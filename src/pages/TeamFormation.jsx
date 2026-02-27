@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, User, ArrowRight, CheckCircle2, Search } from 'lucide-react';
-import { DocLinkBtn } from '../components/analysis/DocLinkBtn';
 
 export const TeamFormation = () => {
     const [teamType, setTeamType] = useState('team'); // 'team' or 'solo'
@@ -22,9 +21,6 @@ export const TeamFormation = () => {
                         進入方法實作前，確認你的最佳戰友，或是宣示成為極客 (Solo)。
                     </p>
                 </div>
-                <DocLinkBtn href="https://docs.google.com/document/d/1X-u5Y6p5lX5-pLtzO51G6YXYC2bTntn_4vGqJ7TjK_8/edit?usp=drive_link">
-                    查看完整教案與學習單
-                </DocLinkBtn>
             </div>
 
             {/* Selection Tabs */}

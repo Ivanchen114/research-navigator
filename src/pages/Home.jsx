@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Search, BrainCircuit, BarChart2, ArrowRight, BookOpen, Users, Gamepad2 } from 'lucide-react';
+import { Search, BrainCircuit, BarChart2, ArrowRight, BookOpen, Users, Gamepad2, Navigation2, Stethoscope, Wrench } from 'lucide-react';
 
 export const Home = () => {
     const navigate = useNavigate();
@@ -87,7 +87,25 @@ export const Home = () => {
                 <h2 className="text-2xl font-bold text-center text-slate-800 mb-8">
                     更多學習模組
                 </h2>
-                <div className="grid md:grid-cols-4 gap-4">
+                <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/wizard')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <Navigation2 size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">方法快篩 (W3-W4)</h3>
+                            <p className="text-sm text-slate-500">回答三個問題，快速鎖定適合你的研究方法。</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/clinic')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <Stethoscope size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">研究診所 (W5)</h3>
+                            <p className="text-sm text-slate-500">用分科三問確認你選對了研究工具。</p>
+                        </CardContent>
+                    </Card>
                     <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/literature-review')}>
                         <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
                             <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
@@ -104,6 +122,15 @@ export const Home = () => {
                             </div>
                             <h3 className="text-base font-bold text-slate-800">組隊決策 (W7)</h3>
                             <p className="text-sm text-slate-500">找到能力互補的夥伴，或是宣告成為 Solo 極客。</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/tool-design')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <Wrench size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">工具設計 (W8-W9)</h3>
+                            <p className="text-sm text-slate-500">學會處方診斷三大標準，設計出好的研究工具。</p>
                         </CardContent>
                     </Card>
                     <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/game/tool-quiz')}>
