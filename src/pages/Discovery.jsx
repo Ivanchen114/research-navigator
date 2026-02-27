@@ -46,26 +46,67 @@ export const Discovery = () => {
                     偵探的三把劍 (W0)
                 </h2>
                 <div className="grid md:grid-cols-3 gap-6">
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col">
                         <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
                             <Eye size={24} />
                         </div>
                         <h3 className="text-lg font-bold text-slate-800 mb-2">1. 觀察力</h3>
-                        <p className="text-sm text-slate-600">看見別人沒看見的細節。真正的研究者能「看見大猩猩」。</p>
+                        <p className="text-sm text-slate-600 flex-1">看見別人沒看見的細節。真正的研究者能「看見大猩猩」。</p>
+                        <a href="https://youtu.be/IGQmdoK_ZfY?si=DTPHxNBlYX0NYuba" target="_blank" rel="noopener noreferrer"
+                            className="mt-4 inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                            🎬 看影片：你看見大猩猩了嗎？
+                        </a>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col">
                         <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-4">
                             <Search size={24} />
                         </div>
                         <h3 className="text-lg font-bold text-slate-800 mb-2">2. 假設檢定</h3>
-                        <p className="text-sm text-slate-600">像玩「海龜湯」，先大膽假設，再小心求證。</p>
+                        <p className="text-sm text-slate-600 flex-1">像玩「海龜湯」，先大膽假設，再小心求證。</p>
+                        <a href="https://lateralthinkingpuzzles.org/zh-TW" target="_blank" rel="noopener noreferrer"
+                            className="mt-4 inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-800 hover:underline font-medium">
+                            🐢 玩海龜湯練習假設思維
+                        </a>
                     </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col">
                         <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mb-4">
                             <BrainCircuit size={24} />
                         </div>
                         <h3 className="text-lg font-bold text-slate-800 mb-2">3. 批判思考</h3>
-                        <p className="text-sm text-slate-600">不盲從權威，識破表面現象背後的矛盾與謊言。</p>
+                        <p className="text-sm text-slate-600 flex-1">不盲從權威，識破表面現象背後的矛盾與謊言。</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* W1 Section: Research Question Types */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <Lightbulb className="text-amber-500" />
+                    什麼是好的研究問題？(W1)
+                </h2>
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8 space-y-6">
+                    <p className="text-slate-600 text-sm">好的研究問題有一個 magic filter：<strong className="text-slate-800">「這個問題 Google 搜尋得到答案嗎？AI 能直接回答嗎？」</strong></p>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-red-50 rounded-lg border border-red-100 p-4">
+                            <h4 className="font-bold text-red-700 mb-3">❌ 不好的研究問題</h4>
+                            <ul className="space-y-2 text-sm text-slate-700">
+                                <li className="flex gap-2"><span className="text-red-400 shrink-0">✗</span>「什麼是溫室效應？」<span className="text-xs text-slate-400 ml-1">（AI/維基直接答）</span></li>
+                                <li className="flex gap-2"><span className="text-red-400 shrink-0">✗</span>「青少年喜歡滑手機嗎？」<span className="text-xs text-slate-400 ml-1">（答案太顯而易見）</span></li>
+                                <li className="flex gap-2"><span className="text-red-400 shrink-0">✗</span>「如何解決貧窮？」<span className="text-xs text-slate-400 ml-1">（範圍太大，無法執行）</span></li>
+                            </ul>
+                        </div>
+                        <div className="bg-green-50 rounded-lg border border-green-100 p-4">
+                            <h4 className="font-bold text-green-700 mb-3">✅ 好的研究問題</h4>
+                            <ul className="space-y-2 text-sm text-slate-700">
+                                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>「本校學生為什麼寧買貴又難吃的便當？」</li>
+                                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>「社群媒體使用時間與本校高一生睡眠時間的關係？」</li>
+                                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>「加入社團的學生和沒加入的，學業成績有差異嗎？」</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm">
+                        <span className="font-bold text-amber-800">🔑 三個關鍵字：</span>
+                        <span className="text-slate-700"> 在地（你的學校/社區）、可測量（能收到數據）、有衝突點（違背常理的現象）</span>
                     </div>
                 </div>
             </section>

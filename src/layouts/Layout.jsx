@@ -7,17 +7,41 @@ export const Layout = () => {
 
     const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-    const navItems = [
-        { name: '首頁', path: '/', icon: <Home size={18} /> },
-        { name: '發掘問題 (W0-W2)', path: '/discovery', icon: <Search size={18} /> },
-        { name: '方法快篩 (W3-W4)', path: '/wizard', icon: <Navigation2 size={18} /> },
-        { name: '研究診所 (W5)', path: '/clinic', icon: <Stethoscope size={18} /> },
-        { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
-        { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
-        { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> },
-        { name: '數據分析 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
-        { name: '辦案工具大考驗', path: '/game/tool-quiz', icon: <Gamepad2 size={18} /> },
-        { name: '文獻偵探社', path: '/game/citation-detective', icon: <Gamepad2 size={18} /> },
+    const navSections = [
+        {
+            items: [
+                { name: '首頁', path: '/', icon: <Home size={18} /> },
+            ]
+        },
+        {
+            label: '探索階段',
+            items: [
+                { name: '發掘問題 (W0-W2)', path: '/discovery', icon: <Search size={18} /> },
+                { name: '方法快篩 (W3-W4)', path: '/wizard', icon: <Navigation2 size={18} /> },
+                { name: '研究診所 (W5)', path: '/clinic', icon: <Stethoscope size={18} /> },
+            ]
+        },
+        {
+            label: '裝備階段',
+            items: [
+                { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
+                { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
+                { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> },
+            ]
+        },
+        {
+            label: '實戰分析',
+            items: [
+                { name: '數據分析 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
+            ]
+        },
+        {
+            label: '互動遊戲',
+            items: [
+                { name: '辦案工具大考驗', path: '/game/tool-quiz', icon: <Gamepad2 size={18} /> },
+                { name: '文獻偵探社', path: '/game/citation-detective', icon: <Gamepad2 size={18} /> },
+            ]
+        },
     ];
 
     return (
@@ -43,25 +67,39 @@ export const Layout = () => {
                     <p className="text-xs text-slate-400 mt-1">AI 時代的高中生專題研究教練</p>
                 </div>
 
-                <div className="flex-1 py-4 space-y-1 overflow-y-auto">
-                    {navItems.map((item) => (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => setIsMobileMenuOpen(false)} // Close on mobile navigation
-                            className={({ isActive }) =>
-                                `flex items-center gap-3 px-6 py-3 transition-colors ${isActive
-                                    ? 'bg-blue-600 text-white border-r-4 border-blue-400'
-                                    : 'hover:bg-slate-700 hover:text-white'
-                                }`
-                            }
-                        >
-                            {item.icon}
-                            <span className="font-medium">{item.name}</span>
-                        </NavLink>
+                <div className="flex-1 py-4 overflow-y-auto">
+                    {navSections.map((section, sIdx) => (
+                        <div key={sIdx} className="mb-2">
+                            {section.label && (
+                                <div className="px-4 pt-3 pb-1">
+                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                                        {section.label}
+                                    </span>
+                                    <div className="mt-1 border-t border-slate-700" />
+                                </div>
+                            )}
+                            {section.items.map((item) => (
+                                <NavLink
+                                    key={item.path}
+                                    to={item.path}
+                                    end={item.path === '/'}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-6 py-2.5 transition-colors ${isActive
+                                            ? 'bg-blue-600 text-white border-r-4 border-blue-400'
+                                            : 'hover:bg-slate-700 hover:text-white'
+                                        }`
+                                    }
+                                >
+                                    {item.icon}
+                                    <span className="font-medium text-sm">{item.name}</span>
+                                </NavLink>
+                            ))}
+                        </div>
                     ))}
                 </div>
             </nav>
+
 
             {/* Main Content Area */}
             <div className="flex flex-col flex-1 w-full min-w-0">
