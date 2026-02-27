@@ -9,6 +9,10 @@ import { ClinicPage } from './pages/ClinicPage';
 import { ToolDesignPage } from './pages/ToolDesignPage';
 import { ToolQuizGame } from './pages/games/ToolQuizGame';
 import { CitationDetectiveGame } from './pages/games/CitationDetectiveGame';
+import { QuestionERGame } from './pages/games/QuestionERGame';
+import { RxInspectorGame } from './pages/games/RxInspectorGame';
+import { DataDetectiveGame } from './pages/games/DataDetectiveGame';
+import { ChartMatcherGame } from './pages/games/ChartMatcherGame';
 import { LiteratureReview } from './pages/LiteratureReview';
 import { TeamFormation } from './pages/TeamFormation';
 
@@ -25,8 +29,12 @@ function App() {
           <Route path="team-formation" element={<TeamFormation />} />
           <Route path="tool-design" element={<ToolDesignPage />} />
           <Route path="analysis" element={<AnalysisHub />} />
+          <Route path="game/question-er" element={<QuestionERGame />} />
+          <Route path="game/rx-inspector" element={<RxInspectorGame />} />
           <Route path="game/tool-quiz" element={<ToolQuizGame />} />
           <Route path="game/citation-detective" element={<CitationDetectiveGame />} />
+          <Route path="game/data-detective" element={<DataDetectiveGame />} />
+          <Route path="game/chart-matcher" element={<ChartMatcherGame />} />
         </Route>
       </Routes>
     </BrowserRouter>

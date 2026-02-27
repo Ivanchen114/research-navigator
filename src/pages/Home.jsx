@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Search, BrainCircuit, BarChart2, ArrowRight, BookOpen, Users, Gamepad2, Navigation2, Stethoscope, Wrench } from 'lucide-react';
+import { Search, BrainCircuit, BarChart2, ArrowRight, BookOpen, Users, Gamepad2, Navigation2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette } from 'lucide-react';
 
 export const Home = () => {
     const navigate = useNavigate();
@@ -12,8 +12,11 @@ export const Home = () => {
 
             {/* Hero Section */}
             <section className="text-center py-12 md:py-20 space-y-6">
-                <div className="inline-flex items-center justify-center p-3 bg-blue-100 rounded-2xl mb-4">
-                    <BrainCircuit className="w-12 h-12 text-blue-600" />
+                <div className="flex flex-col items-center gap-3 mb-4">
+                    <img src="/songshan-logo.svg" alt="松山高中" className="w-16 h-16 bg-white rounded-2xl p-2 shadow-lg" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider">
+                        松山高中 × 研究領航員
+                    </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
                     從發現問題到數據分析<br />
@@ -133,12 +136,21 @@ export const Home = () => {
                             <p className="text-sm text-slate-500">學會處方診斷三大標準，設計出好的研究工具。</p>
                         </CardContent>
                     </Card>
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/game/question-er')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <HeartPulse size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">問題急診室 (W0-W2)</h3>
+                            <p className="text-sm text-slate-500">10 個生病的研究問題，你能正確診斷並開處方嗎？</p>
+                        </CardContent>
+                    </Card>
                     <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/game/tool-quiz')}>
                         <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
                             <div className="w-12 h-12 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
                                 <Gamepad2 size={24} />
                             </div>
-                            <h3 className="text-base font-bold text-slate-800">辦案工具大考驗</h3>
+                            <h3 className="text-base font-bold text-slate-800">辦案工具大考驗 (W3-W5)</h3>
                             <p className="text-sm text-slate-500">11 道委託案件，測試你的研究方法判斷力！</p>
                         </CardContent>
                     </Card>
@@ -147,8 +159,35 @@ export const Home = () => {
                             <div className="w-12 h-12 bg-stone-200 text-stone-700 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
                                 <Search size={24} />
                             </div>
-                            <h3 className="text-base font-bold text-slate-800">文獻偵探社</h3>
+                            <h3 className="text-base font-bold text-slate-800">文獻偵探社 (W6)</h3>
                             <p className="text-sm text-slate-500">限時破案！判斷引用的合法性與常見違規。</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/game/rx-inspector')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <Bug size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">處方鑑定師 (W8-W9)</h3>
+                            <p className="text-sm text-slate-500">找出研究工具裡的設計 Bug！練習效度、信度、可行性。</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/game/data-detective')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <ChartNoAxesCombined size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">數據偵探 (W10+)</h3>
+                            <p className="text-sm text-slate-500">圖表搭配結論，你能分辨正確推論和過度解讀嗎？</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="hover:shadow-lg transition-shadow duration-300 cursor-pointer group" onClick={() => navigate('/game/chart-matcher')}>
+                        <CardContent className="p-6 flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-violet-100 text-violet-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                                <Palette size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-slate-800">圖表配對師 (W10+)</h3>
+                            <p className="text-sm text-slate-500">什麼數據適合什麼圖？幫數據找到最佳圖表！</p>
                         </CardContent>
                     </Card>
                 </div>
