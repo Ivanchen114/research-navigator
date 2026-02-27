@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 // ========== 淡色系圖表元件 ==========
 
 // 長條圖 (含 Y 軸刻度)
-const BarChart = ({ data, unit = '', color = '#6366f1' }) => {
+const BarChart = ({ data, unit = '', color = '#6366f1', axisX, axisY }) => {
     const max = Math.max(...data.map(d => d.value));
     const ceil = Math.ceil(max / 10) * 10;
     const ticks = [0, Math.round(ceil * 0.25), Math.round(ceil * 0.5), Math.round(ceil * 0.75), ceil];
 
     return (
-        <div className="flex gap-2">
+        <div className="flex gap-2 relative">
             {/* Y 軸刻度 */}
             <div className="flex flex-col justify-between items-end py-1 shrink-0 w-10">
                 {[...ticks].reverse().map((t, i) => (
@@ -46,7 +46,11 @@ const BarChart = ({ data, unit = '', color = '#6366f1' }) => {
                         </div>
                     ))}
                 </div>
+                {/* X 軸名稱 */}
+                {axisX && <div className="text-center mt-1"><span className="text-[10px] text-slate-400 italic">{axisX}</span></div>}
             </div>
+            {/* Y 軸名稱 */}
+            {axisY && <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 origin-center"><span className="text-[10px] text-slate-400 italic whitespace-nowrap">{axisY}</span></div>}
         </div>
     );
 };
@@ -87,7 +91,7 @@ const PieChart = ({ data }) => {
 };
 
 // 折線圖 (含 XY 軸)
-const LineChart = ({ data, unit = '', color = '#6366f1' }) => {
+const LineChart = ({ data, unit = '', color = '#6366f1', axisX, axisY }) => {
     const values = data.map(d => d.value);
     const max = Math.max(...values);
     const min = Math.min(...values);
@@ -158,6 +162,10 @@ const LineChart = ({ data, unit = '', color = '#6366f1' }) => {
                     </text>
                 </g>
             ))}
+            {/* X 軸名稱 */}
+            {axisX && <text x={padL + chartW / 2} y={svgH - 2} textAnchor="middle" fontSize="9" fill="#94a3b8" fontStyle="italic">{axisX}</text>}
+            {/* Y 軸名稱 */}
+            {axisY && <text x={8} y={padT + chartH / 2} textAnchor="middle" fontSize="9" fill="#94a3b8" fontStyle="italic" transform={`rotate(-90, 8, ${padT + chartH / 2})`}>{axisY}</text>}
         </svg>
     );
 };
@@ -174,6 +182,8 @@ const caseData = [
         ],
         chartUnit: "分",
         chartColor: "#6366f1",
+        chartAxisX: "社團參與",
+        chartAxisY: "平均成績(分)",
         dataSource: "某高中 200 名學生段考平均",
         conclusion: "加入社團可以提升學業成績",
         isValid: false,
@@ -192,6 +202,8 @@ const caseData = [
         ],
         chartUnit: "%",
         chartColor: "#f43f5e",
+        chartAxisX: "早餐習慣",
+        chartAxisY: "遲到率(%)",
         dataSource: "學校一學期遲到紀錄 (n=450)",
         conclusion: "不吃早餐的學生更容易遲到",
         isValid: true,
@@ -213,6 +225,8 @@ const caseData = [
         ],
         chartUnit: "",
         chartColor: "#f59e0b",
+        chartAxisX: "每週補習時數",
+        chartAxisY: "學業滿意度",
         dataSource: "問卷調查：每週補習時數 vs. 學業滿意度自評 (n=180)",
         conclusion: "補習時數越多，學業滿意度越低",
         isValid: false,
@@ -230,6 +244,8 @@ const caseData = [
         ],
         chartUnit: "分",
         chartColor: "#10b981",
+        chartAxisX: "時間點",
+        chartAxisY: "閱讀理解(分)",
         dataSource: "某班閱讀理解測驗平均分 (n=35)",
         conclusion: "閱讀課有效提升了學生的閱讀理解能力",
         isValid: false,
@@ -268,6 +284,8 @@ const caseData = [
         ],
         chartUnit: "hr",
         chartColor: "#8b5cf6",
+        chartAxisX: "每日手機使用",
+        chartAxisY: "睡眠時間(hr)",
         dataSource: "自我報告問卷 (n=220)",
         conclusion: "使用手機會導致失眠",
         isValid: false,
@@ -286,6 +304,8 @@ const caseData = [
         ],
         chartUnit: "/5",
         chartColor: "#ec4899",
+        chartAxisX: "學校",
+        chartAxisY: "滿意度(1-5)",
         dataSource: "合作社滿意度問卷 (A校n=50, B校n=200, C校n=180)",
         conclusion: "C 校合作社的服務品質顯然是三校中最好的",
         isValid: false,
@@ -305,6 +325,8 @@ const caseData = [
         ],
         chartUnit: "分",
         chartColor: "#10b981",
+        chartAxisX: "運動頻率",
+        chartAxisY: "焦慮分數(分)",
         dataSource: "焦慮自評量表 (BAI) 平均分 (n=250)",
         conclusion: "運動頻率越高的學生，焦慮自評分數有越低的趨勢",
         isValid: true,
@@ -322,6 +344,8 @@ const caseData = [
         ],
         chartUnit: "分",
         chartColor: "#f59e0b",
+        chartAxisX: "性別",
+        chartAxisY: "數學成績(分)",
         dataSource: "某校高二段考數學成績 (n=320)",
         conclusion: "男生的數學能力比女生強",
         isValid: false,
@@ -343,6 +367,8 @@ const caseData = [
         ],
         chartUnit: "分",
         chartColor: "#6366f1",
+        chartAxisX: "週次",
+        chartAxisY: "週測平均(分)",
         dataSource: "某班線上學習平台週測平均 (n=38)",
         conclusion: "數據證明線上學習平台的教學效果持續穩定進步",
         isValid: false,
@@ -396,11 +422,11 @@ export const DataDetectiveGame = () => {
     const renderChart = (c) => {
         switch (c.chartType) {
             case 'bar':
-                return <BarChart data={c.chartData} unit={c.chartUnit} color={c.chartColor} />;
+                return <BarChart data={c.chartData} unit={c.chartUnit} color={c.chartColor} axisX={c.chartAxisX} axisY={c.chartAxisY} />;
             case 'pie':
                 return <PieChart data={c.chartData} />;
             case 'line':
-                return <LineChart data={c.chartData} unit={c.chartUnit} color={c.chartColor} />;
+                return <LineChart data={c.chartData} unit={c.chartUnit} color={c.chartColor} axisX={c.chartAxisX} axisY={c.chartAxisY} />;
             default:
                 return null;
         }

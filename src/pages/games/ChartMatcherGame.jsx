@@ -9,7 +9,7 @@ const GRID_COLOR = '#e2e8f0';
 const LABEL_COLOR = '#64748b';
 const LABEL_SIZE = 9;
 
-const MiniBar = ({ data, color = '#6366f1' }) => {
+const MiniBar = ({ data, color = '#6366f1', axisX, axisY }) => {
     const padL = 30, padR = 20, padT = 18, padB = 22;
     const chartW = SVG_W - padL - padR;
     const chartH = SVG_H - padT - padB;
@@ -42,6 +42,10 @@ const MiniBar = ({ data, color = '#6366f1' }) => {
                     </g>
                 );
             })}
+            {/* X 軸名稱 */}
+            {axisX && <text x={padL + chartW / 2} y={SVG_H - 0} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic">{axisX}</text>}
+            {/* Y 軸名稱 */}
+            {axisY && <text x={6} y={padT + chartH / 2} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic" transform={`rotate(-90, 6, ${padT + chartH / 2})`}>{axisY}</text>}
         </svg>
     );
 };
@@ -70,7 +74,7 @@ const MiniPie = ({ data }) => {
     );
 };
 
-const MiniLine = ({ data, color = '#6366f1' }) => {
+const MiniLine = ({ data, color = '#6366f1', axisX, axisY }) => {
     const values = data.map(d => d.value);
     const rawMax = Math.max(...values);
     const rawMin = Math.min(...values);
@@ -111,11 +115,15 @@ const MiniLine = ({ data, color = '#6366f1' }) => {
                     <text x={p.x} y={SVG_H - 5} textAnchor="middle" fontSize={LABEL_SIZE} fill={LABEL_COLOR} fontWeight="500">{data[i].label}</text>
                 </g>
             ))}
+            {/* X 軸名稱 */}
+            {axisX && <text x={padL + chartW / 2} y={SVG_H - 0} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic">{axisX}</text>}
+            {/* Y 軸名稱 */}
+            {axisY && <text x={6} y={padT + chartH / 2} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic" transform={`rotate(-90, 6, ${padT + chartH / 2})`}>{axisY}</text>}
         </svg>
     );
 };
 
-const MiniScatter = ({ data, color = '#6366f1' }) => {
+const MiniScatter = ({ data, color = '#6366f1', axisX, axisY }) => {
     const xs = data.map(d => d.x);
     const ys = data.map(d => d.y);
     const rawXMin = Math.min(...xs), rawXMax = Math.max(...xs);
@@ -142,9 +150,9 @@ const MiniScatter = ({ data, color = '#6366f1' }) => {
                     stroke={GRID_COLOR} strokeWidth="0.6" strokeDasharray="4 3" />
             ))}
             {/* X 軸標籤 */}
-            <text x={padL + chartW / 2} y={SVG_H - 3} textAnchor="middle" fontSize="8" fill={LABEL_COLOR}>X</text>
+            {axisX && <text x={padL + chartW / 2} y={SVG_H - 3} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic">{axisX}</text>}
             {/* Y 軸標籤 */}
-            <text x={8} y={padT + chartH / 2} textAnchor="middle" fontSize="8" fill={LABEL_COLOR} transform={`rotate(-90, 8, ${padT + chartH / 2})`}>Y</text>
+            {axisY && <text x={6} y={padT + chartH / 2} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic" transform={`rotate(-90, 6, ${padT + chartH / 2})`}>{axisY}</text>}
             {/* 散佈點 */}
             {data.map((d, i) => (
                 <circle key={i}
@@ -156,7 +164,7 @@ const MiniScatter = ({ data, color = '#6366f1' }) => {
     );
 };
 
-const MiniStackedBar = ({ data, colors = ['#6366f1', '#f43f5e', '#10b981'] }) => {
+const MiniStackedBar = ({ data, colors = ['#6366f1', '#f43f5e', '#10b981'], axisX, axisY }) => {
     const padL = 30, padR = 20, padT = 10, padB = 22;
     const chartW = SVG_W - padL - padR;
     const chartH = SVG_H - padT - padB;
@@ -195,11 +203,15 @@ const MiniStackedBar = ({ data, colors = ['#6366f1', '#f43f5e', '#10b981'] }) =>
                     </g>
                 );
             })}
+            {/* X 軸名稱 */}
+            {axisX && <text x={padL + chartW / 2} y={SVG_H - 0} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic">{axisX}</text>}
+            {/* Y 軸名稱 */}
+            {axisY && <text x={6} y={padT + chartH / 2} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic" transform={`rotate(-90, 6, ${padT + chartH / 2})`}>{axisY}</text>}
         </svg>
     );
 };
 
-const MiniHistogram = ({ data, color = '#6366f1' }) => {
+const MiniHistogram = ({ data, color = '#6366f1', axisX, axisY }) => {
     const padL = 30, padR = 10, padT = 10, padB = 22;
     const chartW = SVG_W - padL - padR;
     const chartH = SVG_H - padT - padB;
@@ -230,6 +242,10 @@ const MiniHistogram = ({ data, color = '#6366f1' }) => {
                     </g>
                 );
             })}
+            {/* X 軸名稱 */}
+            {axisX && <text x={padL + chartW / 2} y={SVG_H - 0} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic">{axisX}</text>}
+            {/* Y 軸名稱 */}
+            {axisY && <text x={6} y={padT + chartH / 2} textAnchor="middle" fontSize="8" fill="#94a3b8" fontStyle="italic" transform={`rotate(-90, 6, ${padT + chartH / 2})`}>{axisY}</text>}
         </svg>
     );
 };
@@ -256,7 +272,7 @@ const questions = [
         bestReason: "圓餅圖最能直觀呈現「部分佔整體」的比例關係，一眼就能看出哪個類型最受歡迎。",
         acceptableReason: "長條圖也可以比較各類型人數，但不如圓餅圖直觀地呈現佔比。",
         wrongReason: "折線圖用於時間序列、散佈圖用於兩個數值變項，都不適合分類佔比資料。",
-        previewData: { type: 'pie', data: [{ label: '運動', value: 35 }, { label: '藝術', value: 22 }, { label: '學術', value: 18 }, { label: '服務', value: 15 }, { label: '其他', value: 10 }] }
+        previewData: { type: 'pie', data: [{ label: '運動', value: 35 }, { label: '藝術', value: 22 }, { label: '學術', value: 18 }, { label: '服務', value: 15 }, { label: '其他', value: 10 }], axisX: '社團類型', axisY: '人數' }
     },
     {
         id: 2,
@@ -268,7 +284,7 @@ const questions = [
         bestReason: "折線圖是呈現「隨時間變化的趨勢」的最佳選擇，能清楚看出上升、下降或波動。",
         acceptableReason: "長條圖可以比較各次考試的分數，但無法像折線圖一樣順暢呈現變化趨勢。",
         wrongReason: "圓餅圖用於佔比、直方圖用於分佈，都無法呈現時間變化趨勢。",
-        previewData: { type: 'line', data: [{ label: '第1次', value: 68 }, { label: '第2次', value: 72 }, { label: '第3次', value: 70 }, { label: '第4次', value: 75 }, { label: '第5次', value: 78 }, { label: '第6次', value: 80 }] }
+        previewData: { type: 'line', data: [{ label: '第1次', value: 68 }, { label: '第2次', value: 72 }, { label: '第3次', value: 70 }, { label: '第4次', value: 75 }, { label: '第5次', value: 78 }, { label: '第6次', value: 80 }], axisX: '段考次數', axisY: '平均分數' }
     },
     {
         id: 3,
@@ -280,7 +296,7 @@ const questions = [
         bestReason: "散佈圖是探索兩個連續變項之間關係（正相關、負相關、無相關）的唯一合適圖表。每個點代表一位學生。",
         acceptableReason: "",
         wrongReason: "長條圖無法同時呈現兩個連續變項；折線圖需要有序的 X 軸（如時間）；圓餅圖完全不適用。",
-        previewData: { type: 'scatter', data: [{ x: 1, y: 85 }, { x: 2, y: 78 }, { x: 2.5, y: 72 }, { x: 3, y: 70 }, { x: 3.5, y: 65 }, { x: 4, y: 58 }, { x: 4.5, y: 55 }, { x: 5, y: 50 }, { x: 1.5, y: 80 }, { x: 3, y: 68 }, { x: 2, y: 82 }, { x: 4, y: 62 }] }
+        previewData: { type: 'scatter', data: [{ x: 1, y: 85 }, { x: 2, y: 78 }, { x: 2.5, y: 72 }, { x: 3, y: 70 }, { x: 3.5, y: 65 }, { x: 4, y: 58 }, { x: 4.5, y: 55 }, { x: 5, y: 50 }, { x: 1.5, y: 80 }, { x: 3, y: 68 }, { x: 2, y: 82 }, { x: 4, y: 62 }], axisX: '滑手機時間(hr)', axisY: '睡眠品質' }
     },
     {
         id: 4,
@@ -292,7 +308,7 @@ const questions = [
         bestReason: "堆疊長條圖能同時顯示每個年級的總量，也能看到各科目佔各年級的比例差異，一目了然。",
         acceptableReason: "分組長條圖也可以比較，但不如堆疊長條圖直觀地看到各年級內部的佔比變化。",
         wrongReason: "圓餅圖需要分成三張（各年級一張），不方便比較；折線圖不適合分類資料的跨組比較。",
-        previewData: { type: 'stacked', data: [{ label: '高一', segments: [40, 35, 25] }, { label: '高二', segments: [30, 38, 32] }, { label: '高三', segments: [25, 28, 47] }] }
+        previewData: { type: 'stacked', data: [{ label: '高一', segments: [40, 35, 25] }, { label: '高二', segments: [30, 38, 32] }, { label: '高三', segments: [25, 28, 47] }], axisX: '年級', axisY: '人數' }
     },
     {
         id: 5,
@@ -304,7 +320,7 @@ const questions = [
         bestReason: "直方圖專門用來呈現連續數據的「分佈形狀」，能一眼看出數據是否集中、對稱、偏態。",
         acceptableReason: "",
         wrongReason: "長條圖用於比較不同類別而非連續區間；散佈圖需要兩個變項；圓餅圖完全不適合。",
-        previewData: { type: 'histogram', data: [{ label: '<155', value: 12 }, { label: '155-160', value: 35 }, { label: '160-165', value: 68 }, { label: '165-170', value: 92 }, { label: '170-175', value: 55 }, { label: '175-180', value: 28 }, { label: '>180', value: 10 }] }
+        previewData: { type: 'histogram', data: [{ label: '<155', value: 12 }, { label: '155-160', value: 35 }, { label: '160-165', value: 68 }, { label: '165-170', value: 92 }, { label: '170-175', value: 55 }, { label: '175-180', value: 28 }, { label: '>180', value: 10 }], axisX: '身高(cm)', axisY: '人數' }
     },
     {
         id: 6,
@@ -316,7 +332,7 @@ const questions = [
         bestReason: "長條圖最適合比較兩個（或少數幾個）類別的數值大小，簡潔明瞭。",
         acceptableReason: "",
         wrongReason: "圓餅圖無法比較兩組的平均值；折線圖需要時間軸；散佈圖需要兩個連續變項。",
-        previewData: { type: 'bar', data: [{ label: '男生', value: 3.2 }, { label: '女生', value: 2.5 }], color: '#6366f1' }
+        previewData: { type: 'bar', data: [{ label: '男生', value: 3.2 }, { label: '女生', value: 2.5 }], color: '#6366f1', axisX: '性別', axisY: '每週運動次數' }
     },
     {
         id: 7,
@@ -328,7 +344,7 @@ const questions = [
         bestReason: "30 天的每日數據用折線圖最清楚，能看出趨勢、波動和異常值（如週末高峰）。",
         acceptableReason: "長條圖可以顯示每天的數值，但 30 根長條會很擁擠，不如折線圖一目了然。",
         wrongReason: "直方圖是看「營業額的分佈」，不是每天的變化；圓餅圖完全不適用。",
-        previewData: { type: 'line', data: [{ label: 'D1', value: 1200 }, { label: 'D5', value: 1500 }, { label: 'D10', value: 1100 }, { label: 'D15', value: 1800 }, { label: 'D20', value: 2200 }, { label: 'D25', value: 1600 }, { label: 'D30', value: 1900 }] }
+        previewData: { type: 'line', data: [{ label: 'D1', value: 1200 }, { label: 'D5', value: 1500 }, { label: 'D10', value: 1100 }, { label: 'D15', value: 1800 }, { label: 'D20', value: 2200 }, { label: 'D25', value: 1600 }, { label: 'D30', value: 1900 }], axisX: '日期', axisY: '營業額(元)' }
     },
     {
         id: 8,
@@ -340,7 +356,7 @@ const questions = [
         bestReason: "圓餅圖最適合呈現「各項佔總預算的比例」，能直覺地看出每項支出的大小。",
         acceptableReason: "長條圖也可以比較各項金額，但圓餅圖更直覺地呈現「整體 = 100%」的概念。",
         wrongReason: "堆疊長條圖是比較多組資料時用的；折線圖適合時間序列，不適合比例呈現。",
-        previewData: { type: 'pie', data: [{ label: '活動', value: 40 }, { label: '印刷', value: 30 }, { label: '材料', value: 20 }, { label: '其他', value: 10 }] }
+        previewData: { type: 'pie', data: [{ label: '活動', value: 40 }, { label: '印刷', value: 30 }, { label: '材料', value: 20 }, { label: '其他', value: 10 }], axisX: '支出項目', axisY: '百分比' }
     },
     {
         id: 9,
@@ -352,7 +368,7 @@ const questions = [
         bestReason: "兩個連續變項的關聯性用散佈圖最合適，每個點代表一個國家，能直觀看出是否有正/負相關。",
         acceptableReason: "",
         wrongReason: "折線圖不適合（沒有時間軸）、長條圖只能呈現一個變項、堆疊長條圖不適合兩個連續變項。",
-        previewData: { type: 'scatter', data: [{ x: 3.5, y: 68 }, { x: 4.2, y: 72 }, { x: 5.0, y: 75 }, { x: 5.5, y: 78 }, { x: 6.0, y: 80 }, { x: 6.5, y: 82 }, { x: 7.0, y: 81 }, { x: 4.8, y: 74 }, { x: 5.8, y: 79 }, { x: 3.8, y: 70 }] }
+        previewData: { type: 'scatter', data: [{ x: 3.5, y: 68 }, { x: 4.2, y: 72 }, { x: 5.0, y: 75 }, { x: 5.5, y: 78 }, { x: 6.0, y: 80 }, { x: 6.5, y: 82 }, { x: 7.0, y: 81 }, { x: 4.8, y: 74 }, { x: 5.8, y: 79 }, { x: 3.8, y: 70 }], axisX: '教育支出(%GDP)', axisY: '平均壽命(歲)' }
     },
     {
         id: 10,
@@ -364,25 +380,26 @@ const questions = [
         bestReason: "堆疊長條圖能同時呈現各班的整體人數和各學習風格的佔比差異，是唯一能一張圖搞定「組間比較 + 內部結構」的圖表。",
         acceptableReason: "分組長條圖可以比較各班各學習風格的人數，但無法像堆疊圖一樣看到比例組成。",
         wrongReason: "圓餅圖要畫三張才能比較，而且無法放在同一張圖上比較；直方圖用於連續數據分佈，完全不適合。",
-        previewData: { type: 'stacked', data: [{ label: '甲班', segments: [18, 12, 10] }, { label: '乙班', segments: [10, 20, 10] }, { label: '丙班', segments: [14, 8, 18] }] }
+        previewData: { type: 'stacked', data: [{ label: '甲班', segments: [18, 12, 10] }, { label: '乙班', segments: [10, 20, 10] }, { label: '丙班', segments: [14, 8, 18] }], axisX: '班級', axisY: '人數' }
     }
 ];
 
 // ========== 渲染迷你圖表預覽 ==========
 const renderPreview = (preview) => {
+    const { axisX, axisY } = preview;
     switch (preview.type) {
         case 'bar':
-            return <MiniBar data={preview.data} color={preview.color || '#6366f1'} />;
+            return <MiniBar data={preview.data} color={preview.color || '#6366f1'} axisX={axisX} axisY={axisY} />;
         case 'pie':
             return <MiniPie data={preview.data} />;
         case 'line':
-            return <MiniLine data={preview.data} />;
+            return <MiniLine data={preview.data} axisX={axisX} axisY={axisY} />;
         case 'scatter':
-            return <MiniScatter data={preview.data} />;
+            return <MiniScatter data={preview.data} axisX={axisX} axisY={axisY} />;
         case 'stacked':
-            return <MiniStackedBar data={preview.data} />;
+            return <MiniStackedBar data={preview.data} axisX={axisX} axisY={axisY} />;
         case 'histogram':
-            return <MiniHistogram data={preview.data} />;
+            return <MiniHistogram data={preview.data} axisX={axisX} axisY={axisY} />;
         default:
             return null;
     }
