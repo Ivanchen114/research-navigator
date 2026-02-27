@@ -1,0 +1,375 @@
+import React, { useState } from 'react';
+
+// 題目資料庫：11題 (固定順序，魔王題選項改為具體方法組合)
+const quizData = [
+    {
+        id: 1,
+        topic: "委託一：調查本校高一學生的睡眠時間與段考成績的相關性",
+        correct: "問卷調查",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：需要大樣本和量化數據來跑相關統計。問卷的重點放在睡眠變項與干擾變項（如補習時間）。",
+        tags: ["量化數據", "大樣本", "相關性"]
+    },
+    {
+        id: 2,
+        topic: "委託二：探究資優生面對學習挫折的深層心理經驗與心態轉折",
+        correct: "深度訪談",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：挫折是個複雜的故事，我們需要聽故事、追問細節與脈絡。這也可以搭配「半結構式訪談」來進行。",
+        tags: ["深層經驗", "個人脈絡", "故事與細節"]
+    },
+    {
+        id: 3,
+        topic: "委託三：驗證喝無糖綠茶是否能比喝純水「顯著提升」背單字的速度",
+        correct: "實驗設計",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：這有明確的「因果假設」。你的工具是整個「實驗流程」，需要操弄變項並設立對照組。",
+        tags: ["因果關係", "操弄變項", "控制組/實驗組"]
+    },
+    {
+        id: 4,
+        topic: "委託四：查明高中生在走廊邊走邊滑手機的真實狀況與發生碰撞的次數",
+        correct: "觀察記錄",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：發問卷大家可能會騙你（社會期許偏誤），所以要現場看！記得要先下「操作性定義」（什麼算碰撞？）。",
+        tags: ["真實行為", "避免社會期許", "操作性定義"]
+    },
+    {
+        id: 5,
+        topic: "委託五：分析過去十年台灣流行歌歌詞中，出現「焦慮」相關詞彙的頻率變化",
+        correct: "文獻/內容分析",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：你不用去訪談歌手，而是要收集現成資料。你需要先定義詞庫並建立「編碼規則」來計數。",
+        tags: ["現成文本", "編碼規則", "頻率計數"]
+    },
+    {
+        id: 6,
+        topic: "🔥 魔王委託：統計全校對新版運動服的滿意度比例，並深入了解極度不滿意者的具體抱怨",
+        correct: "問卷調查 + 深度訪談",
+        options: [
+            "問卷調查 + 深度訪談",
+            "觀察記錄 + 深度訪談",
+            "文獻/內容分析 + 問卷調查",
+            "實驗設計 + 觀察記錄",
+            "問卷調查 + 實驗設計",
+            "實驗設計 + 深度訪談"
+        ],
+        explanation: "✅ 破案線索：問「滿意度比例」要用【問卷調查】掌握廣度，問「具體抱怨」要用【深度訪談】挖掘原因（先問卷找出極端者，再目的抽樣訪談）！",
+        tags: ["廣度加深度", "比例與原因", "多重工具"]
+    },
+    {
+        id: 7,
+        topic: "委託七：探討單親家庭高中生在面對大學科系選擇時的內心掙扎與家庭期望",
+        correct: "深度訪談",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：這涉及非常個人且深層的情感，需要建立信任並深入聊天。倫理上要注意保密與避免貼標籤。",
+        tags: ["敏感議題", "信任建立", "深入追問"]
+    },
+    {
+        id: 8,
+        topic: "委託八：測量不同顏色（紅色 vs. 藍色）的重點筆，對學生閱讀理解測驗分數的影響",
+        correct: "實驗設計",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：要探討因果關係，必須將學生分組，並嚴格控制文章難度、作答時間等干擾變項。",
+        tags: ["因果假設", "隨機分派", "控制干擾"]
+    },
+    {
+        id: 9,
+        topic: "委託九：勘查學校合作社在下課十分鐘內，學生排隊動線的順暢度與結帳瓶頸",
+        correct: "觀察記錄",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：你必須站在現場看！工具是「觀察紀錄表」，可以用來記錄等待時間、並畫出堵點熱區圖。",
+        tags: ["現場流程", "動線分析", "計時/計數"]
+    },
+    {
+        id: 10,
+        topic: "委託十：比較台灣三大報紙在報導「108課綱」時，新聞標題的正負面用詞比例",
+        correct: "文獻/內容分析",
+        options: ["問卷調查", "深度訪談", "實驗設計", "觀察記錄", "文獻/內容分析", "混合方法"],
+        explanation: "✅ 破案線索：這是在分析現成的文本資料。重點是要界定「正負面詞」的判準，並最好做同儕交叉編碼算一致率！",
+        tags: ["文本編碼", "正負面判準", "一致率"]
+    },
+    {
+        id: 11,
+        topic: "🔥 終極魔王委託：追蹤過去二十年校刊『校規爭議』報導的篇幅變化，並還原當年撰寫報導的學長姐的心路歷程",
+        correct: "文獻/內容分析 + 深度訪談",
+        options: [
+            "文獻/內容分析 + 深度訪談",
+            "觀察記錄 + 文獻/內容分析",
+            "問卷調查 + 深度訪談",
+            "實驗設計 + 文獻/內容分析",
+            "觀察記錄 + 深度訪談",
+            "文獻/內容分析 + 問卷調查"
+        ],
+        explanation: "✅ 破案線索：需要【文獻/內容分析】來量化過去二十年的校刊文本，再加上【深度訪談】當年作者來了解背後的歷史脈絡，這是非常強大的跨時空研究！",
+        tags: ["文本分析+人物訪談", "歷史脈絡", "多重證據"]
+    }
+];
+
+// 偵探風格圖示
+const toolIcons = {
+    "問卷調查": "📋",
+    "深度訪談": "🎙️",
+    "實驗設計": "🧪",
+    "觀察記錄": "👁️",
+    "文獻/內容分析": "🗄️",
+    "混合方法": "🧰"
+};
+
+// 處理混合選項的圖示渲染
+const getOptionIcon = (optionText) => {
+    if (optionText.includes(' + ')) {
+        const parts = optionText.split(' + ');
+        return `${toolIcons[parts[0]] || '❓'} ${toolIcons[parts[1]] || '❓'}`;
+    }
+    return toolIcons[optionText] || "🧰";
+};
+
+// 洗牌函式
+const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+
+export const ToolQuizGame = () => {
+    const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'end'
+    const [gameQuestions, setGameQuestions] = useState([]);
+    const [wrongQuestions, setWrongQuestions] = useState([]);
+    const [currentQIndex, setCurrentQIndex] = useState(0);
+    const [score, setScore] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [isAnswered, setIsAnswered] = useState(false);
+
+    const startGame = () => {
+        const orderedQuestions = quizData.map(q => ({
+            ...q,
+            shuffledOptions: shuffleArray(q.options)
+        }));
+        setGameQuestions(orderedQuestions);
+        setWrongQuestions([]);
+        setCurrentQIndex(0);
+        setScore(0);
+        setSelectedAnswer(null);
+        setIsAnswered(false);
+        setGameState('playing');
+    };
+
+    const handleAnswer = (answer) => {
+        if (isAnswered) return;
+        setSelectedAnswer(answer);
+        setIsAnswered(true);
+
+        const currentQ = gameQuestions[currentQIndex];
+        if (answer === currentQ.correct) {
+            setScore(s => s + 1);
+        } else {
+            setWrongQuestions(prev => [...prev, currentQ]);
+        }
+    };
+
+    const nextQuestion = () => {
+        if (currentQIndex < gameQuestions.length - 1) {
+            setCurrentQIndex(currentQIndex + 1);
+            setSelectedAnswer(null);
+            setIsAnswered(false);
+        } else {
+            setGameState('end');
+        }
+    };
+
+    // ================= START SCREEN =================
+    if (gameState === 'start') {
+        return (
+            <div className="bg-slate-800 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-slate-100 min-h-[600px]">
+                <div className="bg-slate-900 p-8 md:p-12 rounded-2xl shadow-2xl max-w-xl w-full text-center border-t-8 border-amber-500 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4">🔍</div>
+                    <div className="text-7xl mb-6 animate-pulse">🕵️‍♂️</div>
+                    <h1 className="text-3xl md:text-5xl font-black text-amber-400 mb-6 tracking-wide drop-shadow-md">研究偵探社</h1>
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-300 mb-6 border-b border-slate-700 pb-4">辦案工具大考驗</h2>
+                    <p className="text-slate-400 text-lg mb-8 font-medium leading-relaxed">
+                        真相永遠只有一個！<br />
+                        面對 11 個越來越困難的研究委託，<br />身為首席調查員的你，<br />該從工具箱拔出哪一項<span className="text-amber-400 font-bold border-b-2 border-amber-500">「辦案道具」</span>？
+                    </p>
+                    <button
+                        onClick={startGame}
+                        className="bg-amber-600 hover:bg-amber-500 text-slate-900 font-black py-4 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-[0_0_15px_rgba(245,158,11,0.5)] active:scale-95"
+                    >
+                        接下委託，開始辦案 🔍
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // ================= END SCREEN =================
+    if (gameState === 'end') {
+        let title = "";
+        let color = "";
+        if (score === 11) { title = "🕵️‍♂️ 福爾摩斯級神探！"; color = "text-amber-400"; }
+        else if (score >= 8) { title = "🚔 菁英調查員！"; color = "text-blue-400"; }
+        else if (score >= 5) { title = "🔍 菜鳥見習生！"; color = "text-green-400"; }
+        else { title = "🚨 案發現場破壞者！"; color = "text-red-400"; }
+
+        return (
+            <div className="bg-slate-800 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-slate-100 min-h-[600px]">
+                <div className="bg-slate-900 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center border-t-8 border-amber-500">
+                    <h1 className="text-3xl font-bold text-slate-300 mb-4 tracking-widest">結案報告</h1>
+                    <div className="text-7xl font-black mb-2 text-amber-500">{score} <span className="text-3xl text-slate-600">/ 11</span></div>
+                    <h2 className={`text-3xl font-black mb-6 drop-shadow-md ${color}`}>{title}</h2>
+
+                    <button
+                        onClick={startGame}
+                        className="bg-slate-700 hover:bg-slate-600 text-amber-400 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-lg mb-8 border border-slate-600"
+                    >
+                        重新調查 🔄
+                    </button>
+
+                    {/* 錯題回顧區塊 */}
+                    {wrongQuestions.length > 0 && (
+                        <div className="text-left bg-slate-800 p-6 rounded-xl border-l-8 border-red-500 max-h-96 overflow-y-auto shadow-inner">
+                            <h3 className="text-xl font-black mb-4 flex items-center gap-2 text-slate-200">
+                                📁 破案失敗紀錄 (錯題回顧)
+                            </h3>
+                            <div className="space-y-4">
+                                {wrongQuestions.map((wq, i) => (
+                                    <div key={i} className="bg-slate-700 p-4 rounded-lg shadow-sm border border-slate-600">
+                                        <p className="font-bold text-amber-100 text-lg mb-2 leading-snug">{wq.topic}</p>
+                                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                                            <span className="bg-emerald-900/50 text-emerald-400 font-bold px-3 py-1 rounded-full text-sm border border-emerald-800">
+                                                ✅ 正確道具：{getOptionIcon(wq.correct)} {wq.correct}
+                                            </span>
+                                        </div>
+                                        {/* 錯題的判準標籤 */}
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            {wq.tags.map(tag => (
+                                                <span key={tag} className="bg-slate-800 text-amber-500 text-xs font-bold px-2 py-1 rounded border border-slate-600">
+                                                    #{tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {wrongQuestions.length === 0 && (
+                        <div className="bg-emerald-900/30 text-emerald-400 border border-emerald-800 p-4 rounded-xl font-bold text-lg">
+                            完美破案！毫無破綻的推理，你已經完全掌握研究工具的精髓了！ 🎉
+                        </div>
+                    )}
+
+                </div>
+            </div>
+        );
+    }
+
+    // ================= PLAYING SCREEN =================
+    const currentQ = gameQuestions[currentQIndex];
+    if (!currentQ) return null;
+
+    const isBossLevel = currentQ.topic.includes("魔王");
+
+    return (
+        <div className="bg-slate-800 rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px]">
+            <div className="max-w-4xl w-full">
+
+                {/* Progress and Score */}
+                <div className="flex justify-between items-center mb-6 px-2">
+                    <div className="bg-slate-700 text-amber-400 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-slate-600">
+                        檔案夾 {currentQIndex + 1} / {gameQuestions.length}
+                    </div>
+                    <div className="bg-slate-700 text-emerald-400 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-slate-600">
+                        成功破案: {score}
+                    </div>
+                </div>
+
+                {/* Question Card */}
+                <div className={`bg-slate-900 p-6 md:p-8 rounded-2xl shadow-2xl mb-6 border-l-8 transition-all relative overflow-hidden ${isBossLevel ? 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]' : 'border-amber-500'}`}>
+                    {isBossLevel && (
+                        <div className="absolute top-0 right-0 bg-red-600 text-white text-xs font-black px-4 py-1 rounded-bl-lg tracking-widest animate-pulse">
+                            ⚠️ 高難度混合委託
+                        </div>
+                    )}
+
+                    {/* 判準標籤 (Tags) */}
+                    <div className="flex flex-wrap gap-2 mb-4 mt-2">
+                        {currentQ.tags.map(tag => (
+                            <span key={tag} className="bg-slate-800 text-amber-500 font-bold px-3 py-1 rounded-md text-sm tracking-wider border border-slate-700 shadow-sm">
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                    <h2 className="text-sm text-slate-400 font-bold mb-2 tracking-widest">【 案情描述 】</h2>
+                    <p className="text-2xl md:text-3xl font-bold text-slate-100 leading-snug">
+                        {currentQ.topic}
+                    </p>
+                </div>
+
+                {/* Options Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
+                    {currentQ.shuffledOptions.map((option) => {
+                        const isSelected = selectedAnswer === option;
+                        const isCorrect = option === currentQ.correct;
+                        const isComboOption = option.includes(' + ');
+
+                        let buttonStyle = "bg-slate-800 text-slate-300 hover:bg-slate-700 border-2 border-slate-600 hover:border-amber-500 hover:text-amber-400";
+
+                        if (isAnswered) {
+                            if (isCorrect) {
+                                buttonStyle = "bg-emerald-700 text-white border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] scale-105 z-10";
+                            } else if (isSelected && !isCorrect) {
+                                buttonStyle = "bg-red-900/80 text-white border-red-500 shadow-inner opacity-90";
+                            } else {
+                                buttonStyle = "bg-slate-800 text-slate-600 border-slate-700 opacity-50 cursor-not-allowed";
+                            }
+                        }
+
+                        return (
+                            <button
+                                key={option}
+                                onClick={() => handleAnswer(option)}
+                                disabled={isAnswered}
+                                className={`flex flex-col md:flex-row items-center justify-center p-4 md:p-6 rounded-xl font-bold transition-all duration-200 ${buttonStyle} ${!isAnswered ? 'hover:shadow-lg hover:-translate-y-1' : ''}`}
+                            >
+                                <span className="text-3xl md:text-3xl md:mr-3 mb-2 md:mb-0 drop-shadow-md tracking-widest whitespace-nowrap">
+                                    {getOptionIcon(option)}
+                                </span>
+                                <span className={`${isComboOption ? 'text-sm md:text-base leading-tight' : 'text-lg'}`}>
+                                    {option}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Feedback Section */}
+                {isAnswered && (
+                    <div className={`p-6 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-4 border-l-8 ${selectedAnswer === currentQ.correct ? 'bg-emerald-900/30 border-emerald-500' : 'bg-red-900/30 border-red-500'}`}>
+                        <h3 className={`text-2xl font-black mb-3 ${selectedAnswer === currentQ.correct ? 'text-emerald-400' : 'text-red-400'}`}>
+                            {selectedAnswer === currentQ.correct
+                                ? `🎯 推理正確！使用道具：${getOptionIcon(currentQ.correct)} ${currentQ.correct}`
+                                : `❌ 推理錯誤！現場遭到破壞，正確道具應為：${getOptionIcon(currentQ.correct)} ${currentQ.correct}`}
+                        </h3>
+                        <p className="text-slate-200 text-lg md:text-xl font-medium leading-relaxed mb-6">
+                            {currentQ.explanation}
+                        </p>
+                        <div className="text-right">
+                            <button
+                                onClick={nextQuestion}
+                                className="bg-amber-600 hover:bg-amber-500 text-slate-900 font-black py-3 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-xl"
+                            >
+                                {currentQIndex < gameQuestions.length - 1 ? '調查下一案 ➡️' : '查看結案報告 📁'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+            </div>
+        </div>
+    );
+};
