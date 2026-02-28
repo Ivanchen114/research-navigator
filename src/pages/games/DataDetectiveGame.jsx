@@ -774,6 +774,7 @@ const injectStyles = () => {
 // ========== 遊戲主元件 ==========
 export const DataDetectiveGame = () => {
     const [gameState, setGameState] = useState('start');
+    const [playerName, setPlayerName] = useState('');
     const [shuffledCases, setShuffledCases] = useState([]);
     const [currentIdx, setCurrentIdx] = useState(0);
     const [score, setScore] = useState(0);
@@ -928,7 +929,15 @@ export const DataDetectiveGame = () => {
                     <h2 className="text-lg md:text-xl font-bold text-amber-500 mb-6 pb-4 border-b-2 border-dashed border-amber-200">找出分析報告中的破綻！</h2>
 
                     <div className="bg-amber-50 rounded-xl p-5 mb-6 text-left border border-amber-200">
-                        <h3 className="text-sm font-bold text-amber-600 mb-3 tracking-wider">📋 偵探手冊</h3>
+                        <label className="block text-sm font-bold text-amber-700 mb-2 tracking-wider">🕵️ 探員代號 (姓名)</label>
+                        <input
+                            type="text"
+                            value={playerName}
+                            onChange={(e) => setPlayerName(e.target.value)}
+                            placeholder="請輸入你的名字..."
+                            className="w-full bg-white border-2 border-amber-200 focus:border-amber-500 rounded-lg outline-none px-4 py-3 font-bold text-lg text-slate-800 placeholder-slate-300 mb-4 transition-colors text-center"
+                        />
+                        <h3 className="text-sm font-bold text-amber-600 mb-3 tracking-wider border-t border-amber-200 pt-3">📋 偵探手冊</h3>
                         <div className="space-y-3 text-sm text-slate-600">
                             <p>每份分析報告包含 <strong className="text-amber-700">三層結構</strong>：</p>
                             <div className="pl-2 space-y-1.5">
@@ -945,8 +954,10 @@ export const DataDetectiveGame = () => {
                         </div>
                     </div>
 
-                    <button onClick={startGame}
-                        className="bg-amber-500 hover:bg-amber-600 text-white font-black py-4 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-lg active:scale-95">
+                    <button
+                        onClick={startGame}
+                        disabled={!playerName.trim()}
+                        className={`font-black py-4 px-10 rounded-full text-xl transition transform shadow-lg ${!playerName.trim() ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600 text-white hover:scale-105 active:scale-95'}`}>
                         開始辦案 🕵️
                     </button>
                 </div>
@@ -969,12 +980,20 @@ export const DataDetectiveGame = () => {
                 <div className="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full text-center border-2 border-amber-200 relative detective-fingerprint">
                     <div className="caution-tape" style={{ position: 'absolute', top: 0, left: 0, right: 0 }} />
                     <h1 className="text-2xl font-bold text-amber-400 mb-4 tracking-widest mt-4" style={{ fontFamily: 'Courier New, monospace' }}>📋 INVESTIGATION REPORT</h1>
+
+                    <div className="mb-4">
+                        <p className="text-sm font-bold text-slate-400 tracking-wider">探員姓名</p>
+                        <p className="text-2xl font-black text-slate-800 border-b-2 border-amber-200 inline-block px-8 pb-1">{playerName}</p>
+                    </div>
+
                     <div className="text-6xl font-black mb-2 text-amber-600">{score} <span className="text-2xl text-amber-300">/ {maxScore}</span></div>
                     {pct >= 70 && <div className="case-closed-stamp my-3">CASE CLOSED</div>}
                     <div className="text-5xl my-2">{emoji}</div>
                     <h2 className={`text-3xl font-black mb-6 ${color}`}>{title}</h2>
 
-                    <button onClick={startGame}
+                    <p className="text-xs text-slate-400 font-bold mb-4 uppercase tracking-widest bg-slate-50 py-2 rounded-lg border border-slate-200">請截圖此頁面作為紀錄</p>
+
+                    <button onClick={() => setGameState('start')}
                         className="bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-sm mb-8 border border-amber-300">
                         重新調查 🔄
                     </button>
@@ -1115,8 +1134,8 @@ export const DataDetectiveGame = () => {
                                     {phase === 'select-layer' && !isAnswered && !isWrongLayer && (
                                         <button onClick={() => handleLayerSelect(layer.type)}
                                             className={`mt-2 w-full py-2 rounded-lg font-bold text-sm transition-all border-2 ${layer.type === 'descriptive' ? 'bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border-indigo-200 hover:border-indigo-400' :
-                                                    layer.type === 'interpretive' ? 'bg-amber-50 hover:bg-amber-100 text-amber-600 border-amber-200 hover:border-amber-400' :
-                                                        'bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border-emerald-200 hover:border-emerald-400'
+                                                layer.type === 'interpretive' ? 'bg-amber-50 hover:bg-amber-100 text-amber-600 border-amber-200 hover:border-amber-400' :
+                                                    'bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border-emerald-200 hover:border-emerald-400'
                                                 } hover:shadow-md`}>
                                             🚨 這層有問題
                                         </button>

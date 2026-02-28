@@ -484,6 +484,7 @@ const Confetti = ({ show }) => {
 // ========== 遊戲主元件 ==========
 export const ChartMatcherGame = () => {
     const [gameState, setGameState] = useState('start');
+    const [playerName, setPlayerName] = useState('');
     const [currentIdx, setCurrentIdx] = useState(0);
     const [score, setScore] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -572,8 +573,16 @@ export const ChartMatcherGame = () => {
                         你能幫數據找到<span className="text-violet-600 font-bold">最適合的圖表</span>嗎？
                     </p>
 
-                    <div className="bg-violet-50 rounded-xl p-4 mb-6 text-left border border-violet-200">
-                        <h3 className="text-sm font-bold text-violet-400 mb-3 tracking-wider">📋 計分規則</h3>
+                    <div className="bg-violet-50 rounded-xl p-5 mb-6 text-left border border-violet-200">
+                        <label className="block text-sm font-bold text-violet-700 mb-2 tracking-wider">🎨 配對師代號 (姓名)</label>
+                        <input
+                            type="text"
+                            value={playerName}
+                            onChange={(e) => setPlayerName(e.target.value)}
+                            placeholder="請輸入你的名字..."
+                            className="w-full bg-white border-2 border-violet-200 focus:border-violet-500 rounded-lg outline-none px-4 py-3 font-bold text-lg text-slate-800 placeholder-slate-300 mb-4 transition-colors text-center"
+                        />
+                        <h3 className="text-sm font-bold text-violet-400 mb-3 tracking-wider border-t border-violet-200 pt-3">📋 計分規則</h3>
                         <div className="space-y-2 text-sm text-slate-600">
                             <p>🎯 選到<strong className="text-violet-600">最佳圖表</strong> → <strong className="text-violet-600">+3 分</strong></p>
                             <p>👍 選到<strong className="text-amber-600">可接受圖表</strong> → <strong className="text-amber-600">+1 分</strong></p>
@@ -595,7 +604,8 @@ export const ChartMatcherGame = () => {
 
                     <button
                         onClick={startGame}
-                        className="bg-violet-500 hover:bg-violet-600 text-white font-black py-4 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-lg active:scale-95"
+                        disabled={!playerName.trim()}
+                        className={`font-black py-4 px-10 rounded-full text-xl transition transform shadow-lg ${!playerName.trim() ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-violet-500 hover:bg-violet-600 text-white hover:scale-105 active:scale-95'}`}
                     >
                         開始配對 🎨
                     </button>
@@ -621,6 +631,12 @@ export const ChartMatcherGame = () => {
             <div className="bg-gradient-to-br from-violet-50 to-pink-50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[600px]">
                 <div className="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full text-center border-t-8 border-violet-400">
                     <h1 className="text-3xl font-bold text-slate-400 mb-4 tracking-widest">配對報告</h1>
+
+                    <div className="mb-4">
+                        <p className="text-sm font-bold text-slate-400 tracking-wider">配對師姓名</p>
+                        <p className="text-2xl font-black text-slate-800 border-b-2 border-violet-200 inline-block px-8 pb-1">{playerName}</p>
+                    </div>
+
                     <div className="text-6xl font-black mb-2 text-violet-500">
                         {score} <span className="text-2xl text-slate-300">/ {maxScore}</span>
                     </div>
@@ -630,8 +646,10 @@ export const ChartMatcherGame = () => {
                     )}
                     <h2 className={`text-3xl font-black mb-6 ${color}`}>{title}</h2>
 
+                    <p className="text-xs text-slate-400 font-bold mb-4 uppercase tracking-widest bg-slate-50 py-2 rounded-lg border border-slate-200">請截圖此頁面作為紀錄</p>
+
                     <button
-                        onClick={startGame}
+                        onClick={() => setGameState('start')}
                         className="bg-violet-100 hover:bg-violet-200 text-violet-600 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-sm mb-8 border border-violet-200"
                     >
                         重新配對 🔄

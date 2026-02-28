@@ -141,7 +141,7 @@ export const Home = () => {
                             <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
                                 <HeartPulse size={24} />
                             </div>
-                            <h3 className="text-base font-bold text-slate-800">問題急診室 (W0-W2)</h3>
+                            <h3 className="text-base font-bold text-slate-800">Level 1：問題急診室 (W0-W2)</h3>
                             <p className="text-sm text-slate-500">10 個生病的研究問題，你能正確診斷並開處方嗎？</p>
                         </CardContent>
                     </Card>
@@ -168,7 +168,7 @@ export const Home = () => {
                             <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform">
                                 <Bug size={24} />
                             </div>
-                            <h3 className="text-base font-bold text-slate-800">處方鑑定師 (W8-W9)</h3>
+                            <h3 className="text-base font-bold text-slate-800">Level 2：處方診斷室 (W8-W9)</h3>
                             <p className="text-sm text-slate-500">找出研究工具裡的設計 Bug！練習效度、信度、可行性。</p>
                         </CardContent>
                     </Card>

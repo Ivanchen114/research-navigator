@@ -18,7 +18,7 @@ export const Layout = () => {
             label: '1️⃣ 問題意識',
             items: [
                 { name: '發掘問題 (W0-W2)', path: '/discovery', icon: <Search size={18} /> },
-                { name: '[遊戲] 問題急診室 (W0-W2)', path: '/game/question-er', icon: <HeartPulse size={18} /> },
+                { name: '[遊戲] Level 1：問題急診室 (W0-W2)', path: '/game/question-er', icon: <HeartPulse size={18} /> },
             ]
         },
         {
@@ -37,7 +37,7 @@ export const Layout = () => {
                 { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
                 { name: '[遊戲] 文獻偵探社 (W6)', path: '/game/citation-detective', icon: <Gamepad2 size={18} /> },
                 { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> },
-                { name: '[遊戲] 處方鑑定師 (W8-W9)', path: '/game/rx-inspector', icon: <Bug size={18} /> },
+                { name: '[遊戲] Level 2：處方診斷室 (W8-W9)', path: '/game/rx-inspector', icon: <Bug size={18} /> },
             ]
         },
         {

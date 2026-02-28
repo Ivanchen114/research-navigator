@@ -125,7 +125,30 @@ export const FoundationModule = () => {
                 </div>
             </div>
 
-            {/* Content 2: AI-RED */}
+            {/* Content 2: Data Translation Games */}
+            <div className="bg-amber-50 p-6 rounded-xl shadow-sm border border-amber-100 mt-8">
+                <h3 className="text-xl font-bold mb-4 text-amber-900 flex items-center gap-2">
+                    <span className="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                    實戰演練：選對圖表與黃金寫作公式
+                </h3>
+                <p className="mb-6 text-slate-700">
+                    數據是食材，圖表是盤子，亂裝會出事！學會「描述＋推論」的黃金公式，讓數據自己說故事。
+                </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-white p-5 rounded-lg border border-slate-200 flex flex-col items-center text-center">
+                        <div className="text-4xl mb-3">📊</div>
+                        <h4 className="font-bold text-slate-800 mb-2">圖表配對大師 (Chart Matcher)</h4>
+                        <p className="text-sm text-slate-600 mb-4 flex-1">折線圖、圓餅圖、長條圖怎麼選才對？來挑戰你的圖表直覺！</p>
+                        <a href="/game/chart-matcher" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold transition-colors w-full inline-block">進入圖表選擇挑戰</a>
+                    </div>
+                    <div className="bg-white p-5 rounded-lg border border-slate-200 flex flex-col items-center text-center">
+                        <div className="text-4xl mb-3">🕵️‍♂️</div>
+                        <h4 className="font-bold text-slate-800 mb-2">數據偵探 (Data Detective)</h4>
+                        <p className="text-sm text-slate-600 mb-4 flex-1">有些研究的推論充滿「神邏輯」。你能找出報告中過度推論的地方嗎？</p>
+                        <a href="/game/data-detective" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold transition-colors w-full inline-block">進入推論抓錯挑戰</a>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

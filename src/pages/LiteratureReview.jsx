@@ -15,10 +15,10 @@ export const LiteratureReview = () => {
                             <BookOpen size={16} /> W6 核心模組
                         </div>
                         <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                            文獻偵探社
+                            文獻偵探社與學術寫作倫理
                         </h1>
                         <p className="text-slate-600 mt-2 text-lg">
-                            福爾摩斯的證物鑑識：不只找資料，還要「鑑識」資料。
+                            福爾摩斯的證物鑑識：不只找資料，還要學會「合法使用證據」。
                         </p>
                     </div>
                     {/* Link to the Interactive Game */}
@@ -65,8 +65,71 @@ export const LiteratureReview = () => {
                 </div>
             </div>
 
-            {/* Guide Sections */}
-            <div className="grid md:grid-cols-2 gap-8">
+            {/* Guide Sections: Writing Ethics and Evidence */}
+            <div className="space-y-8">
+                {/* 寫作倫理：避免抄襲的實戰 */}
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div className="bg-rose-600 p-4 text-white">
+                        <h3 className="font-bold text-lg flex items-center gap-2">
+                            <span className="text-2xl">🚨</span> 學術寫作倫理：你踩雷了嗎？
+                        </h3>
+                    </div>
+                    <div className="p-6">
+                        <p className="text-slate-600 mb-6">找到 A 級文獻後，如果不懂「合法使用證據」，就會變成抄襲。快來看看這些實戰範例：</p>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {/* 改寫地雷 */}
+                            <div className="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                                <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                    <span className="text-rose-500">💣</span> 地雷 1：換字抄襲 (Patchwriting)
+                                </h4>
+                                <div className="space-y-4 text-sm">
+                                    <div>
+                                        <span className="font-bold text-slate-500 text-xs">原始觀點 (陳醫師, 2023)：</span>
+                                        <div className="bg-white p-2 rounded border border-slate-200 mt-1">「睡眠不足會導致前額葉皮質功能下降，進而削弱學生的專注力與情緒控管能力。」</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-bold text-rose-600 text-xs">❌ 錯誤改寫 (句型完全沒變，只偷換幾個詞)：</span>
+                                        <div className="bg-rose-50 p-2 rounded border border-rose-200 mt-1 text-rose-900">睡眠<span className="line-through decoration-rose-400">不夠</span>會<span className="line-through decoration-rose-400">造成</span>前額葉皮質<span className="line-through decoration-rose-400">運作降低</span>，進而<span className="line-through decoration-rose-400">減弱同學</span>的<span className="line-through decoration-rose-400">專心度</span>和<span className="line-through decoration-rose-400">情緒管理</span>。(陳醫師, 2023)</div>
+                                    </div>
+                                    <div>
+                                        <span className="font-bold text-emerald-600 text-xs">✅ 優良改寫 (消化後重新組織)：</span>
+                                        <div className="bg-emerald-50 p-2 rounded border border-emerald-200 mt-1 text-emerald-900">陳醫師 (2023) 指出，高中生的情緒管理與專注力問題，其生理成因很可能源自於睡眠缺乏所造成的前額葉功能衰退。</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 三明治法實戰 */}
+                            <div className="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                                <h4 className="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                    <span className="text-emerald-500">🍔</span> 解藥：引用的三明治法則
+                                </h4>
+                                <p className="text-sm text-slate-600 mb-4">如果要「全文照抄」別人的權威名言，必須用你的觀點把肉包起來：</p>
+                                <div className="space-y-3 relative text-sm">
+                                    <div className="absolute left-4 top-4 bottom-4 w-1 bg-amber-200 rounded"></div>
+
+                                    <div className="pl-10 relative">
+                                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-sm"></span>
+                                        <p className="font-bold text-amber-800 text-xs mb-1">上層麵包 (引入背景)：</p>
+                                        <div className="bg-white p-2 rounded border border-slate-200">許多高中生認為拖延只是自己太懶散。然而，就如 <span className="font-bold text-blue-600">Sirois (2018)</span> 所指出的：</div>
+                                    </div>
+
+                                    <div className="pl-10 relative">
+                                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-red-400 border-2 border-white shadow-sm"></span>
+                                        <p className="font-bold text-red-800 text-xs mb-1">中間肉排 (全文照抄，必須加引號)：</p>
+                                        <div className="bg-red-50 p-2 rounded border border-red-200 font-bold text-red-900">「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」</div>
+                                    </div>
+
+                                    <div className="pl-10 relative">
+                                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-sm"></span>
+                                        <p className="font-bold text-amber-800 text-xs mb-1">下層麵包 (你的推論/結論)：</p>
+                                        <div className="bg-white p-2 rounded border border-slate-200">這句話提醒了我們，在本研究設計改善拖延的工具時，不能只給時間計畫表，還必須加入『情緒紓解』的輔助機制。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 {/* 證物位階 */}
                 <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
@@ -75,67 +138,33 @@ export const LiteratureReview = () => {
                             <span className="text-2xl">⚖️</span> 證物可信度等級 (A-D)
                         </h3>
                     </div>
-                    <div className="p-6 space-y-4">
-                        <div className="flex gap-4 items-start">
+                    <div className="p-6 grid md:grid-cols-2 gap-4">
+                        <div className="flex gap-4 items-start bg-slate-50 p-4 rounded-lg">
                             <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xl flex items-center justify-center shrink-0">A</div>
                             <div>
                                 <h4 className="font-bold text-slate-800">學術期刊論文 / 碩博士論文</h4>
-                                <p className="text-sm text-slate-600">經過專家審查（Peer Review）。可信度最高，主要觀點來源。</p>
+                                <p className="text-sm text-slate-600">經過專家審查。可信度最高，是支持研究的<strong className="text-emerald-700">主證據</strong>。</p>
                             </div>
                         </div>
-                        <div className="flex gap-4 items-start">
+                        <div className="flex gap-4 items-start bg-slate-50 p-4 rounded-lg">
                             <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold text-xl flex items-center justify-center shrink-0">B</div>
                             <div>
-                                <h4 className="font-bold text-slate-800">政府報告 / 國際組織數據</h4>
-                                <p className="text-sm text-slate-600">具備官方權威性（如：教育部、WHO）。數據分析的堅實後盾。</p>
+                                <h4 className="font-bold text-slate-800">政府報告 / 專書章節</h4>
+                                <p className="text-sm text-slate-600">具備官方權威性或專家背書。作為補強論點的<strong className="text-blue-700">輔助證據</strong>。</p>
                             </div>
                         </div>
-                        <div className="flex gap-4 items-start">
+                        <div className="flex gap-4 items-start bg-slate-50 p-4 rounded-lg">
                             <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 font-bold text-xl flex items-center justify-center shrink-0">C</div>
                             <div>
-                                <h4 className="font-bold text-slate-800">主流媒體 / 專家專欄</h4>
-                                <p className="text-sm text-slate-600">天下雜誌、泛科學等。可用來幫助理解生硬概念，但不能作為唯一證據。</p>
+                                <h4 className="font-bold text-slate-800">維基百科 / 內容農場 / 科普新聞</h4>
+                                <p className="text-sm text-slate-600">只能用來「找關鍵字」或當<strong className="text-amber-700">背景線索</strong>，不能放進正式引註！</p>
                             </div>
                         </div>
-                        <div className="flex gap-4 items-start">
+                        <div className="flex gap-4 items-start bg-slate-50 p-4 rounded-lg">
                             <div className="w-12 h-12 rounded-full bg-red-100 text-red-700 font-bold text-xl flex items-center justify-center shrink-0">D</div>
                             <div>
-                                <h4 className="font-bold text-slate-800">內容農場 / 個人社群文</h4>
-                                <p className="text-sm text-slate-600">缺乏查證機制。通常帶有強烈情緒或標題殺人，<span className="text-red-600 font-bold">絕對不可引用於正式研究。</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* 正確引用法 */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
-                    <div className="bg-blue-600 p-4 text-white">
-                        <h3 className="font-bold text-lg flex items-center gap-2">
-                            <span className="text-2xl">🍔</span> 正確引用：三明治構句法
-                        </h3>
-                    </div>
-                    <div className="p-6 flex-1 flex flex-col justify-center">
-                        <p className="text-sm text-slate-600 mb-6">引用一段前人的研究，就像做一個漢堡，必須要有上下兩層麵包包夾著精華的肉排。</p>
-
-                        <div className="space-y-3 relative">
-                            <div className="absolute left-4 top-4 bottom-4 w-1 bg-amber-200 rounded"></div>
-
-                            <div className="pl-10 relative">
-                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-sm"></span>
-                                <h4 className="font-bold text-amber-800 text-sm mb-1">上層麵包：引言 (Signal Phrase)</h4>
-                                <p className="text-xs text-slate-600">介紹這是誰說的，或者為什麼要提這個。 <br /><span className="italic text-slate-500">例：「許多學生認為拖延只是時間管理問題。然而，Sirois (2018) 指出：」</span></p>
-                            </div>
-
-                            <div className="pl-10 relative">
-                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-red-400 border-2 border-white shadow-sm"></span>
-                                <h4 className="font-bold text-red-800 text-sm mb-1">肉排：引用內容 (Quote/Paraphrase)</h4>
-                                <p className="text-xs text-slate-600">直接引用（加引號）或是你用自己的話正確改寫的核心知識。<br /><span className="italic text-slate-500">例：「『拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。』」</span></p>
-                            </div>
-
-                            <div className="pl-10 relative">
-                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-sm"></span>
-                                <h4 className="font-bold text-amber-800 text-sm mb-1">下層麵包：你的觀點 (Your Voice)</h4>
-                                <p className="text-xs text-slate-600">解釋這句話跟你的研究有什麼關係，你的看法是什麼。<br /><span className="italic text-slate-500">例：「這提醒我們，制定讀書計畫時也要考慮情緒管理。」</span></p>
+                                <h4 className="font-bold text-slate-800">AI幻覺論文 / 找不到作者的發文</h4>
+                                <p className="text-sm text-slate-600">格式再完美都是假的。<strong className="text-red-700">退回不採用，絕對不可引用！</strong></p>
                             </div>
                         </div>
                     </div>
