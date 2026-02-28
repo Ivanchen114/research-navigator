@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // ========== 迷你圖表預覽元件（全部 SVG）==========
 // 統一尺寸常數
@@ -405,14 +405,98 @@ const renderPreview = (preview) => {
     }
 };
 
+// ========== Juice 動畫樣式注入 ==========
+const injectMatcherStyles = () => {
+    const id = 'chart-matcher-styles';
+    if (document.getElementById(id)) return;
+    const style = document.createElement('style');
+    style.id = id;
+    style.textContent = `
+        @keyframes matcher-shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        @keyframes matcher-pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes combo-fire {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(60px) rotate(360deg); opacity: 0; }
+        }
+        .matcher-confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 50;
+        }
+        .matcher-confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            animation: confetti-fall 1.5s ease-out forwards;
+        }
+    `;
+    document.head.appendChild(style);
+};
+
+// ========== Confetti 元件 ==========
+const Confetti = ({ show }) => {
+    if (!show) return null;
+    const colors = ['#6366f1', '#f43f5e', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'];
+    const pieces = Array.from({ length: 30 }, (_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        delay: `${Math.random() * 0.5}s`,
+        color: colors[i % colors.length],
+        size: 6 + Math.random() * 6,
+        rotation: Math.random() * 360
+    }));
+    return (
+        <div className="matcher-confetti-container">
+            {pieces.map(p => (
+                <div key={p.id} className="matcher-confetti-piece" style={{
+                    left: p.left,
+                    top: `${Math.random() * 40}%`,
+                    backgroundColor: p.color,
+                    width: `${p.size}px`,
+                    height: `${p.size}px`,
+                    animationDelay: p.delay,
+                    transform: `rotate(${p.rotation}deg)`
+                }} />
+            ))}
+        </div>
+    );
+};
+
 // ========== 遊戲主元件 ==========
 export const ChartMatcherGame = () => {
     const [gameState, setGameState] = useState('start');
     const [currentIdx, setCurrentIdx] = useState(0);
     const [score, setScore] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
-    const [answerResult, setAnswerResult] = useState(null); // 'best', 'acceptable', 'wrong'
+    const [answerResult, setAnswerResult] = useState(null);
     const [results, setResults] = useState([]);
+    // Juice states
+    const [combo, setCombo] = useState(0);
+    const [maxCombo, setMaxCombo] = useState(0);
+    const [showConfetti, setShowConfetti] = useState(false);
+    const [shakeCard, setShakeCard] = useState(false);
+    const [comboAnim, setComboAnim] = useState(false);
+
+    useEffect(() => { injectMatcherStyles(); }, []);
 
     const startGame = () => {
         setCurrentIdx(0);
@@ -420,6 +504,10 @@ export const ChartMatcherGame = () => {
         setSelectedAnswer(null);
         setAnswerResult(null);
         setResults([]);
+        setCombo(0);
+        setMaxCombo(0);
+        setShowConfetti(false);
+        setShakeCard(false);
         setGameState('playing');
     };
 
@@ -430,12 +518,30 @@ export const ChartMatcherGame = () => {
         let result;
         if (chartType === q.best) {
             result = 'best';
-            setScore(s => s + 3);
+            const newCombo = combo + 1;
+            setCombo(newCombo);
+            setMaxCombo(m => Math.max(m, newCombo));
+            // Combo bonus: 3連擊+1, 5連擊+2
+            let bonus = 3;
+            if (newCombo >= 5) bonus = 5;
+            else if (newCombo >= 3) bonus = 4;
+            setScore(s => s + bonus);
+            // Confetti!
+            setShowConfetti(true);
+            setTimeout(() => setShowConfetti(false), 1500);
+            // Combo animation
+            setComboAnim(true);
+            setTimeout(() => setComboAnim(false), 600);
         } else if (q.acceptable.includes(chartType)) {
             result = 'acceptable';
             setScore(s => s + 1);
+            setCombo(0); // 斷 combo
         } else {
             result = 'wrong';
+            setCombo(0); // 斷 combo
+            // Shake!
+            setShakeCard(true);
+            setTimeout(() => setShakeCard(false), 500);
         }
         setAnswerResult(result);
         setResults(prev => [...prev, { question: q, chosen: chartType, result }]);
@@ -446,6 +552,7 @@ export const ChartMatcherGame = () => {
             setCurrentIdx(i => i + 1);
             setSelectedAnswer(null);
             setAnswerResult(null);
+            setShakeCard(false);
         } else {
             setGameState('end');
         }
@@ -518,6 +625,9 @@ export const ChartMatcherGame = () => {
                         {score} <span className="text-2xl text-slate-300">/ {maxScore}</span>
                     </div>
                     <p className="text-slate-400 mb-2">（{percentage}%）</p>
+                    {maxCombo >= 3 && (
+                        <p className="text-amber-500 font-bold mb-2">🔥 最高連續答對：{maxCombo} 連擊！</p>
+                    )}
                     <h2 className={`text-3xl font-black mb-6 ${color}`}>{title}</h2>
 
                     <button
@@ -573,13 +683,29 @@ export const ChartMatcherGame = () => {
                     <div className="bg-white text-violet-600 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-violet-200">
                         第 {currentIdx + 1} / {questions.length} 題
                     </div>
-                    <div className="bg-white text-emerald-600 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-emerald-200">
-                        {score} 分
+                    <div className="flex items-center gap-3">
+                        {/* Combo indicator */}
+                        {combo >= 2 && (
+                            <div className="bg-amber-100 text-amber-700 font-black px-4 py-2 rounded-full shadow-sm text-lg border border-amber-300"
+                                style={{ animation: comboAnim ? 'combo-fire 0.5s ease-out' : 'none' }}>
+                                🔥 x{combo}
+                                {combo >= 5 && ' 超神！'}
+                                {combo >= 3 && combo < 5 && ' 火力全開！'}
+                            </div>
+                        )}
+                        <div className="bg-white text-emerald-600 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-emerald-200">
+                            {score} 分
+                        </div>
                     </div>
                 </div>
 
                 {/* Question Card */}
-                <div className={`bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-6 border-l-8 transition-all relative overflow-hidden ${isBoss ? 'border-purple-400 shadow-purple-100' : 'border-violet-400'}`}>
+                <div
+                    className={`bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-6 border-l-8 transition-all relative overflow-hidden ${isBoss ? 'border-purple-400 shadow-purple-100' : 'border-violet-400'}`}
+                    style={{ animation: shakeCard ? 'matcher-shake 0.5s ease-in-out' : 'none' }}
+                >
+                    {/* Confetti */}
+                    <Confetti show={showConfetti} />
                     {isBoss && (
                         <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs font-black px-4 py-1 rounded-bl-lg tracking-widest animate-pulse">
                             🔥 魔王題
@@ -655,8 +781,10 @@ export const ChartMatcherGame = () => {
                             <h3 className={`text-xl font-black mb-3 ${answerResult === 'best' ? 'text-violet-700' :
                                 answerResult === 'acceptable' ? 'text-amber-700' :
                                     'text-rose-600'
-                                }`}>
-                                {answerResult === 'best' && '🎯 完美配對！+3 分'}
+                                }`}
+                                style={{ animation: 'matcher-pop 0.4s ease-out' }}
+                            >
+                                {answerResult === 'best' && (combo >= 3 ? `🔥 完美配對！x${combo} Combo！+${combo >= 5 ? 5 : 4} 分` : '🎯 完美配對！+3 分')}
                                 {answerResult === 'acceptable' && '👍 不錯，但有更好的選擇！+1 分'}
                                 {answerResult === 'wrong' && '❌ 這張圖不太適合！+0 分'}
                             </h3>
