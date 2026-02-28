@@ -47,3 +47,14 @@ export const CardContent = ({ children, className, ...props }) => {
         </div>
     );
 };
+
+export const CardDescription = ({ children, className, ...props }) => {
+    return (
+        <p
+            className={classNames("text-sm text-slate-500 mt-1", className)}
+            {...props}
+        >
+            {children}
+        </p>
+    );
+};
