@@ -19,7 +19,7 @@ export const Home = () => {
                     </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-                    從發現問題到數據分析<br />
+                    從發現問題到解讀結論<br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                         AI 陪你做研究
                     </span>
@@ -67,7 +67,7 @@ export const Home = () => {
                                 <BarChart2 size={32} />
                             </div>
                             <h3 className="text-xl font-bold text-slate-800">
-                                已蒐集資料，準備分析
+                                產出研究結論
                             </h3>
                             <p className="text-slate-600 flex-1">
                                 「我有問卷數據/訪談稿了，接下來救命啊...」<br />
@@ -77,7 +77,7 @@ export const Home = () => {
                                 variant="outline"
                                 className="w-full mt-4 group-hover:bg-indigo-600 group-hover:text-white border-indigo-600 text-indigo-600 hover:bg-indigo-50 focus:ring-indigo-500"
                             >
-                                進入數據分析模組 <ArrowRight size={16} className="ml-2" />
+                                進入解讀與結論模組 <ArrowRight size={16} className="ml-2" />
                             </Button>
                         </CardContent>
                     </Card>

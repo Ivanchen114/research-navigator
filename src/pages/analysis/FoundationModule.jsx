@@ -27,62 +27,105 @@ export const FoundationModule = () => {
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                 <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
                     <span className="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-                    數據分析的本質
+                    如何寫好研究結論？三層次分析法
                 </h3>
-                <p className="mb-6 text-slate-600">做研究就像當偵探，而數據就是你蒐集到的「證物」。你的任務不是只把數據丟出來，而是要透過分析，講出一個有證據支持的「故事」。</p>
+                <p className="mb-6 text-slate-600">
+                    做研究就像當偵探，數據只是你蒐集到的「證物」。
+                    很多人以為把圖表貼上去、數字報一報就是結論，其實那只完成了一小部分。
+                    一個完整嚴謹的研究結論，必須通過以下三個層次：
+                </p>
 
-                <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:shadow-md transition">
-                        <h4 className="font-bold text-slate-700 mb-2">📊 描述 (Descriptive)</h4>
-                        <p className="text-sm text-slate-600">客觀陳述數據呈現的樣貌。<br /><span className="text-xs bg-slate-200 px-1 rounded mt-2 inline-block">例：「平均睡眠 6.2 小時。」</span></p>
+                <div className="space-y-6">
+                    {/* Layer 1: Descriptive */}
+                    <div className="bg-slate-50 p-5 rounded-lg border-l-4 border-l-indigo-500 border border-slate-200">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">📊</span>
+                            <h4 className="font-bold text-lg text-slate-800">層次一：描述 (Descriptive)</h4>
+                        </div>
+                        <p className="text-sm text-slate-700 mb-3">
+                            <strong>目標：客觀陳述數據呈現的樣貌，不參雜個人感覺。</strong>
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="bg-emerald-50 p-3 rounded border border-emerald-100">
+                                <span className="text-emerald-700 font-bold text-sm block mb-1">✅ 這樣寫才對：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li>精準引用數字（例：佔 38%）</li>
+                                    <li>兼顧兩極與中間值（例：分數介於 59-88分）</li>
+                                    <li>真實描述趨勢（例：上下波動）</li>
+                                </ul>
+                            </div>
+                            <div className="bg-rose-50 p-3 rounded border border-rose-100">
+                                <span className="text-rose-700 font-bold text-sm block mb-1">❌ 常見地雷：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li><strong>量詞失準：</strong> 把 38% 說成「絕大多數」</li>
+                                    <li><strong>誇大差距：</strong> 差 5% 卻說「差距懸殊」</li>
+                                    <li><strong>忽略重要數據：</strong> 只提最高最低，無視中間的 60%</li>
+                                    <li><strong>錯誤趨勢歸納：</strong> 明明波動很大卻說「穩定成長」</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:shadow-md transition">
-                        <h4 className="font-bold text-slate-700 mb-2">🧠 詮釋 (Interpretive)</h4>
-                        <p className="text-sm text-slate-600">解讀數據背後的意義。<br /><span className="text-xs bg-slate-200 px-1 rounded mt-2 inline-block">例：「顯示睡眠不足是普遍現象。」</span></p>
+
+                    {/* Layer 2: Interpretive */}
+                    <div className="bg-slate-50 p-5 rounded-lg border-l-4 border-l-amber-500 border border-slate-200">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">🧠</span>
+                            <h4 className="font-bold text-lg text-slate-800">層次二：詮釋 (Interpretive)</h4>
+                        </div>
+                        <p className="text-sm text-slate-700 mb-3">
+                            <strong>目標：解讀數字背後的意義，回答「那又怎樣 (So what?)」。</strong>
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="bg-emerald-50 p-3 rounded border border-emerald-100">
+                                <span className="text-emerald-700 font-bold text-sm block mb-1">✅ 這樣寫才對：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li>探討變項間的「相關性」</li>
+                                    <li>推論造成這種現象的可能原因</li>
+                                    <li>將數據結果與原本的研究動機連結</li>
+                                </ul>
+                            </div>
+                            <div className="bg-rose-50 p-3 rounded border border-rose-100">
+                                <span className="text-rose-700 font-bold text-sm block mb-1">❌ 常見地雷：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li><strong>把相關當因果：</strong> 例：「吃早餐『導致』成績好」 (❌) → 應改為「兩者有『正相關』」。</li>
+                                    <li><strong>過度詮釋（腦補）：</strong> 隨意套用未經證實的成見。</li>
+                                    <li><strong>用詞過強：</strong> 用「證明」、「絕對」等武斷字眼（研究只能說「支持了某個假設」或「顯示某種趨勢」）。</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:shadow-md transition">
-                        <h4 className="font-bold text-slate-700 mb-2">🔍 批判 (Critical)</h4>
-                        <p className="text-sm text-slate-600">檢視結論的限制與可信度。<br /><span className="text-xs bg-slate-200 px-1 rounded mt-2 inline-block">例：「但樣本僅限本校...」</span></p>
+
+                    {/* Layer 3: Critical */}
+                    <div className="bg-slate-50 p-5 rounded-lg border-l-4 border-l-emerald-500 border border-slate-200">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">🔍</span>
+                            <h4 className="font-bold text-lg text-slate-800">層次三：批判 (Critical)</h4>
+                        </div>
+                        <p className="text-sm text-slate-700 mb-3">
+                            <strong>目標：檢視自己這份結論的限制與可信度，展現研究者的嚴謹態度。</strong>
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="bg-emerald-50 p-3 rounded border border-emerald-100">
+                                <span className="text-emerald-700 font-bold text-sm block mb-1">✅ 這樣寫才對：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li>主動承認樣本代表性不足（如：只發了高一部分班級）</li>
+                                    <li>指出可能被遺漏的「干擾變項」（例：影響成績的其實是補習時間，不是吃早餐）</li>
+                                    <li>指出這份研究無法回答的問題</li>
+                                </ul>
+                            </div>
+                            <div className="bg-rose-50 p-3 rounded border border-rose-100">
+                                <span className="text-rose-700 font-bold text-sm block mb-1">❌ 常見地雷：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li><strong>過度推論：</strong> 只調查了松山高中 50 人，就寫「現在的高中生都...」。</li>
+                                    <li><strong>隱瞞瑕疵：</strong> 明知道問卷設計有瑕疵或回收數量太少，卻假裝沒事。</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Content 2: AI-RED */}
-            <div className="bg-emerald-50 p-6 rounded-xl shadow-sm border border-emerald-100 border-l-4 border-l-emerald-500">
-                <h3 className="text-xl font-bold mb-4 text-emerald-900">🤖 AI 協作指南：AI-RED 原則</h3>
-                <p className="mb-4 text-emerald-800">AI 是你的「研究助理」，不是你的「代筆者」。請再次確認你了解以下原則：</p>
-                <ul className="space-y-3 text-sm text-emerald-800">
-                    <li className="flex gap-3 items-start"><span className="font-bold whitespace-nowrap">Ascribe (歸屬)</span> <span>誠實揭露。在報告中寫出：「本研究使用 GenAI (ChatGPT/Claude) 輔助數據分析。」</span></li>
-                    <li className="flex gap-3 items-start"><span className="font-bold whitespace-nowrap">Inquire (探詢)</span> <span>分階段引導，不要一次丟全部資料。</span></li>
-                    <li className="flex gap-3 items-start"><span className="font-bold whitespace-nowrap">Reference (參照)</span> <span>保存你與 AI 的完整對話紀錄（截圖），作為研究歷程。</span></li>
-                    <li className="flex gap-3 items-start"><span className="font-bold whitespace-nowrap text-red-600">Evaluate (評估)</span> <span><strong className="text-red-600">絕不照單全收</strong>。AI 算出的數字要驗證，解釋要思考邏輯。</span></li>
-                    <li className="flex gap-3 items-start"><span className="font-bold whitespace-nowrap">Document (紀錄)</span> <span>記錄你如何「修正」AI 的建議。</span></li>
-                </ul>
-            </div>
-
-            {/* Content 3: Correlation vs Causation */}
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-amber-800 mb-2">⚠️ 避開分析地雷：相關 ≠ 因果</h3>
-                <div className="flex flex-col md:flex-row gap-6 items-center">
-                    <div className="flex-1 text-sm text-amber-900 space-y-2">
-                        <p><strong>現象：</strong>「愛吃早餐的學生，成績比較好」。</p>
-                        <p>❌ <strong>錯誤推論：</strong>「吃早餐會讓成績變好」（因果）。</p>
-                        <p>✅ <strong>正確解讀：</strong>「吃早餐習慣與成績表現有正相關」（相關）。</p>
-                        <p className="text-xs mt-2 text-amber-700">原因：可能有「第三變項」（如：家庭社經地位高 → 有錢吃早餐 + 有錢補習）。</p>
-                        <button
-                            onClick={() => setShowChart(!showChart)}
-                            className="mt-4 bg-amber-600 text-white px-4 py-2 rounded text-sm hover:bg-amber-700 transition shadow-sm w-full md:w-auto"
-                        >
-                            {showChart ? '隱藏圖表' : '顯示相關性圖表範例'}
-                        </button>
-                    </div>
-                    {showChart && (
-                        <div className="flex-1 w-full bg-white p-4 rounded shadow-sm border border-amber-100 flex items-center justify-center text-amber-600 text-sm font-bold h-64 animate-in fade-in">
-                            <FoundationChart />
-                        </div>
-                    )}
-                </div>
-            </div>
         </div>
     );
 };

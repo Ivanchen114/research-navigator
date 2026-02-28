@@ -308,7 +308,7 @@ export const ToolDesignPage = () => {
                     to="/analysis"
                     className="inline-flex items-center gap-2 bg-white text-indigo-700 hover:bg-indigo-50 px-5 py-2.5 rounded-lg font-bold text-sm transition-colors"
                 >
-                    前往數據分析模組 (W10+)
+                    前往解讀與結論模組 (W10+)
                     <ArrowRight size={16} />
                 </Link>
             </div>

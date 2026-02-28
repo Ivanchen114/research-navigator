@@ -54,7 +54,7 @@ export const AnalysisHub = () => {
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                    <span className="text-blue-600">📊</span> 數據分析教練
+                    <span className="text-blue-600">📊</span> 解讀與結論教練
                 </h1>
                 <p className="text-slate-600 mt-2 mb-4">收完數據了嗎？選擇你使用的研究方法，查閱專屬的 AI 協作分析指南與指令範本。</p>
 

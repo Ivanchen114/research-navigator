@@ -32,7 +32,7 @@ export const Layout = () => {
         {
             label: '實戰分析',
             items: [
-                { name: '數據分析 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
+                { name: '解讀與結論 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
             ]
         },
         {
