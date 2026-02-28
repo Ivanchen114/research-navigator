@@ -14,38 +14,41 @@ export const Layout = () => {
             ]
         },
         {
-            label: '探索階段',
+            phase: '🔍 探索階段',
+            label: '1️⃣ 問題意識',
             items: [
                 { name: '發掘問題 (W0-W2)', path: '/discovery', icon: <Search size={18} /> },
+                { name: '[遊戲] 問題急診室 (W0-W2)', path: '/game/question-er', icon: <HeartPulse size={18} /> },
+            ]
+        },
+        {
+            label: '2️⃣ 研究方法',
+            items: [
                 { name: '方法快篩 (W3-W4)', path: '/wizard', icon: <Navigation2 size={18} /> },
                 { name: '研究診所 (W5)', path: '/clinic', icon: <Stethoscope size={18} /> },
+                { name: '[遊戲] 辦案工具大考驗 (W3-W5)', path: '/game/tool-quiz', icon: <Gamepad2 size={18} /> },
+                { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
             ]
         },
         {
-            label: '裝備階段',
+            phase: '🎒 裝備階段',
+            label: '3️⃣ 資料蒐集',
             items: [
                 { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
-                { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
+                { name: '[遊戲] 文獻偵探社 (W6)', path: '/game/citation-detective', icon: <Gamepad2 size={18} /> },
                 { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> },
+                { name: '[遊戲] 處方鑑定師 (W8-W9)', path: '/game/rx-inspector', icon: <Bug size={18} /> },
             ]
         },
         {
-            label: '實戰分析',
+            phase: '📊 實戰分析',
+            label: '4️⃣ 圖表分析',
             items: [
                 { name: '解讀與結論 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
+                { name: '[遊戲] 數據偵探 (W10+)', path: '/game/data-detective', icon: <ChartNoAxesCombined size={18} /> },
+                { name: '[遊戲] 圖表配對師 (W10+)', path: '/game/chart-matcher', icon: <Palette size={18} /> },
             ]
-        },
-        {
-            label: '互動遊戲',
-            items: [
-                { name: '問題急診室 (W0-W2)', path: '/game/question-er', icon: <HeartPulse size={18} /> },
-                { name: '辦案工具大考驗 (W3-W5)', path: '/game/tool-quiz', icon: <Gamepad2 size={18} /> },
-                { name: '文獻偵探社 (W6)', path: '/game/citation-detective', icon: <Gamepad2 size={18} /> },
-                { name: '處方鑑定師 (W8-W9)', path: '/game/rx-inspector', icon: <Bug size={18} /> },
-                { name: '數據偵探 (W10+)', path: '/game/data-detective', icon: <ChartNoAxesCombined size={18} /> },
-                { name: '圖表配對師 (W10+)', path: '/game/chart-matcher', icon: <Palette size={18} /> },
-            ]
-        },
+        }
     ];
 
     return (
@@ -78,14 +81,29 @@ export const Layout = () => {
                 <div className="flex-1 py-4 overflow-y-auto">
                     {navSections.map((section, sIdx) => (
                         <div key={sIdx} className="mb-2">
-                            {section.label && (
-                                <div className="px-4 pt-3 pb-1">
-                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-                                        {section.label}
-                                    </span>
-                                    <div className="mt-1 border-t border-slate-700" />
+                            {/* 大階段標題 (Phase) */}
+                            {section.phase && (
+                                <div className="px-5 pt-4 pb-2 mt-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="h-px bg-slate-600 flex-1"></div>
+                                        <span className="text-sm font-bold text-slate-300 tracking-widest">
+                                            {section.phase}
+                                        </span>
+                                        <div className="h-px bg-slate-600 flex-1"></div>
+                                    </div>
                                 </div>
                             )}
+
+                            {/* 次分類標題 (Label) */}
+                            {section.label && (
+                                <div className="px-6 pt-2 pb-1">
+                                    <span className="text-xs font-bold text-slate-500 tracking-wider">
+                                        {section.label}
+                                    </span>
+                                </div>
+                            )}
+
+                            {/* 導覽按鈕 */}
                             {section.items.map((item) => (
                                 <NavLink
                                     key={item.path}
@@ -93,14 +111,14 @@ export const Layout = () => {
                                     end={item.path === '/'}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-3 px-6 py-2.5 transition-colors ${isActive
-                                            ? 'bg-blue-600 text-white border-r-4 border-blue-400'
-                                            : 'hover:bg-slate-700 hover:text-white'
+                                        `flex items-center gap-3 px-6 py-2 transition-colors ${isActive
+                                            ? 'bg-blue-600/20 text-blue-400 border-r-4 border-blue-500 font-bold'
+                                            : 'text-slate-400 hover:bg-slate-700 hover:text-white'
                                         }`
                                     }
                                 >
                                     {item.icon}
-                                    <span className="font-medium text-sm">{item.name}</span>
+                                    <span className="text-sm">{item.name}</span>
                                 </NavLink>
                             ))}
                         </div>
