@@ -15,7 +15,7 @@ export const Home = () => {
                 <div className="flex flex-col items-center gap-3 mb-4">
                     <img src="/songshan-logo.svg" alt="松山高中" className="w-16 h-16 bg-white rounded-2xl p-2 shadow-lg" />
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider">
-                        松山高中 × 研究領航員
+                        松山高中 × 研究方法與專題
                     </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">

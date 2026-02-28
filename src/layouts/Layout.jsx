@@ -68,7 +68,7 @@ export const Layout = () => {
                     <div className="flex items-center gap-3 mb-2">
                         <img src="/songshan-logo.svg" alt="松山高中" className="w-10 h-10 bg-white rounded-lg p-1 shadow-sm" />
                         <div>
-                            <h1 className="text-lg font-bold text-white tracking-wider">研究領航員</h1>
+                            <h1 className="text-lg font-bold text-white tracking-wider">研究方法與專題</h1>
                             <p className="text-[10px] text-blue-400 font-semibold tracking-wider">松山高中 SSSH</p>
                         </div>
                     </div>
@@ -116,7 +116,7 @@ export const Layout = () => {
                 <div className="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center z-20 shadow-md">
                     <h1 className="font-bold flex items-center gap-2">
                         <img src="/songshan-logo.svg" alt="松山高中" className="w-7 h-7 bg-white rounded p-0.5" />
-                        研究領航員
+                        研究方法與專題
                     </h1>
                     <button
                         onClick={toggleMobileMenu}
