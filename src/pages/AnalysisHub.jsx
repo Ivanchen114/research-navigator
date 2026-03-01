@@ -58,8 +58,8 @@ export const AnalysisHub = () => {
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 shadow-sm mb-4">
                         <span className="text-blue-600">📊</span> W11–W14 執行與分析階段
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight gap-3 justify-center text-center mb-4">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow-sm">解讀與結論教練</span>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight text-center mb-4 leading-snug pb-2">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">解讀與結論教練</span>
                     </h1>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-6">
                         收完數據了嗎？選擇你使用的研究方法，查閱專屬的 AI 協作分析指南與指令範本。

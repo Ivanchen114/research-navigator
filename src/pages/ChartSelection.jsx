@@ -71,8 +71,8 @@ export const ChartSelection = () => {
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-100 shadow-sm mb-4">
                         <TrendingUp size={16} /> DATA VISUALIZATION
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight gap-3 justify-center text-center mb-4">
-                        選圖表如同選盤子：<span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600 drop-shadow-sm">數據視覺化原則</span>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight text-center mb-4 leading-snug pb-2">
+                        選圖表如同選盤子：<span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">數據視覺化原則</span>
                     </h1>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
                         數據是食材，圖表是盤子。選錯圖表，數據就無法說話。
@@ -86,7 +86,7 @@ export const ChartSelection = () => {
                     <div className="p-2 bg-blue-600 rounded-xl text-white shadow-sm">
                         <BookOpen size={24} />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-800">觀念四：選對圖表工具</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">觀念一：選對圖表工具</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -195,7 +195,7 @@ export const ChartSelection = () => {
                     <div className="p-2 bg-emerald-600 rounded-xl text-white shadow-sm">
                         <Info size={24} />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-800">觀念五：圖表引用格式</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">觀念二：圖表引用格式</h2>
                 </div>
                 <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-4">
@@ -242,7 +242,7 @@ export const ChartSelection = () => {
                     <div className="p-2 bg-amber-600 rounded-xl text-white shadow-sm">
                         <Quote size={24} />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-800">觀念六：數據說故事 (描述 vs. 推論)</h2>
+                    <h2 className="text-2xl font-bold text-slate-800">觀念三：數據說故事 (描述 vs. 推論)</h2>
                 </div>
 
                 <div className="bg-amber-50 rounded-3xl p-8 border border-amber-100">
