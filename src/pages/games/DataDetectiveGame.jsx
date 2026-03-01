@@ -577,11 +577,28 @@ const caseData = [
 
 // ========== 偵探風格 CSS ==========
 const injectStyles = () => {
-    const id = 'detective-styles-v3';
+    const id = 'detective-styles-v4';
     if (document.getElementById(id)) return;
     const style = document.createElement('style');
     style.id = id;
     style.textContent = `
+        .chart-container-darkmode svg text {
+            fill: #94a3b8 !important; /* slate-400 */
+        }
+        .chart-container-darkmode svg line, 
+        .chart-container-darkmode svg path.recharts-cartesian-grid-horizontal line,
+        .chart-container-darkmode svg path.recharts-cartesian-grid-vertical line {
+            stroke: #334155 !important; /* slate-700 */
+        }
+        .chart-container-darkmode .recharts-tooltip-wrapper .recharts-default-tooltip {
+            background-color: rgba(15, 23, 42, 0.9) !important; /* slate-900 */
+            border: 1px solid rgba(245, 158, 11, 0.3) !important;
+            border-radius: 8px !important;
+            backdrop-filter: blur(8px) !important;
+        }
+        .chart-container-darkmode .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item {
+            color: #f8fafc !important; /* slate-50 */
+        }
         @keyframes detective-pop {
             0% { transform: scale(0.85); opacity: 0; }
             50% { transform: scale(1.08); }
@@ -603,169 +620,11 @@ const injectStyles = () => {
             70% { transform: scale(1.1) rotate(-2deg); }
             100% { transform: scale(1) rotate(-5deg); opacity: 0.85; }
         }
-        @keyframes tape-slide {
-            0% { transform: translateX(-100%) rotate(-2deg); }
-            100% { transform: translateX(0) rotate(-2deg); }
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
         }
-        @keyframes pin-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-        /* Cork board background */
-        .detective-corkboard {
-            background-color: #f5e6c8;
-            background-image: 
-                radial-gradient(ellipse at 20% 50%, rgba(210,180,140,0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(200,170,120,0.2) 0%, transparent 40%),
-                radial-gradient(circle at 50% 80%, rgba(220,190,150,0.15) 0%, transparent 30%);
-            position: relative;
-        }
-        /* Fingerprint watermark */
-        .detective-fingerprint::before {
-            content: '';
-            position: absolute;
-            width: 120px;
-            height: 150px;
-            bottom: 20px;
-            right: 25px;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'%3E%3Cellipse cx='50' cy='60' rx='35' ry='45' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cellipse cx='50' cy='60' rx='28' ry='38' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3Cellipse cx='50' cy='60' rx='21' ry='31' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3Cellipse cx='50' cy='60' rx='14' ry='24' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3Cellipse cx='50' cy='60' rx='7' ry='17' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3Cellipse cx='50' cy='60' rx='2' ry='10' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            pointer-events: none;
-            z-index: 0;
-        }
-        /* Coffee stain ring */
-        .detective-coffee::after {
-            content: '';
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            top: 15px;
-            right: 60px;
-            opacity: 0.06;
-            border-radius: 50%;
-            border: 4px solid #8B4513;
-            box-shadow: inset 0 0 8px rgba(139,69,19,0.3);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .detective-suspect {
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><text y='24' font-size='24'>🔍</text></svg>") 4 4, pointer;
-            border-bottom: 2px dashed #b0956e;
-            padding-bottom: 1px;
-            transition: all 0.2s;
-            border-radius: 2px;
-            position: relative;
-        }
-        .detective-suspect:hover {
-            background: rgba(220, 50, 50, 0.08);
-            border-bottom-color: #dc2626;
-            box-shadow: 0 2px 8px rgba(220, 50, 50, 0.1);
-        }
-        .detective-suspect.clicked-wrong {
-            background: rgba(248, 113, 113, 0.12);
-            border-bottom-color: #f87171;
-            text-decoration: line-through;
-            opacity: 0.4;
-        }
-        .detective-suspect.clicked-right {
-            background: rgba(220, 50, 50, 0.12);
-            border-bottom: 3px solid #dc2626;
-            font-weight: 800;
-        }
-        /* Evidence cards with push pin */
-        .evidence-card {
-            position: relative;
-            border-left: 4px solid;
-            padding: 14px 16px 14px 42px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-            box-shadow: 1px 2px 4px rgba(0,0,0,0.06);
-        }
-        .evidence-card::before {
-            content: '📌';
-            position: absolute;
-            top: -6px;
-            left: 10px;
-            font-size: 18px;
-            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
-            z-index: 2;
-        }
-        .evidence-card.layer-descriptive { border-left-color: #6366f1; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); }
-        .evidence-card.layer-interpretive { border-left-color: #f59e0b; background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); }
-        .evidence-card.layer-critical { border-left-color: #10b981; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); }
-        /* Red string connecting evidence */
-        .evidence-card:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 18px;
-            bottom: -12px;
-            width: 2px;
-            height: 12px;
-            background: repeating-linear-gradient(to bottom, #dc2626 0px, #dc2626 3px, transparent 3px, transparent 6px);
-            z-index: 1;
-        }
-        /* Case Closed stamp */
-        .case-closed-stamp {
-            display: inline-block;
-            border: 4px solid #dc2626;
-            border-radius: 8px;
-            color: #dc2626;
-            font-weight: 900;
-            font-size: 1.1rem;
-            padding: 6px 18px;
-            letter-spacing: 4px;
-            transform: rotate(-5deg);
-            opacity: 0.85;
-            animation: stamp-in 0.6s ease-out;
-            text-transform: uppercase;
-            font-family: 'Courier New', monospace;
-        }
-        /* Caution tape */
-        .caution-tape {
-            background: repeating-linear-gradient(
-                -45deg,
-                #fbbf24 0px, #fbbf24 10px,
-                #1a1a1a 10px, #1a1a1a 12px,
-                #fbbf24 12px, #fbbf24 22px,
-                #1a1a1a 22px, #1a1a1a 24px
-            );
-            height: 6px;
-            border-radius: 3px;
-            opacity: 0.7;
-        }
-        /* Exhibit tag */
-        .exhibit-tag {
-            display: inline-block;
-            background: #fef3c7;
-            border: 1px solid #d97706;
-            color: #92400e;
-            font-size: 9px;
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
-            padding: 1px 6px;
-            border-radius: 3px;
-            margin-left: 6px;
-            transform: rotate(-1deg);
-        }
-        /* Manila folder tab */
-        .manila-tab {
-            position: absolute;
-            top: -14px;
-            left: 20px;
-            background: linear-gradient(to bottom, #e8d5a8, #dcc89a);
-            border: 1px solid #c9a96e;
-            border-bottom: none;
-            border-radius: 6px 6px 0 0;
-            padding: 2px 14px;
-            font-size: 10px;
-            font-weight: 800;
-            color: #8b6914;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
+        .animate-shimmer {
+            animation: shimmer 1.5s infinite;
         }
     `;
     document.head.appendChild(style);
@@ -788,7 +647,13 @@ export const DataDetectiveGame = () => {
     const [shakeCard, setShakeCard] = useState(false);
     const [wrongLayers, setWrongLayers] = useState([]); // track wrong layer attempts
 
-    useEffect(() => { injectStyles(); }, []);
+    useEffect(() => {
+        injectStyles();
+        const savedName = localStorage.getItem('rib_agent_name');
+        if (savedName) {
+            setPlayerName(savedName);
+        }
+    }, []);
 
     // Fisher-Yates shuffle
     const shuffle = (arr) => {
@@ -920,45 +785,53 @@ export const DataDetectiveGame = () => {
     // ========== START SCREEN ==========
     if (gameState === 'start') {
         return (
-            <div className="detective-corkboard rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-14 font-sans min-h-[600px]">
-                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl max-w-xl w-full text-center border-2 border-amber-200 relative overflow-hidden detective-fingerprint">
-                    <div className="caution-tape mb-0" style={{ position: 'absolute', top: 0, left: 0, right: 0 }} />
-                    <div className="absolute top-3 right-4 text-[10px] font-mono text-amber-400 tracking-widest" style={{ fontFamily: 'Courier New, monospace' }}>CASE FILE #001-014</div>
-                    <div className="text-6xl mb-4">🕵️</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-amber-700 mb-3 tracking-wide">數據偵探</h1>
-                    <h2 className="text-lg md:text-xl font-bold text-amber-500 mb-6 pb-4 border-b-2 border-dashed border-amber-200">找出分析報告中的破綻！</h2>
+            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-14 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+                style={{ backgroundImage: "url('/images/data_detective_bg.png')" }}>
+                <div className="absolute inset-0 bg-slate-900/80  z-0"></div>
+                <div className="bg-slate-900/60 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative flex flex-col  border-x border-b border-white/10 z-10 animate-in fade-in zoom-in-95 duration-500">
+                    <div className="absolute top-3 right-4 text-[10px] font-mono text-amber-500 tracking-widest drop-shadow-[0_0_5px_rgba(245,158,11,0.8)]" style={{ fontFamily: 'Courier New, monospace' }}>FILE #001-014</div>
+                    <div className="text-6xl mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">🕵️</div>
+                    <h1 className="text-4xl md:text-5xl font-black mb-2 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse">真相濾鏡</h1>
+                    <div className="text-sm md:text-base font-bold text-amber-200/90 mb-5 bg-amber-950/60 inline-block px-4 py-1.5 rounded-lg border border-amber-500/30 tracking-widest">
+                        🎯 客觀數據解讀與批判性思維培養
+                    </div>
+                    <p className="text-lg text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed shadow-sm font-medium">
+                        歡迎來到「真相濾鏡」！在這裡，你將化身為數據偵探，運用你的批判性思維，
+                        從看似合理的分析報告中，找出隱藏的偏誤、錯誤詮釋或不當結論。
+                        每一份報告都可能藏著「假象」，你的任務就是揭露它們，還原數據的「真相」！
+                    </p>
 
-                    <div className="bg-amber-50 rounded-xl p-5 mb-6 text-left border border-amber-200">
-                        <label className="block text-sm font-bold text-amber-700 mb-2 tracking-wider">🕵️ 探員代號 (姓名)</label>
-                        <input
-                            type="text"
-                            value={playerName}
-                            onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="請輸入你的名字..."
-                            className="w-full bg-white border-2 border-amber-200 focus:border-amber-500 rounded-lg outline-none px-4 py-3 font-bold text-lg text-slate-800 placeholder-slate-300 mb-4 transition-colors text-center"
-                        />
-                        <h3 className="text-sm font-bold text-amber-600 mb-3 tracking-wider border-t border-amber-200 pt-3">📋 偵探手冊</h3>
-                        <div className="space-y-3 text-sm text-slate-600">
-                            <p>每份分析報告包含 <strong className="text-amber-700">三層結構</strong>：</p>
-                            <div className="pl-2 space-y-1.5">
-                                <p><span className="text-indigo-500 font-bold">📊 描述</span> — 客觀陳述數據</p>
-                                <p><span className="text-amber-600 font-bold">🧠 詮釋</span> — 解讀數據意義</p>
-                                <p><span className="text-emerald-600 font-bold">🔍 批判</span> — 檢視限制與可信度</p>
+                    <div className="bg-slate-950/60 rounded-2xl p-6 mb-8 text-center border border-amber-500/30 shadow-inner  relative overflow-hidden group hover:border-amber-500/50 transition-colors duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <label className="block text-sm font-black text-amber-500 mb-2 tracking-[0.2em] drop-shadow-[0_0_5px_currentColor]">🕵️ 目前登入身分</label>
+                        {playerName ? (
+                            <div className="text-2xl font-black text-amber-300 border-b-2 border-amber-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_8px_rgba(252,211,77,0.5)]">{playerName} 探員</div>
+                        ) : (
+                            <div className="text-rose-400 font-bold mb-2 drop-shadow-[0_0_5px_currentColor]">無法辨識身分！請返回總部大廳完成報到手續。</div>
+                        )}
+                        <h3 className="text-sm font-black text-cyan-400 mb-3 tracking-widest border-t border-slate-700/50 pt-5 mt-6 flex items-center justify-center gap-2 drop-shadow-[0_0_5px_currentColor]">📋 偵探手冊</h3>
+                        <div className="space-y-3 text-sm text-slate-300 text-left font-medium">
+                            <p>每份分析報告包含 <strong className="text-amber-400">三層結構</strong>：</p>
+                            <div className="pl-3 border-l-2 border-slate-700/80 space-y-2 py-1 my-2">
+                                <p className="flex items-center gap-2"><span className="text-indigo-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">📊 描述</span> <span className="text-slate-400">—</span> 客觀陳述數據</p>
+                                <p className="flex items-center gap-2"><span className="text-amber-500 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🧠 詮釋</span> <span className="text-slate-400">—</span> 解讀數據意義</p>
+                                <p className="flex items-center gap-2"><span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🔍 批判</span> <span className="text-slate-400">—</span> 檢視限制與信度</p>
                             </div>
-                            <div className="border-t border-amber-200 pt-3 mt-3">
-                                <p>🔎 <strong className="text-amber-700">第一步：選哪一層有問題</strong></p>
-                                <p>🔍 <strong className="text-amber-700">第二步：找出問題關鍵字</strong></p>
-                                <p>✅ 三層都 OK？按<strong className="text-emerald-600">「都沒問題」</strong></p>
-                                <p>⭐ 每案 3 顆星，選錯扣星！</p>
+                            <div className="border-t border-slate-700/50 pt-4 mt-4 space-y-2">
+                                <p className="flex items-center gap-2">🔎 <strong className="text-amber-400 drop-shadow-[0_0_5px_currentColor]">第一步：選哪一層有問題</strong></p>
+                                <p className="flex items-center gap-2">🔍 <strong className="text-cyan-400 drop-shadow-[0_0_5px_currentColor]">第二步：找出問題關鍵字</strong></p>
+                                <p className="flex items-center gap-2"><span className="text-emerald-400">✅</span> 三層都 OK？按<strong className="text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">「都沒問題」</strong></p>
+                                <p className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-800/80 text-amber-500/80 text-xs">⭐ 每案 3 顆星，選錯扣星！</p>
                             </div>
                         </div>
                     </div>
 
                     <button
                         onClick={startGame}
-                        disabled={!playerName.trim()}
-                        className={`font-black py-4 px-10 rounded-full text-xl transition transform shadow-lg ${!playerName.trim() ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-600 text-white hover:scale-105 active:scale-95'}`}>
-                        開始辦案 🕵️
+                        disabled={!playerName}
+                        className={`w-full py-4 rounded-full font-black text-xl tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group ${!playerName ? 'bg-slate-800/50 text-slate-500 border border-slate-700 cursor-not-allowed' : 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 shadow-[0_5px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_8px_25px_rgba(245,158,11,0.6)] hover:-translate-y-1 active:translate-y-0'}`}>
+                        {playerName && <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
+                        <span className="relative z-10 flex items-center gap-2">開始辦案 🕵️</span>
                     </button>
                 </div>
             </div >
@@ -969,48 +842,52 @@ export const DataDetectiveGame = () => {
     if (gameState === 'end') {
         const maxScore = shuffledCases.length * 3;
         const pct = Math.round((score / maxScore) * 100);
-        let title, color, emoji;
-        if (pct >= 90) { title = "首席數據分析官"; color = "text-amber-600"; emoji = "🏆"; }
-        else if (pct >= 70) { title = "資深數據偵探"; color = "text-amber-700"; emoji = "🕵️"; }
-        else if (pct >= 50) { title = "實習分析師"; color = "text-emerald-600"; emoji = "📋"; }
-        else { title = "菜鳥偵探，繼續修煉！"; color = "text-rose-500"; emoji = "📉"; }
+        let title;
+        let color, bg, borderColor, emoji;
+        if (pct >= 90) { title = "首席情報解碼員"; color = "text-amber-400"; bg = "bg-amber-950/60"; borderColor = "border-amber-400"; emoji = "🏆"; }
+        else if (pct >= 70) { title = "資深數據分析師"; color = "text-amber-500"; bg = "bg-amber-950/40"; borderColor = "border-amber-500/50"; emoji = "🕵️"; }
+        else if (pct >= 50) { title = "實習分析師"; color = "text-emerald-400"; emoji = "📋"; }
+        else { title = "菜鳥偵探，繼續修煉！"; color = "text-rose-400"; emoji = "📉"; }
 
         return (
-            <div className="detective-corkboard rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[600px]">
-                <div className="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full text-center border-2 border-amber-200 relative detective-fingerprint">
-                    <div className="caution-tape" style={{ position: 'absolute', top: 0, left: 0, right: 0 }} />
-                    <h1 className="text-2xl font-bold text-amber-400 mb-4 tracking-widest mt-4" style={{ fontFamily: 'Courier New, monospace' }}>📋 INVESTIGATION REPORT</h1>
+            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+                style={{ backgroundImage: "url('/images/data_detective_bg.png')" }}>
+                <div className="absolute inset-0 bg-slate-900/80 z-0"></div>
+                <div className="bg-slate-900/70 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative  border-x border-b border-white/10 z-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                    <div className="absolute top-0 right-6 bg-slate-800 text-slate-400 text-xs font-mono px-4 py-1.5 rounded-b-lg tracking-widest shadow-inner border-x border-b border-slate-700">FINAL DOSSIER</div>
+                    <h1 className="text-2xl font-bold text-amber-500 mb-4 tracking-widest mt-4 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" style={{ fontFamily: 'Courier New, monospace' }}>📋 INVESTIGATION REPORT</h1>
 
-                    <div className="mb-4">
-                        <p className="text-sm font-bold text-slate-400 tracking-wider">探員姓名</p>
-                        <p className="text-2xl font-black text-slate-800 border-b-2 border-amber-200 inline-block px-8 pb-1">{playerName}</p>
+                    <div className="mb-6 bg-slate-950/50 py-4 mx-8 rounded-2xl border border-slate-800/80 shadow-inner">
+                        <p className="text-sm font-black text-slate-400 tracking-widest mb-1">探員姓名</p>
+                        <p className="text-3xl font-black text-amber-300 border-b-2 border-amber-500/50 inline-block px-8 pb-1 drop-shadow-[0_0_8px_rgba(252,211,77,0.5)]">{playerName}</p>
                     </div>
 
-                    <div className="text-6xl font-black mb-2 text-amber-600">{score} <span className="text-2xl text-amber-300">/ {maxScore}</span></div>
-                    {pct >= 70 && <div className="case-closed-stamp my-3">CASE CLOSED</div>}
-                    <div className="text-5xl my-2">{emoji}</div>
-                    <h2 className={`text-3xl font-black mb-6 ${color}`}>{title}</h2>
+                    <div className="text-6xl font-black mb-2 text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)]">{score} <span className="text-3xl text-amber-300 opacity-60">/ {maxScore}</span></div>
+                    {pct >= 70 && <div className="case-closed-stamp my-3 opacity-90 rotate-[-5deg] scale-110 drop-shadow-[0_0_10px_rgba(244,63,94,0.4)] border-rose-500 text-rose-500">CASE CLOSED</div>}
+                    <div className="text-6xl my-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] animate-bounce">{emoji}</div>
+                    <h2 className={`text-4xl font-black mb-8 ${color} drop-shadow-[0_0_10px_currentColor] tracking-wide`}>{title}</h2>
 
-                    <p className="text-xs text-slate-400 font-bold mb-4 uppercase tracking-widest bg-slate-50 py-2 rounded-lg border border-slate-200">請截圖此頁面作為紀錄</p>
+                    <p className="text-xs text-amber-400/80 font-black mb-6 uppercase tracking-[0.2em] bg-amber-950/40 py-2.5 rounded-xl border border-amber-500/30 mx-12 shadow-inner">請截圖此頁面作為紀錄</p>
 
                     <button onClick={() => setGameState('start')}
-                        className="bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-sm mb-8 border border-amber-300">
-                        重新調查 🔄
+                        className="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3.5 px-10 rounded-full text-lg tracking-widest transition-all duration-300 hover:scale-105 shadow-[0_5px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_5px_20px_rgba(245,158,11,0.3)] mb-8 border border-slate-600 hover:border-amber-500/50 flex items-center gap-2 mx-auto">
+                        <span>重新調查</span> <span>🔄</span>
                     </button>
 
                     {wrongCases.length > 0 && (
-                        <div className="text-left bg-rose-50 p-6 rounded-xl border-l-8 border-rose-300 max-h-96 overflow-y-auto">
-                            <h3 className="text-lg font-black mb-4 text-slate-700">📋 誤判紀錄</h3>
-                            <div className="space-y-3">
+                        <div className="text-left bg-slate-900/80 p-6 rounded-2xl border-l-[6px] border-rose-500 shadow-inner max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-rose-900 scrollbar-track-transparent">
+                            <h3 className="text-lg font-black mb-4 text-rose-400 tracking-widest flex items-center gap-2 drop-shadow-[0_0_5px_currentColor]">📋 誤判紀錄</h3>
+                            <div className="space-y-4">
                                 {wrongCases.map((wc, i) => (
-                                    <div key={i} className="bg-white p-4 rounded-lg border border-rose-200 shadow-sm">
-                                        <p className="font-bold text-slate-700 mb-1">{wc.title}</p>
-                                        <span className={`text-sm font-bold px-3 py-1 rounded-full ${wc.isValid ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-600'}`}>
+                                    <div key={i} className="bg-slate-950/60 p-5 rounded-xl border border-slate-700 shadow-sm relative overflow-hidden group hover:border-slate-500 transition-colors">
+                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-rose-500/50 to-transparent"></div>
+                                        <p className="font-bold text-slate-200 mb-2">{wc.title}</p>
+                                        <span className={`text-xs font-black px-3 py-1 rounded-full shadow-inner tracking-wider ${wc.isValid ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950/60 text-rose-400 border border-rose-500/30'}`}>
                                             {wc.isValid ? '✅ 其實是正確分析' : `❌ ${wc.errorType}（${wc.errorLayer === 'descriptive' ? '📊描述層' : wc.errorLayer === 'interpretive' ? '🧠詮釋層' : '🔍批判層'}）`}
                                         </span>
-                                        <div className="flex flex-wrap gap-1 mt-2">
+                                        <div className="flex flex-wrap gap-1.5 mt-3">
                                             {wc.tags.map(t => (
-                                                <span key={t} className="bg-amber-50 text-amber-700 text-xs font-bold px-2 py-0.5 rounded border border-amber-200">#{t}</span>
+                                                <span key={t} className="bg-amber-950/40 text-amber-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded border border-amber-500/20">#{t}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -1019,8 +896,8 @@ export const DataDetectiveGame = () => {
                         </div>
                     )}
                     {wrongCases.length === 0 && (
-                        <div className="bg-emerald-50 text-emerald-700 border border-emerald-200 p-4 rounded-xl font-bold text-lg">
-                            零誤判！你的數據解讀能力堪稱完美！ 🎉
+                        <div className="bg-emerald-950/60 text-emerald-400 border border-emerald-500/50 p-5 rounded-2xl font-black text-lg tracking-wide shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                            ✨ 零誤判！你的數據解讀能力堪稱完美！ 🎉
                         </div>
                     )}
                 </div>
@@ -1033,18 +910,23 @@ export const DataDetectiveGame = () => {
     const isBoss = current.title.includes('🔥');
 
     return (
-        <div className="detective-corkboard rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px]">
-            <div className="max-w-4xl w-full">
+        <div className="relative rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+            style={{ backgroundImage: "url('/images/data_detective_bg.png')" }}>
+            <div className="absolute inset-0 bg-slate-900/80 z-0"></div>
+
+            <div className="max-w-4xl w-full relative z-10 flex flex-col h-full">
 
                 {/* Top bar */}
-                <div className="flex justify-between items-center mb-5 px-2">
-                    <div className="bg-white text-amber-700 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-amber-200">
-                        🗂️ 案件 {currentIdx + 1} / {shuffledCases.length}
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1 shrink-0">
+                    <div className="bg-slate-900/80 text-amber-500 font-bold px-5 py-2.5 rounded-full shadow-inner border border-amber-500/30 text-lg flex items-center gap-2 ">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
+                        案件 <span className="text-amber-300">{currentIdx + 1}</span> <span className="opacity-50 font-normal">/ {shuffledCases.length}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex gap-1 text-xl">
+
+                    <div className="flex items-center gap-4 bg-slate-900/80 px-5 py-2 rounded-full border border-amber-500/30 shadow-inner ">
+                        <div className="flex gap-1.5 text-xl items-center mr-4 border-r border-slate-700/80 pr-4">
                             {[0, 1, 2].map(i => (
-                                <span key={i} style={{
+                                <span key={i} className="drop-shadow-[0_0_5px_rgba(252,211,77,0.8)]" style={{
                                     opacity: i < stars ? 1 : 0.2,
                                     transition: 'all 0.3s',
                                     display: 'inline-block',
@@ -1052,143 +934,176 @@ export const DataDetectiveGame = () => {
                                 }}>⭐</span>
                             ))}
                         </div>
-                        <div className="bg-white text-amber-600 font-bold px-4 py-2 rounded-full shadow-sm text-lg border border-amber-200">
-                            {score} 分
+                        <div className="text-right flex items-center gap-3">
+                            <span className="text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">任務積分</span>
+                            <span className="text-2xl font-black text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">{score}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Case File Card */}
                 <div
-                    className={`bg-white p-5 md:p-7 rounded-2xl shadow-lg mb-5 border-2 transition-all relative overflow-visible detective-coffee ${isBoss ? 'border-purple-300 shadow-purple-100' : 'border-amber-200'}`}
-                    style={{ animation: shakeCard ? 'detective-shake 0.5s ease-in-out' : 'none', marginTop: '20px' }}
+                    className={`bg-slate-900/70 p-6 md:p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-t-[8px] relative flex-1 flex flex-col  border-x border-b border-white/10 ${isBoss ? 'border-purple-500' : 'border-amber-500'}`}
+                    style={{ animation: shakeCard ? 'detective-shake 0.5s ease-in-out' : 'none' }}
                 >
-                    <div className="manila-tab">CASE #{String(current.id).padStart(3, '0')}</div>
-                    <div className="caution-tape" style={{ position: 'absolute', top: 0, left: 0, right: 0, borderRadius: '12px 12px 0 0' }} />
+                    <div className="absolute top-0 right-6 bg-slate-800 text-slate-400 text-xs font-mono px-4 py-1.5 rounded-b-lg tracking-widest shadow-inner border-x border-b border-slate-700">CASE #{String(current.id).padStart(3, '0')}</div>
+
                     {isBoss && (
-                        <div className="absolute top-2 right-3 bg-purple-500 text-white text-xs font-black px-3 py-1 rounded-full tracking-widest animate-pulse" style={{ zIndex: 5 }}>🔥 魔王</div>
+                        <div className="absolute top-0 left-6 bg-purple-600/90 text-white text-xs font-black px-4 py-1.5 rounded-b-lg tracking-widest shadow-[0_2px_10px_rgba(168,85,247,0.5)]  border-x border-b border-purple-400/50 animate-pulse">🔥 魔王考驗</div>
                     )}
 
                     {/* Title */}
-                    <div className="flex items-center gap-2 mb-2 mt-1">
-                        <span className="text-xl">🕵️</span>
-                        <h2 className="text-lg font-bold text-slate-800">{current.title}</h2>
+                    <div className="flex items-center gap-3 mb-2 mt-4 md:mt-2">
+                        <span className="text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">🕵️</span>
+                        <h2 className={`text-xl font-black tracking-wide ${isBoss ? 'text-purple-400 drop-shadow-[0_0_5px_currentColor]' : 'text-amber-400 drop-shadow-[0_0_5px_currentColor]'}`}>{current.title}</h2>
                     </div>
-                    <p className="text-[11px] text-slate-400 mb-4">📁 資料來源：{current.dataSource}</p>
+                    <p className="text-[11px] text-slate-400 mb-5 font-mono tracking-wider">📁 資料來源：{current.dataSource}</p>
 
-                    {/* Chart */}
-                    <div className="bg-slate-50 rounded-xl p-4 mb-5 border border-slate-200">
-                        {renderChart(current)}
+                    {/* Chart Area */}
+                    <div className="bg-slate-950/80 rounded-2xl p-4 md:p-6 mb-6 border border-slate-800 shadow-inner relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        {/* Wrapper for charts to invert colors if they are not naturally dark mode compat */}
+                        <div className="chart-container-darkmode opacity-90 hover:opacity-100 transition-opacity">
+                            {renderChart(current)}
+                        </div>
                     </div>
 
                     {/* Three-Layer Analysis */}
-                    <div className="mb-2">
-                        <p className="text-xs font-bold text-amber-600 mb-3 tracking-wider flex items-center gap-1">
-                            {phase === 'select-layer'
-                                ? '📋 閱讀後，判斷哪一層有問題：'
-                                : '🔍 找出有問題的關鍵字：'}
-                        </p>
+                    <div className="flex-1 flex flex-col min-h-0">
+                        <div className="flex items-center justify-between mb-4 border-b border-slate-700/50 pb-2">
+                            <p className="text-sm font-black text-amber-500 tracking-[0.1em] flex items-center gap-2 drop-shadow-[0_0_5px_currentColor]">
+                                {phase === 'select-layer'
+                                    ? '📋 第 1 步：判斷哪一層有問題'
+                                    : '🔍 第 2 步：找出有問題的關鍵字'}
+                            </p>
+                        </div>
 
-                        {current.layers.map((layer, layerIdx) => {
-                            const exhibitLabels = ['EXHIBIT A', 'EXHIBIT B', 'EXHIBIT C'];
-                            const isSelectedLayer = selectedLayer === layer.type;
-                            const isWrongLayer = wrongLayers.includes(layer.type);
-                            return (
-                                <div key={layerIdx} className={`evidence-card layer-${layer.type}`}
-                                    style={{
-                                        opacity: (phase === 'find-word' && !isSelectedLayer) ? 0.5 : 1,
-                                        borderLeftWidth: isSelectedLayer ? '6px' : '4px',
-                                        transition: 'all 0.3s'
-                                    }}>
-                                    <div className="flex items-center gap-2 mb-1.5">
-                                        <span className="text-base">{layer.icon}</span>
-                                        <span className={`text-xs font-black tracking-wider ${layer.type === 'descriptive' ? 'text-indigo-500' :
-                                            layer.type === 'interpretive' ? 'text-amber-600' : 'text-emerald-600'
-                                            }`}>{layer.label}</span>
-                                        <span className="exhibit-tag">{exhibitLabels[layerIdx]}</span>
-                                        {isWrongLayer && <span className="text-xs text-rose-400 font-bold">✗ 不是這層</span>}
-                                        {isSelectedLayer && phase === 'find-word' && <span className="text-xs text-red-500 font-bold animate-pulse">⬇ 找出問題字句</span>}
+                        <div className="space-y-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent flex-1 pb-4">
+                            {current.layers.map((layer, layerIdx) => {
+                                const exhibitLabels = ['EXHIBIT A', 'EXHIBIT B', 'EXHIBIT C'];
+                                const isSelectedLayer = selectedLayer === layer.type;
+                                const isWrongLayer = wrongLayers.includes(layer.type);
+
+                                // Dynamic colors for dark mode based on layer type
+                                const layerColors = {
+                                    descriptive: { text: 'text-indigo-400', border: 'border-indigo-500/50', bgHover: 'hover:bg-indigo-950/40', btnColor: 'from-indigo-600 to-blue-600' },
+                                    interpretive: { text: 'text-amber-500', border: 'border-amber-500/50', bgHover: 'hover:bg-amber-950/40', btnColor: 'from-amber-600 to-orange-600' },
+                                    critical: { text: 'text-emerald-400', border: 'border-emerald-500/50', bgHover: 'hover:bg-emerald-950/40', btnColor: 'from-emerald-600 to-teal-600' }
+                                };
+                                const colors = layerColors[layer.type];
+
+                                return (
+                                    <div key={layerIdx} className={`relative p-4 md:p-5 rounded-2xl border-l-[6px] transition-all duration-300 shadow-inner  ${isSelectedLayer ? `bg-slate-800/80 ${colors.border}` :
+                                        isWrongLayer ? 'bg-slate-900/30 border-slate-700/30 opacity-60' :
+                                            `bg-slate-900/60 border-slate-700 hover:border-slate-500`
+                                        }`}
+                                        style={{
+                                            opacity: (phase === 'find-word' && !isSelectedLayer) ? 0.3 : 1,
+                                            filter: (phase === 'find-word' && !isSelectedLayer) ? 'grayscale(0.8)' : 'none',
+                                        }}>
+
+                                        <div className="flex items-center justify-between gap-2 mb-3">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xl drop-shadow-md">{layer.icon}</span>
+                                                <span className={`text-sm font-black tracking-widest drop-shadow-[0_0_5px_currentColor] ${colors.text}`}>{layer.label}</span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                {isWrongLayer && <span className="text-[10px] text-rose-400 font-bold bg-rose-950/50 px-2 py-0.5 rounded border border-rose-500/30">✗ 安全</span>}
+                                                {isSelectedLayer && phase === 'find-word' && <span className="text-[10px] text-rose-400 font-black animate-pulse tracking-widest bg-rose-950/50 px-2 py-1 rounded border border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.3)]">⬇ 點擊可疑字詞</span>}
+                                                <span className="text-[10px] font-mono text-slate-500 border border-slate-700/50 bg-slate-950/50 px-2 py-0.5 rounded tracking-widest">{exhibitLabels[layerIdx]}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="text-base md:text-lg font-medium text-slate-200 leading-relaxed pl-1 pb-1">
+                                            {layer.parts.map((part, partIdx) => {
+                                                if (!part.suspect || phase !== 'find-word' || !isSelectedLayer) {
+                                                    return <span key={partIdx}>{part.text}</span>;
+                                                }
+                                                const key = `${layerIdx}-${partIdx}`;
+                                                const wasClicked = clickedParts.includes(key);
+                                                const isRight = part.isError;
+
+                                                let styleClass = "inline-block px-1.5 mx-0.5 rounded relative cursor-pointer font-bold transition-all duration-300 hover:bg-white/10 hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] border border-dashed border-white/20";
+
+                                                if (wasClicked) {
+                                                    if (isRight) styleClass = "inline-block px-1.5 mx-0.5 rounded font-black bg-rose-950/80 border-2 border-rose-500 text-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.4)]";
+                                                    else styleClass = "inline-block px-1.5 mx-0.5 rounded font-medium line-through text-slate-500 bg-slate-900 border border-slate-800 opacity-60";
+                                                } else if (isAnswered && isRight) { // reveal right answer if missed
+                                                    styleClass = "inline-block px-1.5 mx-0.5 rounded font-black border-2 border-emerald-500 bg-emerald-950/50 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]";
+                                                }
+
+                                                return (
+                                                    <span key={partIdx} className={styleClass}
+                                                        onClick={() => !isAnswered && handleSuspectClick(layerIdx, partIdx)}
+                                                        style={{ cursor: (isAnswered || wasClicked) ? 'default' : 'pointer' }}>
+                                                        {part.text}
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Inline layer select button */}
+                                        {phase === 'select-layer' && !isAnswered && !isWrongLayer && (
+                                            <button onClick={() => handleLayerSelect(layer.type)}
+                                                className={`mt-4 w-full py-2.5 rounded-xl font-bold text-sm tracking-widest transition-all duration-300 relative overflow-hidden group bg-gradient-to-r ${colors.btnColor} border border-white/10 shadow-lg text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:-translate-y-0.5`}>
+                                                <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
+                                                <span className="relative z-10 flex items-center justify-center gap-2">🚨 指控此層有誤</span>
+                                            </button>
+                                        )}
                                     </div>
-                                    <p className="text-base md:text-lg font-medium text-slate-700 leading-relaxed">
-                                        {layer.parts.map((part, partIdx) => {
-                                            // Only show suspects in Phase 2 for the selected layer
-                                            if (!part.suspect || phase !== 'find-word' || !isSelectedLayer) {
-                                                return <span key={partIdx}>{part.text}</span>;
-                                            }
-                                            const key = `${layerIdx}-${partIdx}`;
-                                            const wasClicked = clickedParts.includes(key);
-                                            const isRight = part.isError;
-                                            let className = 'detective-suspect';
-                                            if (wasClicked) className += isRight ? ' clicked-right' : ' clicked-wrong';
-                                            if (isAnswered && !wasClicked && isRight) className += ' clicked-right';
-                                            return (
-                                                <span key={partIdx} className={className}
-                                                    onClick={() => !isAnswered && handleSuspectClick(layerIdx, partIdx)}
-                                                    style={{ cursor: (isAnswered || wasClicked) ? 'default' : undefined }}>
-                                                    {part.text}
-                                                </span>
-                                            );
-                                        })}
-                                    </p>
-                                    {/* Inline layer select button */}
-                                    {phase === 'select-layer' && !isAnswered && !isWrongLayer && (
-                                        <button onClick={() => handleLayerSelect(layer.type)}
-                                            className={`mt-2 w-full py-2 rounded-lg font-bold text-sm transition-all border-2 ${layer.type === 'descriptive' ? 'bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border-indigo-200 hover:border-indigo-400' :
-                                                layer.type === 'interpretive' ? 'bg-amber-50 hover:bg-amber-100 text-amber-600 border-amber-200 hover:border-amber-400' :
-                                                    'bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border-emerald-200 hover:border-emerald-400'
-                                                } hover:shadow-md`}>
-                                            🚨 這層有問題
-                                        </button>
-                                    )}
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
 
                 {/* Phase 1: "No problem" button only */}
                 {phase === 'select-layer' && !isAnswered && (
-                    <div className="flex justify-center mb-5">
+                    <div className="flex justify-center mb-8 relative z-20">
                         <button onClick={() => handleLayerSelect('none')}
                             disabled={wrongLayers.includes('none')}
-                            className={`py-3 px-8 rounded-xl font-bold text-base transition-all border-2 ${wrongLayers.includes('none')
-                                ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed'
-                                : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-300 hover:border-slate-400 hover:shadow-md hover:-translate-y-0.5'}`}>
-                            ✅ 結案：三層都沒問題
+                            className={`py-3.5 px-10 rounded-full font-black text-lg tracking-widest transition-all duration-300 border-2 shadow-lg relative overflow-hidden group ${wrongLayers.includes('none')
+                                ? 'bg-slate-900/50 text-slate-600 border-slate-800 cursor-not-allowed'
+                                : 'bg-slate-900/80 hover:bg-slate-800 text-emerald-400 border-emerald-500/50 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:-translate-y-1 '}`}>
+                            {wrongLayers.includes('none') ? '' : <span className="absolute inset-0 w-full h-full bg-white/5 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
+                            <span className="relative z-10">✅ 結案：三層都沒問題</span>
                         </button>
                     </div>
                 )}
 
                 {/* Phase transition feedback */}
                 {feedbackMsg && phase === 'find-word' && !isAnswered && feedbackMsg.type === 'layer-right' && (
-                    <div className="bg-indigo-50 border border-indigo-300 rounded-xl p-4 mb-5 text-center" style={{ animation: 'detective-pop 0.3s ease-out' }}>
-                        <p className="text-base font-bold text-indigo-700">{feedbackMsg.text}</p>
+                    <div className="bg-indigo-950/80 border-2 border-indigo-500 rounded-2xl p-5 mb-8 text-center shadow-[0_0_20px_rgba(99,102,241,0.3)]  relative z-20" style={{ animation: 'detective-pop 0.3s ease-out' }}>
+                        <p className="text-lg font-black text-indigo-300 tracking-wider drop-shadow-[0_0_5px_currentColor]">{feedbackMsg.text}</p>
                     </div>
                 )}
 
                 {/* Inline hint for wrong layer/word */}
                 {feedbackMsg && !isAnswered && feedbackMsg.type === 'wrong' && (
-                    <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 mb-5 text-center" style={{ animation: 'detective-pop 0.3s ease-out' }}>
-                        <p className="text-base font-bold text-amber-700">{feedbackMsg.text}</p>
+                    <div className="bg-amber-950/80 border-2 border-amber-500 rounded-2xl p-5 mb-8 text-center shadow-[0_0_20px_rgba(245,158,11,0.3)]  relative z-20" style={{ animation: 'detective-pop 0.3s ease-out' }}>
+                        <p className="text-lg font-black text-amber-400 tracking-wider drop-shadow-[0_0_5px_currentColor]">{feedbackMsg.text}</p>
                     </div>
                 )}
 
                 {/* Full feedback after answering */}
                 {isAnswered && (
-                    <div className={`p-6 rounded-2xl shadow-lg mb-5 border-l-8 ${feedbackMsg?.type === 'right' ? 'bg-emerald-50 border-emerald-400' : 'bg-rose-50 border-rose-400'}`}
+                    <div className={`p-6 md:p-8 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.6)] mb-8 border-l-[8px] relative z-20  ${feedbackMsg?.type === 'right' ? 'bg-emerald-950/80 border-emerald-500' : 'bg-rose-950/80 border-rose-500'}`}
                         style={{ animation: 'detective-pop 0.4s ease-out' }}>
-                        <h3 className={`text-xl font-black mb-3 ${feedbackMsg?.type === 'right' ? 'text-emerald-700' : 'text-rose-600'}`}>
+                        <div className="absolute top-0 right-0 p-4 opacity-20">
+                            <span className="text-6xl">{feedbackMsg?.type === 'right' ? '✔️' : '❌'}</span>
+                        </div>
+                        <h3 className={`text-2xl font-black mb-5 tracking-wider drop-shadow-[0_0_8px_currentColor] ${feedbackMsg?.type === 'right' ? 'text-emerald-400' : 'text-rose-400'}`}>
                             {feedbackMsg?.text}
                         </h3>
 
                         {!current.isValid && (
-                            <div className="mb-3 flex flex-wrap gap-2">
-                                <span className="bg-rose-100 text-rose-600 font-bold px-3 py-1 rounded-full text-sm">
+                            <div className="mb-4 flex flex-wrap gap-3">
+                                <span className="bg-rose-950 text-rose-400 font-bold px-4 py-1.5 rounded-full text-sm border border-rose-500/50 shadow-inner">
                                     🏷️ {current.errorType}
                                 </span>
-                                <span className={`font-bold px-3 py-1 rounded-full text-sm ${current.errorLayer === 'descriptive' ? 'bg-indigo-100 text-indigo-600' :
-                                    current.errorLayer === 'interpretive' ? 'bg-amber-100 text-amber-700' :
-                                        'bg-emerald-100 text-emerald-700'
+                                <span className={`font-bold px-4 py-1.5 rounded-full text-sm border shadow-inner ${current.errorLayer === 'descriptive' ? 'bg-indigo-950/80 text-indigo-400 border-indigo-500/50' :
+                                    current.errorLayer === 'interpretive' ? 'bg-amber-950/80 text-amber-400 border-amber-500/50' :
+                                        'bg-emerald-950/80 text-emerald-400 border-emerald-500/50'
                                     }`}>
                                     {current.errorLayer === 'descriptive' ? '📊 描述層出錯' :
                                         current.errorLayer === 'interpretive' ? '🧠 詮釋層出錯' : '🔍 批判層出錯'}
@@ -1196,18 +1111,23 @@ export const DataDetectiveGame = () => {
                             </div>
                         )}
 
-                        <div className="flex flex-wrap gap-2 mb-3">
+                        <div className="flex flex-wrap gap-2 mb-5">
                             {current.tags.map(tag => (
-                                <span key={tag} className="bg-amber-50 text-amber-700 font-bold px-3 py-1 rounded-md text-sm border border-amber-200">#{tag}</span>
+                                <span key={tag} className="bg-slate-900/60 text-amber-500 font-black tracking-widest px-3 py-1.5 rounded-lg text-xs border border-amber-500/30">#{tag}</span>
                             ))}
                         </div>
 
-                        <p className="text-slate-700 text-base font-medium leading-relaxed mb-4 whitespace-pre-line">{current.explanation}</p>
+                        <div className="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50 relative mb-6">
+                            <h4 className="absolute -top-3 left-4 bg-slate-800 x-2 py-0.5 rounded text-[10px] font-black tracking-widest text-slate-400 border border-slate-700">DETECTIVE NOTES</h4>
+                            <p className="text-amber-100/90 text-[15px] md:text-base font-medium leading-relaxed whitespace-pre-line tracking-wide mt-2">{current.explanation}</p>
+                        </div>
 
                         <div className="text-right">
                             <button onClick={nextCase}
-                                className="bg-amber-500 hover:bg-amber-600 text-white font-black py-3 px-10 rounded-full text-lg transition transform hover:scale-105 shadow-lg">
-                                {currentIdx < caseData.length - 1 ? '下一案 ➡️' : '查看調查報告 📋'}
+                                className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black py-4 px-10 rounded-full text-lg tracking-[0.1em] transition-all duration-300 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] hover:-translate-y-1 relative overflow-hidden group inline-flex items-center gap-2">
+                                <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
+                                <span className="relative z-10">{currentIdx < caseData.length - 1 ? '調閱下一宗案件' : '查看最終調查報告'}</span>
+                                <span className="relative z-10">{currentIdx < caseData.length - 1 ? '➡️' : '📋'}</span>
                             </button>
                         </div>
                     </div>

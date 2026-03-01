@@ -210,8 +210,13 @@ export const QuestionERGame = () => {
     const [submitAttempts, setSubmitAttempts] = useState(0);
     const [partialFeedback, setPartialFeedback] = useState(null); // { type: 'success'|'missing'|'extra'|'both'|'fail', message: string, pts?: number }
 
-    // Timer
+    // Timer & Player Name
     useEffect(() => {
+        const savedName = localStorage.getItem('rib_agent_name');
+        if (savedName) {
+            setPlayerName(savedName);
+        }
+
         let interval;
         if (gameState === 'playing') {
             interval = setInterval(() => setTimer(t => t + 1), 1000);
@@ -327,43 +332,46 @@ export const QuestionERGame = () => {
     // ================= START SCREEN =================
     if (gameState === 'start') {
         return (
-            <div className="bg-slate-50/50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-slate-800 min-h-[600px]">
-                <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] max-w-xl w-full text-center border-t-[12px] border-red-500 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 opacity-5 text-9xl -mt-4 -mr-4 text-slate-900">🏥</div>
-                    <div className="text-7xl mb-6 animate-pulse">🚑</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-800 mb-4 tracking-wide">Level 1：問題急診室</h1>
-                    <h2 className="text-xl md:text-2xl font-bold text-slate-500 mb-6 border-b border-slate-100 pb-4">研究問題健檢大挑戰</h2>
-                    <p className="text-slate-600 text-lg mb-8 font-medium leading-relaxed">
-                        急診室湧入了 10 個<span className="text-red-500 font-bold">「生病的研究問題」</span>！<br />
-                        有些問題可能需要<span className="text-blue-500 font-bold border-b-2 border-blue-200 px-1">「多張處方」</span>才能治癒它。<br />
-                        你能對症下藥，拿滿 <span className="font-bold text-slate-800 bg-yellow-200 px-2 rounded">100 分</span> 嗎？
+            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+                style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
+                <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-none z-0"></div>
+
+                <div className="bg-slate-900/60 backdrop-blur-lg p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(244,63,94,0.2)] max-w-xl w-full text-center border border-white/10 border-t-[12px] border-t-rose-500 relative overflow-hidden z-10">
+                    <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 text-rose-400 drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">🏥</div>
+                    <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(244,63,94,0.8)]">🚑</div>
+                    <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-red-500 mb-2 tracking-wide drop-shadow-sm">行動代號：靶心</h1>
+                    <div className="text-sm md:text-base font-bold text-rose-300/80 mb-4 bg-rose-950/40 inline-block px-3 py-1 rounded border border-rose-500/20 tracking-wider">
+                        🎯 研究問題精煉與對焦訓練
+                    </div>
+                    <p className="text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
+                        急診室湧入了 10 個<span className="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]">「生病的研究問題」</span>！<br />
+                        有些問題可能需要<span className="text-cyan-400 font-bold border-b-2 border-cyan-400/50 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] px-1">「多張處方」</span>才能治癒它。<br />
+                        你能對症下藥，拿滿 <span className="font-bold text-amber-300 bg-amber-900/40 px-2 rounded border border-amber-500/30 drop-shadow-sm">100 分</span> 嗎？
                     </p>
 
-                    <div className="bg-slate-50 rounded-2xl p-6 mb-8 text-left border border-slate-200 shadow-sm">
-                        <label className="block text-sm font-bold text-slate-700 mb-2 tracking-wider">👨‍⚕️ 急診醫師代號 (姓名)</label>
-                        <input
-                            type="text"
-                            value={playerName}
-                            onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="請輸入你的名字..."
-                            className="w-full bg-white border-2 border-slate-200 focus:border-red-400 rounded-xl outline-none px-4 py-3 font-bold text-lg text-slate-800 placeholder-slate-300 mb-5 transition-colors text-center"
-                        />
+                    <div className="bg-slate-800/50 rounded-2xl p-6 mb-8 text-center border border-slate-600/50 shadow-inner">
+                        <label className="block text-sm font-bold text-rose-300 mb-2 tracking-wider drop-shadow-sm">👨‍⚕️ 目前登入身分</label>
+                        {playerName ? (
+                            <div className="text-2xl font-black text-rose-400 border-b-2 border-rose-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_10px_rgba(244,63,94,0.4)]">{playerName} 醫師</div>
+                        ) : (
+                            <div className="text-amber-400 font-bold mb-2 drop-shadow-sm">無法辨識身分！請返回總部大廳完成報到手續。</div>
+                        )}
 
-                        <h3 className="text-sm font-bold text-slate-500 mb-3 tracking-wider border-t border-slate-200 pt-4">📋 值班須知（提示與重考機制）</h3>
-                        <div className="space-y-3 text-sm text-slate-600">
-                            <p className="flex items-start gap-2">✅ <span><span className="text-emerald-600 font-bold bg-emerald-50 px-2 rounded">精準投藥 (+10 分)</span><br />完全正確勾選所有處方即可得分。</span></p>
-                            <p className="flex items-start gap-2">🔄 <span><span className="text-amber-600 font-bold bg-amber-50 px-2 rounded">修改處方 (-2 分)</span><br />若第一次開錯藥，系統會給予提示（例如：少開/多開），讓你修改並「補考」一次。</span></p>
-                            <p className="flex items-start gap-2">⚠️ <span><span className="text-red-500 font-bold bg-red-50 px-2 rounded">醫療糾紛 (+0 分)</span><br />若修改後依然錯誤，就真的急救失敗了。</span></p>
-                            <p className="flex items-start gap-2">🔍 <span><span className="text-blue-500 font-bold bg-blue-50 px-2 rounded">顧問報告 (-3 分)</span><br />若完全沒頭緒，一開始就能花分數查看報告。</span></p>
+                        <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700 pt-6 mt-6">📋 值班須知（提示與重考機制）</h3>
+                        <div className="space-y-3 text-sm text-slate-300 text-left">
+                            <p className="flex items-start gap-2">✅ <span><span className="text-emerald-400 font-bold bg-emerald-900/40 px-2 rounded border border-emerald-500/20 shadow-sm">精準投藥 (+10 分)</span><br />完全正確勾選所有處方即可得分。</span></p>
+                            <p className="flex items-start gap-2">🔄 <span><span className="text-amber-400 font-bold bg-amber-900/40 px-2 rounded border border-amber-500/20 shadow-sm">修改處方 (-2 分)</span><br />若第一次開錯藥，系統會給予提示，讓你修改並「補考」一次。</span></p>
+                            <p className="flex items-start gap-2">⚠️ <span><span className="text-rose-400 font-bold bg-rose-900/40 px-2 rounded border border-rose-500/20 shadow-sm">醫療糾紛 (+0 分)</span><br />若修改後依然錯誤，就真的急救失敗了。</span></p>
+                            <p className="flex items-start gap-2">🔍 <span><span className="text-cyan-400 font-bold bg-cyan-900/40 px-2 rounded border border-cyan-500/20 shadow-sm">顧問報告 (-3 分)</span><br />若完全沒頭緒，一開始就能花分數查看報告。</span></p>
                         </div>
                     </div>
 
                     <button
                         onClick={startGame}
-                        disabled={!playerName.trim()}
-                        className={`font-black py-4 px-10 rounded-full text-xl transition transform shadow-[0_8px_20px_rgba(239,68,68,0.3)] hover:shadow-[0_12px_25px_rgba(239,68,68,0.4)] flex items-center justify-center gap-2 mx-auto ${!playerName.trim() ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none hover:shadow-none' : 'bg-red-500 hover:bg-red-600 text-white hover:scale-105 active:scale-95'}`}
+                        disabled={!playerName}
+                        className={`font-black py-4 px-10 rounded-full text-xl transition-all duration-300 transform shadow-[0_0_20px_rgba(244,63,94,0.4)] flex items-center justify-center gap-2 mx-auto overflow-hidden group ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(244,63,94,0.6)] border border-rose-400/50'}`}
                     >
-                        穿上白袍，開始值班 🩺
+                        <span className="relative z-10">穿上白袍，開始值班 🩺</span>
                     </button>
                 </div>
             </div>
@@ -375,62 +383,66 @@ export const QuestionERGame = () => {
         let title = "";
         let color = "";
         let bg = "";
-        if (score === 100) { title = "🏆 完美的神醫！"; color = "text-amber-600"; bg = "bg-amber-50"; }
-        else if (score >= 80) { title = "👨‍⚕️ 主治醫師！"; color = "text-blue-600"; bg = "bg-blue-50"; }
-        else if (score >= 60) { title = "🩺 住院醫師！"; color = "text-emerald-600"; bg = "bg-emerald-50"; }
-        else { title = "💊 實習生，多加練習！"; color = "text-red-600"; bg = "bg-red-50"; }
+        let borderColor = "";
+        if (score === 100) { title = "🏆 完美的神醫！"; color = "text-amber-400"; bg = "bg-amber-900/40"; borderColor = "border-amber-500/50"; }
+        else if (score >= 80) { title = "👨‍⚕️ 主治醫師！"; color = "text-cyan-400"; bg = "bg-cyan-900/40"; borderColor = "border-cyan-500/50"; }
+        else if (score >= 60) { title = "🩺 住院醫師！"; color = "text-emerald-400"; bg = "bg-emerald-900/40"; borderColor = "border-emerald-500/50"; }
+        else { title = "💊 實習生，多加練習！"; color = "text-rose-400"; bg = "bg-rose-900/40"; borderColor = "border-rose-500/50"; }
 
         return (
-            <div className="bg-slate-50/50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-slate-800 min-h-[600px]">
-                <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] max-w-2xl w-full text-center border-t-[12px] border-blue-500 relative">
-                    <div className="absolute top-6 left-6 text-slate-200 text-6xl">📋</div>
-                    <h1 className="text-2xl font-bold text-slate-400 mb-2 tracking-widest relative z-10">急診交班報告</h1>
+            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-blue-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+                style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
+                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-0"></div>
+
+                <div className="bg-slate-900/70 backdrop-blur-lg p-8 md:p-12 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[12px] border-t-rose-500 border-x border-b border-white/10 relative z-10">
+                    <div className="absolute top-6 left-6 text-rose-500/20 text-6xl drop-shadow-md">📋</div>
+                    <h2 className="text-2xl font-black text-amber-500 mb-4 tracking-widest drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">🎯 任務結案報告</h2>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6 relative z-10">
-                        <div className="text-sm font-medium text-slate-400 bg-slate-50 px-4 py-1 rounded-full border border-slate-200">值班時間：{formatTime(timer)}</div>
-                        <div className="text-sm font-medium text-blue-600 bg-blue-50 px-4 py-1 rounded-full border border-blue-200">主治醫師：<span className="font-bold">{playerName}</span></div>
+                        <div className="text-sm font-medium text-slate-400 bg-slate-800/60 shadow-inner px-4 py-1 rounded-full border border-slate-600/50">值班時間：{formatTime(timer)}</div>
+                        <div className="text-sm font-medium text-rose-300 bg-rose-900/40 shadow-inner px-4 py-1 rounded-full border border-rose-500/30">主治醫師：<span className="font-bold">{playerName}</span></div>
                     </div>
 
                     <div className="flex flex-col items-center justify-center mb-6 relative z-10">
-                        <div className="text-7xl font-black text-blue-600 tracking-tighter mb-2">{score} <span className="text-3xl text-slate-300 font-medium">/ 100</span></div>
-                        <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-2xl ${color} ${bg} mb-4`}>{title}</h2>
+                        <div className="text-7xl font-black text-rose-400 tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">{score} <span className="text-3xl text-slate-500 font-medium">/ 100</span></div>
+                        <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-2xl ${color} ${bg} border ${borderColor} mb-4 shadow-lg drop-shadow-md`}>{title}</h2>
 
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-50 py-2 px-6 rounded-lg border border-slate-200 mb-2">請截圖此頁面作為紀錄</p>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-800/80 py-2 px-6 rounded-lg border border-slate-700 shadow-inner mb-2">請截圖此畫面作為紀錄</p>
 
                         <div className="flex gap-4 mt-6">
-                            <div className="bg-emerald-50 border border-emerald-100 px-4 py-2 rounded-lg">
-                                <span className="text-emerald-600 font-bold block text-xl">{10 - wrongCases.length}</span>
-                                <span className="text-xs text-emerald-800 font-medium">成功治癒</span>
+                            <div className="bg-emerald-900/40 border border-emerald-500/50 shadow-inner px-5 py-3 rounded-xl flex flex-col items-center">
+                                <span className="text-emerald-400 font-black block text-2xl drop-shadow-sm">{10 - wrongCases.length}</span>
+                                <span className="text-xs text-emerald-200/60 font-medium tracking-wider mt-1">成功治癒</span>
                             </div>
-                            <div className="bg-red-50 border border-red-100 px-4 py-2 rounded-lg">
-                                <span className="text-red-600 font-bold block text-xl">{wrongCases.length}</span>
-                                <span className="text-xs text-red-800 font-medium">醫療誤診</span>
+                            <div className="bg-rose-900/40 border border-rose-500/50 shadow-inner px-5 py-3 rounded-xl flex flex-col items-center">
+                                <span className="text-rose-400 font-black block text-2xl drop-shadow-sm">{wrongCases.length}</span>
+                                <span className="text-xs text-rose-200/60 font-medium tracking-wider mt-1">醫療誤診</span>
                             </div>
                         </div>
                     </div>
 
                     <button
                         onClick={() => setGameState('start')}
-                        className="bg-white hover:bg-slate-50 text-blue-600 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-md hover:shadow-lg mb-8 border-2 border-blue-100 flex items-center justify-center gap-2 mx-auto"
+                        className="bg-slate-800/80 hover:bg-slate-700 text-rose-400 font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:shadow-[0_0_25px_rgba(244,63,94,0.5)] mb-8 border border-rose-500/50 flex items-center justify-center gap-2 mx-auto relative z-10 backdrop-blur-sm"
                     >
                         重新開始實習 🔄
                     </button>
 
                     {wrongCases.length > 0 && (
-                        <div className="text-left bg-slate-50 p-6 md:p-8 rounded-2xl border-l-8 border-red-400 max-h-[400px] overflow-y-auto shadow-inner">
-                            <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-slate-700 border-b border-slate-200 pb-4">
+                        <div className="text-left bg-slate-800/40 p-6 md:p-8 rounded-2xl border-l-8 border-rose-500 max-h-[400px] overflow-y-auto shadow-inner border-y border-r border-white/5 scrollbar-thin scrollbar-thumb-rose-700 scrollbar-track-slate-800">
+                            <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-rose-300 border-b border-slate-700 pb-4 drop-shadow-sm">
                                 🚨 誤診檢討筆記
                             </h3>
                             <div className="space-y-5">
                                 {wrongCases.map((wc, i) => (
-                                    <div key={i} className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-red-400"></div>
-                                        <p className="font-bold text-slate-800 text-lg mb-2 flex items-start gap-2">🤒「{wc.question}」</p>
-                                        <p className="text-sm text-slate-500 mb-3 bg-slate-50 inline-block px-2 py-1 rounded">病因診斷：{wc.diagnosis}</p>
+                                    <div key={i} className="bg-slate-900/80 p-5 rounded-xl shadow-lg border border-slate-700 relative overflow-hidden group hover:border-rose-500/50 transition-colors">
+                                        <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
+                                        <p className="font-bold text-rose-100 text-lg mb-2 flex items-start gap-2">🤒「{wc.question}」</p>
+                                        <p className="text-sm text-slate-300 mb-3 bg-slate-800/80 inline-block px-3 py-1.5 rounded border border-slate-600/50 shadow-inner">病因診斷：<span className="text-rose-300 font-bold">{wc.diagnosis}</span></p>
                                         <div className="mb-3">
-                                            <p className="text-sm font-bold text-slate-500 mb-2">✅ 完整標準處方應為：</p>
+                                            <p className="text-sm font-bold text-slate-400 mb-2">✅ 完整標準處方應為：</p>
                                             <div className="flex flex-wrap gap-2">
                                                 {wc.correctRxs.map(rx => (
-                                                    <span key={rx} className="bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded-lg text-sm border border-emerald-200">
+                                                    <span key={rx} className="bg-emerald-900/40 text-emerald-400 font-bold px-3 py-1 rounded-lg text-sm border border-emerald-500/40 shadow-inner">
                                                         💊 {rx}
                                                     </span>
                                                 ))}
@@ -443,8 +455,8 @@ export const QuestionERGame = () => {
                     )}
 
                     {wrongCases.length === 0 && (
-                        <div className="bg-emerald-50 text-emerald-700 border border-emerald-200 p-6 rounded-2xl font-bold text-lg shadow-sm flex items-center justify-center gap-3 mt-6">
-                            <span className="text-3xl">🎉</span>
+                        <div className="bg-emerald-900/40 text-emerald-400 border border-emerald-500/50 p-6 rounded-2xl font-bold text-lg shadow-[0_0_20px_rgba(16,185,129,0.2)] flex items-center justify-center gap-3 mt-6 backdrop-blur-sm">
+                            <span className="text-3xl drop-shadow-sm">🎉</span>
                             零誤診！各種疑難雜症都難不倒你！
                         </div>
                     )}
@@ -460,49 +472,51 @@ export const QuestionERGame = () => {
     const isBoss = current.severity === 'boss';
 
     return (
-        <div className="bg-slate-50/50 rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px] text-slate-800">
-            <div className="max-w-4xl w-full">
+        <div className="relative rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 bg-cover bg-fixed bg-center shadow-2xl"
+            style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
+            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-0"></div>
+            <div className="max-w-4xl w-full relative z-10">
 
                 {/* Progress & Score */}
                 <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1">
-                    <div className="bg-white text-slate-500 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-slate-200 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                        病患 {currentIdx + 1} <span className="opacity-40 font-normal">/ {patients.length}</span>
+                    <div className="bg-slate-900/60 backdrop-blur-sm text-slate-300 font-bold px-5 py-2 rounded-full shadow-inner text-lg border border-slate-700 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-[pulse_1.5s_ease-in-out_infinite] shadow-[0_0_8px_rgba(244,63,94,0.8)]"></span>
+                        病患 <span className="text-rose-400">{currentIdx + 1}</span> <span className="opacity-40 font-normal">/ {patients.length}</span>
                     </div>
 
-                    <div className="bg-white text-emerald-600 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-emerald-200 flex items-center gap-2">
+                    <div className="bg-slate-900/60 backdrop-blur-sm text-emerald-400 font-bold px-5 py-2 rounded-full shadow-inner text-lg border border-emerald-500/30 flex items-center gap-2">
                         <span>總積分</span>
-                        <span className="bg-emerald-100 text-emerald-700 px-3 py-0.5 rounded-md font-black min-w-[3rem] text-center">{score}</span>
+                        <span className="bg-emerald-900/50 text-emerald-300 px-3 py-0.5 rounded-md font-black min-w-[3rem] text-center border border-emerald-500/20 shadow-inner drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">{score}</span>
                     </div>
                 </div>
 
                 {/* Patient Card */}
-                <div className={`bg-white p-6 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] mb-8 border-t-[8px] transition-all relative overflow-hidden ${isBoss ? 'border-purple-500 shadow-[0_10px_40px_rgba(168,85,247,0.15)]' : 'border-blue-400'}`}>
+                <div className={`bg-slate-900/70 backdrop-blur-lg p-6 md:p-10 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] mb-8 border-t-[8px] border-x border-b border-white/10 transition-all relative overflow-hidden group hover:border-rose-500/30 duration-500 ${isBoss ? 'border-t-purple-500 shadow-[0_0_50px_rgba(168,85,247,0.3)]' : 'border-t-rose-500'}`}>
                     {isBoss && (
-                        <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs font-black px-5 py-1.5 rounded-bl-xl tracking-widest animate-pulse shadow-md z-10">
+                        <div className="absolute top-0 right-0 bg-purple-600/90 text-white text-xs font-black px-5 py-1.5 rounded-bl-xl tracking-widest animate-[pulse_2s_infinite] shadow-[0_0_15px_rgba(168,85,247,0.8)] border-b border-l border-purple-400/50 z-20 backdrop-blur-sm">
                             ☠️ 超級重症
                         </div>
                     )}
 
-                    <div className="absolute -bottom-10 -right-10 text-9xl opacity-5 text-slate-900 pointer-events-none">
+                    <div className="absolute -bottom-10 -right-10 text-9xl opacity-5 text-rose-500 pointer-events-none drop-shadow-[0_0_20px_rgba(244,63,94,0.5)]">
                         🏥
                     </div>
 
-                    <div className="flex items-center gap-2 flex-wrap mb-4 pb-4 border-b border-slate-100 relative z-10">
+                    <div className="flex items-center gap-2 flex-wrap mb-4 pb-4 border-b border-slate-700 relative z-10">
                         {/* Always visible severity badge */}
-                        <span className={`${sv.bg} ${sv.color} font-bold px-4 py-1.5 rounded-xl border ${sv.border} shadow-sm inline-flex items-center gap-1.5`}>
+                        <span className={`bg-slate-800/80 font-bold px-4 py-1.5 rounded-xl border border-slate-600 shadow-inner inline-flex items-center gap-1.5 ${current.severity === 'boss' ? 'text-purple-400 border-purple-500/50 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]' : current.severity === 'severe' ? 'text-rose-400 border-rose-500/50 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]' : current.severity === 'moderate' ? 'text-amber-400 border-amber-500/50 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]' : 'text-emerald-400 border-emerald-500/50 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`}>
                             <span className="text-base leading-none">{sv.icon}</span> {sv.label}
                         </span>
 
                         {/* Hint Area Toggle Info */}
                         {hintUsed && (
-                            <span className="text-amber-600 bg-amber-50 px-3 py-1 text-xs font-bold rounded-full border border-amber-200 ml-auto flex items-center gap-1">
-                                <span className="opacity-70 animate-ping h-2 w-2 rounded-full bg-amber-500"></span>
+                            <span className="text-amber-400 bg-amber-900/30 px-3 py-1 text-xs font-bold rounded-full border border-amber-500/30 ml-auto flex items-center gap-1 shadow-inner">
+                                <span className="opacity-80 animate-ping h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_5px_rgba(251,191,36,0.8)]"></span>
                                 已啟用檢查報告 (-3 分)
                             </span>
                         )}
                         {submitAttempts > 0 && !isAnswered && (
-                            <span className="text-amber-500 bg-amber-50 px-3 py-1 text-xs font-bold rounded-full border border-amber-200 ml-2 flex items-center gap-1">
+                            <span className="text-amber-400 bg-amber-900/30 px-3 py-1 text-xs font-bold rounded-full border border-amber-500/30 ml-2 flex items-center gap-1 shadow-inner">
                                 <span>⚠️</span>
                                 處方重調中 (-2 分)
                             </span>
@@ -510,32 +524,32 @@ export const QuestionERGame = () => {
                     </div>
 
                     <div className="relative z-10 text-center py-4">
-                        <p className="text-2xl md:text-3xl font-black text-slate-800 leading-tight">
+                        <p className="text-2xl md:text-3xl font-black text-rose-100 leading-tight drop-shadow-md">
                             「{current.question}」
                         </p>
                     </div>
 
                     {/* Hint Component */}
                     {(!hintUsed && !isAnswered) ? (
-                        <div className="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-5 flex flex-col items-center justify-center gap-3 mt-4 relative z-10 mx-auto max-w-md">
-                            <p className="text-slate-500 font-bold mb-1 text-sm">完全沒頭緒，不知道這病人哪裡有問題？</p>
+                        <div className="bg-slate-800/40 border border-slate-600/50 border-dashed rounded-2xl p-5 flex flex-col items-center justify-center gap-3 mt-4 relative z-10 mx-auto max-w-md shadow-inner backdrop-blur-none">
+                            <p className="text-slate-400 font-bold mb-1 text-sm">完全沒頭緒，不知道這病人哪裡有問題？</p>
                             <button
                                 onClick={() => setHintUsed(true)}
-                                className="bg-white hover:bg-amber-50 text-amber-700 font-bold py-2.5 px-6 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-slate-200 hover:border-amber-300 shadow-sm w-full"
+                                className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-2.5 px-6 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-slate-600 hover:border-amber-400/50 shadow-md hover:shadow-[0_0_15px_rgba(251,191,36,0.3)] w-full backdrop-blur-sm"
                             >
                                 <span>🔍</span> 申請醫療顧問檢查報告
-                                <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md ml-1 border border-amber-200">扣 3 分</span>
+                                <span className="text-xs bg-amber-900/50 text-amber-300 px-2 py-0.5 rounded-md ml-1 border border-amber-500/30">扣 3 分</span>
                             </button>
                         </div>
                     ) : (
-                        <div className="bg-slate-50 border-x border-b border-t-0 border-slate-200 rounded-b-xl p-5 md:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 mt-6 relative z-10 animate-in fade-in slide-in-from-top-4 duration-300 -mx-6 md:-mx-10 -mb-6 md:-mb-10 shadow-inner">
+                        <div className="bg-slate-800/60 border-x border-b border-t-0 border-white/5 rounded-b-xl p-5 md:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 mt-6 relative z-10 animate-in fade-in slide-in-from-top-4 duration-300 -mx-6 md:-mx-10 -mb-6 md:-mb-10 shadow-inner backdrop-blur-sm">
                             {/* Tags */}
                             <div className="flex-1 space-y-2">
-                                <span className="text-xs font-black tracking-widest text-slate-400 bg-slate-200/50 px-2 py-1 rounded inline-block">病徵標籤</span>
+                                <span className="text-xs font-black tracking-widest text-slate-400 bg-slate-900/80 border border-slate-700 px-2 py-1 rounded inline-block shadow-inner">病徵標籤</span>
                                 <div className="flex flex-wrap gap-2">
                                     {current.tags.map(tag => (
-                                        <span key={tag} className="bg-white text-slate-600 font-semibold px-3 py-1.5 rounded-lg text-sm border border-slate-200 shadow-sm leading-none flex items-center gap-1">
-                                            <span className="opacity-50">#</span>{tag}
+                                        <span key={tag} className="bg-slate-700/50 text-rose-200 font-semibold px-3 py-1.5 rounded-lg text-sm border border-slate-600 shadow-sm leading-none flex items-center gap-1">
+                                            <span className="opacity-50 text-rose-400">#</span>{tag}
                                         </span>
                                     ))}
                                 </div>
@@ -543,9 +557,9 @@ export const QuestionERGame = () => {
 
                             {/* Diagnosis */}
                             <div className="flex-1 space-y-2">
-                                <span className="text-xs font-black tracking-widest text-red-500 bg-red-100/50 px-2 py-1 rounded inline-block">醫療團隊初步評估</span>
-                                <div className="bg-red-50 text-red-700 px-4 py-3 rounded-xl border border-red-200 shadow-sm">
-                                    <span className="font-bold text-lg leading-snug">{current.diagnosis}</span>
+                                <span className="text-xs font-black tracking-widest text-rose-400 bg-rose-900/40 border border-rose-500/30 px-2 py-1 rounded inline-block shadow-inner">醫療團隊初步評估</span>
+                                <div className="bg-rose-900/20 text-rose-300 px-4 py-3 rounded-xl border border-rose-500/30 shadow-inner">
+                                    <span className="font-bold text-lg leading-snug drop-shadow-[0_0_5px_rgba(244,63,94,0.4)]">{current.diagnosis}</span>
                                 </div>
                             </div>
                         </div>
@@ -553,9 +567,9 @@ export const QuestionERGame = () => {
                 </div>
 
                 {/* Prescription Options */}
-                <h3 className="text-slate-600 font-bold text-base mb-4 px-2 tracking-wide flex items-center gap-2">
+                <h3 className="text-rose-200 font-bold text-base mb-4 px-2 tracking-wide flex items-center gap-2 drop-shadow-sm">
                     <span className="text-xl">💊</span>
-                    <span>請選擇 <span className="text-blue-600 border-b-2 border-blue-200 font-black">所有</span> 病患需要的處方<span className="text-sm font-normal text-slate-400 ml-1">(可複選)</span>：</span>
+                    <span>請選擇 <span className="text-cyan-400 border-b-2 border-cyan-400/50 font-black drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">所有</span> 病患需要的處方<span className="text-sm font-normal text-slate-400 ml-1">(可複選)</span>：</span>
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -564,25 +578,25 @@ export const QuestionERGame = () => {
                         const isAcutallyCorrect = current.correctRxs.includes(option);
 
                         // 基礎樣式
-                        let buttonStyle = "bg-white text-slate-600 border-2 shadow-sm text-left transition-all duration-200";
+                        let buttonStyle = "bg-slate-900/60 backdrop-blur-sm border border-slate-700 shadow-[0_4px_15px_rgba(0,0,0,0.3)] text-left transition-all duration-300 relative overflow-hidden group hover:border-cyan-400/50";
 
                         if (!isAnswered) {
                             // 答題中狀態
                             if (isSelected) {
-                                buttonStyle += " border-blue-500 bg-blue-50 translate-y-[2px] shadow-none";
+                                buttonStyle = "bg-cyan-900/30 backdrop-blur-sm border border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.2)] text-left transition-all duration-300 translate-y-[2px] relative overflow-hidden";
                             } else {
-                                buttonStyle += " border-slate-200 hover:border-blue-300 hover:bg-slate-50 active:translate-y-[1px]";
+                                buttonStyle = "bg-slate-900/60 backdrop-blur-sm border border-slate-700 shadow-[0_4px_15px_rgba(0,0,0,0.3)] text-left transition-all duration-300 hover:border-cyan-400/50 hover:bg-slate-800/80 active:translate-y-[1px] relative overflow-hidden group";
                             }
                         } else {
                             // 結算狀態
                             if (isAcutallyCorrect && isSelected) {
-                                buttonStyle += " border-emerald-500 bg-emerald-50 text-emerald-800 shadow-[0_0_10px_rgba(16,185,129,0.2)]";
+                                buttonStyle = "bg-emerald-900/30 backdrop-blur-sm border border-emerald-400 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)] text-left transition-all duration-300 relative overflow-hidden";
                             } else if (isAcutallyCorrect && !isSelected) {
-                                buttonStyle += " border-red-400 border-dashed bg-white text-slate-400";
+                                buttonStyle = "bg-slate-900/60 backdrop-blur-sm border border-rose-400 border-dashed text-slate-400 text-left transition-all duration-300 relative overflow-hidden opacity-80";
                             } else if (!isAcutallyCorrect && isSelected) {
-                                buttonStyle += " border-red-400 bg-red-50 text-red-600";
+                                buttonStyle = "bg-rose-900/30 backdrop-blur-sm border border-rose-500 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.3)] text-left transition-all duration-300 relative overflow-hidden";
                             } else {
-                                buttonStyle += " border-slate-100 bg-white text-slate-300 opacity-60";
+                                buttonStyle = "bg-slate-900/40 backdrop-blur-sm border border-slate-800 text-slate-500 opacity-50 text-left transition-all duration-300 relative overflow-hidden";
                             }
                         }
 
@@ -591,23 +605,24 @@ export const QuestionERGame = () => {
                                 key={option}
                                 onClick={() => toggleRx(option)}
                                 disabled={isAnswered}
-                                className={`group flex items-center px-5 py-4 rounded-2xl font-bold text-lg ${buttonStyle} ${isAnswered ? 'cursor-default transition-none' : 'cursor-pointer'}`}
+                                className={`flex items-center px-5 py-4 rounded-2xl font-bold text-lg ${buttonStyle} ${isAnswered ? 'cursor-default' : 'cursor-pointer'}`}
                             >
-                                <div className="flex items-center gap-4 w-full">
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <div className="flex items-center gap-4 w-full relative z-10">
                                     {/* 模擬 Checkbox */}
-                                    <div className={`shrink-0 w-6 h-6 rounded flex items-center justify-center border-2 transition-colors ${!isAnswered
-                                        ? (isSelected ? 'bg-blue-500 border-blue-500 text-white' : 'border-slate-300 group-hover:border-blue-400 bg-white')
-                                        : (isAcutallyCorrect && isSelected ? 'bg-emerald-500 border-emerald-500 text-white'
-                                            : !isAcutallyCorrect && isSelected ? 'bg-red-400 border-red-400 text-white'
-                                                : isAcutallyCorrect && !isSelected ? 'border-red-400 bg-transparent text-red-400'
-                                                    : 'border-slate-200 bg-slate-100')
+                                    <div className={`shrink-0 w-6 h-6 rounded flex items-center justify-center border-2 transition-colors shadow-inner ${!isAnswered
+                                        ? (isSelected ? 'bg-cyan-500 border-cyan-400 text-white shadow-[0_0_10px_rgba(34,211,238,0.5)]' : 'border-slate-500 group-hover:border-cyan-400/50 bg-slate-800/80 text-slate-400')
+                                        : (isAcutallyCorrect && isSelected ? 'bg-emerald-500 border-emerald-400 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]'
+                                            : !isAcutallyCorrect && isSelected ? 'bg-rose-500 border-rose-400 text-white shadow-[0_0_10px_rgba(244,63,94,0.5)]'
+                                                : isAcutallyCorrect && !isSelected ? 'border-rose-400 border-dashed bg-transparent text-rose-400'
+                                                    : 'border-slate-700 bg-slate-800/50 text-slate-600')
                                         }`}>
                                         {(!isAnswered && isSelected) && '✓'}
                                         {isAnswered && isAcutallyCorrect && isSelected && '✓'}
                                         {isAnswered && !isAcutallyCorrect && isSelected && '✗'}
                                         {isAnswered && isAcutallyCorrect && !isSelected && '⚠️'}
                                     </div>
-                                    <span className="leading-snug">{option}</span>
+                                    <span className={`leading-snug ${(!isAnswered && !isSelected) ? 'text-slate-300 group-hover:text-rose-100' : ''}`}>{option}</span>
                                 </div>
                             </button>
                         );
@@ -616,12 +631,12 @@ export const QuestionERGame = () => {
 
                 {/* Partial Feedback Alert (Shown when hint is active) */}
                 {partialFeedback && !isAnswered && (
-                    <div className="w-full mb-6 bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 shadow-sm">
+                    <div className="w-full mb-6 bg-amber-900/30 backdrop-blur-sm border border-amber-500/50 border-dashed rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 shadow-[0_0_20px_rgba(251,191,36,0.1)]">
                         <div className="flex items-start md:items-center gap-4">
-                            <span className="text-3xl shrink-0 mt-1 md:mt-0">🩺</span>
+                            <span className="text-3xl shrink-0 mt-1 md:mt-0 drop-shadow-md">🩺</span>
                             <div>
-                                <h4 className="font-bold text-amber-700 text-lg mb-1">{partialFeedback.message}</h4>
-                                <p className="text-sm text-amber-600 font-medium">請重新思考並調整你的處方再送出 {partialFeedback.hint}</p>
+                                <h4 className="font-bold text-amber-400 text-lg mb-1 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">{partialFeedback.message}</h4>
+                                <p className="text-sm text-amber-200/80 font-medium">請重新思考並調整你的處方再送出 {partialFeedback.hint}</p>
                             </div>
                         </div>
                     </div>
@@ -633,38 +648,38 @@ export const QuestionERGame = () => {
                         <button
                             onClick={submitAnswer}
                             disabled={selectedRxs.length === 0}
-                            className={`font-black py-4 px-12 rounded-full text-xl transition transform flex items-center gap-2 shadow-lg ${selectedRxs.length > 0 ? (submitAttempts > 0 ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105 active:scale-95') : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'}`}
+                            className={`font-black py-4 px-12 rounded-full text-xl transition-all duration-300 transform flex items-center gap-2 shadow-lg relative overflow-hidden group ${selectedRxs.length > 0 ? (submitAttempts > 0 ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-rose-50 border border-amber-400/50 shadow-[0_0_20px_rgba(245,158,11,0.4)]' : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white hover:scale-105 active:scale-95 border border-rose-400/50 shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-[0_0_30px_rgba(244,63,94,0.6)]') : 'bg-slate-800/80 text-slate-500 cursor-not-allowed border border-slate-700/50 backdrop-blur-none shadow-none'}`}
                         >
-                            {submitAttempts === 0 ? '確認開立處方箋 📄' : '重新送出處方箋 🔄'}
+                            <span className="relative z-10">{submitAttempts === 0 ? '確認開立處方箋 📄' : '重新送出處方箋 🔄'}</span>
                         </button>
                     ) : (
-                        <div className={`w-full p-6 md:p-8 rounded-3xl shadow-lg animate-in fade-in slide-in-from-bottom-4 border-l-[12px] ${partialFeedback?.type === 'success' ? 'bg-white border-emerald-500' : 'bg-red-50/50 border-red-500'}`}>
+                        <div className={`w-full p-6 md:p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-bottom-4 border-l-[12px] backdrop-blur-lg border-y border-r border-white/10 ${partialFeedback?.type === 'success' ? 'bg-emerald-900/20 border-l-emerald-500' : 'bg-rose-900/20 border-l-rose-500'}`}>
                             <div className="flex items-start justify-between gap-4 mb-4">
                                 <div className="flex items-center gap-4">
-                                    <div className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-sm ${partialFeedback?.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+                                    <div className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-inner border ${partialFeedback?.type === 'success' ? 'bg-emerald-900/50 text-emerald-400 border-emerald-500/30' : 'bg-rose-900/50 text-rose-400 border-rose-500/30'}`}>
                                         {partialFeedback?.type === 'success' ? '🏥' : '🚨'}
                                     </div>
                                     <div>
-                                        <h3 className={`text-xl md:text-2xl font-black mb-1 ${partialFeedback?.type === 'success' ? 'text-emerald-600' : 'text-red-600'}`}>
+                                        <h3 className={`text-xl md:text-2xl font-black mb-1 drop-shadow-[0_0_8px_currentColor] ${partialFeedback?.type === 'success' ? 'text-emerald-400' : 'text-rose-400'}`}>
                                             {partialFeedback?.message}
                                         </h3>
                                         {partialFeedback?.type !== 'success' && (
-                                            <div className="text-sm text-red-700 font-bold bg-white p-2 rounded border border-red-100 shadow-sm inline-block">
+                                            <div className="text-sm text-emerald-400 font-bold bg-slate-900/80 p-2 rounded border border-emerald-500/30 shadow-inner inline-block mt-2">
                                                 完整標準處方應為：{current.correctRxs.join(" ＋ ")}
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                                <div className={`flex flex-col items-end shrink-0`}>
-                                    <div className={`text-3xl font-black flex items-center gap-1 ${partialFeedback?.type === 'success' ? 'text-emerald-500' : 'text-slate-300'}`}>
-                                        {partialFeedback?.type === 'success' ? `+${partialFeedback.pts}` : '0'} <span className="text-base font-bold">分</span>
+                                <div className={`flex flex-col items-end shrink-0 bg-slate-900/60 p-3 rounded-2xl border border-white/5 shadow-inner`}>
+                                    <div className={`text-3xl font-black flex items-center gap-1 drop-shadow-md ${partialFeedback?.type === 'success' ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'text-slate-400'}`}>
+                                        {partialFeedback?.type === 'success' ? `+${partialFeedback.pts}` : '0'} <span className="text-base font-bold text-slate-500">分</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm mb-5 relative">
-                                <span className="absolute top-0 right-0 p-3 opacity-20 text-3xl pointer-events-none">💡</span>
-                                <p className="text-slate-600 text-lg font-medium leading-relaxed relative z-10">
+                            <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-700 shadow-inner mb-5 relative group hover:border-cyan-500/30 transition-colors">
+                                <span className="absolute top-0 right-0 p-3 opacity-20 text-3xl pointer-events-none group-hover:opacity-40 transition-opacity">💡</span>
+                                <p className="text-slate-300 text-lg font-medium leading-relaxed relative z-10 group-hover:text-rose-100 transition-colors">
                                     {current.explanation}
                                 </p>
                             </div>
@@ -673,31 +688,33 @@ export const QuestionERGame = () => {
                             {!showHealed ? (
                                 <button
                                     onClick={() => setShowHealed(true)}
-                                    className="bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold py-3 px-6 rounded-xl transition mb-6 w-full md:w-auto flex justify-center items-center gap-2 border border-blue-200"
+                                    className="bg-slate-800/80 hover:bg-slate-700 text-cyan-400 font-bold py-3 px-6 rounded-xl transition-all duration-300 mb-6 w-full md:w-auto flex justify-center items-center gap-2 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] backdrop-blur-none mx-auto md:mx-0"
                                 >
                                     <span>👀</span> 查看治癒後的問題樣貌
                                 </button>
                             ) : (
-                                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-6 relative overflow-hidden animate-in fade-in slide-in-from-top-2">
-                                    <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+                                <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-2xl p-6 mb-6 relative overflow-hidden animate-in fade-in slide-in-from-top-2 backdrop-blur-none shadow-inner mx-auto md:mx-0">
+                                    <div className="absolute top-0 left-0 w-1.5 h-full bg-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div>
                                     <div className="flex items-center gap-2 mb-3">
-                                        <span className="bg-blue-100 text-blue-600 text-xs font-black px-2 py-1 rounded-md tracking-widest">AFTER</span>
-                                        <p className="text-sm text-blue-800 font-bold">治癒後的研究問題：</p>
+                                        <span className="bg-cyan-900/80 text-cyan-300 text-xs font-black px-2 py-1 rounded-md tracking-widest border border-cyan-500/50 shadow-inner">AFTER</span>
+                                        <p className="text-sm text-cyan-200/80 font-bold">治癒後的研究問題：</p>
                                     </div>
-                                    <p className="text-blue-900 text-xl font-bold leading-snug">「{current.healed}」</p>
+                                    <p className="text-cyan-100 text-xl font-bold leading-snug drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">「{current.healed}」</p>
                                 </div>
                             )}
 
-                            <div className="flex justify-end pt-4 border-t border-slate-200">
+                            <div className="flex justify-end pt-5 border-t border-slate-700/50">
                                 <button
                                     onClick={nextPatient}
-                                    className={`font-black py-4 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-md flex items-center gap-2 text-white ${currentIdx < patients.length - 1 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-slate-800 hover:bg-slate-900'}`}
+                                    className={`font-black py-4 px-10 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 text-white overflow-hidden relative group ${currentIdx < patients.length - 1 ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 border border-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)]' : 'bg-slate-700 hover:bg-slate-600 border border-slate-500'}`}
                                 >
-                                    {currentIdx < patients.length - 1 ? (
-                                        <>呼叫下一位病患 <span className="text-2xl leading-none">🩺</span></>
-                                    ) : (
-                                        <>完成交班，查看報告 <span className="text-2xl leading-none">📋</span></>
-                                    )}
+                                    <span className="relative z-10">
+                                        {currentIdx < patients.length - 1 ? (
+                                            <>呼叫下一位病患 <span className="text-2xl leading-none">🩺</span></>
+                                        ) : (
+                                            <>完成交班，查看報告 <span className="text-2xl leading-none drop-shadow-md">📋</span></>
+                                        )}
+                                    </span>
                                 </button>
                             </div>
                         </div>

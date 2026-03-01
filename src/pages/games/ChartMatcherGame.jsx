@@ -3,13 +3,13 @@ import React, { useState, useEffect, useRef } from 'react';
 // ========== 迷你圖表預覽元件（全部 SVG）==========
 // 統一尺寸常數
 const SVG_W = 400, SVG_H = 120;
-const AXIS_COLOR = '#64748b';   // 深灰色，清晰可見
+const AXIS_COLOR = '#475569';   // slate-600 (Darker axis for dark mode)
 const AXIS_W = 1.5;             // 軸線粗細
-const GRID_COLOR = '#e2e8f0';
-const LABEL_COLOR = '#64748b';
+const GRID_COLOR = '#334155';   // slate-700 (Dark grid)
+const LABEL_COLOR = '#94a3b8';  // slate-400 (Light text for dark mode)
 const LABEL_SIZE = 9;
 
-const MiniBar = ({ data, color = '#6366f1', axisX, axisY }) => {
+const MiniBar = ({ data, color = '#06b6d4', axisX, axisY }) => {
     const padL = 30, padR = 20, padT = 18, padB = 22;
     const chartW = SVG_W - padL - padR;
     const chartH = SVG_H - padT - padB;
@@ -53,7 +53,7 @@ const MiniBar = ({ data, color = '#6366f1', axisX, axisY }) => {
 const MiniPie = ({ data }) => {
     const total = data.reduce((s, d) => s + d.value, 0);
     let cum = 0;
-    const colors = ['#6366f1', '#f43f5e', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
+    const colors = ['#06b6d4', '#f43f5e', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
     const segs = data.map((d, i) => {
         const start = cum;
         cum += (d.value / total) * 360;
@@ -65,8 +65,8 @@ const MiniPie = ({ data }) => {
             <div className="space-y-1">
                 {data.map((d, i) => (
                     <div key={i} className="flex items-center gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: colors[i % colors.length] }} />
-                        <span className="text-[9px] text-slate-600 font-medium">{d.label} ({Math.round(d.value / total * 100)}%)</span>
+                        <div className="w-2.5 h-2.5 rounded-sm shadow-[0_0_5px_currentColor]" style={{ backgroundColor: colors[i % colors.length], color: colors[i % colors.length] }} />
+                        <span className="text-[9px] text-slate-300 font-medium tracking-wider">{d.label} ({Math.round(d.value / total * 100)}%)</span>
                     </div>
                 ))}
             </div>
@@ -74,7 +74,7 @@ const MiniPie = ({ data }) => {
     );
 };
 
-const MiniLine = ({ data, color = '#6366f1', axisX, axisY }) => {
+const MiniLine = ({ data, color = '#06b6d4', axisX, axisY }) => {
     const values = data.map(d => d.value);
     const rawMax = Math.max(...values);
     const rawMin = Math.min(...values);
@@ -111,7 +111,7 @@ const MiniLine = ({ data, color = '#6366f1', axisX, axisY }) => {
             {/* 資料點 + 標籤 */}
             {points.map((p, i) => (
                 <g key={i}>
-                    <circle cx={p.x} cy={p.y} r="4" fill="white" stroke={color} strokeWidth="2" />
+                    <circle cx={p.x} cy={p.y} r="4" fill="#0f172a" stroke={color} strokeWidth="2" />
                     <text x={p.x} y={SVG_H - 5} textAnchor="middle" fontSize={LABEL_SIZE} fill={LABEL_COLOR} fontWeight="500">{data[i].label}</text>
                 </g>
             ))}
@@ -123,7 +123,7 @@ const MiniLine = ({ data, color = '#6366f1', axisX, axisY }) => {
     );
 };
 
-const MiniScatter = ({ data, color = '#6366f1', axisX, axisY }) => {
+const MiniScatter = ({ data, color = '#06b6d4', axisX, axisY }) => {
     const xs = data.map(d => d.x);
     const ys = data.map(d => d.y);
     const rawXMin = Math.min(...xs), rawXMax = Math.max(...xs);
@@ -164,7 +164,7 @@ const MiniScatter = ({ data, color = '#6366f1', axisX, axisY }) => {
     );
 };
 
-const MiniStackedBar = ({ data, colors = ['#6366f1', '#f43f5e', '#10b981'], axisX, axisY }) => {
+const MiniStackedBar = ({ data, colors = ['#06b6d4', '#f43f5e', '#10b981'], axisX, axisY }) => {
     const padL = 30, padR = 20, padT = 10, padB = 22;
     const chartW = SVG_W - padL - padR;
     const chartH = SVG_H - padT - padB;
@@ -211,7 +211,7 @@ const MiniStackedBar = ({ data, colors = ['#6366f1', '#f43f5e', '#10b981'], axis
     );
 };
 
-const MiniHistogram = ({ data, color = '#6366f1', axisX, axisY }) => {
+const MiniHistogram = ({ data, color = '#06b6d4', axisX, axisY }) => {
     const padL = 30, padR = 10, padT = 10, padB = 22;
     const chartW = SVG_W - padL - padR;
     const chartH = SVG_H - padT - padB;
@@ -332,7 +332,7 @@ const questions = [
         bestReason: "長條圖最適合比較兩個（或少數幾個）類別的數值大小，簡潔明瞭。",
         acceptableReason: "",
         wrongReason: "圓餅圖無法比較兩組的平均值；折線圖需要時間軸；散佈圖需要兩個連續變項。",
-        previewData: { type: 'bar', data: [{ label: '男生', value: 3.2 }, { label: '女生', value: 2.5 }], color: '#6366f1', axisX: '性別', axisY: '每週運動次數' }
+        previewData: { type: 'bar', data: [{ label: '男生', value: 3.2 }, { label: '女生', value: 2.5 }], color: '#06b6d4', axisX: '性別', axisY: '每週運動次數' }
     },
     {
         id: 7,
@@ -389,7 +389,7 @@ const renderPreview = (preview) => {
     const { axisX, axisY } = preview;
     switch (preview.type) {
         case 'bar':
-            return <MiniBar data={preview.data} color={preview.color || '#6366f1'} axisX={axisX} axisY={axisY} />;
+            return <MiniBar data={preview.data} color={preview.color || '#06b6d4'} axisX={axisX} axisY={axisY} />;
         case 'pie':
             return <MiniPie data={preview.data} />;
         case 'line':
@@ -497,7 +497,13 @@ export const ChartMatcherGame = () => {
     const [shakeCard, setShakeCard] = useState(false);
     const [comboAnim, setComboAnim] = useState(false);
 
-    useEffect(() => { injectMatcherStyles(); }, []);
+    useEffect(() => {
+        injectMatcherStyles();
+        const savedName = localStorage.getItem('rib_agent_name');
+        if (savedName) {
+            setPlayerName(savedName);
+        }
+    }, []);
 
     const startGame = () => {
         setCurrentIdx(0);
@@ -562,41 +568,42 @@ export const ChartMatcherGame = () => {
     // ================= START SCREEN =================
     if (gameState === 'start') {
         return (
-            <div className="bg-gradient-to-br from-violet-50 to-pink-50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans min-h-[600px]">
-                <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl max-w-xl w-full text-center border-t-8 border-violet-400 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 opacity-5 text-9xl -mt-4 -mr-4">🎨</div>
-                    <div className="text-7xl mb-6">🎨</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-violet-600 mb-4 tracking-wide">圖表配對師</h1>
-                    <h2 className="text-xl md:text-2xl font-bold text-slate-500 mb-6 border-b border-slate-200 pb-4">你會選什麼圖？</h2>
-                    <p className="text-slate-500 text-lg mb-6 font-medium leading-relaxed">
-                        10 個研究情境，<br />
-                        你能幫數據找到<span className="text-violet-600 font-bold">最適合的圖表</span>嗎？
+            <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans min-h-[600px] relative">
+                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none"></div>
+                <div className="bg-slate-900/80 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-cyan-500 relative overflow-hidden backdrop-blur-sm z-10">
+                    <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 drop-shadow-[0_0_20px_rgba(6,182,212,0.5)]">📊</div>
+                    <div className="text-7xl mb-6 relative">📊<span className="absolute -inset-4 bg-cyan-500/20 rounded-full blur-xl z-[-1]"></span></div>
+                    <h1 className="text-3xl md:text-5xl font-black text-cyan-400 mb-2 tracking-widest drop-shadow-[0_0_8px_currentColor]">情報視覺化</h1>
+                    <div className="text-sm md:text-base font-bold text-cyan-300/80 mb-4 bg-cyan-950/40 inline-block px-3 py-1 rounded border border-cyan-500/20 tracking-wider">
+                        🎯 統計圖表選擇與資訊呈現最佳化
+                    </div>
+                    <p className="text-slate-300 text-lg mb-6 font-medium leading-relaxed tracking-wider">
+                        10 個情報戰略情境，<br />
+                        你能幫數據找到<span className="text-cyan-400 font-bold mx-1 drop-shadow-[0_0_5px_currentColor]">最適合的圖表</span>來呈現決策嗎？
                     </p>
 
-                    <div className="bg-violet-50 rounded-xl p-5 mb-6 text-left border border-violet-200">
-                        <label className="block text-sm font-bold text-violet-700 mb-2 tracking-wider">🎨 配對師代號 (姓名)</label>
-                        <input
-                            type="text"
-                            value={playerName}
-                            onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="請輸入你的名字..."
-                            className="w-full bg-white border-2 border-violet-200 focus:border-violet-500 rounded-lg outline-none px-4 py-3 font-bold text-lg text-slate-800 placeholder-slate-300 mb-4 transition-colors text-center"
-                        />
-                        <h3 className="text-sm font-bold text-violet-400 mb-3 tracking-wider border-t border-violet-200 pt-3">📋 計分規則</h3>
-                        <div className="space-y-2 text-sm text-slate-600">
-                            <p>🎯 選到<strong className="text-violet-600">最佳圖表</strong> → <strong className="text-violet-600">+3 分</strong></p>
-                            <p>👍 選到<strong className="text-amber-600">可接受圖表</strong> → <strong className="text-amber-600">+1 分</strong></p>
-                            <p>❌ 選到<strong className="text-rose-500">不適合的圖表</strong> → <strong className="text-rose-500">+0 分</strong></p>
+                    <div className="bg-slate-800/60 rounded-xl p-5 mb-6 text-center border border-cyan-500/30 shadow-inner">
+                        <label className="block text-sm font-bold text-cyan-500 mb-2 tracking-[0.2em] font-mono">📡 CURRENT OPERATIVE</label>
+                        {playerName ? (
+                            <div className="text-2xl font-black text-emerald-400 border-b-2 border-emerald-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_5px_currentColor]">{playerName} 探員</div>
+                        ) : (
+                            <div className="text-rose-500 font-bold mb-2 animate-pulse font-mono tracking-widest">⚠️ UNIDENTIFIED PROTOCOL: 請返回總部大廳報到</div>
+                        )}
+                        <h3 className="text-sm font-bold text-cyan-400 mb-3 tracking-[0.2em] border-t border-cyan-500/30 pt-5 mt-6 font-mono">⚙️ SCORING PROTOCOL</h3>
+                        <div className="space-y-3 text-sm text-slate-300 text-left font-mono">
+                            <p className="flex items-center gap-2"><span className="text-cyan-400 text-lg">🎯</span>選到<span className="text-cyan-400 font-bold drop-shadow-[0_0_5px_currentColor]">最佳圖表</span> → <span className="text-cyan-400 font-bold">+3 PTS</span></p>
+                            <p className="flex items-center gap-2"><span className="text-amber-500 text-lg">👍</span>選到<span className="text-amber-500 font-bold drop-shadow-[0_0_5px_currentColor]">可接受圖表</span> → <span className="text-amber-500 font-bold">+1 PTS</span></p>
+                            <p className="flex items-center gap-2"><span className="text-rose-500 text-lg">❌</span>選到<span className="text-rose-500 font-bold drop-shadow-[0_0_5px_currentColor]">不適合圖表</span> → <span className="text-rose-500 font-bold">+0 PTS</span></p>
                         </div>
                     </div>
 
-                    <div className="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-200">
-                        <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider">📊 涵蓋的圖表類型</h3>
-                        <div className="grid grid-cols-2 gap-2 text-sm text-slate-600">
+                    <div className="bg-slate-900/60 rounded-xl p-4 mb-8 border border-slate-700 shadow-inner">
+                        <h3 className="text-sm font-bold text-slate-400 mb-4 tracking-[0.2em] font-mono">📊 AVAILABLE TOOLS</h3>
+                        <div className="grid grid-cols-2 gap-3 text-sm text-slate-300">
                             {Object.values(chartTypes).map((ct, i) => (
-                                <div key={i} className="flex items-center gap-1.5">
-                                    <span>{ct.icon}</span>
-                                    <span className="font-medium">{ct.name}</span>
+                                <div key={i} className="flex items-center gap-2 bg-slate-800/50 py-1.5 px-3 rounded-md border border-slate-700/50">
+                                    <span className="text-lg">{ct.icon}</span>
+                                    <span className="font-bold tracking-wider">{ct.name}</span>
                                 </div>
                             ))}
                         </div>
@@ -604,10 +611,11 @@ export const ChartMatcherGame = () => {
 
                     <button
                         onClick={startGame}
-                        disabled={!playerName.trim()}
-                        className={`font-black py-4 px-10 rounded-full text-xl transition transform shadow-lg ${!playerName.trim() ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-violet-500 hover:bg-violet-600 text-white hover:scale-105 active:scale-95'}`}
+                        disabled={!playerName}
+                        className={`font-black py-4 px-12 rounded-full text-xl transition-all duration-300 relative overflow-hidden group tracking-[0.2em] ${!playerName ? 'bg-slate-800 text-slate-500 cursor-not-allowed border-2 border-slate-700' : 'bg-slate-900 border-2 border-cyan-500 hover:border-cyan-400 text-cyan-400 hover:text-white hover:bg-cyan-900/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:-translate-y-1'}`}
                     >
-                        開始配對 🎨
+                        {playerName && <span className="absolute inset-0 w-full h-full bg-white/10 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
+                        <span className="relative z-10 flex items-center justify-center gap-3">開始配對 <span>🚀</span></span>
                     </button>
                 </div>
             </div>
@@ -620,55 +628,56 @@ export const ChartMatcherGame = () => {
         const percentage = Math.round((score / maxScore) * 100);
         let title = "";
         let color = "";
-        if (percentage >= 90) { title = "🏆 圖表大師！"; color = "text-amber-500"; }
-        else if (percentage >= 70) { title = "📊 資深配對師！"; color = "text-violet-600"; }
-        else if (percentage >= 50) { title = "🎨 實習設計師！"; color = "text-emerald-600"; }
-        else { title = "📉 圖表迷路了！再練練！"; color = "text-rose-500"; }
+        if (percentage >= 90) { title = "🏆 圖表大師！"; color = "text-emerald-400 drop-shadow-[0_0_8px_currentColor]"; }
+        else if (percentage >= 70) { title = "📊 資深配對師！"; color = "text-cyan-400 drop-shadow-[0_0_8px_currentColor]"; }
+        else if (percentage >= 50) { title = "🎨 實習探員！"; color = "text-amber-400 drop-shadow-[0_0_8px_currentColor]"; }
+        else { title = "📉 情報錯誤！再練練！"; color = "text-rose-500 drop-shadow-[0_0_8px_currentColor]"; }
 
         const missedOrWeak = results.filter(r => r.result !== 'best');
 
         return (
-            <div className="bg-gradient-to-br from-violet-50 to-pink-50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[600px]">
-                <div className="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full text-center border-t-8 border-violet-400">
-                    <h1 className="text-3xl font-bold text-slate-400 mb-4 tracking-widest">配對報告</h1>
+            <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[600px] relative">
+                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none"></div>
+                <div className="bg-slate-900/80 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-2xl w-full text-center border-t-[8px] border-cyan-500 relative z-10 backdrop-blur-sm">
+                    <h1 className="text-3xl font-black text-cyan-500 mb-4 tracking-[0.25em] font-mono">MISSION REPORT</h1>
 
-                    <div className="mb-4">
-                        <p className="text-sm font-bold text-slate-400 tracking-wider">配對師姓名</p>
-                        <p className="text-2xl font-black text-slate-800 border-b-2 border-violet-200 inline-block px-8 pb-1">{playerName}</p>
+                    <div className="mb-6 bg-slate-800/50 py-3 rounded-xl border border-slate-700/50 inline-block px-10">
+                        <p className="text-xs font-bold text-slate-400 tracking-[0.2em] font-mono mb-1">OPERATIVE ID</p>
+                        <p className="text-2xl font-black text-emerald-400 drop-shadow-[0_0_5px_currentColor]">{playerName}</p>
                     </div>
 
-                    <div className="text-6xl font-black mb-2 text-violet-500">
-                        {score} <span className="text-2xl text-slate-300">/ {maxScore}</span>
+                    <div className="text-6xl font-black mb-2 text-cyan-400 drop-shadow-[0_0_10px_currentColor]">
+                        {score} <span className="text-2xl text-slate-500">/ {maxScore}</span>
                     </div>
-                    <p className="text-slate-400 mb-2">（{percentage}%）</p>
+                    <p className="text-cyan-600 font-mono tracking-widest mb-2">ACCURACY: {percentage}%</p>
                     {maxCombo >= 3 && (
-                        <p className="text-amber-500 font-bold mb-2">🔥 最高連續答對：{maxCombo} 連擊！</p>
+                        <p className="text-amber-500 font-bold mb-4 bg-amber-950/30 inline-block px-4 py-1 rounded-full border border-amber-500/30">🔥 最高連續答對：{maxCombo} 連擊！</p>
                     )}
-                    <h2 className={`text-3xl font-black mb-6 ${color}`}>{title}</h2>
+                    <h2 className={`text-3xl font-black mb-8 ${color}`}>{title}</h2>
 
-                    <p className="text-xs text-slate-400 font-bold mb-4 uppercase tracking-widest bg-slate-50 py-2 rounded-lg border border-slate-200">請截圖此頁面作為紀錄</p>
+                    <p className="text-xs text-slate-400 font-bold mb-6 uppercase tracking-[0.2em] bg-slate-800/80 py-2 rounded-lg border border-slate-700 mx-auto max-w-xs shadow-inner">請截圖此頁面作為紀錄</p>
 
                     <button
                         onClick={() => setGameState('start')}
-                        className="bg-violet-100 hover:bg-violet-200 text-violet-600 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-sm mb-8 border border-violet-200"
+                        className="bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 font-black py-4 px-10 rounded-full text-lg transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:-translate-y-1 mb-8 border border-cyan-500/50 tracking-[0.2em]"
                     >
-                        重新配對 🔄
+                        重新執行任務 🔄
                     </button>
 
                     {missedOrWeak.length > 0 && (
-                        <div className="text-left bg-amber-50 p-6 rounded-xl border-l-8 border-amber-400 max-h-96 overflow-y-auto">
-                            <h3 className="text-xl font-black mb-4 text-slate-700">📋 可加強的題目</h3>
+                        <div className="text-left bg-slate-800/80 p-6 rounded-2xl border-l-8 border-amber-500 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
+                            <h3 className="text-lg font-black mb-5 text-amber-500 tracking-wider">⚠️ 建議複習情報</h3>
                             <div className="space-y-4">
                                 {missedOrWeak.map((r, i) => (
-                                    <div key={i} className="bg-white p-4 rounded-lg border border-amber-200 shadow-sm">
-                                        <p className="font-bold text-slate-700 mb-1 text-sm">Q{r.question.id}. {r.question.scenario.slice(0, 50)}...</p>
-                                        <div className="flex flex-wrap gap-2 mt-2">
-                                            <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${r.result === 'acceptable' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-600'}`}>
-                                                你選：{chartTypes[r.chosen].icon} {chartTypes[r.chosen].name}
-                                                {r.result === 'acceptable' ? '（可接受）' : '（不適合）'}
+                                    <div key={i} className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                                        <p className="font-bold text-slate-300 mb-3 text-sm leading-relaxed"><span className="text-amber-500 font-mono">Q{r.question.id}.</span> {r.question.scenario}</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className={`text-xs font-bold px-3 py-1.5 rounded-md border ${r.result === 'acceptable' ? 'bg-amber-950/40 text-amber-400 border-amber-500/30' : 'bg-rose-950/40 text-rose-400 border-rose-500/30'}`}>
+                                                你選擇：{chartTypes[r.chosen].icon} {chartTypes[r.chosen].name}
+                                                {r.result === 'acceptable' ? ' (次佳)' : ' (不適合)'}
                                             </span>
-                                            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-600">
-                                                最佳：{chartTypes[r.question.best].icon} {chartTypes[r.question.best].name}
+                                            <span className="text-xs font-bold px-3 py-1.5 rounded-md bg-cyan-950/40 text-cyan-400 border border-cyan-500/30">
+                                                ★ 最佳：{chartTypes[r.question.best].icon} {chartTypes[r.question.best].name}
                                             </span>
                                         </div>
                                     </div>
@@ -678,8 +687,8 @@ export const ChartMatcherGame = () => {
                     )}
 
                     {missedOrWeak.length === 0 && (
-                        <div className="bg-emerald-50 text-emerald-700 border border-emerald-200 p-4 rounded-xl font-bold text-lg">
-                            全部最佳配對！你是圖表大師！ 🎉
+                        <div className="bg-emerald-950/50 text-emerald-400 border border-emerald-500/50 p-5 rounded-2xl font-black text-xl tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                            PERFECT OPERATION! 🎉
                         </div>
                     )}
                 </div>
@@ -693,49 +702,51 @@ export const ChartMatcherGame = () => {
     const isBoss = q.scenario.includes('🔥');
 
     return (
-        <div className="bg-gradient-to-br from-violet-50 to-pink-50 rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px]">
-            <div className="max-w-4xl w-full">
+        <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px] relative">
+            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none"></div>
+            <div className="max-w-4xl w-full relative z-10 flex flex-col h-full">
 
                 {/* Progress */}
                 <div className="flex justify-between items-center mb-6 px-2">
-                    <div className="bg-white text-violet-600 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-violet-200">
-                        第 {currentIdx + 1} / {questions.length} 題
+                    <div className="bg-slate-900/80 text-cyan-400 font-bold px-5 py-2 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.2)] text-lg border border-cyan-500/50 backdrop-blur-sm tracking-wider font-mono">
+                        DATASET {currentIdx + 1} / {questions.length}
                     </div>
                     <div className="flex items-center gap-3">
                         {/* Combo indicator */}
                         {combo >= 2 && (
-                            <div className="bg-amber-100 text-amber-700 font-black px-4 py-2 rounded-full shadow-sm text-lg border border-amber-300"
+                            <div className="bg-amber-950/80 text-amber-500 font-black px-4 py-2 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.3)] text-lg border border-amber-500/50 backdrop-blur-sm"
                                 style={{ animation: comboAnim ? 'combo-fire 0.5s ease-out' : 'none' }}>
                                 🔥 x{combo}
-                                {combo >= 5 && ' 超神！'}
-                                {combo >= 3 && combo < 5 && ' 火力全開！'}
+                                {combo >= 5 && ' OVERKILL!'}
+                                {combo >= 3 && combo < 5 && ' TACTICAL!'}
                             </div>
                         )}
-                        <div className="bg-white text-emerald-600 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-emerald-200">
-                            {score} 分
+                        <div className="bg-slate-900/80 text-emerald-400 font-bold px-5 py-2 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.2)] text-lg border border-emerald-500/50 backdrop-blur-sm">
+                            SCORE: {score}
                         </div>
                     </div>
                 </div>
 
                 {/* Question Card */}
                 <div
-                    className={`bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-6 border-l-8 transition-all relative overflow-hidden ${isBoss ? 'border-purple-400 shadow-purple-100' : 'border-violet-400'}`}
+                    className={`bg-slate-900/80 p-6 md:p-8 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-6 border-l-[8px] transition-all relative overflow-hidden backdrop-blur-sm ${isBoss ? 'border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : 'border-cyan-500'}`}
                     style={{ animation: shakeCard ? 'matcher-shake 0.5s ease-in-out' : 'none' }}
                 >
                     {/* Confetti */}
                     <Confetti show={showConfetti} />
                     {isBoss && (
-                        <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs font-black px-4 py-1 rounded-bl-lg tracking-widest animate-pulse">
-                            🔥 魔王題
+                        <div className="absolute top-0 right-0 bg-amber-600 text-slate-900 text-xs font-black px-4 py-1.5 rounded-bl-lg tracking-widest animate-pulse shadow-[0_0_10px_rgba(245,158,11,0.5)]">
+                            ⚠️ EXTREME SCENARIO
                         </div>
                     )}
+                    <div className="absolute top-0 left-0 bg-slate-800 text-slate-400 text-[10px] font-mono px-3 py-1 rounded-br-lg border-b border-r border-slate-700 tracking-widest">SCENARIO DEBRIEF</div>
 
-                    <div className="flex items-start gap-3 mb-4">
-                        <span className="text-3xl">📋</span>
+                    <div className="flex items-start gap-4 mb-2 mt-4">
+                        <span className="text-3xl drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">📋</span>
                         <div>
-                            <h2 className="text-lg font-bold text-slate-800 leading-relaxed">{q.scenario}</h2>
-                            <p className="text-xs text-slate-400 mt-2 bg-slate-50 inline-block px-3 py-1 rounded-full border border-slate-200">
-                                💡 提示：{q.dataHint}
+                            <h2 className="text-lg font-bold text-slate-200 leading-relaxed">{q.scenario}</h2>
+                            <p className="text-xs text-slate-400 mt-3 bg-slate-800/80 inline-block px-3 py-1.5 rounded-md border border-slate-700/50 font-mono tracking-wider shadow-inner">
+                                <span className="text-cyan-500 mr-2">HINT:</span>{q.dataHint}
                             </p>
                         </div>
                     </div>
@@ -746,10 +757,11 @@ export const ChartMatcherGame = () => {
                     <div className="grid grid-cols-2 gap-4 mb-6">
                         {q.options.map(opt => (
                             <button key={opt} onClick={() => handleAnswer(opt)}
-                                className="bg-white hover:bg-violet-50 border-2 border-slate-200 hover:border-violet-400 rounded-xl p-5 text-center transition-all hover:shadow-lg hover:-translate-y-1 group">
-                                <div className="text-4xl mb-2">{chartTypes[opt].icon}</div>
-                                <div className="text-lg font-black text-slate-700 group-hover:text-violet-600">{chartTypes[opt].name}</div>
-                                <div className="text-xs text-slate-400 mt-1">{chartTypes[opt].desc}</div>
+                                className="bg-slate-900/60 hover:bg-slate-800/80 border-2 border-slate-700/50 hover:border-cyan-500/80 rounded-2xl p-5 text-center transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:-translate-y-1 group backdrop-blur-none relative overflow-hidden">
+                                <span className="absolute inset-0 w-full h-full bg-cyan-500/0 group-hover:bg-cyan-500/5 transition-colors"></span>
+                                <div className="text-4xl mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] relative z-10">{chartTypes[opt].icon}</div>
+                                <div className="text-lg font-black text-slate-300 group-hover:text-cyan-400 relative z-10">{chartTypes[opt].name}</div>
+                                <div className="text-xs text-slate-500 mt-2 relative z-10 group-hover:text-slate-400">{chartTypes[opt].desc}</div>
                             </button>
                         ))}
                     </div>
@@ -761,84 +773,97 @@ export const ChartMatcherGame = () => {
                         {/* Options with result badges */}
                         <div className="grid grid-cols-2 gap-3 mb-4">
                             {q.options.map(opt => {
-                                let borderColor = 'border-slate-200';
-                                let bg = 'bg-white';
+                                let borderColor = 'border-slate-700/50';
+                                let bg = 'bg-slate-900/40';
                                 let badge = null;
+                                let nameColor = 'text-slate-400';
 
                                 if (opt === q.best) {
-                                    borderColor = 'border-violet-400';
-                                    bg = 'bg-violet-50';
-                                    badge = <span className="absolute -top-2 -right-2 bg-violet-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">🎯 最佳</span>;
+                                    borderColor = 'border-cyan-500';
+                                    bg = 'bg-cyan-950/40';
+                                    nameColor = 'text-cyan-400';
+                                    badge = <span className="absolute -top-2 -right-2 bg-cyan-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)]">🎯 最佳解</span>;
                                 } else if (q.acceptable.includes(opt)) {
-                                    borderColor = 'border-amber-300';
-                                    bg = 'bg-amber-50';
-                                    badge = <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">👍 可接受</span>;
+                                    borderColor = 'border-amber-500/50';
+                                    bg = 'bg-amber-950/40';
+                                    nameColor = 'text-amber-400';
+                                    badge = <span className="absolute -top-2 -right-2 bg-amber-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.5)]">👍 次佳解</span>;
                                 } else {
-                                    borderColor = 'border-rose-200';
-                                    bg = 'bg-rose-50';
-                                    badge = <span className="absolute -top-2 -right-2 bg-rose-400 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">❌ 不適合</span>;
+                                    borderColor = 'border-rose-500/30';
+                                    bg = 'bg-rose-950/20';
+                                    nameColor = 'text-rose-400/70';
+                                    badge = <span className="absolute -top-2 -right-2 bg-rose-500/80 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">❌ 錯誤</span>;
                                 }
 
                                 const isSelected = opt === selectedAnswer;
 
                                 return (
-                                    <div key={opt} className={`relative ${bg} border-2 ${borderColor} rounded-xl p-3 text-center ${isSelected ? 'ring-2 ring-offset-2 ring-violet-500' : ''}`}>
+                                    <div key={opt} className={`relative ${bg} border-2 ${borderColor} rounded-xl p-3 text-center transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-offset-slate-900 ring-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)] z-10 scale-[1.02]' : 'opacity-70 grayscale-[0.3]'}`}>
                                         {badge}
                                         <div className="text-2xl mb-1">{chartTypes[opt].icon}</div>
-                                        <div className="text-sm font-bold text-slate-700">{chartTypes[opt].name}</div>
+                                        <div className={`text-sm font-bold ${nameColor}`}>{chartTypes[opt].name}</div>
                                     </div>
                                 );
                             })}
                         </div>
 
                         {/* Feedback */}
-                        <div className={`p-6 rounded-2xl shadow-lg mb-6 border-l-8 ${answerResult === 'best' ? 'bg-violet-50 border-violet-400' :
-                            answerResult === 'acceptable' ? 'bg-amber-50 border-amber-400' :
-                                'bg-rose-50 border-rose-400'
+                        <div className={`p-6 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.6)] mb-6 border-l-[8px] relative overflow-hidden backdrop-blur-lg ${answerResult === 'best' ? 'bg-cyan-950/80 border-cyan-500' :
+                            answerResult === 'acceptable' ? 'bg-amber-950/80 border-amber-500' :
+                                'bg-rose-950/80 border-rose-500'
                             }`}>
-                            <h3 className={`text-xl font-black mb-3 ${answerResult === 'best' ? 'text-violet-700' :
-                                answerResult === 'acceptable' ? 'text-amber-700' :
-                                    'text-rose-600'
+                            <div className="absolute top-0 right-0 p-4 opacity-10 blur-[1px]">
+                                <span className="text-8xl">{answerResult === 'best' ? '🎯' : answerResult === 'acceptable' ? '👍' : '❌'}</span>
+                            </div>
+
+                            <h3 className={`text-xl font-black mb-5 tracking-wide drop-shadow-[0_0_8px_currentColor] relative z-10 ${answerResult === 'best' ? 'text-cyan-400' :
+                                answerResult === 'acceptable' ? 'text-amber-400' :
+                                    'text-rose-400'
                                 }`}
                                 style={{ animation: 'matcher-pop 0.4s ease-out' }}
                             >
-                                {answerResult === 'best' && (combo >= 3 ? `🔥 完美配對！x${combo} Combo！+${combo >= 5 ? 5 : 4} 分` : '🎯 完美配對！+3 分')}
-                                {answerResult === 'acceptable' && '👍 不錯，但有更好的選擇！+1 分'}
-                                {answerResult === 'wrong' && '❌ 這張圖不太適合！+0 分'}
+                                {answerResult === 'best' && (combo >= 3 ? `🔥 TARGET LOCKED! x${combo} Combo! +${combo >= 5 ? 5 : 4} PTS` : '🎯 OPTIMAL SELECTION! +3 PTS')}
+                                {answerResult === 'acceptable' && '👍 ACCEPTABLE, BUT CAN BE IMPROVED. +1 PTS'}
+                                {answerResult === 'wrong' && '❌ INVALID VISUALIZATION. +0 PTS'}
                             </h3>
 
                             {/* Best reason */}
-                            <div className="mb-3">
-                                <p className="text-sm font-bold text-violet-600 mb-1">🎯 為什麼 {chartTypes[q.best].name} 是最佳？</p>
-                                <p className="text-slate-600 text-sm leading-relaxed">{q.bestReason}</p>
+                            <div className="mb-4 relative z-10 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                                <p className="text-sm font-black text-cyan-500 mb-2 tracking-widest font-mono border-b border-cyan-500/20 pb-2">🎯 為什麼 {chartTypes[q.best].name} 是第一選擇？</p>
+                                <p className="text-slate-300 text-[15px] leading-relaxed font-medium">{q.bestReason}</p>
                             </div>
 
                             {/* Acceptable reason */}
                             {q.acceptable.length > 0 && q.acceptableReason && (
-                                <div className="mb-3">
-                                    <p className="text-sm font-bold text-amber-600 mb-1">👍 {q.acceptable.map(a => chartTypes[a].name).join('、')} 為什麼可接受？</p>
-                                    <p className="text-slate-600 text-sm leading-relaxed">{q.acceptableReason}</p>
+                                <div className="mb-4 relative z-10 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                                    <p className="text-sm font-black text-amber-500 mb-2 tracking-widest font-mono border-b border-amber-500/20 pb-2">👍 {q.acceptable.map(a => chartTypes[a].name).join('、')} 為什麼可接受？</p>
+                                    <p className="text-slate-300 text-[15px] leading-relaxed font-medium">{q.acceptableReason}</p>
                                 </div>
                             )}
 
                             {/* Wrong reason */}
-                            <div className="mb-4">
-                                <p className="text-sm font-bold text-rose-500 mb-1">❌ 其他選項為什麼不行？</p>
-                                <p className="text-slate-600 text-sm leading-relaxed">{q.wrongReason}</p>
+                            <div className="mb-5 relative z-10 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                                <p className="text-sm font-black text-rose-500 mb-2 tracking-widest font-mono border-b border-rose-500/20 pb-2">❌ 其他選項為什麼不適合？</p>
+                                <p className="text-slate-300 text-[15px] leading-relaxed font-medium">{q.wrongReason}</p>
                             </div>
 
                             {/* Chart Preview */}
-                            <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                                <p className="text-xs font-bold text-slate-400 mb-2 tracking-wider">📊 最佳圖表預覽：{chartTypes[q.best].icon} {chartTypes[q.best].name}</p>
-                                {renderPreview(q.previewData)}
+                            <div className="bg-slate-900 p-4 rounded-xl border border-cyan-500/30 shadow-inner relative z-10 mb-2 hover:border-cyan-400/50 transition-colors group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-xl"></div>
+                                <p className="text-[11px] font-bold text-slate-400 mb-3 tracking-[0.2em] font-mono flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+                                    VISUALIZATION PREVIEW: {chartTypes[q.best].icon} {chartTypes[q.best].name}
+                                </p>
+                                <div className="opacity-90 hover:opacity-100 transition-opacity">{renderPreview(q.previewData)}</div>
                             </div>
 
-                            <div className="text-right mt-4">
+                            <div className="text-right mt-6 relative z-10">
                                 <button
                                     onClick={nextQuestion}
-                                    className="bg-violet-500 hover:bg-violet-600 text-white font-black py-3 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-lg"
+                                    className="bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-black py-3.5 px-10 rounded-full text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_15px_rgba(6,182,212,0.4)] tracking-wider group relative overflow-hidden"
                                 >
-                                    {currentIdx < questions.length - 1 ? '下一題 ➡️' : '查看配對報告 📋'}
+                                    <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
+                                    <span className="relative z-10 flex items-center gap-2">{currentIdx < questions.length - 1 ? '載入下一個數據庫 ➡️' : '輸出情報分析報告 📋'}</span>
                                 </button>
                             </div>
                         </div>

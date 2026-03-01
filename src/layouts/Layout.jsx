@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Menu, X, Home, Navigation2, BarChart2, Search, BookOpen, Users, Gamepad2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette } from 'lucide-react';
+import { Menu, X, Home, Navigation2, BarChart2, Search, BookOpen, Users, Gamepad2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp } from 'lucide-react';
 
 export const Layout = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,14 +11,14 @@ export const Layout = () => {
         {
             items: [
                 { name: '首頁', path: '/', icon: <Home size={18} /> },
+                { name: '🎮 R.I.B. 特務指揮中心', path: '/games', icon: <Gamepad2 size={18} className="text-amber-500" /> },
             ]
         },
         {
             phase: '🔍 探索階段',
             label: '1️⃣ 問題意識',
             items: [
-                { name: '發掘問題 (W0-W2)', path: '/discovery', icon: <Search size={18} /> },
-                { name: '[遊戲] Level 1：問題急診室 (W0-W2)', path: '/game/question-er', icon: <HeartPulse size={18} /> },
+                { name: '發掘問題 (W0-W2)', path: '/discovery', icon: <Search size={18} /> }
             ]
         },
         {
@@ -26,7 +26,6 @@ export const Layout = () => {
             items: [
                 { name: '方法快篩 (W3-W4)', path: '/wizard', icon: <Navigation2 size={18} /> },
                 { name: '研究診所 (W5)', path: '/clinic', icon: <Stethoscope size={18} /> },
-                { name: '[遊戲] 辦案工具大考驗 (W3-W5)', path: '/game/tool-quiz', icon: <Gamepad2 size={18} /> },
                 { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
             ]
         },
@@ -35,9 +34,7 @@ export const Layout = () => {
             label: '3️⃣ 資料蒐集',
             items: [
                 { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
-                { name: '[遊戲] 文獻偵探社 (W6)', path: '/game/citation-detective', icon: <Gamepad2 size={18} /> },
-                { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> },
-                { name: '[遊戲] Level 2：處方診斷室 (W8-W9)', path: '/game/rx-inspector', icon: <Bug size={18} /> },
+                { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> }
             ]
         },
         {
@@ -45,8 +42,7 @@ export const Layout = () => {
             label: '4️⃣ 圖表分析',
             items: [
                 { name: '解讀與結論 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
-                { name: '[遊戲] 數據偵探 (W10+)', path: '/game/data-detective', icon: <ChartNoAxesCombined size={18} /> },
-                { name: '[遊戲] 圖表配對師 (W10+)', path: '/game/chart-matcher', icon: <Palette size={18} /> },
+                { name: '圖表選用原則 (W10+)', path: '/chart-selection', icon: <TrendingUp size={18} /> }
             ]
         }
     ];

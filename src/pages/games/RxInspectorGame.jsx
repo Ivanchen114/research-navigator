@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // 10 份研究工具病例 (問卷、訪談、實驗、觀察、文獻)
 const instrumentData = [
@@ -368,6 +368,13 @@ export const RxInspectorGame = () => {
     const [totalCorrect, setTotalCorrect] = useState(0);
     const [totalBugs, setTotalBugs] = useState(0);
 
+    useEffect(() => {
+        const savedName = localStorage.getItem('rib_agent_name');
+        if (savedName) {
+            setPlayerName(savedName);
+        }
+    }, []);
+
     const startGame = () => {
         setCurrentRound(0);
         setFlagged({});
@@ -421,41 +428,44 @@ export const RxInspectorGame = () => {
     // ================= START SCREEN =================
     if (gameState === 'start') {
         return (
-            <div className="bg-slate-50/50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-slate-800 min-h-[600px]">
-                <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] max-w-xl w-full text-center border-t-[12px] border-blue-500 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 opacity-5 text-9xl -mt-4 -mr-4 text-slate-900">🏥</div>
-                    <div className="text-7xl mb-6 animate-pulse">🩺</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-800 mb-4 tracking-wide drop-shadow-sm">Level 2：處方診斷室</h1>
-                    <h2 className="text-xl md:text-2xl font-bold text-slate-500 mb-6 border-b border-slate-100 pb-4">研究工具深度診斷挑戰</h2>
-                    <p className="text-slate-600 text-lg mb-8 font-medium leading-relaxed">
+            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-blue-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+                style={{ backgroundImage: "url('/images/rx_inspector_bg.png')" }}>
+                <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-none z-0"></div>
+
+                <div className="bg-slate-900/60 backdrop-blur-lg p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(59,130,246,0.2)] max-w-xl w-full text-center border border-white/10 border-t-[12px] border-t-cyan-500 relative overflow-hidden z-10">
+                    <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">🏥</div>
+                    <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]">🩺</div>
+                    <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500 mb-2 tracking-wide drop-shadow-sm">行動代號：防線</h1>
+                    <div className="text-sm md:text-base font-bold text-cyan-300/80 mb-4 bg-cyan-950/40 inline-block px-3 py-1 rounded border border-cyan-500/20 tracking-wider">
+                        🎯 研究設計與方法學避險測試
+                    </div>
+                    <p className="text-blue-100/90 text-lg mb-8 font-medium leading-relaxed drop-shadow-md">
                         10 份研究工具病例送到了你的診間，<br />
-                        裡面藏著各種<span className="text-red-500 font-bold">「有毒的設計處方」</span>！<br />
+                        裡面藏著各種<span className="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]">「有毒的設計處方」</span>！<br />
                         身為 Level 2 專科醫師的你，<br />
-                        能把所有 <span className="text-blue-500 font-bold border-b-2 border-blue-200">💊 隱藏病徵 (Bug)</span> 都抓出來嗎？
+                        能把所有 <span className="text-cyan-400 font-bold border-b-2 border-cyan-400/50 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]">💊 隱藏病徵 (Bug)</span> 都抓出來嗎？
                     </p>
-                    <div className="bg-slate-50 rounded-2xl p-6 mb-8 text-left border border-slate-200 shadow-sm">
-                        <label className="block text-sm font-bold text-slate-700 mb-2 tracking-wider">👨‍⚕️ 專科醫師代號 (姓名)</label>
-                        <input
-                            type="text"
-                            value={playerName}
-                            onChange={(e) => setPlayerName(e.target.value)}
-                            placeholder="請輸入你的名字..."
-                            className="w-full bg-white border-2 border-slate-200 focus:border-blue-400 rounded-xl outline-none px-4 py-3 font-bold text-lg text-slate-800 placeholder-slate-300 mb-5 transition-colors text-center"
-                        />
-                        <h3 className="text-sm font-bold text-slate-500 mb-3 tracking-wider border-t border-slate-200 pt-4">📋 看診須知</h3>
-                        <div className="space-y-3 text-sm text-slate-600">
-                            <p className="flex items-start gap-2">🩺 <span>每一關會出現一份<strong className="text-blue-600 font-bold bg-blue-50 px-1 rounded">研究工具病例</strong>（問卷/訪談/實驗...）</span></p>
-                            <p className="flex items-start gap-2">💊 <span>仔細檢查每一題，<strong className="text-red-500 font-bold bg-red-50 px-1 rounded">點擊有病的題目</strong>標記它</span></p>
-                            <p className="flex items-start gap-2">⚠️ <span>小心！不是每一題都有問題，<strong className="text-amber-600 font-bold bg-amber-50 px-1 rounded">誤診也會扣分</strong></span></p>
+                    <div className="bg-slate-800/50 rounded-2xl p-6 mb-8 text-center border border-slate-600/50 shadow-inner">
+                        <label className="block text-sm font-bold text-cyan-300 mb-2 tracking-wider drop-shadow-sm">👨‍⚕️ 目前登入身分</label>
+                        {playerName ? (
+                            <div className="text-2xl font-black text-cyan-400 border-b-2 border-cyan-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]">{playerName} 醫師</div>
+                        ) : (
+                            <div className="text-rose-400 font-bold mb-2 drop-shadow-sm">無法辨識身分！請返回總部大廳完成報到手續。</div>
+                        )}
+                        <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700 pt-6 mt-6">📋 看診須知</h3>
+                        <div className="space-y-3 text-sm text-slate-300 text-left">
+                            <p className="flex items-start gap-2">🩺 <span>每一關會出現一份<strong className="text-cyan-300 font-bold bg-cyan-900/40 px-1 rounded shadow-sm border border-cyan-500/20">研究工具病例</strong>（問卷/訪談/實驗...）</span></p>
+                            <p className="flex items-start gap-2">💊 <span>仔細檢查每一題，<strong className="text-rose-400 font-bold bg-rose-900/40 px-1 rounded shadow-sm border border-rose-500/20">點擊有病的題目</strong>標記它</span></p>
+                            <p className="flex items-start gap-2">⚠️ <span>小心！不是每一題都有問題，<strong className="text-amber-400 font-bold bg-amber-900/40 px-1 rounded shadow-sm border border-amber-500/20">誤診也會扣分</strong></span></p>
                             <p className="flex items-start gap-2">🎯 <span>常見病徵：雙管問題、誘導性措辭、安慰劑效應未控制...</span></p>
                         </div>
                     </div>
                     <button
                         onClick={startGame}
-                        disabled={!playerName.trim()}
-                        className={`font-black py-4 px-10 rounded-full text-xl transition transform shadow-[0_8px_20px_rgba(59,130,246,0.3)] hover:shadow-[0_12px_25px_rgba(59,130,246,0.4)] flex items-center justify-center gap-2 mx-auto ${!playerName.trim() ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none hover:shadow-none' : 'bg-blue-500 hover:bg-blue-600 text-white hover:scale-105 active:scale-95'}`}
+                        disabled={!playerName}
+                        className={`font-black py-4 px-10 rounded-full text-xl transition-all duration-300 transform shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center justify-center gap-2 mx-auto overflow-hidden group ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] border border-cyan-400/50'}`}
                     >
-                        穿上白袍，開始看診 🩺
+                        <span className="relative z-10">穿上白袍，開始看診 🩺</span>
                     </button>
                 </div>
             </div>
@@ -468,47 +478,52 @@ export const RxInspectorGame = () => {
         let title = "";
         let color = "";
         let bg = "";
-        if (accuracy === 100) { title = "🏆 神醫！零漏網之病！"; color = "text-amber-600"; bg = "bg-amber-50"; }
-        else if (accuracy >= 75) { title = "👨‍⚕️ 主治醫師！眼光犀利！"; color = "text-blue-600"; bg = "bg-blue-50"; }
-        else if (accuracy >= 50) { title = "🩺 住院醫師！還需磨練！"; color = "text-emerald-600"; bg = "bg-emerald-50"; }
-        else { title = "🚨 醫療糾紛！重新訓練！"; color = "text-red-600"; bg = "bg-red-50"; }
+        let borderColor = "";
+        if (accuracy === 100) { title = "🏆 神醫！零漏網之病！"; color = "text-amber-400"; bg = "bg-amber-900/40"; borderColor = "border-amber-500/50"; }
+        else if (accuracy >= 75) { title = "👨‍⚕️ 主治醫師！眼光犀利！"; color = "text-cyan-400"; bg = "bg-cyan-900/40"; borderColor = "border-cyan-500/50"; }
+        else if (accuracy >= 50) { title = "🩺 住院醫師！還需磨練！"; color = "text-emerald-400"; bg = "bg-emerald-900/40"; borderColor = "border-emerald-500/50"; }
+        else { title = "🚨 醫療糾紛！重新訓練！"; color = "text-rose-400"; bg = "bg-rose-900/40"; borderColor = "border-rose-500/50"; }
 
         return (
-            <div className="bg-slate-50/50 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-slate-800 min-h-[600px]">
-                <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] max-w-2xl w-full text-center border-t-[12px] border-blue-500 relative">
-                    <div className="absolute top-6 left-6 text-slate-200 text-6xl">📋</div>
-                    <h1 className="text-2xl font-bold text-slate-400 mb-2 tracking-widest relative z-10">看診報告單</h1>
+            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-blue-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+                style={{ backgroundImage: "url('/images/rx_inspector_bg.png')" }}>
+                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-0"></div>
+
+                <div className="bg-slate-900/70 backdrop-blur-lg p-8 md:p-12 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[12px] border-t-cyan-500 border-x border-b border-white/10 relative z-10">
+                    <div className="absolute top-6 left-6 text-cyan-500/20 text-6xl drop-shadow-md">📋</div>
+                    <h1 className="text-2xl font-bold text-cyan-200/60 mb-2 tracking-widest relative z-10">法醫部機密看診報告單</h1>
 
                     <div className="mb-4 relative z-10">
-                        <p className="text-sm font-bold text-slate-400 tracking-wider">專科醫師</p>
-                        <p className="text-2xl font-black text-blue-600 border-b-2 border-slate-200 inline-block px-8 pb-1">{playerName}</p>
+                        <p className="text-sm font-bold text-slate-400 tracking-wider">專科醫師 / 探員</p>
+                        <p className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 border-b-2 border-cyan-500/30 inline-block px-8 pb-1 drop-shadow-sm">{playerName}</p>
                     </div>
 
                     <div className="flex flex-col items-center justify-center mb-6 relative z-10">
-                        <div className="text-7xl font-black text-blue-600 tracking-tighter mb-2">{totalCorrect} <span className="text-3xl text-slate-300 font-medium">/ {totalBugs}</span></div>
-                        <p className="text-slate-500 mb-6 font-bold bg-slate-50 px-4 py-1 rounded-full border border-slate-200">病徵命中率：{accuracy}%</p>
-                        <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-2xl ${color} ${bg} mb-4`}>{title}</h2>
+                        <h2 className="text-2xl font-black text-amber-500 mb-4 tracking-widest drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">🛡️ 防線測試報告</h2>
+                        <div className="text-7xl font-black text-cyan-400 tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">{totalCorrect} <span className="text-3xl text-slate-500 font-medium">/ {totalBugs}</span></div>
+                        <p className="text-blue-200 mb-6 font-bold bg-slate-800/60 px-4 py-1 rounded-full border border-slate-600/50 shadow-inner">病徵命中率：<span className="text-cyan-400">{accuracy}%</span></p>
+                        <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-2xl ${color} ${bg} border ${borderColor} mb-4 shadow-lg drop-shadow-md`}>{title}</h2>
 
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-50 py-2 px-6 rounded-lg border border-slate-200">請截圖此頁面作為紀錄</p>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-800/80 py-2 px-6 rounded-lg border border-slate-700 shadow-inner">請截圖此畫面回報長官</p>
                     </div>
 
                     <button
                         onClick={() => setGameState('start')}
-                        className="bg-white hover:bg-slate-50 text-blue-600 font-bold py-3 px-8 rounded-full text-lg transition transform hover:scale-105 shadow-md hover:shadow-lg mb-8 border-2 border-blue-100 flex items-center justify-center gap-2 mx-auto relative z-10"
+                        className="bg-slate-800/80 hover:bg-slate-700 text-cyan-400 font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:shadow-[0_0_25px_rgba(34,211,238,0.5)] mb-8 border border-cyan-500/50 flex items-center justify-center gap-2 mx-auto relative z-10 backdrop-blur-sm"
                     >
-                        重新開始實習 🔄
+                        重新開始受訓 🔄
                     </button>
 
                     {/* Round-by-round review */}
-                    <div className="text-left bg-slate-50 p-6 md:p-8 rounded-2xl border-l-8 border-blue-400 max-h-96 overflow-y-auto shadow-inner">
-                        <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-slate-700 border-b border-slate-200 pb-4">📋 各病例看診紀錄</h3>
+                    <div className="text-left bg-slate-800/40 p-6 md:p-8 rounded-2xl border-l-8 border-cyan-500 max-h-96 overflow-y-auto shadow-inner border-y border-r border-white/5 scrollbar-thin scrollbar-thumb-cyan-700 scrollbar-track-slate-800">
+                        <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-cyan-300 border-b border-slate-700 pb-4 drop-shadow-sm">📋 各病例看診紀錄</h3>
                         <div className="space-y-5">
                             {roundScores.map((rs, i) => (
-                                <div key={i} className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
-                                    <div className={`absolute top-0 left-0 w-1 h-full ${rs.correct === rs.bugs && rs.details.filter(d => d.status === 'false-alarm').length === 0 ? 'bg-emerald-400' : 'bg-red-400'}`}></div>
+                                <div key={i} className="bg-slate-900/80 p-5 rounded-xl shadow-lg border border-slate-700 relative overflow-hidden group hover:border-cyan-500/50 transition-colors">
+                                    <div className={`absolute top-0 left-0 w-1.5 h-full transition-colors ${rs.correct === rs.bugs && rs.details.filter(d => d.status === 'false-alarm').length === 0 ? 'bg-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]'}`}></div>
                                     <div className="flex justify-between items-center mb-3">
-                                        <span className="font-bold text-slate-800 text-lg flex items-center gap-2">{rs.instrument.icon} {rs.instrument.title}</span>
-                                        <span className={`text-sm font-bold px-3 py-1 rounded-full ${rs.correct === rs.bugs && rs.details.filter(d => d.status === 'false-alarm').length === 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+                                        <span className="font-bold text-blue-100 text-lg flex items-center gap-2">{rs.instrument.icon} {rs.instrument.title}</span>
+                                        <span className={`text-sm font-bold px-3 py-1 rounded-full shadow-inner ${rs.correct === rs.bugs && rs.details.filter(d => d.status === 'false-alarm').length === 0 ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-500/30' : 'bg-rose-900/40 text-rose-400 border border-rose-500/30'}`}>
                                             {rs.correct}/{rs.bugs} 病徵
                                         </span>
                                     </div>
@@ -516,15 +531,15 @@ export const RxInspectorGame = () => {
                                         {rs.details.filter(d => d.status !== 'hit').map((d, j) => (
                                             <div key={j} className="text-sm">
                                                 {d.status === 'missed' && (
-                                                    <p className="flex items-start gap-2 text-slate-600"><span className="text-red-500 font-bold shrink-0">❌ 漏診：</span><span>{d.item.bugType}</span></p>
+                                                    <p className="flex items-start gap-2 text-slate-300"><span className="text-rose-400 font-bold shrink-0">❌ 漏診：</span><span>{d.item.bugType}</span></p>
                                                 )}
                                                 {d.status === 'false-alarm' && (
-                                                    <p className="flex items-start gap-2 text-slate-600"><span className="text-amber-500 font-bold shrink-0">⚠️ 誤診：</span><span>第 {d.idx + 1} 題其實很健康</span></p>
+                                                    <p className="flex items-start gap-2 text-slate-300"><span className="text-amber-400 font-bold shrink-0">⚠️ 誤診：</span><span>第 {d.idx + 1} 題其實很健康</span></p>
                                                 )}
                                             </div>
                                         ))}
                                         {rs.details.filter(d => d.status !== 'hit').length === 0 && (
-                                            <p className="text-emerald-600 font-bold text-sm mt-1">✅ 完美揪出所有病徵！</p>
+                                            <p className="text-emerald-400 font-bold text-sm mt-1 drop-shadow-sm">✅ 完美揪出所有病徵！</p>
                                         )}
                                     </div>
                                 </div>
@@ -543,50 +558,53 @@ export const RxInspectorGame = () => {
     const isBoss = instrument.type.includes('🔥');
 
     return (
-        <div className="bg-slate-50/50 rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px] text-slate-800">
-            <div className="max-w-4xl w-full">
+        <div className="relative rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-blue-50 bg-cover bg-fixed bg-center shadow-2xl"
+            style={{ backgroundImage: "url('/images/rx_inspector_bg.png')" }}>
+            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none z-0"></div>
+
+            <div className="max-w-4xl w-full relative z-10">
 
                 {/* Progress & Score */}
                 <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1">
-                    <div className="bg-white text-slate-500 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-slate-200 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                        病例 {currentRound + 1} <span className="opacity-40 font-normal">/ {instrumentData.length}</span>
+                    <div className="bg-slate-900/60 backdrop-blur-sm text-cyan-300 font-bold px-5 py-2 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.2)] text-lg border border-cyan-500/30 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-[pulse_1.5s_ease-in-out_infinite] shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+                        病例 {currentRound + 1} <span className="opacity-50 font-normal text-slate-400">/ {instrumentData.length}</span>
                     </div>
 
                     <div className="flex gap-2">
-                        <div className="bg-white text-amber-600 font-bold px-4 py-2 rounded-full shadow-sm text-sm border border-amber-200 flex items-center gap-1">
+                        <div className="bg-slate-900/60 backdrop-blur-sm text-amber-400 font-bold px-4 py-2 rounded-full shadow-inner text-sm border border-amber-500/30 flex items-center gap-1">
                             💊 已開 {flaggedCount} 張處方
                         </div>
-                        <div className="bg-white text-emerald-600 font-bold px-4 py-2 rounded-full shadow-sm text-sm border border-emerald-200 flex items-center gap-1">
+                        <div className="bg-slate-900/60 backdrop-blur-sm text-emerald-400 font-bold px-4 py-2 rounded-full shadow-inner text-sm border border-emerald-500/30 flex items-center gap-1">
                             ✅ 累計: {totalCorrect} 命中
                         </div>
                     </div>
                 </div>
 
                 {/* Instrument Header */}
-                <div className={`bg-white p-6 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] mb-8 border-t-[8px] transition-all relative overflow-hidden ${isBoss ? 'border-purple-500 shadow-[0_10px_40px_rgba(168,85,247,0.15)]' : 'border-blue-400'}`}>
+                <div className={`bg-slate-900/70 backdrop-blur-lg p-6 md:p-10 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.4)] mb-8 border-t-[8px] border-x border-b border-white/5 transition-all relative overflow-hidden ${isBoss ? 'border-t-purple-500 drop-shadow-[0_0_20px_rgba(168,85,247,0.3)]' : 'border-t-cyan-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.2)]'}`}>
                     {isBoss && (
-                        <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs font-black px-5 py-1.5 rounded-bl-xl tracking-widest animate-pulse shadow-md z-10">
+                        <div className="absolute top-0 right-0 bg-gradient-to-l from-purple-600 to-purple-400 text-white text-xs font-black px-5 py-1.5 rounded-bl-xl tracking-widest animate-pulse shadow-md z-10">
                             ☠️ 綜合重症
                         </div>
                     )}
-                    <div className="absolute -bottom-10 -right-10 text-9xl opacity-5 text-slate-900 pointer-events-none">
+                    <div className="absolute -bottom-10 -right-10 text-9xl opacity-10 text-cyan-500 pointer-events-none drop-shadow-2xl mix-blend-screen">
                         🏥
                     </div>
 
                     <div className="flex items-center gap-4 mb-3 relative z-10">
-                        <span className="text-4xl md:text-5xl">{instrument.icon}</span>
+                        <span className="text-4xl md:text-5xl drop-shadow-md">{instrument.icon}</span>
                         <div>
-                            <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded font-bold tracking-wider border border-blue-100">{instrument.type}</span>
-                            <h2 className="text-2xl md:text-3xl font-black text-slate-800 mt-2">{instrument.title}</h2>
+                            <span className="text-xs text-cyan-300 bg-cyan-900/50 px-2 py-1 rounded font-bold tracking-wider border border-cyan-500/30 shadow-inner">{instrument.type}</span>
+                            <h2 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-200 mt-2 drop-shadow-sm">{instrument.title}</h2>
                         </div>
                     </div>
-                    <p className="text-sm text-slate-500 font-bold bg-slate-50 inline-block px-3 py-1 rounded-md border border-slate-100 relative z-10">對象：{instrument.target}</p>
+                    <p className="text-sm text-slate-300 font-bold bg-slate-800/60 inline-block px-3 py-1 rounded-md border border-slate-600/50 shadow-inner relative z-10">對象：{instrument.target}</p>
 
                     {!isRevealed && (
-                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-6 flex items-center gap-3 relative z-10 mx-auto w-full shadow-inner animate-in fade-in slide-in-from-bottom-2">
-                            <span className="text-2xl shrink-0">👆</span>
-                            <p className="text-amber-700 font-bold text-sm md:text-base">這份工具設計裡藏著「有毒的病徵」！請點擊你認為有病的題目，再按「開立處方箋」。</p>
+                        <div className="bg-cyan-950/40 border border-cyan-500/40 rounded-xl p-4 mt-6 flex items-center gap-3 relative z-10 mx-auto w-full shadow-inner animate-in fade-in slide-in-from-bottom-2 backdrop-blur-none">
+                            <span className="text-2xl shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">👆</span>
+                            <p className="text-cyan-200 font-bold text-sm md:text-base drop-shadow-sm">這份工具設計裡藏著「有毒的病徵」！請點擊你認為有病的題目，再按「開立處方箋」。</p>
                         </div>
                     )}
                 </div>
@@ -600,20 +618,20 @@ export const RxInspectorGame = () => {
 
                         if (!isRevealed) {
                             cardStyle = isFlagged
-                                ? "bg-red-50/80 border-2 border-red-400 shadow-[0_0_10px_rgba(239,68,68,0.15)] translate-y-[2px]"
-                                : "bg-white border-2 border-slate-200 hover:border-blue-300 hover:bg-slate-50 active:translate-y-[1px] shadow-sm";
+                                ? "bg-rose-900/40 border-2 border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)] translate-y-[2px]"
+                                : "bg-slate-900/60 backdrop-blur-sm border-2 border-slate-700/50 hover:border-cyan-400/50 hover:bg-slate-800/80 active:translate-y-[1px] shadow-lg";
                         } else {
                             if (item.hasBug && isFlagged) {
-                                cardStyle = "bg-emerald-50 border-2 border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]";
-                                labelContent = <span className="bg-emerald-100 text-emerald-700 border border-emerald-300 text-xs font-bold px-2 py-1 rounded shadow-sm">✅ 命中病徵！</span>;
+                                cardStyle = "bg-emerald-900/30 backdrop-blur-sm border-2 border-emerald-500/60 shadow-[0_0_20px_rgba(16,185,129,0.2)]";
+                                labelContent = <span className="bg-emerald-900/60 text-emerald-400 border border-emerald-500/50 text-xs font-bold px-2 py-1 rounded shadow-sm">✅ 命中病徵！</span>;
                             } else if (item.hasBug && !isFlagged) {
-                                cardStyle = "bg-white border-2 border-red-300 border-dashed opacity-80";
-                                labelContent = <span className="bg-red-50 text-red-600 border border-red-200 text-xs font-bold px-2 py-1 rounded">❌ 漏診了！</span>;
+                                cardStyle = "bg-slate-900/40 backdrop-blur-sm border-2 border-rose-500/50 border-dashed opacity-80";
+                                labelContent = <span className="bg-rose-950/60 text-rose-400 border border-rose-500/50 text-xs font-bold px-2 py-1 rounded">❌ 漏診了！</span>;
                             } else if (!item.hasBug && isFlagged) {
-                                cardStyle = "bg-amber-50 border-2 border-amber-400";
-                                labelContent = <span className="bg-amber-100 text-amber-700 border border-amber-300 text-xs font-bold px-2 py-1 rounded">⚠️ 誤診</span>;
+                                cardStyle = "bg-amber-900/30 backdrop-blur-sm border-2 border-amber-500/60 shadow-[0_0_15px_rgba(245,158,11,0.2)]";
+                                labelContent = <span className="bg-amber-900/60 text-amber-400 border border-amber-500/50 text-xs font-bold px-2 py-1 rounded">⚠️ 誤診</span>;
                             } else {
-                                cardStyle = "bg-slate-50 border-2 border-slate-100 opacity-50";
+                                cardStyle = "bg-slate-900/30 backdrop-blur-sm border-2 border-slate-700/30 opacity-50";
                             }
                         }
 
@@ -621,34 +639,34 @@ export const RxInspectorGame = () => {
                             <div
                                 key={idx}
                                 onClick={() => toggleFlag(idx)}
-                                className={`p-5 md:p-6 rounded-2xl transition-all duration-200 ${cardStyle} ${!isRevealed ? 'cursor-pointer' : ''}`}
+                                className={`p-5 md:p-6 rounded-2xl transition-all duration-300 ${cardStyle} ${!isRevealed ? 'cursor-pointer hover:shadow-[0_0_25px_rgba(34,211,238,0.15)]' : ''}`}
                             >
                                 <div className="flex items-start gap-4">
                                     <div className="shrink-0 mt-1">
                                         {!isRevealed ? (
-                                            <div className={`w-7 h-7 rounded border-2 flex items-center justify-center text-sm transition-colors ${isFlagged ? 'bg-red-500 border-red-500 text-white shadow-sm' : 'border-slate-300 bg-white group-hover:border-blue-400'}`}>
+                                            <div className={`w-7 h-7 rounded border-2 flex items-center justify-center text-sm transition-colors duration-300 ${isFlagged ? 'bg-rose-500 border-rose-400 text-white shadow-[0_0_10px_rgba(244,63,94,0.6)]' : 'border-slate-500/50 bg-slate-800/50 group-hover:border-cyan-400/80 shadow-inner'}`}>
                                                 {isFlagged ? '🖍️' : ''}
                                             </div>
                                         ) : (
-                                            <span className="text-2xl">{item.hasBug ? '💊' : '✨'}</span>
+                                            <span className="text-2xl drop-shadow-md">{item.hasBug ? '💊' : '✨'}</span>
                                         )}
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <span className="text-sm text-slate-400 font-bold bg-slate-100 px-2 py-0.5 rounded">第 {idx + 1} 題</span>
+                                            <span className="text-sm text-slate-400 font-bold bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">第 {idx + 1} 題</span>
                                             {labelContent}
                                         </div>
-                                        <p className={`whitespace-pre-line text-base md:text-lg font-medium leading-relaxed ${isRevealed && isFlagged && item.hasBug ? 'text-slate-800 line-through decoration-red-400 decoration-2' : 'text-slate-700'}`}>{item.text}</p>
+                                        <p className={`whitespace-pre-line text-base md:text-lg font-medium leading-relaxed ${isRevealed && isFlagged && item.hasBug ? 'text-slate-400 line-through decoration-rose-500/70 decoration-[3px]' : 'text-blue-50/90'}`}>{item.text}</p>
 
                                         {isRevealed && item.hasBug && (
-                                            <div className="mt-4 bg-white rounded-xl p-4 border-l-[6px] border-emerald-400 shadow-sm relative overflow-hidden">
-                                                <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-50 rounded-bl-full -mr-8 -mt-8 opacity-50"></div>
-                                                <p className="text-emerald-600 font-black text-sm mb-2 flex items-center gap-1">▍ 診斷名稱：{item.bugType}</p>
-                                                <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium relative z-10 mb-3">{item.explanation}</p>
+                                            <div className="mt-4 bg-slate-800/70 backdrop-blur-sm rounded-xl p-4 border-l-[6px] border-l-emerald-500/80 shadow-inner relative overflow-hidden border border-slate-700">
+                                                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-radial from-emerald-500/10 to-transparent rounded-bl-full -mr-4 -mt-4 opacity-70"></div>
+                                                <p className="text-emerald-400 font-black text-sm mb-2 flex items-center gap-1 drop-shadow-sm">▍ 診斷名稱：{item.bugType}</p>
+                                                <p className="text-slate-300 text-sm md:text-base leading-relaxed font-medium relative z-10 mb-3">{item.explanation}</p>
                                                 {item.correction && (
-                                                    <div className="pt-3 border-t border-slate-100 relative z-10">
-                                                        <p className="text-blue-600 font-extrabold text-sm mb-1 flex items-center gap-1">▍ 改寫處方：</p>
-                                                        <p className="text-slate-700 text-sm md:text-base leading-relaxed font-bold bg-blue-50/50 p-2 rounded-lg">{item.correction}</p>
+                                                    <div className="pt-3 border-t border-slate-700/80 relative z-10">
+                                                        <p className="text-cyan-400 font-extrabold text-sm mb-1 flex items-center gap-1 drop-shadow-sm">▍ 改寫處方：</p>
+                                                        <p className="text-blue-100 text-sm md:text-base leading-relaxed font-bold bg-cyan-900/30 border border-cyan-500/20 p-3 rounded-lg shadow-inner">{item.correction}</p>
                                                     </div>
                                                 )}
                                             </div>
@@ -661,20 +679,20 @@ export const RxInspectorGame = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col items-center pb-8 border-t border-slate-200 pt-8">
+                <div className="flex flex-col items-center pb-8 border-t border-slate-700/50 pt-8 relative z-10">
                     {!isRevealed ? (
                         <button
                             onClick={submitInspection}
                             disabled={flaggedCount === 0}
-                            className={`font-black py-4 px-12 rounded-full text-xl transition transform flex items-center justify-center gap-2 shadow-lg w-full md:w-auto ${flaggedCount > 0 ? 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'}`}
+                            className={`font-black py-4 px-12 rounded-full text-xl transition-all duration-300 transform flex items-center justify-center gap-2 shadow-lg w-full md:w-auto relative overflow-hidden group ${flaggedCount > 0 ? 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] border border-cyan-400/50' : 'bg-slate-800/80 text-slate-500 cursor-not-allowed shadow-none border border-slate-700'}`}
                         >
-                            開立處方箋 📄
+                            <span className="relative z-10">開立處方箋 📄</span>
                         </button>
                     ) : (
                         <div className="w-full">
-                            <div className={`w-full p-6 rounded-2xl text-center mb-6 shadow-sm border-l-8 font-bold text-lg ${roundScores[roundScores.length - 1]?.correct === bugCount && roundScores[roundScores.length - 1]?.details.filter(d => d.status === 'false-alarm').length === 0
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-500'
-                                : 'bg-amber-50 text-amber-700 border-amber-500'
+                            <div className={`w-full p-6 rounded-2xl text-center mb-6 shadow-lg border-l-8 font-bold text-lg backdrop-blur-sm ${roundScores[roundScores.length - 1]?.correct === bugCount && roundScores[roundScores.length - 1]?.details.filter(d => d.status === 'false-alarm').length === 0
+                                ? 'bg-emerald-900/40 text-emerald-400 border-emerald-500 border-y border-r border-emerald-500/20 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                                : 'bg-amber-900/40 text-amber-400 border-amber-500 border-y border-r border-amber-500/20 drop-shadow-[0_0_15px_rgba(245,158,11,0.3)]'
                                 }`}>
                                 {roundScores[roundScores.length - 1]?.correct === bugCount && roundScores[roundScores.length - 1]?.details.filter(d => d.status === 'false-alarm').length === 0
                                     ? `🎯 太神啦！精準診斷出全部 ${bugCount} 個病徵！`
@@ -682,13 +700,15 @@ export const RxInspectorGame = () => {
                             </div>
                             <button
                                 onClick={nextRound}
-                                className="bg-blue-600 hover:bg-blue-700 text-white font-black py-4 px-10 rounded-full text-xl transition transform hover:scale-105 shadow-md flex items-center justify-center gap-2 w-full md:w-auto mx-auto"
+                                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-4 px-10 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] border border-blue-400/50 flex items-center justify-center gap-2 w-full md:w-auto mx-auto relative overflow-hidden group"
                             >
-                                {currentRound < instrumentData.length - 1 ? (
-                                    <>呼叫下一位病例 <span className="text-2xl leading-none">🩺</span></>
-                                ) : (
-                                    <>完成看診，查看報告 <span className="text-2xl leading-none">📋</span></>
-                                )}
+                                <span className="relative z-10 flex items-center gap-2">
+                                    {currentRound < instrumentData.length - 1 ? (
+                                        <>呼叫下一位病例 <span className="text-2xl leading-none drop-shadow-sm">🩺</span></>
+                                    ) : (
+                                        <>完成看診，查看報告 <span className="text-2xl leading-none drop-shadow-sm">📋</span></>
+                                    )}
+                                </span>
                             </button>
                         </div>
                     )}
