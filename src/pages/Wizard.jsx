@@ -107,35 +107,39 @@ export const Wizard = () => {
         <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in duration-500 pb-16">
 
             {/* ===== Header ===== */}
-            <div className="text-center pt-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold mb-4">
-                    <Search size={16} /> 發現與對焦階段 (W3)
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
+                <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 -translate-x-1/3" />
+                <div className="relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm mb-4">
+                        <Search size={16} /> 發現與對焦階段 (W3)
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 drop-shadow-sm">題目健檢與方法快篩</span>
+                    </h1>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        做研究最怕一開始題目就走偏！<br />在讓 AI 幫你健檢前，先來了解一下好題目的標準，以及五大研究方法的武器庫。
+                    </p>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
-                    題目健檢與方法快篩
-                </h1>
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                    做研究最怕一開始題目就走偏！<br />在讓 AI 幫你健檢前，先來了解一下好題目的標準，以及五大研究方法的武器庫。
-                </p>
-            </div>
+            </header>
 
             {/* ===== 觀念一：四大絕症 ===== */}
-            <section className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    <AlertTriangle className="text-amber-500" />
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <AlertTriangle className="text-amber-500" size={28} />
                     觀念一：新手題目的「四大絕症」
                 </h2>
-                <p className="text-slate-600 mb-8">如果你的題目不幸中了以下任何一種病，研究一定會卡關。請牢記我們的萬用解藥：「大空遠難 → 小實近易」。</p>
+                <p className="text-slate-600 mb-8 leading-relaxed">如果你的題目不幸中了以下任何一種病，研究一定會卡關。請牢記我們的萬用解藥：「大空遠難 → 小實近易」。</p>
                 <div className="grid md:grid-cols-2 gap-6">
                     {DISEASES.map((disease) => (
-                        <div key={disease.id} className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                        <div key={disease.id} className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
                             <div className="flex items-start gap-4">
                                 <span className="text-4xl">{disease.icon}</span>
                                 <div>
-                                    <h3 className="font-bold text-lg text-slate-800 mb-1">{disease.name}</h3>
-                                    <p className="text-sm text-slate-600 mb-3">{disease.description}</p>
-                                    <div className="bg-emerald-100 text-emerald-800 text-sm font-semibold p-2 rounded">
-                                        👉 解藥：{disease.cure}
+                                    <h3 className="font-bold text-lg text-slate-800 mb-2">{disease.name}</h3>
+                                    <p className="text-sm text-slate-600 mb-4">{disease.description}</p>
+                                    <div className="bg-emerald-50 border border-emerald-100 text-emerald-800 text-sm font-semibold p-3 rounded-lg flex items-start gap-2">
+                                        <span className="shrink-0 mt-0.5">👉 解藥：</span>
+                                        <span>{disease.cure}</span>
                                     </div>
                                 </div>
                             </div>
@@ -145,20 +149,20 @@ export const Wizard = () => {
             </section>
 
             {/* ===== 觀念二：五大研究方法 ===== */}
-            <section className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl shadow-sm border border-indigo-100 p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    <FileSearch className="text-indigo-600" />
+            <section className="bg-gradient-to-br from-indigo-50 to-blue-50(2) rounded-3xl shadow-sm border border-indigo-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <FileSearch className="text-indigo-600" size={28} />
                     觀念二：五大研究方法挑選法則
                 </h2>
-                <p className="text-slate-600 mb-8">確認題目沒病後，你要選對工具。就像你要喝湯不會拿叉子，選錯方法會讓你白忙一場。</p>
+                <p className="text-slate-600 mb-8 leading-relaxed">確認題目沒病後，你要選對工具。就像你要喝湯不會拿叉子，選錯方法會讓你白忙一場。</p>
                 <div className="grid md:grid-cols-5 gap-4">
                     {METHODS.map((method) => (
-                        <div key={method.id} className="bg-white rounded-xl p-4 border border-indigo-100 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                            <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-3">
+                        <div key={method.id} className="bg-white rounded-2xl p-5 border border-indigo-100 shadow-sm flex flex-col items-center text-center hover:-translate-y-1 transition-transform cursor-default">
+                            <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mb-4">
                                 {method.icon}
                             </div>
                             <h3 className="font-bold text-slate-800 text-sm mb-2">{method.name.split(' ')[0]}</h3>
-                            <p className="text-xs text-slate-500">{method.desc}</p>
+                            <p className="text-xs text-slate-500 leading-normal">{method.desc}</p>
                         </div>
                     ))}
                 </div>

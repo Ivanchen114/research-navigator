@@ -9,19 +9,20 @@ export const TeamFormation = () => {
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
 
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-sm font-semibold mb-3">
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
+                <div className="relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm mb-4">
                         <Users size={16} /> W7 核心模組
                     </div>
-                    <h1 className="text-3xl font-bold text-slate-800">
-                        組隊決策週 (Research Matchmaking)
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 drop-shadow-sm">組隊決策週 (Research Matchmaking)</span>
                     </h1>
-                    <p className="text-slate-600 mt-2 text-lg">
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
                         進入方法實作前，確認你的最佳戰友，或是宣示成為極客 (Solo)。
                     </p>
                 </div>
-            </div>
+            </header>
 
             {/* Selection Tabs */}
             <div className="flex bg-slate-100 p-1 rounded-xl w-full max-w-md mx-auto">
@@ -42,7 +43,7 @@ export const TeamFormation = () => {
             </div>
 
             {/* Conditional Content */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
                 {teamType === 'team' ? (
                     <div className="space-y-6 animate-fade-in">
                         <div className="flex items-start gap-4">
@@ -56,8 +57,8 @@ export const TeamFormation = () => {
                                 </p>
 
                                 <div className="grid md:grid-cols-2 gap-4">
-                                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
-                                        <h4 className="font-bold text-slate-700 mb-2 flex items-center gap-2">
+                                    <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl hover:-translate-y-1 transition-transform">
+                                        <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
                                             <span className="text-emerald-500"><CheckCircle2 size={16} /></span>
                                             能力互補最重要
                                         </h4>
@@ -68,8 +69,8 @@ export const TeamFormation = () => {
                                             <li>有人專注美感 (簡報設計)</li>
                                         </ul>
                                     </div>
-                                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
-                                        <h4 className="font-bold text-slate-700 mb-2 flex items-center gap-2">
+                                    <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl hover:-translate-y-1 transition-transform">
+                                        <h4 className="font-bold text-slate-700 mb-3 flex items-center gap-2">
                                             <span className="text-emerald-500"><CheckCircle2 size={16} /></span>
                                             企劃書檢核清單
                                         </h4>
@@ -96,17 +97,17 @@ export const TeamFormation = () => {
                                     選擇一個人做沒有比較輕鬆，但你可以完全掌握自己的節奏。以下是你需要注意的事項：
                                 </p>
 
-                                <div className="space-y-4">
-                                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                                        <h4 className="font-bold text-blue-900 mb-1">⚖️ 規模控制</h4>
+                                <div className="space-y-4 tracking-wide leading-relaxed">
+                                    <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-2xl">
+                                        <h4 className="font-bold text-blue-900 mb-2">⚖️ 規模控制</h4>
                                         <p className="text-sm text-slate-700">不要選太龐大的題目。例如：問卷 100 份即可，訪談 5 人即可。別把自己累垮。</p>
                                     </div>
-                                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                                        <h4 className="font-bold text-blue-900 mb-1">🆘 主動求援</h4>
+                                    <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-2xl">
+                                        <h4 className="font-bold text-blue-900 mb-2">🆘 主動求援</h4>
                                         <p className="text-sm text-slate-700">你沒有組員可以討論，所以遇到卡關時，必須主動去找老師，或是利用 AI 進行初步除錯。</p>
                                     </div>
-                                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                                        <h4 className="font-bold text-blue-900 mb-1">🛡️ 尋找 Solo 夥伴</h4>
+                                    <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-2xl">
+                                        <h4 className="font-bold text-blue-900 mb-2">🛡️ 尋找 Solo 夥伴</h4>
                                         <p className="text-sm text-slate-700">跟班上其他的 Solo 者結盟！雖然題目不同，但在預試問卷、同儕互審時，你們可以互相幫忙。</p>
                                     </div>
                                 </div>
@@ -117,9 +118,9 @@ export const TeamFormation = () => {
             </div>
 
             {/* Next Step CTA */}
-            <div className="mt-8 text-center bg-slate-50 p-8 rounded-xl border border-slate-200">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">組隊完成，準備進入實戰！</h3>
-                <p className="text-slate-600 mb-6">接下來將依據你們選擇的研究方法（問卷、訪談、實驗、觀察）進行分流訓練。</p>
+            <div className="mt-8 text-center bg-slate-50 p-8 rounded-3xl border border-slate-200 hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">組隊完成，準備進入實戰！</h3>
+                <p className="text-slate-600 mb-6 leading-relaxed">接下來將依據你們選擇的研究方法（問卷、訪談、實驗、觀察）進行分流訓練。</p>
                 <div className="flex justify-center">
                     <Link to="/analysis" className="bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-bold text-sm transition-colors flex items-center gap-2">
                         前往數據分析模組

@@ -65,23 +65,26 @@ export const ChartSelection = () => {
     return (
         <div className="max-w-5xl mx-auto space-y-12 pb-20 animate-in fade-in duration-500">
             {/* Header */}
-            <div className="text-center space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-sm font-bold tracking-wider mb-2">
-                    <TrendingUp size={16} /> DATA VISUALIZATION
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-12 relative overflow-hidden text-center">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-violet-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
+                <div className="relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-100 shadow-sm mb-4">
+                        <TrendingUp size={16} /> DATA VISUALIZATION
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight gap-3 justify-center text-center mb-4">
+                        選圖表如同選盤子：<span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600 drop-shadow-sm">數據視覺化原則</span>
+                    </h1>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        數據是食材，圖表是盤子。選錯圖表，數據就無法說話。
+                    </p>
                 </div>
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight">
-                    選圖表如同選盤子：數據視覺化原則
-                </h1>
-                <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-                    數據是食材，圖表是盤子。選錯圖表，數據就無法說話。
-                </p>
-            </div>
+            </header>
 
             {/* Section 1: Chart Selection */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-2">
-                    <div className="p-2 bg-blue-600 rounded-lg text-white">
-                        <BookOpen size={20} />
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-xl text-white shadow-sm">
+                        <BookOpen size={24} />
                     </div>
                     <h2 className="text-2xl font-bold text-slate-800">觀念四：選對圖表工具</h2>
                 </div>
@@ -107,7 +110,7 @@ export const ChartSelection = () => {
                     ))}
                 </div>
 
-                <div className="bg-slate-900 rounded-2xl p-6 text-white overflow-hidden relative group">
+                <div className="bg-slate-900 rounded-3xl p-6 md:p-8 text-white overflow-hidden relative group mt-8 shadow-md">
                     <div className="absolute right-0 top-0 opacity-10 group-hover:rotate-12 transition-transform">
                         <TrendingUp size={160} />
                     </div>
@@ -136,10 +139,10 @@ export const ChartSelection = () => {
             </section>
 
             {/* Section 2: Practice Cases */}
-            <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 space-y-8">
+            <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 space-y-8 hover:shadow-md transition-shadow">
                 <div>
-                    <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <PenTool className="text-indigo-500" /> 實戰演練：圖表決策直覺訓練
+                    <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                        <PenTool className="text-indigo-500" size={28} /> 實戰演練：圖表決策直覺訓練
                     </h3>
                     <div className="space-y-4">
                         {exercises.map((ex, i) => (
@@ -165,8 +168,8 @@ export const ChartSelection = () => {
                 </div>
 
                 <div className="pt-8 border-t border-slate-100">
-                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2 text-red-600">
-                        <AlertCircle /> 圖表除錯案 (Chart Debugging)
+                    <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3 text-red-600">
+                        <AlertCircle size={28} /> 圖表除錯案 (Chart Debugging)
                     </h3>
                     <div className="bg-red-50 p-6 rounded-2xl border border-red-100">
                         <p className="font-bold text-slate-800 mb-2">情境案例：</p>
@@ -187,10 +190,10 @@ export const ChartSelection = () => {
             </section>
 
             {/* Section 3: Citation Format */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-2">
-                    <div className="p-2 bg-emerald-600 rounded-lg text-white">
-                        <Info size={20} />
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-6">
+                    <div className="p-2 bg-emerald-600 rounded-xl text-white shadow-sm">
+                        <Info size={24} />
                     </div>
                     <h2 className="text-2xl font-bold text-slate-800">觀念五：圖表引用格式</h2>
                 </div>
@@ -234,10 +237,10 @@ export const ChartSelection = () => {
             </section>
 
             {/* Section 4: Storytelling */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-2">
-                    <div className="p-2 bg-amber-600 rounded-lg text-white">
-                        <Quote size={20} />
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-6">
+                    <div className="p-2 bg-amber-600 rounded-xl text-white shadow-sm">
+                        <Quote size={24} />
                     </div>
                     <h2 className="text-2xl font-bold text-slate-800">觀念六：數據說故事 (描述 vs. 推論)</h2>
                 </div>
@@ -280,8 +283,8 @@ export const ChartSelection = () => {
                     </div>
                 </div>
 
-                <div className="space-y-4 pt-4">
-                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <div className="space-y-4 pt-8">
+                    <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
                         📑 實戰案例分析 (Case Study)
                     </h3>
                     <div className="grid grid-cols-1 gap-4">

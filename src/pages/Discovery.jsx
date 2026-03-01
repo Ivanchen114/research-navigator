@@ -30,19 +30,25 @@ export const Discovery = () => {
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
 
             {/* Header Section */}
-            <div className="text-center space-y-4 mb-12">
-                <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">
-                    第一步：發掘問題
-                </h1>
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                    好的研究不是坐在書桌前想出來的，而是從生活中的「不尋常」看出來的。<br /> 帶上偵探的裝備，我們開始辦案吧！
-                </p>
-            </div>
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
+                <div className="relative z-10 text-center">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 shadow-sm mb-4">
+                        <Search size={16} /> W0–W2 發現階段
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
+                        第一步：<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow-sm">發掘問題</span>
+                    </h1>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        好的研究不是坐在書桌前想出來的，而是從生活中的「不尋常」看出來的。<br /> 帶上偵探的裝備，我們開始辦案吧！
+                    </p>
+                </div>
+            </header>
 
             {/* The 3 Swords Section */}
-            <section className="mb-12">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <ShieldAlert className="text-blue-600" />
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <ShieldAlert className="text-blue-600" size={28} />
                     偵探的三把劍 (W0)
                 </h2>
                 <div className="grid md:grid-cols-3 gap-6">
@@ -79,12 +85,12 @@ export const Discovery = () => {
             </section>
 
             {/* W1 Section: Research Question Types */}
-            <section className="mb-12">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <Lightbulb className="text-amber-500" />
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <Lightbulb className="text-amber-500" size={28} />
                     什麼是好的研究問題？(W1)
                 </h2>
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8 space-y-6">
+                <div className="space-y-6">
                     <p className="text-slate-600 text-sm">好的研究問題有一個 magic filter：<strong className="text-slate-800">「這個問題 Google 搜尋得到答案嗎？AI 能直接回答嗎？」</strong></p>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="bg-red-50 rounded-lg border border-red-100 p-4">
@@ -113,10 +119,10 @@ export const Discovery = () => {
 
             {/* The Question Builder */}
             <section>
-                <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
                     <div className="bg-slate-800 text-white p-6 md:p-8">
-                        <h2 className="text-2xl font-bold flex items-center gap-2">
-                            <PenTool className="text-blue-400" />
+                        <h2 className="text-2xl font-bold flex items-center gap-3">
+                            <PenTool className="text-blue-400" size={28} />
                             問題意識鍛鍊所 (W2)
                         </h2>
                         <p className="text-slate-300 mt-2">

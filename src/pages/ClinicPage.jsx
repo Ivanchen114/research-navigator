@@ -56,31 +56,29 @@ export const ClinicPage = () => {
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
 
             {/* Header */}
-            <header className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-red-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3"></div>
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-red-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
                 <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-800 text-sm font-semibold mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 shadow-sm mb-4">
                         <Stethoscope size={16} /> W5 核心模組
                     </div>
-                    <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                        🏥 研究診所：掛號判斷工作坊
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 flex items-center justify-center gap-3">
+                        🏥 研究診所：<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600 drop-shadow-sm">掛號判斷工作坊</span>
                     </h1>
-                    <p className="text-slate-600 mt-2 text-lg">
-                        Level 1 掛號診斷 — 你的研究問題該掛哪一科？
-                    </p>
-                    <p className="text-slate-500 mt-1 text-sm">
-                        掛錯科，後面所有努力都白費！用「分科三問」快速判斷。
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        Level 1 掛號診斷 — 你的研究問題該掛哪一科？<br />
+                        <span className="text-sm">掛錯科，後面所有努力都白費！用「分科三問」快速判斷。</span>
                     </p>
                 </div>
             </header>
 
             {/* 分科三問 */}
-            <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-sm border border-red-100 p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    <Lightbulb className="text-amber-500" size={24} />
+            <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl shadow-sm border border-red-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <Lightbulb className="text-amber-500" size={28} />
                     分科三問：掛號診斷標準
                 </h2>
-                <p className="text-slate-600 mb-6">問自己以下問題，就知道該掛哪科：</p>
+                <p className="text-slate-600 mb-6 leading-relaxed">問自己以下問題，就知道該掛哪科：</p>
 
                 <div className="grid md:grid-cols-2 gap-4">
                     {triageQuestions.map((tq) => (
@@ -110,8 +108,8 @@ export const ClinicPage = () => {
             </div>
 
             {/* 五大方法總覽 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-xl font-bold text-slate-800 mb-4">五大研究方法一覽</h2>
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6">五大研究方法一覽</h2>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     {[
                         { icon: '📋', name: '問卷法', desc: '想知道多少人、什麼比例', example: '全校有多少人每天用手機超過3小時？', color: 'blue' },
@@ -120,23 +118,23 @@ export const ClinicPage = () => {
                         { icon: '👀', name: '觀察法', desc: '想記錄真實行為', example: '學生在小組討論時誰發言最多？', color: 'teal' },
                         { icon: '📚', name: '文獻法', desc: '想整理別人的研究', example: '過去10年AI教育研究的趨勢？', color: 'emerald' },
                     ].map((m) => (
-                        <div key={m.name} className="bg-slate-50 rounded-xl p-4 border border-slate-200 text-center hover:shadow-md transition-shadow">
-                            <div className="text-3xl mb-2">{m.icon}</div>
-                            <h3 className="font-bold text-slate-800 text-sm mb-1">{m.name}</h3>
-                            <p className="text-xs text-slate-600 mb-2">{m.desc}</p>
-                            <p className="text-xs text-slate-400 italic">例：{m.example}</p>
+                        <div key={m.name} className="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-center hover:-translate-y-1 transition-transform cursor-default">
+                            <div className="text-4xl mb-3">{m.icon}</div>
+                            <h3 className="font-bold text-slate-800 text-sm mb-2">{m.name}</h3>
+                            <p className="text-xs text-slate-600 mb-3 leading-relaxed">{m.desc}</p>
+                            <p className="text-[10px] text-slate-500 italic bg-white p-2 rounded-lg border border-slate-100">例：{m.example}</p>
                         </div>
                     ))}
                 </div>
             </div>
 
             {/* 急診分流練習 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    <HelpCircle className="text-blue-500" size={22} />
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <HelpCircle className="text-blue-500" size={28} />
                     急診分流練習
                 </h2>
-                <p className="text-slate-600 text-sm mb-6">看到研究問題，試著用分科三問判斷該掛哪科！點擊「顯示答案」檢查你的判斷。</p>
+                <p className="text-slate-600 mb-6 leading-relaxed">看到研究問題，試著用分科三問判斷該掛哪科！點擊「顯示答案」檢查你的判斷。</p>
 
                 <div className="space-y-3">
                     {practiceItems.map((item, idx) => (
@@ -170,7 +168,7 @@ export const ClinicPage = () => {
             </div>
 
             {/* 遊戲入口 */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-6 md:p-8 text-white">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div>
                         <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
@@ -192,9 +190,9 @@ export const ClinicPage = () => {
             </div>
 
             {/* W8 預告 */}
-            <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 text-center">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">📌 下一站：W8 工具設計工作坊</h3>
-                <p className="text-slate-600 mb-4 text-sm">
+            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 text-center hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-bold text-slate-800 mb-4">📌 下一站：W8 工具設計工作坊</h3>
+                <p className="text-slate-600 mb-6 leading-relaxed">
                     掛對科之後，你們要學的是——<strong>工具設計得好不好？</strong>那是另一種診斷能力！
                     <br />W8 會教你「處方診斷」+ 動手設計自己的問卷/訪談大綱/實驗流程。
                 </p>

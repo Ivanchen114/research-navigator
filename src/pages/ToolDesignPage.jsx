@@ -44,20 +44,18 @@ export const ToolDesignPage = () => {
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
 
             {/* Header */}
-            <header className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3"></div>
-                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold mb-3">
-                            <Wrench size={16} /> W8–W9 核心模組
-                        </div>
-                        <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                            🔧 工具設計工作坊
-                        </h1>
-                        <p className="text-slate-600 mt-2 text-lg">
-                            Level 2 處方診斷 — 工具設計得好不好？哪裡有毒？怎麼解毒？
-                        </p>
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
+                <div className="relative z-10 flex flex-col items-center gap-4">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 shadow-sm">
+                        <Wrench size={16} /> W8–W9 核心模組
                     </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight gap-3 justify-center text-center">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 drop-shadow-sm">🔧 工具設計工作坊</span>
+                    </h1>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                        Level 2 處方診斷 — 工具設計得好不好？哪裡有毒？怎麼解毒？
+                    </p>
                     <div className="shrink-0 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
                         <strong>前置條件</strong>
                         <p className="text-xs mt-1">W5 掛號判斷 ✅ → W7 已組隊 ✅</p>
@@ -66,8 +64,8 @@ export const ToolDesignPage = () => {
             </header>
 
             {/* W5→W8 銜接 */}
-            <div className="bg-gradient-to-r from-red-50 to-blue-50 rounded-xl border border-slate-200 p-6 shadow-sm">
-                <h2 className="text-lg font-bold text-slate-800 mb-3">從掛號到處方的升級</h2>
+            <div className="bg-gradient-to-r from-red-50 to-blue-50(2) rounded-3xl border border-slate-200 p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow mb-8">
+                <h2 className="text-xl font-bold text-slate-800 mb-4">從掛號到處方的升級</h2>
                 <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white rounded-lg p-4 border border-red-100">
                         <span className="font-bold text-red-700 block mb-1">W5 掛號判斷 (Level 1)</span>
@@ -83,12 +81,12 @@ export const ToolDesignPage = () => {
             </div>
 
             {/* 處方診斷：壞範例 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-                    <AlertTriangle className="text-amber-500" size={22} />
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow mb-8">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                    <AlertTriangle className="text-amber-500" size={28} />
                     處方診斷熱身：先看壞範例
                 </h2>
-                <p className="text-slate-600 text-sm mb-4">
+                <p className="text-slate-600 mb-6 leading-relaxed">
                     在動手設計之前，先來看看「壞掉的工具」長什麼樣！
                 </p>
 
@@ -126,9 +124,9 @@ export const ToolDesignPage = () => {
             </div>
 
             {/* 錯誤類型速查 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-xl font-bold text-slate-800 mb-2">🃏 錯誤類型速查卡</h2>
-                <p className="text-slate-600 text-sm mb-6">設計工具時旁邊放著這張卡，隨時自我檢查！</p>
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow mb-8">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">🃏 錯誤類型速查卡</h2>
+                <p className="text-slate-600 mb-6 leading-relaxed">設計工具時旁邊放著這張卡，隨時自我檢查！</p>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {errorTypes.map((err) => (
@@ -145,18 +143,18 @@ export const ToolDesignPage = () => {
             </div>
 
             {/* 好工具三大標準 */}
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-sm border border-emerald-100 p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <ShieldCheck className="text-emerald-600" size={24} />
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50(2) rounded-3xl shadow-sm border border-emerald-100 p-6 md:p-8 hover:shadow-md transition-shadow mb-8">
+                <h2 className="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <ShieldCheck className="text-emerald-600" size={28} />
                     好工具的三大標準
                 </h2>
 
                 <div className="grid md:grid-cols-3 gap-6">
                     {/* 有效性 */}
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-emerald-100">
-                        <div className="text-3xl mb-3">🎯</div>
-                        <h3 className="text-lg font-bold text-emerald-800 mb-2">有效性 (Validity)</h3>
-                        <p className="text-sm text-slate-600 mb-3">能測到你想測的東西</p>
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 hover:-translate-y-1 transition-transform">
+                        <div className="text-4xl mb-4">🎯</div>
+                        <h3 className="text-xl font-bold text-emerald-800 mb-2">有效性 (Validity)</h3>
+                        <p className="text-slate-600 mb-4 leading-relaxed">能測到你想測的東西</p>
                         <div className="space-y-2 text-sm">
                             <div className="bg-red-50 p-2 rounded border border-red-100">
                                 <span className="text-red-600 font-bold text-xs">❌ 無效：</span>
@@ -173,10 +171,10 @@ export const ToolDesignPage = () => {
                     </div>
 
                     {/* 可靠性 */}
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-emerald-100">
-                        <div className="text-3xl mb-3">⚖️</div>
-                        <h3 className="text-lg font-bold text-emerald-800 mb-2">可靠性 (Reliability)</h3>
-                        <p className="text-sm text-slate-600 mb-3">測出來的結果穩定</p>
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 hover:-translate-y-1 transition-transform">
+                        <div className="text-4xl mb-4">⚖️</div>
+                        <h3 className="text-xl font-bold text-emerald-800 mb-2">可靠性 (Reliability)</h3>
+                        <p className="text-slate-600 mb-4 leading-relaxed">測出來的結果穩定</p>
                         <div className="space-y-2 text-sm">
                             <div className="bg-red-50 p-2 rounded border border-red-100">
                                 <span className="text-red-600 font-bold text-xs">❌ 不可靠：</span>
@@ -193,10 +191,10 @@ export const ToolDesignPage = () => {
                     </div>
 
                     {/* 可行性 */}
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-emerald-100">
-                        <div className="text-3xl mb-3">⏱️</div>
-                        <h3 className="text-lg font-bold text-emerald-800 mb-2">可行性 (Feasibility)</h3>
-                        <p className="text-sm text-slate-600 mb-3">你做得到、受訪者願意配合</p>
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 hover:-translate-y-1 transition-transform">
+                        <div className="text-4xl mb-4">⏱️</div>
+                        <h3 className="text-xl font-bold text-emerald-800 mb-2">可行性 (Feasibility)</h3>
+                        <p className="text-slate-600 mb-4 leading-relaxed">你做得到、受訪者願意配合</p>
                         <div className="space-y-2 text-sm">
                             <div className="bg-red-50 p-2 rounded border border-red-100">
                                 <span className="text-red-600 font-bold text-xs">❌ 不可行：</span>
@@ -215,10 +213,10 @@ export const ToolDesignPage = () => {
             </div>
 
             {/* 研究倫理 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                        <Heart className="text-pink-500" size={22} />
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow mb-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-3">
+                        <Heart className="text-pink-500" size={28} />
                         研究倫理四大原則
                     </h2>
                     <button
@@ -271,9 +269,9 @@ export const ToolDesignPage = () => {
             </div>
 
             {/* 分流工作坊入口 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-xl font-bold text-slate-800 mb-2">🔀 分流工作坊：選擇你的方法</h2>
-                <p className="text-slate-600 text-sm mb-6">依照你在 W7 決定的研究方法，進入對應的設計指引。</p>
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow mb-8">
+                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-3">🔀 分流工作坊：選擇你的方法</h2>
+                <p className="text-slate-600 mb-8 leading-relaxed">依照你在 W7 決定的研究方法，進入對應的設計指引。</p>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {[
@@ -298,9 +296,9 @@ export const ToolDesignPage = () => {
             </div>
 
             {/* W9 預告 */}
-            <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl shadow-lg p-6 md:p-8 text-white">
-                <h3 className="text-xl font-bold mb-2">🤖 W9 預告：AI 協助工具精進與預試</h3>
-                <p className="text-violet-100 text-sm mb-4">
+            <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow text-center">
+                <h3 className="text-2xl font-bold mb-4">🤖 W9 預告：AI 協助工具精進與預試</h3>
+                <p className="text-violet-100 leading-relaxed mb-6">
                     設計完初稿後，你會學到如何用 AI 來「壓力測試」你的工具！
                     <br />但記住——AI 可以幫你找到 80% 的問題，剩下 20% 一定要靠真人預試！
                 </p>

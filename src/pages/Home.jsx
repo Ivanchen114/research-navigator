@@ -124,8 +124,8 @@ export const Home = () => {
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/game/question-er')}>
                                         <div className="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center shrink-0"><HeartPulse size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">Level 1：問題急診室</h4>
-                                            <p className="text-xs text-slate-500">10個生病的研究問題，你能開立處方嗎？</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">行動代號：靶心</h4>
+                                            <p className="text-xs text-slate-500">研究問題精煉與對焦訓練。為生病的問題開立處方！</p>
                                         </div>
                                     </div>
                                 </div>
@@ -157,8 +157,8 @@ export const Home = () => {
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/game/tool-quiz')}>
                                         <div className="w-10 h-10 bg-slate-200 text-slate-700 rounded-lg flex items-center justify-center shrink-0"><Gamepad2 size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">辦案工具大考驗 (W3-W5)</h4>
-                                            <p className="text-xs text-slate-500">11 道委託案件，測試你的判斷力！</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">裝備檢定測試</h4>
+                                            <p className="text-xs text-slate-500">研究工具與蒐集方法辨識。測試你的判斷力！</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/clinic')}>
@@ -178,8 +178,8 @@ export const Home = () => {
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer sm:col-span-2" onClick={() => navigate('/game/citation-detective')}>
                                         <div className="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center shrink-0"><Search size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">文獻偵探社 (W6)</h4>
-                                            <p className="text-xs text-slate-500">限時破案！判斷引用合法性與常見違規。</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">獵狐行動</h4>
+                                            <p className="text-xs text-slate-500">文獻真偽辨識與學術倫理審查。判斷引用合法性！</p>
                                         </div>
                                     </div>
                                 </div>
@@ -237,8 +237,8 @@ export const Home = () => {
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/game/rx-inspector')}>
                                         <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center shrink-0"><Bug size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">Level 2：處方診斷室</h4>
-                                            <p className="text-xs text-slate-500">找出研究工具裡的設計 Bug！</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">行動代號：防線</h4>
+                                            <p className="text-xs text-slate-500">研究設計與方法學避險測試。找出設計中的 Bug！</p>
                                         </div>
                                     </div>
                                 </div>
@@ -277,15 +277,15 @@ export const Home = () => {
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/game/chart-matcher')}>
                                         <div className="w-10 h-10 bg-fuchsia-100 text-fuchsia-600 rounded-lg flex items-center justify-center shrink-0"><Palette size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">圖表配對師</h4>
-                                            <p className="text-xs text-slate-500">什麼數據配什麼圖？幫數據找最佳圖表！</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">情報視覺化</h4>
+                                            <p className="text-xs text-slate-500">統計圖表選擇與呈現最佳化。幫數據找最佳圖表！</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/game/data-detective')}>
                                         <div className="w-10 h-10 bg-cyan-100 text-cyan-600 rounded-lg flex items-center justify-center shrink-0"><ChartNoAxesCombined size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">數據偵探</h4>
-                                            <p className="text-xs text-slate-500">分辨正確推論和過度解讀！</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">真相濾鏡</h4>
+                                            <p className="text-xs text-slate-500">客觀數據解讀與批判性思維培養。分辨正確推論！</p>
                                         </div>
                                     </div>
                                 </div>

@@ -7,25 +7,23 @@ export const LiteratureReview = () => {
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
 
             {/* Header */}
-            <header className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3"></div>
-                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-sm font-semibold mb-3">
-                            <BookOpen size={16} /> W6 核心模組
-                        </div>
-                        <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
-                            文獻偵探社與學術寫作倫理
-                        </h1>
-                        <p className="text-slate-600 mt-2 text-lg">
-                            福爾摩斯的證物鑑識：不只找資料，還要學會「合法使用證據」。
-                        </p>
+            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3" />
+                <div className="relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 shadow-sm mb-4">
+                        <BookOpen size={16} /> W6 核心模組
                     </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight gap-3 justify-center text-center mb-4">
+                        文獻偵探社與<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600 drop-shadow-sm">學術寫作倫理</span>
+                    </h1>
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-6">
+                        福爾摩斯的證物鑑識：不只找資料，還要學會「合法使用證據」。
+                    </p>
                     {/* Link to the Interactive Game */}
-                    <div className="shrink-0">
+                    <div className="flex justify-center">
                         <Link
                             to="/game/citation-detective"
-                            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group"
+                            className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group text-lg"
                         >
                             <span>進入文獻偵探遊戲</span>
                             <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -35,29 +33,29 @@ export const LiteratureReview = () => {
             </header>
 
             {/* Core Idea */}
-            <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-xl shadow-sm">
-                <h3 className="text-xl font-bold text-amber-900 mb-3 flex items-center gap-2">
-                    <ShieldAlert size={24} />
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-l-4 border-amber-500 p-6 md:p-8 rounded-r-3xl rounded-l-md shadow-sm mb-8 hover:shadow-md transition-shadow">
+                <h3 className="text-2xl font-bold text-amber-900 mb-6 flex items-center gap-3">
+                    <ShieldAlert size={28} />
                     文獻鑑識的三大雷區
                 </h3>
                 <div className="grid md:grid-cols-3 gap-6">
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <span className="font-bold text-red-600 block mb-2">💣 陷阱 1：孤兒引用</span>
-                        <p className="text-sm text-slate-700">「只有肉，沒有漢堡包」。把引用的話直接丟出來，前面沒有引言介紹，後面沒有你的觀點解釋。</p>
-                        <div className="mt-3 p-2 bg-slate-50 border border-slate-200 rounded text-xs">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100 hover:-translate-y-1 transition-transform">
+                        <span className="font-bold text-red-600 block mb-3 text-lg">💣 陷阱 1：孤兒引用</span>
+                        <p className="text-sm text-slate-700 leading-relaxed">「只有肉，沒有漢堡包」。把引用的話直接丟出來，前面沒有引言介紹，後面沒有你的觀點解釋。</p>
+                        <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
                             <span className="text-red-500 font-bold">❌ 錯誤：</span> AI 很好用。(Wang, 2023) 所以我們要多用。
                         </div>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <span className="font-bold text-red-600 block mb-2">💣 陷阱 2：換字抄襲</span>
-                        <p className="text-sm text-slate-700">以為把「導致」改成「造成」、「下降」改成「降低」就不是抄襲。句型結構一樣，就是抄襲！</p>
-                        <div className="mt-3 p-2 bg-slate-50 border border-slate-200 rounded text-xs">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100 hover:-translate-y-1 transition-transform">
+                        <span className="font-bold text-red-600 block mb-3 text-lg">💣 陷阱 2：換字抄襲</span>
+                        <p className="text-sm text-slate-700 leading-relaxed">以為把「導致」改成「造成」、「下降」改成「降低」就不是抄襲。句型結構一樣，就是抄襲！</p>
+                        <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
                             <span className="text-red-500 font-bold">❌ 錯誤：</span> 睡眠不夠會造成前額葉運作降低。(陳, 2023)
                         </div>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <span className="font-bold text-red-600 block mb-2">💣 陷阱 3：AI 幻覺論文</span>
-                        <p className="text-sm text-slate-700">AI 給的文獻格式看起來超完美，但其實根本不存在這篇文章，或者作者和年份被張冠李戴。</p>
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-amber-100 hover:-translate-y-1 transition-transform">
+                        <span className="font-bold text-red-600 block mb-3 text-lg">💣 陷阱 3：AI 幻覺論文</span>
+                        <p className="text-sm text-slate-700 leading-relaxed">AI 給的文獻格式看起來超完美，但其實根本不存在這篇文章，或者作者和年份被張冠李戴。</p>
                         <div className="mt-3 p-2 bg-slate-50 border border-slate-200 rounded text-xs text-amber-600 font-semibold">
                             ⚠️ 必須回到 Google Scholar 查證真實性！
                         </div>
@@ -68,14 +66,14 @@ export const LiteratureReview = () => {
             {/* Guide Sections: Writing Ethics and Evidence */}
             <div className="space-y-8">
                 {/* 寫作倫理：避免抄襲的實戰 */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="bg-rose-600 p-4 text-white">
-                        <h3 className="font-bold text-lg flex items-center gap-2">
-                            <span className="text-2xl">🚨</span> 學術寫作倫理：你踩雷了嗎？
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="bg-rose-600 p-6 text-white">
+                        <h3 className="font-bold text-2xl flex items-center gap-3">
+                            <span className="text-3xl">🚨</span> 學術寫作倫理：你踩雷了嗎？
                         </h3>
                     </div>
-                    <div className="p-6">
-                        <p className="text-slate-600 mb-6">找到 A 級文獻後，如果不懂「合法使用證據」，就會變成抄襲。快來看看這些實戰範例：</p>
+                    <div className="p-6 md:p-8">
+                        <p className="text-slate-600 mb-8 leading-relaxed text-lg">找到 A 級文獻後，如果不懂「合法使用證據」，就會變成抄襲。快來看看這些實戰範例：</p>
 
                         <div className="grid md:grid-cols-2 gap-6">
                             {/* 改寫地雷 */}
@@ -132,13 +130,13 @@ export const LiteratureReview = () => {
                 </div>
 
                 {/* 證物位階 */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="bg-slate-800 p-4 text-white">
-                        <h3 className="font-bold text-lg flex items-center gap-2">
-                            <span className="text-2xl">⚖️</span> 證物可信度等級 (A-D)
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="bg-slate-800 p-6 text-white">
+                        <h3 className="font-bold text-2xl flex items-center gap-3">
+                            <span className="text-3xl">⚖️</span> 證物可信度等級 (A-D)
                         </h3>
                     </div>
-                    <div className="p-6 grid md:grid-cols-2 gap-4">
+                    <div className="p-6 md:p-8 grid md:grid-cols-2 gap-6">
                         <div className="flex gap-4 items-start bg-slate-50 p-4 rounded-lg">
                             <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xl flex items-center justify-center shrink-0">A</div>
                             <div>
@@ -173,13 +171,13 @@ export const LiteratureReview = () => {
             </div>
 
             {/* AI Tools for Lit Review */}
-            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl shadow-sm border border-indigo-100 p-6 md:p-8">
+            <div className="bg-gradient-to-br from-indigo-50 to-blue-50(2) rounded-3xl shadow-sm border border-indigo-100 p-6 md:p-8 hover:shadow-md transition-shadow mt-8">
                 <div className="flex items-center gap-3 mb-6">
                     <Cpu className="text-indigo-600" size={28} />
                     <h2 className="text-2xl font-bold text-slate-800">AI 輔助閱讀與文獻整理 (NotebookLM)</h2>
                 </div>
 
-                <p className="text-slate-700 mb-6">
+                <p className="text-slate-700 mb-8 leading-relaxed text-lg">
                     閱讀原始論文通常很耗時。W6 建議將找到的可信文獻上傳至 <a href="https://notebooklm.google.com/" target="_blank" rel="noreferrer" className="text-blue-600 font-bold hover:underline">Google NotebookLM</a>，建立你的「專屬文獻庫」，讓 AI 幫你快速摘要。
                 </p>
 
