@@ -87,12 +87,12 @@ export const LiteratureReview = () => {
 
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-slate-800 p-5 rounded-xl border-l-4 border-slate-500 relative shadow-lg">
-                                    <span className="absolute -top-3 left-4 bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded-md font-bold">原始文獻 (陳醫師, 2023)</span>
-                                    <p className="text-slate-200 mt-2 leading-relaxed">「睡眠不足會導致前額葉皮質功能下降，進而削弱學生的專注力與情緒控管能力，長期下來可能引發焦慮症狀。」</p>
+                                    <span className="absolute -top-3 left-4 bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded-md font-bold">原始文獻 (王研究員, 2024)</span>
+                                    <p className="text-slate-200 mt-2 leading-relaxed">「中等強度的有氧運動能促進大腦海馬迴的血液循環，進而提升短期記憶的固化效率，對準備大考的學生有顯著幫助。」</p>
                                 </div>
                                 <div className="bg-slate-800 p-5 rounded-xl border-l-4 border-rose-500 relative shadow-lg">
                                     <span className="absolute -top-3 left-4 bg-rose-900 text-rose-300 text-xs px-2 py-1 rounded-md font-bold">某位學生的改寫</span>
-                                    <p className="text-slate-200 mt-2 leading-relaxed">睡眠不夠會造成前額葉皮質運作降低，進而減弱同學的專心度和情緒管理，時間久了可能產生焦慮的問題。(陳醫師, 2023)</p>
+                                    <p className="text-slate-200 mt-2 leading-relaxed">中等程度的有氧運動可以增加大腦海馬迴的血液流動，進而提高短暫記憶的儲存效率，對準備重要考試的同學有明顯幫助。(王研究員, 2024)</p>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +109,22 @@ export const LiteratureReview = () => {
                                     <li>指出這位學生的改寫有什麼破綻？盲點在哪裡？</li>
                                     <li>請親自示範一次真正的改寫，用你自己的話重述這段概念。</li>
                                 </ul>
+
+                                <div className="mt-8 pt-6 border-t border-slate-700/50">
+                                    <details className="group marker:content-['']">
+                                        <summary className="cursor-pointer text-amber-400 font-bold flex items-center gap-2 outline-none hover:text-amber-300 transition-colors w-max select-none">
+                                            <CheckCircle size={18} /> 點擊查看參考解答
+                                        </summary>
+                                        <div className="mt-4 space-y-3 pl-7">
+                                            <p className="text-sm text-slate-300 leading-relaxed">
+                                                <strong className="text-rose-400">破綻：</strong> 這是典型的「換字抄襲」！學生只是把「強度」換成「程度」、「促進」換成「增加」、「短期記憶」換成「短暫記憶」，整體句型結構完全沒有自己消化過。
+                                            </p>
+                                            <p className="text-sm text-emerald-300 leading-relaxed">
+                                                <strong className="text-emerald-400">示範改寫：</strong> 王研究員 (2024) 指出，面臨大考壓力的學生如果能維持適度的有氧運動，將有助於促進大腦血液循環，從而增強短期記憶的學習成效。
+                                            </p>
+                                        </div>
+                                    </details>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -175,11 +191,11 @@ export const LiteratureReview = () => {
                     <div className="space-y-6">
                         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-700">
                             <h4 className="text-emerald-300 font-bold mb-4 flex items-center gap-2"><Info size={18} /> 【案發情境】</h4>
-                            <p className="text-slate-300 mb-4">請將下列名言引用到一篇關於「高中生讀書計畫」的文章中。</p>
+                            <p className="text-slate-300 mb-4">請將下列名言引用到一篇關於「數位時代的學習專注力」的文章中。</p>
                             <div className="bg-slate-800 p-5 rounded-xl border-l-4 border-emerald-500 relative shadow-lg">
-                                <span className="absolute -top-3 left-4 bg-emerald-900 text-emerald-300 text-xs px-2 py-1 rounded-md font-bold">重要證物 (來源：心理學家 Fuschia Sirois, 2018)</span>
+                                <span className="absolute -top-3 left-4 bg-emerald-900 text-emerald-300 text-xs px-2 py-1 rounded-md font-bold">重要證物 (來源：認知學者 Dr. Miller, 2022)</span>
                                 <p className="text-slate-200 mt-2 italic text-lg leading-relaxed">
-                                    「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。人們透過拖延來逃避任務帶來的負面情緒。」
+                                    「人類大腦在進行數位多工處理時，實際上是在不同任務間快速切換注意力，這不僅會消耗更多認知資源，還會使錯誤率大幅上升。」
                                 </p>
                             </div>
                         </div>
@@ -197,11 +213,30 @@ export const LiteratureReview = () => {
                                 <div className="bg-slate-800 border border-emerald-900/50 p-5 rounded-xl md:w-72 shrink-0 shadow-inner">
                                     <span className="block mb-3 font-bold text-emerald-400 text-sm">💡 破案步驟拆解：</span>
                                     <ul className="space-y-3 text-sm text-slate-300">
-                                        <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">先點出一般人對拖延的誤解</span></li>
-                                        <li className="flex gap-3 items-start"><span className="text-rose-500 text-lg">🥩</span> <span className="pt-0.5">引用 Sirois 的觀點 <strong className="text-rose-300">(加引號)</strong></span></li>
-                                        <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">總結這對制定計畫的啟示</span></li>
+                                        <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">先點出一般人對多工處理的迷思</span></li>
+                                        <li className="flex gap-3 items-start"><span className="text-rose-500 text-lg">🥩</span> <span className="pt-0.5">引用 Miller 的觀點 <strong className="text-rose-300">(加引號)</strong></span></li>
+                                        <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">總結這對深度學習習慣的啟示</span></li>
                                     </ul>
                                 </div>
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-slate-700/50">
+                                <details className="group marker:content-['']">
+                                    <summary className="cursor-pointer text-emerald-400 font-bold flex items-center gap-2 outline-none hover:text-emerald-300 transition-colors w-max select-none">
+                                        <CheckCircle size={18} /> 點擊查看參考解答
+                                    </summary>
+                                    <div className="mt-4 space-y-4 pl-7 text-sm">
+                                        <p className="text-slate-300 leading-relaxed flex gap-2">
+                                            <span className="text-amber-500 text-base">🍞</span> <span>許多高中生在讀書時喜歡同時聽音樂、回訊息，認為自己擅長多工處理，但大腦科學未必支持這種策略。</span>
+                                        </p>
+                                        <p className="text-slate-300 leading-relaxed flex gap-2">
+                                            <span className="text-rose-500 text-base">🥩</span> <span>根據認知學者 Dr. Miller (2022) 所述：「人類大腦在進行數位多工處理時，實際上是在不同任務間快速切換注意力，這不僅會消耗更多認知資源，還會使錯誤率大幅上升。」</span>
+                                        </p>
+                                        <p className="text-slate-300 leading-relaxed flex gap-2">
+                                            <span className="text-amber-500 text-base">🍞</span> <span>這意味著，如果我們希望在專題研究中產出高品質的思路，就必須刻意放下手機，建立排除數位干擾的深度工作時間。</span>
+                                        </p>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </div>
@@ -293,18 +328,18 @@ export const LiteratureReview = () => {
                     <div className="space-y-6">
                         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-700">
                             <h4 className="text-blue-300 font-bold mb-4 flex items-center gap-2"><Info size={18} /> 【案發情境】</h4>
-                            <p className="text-slate-300 mb-6">探員，我們收到了兩份互相對立的醫療情報，關於「高中生是否適合喝咖啡」。請綜合分析它們。</p>
+                            <p className="text-slate-300 mb-6">探員，我們收到了兩份觀點不同的情報，關於「高中生是否適合使用生成式 AI 輔助學習」。請綜合分析它們。</p>
 
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-slate-800 p-5 rounded-xl border-t-4 border-indigo-500 relative shadow-lg">
                                     <div className="absolute top-0 right-0 p-2 opacity-10 text-6xl font-black italic">A</div>
-                                    <span className="inline-block bg-indigo-900 text-indigo-300 text-xs px-2 py-1 rounded font-bold mb-3">檔案 A (林教授, 2020)</span>
-                                    <p className="text-slate-200 leading-relaxed relative z-10">「研究顯示，適度飲用咖啡因能短暫提升大腦的警覺性，幫助記憶力鞏固。」</p>
+                                    <span className="inline-block bg-indigo-900 text-indigo-300 text-xs px-2 py-1 rounded font-bold mb-3">檔案 A (科技教育學會, 2023)</span>
+                                    <p className="text-slate-200 leading-relaxed relative z-10">「生成式 AI 能快速提供思路框架與資料統整，大幅縮短學生在專題初期的摸索時間，是極佳的腦力激盪夥伴。」</p>
                                 </div>
                                 <div className="bg-slate-800 p-5 rounded-xl border-t-4 border-rose-500 relative shadow-lg">
                                     <div className="absolute top-0 right-0 p-2 opacity-10 text-6xl font-black italic">B</div>
-                                    <span className="inline-block bg-rose-900 text-rose-300 text-xs px-2 py-1 rounded font-bold mb-3">檔案 B (營養師公會, 2022)</span>
-                                    <p className="text-slate-200 leading-relaxed relative z-10">「對於發育中的青少年，過量攝取咖啡因可能導致心悸、失眠，甚至影響骨骼發育。」</p>
+                                    <span className="inline-block bg-rose-900 text-rose-300 text-xs px-2 py-1 rounded font-bold mb-3">檔案 B (高教研究中心, 2024)</span>
+                                    <p className="text-slate-200 leading-relaxed relative z-10">「過度依賴 AI 直接生成文本的學生，其批判性思維與邏輯推理能力在一年後出現顯著衰退的現象。」</p>
                                 </div>
                             </div>
                         </div>
@@ -327,6 +362,19 @@ export const LiteratureReview = () => {
                                         <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>提出個人見解或平衡建議</span></li>
                                     </ul>
                                 </div>
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-slate-700/50">
+                                <details className="group marker:content-['']">
+                                    <summary className="cursor-pointer text-blue-400 font-bold flex items-center gap-2 outline-none hover:text-blue-300 transition-colors w-max select-none">
+                                        <CheckCircle size={18} /> 點擊查看參考解答
+                                    </summary>
+                                    <div className="mt-4 pl-7 text-sm">
+                                        <p className="text-slate-300 leading-relaxed">
+                                            關於高中生使用生成式 AI 輔助學習，各方存在不同建議。科技教育學會 (2023) 肯定其作為「腦力激盪夥伴」的價值，能有效協助學生突破研究初期的瓶頸；然而，高教研究中心 (2024) 則提出警告，指出過度依賴 AI 直接生成內容會削弱學生的批判與邏輯思維。綜合兩者觀點，學生應將 AI 視為協助「發想」與「框架統整」的工具，而非代替自己思考與寫作的代筆者，方能在享受科技便利的同時確保自身素養的提升。
+                                        </p>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </div>
