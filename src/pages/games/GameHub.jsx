@@ -236,31 +236,19 @@ export const GameHub = () => {
                     </div>
                 )}
 
-                {/* 任務檔案庫 Timeline */}
-                <div className="relative max-w-4xl mx-auto py-10 mt-8">
-                    {/* 垂直軸心線 (Desktop only for full tree, mobile left-aligned) */}
-                    <div className="absolute left-[39px] md:left-1/2 top-4 bottom-4 w-1 flex flex-col items-center z-0 hidden md:flex">
-                        <div className="h-full w-full bg-slate-700/50 rounded-full cursor-pointer"></div>
-                    </div>
-                    {/* Mobile Timeline line */}
-                    <div className="absolute left-[39px] top-4 bottom-4 w-1 bg-slate-700/50 rounded-full z-0 md:hidden"></div>
-
-                    <div className="space-y-12 relative z-10 w-full">
+                {/* 任務檔案庫 Grid */}
+                <div className="relative max-w-6xl mx-auto py-10 mt-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 relative z-10 w-full">
                         {RIB_MISSIONS.map((mission, index) => {
-                            const isEven = index % 2 === 0;
+                            const missionNumber = String(index + 1).padStart(2, '0');
                             return (
-                                <div key={mission.id} className={`relative flex flex-col md:flex-row items-center gap-6 md:gap-0 ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                                <div key={mission.id} className="w-full flex">
 
-                                    {/* 圓形節點標記 */}
-                                    <div className="absolute left-[39px] md:left-1/2 w-12 h-12 bg-slate-900 shadow-[0_0_15px_rgba(0,0,0,0.8)] rounded-full border-4 border-slate-700 -translate-x-1/2 flex items-center justify-center z-10 text-slate-500 font-black font-mono shadow-inner transition-colors">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </div>
-
-                                    {/* 卡片容器：控制寬度與左右貼齊 */}
-                                    <div className={`w-full pl-[90px] pr-4 md:px-0 md:w-1/2 flex ${isEven ? 'md:justify-start md:pr-12' : 'md:justify-end md:pl-12'}`}>
+                                    {/* 卡片容器 */}
+                                    <div className="w-full flex h-full">
                                         <div
                                             onClick={() => navigateToMission(mission.path)}
-                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 border transition-all duration-300 flex flex-col overflow-hidden shadow-xl ${isLoggedIn
+                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${isLoggedIn
                                                     ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
                                                     : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
                                                 }`}
@@ -277,14 +265,19 @@ export const GameHub = () => {
 
                                             {/* ACTIVE / LOCKED Stamp */}
                                             {isLoggedIn ? (
-                                                <div className="absolute top-6 right-6 border-2 border-amber-500/30 text-amber-500/50 font-mono text-[10px] font-black tracking-[4px] px-2 py-0.5 -rotate-12 z-10 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] pointer-events-none">
+                                                <div className="absolute top-16 right-4 sm:top-14 sm:right-6 border-2 border-amber-500/30 text-amber-500/40 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] pointer-events-none opacity-60 group-hover:opacity-100 scale-90 sm:scale-100 origin-top-right">
                                                     ACTIVE
                                                 </div>
                                             ) : (
-                                                <div className="absolute top-6 right-6 border-2 border-slate-700 text-slate-600 font-mono text-[10px] font-black tracking-[4px] px-2 py-0.5 -rotate-12 z-10 pointer-events-none">
+                                                <div className="absolute top-16 right-4 sm:top-14 sm:right-6 border-2 border-slate-700 text-slate-600 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none opacity-60 scale-90 sm:scale-100 origin-top-right">
                                                     LOCKED
                                                 </div>
                                             )}
+
+                                            {/* 巨大編號浮水印底圖 */}
+                                            <div className="absolute -bottom-4 -right-2 text-[120px] font-black font-mono text-slate-800/20 leading-none z-0 pointer-events-none select-none">
+                                                {missionNumber}
+                                            </div>
 
                                             {/* Department Badge */}
                                             <div className="flex justify-between items-start mb-5 relative z-10">
