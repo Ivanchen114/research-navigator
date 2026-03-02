@@ -78,63 +78,67 @@ export const Footer = () => {
         );
     }
 
-    // Default: 學術/教學版 Footer (溫和、圓潤、偏教育主題_白底)
+       // Default: 學術/教學版 Footer (溫和、橫向儀表板_白底)
     return (
-        <footer className="w-full bg-white border-t border-slate-200 mt-auto relative overflow-hidden font-sans">
-            <div className="max-w-7xl mx-auto px-6 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <footer className="w-full bg-white border-t border-slate-200 mt-auto relative overflow-hidden text-slate-500 font-mono">
+            {/* Top scanning line effect - light version */}
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+            
+            <div className="max-w-7xl mx-auto px-6 py-10">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
                     
-                    {/* Feature 1: AI-RED Framework */}
-                    <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-100 transition-colors shadow-sm">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                            <Target size={24} className="text-blue-600" />
+                    {/* Left: Branding & Core */}
+                    <div className="flex items-center gap-6 w-full md:w-auto">
+                        <div className="bg-blue-50/50 border border-blue-100 p-3 flex items-center justify-center text-blue-600 rounded-sm shrink-0">
+                            <Fingerprint size={32} strokeWidth={1.5} />
                         </div>
-                        <h4 className="text-slate-800 font-bold tracking-widest mb-3">
-                            AI-RED 學習框架
-                        </h4>
-                        <div className="text-xs text-slate-500 font-medium flex gap-2">
-                            <span>Ascribe</span> &middot;
-                            <span>Inquire</span> &middot;
-                            <span>Reference</span> &middot;
-                            <span>Evaluate</span> &middot;
-                            <span>Document</span>
-                        </div>
-                    </div>
-
-                    {/* Feature 2: School Brand */}
-                    <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-100 transition-colors shadow-sm">
-                        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-                            <School size={24} className="text-emerald-600" />
-                        </div>
-                        <h4 className="text-slate-800 font-bold tracking-widest mb-2">
-                            台北市立松山高中
-                        </h4>
-                        <p className="text-sm text-slate-500 font-medium">
-                            研究方法與專題
-                        </p>
-                        <span className="inline-block mt-3 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold">高一必修</span>
-                    </div>
-
-                    {/* Feature 3: Dual Mode */}
-                    <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-100 transition-colors shadow-sm">
-                        <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-                            <Zap size={24} className="text-amber-600" />
-                        </div>
-                        <h4 className="text-slate-800 font-bold tracking-widest mb-4">
-                            課堂 ＋ 自學雙模式
-                        </h4>
-                        <div className="flex gap-2 text-[11px] text-slate-600 font-medium">
-                            <span className="bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">可投影</span>
-                            <span className="bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">可手機</span>
-                            <span className="bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">可回家練習</span>
+                        <div>
+                            <div className="flex items-center gap-3 mb-1">
+                                <h4 className="text-slate-800 font-black tracking-widest text-lg uppercase">AI-RED 學習框架</h4>
+                                <span className="bg-blue-50 text-blue-600 border border-blue-200 text-[10px] px-2 py-0.5 tracking-widest rounded-sm font-bold">V2.0.4 ACTIVE</span>
+                            </div>
+                            <div className="flex gap-3 text-[10px] text-slate-500 tracking-[0.2em] font-bold uppercase">
+                                <span>Ascribe</span><span className="opacity-30">/</span>
+                                <span>Inquire</span><span className="opacity-30">/</span>
+                                <span>Reference</span><span className="opacity-30">/</span>
+                                <span>Evaluate</span><span className="opacity-30">/</span>
+                                <span>Document</span>
+                            </div>
                         </div>
                     </div>
 
+                    {/* Middle / Right: School & Specs */}
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-8 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-200 pt-6 md:pt-0 md:pl-8">
+                        
+                        {/* School Info */}
+                        <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center gap-2 text-slate-700 font-bold tracking-widest text-sm">
+                                <School size={16} className="text-slate-500" /> 台北市立松山高中
+                            </div>
+                            <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                                <span className="uppercase tracking-widest">Subject: <span className="text-slate-600 font-medium">研究方法與專題</span></span>
+                                <span className="inline-block bg-slate-100 border border-slate-200 px-2 py-[2px] rounded-sm text-[9px] text-slate-500 uppercase font-bold">Required</span>
+                            </div>
+                        </div>
+
+                        {/* Systems */}
+                        <div className="flex flex-col gap-2 md:items-end">
+                            <div className="text-[10px] text-amber-600 tracking-widest flex items-center gap-1.5 font-bold uppercase">
+                                <Zap size={12} /> 課堂 ＋ 自學雙模式
+                            </div>
+                            <div className="flex gap-1.5 text-[9px] text-slate-600 font-bold uppercase tracking-wider">
+                                <span className="bg-white border border-slate-200 px-2 py-[2px] rounded-sm shadow-sm">可投影</span>
+                                <span className="bg-white border border-slate-200 px-2 py-[2px] rounded-sm shadow-sm">可手機</span>
+                                <span className="bg-white border border-slate-200 px-2 py-[2px] rounded-sm shadow-sm">可回家練習</span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 
-                {/* Bottom line */}
-                <div className="mt-10 pt-6 border-t border-slate-200 flex justify-center text-xs text-slate-400">
-                    &copy; {new Date().getFullYear()} Songshan High School. All Learning Rights Reserved.
+                <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 tracking-[0.3em] uppercase">
+                    <span>ACADEMIC ACCESS GRANTED</span>
+                    <span>TEACHING SECTION // SSSH</span>
                 </div>
             </div>
         </footer>
