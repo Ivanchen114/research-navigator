@@ -78,21 +78,21 @@ export const Footer = () => {
         );
     }
 
-    // Default: 學術/教學版 Footer (溫和、圓潤、偏教育風格)
+    // Default: 學術/教學版 Footer (溫和、圓潤、偏教育主題_白底)
     return (
-        <footer className="w-full bg-slate-900 border-t border-slate-800 mt-auto relative overflow-hidden font-sans">
+        <footer className="w-full bg-white border-t border-slate-200 mt-auto relative overflow-hidden font-sans">
             <div className="max-w-7xl mx-auto px-6 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
                     {/* Feature 1: AI-RED Framework */}
-                    <div className="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-800/60 transition-colors">
-                        <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
-                            <Target size={24} className="text-blue-400" />
+                    <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-100 transition-colors shadow-sm">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                            <Target size={24} className="text-blue-600" />
                         </div>
-                        <h4 className="text-slate-200 font-bold tracking-widest mb-3">
+                        <h4 className="text-slate-800 font-bold tracking-widest mb-3">
                             AI-RED 學習框架
                         </h4>
-                        <div className="text-xs text-slate-400 font-medium flex gap-2">
+                        <div className="text-xs text-slate-500 font-medium flex gap-2">
                             <span>Ascribe</span> &middot;
                             <span>Inquire</span> &middot;
                             <span>Reference</span> &middot;
@@ -102,38 +102,38 @@ export const Footer = () => {
                     </div>
 
                     {/* Feature 2: School Brand */}
-                    <div className="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-800/60 transition-colors">
-                        <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
-                            <School size={24} className="text-emerald-400" />
+                    <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-100 transition-colors shadow-sm">
+                        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <School size={24} className="text-emerald-600" />
                         </div>
-                        <h4 className="text-slate-200 font-bold tracking-widest mb-2">
+                        <h4 className="text-slate-800 font-bold tracking-widest mb-2">
                             台北市立松山高中
                         </h4>
-                        <p className="text-sm text-slate-400 font-medium">
+                        <p className="text-sm text-slate-500 font-medium">
                             研究方法與專題
                         </p>
-                        <span className="inline-block mt-3 bg-slate-700/50 px-3 py-1 rounded-full text-[11px] text-slate-300">高一必修</span>
+                        <span className="inline-block mt-3 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold">高一必修</span>
                     </div>
 
                     {/* Feature 3: Dual Mode */}
-                    <div className="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-800/60 transition-colors">
-                        <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
-                            <Zap size={24} className="text-amber-400" />
+                    <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-100 transition-colors shadow-sm">
+                        <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                            <Zap size={24} className="text-amber-600" />
                         </div>
-                        <h4 className="text-slate-200 font-bold tracking-widest mb-4">
+                        <h4 className="text-slate-800 font-bold tracking-widest mb-4">
                             課堂 ＋ 自學雙模式
                         </h4>
-                        <div className="flex gap-2 text-[11px] text-slate-300">
-                            <span className="bg-slate-700/50 px-3 py-1 rounded-full">可投影</span>
-                            <span className="bg-slate-700/50 px-3 py-1 rounded-full">可手機</span>
-                            <span className="bg-slate-700/50 px-3 py-1 rounded-full">可回家練習</span>
+                        <div className="flex gap-2 text-[11px] text-slate-600 font-medium">
+                            <span className="bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">可投影</span>
+                            <span className="bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">可手機</span>
+                            <span className="bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">可回家練習</span>
                         </div>
                     </div>
 
                 </div>
                 
                 {/* Bottom line */}
-                <div className="mt-10 pt-6 border-t border-slate-800 flex justify-center text-xs text-slate-500">
+                <div className="mt-10 pt-6 border-t border-slate-200 flex justify-center text-xs text-slate-400">
                     &copy; {new Date().getFullYear()} Songshan High School. All Learning Rights Reserved.
                 </div>
             </div>
