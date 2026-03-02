@@ -21,18 +21,6 @@ const RIB_MISSIONS = [
         status: "active"
     },
     {
-        id: 'rx-inspector',
-        title: "行動代號：防線",
-        english: "Operation: Defense",
-        department: "法醫部",
-        departmentColor: "text-rose-500 bg-rose-500/10 border-rose-500/30",
-        icon: <BriefcaseMedical size={32} className="text-rose-500" />,
-        desc: "找出問卷、訪談、實驗設計中的致命副作用！",
-        learningObjective: "研究設計與方法學避險測試",
-        path: "/game/rx-inspector",
-        status: "active"
-    },
-    {
         id: 'tool-quiz',
         title: "裝備檢定測試",
         english: "Gear Check Protocol",
@@ -54,6 +42,18 @@ const RIB_MISSIONS = [
         desc: "審問可疑文獻，揪出換字抄襲與孤兒引用的罪犯！",
         learningObjective: "文獻真偽辨識與學術倫理審查",
         path: "/game/citation-detective",
+        status: "active"
+    },
+    {
+        id: 'rx-inspector',
+        title: "行動代號：防線",
+        english: "Operation: Defense",
+        department: "法醫部",
+        departmentColor: "text-rose-500 bg-rose-500/10 border-rose-500/30",
+        icon: <BriefcaseMedical size={32} className="text-rose-500" />,
+        desc: "找出問卷、訪談、實驗設計中的致命副作用！",
+        learningObjective: "研究設計與方法學避險測試",
+        path: "/game/rx-inspector",
         status: "active"
     },
     {
