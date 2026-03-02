@@ -9,66 +9,78 @@ import {
 // 定義六大任務卡片資料
 const RIB_MISSIONS = [
     {
+        caseCode: 'CASE #01',
+        tags: ['W0-W2', '問題意識', '靶心對焦'],
         id: 'question-er',
         title: "行動代號：靶心",
         english: "Operation: Bullseye",
         department: "法醫部",
         departmentColor: "text-rose-500 bg-rose-500/10 border-rose-500/30",
         icon: <Stethoscope size={32} className="text-rose-500" />,
-        desc: "搶救方向錯誤、範圍膨脹的瀕死研究問題！",
+        desc: "幫助你在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。這關卡將為陷入迷惘的探員對症下藥，開出精準的問題處方。",
         learningObjective: "研究問題精煉與對焦訓練",
         path: "/game/question-er",
         status: "active"
     },
     {
+        caseCode: 'CASE #02',
+        tags: ['W3-W5', '方法快篩', '裝備盤點'],
         id: 'tool-quiz',
         title: "裝備檢定測試",
         english: "Gear Check Protocol",
         department: "重案部",
         departmentColor: "text-amber-500 bg-amber-500/10 border-amber-500/30",
         icon: <Search size={32} className="text-amber-500" />,
-        desc: "抵達案發現場，迅速拔出最適合的辦案道具！",
+        desc: "研究現場千變萬化，裝備拿錯全盤皆輸。面對不同的案件委託，你能迅速判斷該使用問卷、訪談、實驗，還是觀察法嗎？快來測試你的鑑識直覺！",
         learningObjective: "研究工具與資料蒐集方法辨識",
         path: "/game/tool-quiz",
         status: "active"
     },
     {
+        caseCode: 'CASE #03',
+        tags: ['W6', '文獻鑑識', '學術誠信'],
         id: 'citation-detective',
         title: "獵狐行動",
         english: "Operation: Foxhunt",
         department: "重案部",
         departmentColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
         icon: <BookOpen size={32} className="text-emerald-500" />,
-        desc: "審問可疑文獻，揪出換字抄襲與孤兒引用的罪犯！",
+        desc: "學術界的陰暗角落藏有許多未爆彈！你將扮演獵狐特務，追查 10 件極具爭議的文獻引用疑案。辨識孤兒引用、換字抄襲等違規手法，守護學術誠信的防線。",
         learningObjective: "文獻真偽辨識與學術倫理審查",
         path: "/game/citation-detective",
         status: "active"
     },
     {
+        caseCode: 'CASE #04',
+        tags: ['W8-W9', '研究設計', '避險測試'],
         id: 'rx-inspector',
         title: "行動代號：防線",
         english: "Operation: Defense",
         department: "法醫部",
         departmentColor: "text-rose-500 bg-rose-500/10 border-rose-500/30",
         icon: <BriefcaseMedical size={32} className="text-rose-500" />,
-        desc: "找出問卷、訪談、實驗設計中的致命副作用！",
+        desc: "這是一場防禦戰！深入 10 個充滿致命設計缺陷的研究病例。從誘導性問卷到缺乏控制組的實驗，揪出錯誤並開立正確處方，確保研究方法無懈可擊。",
         learningObjective: "研究設計與方法學避險測試",
         path: "/game/rx-inspector",
         status: "active"
     },
     {
+        caseCode: 'CASE #05',
+        tags: ['W10+', '數據解讀', '批判思考'],
         id: 'data-detective',
         title: "真相濾鏡",
         english: "Truth Filter",
         department: "重案部",
         departmentColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
         icon: <Bug size={32} className="text-emerald-500" />,
-        desc: "不被統計表象欺騙，精準分辨事實與主觀妄想！",
+        desc: "數字會說話，但有時候會說謊。戴上真相濾鏡，識破樣本偏差、倖存者偏差、辛普森悖論等數據陷阱。學習從客觀數據中得出穩健的結論。",
         learningObjective: "客觀數據解讀與批判性思維培養",
         path: "/game/data-detective",
         status: "active"
     },
     {
+        caseCode: 'CASE #06',
+        tags: ['W10+', '圖表選擇', '資訊呈現'],
         id: 'chart-matcher',
         title: "情報視覺化",
         english: "Intel Visualization",
@@ -131,10 +143,23 @@ export const GameHub = () => {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <ShieldAlert size={40} className="text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-                            <h1 className="text-4xl md:text-5xl font-black text-white tracking-widest drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] font-mono">R.I.B.</h1>
+                            <h1 className="text-4xl md:text-5xl font-black text-slate-100 mb-4 tracking-tight drop-shadow-md">
+                                R.I.B. 特務指揮中心
+                            </h1>
+                            <p className="text-amber-400 font-mono text-sm md:text-base tracking-[0.2em] uppercase font-bold text-shadow-sm">
+                                Research Investigation Bureau / 機密任務總覽
+                            </p>
                         </div>
-                        <h2 className="text-xl md:text-2xl font-bold text-slate-300 tracking-[0.2em]">研究調查局 <span className="text-sm text-slate-500">(Research Investigation Bureau)</span></h2>
-                        <p className="text-amber-500/80 mt-2 font-black tracking-widest text-sm bg-amber-950/40 inline-block px-3 py-1 rounded-md border border-amber-500/20">特務指揮中心 / 機密任務總覽</p>
+                        {/* Progress Bar Component */}
+                        <div className="mt-8 max-w-sm">
+                            <div className="flex justify-between text-[11px] font-mono tracking-widest mb-3">
+                                <span className="text-slate-400">總進度</span>
+                                <span className="text-amber-500 font-bold">0 / 6 案件完成</span>
+                            </div>
+                            <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/50 relative">
+                                <div className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-amber-600 to-amber-400 w-[0%] transition-all duration-1000" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.5)' }}></div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* 登入狀態儀表板 */}
@@ -235,20 +260,39 @@ export const GameHub = () => {
                                     <div className={`w-full pl-[90px] pr-4 md:px-0 md:w-1/2 flex ${isEven ? 'md:justify-start md:pr-12' : 'md:justify-end md:pl-12'}`}>
                                         <div
                                             onClick={() => navigateToMission(mission.path)}
-                                            className={`w-full group relative bg-slate-900/60 rounded-3xl p-6 border transition-all duration-300 flex flex-col backdrop-blur-md overflow-hidden ${isLoggedIn
-                                                    ? 'border-slate-700 hover:border-amber-500/50 hover:bg-slate-800/80 cursor-pointer hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]'
+                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 border transition-all duration-300 flex flex-col overflow-hidden shadow-xl ${isLoggedIn
+                                                    ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
                                                     : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
                                                 }`}
                                         >
+                                            {/* Top Accent Line */}
+                                            {isLoggedIn && (
+                                                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-amber-500 to-amber-600 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out z-20"></div>
+                                            )}
+
                                             {/* Hover effect gradient overlay */}
                                             {isLoggedIn && (
-                                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                                                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
+                                            )}
+
+                                            {/* ACTIVE / LOCKED Stamp */}
+                                            {isLoggedIn ? (
+                                                <div className="absolute top-6 right-6 border-2 border-amber-500/30 text-amber-500/50 font-mono text-[10px] font-black tracking-[4px] px-2 py-0.5 -rotate-12 z-10 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] pointer-events-none">
+                                                    ACTIVE
+                                                </div>
+                                            ) : (
+                                                <div className="absolute top-6 right-6 border-2 border-slate-700 text-slate-600 font-mono text-[10px] font-black tracking-[4px] px-2 py-0.5 -rotate-12 z-10 pointer-events-none">
+                                                    LOCKED
+                                                </div>
                                             )}
 
                                             {/* Department Badge */}
-                                            <div className="flex justify-between items-start mb-6 relative z-10">
-                                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] border shadow-sm ${mission.departmentColor}`}>
-                                                    {mission.department}
+                                            <div className="flex justify-between items-start mb-5 relative z-10">
+                                                <div className="flex flex-col gap-2">
+                                                    <span className="font-mono text-[10px] text-slate-500 tracking-[3px] border border-slate-700/60 px-2 py-0.5 rounded-sm self-start bg-slate-900/50 shadow-inner">{mission.caseCode}</span>
+                                                    <div className={`px-3 py-1 rounded-sm text-[10px] font-black tracking-[0.2em] border shadow-sm self-start ${mission.departmentColor}`}>
+                                                        {mission.department}
+                                                    </div>
                                                 </div>
                                                 <div className={`p-3.5 rounded-2xl bg-slate-950/80 shadow-inner group-hover:scale-110 transition-transform border border-slate-700/50 ${isLoggedIn ? 'text-slate-300 group-hover:text-amber-400' : 'text-slate-600'}`}>
                                                     {mission.icon}
@@ -269,18 +313,27 @@ export const GameHub = () => {
                                                 </p>
                                             </div>
 
-                                            {/* Action Button */}
-                                            <div className="pt-5 border-t border-slate-700/50 flex items-center justify-between relative z-10">
-                                                <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
-                                                {isLoggedIn ? (
-                                                    <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/30 px-3 py-1.5 rounded-lg border border-amber-500/20">
-                                                        查閱檔案 <ArrowRight size={16} />
-                                                    </div>
-                                                ) : (
-                                                    <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
-                                                        🔒 權限不足
-                                                    </div>
-                                                )}
+                                            {/* Action Button & Tags */}
+                                            <div className="pt-5 mt-auto border-t border-slate-800/60 flex flex-col gap-4 relative z-10">
+                                                {/* Tags Row */}
+                                                <div className="flex flex-wrap gap-2">
+                                                    {mission.tags.map((tag, i) => (
+                                                        <span key={i} className="bg-slate-900/80 border border-slate-700/50 text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded tracking-wide shadow-inner">#{tag}</span>
+                                                    ))}
+                                                </div>
+
+                                                <div className="flex items-center justify-between w-full">
+                                                    <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
+                                                    {isLoggedIn ? (
+                                                        <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/20 hover:bg-amber-900/40 px-3 py-1.5 rounded-lg border border-amber-500/20 backdrop-blur-sm">
+                                                            解密檔案 <ArrowRight size={16} />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                                                            🔒 權限不足
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

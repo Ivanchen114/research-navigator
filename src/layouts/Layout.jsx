@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Menu, X, Home, Navigation2, BarChart2, Search, BookOpen, Users, Gamepad2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp } from 'lucide-react';
+import { Footer } from '../components/Footer';
 
 export const Layout = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -143,6 +144,7 @@ export const Layout = () => {
                 {/* Scrollable Main View */}
                 <main className="flex-1 overflow-y-auto p-4 md:p-8 relative">
                     <Outlet />
+                <Footer />
                 </main>
             </div>
 
