@@ -1,62 +1,70 @@
 import React from 'react';
-import { Target, Lightbulb, ScanText, CheckCircle, FileText, Zap, School } from 'lucide-react';
+import { Target, Lightbulb, ScanText, CheckCircle, FileText, Zap, School, ShieldAlert, Fingerprint } from 'lucide-react';
 
 export const Footer = () => {
     return (
-        <footer className="w-full bg-[#080d14] border-t border-slate-800/60 mt-auto relative overflow-hidden">
+        <footer className="w-full bg-[#050910] border-t border-slate-800/80 mt-auto relative overflow-hidden text-slate-400 font-mono">
+            {/* Top scanning line effect */}
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+            
             {/* Warning Tape Border Bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-[repeating-linear-gradient(45deg,#f59e0b,#f59e0b_8px,#000_8px,#000_16px)] opacity-80" />
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-[repeating-linear-gradient(45deg,#f59e0b,#f59e0b_10px,#000_10px,#000_20px)] opacity-50" />
 
-            <div className="max-w-7xl mx-auto px-4 py-12 pb-16">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                    {/* Feature 1: AI-RED Framework */}
-                    <div className="bg-[#0f172a]/60 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-800/40 transition-colors shadow-inner relative group">
-                        <div className="absolute -top-4 w-12 h-12 bg-slate-900 rounded-full border border-rose-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.15)] group-hover:scale-110 transition-transform">
-                            <Target size={24} className="text-rose-400" />
+            <div className="max-w-7xl mx-auto px-6 py-10">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
+                    
+                    {/* Left: Branding & Core */}
+                    <div className="flex items-center gap-6 w-full md:w-auto">
+                        <div className="bg-slate-900 border border-slate-700 p-3 flex items-center justify-center text-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)] rounded-sm shrink-0">
+                            <Fingerprint size={32} strokeWidth={1.5} />
                         </div>
-                        <h4 className="text-slate-300 font-bold tracking-widest mt-6 mb-3 flex items-center justify-center gap-2">
-                            AI-RED 學習框架
-                        </h4>
-                        <div className="text-[11px] text-slate-500 space-y-1.5 font-mono tracking-wider flex flex-col gap-1 items-center justify-center w-full max-w-[200px]">
-                            <div className="flex justify-between w-full"><span className="text-slate-400">A</span>scribe</div>
-                            <div className="flex justify-between w-full"><span className="text-slate-400">I</span>nquire</div>
-                            <div className="w-full border-b border-slate-700/50 my-1"></div>
-                            <div className="flex justify-between w-full"><span className="text-slate-400">R</span>eference</div>
-                            <div className="flex justify-between w-full"><span className="text-slate-400">E</span>valuate</div>
-                            <div className="flex justify-between w-full"><span className="text-slate-400">D</span>ocument</div>
-                        </div>
-                    </div>
-
-                    {/* Feature 2: School Brand */}
-                    <div className="bg-[#0f172a]/60 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-800/40 transition-colors shadow-inner relative group mt-8 md:mt-0">
-                        <div className="absolute -top-4 w-12 h-12 bg-slate-900 rounded-full border border-sky-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.15)] group-hover:scale-110 transition-transform">
-                            <School size={24} className="text-sky-400" />
-                        </div>
-                        <h4 className="text-slate-300 font-bold tracking-widest mt-6 mb-3">
-                            台北市立松山高中
-                        </h4>
-                        <p className="text-xs text-slate-500 font-medium tracking-widest leading-relaxed">
-                            研究方法與專題<br />
-                            <span className="inline-block mt-2 bg-slate-800/80 border border-slate-700 px-3 py-1 rounded text-[10px] text-slate-400">高一必修</span>
-                        </p>
-                    </div>
-
-                    {/* Feature 3: Dual Mode */}
-                    <div className="bg-[#0f172a]/60 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center text-center hover:bg-slate-800/40 transition-colors shadow-inner relative group mt-8 md:mt-0">
-                        <div className="absolute -top-4 w-12 h-12 bg-slate-900 rounded-full border border-amber-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.15)] group-hover:scale-110 transition-transform">
-                            <Zap size={24} className="text-amber-400" />
-                        </div>
-                        <h4 className="text-slate-300 font-bold tracking-widest mt-6 mb-3">
-                            課堂 ＋ 自學雙模式
-                        </h4>
-                        <div className="flex gap-2 text-[10px] text-slate-500 font-bold">
-                            <span className="bg-slate-800 border border-slate-700 px-2 py-1 rounded">可投影</span>
-                            <span className="bg-slate-800 border border-slate-700 px-2 py-1 rounded">可手機</span>
-                            <span className="bg-slate-800 border border-slate-700 px-2 py-1 rounded">可回家練習</span>
+                        <div>
+                            <div className="flex items-center gap-3 mb-1">
+                                <h4 className="text-slate-200 font-black tracking-widest text-lg uppercase">AI-RED 學習框架</h4>
+                                <span className="bg-cyan-950/50 text-cyan-400 border border-cyan-800 text-[10px] px-2 py-0.5 tracking-widest rounded-sm">V2.0.4 ACTIVE</span>
+                            </div>
+                            <div className="flex gap-3 text-[10px] text-slate-500 tracking-[0.2em] font-bold uppercase">
+                                <span>Ascribe</span><span className="opacity-30">/</span>
+                                <span>Inquire</span><span className="opacity-30">/</span>
+                                <span>Reference</span><span className="opacity-30">/</span>
+                                <span>Evaluate</span><span className="opacity-30">/</span>
+                                <span>Document</span>
+                            </div>
                         </div>
                     </div>
 
+                    {/* Middle / Right: School & Specs */}
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-8 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-800 pt-6 md:pt-0 md:pl-8">
+                        
+                        {/* School Info */}
+                        <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center gap-2 text-slate-300 font-bold tracking-widest text-sm">
+                                <School size={16} className="text-slate-500" /> 台北市立松山高中
+                            </div>
+                            <div className="text-[11px] text-slate-500 flex items-center gap-2">
+                                <span className="uppercase tracking-widest">Subject: <span className="text-slate-400">研究方法與專題</span></span>
+                                <span className="inline-block bg-slate-900 border border-slate-700 px-2 py-[2px] rounded-sm text-[9px] text-slate-400 uppercase">Required</span>
+                            </div>
+                        </div>
+
+                        {/* Systems */}
+                        <div className="flex flex-col gap-2 md:items-end">
+                            <div className="text-[10px] text-amber-500/80 tracking-widest flex items-center gap-1.5 font-bold uppercase">
+                                <Zap size={12} /> 課堂 ＋ 自學雙模式
+                            </div>
+                            <div className="flex gap-1.5 text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                                <span className="bg-slate-900 border border-slate-800 px-2 py-[2px] rounded-sm">可投影</span>
+                                <span className="bg-slate-900 border border-slate-800 px-2 py-[2px] rounded-sm">可手機</span>
+                                <span className="bg-slate-900 border border-slate-800 px-2 py-[2px] rounded-sm">可回家練習</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div className="mt-8 pt-4 border-t border-slate-800/50 flex justify-between items-center text-[9px] text-slate-600 tracking-[0.3em] uppercase">
+                    <span>SECURITY CLEARANCE REQUIRED FOR ACCESS</span>
+                    <span>RESTRICTED SECTION // SSSH</span>
                 </div>
             </div>
         </footer>
