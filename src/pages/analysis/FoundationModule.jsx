@@ -143,7 +143,7 @@ export const FoundationModule = () => {
                     </div>
                     <div className="bg-white p-5 rounded-lg border border-slate-200 flex flex-col items-center text-center">
                         <div className="text-4xl mb-3">🕵️‍♂️</div>
-                        <h4 className="font-bold text-slate-800 mb-2">數據偵探 (Data Detective)</h4>
+                        <h4 className="font-bold text-slate-800 mb-2">真相濾鏡 (Data Detective)</h4>
                         <p className="text-sm text-slate-600 mb-4 flex-1">有些研究的推論充滿「神邏輯」。你能找出報告中過度推論的地方嗎？</p>
                         <a href="/game/data-detective" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold transition-colors w-full inline-block">進入推論抓錯挑戰</a>
                     </div>

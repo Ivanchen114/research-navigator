@@ -24,7 +24,7 @@ export const LiteratureReview = () => {
                             to="/game/citation-detective"
                             className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group text-lg"
                         >
-                            <span>進入文獻偵探遊戲</span>
+                            <span>進入遊戲：行動代號：引註追緝</span>
                             <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </Link>
                     </div>
@@ -79,12 +79,12 @@ export const LiteratureReview = () => {
                             <FileSearch size={16} className="text-amber-400" /> 搭配紙本學習單作答
                         </div>
                     </div>
-                    
+
                     <div className="space-y-6">
                         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-700">
-                            <h4 className="text-amber-300 font-bold mb-4 flex items-center gap-2"><FileText size={18}/> 【案發情境】</h4>
+                            <h4 className="text-amber-300 font-bold mb-4 flex items-center gap-2"><FileText size={18} /> 【案發情境】</h4>
                             <p className="text-slate-300 mb-6">下列是一位同學的改寫紀錄，請以特務的眼光判斷他是否犯了「換字抄襲」的錯誤。</p>
-                            
+
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-slate-800 p-5 rounded-xl border-l-4 border-slate-500 relative shadow-lg">
                                     <span className="absolute -top-3 left-4 bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded-md font-bold">原始文獻 (陳醫師, 2023)</span>
@@ -96,7 +96,7 @@ export const LiteratureReview = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-[1px] rounded-2xl">
                             <div className="bg-slate-900 text-white p-6 rounded-2xl">
                                 <h4 className="font-bold text-amber-400 mb-3 flex items-center gap-2 text-lg">
@@ -124,11 +124,11 @@ export const LiteratureReview = () => {
                     <h2 className="text-2xl font-bold text-slate-800">觀念二：直接引用與「三明治寫作法」</h2>
                 </div>
                 <div className="text-slate-700 leading-relaxed space-y-6">
-                    <p className="text-lg">當原文是定義、法律條文、權威名言或數據時，我們通常會選擇<strong>「直接引用」</strong>（全文照抄並加引號）。<br/>但直接引用不能硬生生地丟進文章裡，必須用<strong>三明治法</strong>包裹起來，讓上下文通順：</p>
-                    
+                    <p className="text-lg">當原文是定義、法律條文、權威名言或數據時，我們通常會選擇<strong>「直接引用」</strong>（全文照抄並加引號）。<br />但直接引用不能硬生生地丟進文章裡，必須用<strong>三明治法</strong>包裹起來，讓上下文通順：</p>
+
                     <div className="max-w-2xl mx-auto bg-slate-50 p-8 rounded-3xl border border-slate-200 space-y-6 relative mt-8">
                         <div className="absolute left-10 top-12 bottom-12 w-1.5 bg-amber-200 rounded-full hidden md:block"></div>
-                        
+
                         <div className="md:pl-16 relative">
                             <span className="absolute left-[-2rem] top-1/2 -translate-y-1/2 text-4xl hidden md:block">🍞</span>
                             <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm hover:shadow-md transition-shadow">
@@ -136,7 +136,7 @@ export const LiteratureReview = () => {
                                 <p className="text-slate-600">介紹這句話是誰說的，或是這句話出現的時空背景。</p>
                             </div>
                         </div>
-                        
+
                         <div className="md:pl-16 relative">
                             <span className="absolute left-[-2rem] top-1/2 -translate-y-1/2 text-4xl hidden md:block">🥩</span>
                             <div className="bg-white p-5 rounded-2xl border border-rose-200 shadow-sm hover:shadow-md transition-shadow">
@@ -144,7 +144,7 @@ export const LiteratureReview = () => {
                                 <p className="text-slate-600">放入引用的內容正文 <strong className="text-rose-600">(記得一定要加引號)</strong>。</p>
                             </div>
                         </div>
-                        
+
                         <div className="md:pl-16 relative">
                             <span className="absolute left-[-2rem] top-1/2 -translate-y-1/2 text-4xl hidden md:block">🍞</span>
                             <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-sm hover:shadow-md transition-shadow">
@@ -171,10 +171,10 @@ export const LiteratureReview = () => {
                             <FileSearch size={16} className="text-emerald-400" /> 搭配紙本學習單作答
                         </div>
                     </div>
-                    
+
                     <div className="space-y-6">
                         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-700">
-                            <h4 className="text-emerald-300 font-bold mb-4 flex items-center gap-2"><Info size={18}/> 【案發情境】</h4>
+                            <h4 className="text-emerald-300 font-bold mb-4 flex items-center gap-2"><Info size={18} /> 【案發情境】</h4>
                             <p className="text-slate-300 mb-4">請將下列名言引用到一篇關於「高中生讀書計畫」的文章中。</p>
                             <div className="bg-slate-800 p-5 rounded-xl border-l-4 border-emerald-500 relative shadow-lg">
                                 <span className="absolute -top-3 left-4 bg-emerald-900 text-emerald-300 text-xs px-2 py-1 rounded-md font-bold">重要證物 (來源：心理學家 Fuschia Sirois, 2018)</span>
@@ -183,7 +183,7 @@ export const LiteratureReview = () => {
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-[1px] rounded-2xl">
                             <div className="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-start">
                                 <div className="flex-1">
@@ -236,8 +236,8 @@ export const LiteratureReview = () => {
                                 </tr>
                                 <tr>
                                     <td className="p-3 font-medium text-slate-800">機構作者</td>
-                                    <td className="p-3 text-slate-600">一次：全稱<br/>二次：簡稱</td>
-                                    <td className="p-3 text-slate-600">(衛生福利部, 2024)<br/>(衛福部, 2024)</td>
+                                    <td className="p-3 text-slate-600">一次：全稱<br />二次：簡稱</td>
+                                    <td className="p-3 text-slate-600">(衛生福利部, 2024)<br />(衛福部, 2024)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -289,12 +289,12 @@ export const LiteratureReview = () => {
                             <FileSearch size={16} className="text-blue-400" /> 搭配紙本學習單作答
                         </div>
                     </div>
-                    
+
                     <div className="space-y-6">
                         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-700">
-                            <h4 className="text-blue-300 font-bold mb-4 flex items-center gap-2"><Info size={18}/> 【案發情境】</h4>
+                            <h4 className="text-blue-300 font-bold mb-4 flex items-center gap-2"><Info size={18} /> 【案發情境】</h4>
                             <p className="text-slate-300 mb-6">探員，我們收到了兩份互相對立的醫療情報，關於「高中生是否適合喝咖啡」。請綜合分析它們。</p>
-                            
+
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="bg-slate-800 p-5 rounded-xl border-t-4 border-indigo-500 relative shadow-lg">
                                     <div className="absolute top-0 right-0 p-2 opacity-10 text-6xl font-black italic">A</div>
@@ -308,7 +308,7 @@ export const LiteratureReview = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-[1px] rounded-2xl">
                             <div className="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-start">
                                 <div className="flex-1">
