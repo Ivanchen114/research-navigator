@@ -249,8 +249,8 @@ export const GameHub = () => {
                                         <div
                                             onClick={() => navigateToMission(mission.path)}
                                             className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${isLoggedIn
-                                                    ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
-                                                    : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
+                                                ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
+                                                : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
                                                 }`}
                                         >
                                             {/* Top Accent Line */}
@@ -265,11 +265,11 @@ export const GameHub = () => {
 
                                             {/* ACTIVE / LOCKED Stamp */}
                                             {isLoggedIn ? (
-                                                <div className="absolute top-16 right-4 sm:top-14 sm:right-6 border-2 border-amber-500/30 text-amber-500/40 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] pointer-events-none opacity-60 group-hover:opacity-100 scale-90 sm:scale-100 origin-top-right">
+                                                <div className="absolute top-20 right-8 sm:top-20 sm:right-28 border-2 border-amber-500/30 text-amber-500/40 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] pointer-events-none opacity-60 group-hover:opacity-100 scale-90 sm:scale-100">
                                                     ACTIVE
                                                 </div>
                                             ) : (
-                                                <div className="absolute top-16 right-4 sm:top-14 sm:right-6 border-2 border-slate-700 text-slate-600 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none opacity-60 scale-90 sm:scale-100 origin-top-right">
+                                                <div className="absolute top-20 right-8 sm:top-20 sm:right-28 border-2 border-slate-700 text-slate-600 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none opacity-60 scale-90 sm:scale-100">
                                                     LOCKED
                                                 </div>
                                             )}
