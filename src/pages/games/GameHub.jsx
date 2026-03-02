@@ -211,62 +211,83 @@ export const GameHub = () => {
                     </div>
                 )}
 
-                {/* 任務檔案庫 Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {RIB_MISSIONS.map((mission) => (
-                        <div
-                            key={mission.id}
-                            onClick={() => navigateToMission(mission.path)}
-                            className={`group relative bg-slate-900/60 rounded-3xl p-6 border transition-all duration-300 flex flex-col h-full backdrop-blur-md overflow-hidden
-                                ${isLoggedIn
-                                    ? 'border-slate-700 hover:border-amber-500/50 hover:bg-slate-800/80 cursor-pointer hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]'
-                                    : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
-                                }`}
-                        >
-                            {/* Hover effect gradient overlay */}
-                            {isLoggedIn && (
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                            )}
+                {/* 任務檔案庫 Timeline */}
+                <div className="relative max-w-4xl mx-auto py-10 mt-8">
+                    {/* 垂直軸心線 (Desktop only for full tree, mobile left-aligned) */}
+                    <div className="absolute left-[39px] md:left-1/2 top-4 bottom-4 w-1 flex flex-col items-center z-0 hidden md:flex">
+                        <div className="h-full w-full bg-slate-700/50 rounded-full cursor-pointer"></div>
+                    </div>
+                    {/* Mobile Timeline line */}
+                    <div className="absolute left-[39px] top-4 bottom-4 w-1 bg-slate-700/50 rounded-full z-0 md:hidden"></div>
 
-                            {/* Department Badge */}
-                            <div className="flex justify-between items-start mb-6 relative z-10">
-                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] border shadow-sm ${mission.departmentColor}`}>
-                                    {mission.department}
-                                </div>
-                                <div className={`p-3.5 rounded-2xl bg-slate-950/80 shadow-inner group-hover:scale-110 transition-transform border border-slate-700/50 ${isLoggedIn ? 'text-slate-300 group-hover:text-amber-400' : 'text-slate-600'}`}>
-                                    {mission.icon}
-                                </div>
-                            </div>
+                    <div className="space-y-12 relative z-10 w-full">
+                        {RIB_MISSIONS.map((mission, index) => {
+                            const isEven = index % 2 === 0;
+                            return (
+                                <div key={mission.id} className={`relative flex flex-col md:flex-row items-center gap-6 md:gap-0 ${isEven ? 'md:flex-row-reverse' : ''}`}>
 
-                            {/* Title & Desc */}
-                            <div className="mb-6 flex-1 relative z-10">
-                                <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded truncate max-w-full">{mission.english}</div>
-                                <h3 className={`text-2xl font-black mb-3 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
-                                    {mission.title}
-                                </h3>
-                                <div className={`text-xs font-bold mb-3 inline-block px-2.5 py-1 rounded border tracking-wider ${isLoggedIn ? 'bg-indigo-950/30 text-indigo-300 border-indigo-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
-                                    🎯 {mission.learningObjective}
-                                </div>
-                                <p className="text-slate-400 text-sm font-medium leading-relaxed group-hover:text-slate-300 transition-colors">
-                                    {mission.desc}
-                                </p>
-                            </div>
-
-                            {/* Action Button */}
-                            <div className="pt-5 border-t border-slate-700/50 flex items-center justify-between relative z-10">
-                                <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
-                                {isLoggedIn ? (
-                                    <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/30 px-3 py-1.5 rounded-lg border border-amber-500/20">
-                                        查閱檔案 <ArrowRight size={16} />
+                                    {/* 圓形節點標記 */}
+                                    <div className="absolute left-[39px] md:left-1/2 w-12 h-12 bg-slate-900 shadow-[0_0_15px_rgba(0,0,0,0.8)] rounded-full border-4 border-slate-700 -translate-x-1/2 flex items-center justify-center z-10 text-slate-500 font-black font-mono shadow-inner transition-colors">
+                                        {String(index + 1).padStart(2, '0')}
                                     </div>
-                                ) : (
-                                    <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
-                                        🔒 權限不足
+
+                                    {/* 卡片容器：控制寬度與左右貼齊 */}
+                                    <div className={`w-full pl-[90px] pr-4 md:px-0 md:w-1/2 flex ${isEven ? 'md:justify-start md:pr-12' : 'md:justify-end md:pl-12'}`}>
+                                        <div
+                                            onClick={() => navigateToMission(mission.path)}
+                                            className={`w-full group relative bg-slate-900/60 rounded-3xl p-6 border transition-all duration-300 flex flex-col backdrop-blur-md overflow-hidden ${isLoggedIn
+                                                    ? 'border-slate-700 hover:border-amber-500/50 hover:bg-slate-800/80 cursor-pointer hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]'
+                                                    : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
+                                                }`}
+                                        >
+                                            {/* Hover effect gradient overlay */}
+                                            {isLoggedIn && (
+                                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                                            )}
+
+                                            {/* Department Badge */}
+                                            <div className="flex justify-between items-start mb-6 relative z-10">
+                                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] border shadow-sm ${mission.departmentColor}`}>
+                                                    {mission.department}
+                                                </div>
+                                                <div className={`p-3.5 rounded-2xl bg-slate-950/80 shadow-inner group-hover:scale-110 transition-transform border border-slate-700/50 ${isLoggedIn ? 'text-slate-300 group-hover:text-amber-400' : 'text-slate-600'}`}>
+                                                    {mission.icon}
+                                                </div>
+                                            </div>
+
+                                            {/* Title & Desc */}
+                                            <div className="mb-6 flex-1 relative z-10">
+                                                <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded truncate max-w-full">{mission.english}</div>
+                                                <h3 className={`text-2xl font-black mb-3 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
+                                                    {mission.title}
+                                                </h3>
+                                                <div className={`text-[11px] font-bold mb-3 inline-block px-2.5 py-1 rounded border tracking-wider mt-1 ${isLoggedIn ? 'bg-indigo-950/30 text-indigo-300 border-indigo-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
+                                                    🎯 {mission.learningObjective}
+                                                </div>
+                                                <p className="text-slate-400 text-sm font-medium leading-relaxed group-hover:text-slate-300 transition-colors mt-2">
+                                                    {mission.desc}
+                                                </p>
+                                            </div>
+
+                                            {/* Action Button */}
+                                            <div className="pt-5 border-t border-slate-700/50 flex items-center justify-between relative z-10">
+                                                <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
+                                                {isLoggedIn ? (
+                                                    <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/30 px-3 py-1.5 rounded-lg border border-amber-500/20">
+                                                        查閱檔案 <ArrowRight size={16} />
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                                                        🔒 權限不足
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
 
             </div>
