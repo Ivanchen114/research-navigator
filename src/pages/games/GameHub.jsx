@@ -156,14 +156,14 @@ export const GameHub = () => {
                                 <span className="text-slate-400">總進度</span>
                                 <span className="text-amber-500 font-bold">0 / 6 案件完成</span>
                             </div>
-                            <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/50 relative">
+                            <div className="h-1.5 bg-slate-800 rounded-sm overflow-hidden border border-slate-700/50 relative">
                                 <div className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-amber-600 to-amber-400 w-[0%] transition-all duration-1000" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.5)' }}></div>
                             </div>
                         </div>
                     </div>
 
                     {/* 登入狀態儀表板 */}
-                    <div className="bg-slate-900/80 p-5 rounded-2xl border-t-[4px] border-amber-500 shadow-[0_0_30px_rgba(0,0,0,0.6)] min-w-[300px] backdrop-blur-sm relative overflow-hidden">
+                    <div className="bg-slate-900/80 p-5 rounded-sm border-t-[4px] border-amber-500 shadow-[0_0_30px_rgba(0,0,0,0.6)] min-w-[300px] backdrop-blur-sm relative overflow-hidden">
                         <div className="absolute -right-4 -top-4 text-amber-500/10">
                             <ShieldAlert size={100} />
                         </div>
@@ -177,12 +177,12 @@ export const GameHub = () => {
                                     value={inputName}
                                     onChange={(e) => setInputName(e.target.value)}
                                     placeholder="輸入探員姓名..."
-                                    className="bg-slate-950/80 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 font-bold shadow-inner placeholder-slate-600 transition-colors"
+                                    className="bg-slate-950/80 border border-slate-700 rounded-sm px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 font-bold shadow-inner placeholder-slate-600 transition-colors"
                                 />
                                 <button
                                     type="submit"
                                     disabled={!inputName.trim()}
-                                    className="bg-amber-600 hover:bg-amber-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:border-slate-700 text-slate-950 font-black py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)] disabled:shadow-none border border-amber-500/50"
+                                    className="bg-amber-600 hover:bg-amber-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:border-slate-700 text-slate-950 font-black py-2.5 rounded-sm flex items-center justify-center gap-2 transition-all shadow-[0_0_10px_rgba(245,158,11,0.2)] disabled:shadow-none border border-amber-500/50"
                                 >
                                     <LogIn size={18} /> 辦理報到手續
                                 </button>
@@ -192,8 +192,8 @@ export const GameHub = () => {
                                 <div className="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1 font-mono">
                                     <Activity size={14} className="animate-pulse" /> 安全連線已建立
                                 </div>
-                                <div className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-xl border border-slate-700/80 shadow-inner">
-                                    <div className="bg-emerald-950/50 p-2.5 rounded-full text-emerald-400 border border-emerald-500/20">
+                                <div className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-sm border border-slate-700/80 shadow-inner">
+                                    <div className="bg-emerald-950/50 p-2.5 rounded-sm text-emerald-400 border border-emerald-500/20">
                                         <UserCircle2 size={24} />
                                     </div>
                                     <div>
@@ -214,8 +214,8 @@ export const GameHub = () => {
 
                 {/* 歡迎訊息 */}
                 {isLoggedIn && (
-                    <div className="bg-emerald-950/40 border border-emerald-500/30 p-5 rounded-2xl mb-8 flex items-start gap-4 backdrop-blur-sm shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-                        <div className="bg-emerald-500/20 p-3 rounded-full text-emerald-400 shrink-0 border border-emerald-500/30 flex items-center justify-center">
+                    <div className="bg-emerald-950/40 border border-emerald-500/30 p-5 rounded-sm mb-8 flex items-start gap-4 backdrop-blur-sm shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                        <div className="bg-emerald-500/20 p-3 rounded-sm text-emerald-400 shrink-0 border border-emerald-500/30 flex items-center justify-center">
                             <ShieldAlert size={24} />
                         </div>
                         <div>
@@ -225,8 +225,8 @@ export const GameHub = () => {
                     </div>
                 )}
                 {!isLoggedIn && (
-                    <div className="bg-amber-950/40 border-l-[6px] border-amber-500/80 border-y border-r border-slate-700/50 p-5 rounded-2xl mb-8 flex items-start gap-4 backdrop-blur-sm shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-                        <div className="bg-amber-500/20 p-3 rounded-full text-amber-500 shrink-0 border border-amber-500/30 flex items-center justify-center">
+                    <div className="bg-amber-950/40 border-l-[6px] border-amber-500/80 border-y border-r border-slate-700/50 p-5 rounded-sm mb-8 flex items-start gap-4 backdrop-blur-sm shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+                        <div className="bg-amber-500/20 p-3 rounded-sm text-amber-500 shrink-0 border border-amber-500/30 flex items-center justify-center">
                             <ShieldAlert size={24} />
                         </div>
                         <div>
@@ -248,7 +248,7 @@ export const GameHub = () => {
                                     <div className="w-full flex h-full">
                                         <div
                                             onClick={() => navigateToMission(mission.path)}
-                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${isLoggedIn
+                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-sm p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${isLoggedIn
                                                 ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
                                                 : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
                                                 }`}
@@ -287,18 +287,18 @@ export const GameHub = () => {
                                                         {mission.department}
                                                     </div>
                                                 </div>
-                                                <div className={`p-3.5 rounded-2xl bg-slate-950/80 shadow-inner group-hover:scale-110 transition-transform border border-slate-700/50 ${isLoggedIn ? 'text-slate-300 group-hover:text-amber-400' : 'text-slate-600'}`}>
+                                                <div className={`p-3.5 rounded-sm bg-slate-950/80 shadow-inner group-hover:scale-110 transition-transform border border-slate-700/50 ${isLoggedIn ? 'text-slate-300 group-hover:text-amber-400' : 'text-slate-600'}`}>
                                                     {mission.icon}
                                                 </div>
                                             </div>
 
                                             {/* Title & Desc */}
                                             <div className="mb-6 flex-1 relative z-10">
-                                                <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded truncate max-w-full">{mission.english}</div>
+                                                <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded-sm truncate max-w-full">{mission.english}</div>
                                                 <h3 className={`text-2xl font-black mb-3 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
                                                     {mission.title}
                                                 </h3>
-                                                <div className={`text-[11px] font-bold mb-3 inline-block px-2.5 py-1 rounded border tracking-wider mt-1 ${isLoggedIn ? 'bg-indigo-950/30 text-indigo-300 border-indigo-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
+                                                <div className={`text-[11px] font-bold mb-3 inline-block px-2.5 py-1 rounded-sm border tracking-wider mt-1 ${isLoggedIn ? 'bg-indigo-950/30 text-indigo-300 border-indigo-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
                                                     🎯 {mission.learningObjective}
                                                 </div>
                                                 <p className="text-slate-400 text-sm font-medium leading-relaxed group-hover:text-slate-300 transition-colors mt-2">
@@ -311,18 +311,18 @@ export const GameHub = () => {
                                                 {/* Tags Row */}
                                                 <div className="flex flex-wrap gap-2">
                                                     {mission.tags.map((tag, i) => (
-                                                        <span key={i} className="bg-slate-900/80 border border-slate-700/50 text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded tracking-wide shadow-inner">#{tag}</span>
+                                                        <span key={i} className="bg-slate-900/80 border border-slate-700/50 text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded-sm tracking-wide shadow-inner">#{tag}</span>
                                                     ))}
                                                 </div>
 
                                                 <div className="flex items-center justify-between w-full">
                                                     <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
                                                     {isLoggedIn ? (
-                                                        <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/20 hover:bg-amber-900/40 px-3 py-1.5 rounded-lg border border-amber-500/20 backdrop-blur-sm">
+                                                        <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/20 hover:bg-amber-900/40 px-3 py-1.5 rounded-sm border border-amber-500/20 backdrop-blur-sm">
                                                             解密檔案 <ArrowRight size={16} />
                                                         </div>
                                                     ) : (
-                                                        <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                                                        <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-sm border border-slate-800">
                                                             🔒 權限不足
                                                         </div>
                                                     )}
