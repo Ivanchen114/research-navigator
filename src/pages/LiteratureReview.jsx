@@ -201,22 +201,24 @@ export const LiteratureReview = () => {
                         </div>
 
                         <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-[1px] rounded-2xl">
-                            <div className="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-start">
-                                <div className="flex-1">
-                                    <h4 className="font-bold text-emerald-400 mb-3 flex items-center gap-2 text-lg">
-                                        <PenTool size={20} /> 特務行動指示
-                                    </h4>
-                                    <p className="text-slate-300 leading-relaxed mb-4 tracking-wide">
-                                        請在你的<strong>紙本學習單</strong>（實戰演練 2）上作答。運用三明治法則，將長官給的「重要證物」完美地融入你的情報分析報告中。
-                                    </p>
-                                </div>
-                                <div className="bg-slate-800 border border-emerald-900/50 p-5 rounded-xl md:w-72 shrink-0 shadow-inner">
-                                    <span className="block mb-3 font-bold text-emerald-400 text-sm">💡 破案步驟拆解：</span>
-                                    <ul className="space-y-3 text-sm text-slate-300">
-                                        <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">先點出一般人對多工處理的迷思</span></li>
-                                        <li className="flex gap-3 items-start"><span className="text-rose-500 text-lg">🥩</span> <span className="pt-0.5">引用 Miller 的觀點 <strong className="text-rose-300">(加引號)</strong></span></li>
-                                        <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">總結這對深度學習習慣的啟示</span></li>
-                                    </ul>
+                            <div className="bg-slate-900 text-white p-6 rounded-2xl">
+                                <div className="flex flex-col md:flex-row gap-6 items-start">
+                                    <div className="flex-1">
+                                        <h4 className="font-bold text-emerald-400 mb-3 flex items-center gap-2 text-lg">
+                                            <PenTool size={20} /> 特務行動指示
+                                        </h4>
+                                        <p className="text-slate-300 leading-relaxed mb-4 tracking-wide">
+                                            請在你的<strong>紙本學習單</strong>（實戰演練 2）上作答。運用三明治法則，將長官給的「重要證物」完美地融入你的情報分析報告中。
+                                        </p>
+                                    </div>
+                                    <div className="bg-slate-800 border border-emerald-900/50 p-5 rounded-xl md:w-72 shrink-0 shadow-inner">
+                                        <span className="block mb-3 font-bold text-emerald-400 text-sm">💡 破案步驟拆解：</span>
+                                        <ul className="space-y-3 text-sm text-slate-300">
+                                            <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">先點出一般人對多工處理的迷思</span></li>
+                                            <li className="flex gap-3 items-start"><span className="text-rose-500 text-lg">🥩</span> <span className="pt-0.5">引用 Miller 的觀點 <strong className="text-rose-300">(加引號)</strong></span></li>
+                                            <li className="flex gap-3 items-start"><span className="text-amber-500 text-lg">🍞</span> <span className="pt-0.5">總結這對深度學習習慣的啟示</span></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
@@ -345,22 +347,24 @@ export const LiteratureReview = () => {
                         </div>
 
                         <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-[1px] rounded-2xl">
-                            <div className="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row gap-6 items-start">
-                                <div className="flex-1">
-                                    <h4 className="font-bold text-blue-400 mb-3 flex items-center gap-2 text-lg">
-                                        <PenTool size={20} /> 最終考核任務
-                                    </h4>
-                                    <p className="text-slate-300 leading-relaxed tracking-wide">
-                                        請在<strong>紙本學習單</strong>（實戰演練 3）上，寫下一段約 50-80 字的短文。綜合考量這兩份情報，產出一份客觀的最終結論報告。
-                                    </p>
-                                </div>
-                                <div className="bg-slate-800 border border-blue-900/50 p-5 rounded-xl md:w-72 shrink-0 shadow-inner">
-                                    <span className="block mb-3 font-bold text-blue-400 text-sm">🏅 總部評分標準：</span>
-                                    <ul className="space-y-3 text-sm text-slate-300">
-                                        <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>同時提及正反面觀點</span></li>
-                                        <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>正確標註兩處情報出處</span></li>
-                                        <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>提出個人見解或平衡建議</span></li>
-                                    </ul>
+                            <div className="bg-slate-900 text-white p-6 rounded-2xl">
+                                <div className="flex flex-col md:flex-row gap-6 items-start">
+                                    <div className="flex-1">
+                                        <h4 className="font-bold text-blue-400 mb-3 flex items-center gap-2 text-lg">
+                                            <PenTool size={20} /> 最終考核任務
+                                        </h4>
+                                        <p className="text-slate-300 leading-relaxed tracking-wide">
+                                            請在<strong>紙本學習單</strong>（實戰演練 3）上，寫下一段約 50-80 字的短文。綜合考量這兩份情報，產出一份客觀的最終結論報告。
+                                        </p>
+                                    </div>
+                                    <div className="bg-slate-800 border border-blue-900/50 p-5 rounded-xl md:w-72 shrink-0 shadow-inner">
+                                        <span className="block mb-3 font-bold text-blue-400 text-sm">🏅 總部評分標準：</span>
+                                        <ul className="space-y-3 text-sm text-slate-300">
+                                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>同時提及正反面觀點</span></li>
+                                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>正確標註兩處情報出處</span></li>
+                                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-500 shrink-0 mt-0.5" /> <span>提出個人見解或平衡建議</span></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
 
