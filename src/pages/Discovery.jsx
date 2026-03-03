@@ -1,55 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { PromptBox, AIInstructionDropdown } from '../components/analysis/PromptBox';
-import { Search, Lightbulb, PenTool, ArrowRight, Eye, ShieldAlert, BrainCircuit } from 'lucide-react';
+import { Search, Eye, BrainCircuit, ArrowRight } from 'lucide-react';
 
 export const Discovery = () => {
-    const [observation, setObservation] = useState('');
-    const [expectation, setExpectation] = useState('');
-    const [reality, setReality] = useState('');
-    const [draftQuestion, setDraftQuestion] = useState('');
-
-    const generatePrompt = () => {
-        return `【角色】你是一位嚴格但有啟發性的高中專題研究指導老師。
-【任務】請對學生的「問題意識」初稿進行健檢，並給予引導。
-【規則】
-1. 絕對不要直接給出完整的研究題目。
-2. 請指出這個問題是否太過常識（AI 就能直接回答）？
-3. 請引導學生思考：這個現象背後的「衝突點」或「變項」還可以怎麼深化？
-
-【學生草稿】
-- 觀察到的具體現象：${observation || '(未填寫)'}
-- 原本理所當然的期待：${expectation || '(未填寫)'}
-- 實際發生的落差：${reality || '(未填寫)'}
-- 初步提出的問題：${draftQuestion || '(未填寫)'}`;
-    };
-
     return (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
 
-            {/* Header Section */}
+            {/* Header */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
                 <div className="relative z-10 text-center">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 shadow-sm mb-4">
-                        <Search size={16} /> W0–W2 發現階段
+                        <Search size={16} /> W0 觀察力啟動
                     </div>
                     <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
                         第一步：<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 drop-shadow-sm">發掘問題</span>
                     </h1>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                        好的研究不是坐在書桌前想出來的，而是從生活中的「不尋常」看出來的。<br /> 帶上偵探的裝備，我們開始辦案吧！
+                        好的研究不是坐在書桌前想出來的，而是從生活中的「不尋常」看出來的。<br />
+                        帶上偵探的裝備，我們開始辦案吧！
                     </p>
                 </div>
             </header>
 
-            {/* The 3 Swords Section */}
-            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 hover:shadow-md transition-shadow">
+            {/* 偵探的三把劍 */}
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
                 <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <ShieldAlert className="text-blue-600" size={28} />
-                    偵探的三把劍 (W0)
+                    🗡️ 偵探的三把劍 (W0)
                 </h2>
                 <div className="grid md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition flex flex-col">
@@ -84,145 +61,72 @@ export const Discovery = () => {
                 </div>
             </section>
 
-            {/* W1 Section: Research Question Types */}
-            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <Lightbulb className="text-amber-500" size={28} />
-                    什麼是好的研究問題？(W1)
+            {/* 生活觀察種子任務 */}
+            <section className="bg-amber-50 rounded-3xl border border-amber-200 p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-amber-800 mb-4 flex items-center gap-3">
+                    🌱 今天的任務：種下種子
                 </h2>
-                <div className="space-y-6">
-                    <p className="text-slate-600 text-sm">好的研究問題有一個 magic filter：<strong className="text-slate-800">「這個問題 Google 搜尋得到答案嗎？AI 能直接回答嗎？」</strong></p>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="bg-red-50 rounded-lg border border-red-100 p-4">
-                            <h4 className="font-bold text-red-700 mb-3">❌ 不好的研究問題</h4>
-                            <ul className="space-y-2 text-sm text-slate-700">
-                                <li className="flex gap-2"><span className="text-red-400 shrink-0">✗</span>「什麼是溫室效應？」<span className="text-xs text-slate-400 ml-1">（AI/維基直接答）</span></li>
-                                <li className="flex gap-2"><span className="text-red-400 shrink-0">✗</span>「青少年喜歡滑手機嗎？」<span className="text-xs text-slate-400 ml-1">（答案太顯而易見）</span></li>
-                                <li className="flex gap-2"><span className="text-red-400 shrink-0">✗</span>「如何解決貧窮？」<span className="text-xs text-slate-400 ml-1">（範圍太大，無法執行）</span></li>
-                            </ul>
-                        </div>
-                        <div className="bg-green-50 rounded-lg border border-green-100 p-4">
-                            <h4 className="font-bold text-green-700 mb-3">✅ 好的研究問題</h4>
-                            <ul className="space-y-2 text-sm text-slate-700">
-                                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>「本校學生為什麼寧買貴又難吃的便當？」</li>
-                                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>「社群媒體使用時間與本校高一生睡眠時間的關係？」</li>
-                                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>「加入社團的學生和沒加入的，學業成績有差異嗎？」</li>
-                            </ul>
-                        </div>
+                <p className="text-slate-700 mb-4 leading-relaxed">
+                    在學習單 Part 0 第 3 題，寫下你的一個「生活觀察」——
+                    <strong className="text-amber-800">最近有什麼現象讓你感到好奇、奇怪或困擾？</strong>
+                </p>
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="bg-white rounded-xl p-4 border border-amber-100 shadow-sm">
+                        <p className="text-xs text-amber-600 font-bold mb-2 uppercase tracking-wider">💡 可以這樣觀察</p>
+                        <ul className="space-y-2 text-sm text-slate-700">
+                            <li>🏫 學校裡：為什麼合作社熱食總是搶不到？</li>
+                            <li>👥 班級中：為什麼大家都喜歡聚集在走廊？</li>
+                            <li>📱 日常生活：為什麼某個 app 越用越上癮？</li>
+                        </ul>
                     </div>
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm">
-                        <span className="font-bold text-amber-800">🔑 三個關鍵字：</span>
-                        <span className="text-slate-700"> 在地（你的學校/社區）、可測量（能收到數據）、有衝突點（違背常理的現象）</span>
+                    <div className="bg-white rounded-xl p-4 border border-amber-100 shadow-sm">
+                        <p className="text-xs text-red-600 font-bold mb-2 uppercase tracking-wider">⚠️ 老師的提醒</p>
+                        <ul className="space-y-2 text-sm text-slate-700">
+                            <li>❌ 不要寫「社會問題」（太大，無法研究）</li>
+                            <li>❌ 不要寫「普通常識」（AI 能直接回答的）</li>
+                            <li>✅ 要寫「你真的看得見、摸得到」的現象</li>
+                        </ul>
                     </div>
+                </div>
+                <div className="bg-amber-100 rounded-xl p-4 border border-amber-300">
+                    <p className="text-amber-900 font-bold text-sm">
+                        📢 這個觀察，下週 W1 上課要用！請認真寫，它是你研究問題的第一顆種子。
+                    </p>
                 </div>
             </section>
 
-            {/* The Question Builder */}
-            <section>
-                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="bg-slate-800 text-white p-6 md:p-8">
-                        <h2 className="text-2xl font-bold flex items-center gap-3">
-                            <PenTool className="text-blue-400" size={28} />
-                            問題意識鍛鍊所 (W2)
-                        </h2>
-                        <p className="text-slate-300 mt-2">
-                            不要問「AI 知道答案」的問題（如：什麼是溫室效應？）。<br />
-                            要問「只有在你的學校、你的社團、你的生活中」才看得到的在地問題。
-                        </p>
-                    </div>
-
-                    <div className="p-6 md:p-8 space-y-8">
-                        {/* Step 1 */}
-                        <div className="space-y-3">
-                            <h3 className="text-lg font-bold justify-start flex items-center gap-2 text-slate-800">
-                                <span className="bg-blue-100 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm">1</span>
-                                覺察現象 (Observation)
-                            </h3>
-                            <p className="text-sm text-slate-500">像攝影機一樣，你具體看到了什麼畫面？（例：每天中午，合作社賣 65 元的難吃便當總是大排長龍，而旁邊 50 元的卻沒人買。）</p>
-                            <textarea
-                                className="w-full border border-slate-300 rounded-lg p-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all min-h-[100px]"
-                                placeholder="請客觀描述你看到的場景..."
-                                value={observation}
-                                onChange={(e) => setObservation(e.target.value)}
-                            />
-                        </div>
-
-                        {/* Step 2 */}
-                        <div className="space-y-3 bg-slate-50 p-6 rounded-xl border border-slate-100">
-                            <h3 className="text-lg font-bold justify-start flex items-center gap-2 text-slate-800">
-                                <span className="bg-blue-100 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm">2</span>
-                                發現落差 (The Gap)
-                            </h3>
-                            <p className="text-sm text-slate-500 mb-4">為什麼這個現象很奇怪？它違背了什麼常理？</p>
-
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1">A. 理所當然的期待 (應該要...)</label>
-                                    <textarea
-                                        className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
-                                        placeholder="例：學生應該會想省錢買便宜的。"
-                                        value={expectation}
-                                        onChange={(e) => setExpectation(e.target.value)}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-1">B. 實際發生的現象 (但卻...)</label>
-                                    <textarea
-                                        className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
-                                        placeholder="例：卻寧願排隊買貴又難吃的。"
-                                        value={reality}
-                                        onChange={(e) => setReality(e.target.value)}
-                                    />
-                                </div>
+            {/* 本週學習路徑 */}
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8">
+                <h2 className="text-xl font-bold text-slate-800 mb-5">📍 W0 → W2 學習路徑</h2>
+                <div className="flex flex-col md:flex-row items-stretch gap-3">
+                    {[
+                        { step: 'W0', title: '觀察力啟動', desc: '培養看見「不尋常」的眼睛，種下觀察種子', active: true },
+                        { step: 'W1', title: '研究啟動 & AI-RED 公約', desc: 'AI 模仿遊戲 + 簽署公約 + 人機協作示範', active: false, path: '/w1' },
+                        { step: 'W2', title: '問題意識鍛鍊', desc: '把觀察 → 落差 → 研究問題，AI 健檢你的草稿', active: false, path: '/problem-focus' },
+                    ].map((item, i) => (
+                        <React.Fragment key={item.step}>
+                            <div className={`flex-1 rounded-xl p-4 border ${item.active ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
+                                <div className={`text-xs font-mono font-bold mb-1 ${item.active ? 'text-blue-600' : 'text-slate-400'}`}>{item.step}</div>
+                                <div className={`font-bold text-sm mb-1 ${item.active ? 'text-blue-800' : 'text-slate-600'}`}>{item.title}</div>
+                                <p className="text-xs text-slate-500">{item.desc}</p>
+                                {item.path && (
+                                    <Link to={item.path} className="mt-2 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline font-medium">
+                                        前往 <ArrowRight size={12} />
+                                    </Link>
+                                )}
                             </div>
-                            <div className="flex justify-center mt-2">
-                                <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold border border-red-200">
-                                    ↑ 這個衝突點，就是研究的價值 ↑
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Step 3 */}
-                        <div className="space-y-3">
-                            <h3 className="text-lg font-bold justify-start flex items-center gap-2 text-slate-800">
-                                <span className="bg-blue-100 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-sm">3</span>
-                                試寫問題 (The Question)
-                            </h3>
-                            <p className="text-sm text-slate-500">基於上述落差，用「為什麼」或「如何」開頭，寫下你的研究問題。</p>
-                            <textarea
-                                className="w-full border border-blue-300 bg-blue-50 rounded-lg p-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-blue-900 min-h-[80px]"
-                                placeholder="例：為什麼本校學生在購買午餐時，展現出非理性的消費行為？背後有哪些影響因素？"
-                                value={draftQuestion}
-                                onChange={(e) => setDraftQuestion(e.target.value)}
-                            />
-                        </div>
-
-                        {/* AI Assistant Hook */}
-                        <div className="pt-6 border-t border-slate-200">
-                            <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                                <Lightbulb className="text-amber-500" />
-                                呼叫 AI 指導老師
-                            </h3>
-                            <p className="text-sm text-slate-600 mb-4">寫得差不多了嗎？生成專屬指令，讓 AI 幫你健檢這個問題是否具備研究價值（AI-RED 提示：請自行判斷 AI 的建議是否合理，不要照單全收！）。</p>
-
-                            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                <PromptBox>
-                                    {generatePrompt()}
-                                </PromptBox>
-                            </div>
-                        </div>
-
-                    </div>
+                            {i < 2 && <div className="hidden md:flex items-center text-slate-300 text-2xl">→</div>}
+                        </React.Fragment>
+                    ))}
                 </div>
             </section>
 
-            {/* Navigation to next step */}
-            <div className="flex justify-end pt-8 pb-12">
-                <Link to="/wizard" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md hover:shadow-lg">
-                    問題寫好了，前進「方法快篩」 <ArrowRight size={20} />
+            {/* Navigation */}
+            <div className="flex justify-end pt-4 pb-12">
+                <Link to="/w1" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md hover:shadow-lg">
+                    觀察種子種好了，前進 W1 <ArrowRight size={20} />
                 </Link>
             </div>
-
         </div>
     );
 };

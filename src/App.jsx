@@ -5,6 +5,8 @@ import { Home } from './pages/Home';
 import { Wizard } from './pages/Wizard';
 import { AnalysisHub } from './pages/AnalysisHub';
 import { Discovery } from './pages/Discovery';
+import { W1Page } from './pages/W1Page';
+import { ProblemFocus } from './pages/ProblemFocus';
 import { ClinicPage } from './pages/ClinicPage';
 import { ToolDesignPage } from './pages/ToolDesignPage';
 import { GameHub } from './pages/games/GameHub';
@@ -25,6 +27,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="discovery" element={<Discovery />} />
+          <Route path="w1" element={<W1Page />} />
+          <Route path="problem-focus" element={<ProblemFocus />} />
           <Route path="wizard" element={<Wizard />} />
           <Route path="clinic" element={<ClinicPage />} />
           <Route path="literature-review" element={<LiteratureReview />} />
