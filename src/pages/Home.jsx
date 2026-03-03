@@ -49,14 +49,13 @@ export const Home = () => {
                             </h3>
                             <p className="text-slate-600 flex-1">
                                 「我還沒有題目...」或「我的問題好像太大太廢話...」<br />
-                                沒關係，來這裡用<strong>發掘問題筆記本</strong>幫你的現象找落差！
+                                這裡有：<strong>W0 觀察力</strong>、<strong>W1 AI-RED 公約</strong> 與 <strong>W2 問題意識</strong>。
                             </p>
-                            <Button
-                                variant="outline"
-                                className="w-full mt-4 group-hover:bg-blue-600 group-hover:text-white border-blue-600"
-                            >
-                                進入問題發掘所 <ArrowRight size={16} className="ml-2" />
-                            </Button>
+                            <div className="grid grid-cols-1 gap-2 w-full mt-2">
+                                <Button variant="outline" size="sm" className="text-xs h-8 border-slate-200" onClick={(e) => { e.stopPropagation(); navigate('/discovery'); }}>W0 觀察力啟動</Button>
+                                <Button variant="outline" size="sm" className="text-xs h-8 border-slate-200" onClick={(e) => { e.stopPropagation(); navigate('/w1'); }}>W1 AI-RED 公約</Button>
+                                <Button variant="outline" size="sm" className="text-xs h-8 border-slate-200" onClick={(e) => { e.stopPropagation(); navigate('/problem-focus'); }}>W2 問題意識鍛鍊</Button>
+                            </div>
                         </CardContent>
                     </Card>
 
