@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Menu, X, Home, Navigation2, BarChart2, Search, BookOpen, Users, Gamepad2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp, ShieldAlert, PenTool } from 'lucide-react';
+import { Menu, X, Home, Navigation2, BarChart2, Search, BookOpen, Users, Gamepad2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp, ShieldAlert, PenTool, ShieldCheck, Clock, Target } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 export const Layout = () => {
@@ -19,33 +19,41 @@ export const Layout = () => {
             phase: '🔍 探索階段',
             label: '1️⃣ 問題意識',
             items: [
-                { name: '發掘問題 W0 (觀察力)', path: '/discovery', icon: <Search size={18} /> },
-                { name: 'AI-RED 公約 W1', path: '/w1', icon: <ShieldAlert size={18} className="text-amber-500" /> },
-                { name: '問題意識 W2', path: '/problem-focus', icon: <PenTool size={18} /> },
+                { name: '發掘問題 (W0)', path: '/discovery', icon: <Search size={18} /> },
+                { name: 'AI-RED 公約 (W1)', path: '/w1', icon: <ShieldAlert size={18} className="text-amber-500" /> },
+                { name: '問題意識 (W2)', path: '/problem-focus', icon: <PenTool size={18} /> },
             ]
         },
         {
-            label: '2️⃣ 研究方法',
+            label: '2️⃣ 研究規劃',
             items: [
                 { name: '方法快篩 (W3-W4)', path: '/wizard', icon: <Navigation2 size={18} /> },
                 { name: '研究診所 (W5)', path: '/clinic', icon: <Stethoscope size={18} /> },
+                { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
                 { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
             ]
         },
         {
-            phase: '🎒 裝備階段',
-            label: '3️⃣ 資料蒐集',
+            phase: '🎒 裝備與執行',
+            label: '3️⃣ 工具準備',
             items: [
-                { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
                 { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> }
             ]
         },
         {
-            phase: '📊 實戰分析',
-            label: '4️⃣ 圖表分析',
+            label: '4️⃣ 執行週 (W10-W12)',
             items: [
-                { name: '解讀與結論 (W10+)', path: '/analysis', icon: <BarChart2 size={18} /> },
-                { name: '圖表選用原則 (W10+)', path: '/chart-selection', icon: <TrendingUp size={18} /> }
+                { name: '定案與倫理 (W10)', path: '/w10', icon: <ShieldCheck size={18} /> },
+                { name: '研究診所 I (W11)', path: '/w11', icon: <Clock size={18} /> },
+                { name: '中期盤點 (W12)', path: '/w12', icon: <Target size={18} /> }
+            ]
+        },
+        {
+            phase: '📊 實戰分析',
+            label: '5️⃣ 分析與報告',
+            items: [
+                { name: '解讀與結論 (W13+)', path: '/analysis', icon: <BarChart2 size={18} /> },
+                { name: '圖表選用原則 (W13+)', path: '/chart-selection', icon: <TrendingUp size={18} /> }
             ]
         }
     ];

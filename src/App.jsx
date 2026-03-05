@@ -9,6 +9,9 @@ import { W1Page } from './pages/W1Page';
 import { ProblemFocus } from './pages/ProblemFocus';
 import { ClinicPage } from './pages/ClinicPage';
 import { ToolDesignPage } from './pages/ToolDesignPage';
+import { W10Page } from './pages/W10Page';
+import { W11Page } from './pages/W11Page';
+import { W12Page } from './pages/W12Page';
 import { GameHub } from './pages/games/GameHub';
 import { ToolQuizGame } from './pages/games/ToolQuizGame';
 import { CitationDetectiveGame } from './pages/games/CitationDetectiveGame';
@@ -34,6 +37,9 @@ function App() {
           <Route path="literature-review" element={<LiteratureReview />} />
           <Route path="team-formation" element={<TeamFormation />} />
           <Route path="tool-design" element={<ToolDesignPage />} />
+          <Route path="w10" element={<W10Page />} />
+          <Route path="w11" element={<W11Page />} />
+          <Route path="w12" element={<W12Page />} />
           <Route path="analysis" element={<AnalysisHub />} />
           <Route path="chart-selection" element={<ChartSelection />} />
 
