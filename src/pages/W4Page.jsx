@@ -170,17 +170,21 @@ export const W4Page = () => {
                         </div>
 
                         {/* 海報格式參考 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2">📋 海報格式參考</label>
-                            <div className="bg-slate-900 text-slate-300 rounded-xl p-4 font-mono text-sm space-y-1">
-                                <div className="text-amber-400 font-bold text-center border-b border-slate-700 pb-2 mb-2">【吸引人的標題，用問句！】</div>
-                                <div>👥 研究對象：{myWho || '___________'}</div>
-                                <div>📋 研究方法：{myHow || '___________'}</div>
-                                <div className="pt-1">🎯 預期發現：</div>
-                                <div className="pl-4">• 假設一：___________</div>
-                                <div className="pl-4">• 假設二：___________</div>
-                                <div className="pl-4">• 假設三：___________</div>
-                                <div className="pt-2 text-slate-500 text-right text-xs">姓名 / 班級座號</div>
+                        <div className="pt-4 border-t border-slate-100">
+                            <label className="font-bold text-slate-700 text-sm block mb-4 flex items-center gap-2">
+                                <BookOpen size={16} className="text-indigo-500" /> 📋 海報格式參考範例
+                            </label>
+                            <div className="bg-slate-50 rounded-2xl p-4 md:p-6 border border-slate-200">
+                                <div className="max-w-md mx-auto shadow-xl rounded-lg overflow-hidden border border-slate-300 transform transition-transform hover:scale-[1.02]">
+                                    <img
+                                        src="/Users/Ivan/.gemini/antigravity/brain/aded99e8-cb68-4fa5-bf8d-728e8c91d963/user_research_poster.png"
+                                        alt="Research Poster Template"
+                                        className="w-full h-auto block"
+                                    />
+                                </div>
+                                <p className="text-center text-slate-500 text-xs mt-4 italic">
+                                    💡 提示：海報標題要夠吸引人（問句式），內容要簡潔好讀。最後請**手寫在 A4 紙上**。
+                                </p>
                             </div>
                         </div>
                     </div>
