@@ -136,6 +136,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此調查初步回答了關於社團參與是否會影響學業表現的提問。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "本調查僅為單校橫斷面數據，未控制其他變項影響。" }
                 ]
@@ -165,6 +170,11 @@ const caseData = [
                     { text: "不吃早餐的學生" },
                     { text: "更容易", suspect: true },
                     { text: "遲到。" }
+                ]
+            },
+            {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "研究結果回應了關於學生生活作息習慣對出勤影響的探討。" }
                 ]
             },
             {
@@ -202,6 +212,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此結論對應了我們欲探討的「課外學習投入與主觀成效之關係」的研究問題。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "此為自評問卷，受主觀感受影響。" }
                 ]
@@ -234,6 +249,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "報告結果回應了學校對新型態閱讀課程實施成效的評估需求。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "前後測間隔三個月，測驗題型相同。" }
                 ]
@@ -261,6 +281,11 @@ const caseData = [
                 type: "interpretive", icon: "🧠", label: "詮釋", parts: [
                     { text: "近半數", suspect: true },
                     { text: "學生表示課業考試是其主要壓力來源。" }
+                ]
+            },
+            {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此調查初步解答了目前校園中多數學生面臨的困境核心。" }
                 ]
             },
             {
@@ -297,6 +322,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "本研究證實了關於睡前螢幕使用時間對睡眠長度存在影響的假設。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "此為自我報告數據，可能有回憶偏誤。" }
                 ]
@@ -330,6 +360,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此調查回應了關於三校學生對合作社評價差異的提問。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "三校樣本大小不同（A 校僅 50 人），需注意代表性。" }
                 ]
@@ -359,6 +394,11 @@ const caseData = [
                     { text: "運動頻率越高的學生，焦慮自評分數" },
                     { text: "有越低的趨勢", suspect: true },
                     { text: "。" }
+                ]
+            },
+            {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此研究初步解答了規律運動習慣與學生心理健康關聯的探討。" }
                 ]
             },
             {
@@ -398,6 +438,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "本研究數據對應了目前性別在特定學科表現差異的研究問題。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "僅一次段考無法代表整體能力，3 分差距需統計檢定。" }
                 ]
@@ -429,6 +474,11 @@ const caseData = [
                     { text: "線上學習平台的教學效果" },
                     { text: "持續穩定", suspect: true, isError: true },
                     { text: "進步。" }
+                ]
+            },
+            {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此結果回應了計畫目標中關於線上學習平台近期導入後追蹤成效的評估需求。" }
                 ]
             },
             {
@@ -464,6 +514,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此研究回應了關於學生通勤方式是否影響出勤狀況的討論。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "可能受通勤距離、天氣、個人習慣等因素干擾。" }
                 ]
@@ -492,6 +547,11 @@ const caseData = [
             {
                 type: "interpretive", icon: "🧠", label: "詮釋", parts: [
                     { text: "自帶便當是最受歡迎的午餐選擇。" }
+                ]
+            },
+            {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "本調查初步解答了校方對於學生午餐飲食偏好分佈的疑問。" }
                 ]
             },
             {
@@ -531,6 +591,11 @@ const caseData = [
                 ]
             },
             {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "此分析對應了各班階段性學習成效追蹤與比較的研究目的。" }
+                ]
+            },
+            {
                 type: "critical", icon: "🔍", label: "批判", parts: [
                     { text: "週考僅一次，且各班授課教師不同，需謹慎比較。" }
                 ]
@@ -560,6 +625,11 @@ const caseData = [
             {
                 type: "interpretive", icon: "🧠", label: "詮釋", parts: [
                     { text: "學生對研究課程的滿意度逐漸提高。" }
+                ]
+            },
+            {
+                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                    { text: "報告結果回應了研究計畫中關於學生長期滿意度的趨勢探討。" }
                 ]
             },
             {
@@ -980,7 +1050,7 @@ export const DataDetectiveGame = () => {
 
                         <div className="space-y-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent flex-1 pb-4">
                             {current.layers.map((layer, layerIdx) => {
-                                const exhibitLabels = ['EXHIBIT A', 'EXHIBIT B', 'EXHIBIT C'];
+                                const exhibitLabels = ['EXHIBIT A', 'EXHIBIT B', 'EXHIBIT C', 'EXHIBIT D'];
                                 const isSelectedLayer = selectedLayer === layer.type;
                                 const isWrongLayer = wrongLayers.includes(layer.type);
 
@@ -988,6 +1058,7 @@ export const DataDetectiveGame = () => {
                                 const layerColors = {
                                     descriptive: { text: 'text-indigo-400', border: 'border-indigo-500/50', bgHover: 'hover:bg-indigo-950/40', btnColor: 'from-indigo-600 to-blue-600' },
                                     interpretive: { text: 'text-amber-500', border: 'border-amber-500/50', bgHover: 'hover:bg-amber-950/40', btnColor: 'from-amber-600 to-orange-600' },
+                                    relevance: { text: 'text-purple-400', border: 'border-purple-500/50', bgHover: 'hover:bg-purple-950/40', btnColor: 'from-purple-600 to-fuchsia-600' },
                                     critical: { text: 'text-emerald-400', border: 'border-emerald-500/50', bgHover: 'hover:bg-emerald-950/40', btnColor: 'from-emerald-600 to-teal-600' }
                                 };
                                 const colors = layerColors[layer.type];
@@ -1066,7 +1137,7 @@ export const DataDetectiveGame = () => {
                                 ? 'bg-slate-900/50 text-slate-600 border-slate-800 cursor-not-allowed'
                                 : 'bg-slate-900/80 hover:bg-slate-800 text-emerald-400 border-emerald-500/50 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:-translate-y-1 '}`}>
                             {wrongLayers.includes('none') ? '' : <span className="absolute inset-0 w-full h-full bg-white/5 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
-                            <span className="relative z-10">✅ 結案：三層都沒問題</span>
+                            <span className="relative z-10">✅ 結案：四層都沒問題</span>
                         </button>
                     </div>
                 )}
@@ -1103,10 +1174,12 @@ export const DataDetectiveGame = () => {
                                 </span>
                                 <span className={`font-bold px-4 py-1.5 rounded-full text-sm border shadow-inner ${current.errorLayer === 'descriptive' ? 'bg-indigo-950/80 text-indigo-400 border-indigo-500/50' :
                                     current.errorLayer === 'interpretive' ? 'bg-amber-950/80 text-amber-400 border-amber-500/50' :
-                                        'bg-emerald-950/80 text-emerald-400 border-emerald-500/50'
+                                        current.errorLayer === 'relevance' ? 'bg-purple-950/80 text-purple-400 border-purple-500/50' :
+                                            'bg-emerald-950/80 text-emerald-400 border-emerald-500/50'
                                     }`}>
                                     {current.errorLayer === 'descriptive' ? '📊 描述層出錯' :
-                                        current.errorLayer === 'interpretive' ? '🧠 詮釋層出錯' : '🔍 批判層出錯'}
+                                        current.errorLayer === 'interpretive' ? '🧠 詮釋層出錯' :
+                                            current.errorLayer === 'relevance' ? '🎯 回扣層出錯' : '🔍 批判層出錯'}
                                 </span>
                             </div>
                         )}
