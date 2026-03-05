@@ -311,6 +311,36 @@ export const ChartSelection = () => {
                 </div>
             </section>
 
+            {/* W13 Game CTA */}
+            <section className="mt-12">
+                <div className="bg-cyan-50 p-8 rounded-3xl shadow-sm border border-cyan-200 text-center relative overflow-hidden group">
+                    <div className="absolute -right-10 -top-10 text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">
+                        <PieChart size={160} />
+                    </div>
+                    <div className="relative z-10">
+                        <h3 className="text-2xl font-bold mb-4 text-cyan-900 flex items-center justify-center gap-3">
+                            <span className="text-3xl">🎯</span>
+                            實戰演練：統計圖表選擇與資訊呈現最佳化
+                        </h3>
+                        <p className="mb-6 text-slate-700 max-w-2xl mx-auto leading-relaxed">
+                            10 個情報戰略情境，你能幫數據找到最適合的圖表來呈現決策嗎？<br />
+                            化身情報特務，將雜亂情報解碼，配對成最高效的視覺化圖表！
+                        </p>
+                        <div className="bg-white p-6 rounded-2xl border border-cyan-100 flex flex-col items-center text-center max-w-md mx-auto shadow-sm">
+                            <div className="text-4xl mb-4">📊</div>
+                            <h4 className="text-xl font-bold text-slate-800 mb-2">行動代號：解碼</h4>
+                            <p className="text-sm text-slate-600 mb-6 flex-1">折線圖、圓餅圖、長條圖怎麼選才對？來挑戰你的圖表直覺！</p>
+                            <button
+                                onClick={() => navigate('/game/chart-matcher')}
+                                className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-xl font-bold transition-all w-full shadow-lg shadow-cyan-600/30 flex items-center justify-center gap-2"
+                            >
+                                進入任務：行動代號：解碼 <TrendingUp size={18} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Final CTA: Move to W14 Analysis */}
             <section className="mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-violet-900 rounded-3xl p-8 md:p-12 shadow-xl border border-indigo-700/50 relative overflow-hidden group">

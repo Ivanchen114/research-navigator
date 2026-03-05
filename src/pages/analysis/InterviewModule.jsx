@@ -14,9 +14,9 @@ export const InterviewModule = () => {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
                         <div className="flex items-center gap-4">
-                            <h2 className="text-2xl font-bold text-slate-800">模組 2：訪談法逐字稿分析</h2>
+                            <h2 className="text-2xl font-bold text-slate-800">模組 2：訪談法逐字稿 — 四層次寫作</h2>
                         </div>
-                        <p className="text-slate-600 mt-2 text-sm">目標：從對話中提煉出主題 (Themes) 與架構 (Framework)。</p>
+                        <p className="text-slate-600 mt-2 text-sm">目標：從對話中提煉主題，加上你的初稿，讓 AI 協助檢核並產出堅實的結論。</p>
                     </div>
                     <DocLinkBtn href="https://docs.google.com/document/d/13NFmhIYg96BKhc871oTlnAS2r812O-hdbBl-LYNcEog/edit?usp=drive_link">
                         完整指南
@@ -47,24 +47,26 @@ export const InterviewModule = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 p-6">
                 <div className="flex items-center gap-2 mb-2">
                     <Bot className="text-blue-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 2：第一輪分析 (AI 主題編碼)</h3>
+                    <h3 className="text-lg font-bold text-slate-800">Step 2：AI 檢核與潤飾</h3>
                 </div>
                 <p className="text-sm text-slate-600 mb-4">
-                    這是質性研究的核心：從長篇連篇的逐字稿中萃取「關鍵概念」。請將**單一受訪者**的逐字稿餵給 AI：
+                    將你的「四層結論初稿」與「受訪者的逐字稿（已取代稱）」餵給 AI：
                 </p>
 
-                <AIInstructionDropdown title="複製 Prompt：受訪者獨立編碼">
+                <AIInstructionDropdown title="複製 Prompt：對齊學習單小卡 B">
                     <PromptBox>
-                        {`【任務】我做了訪談研究，主題是「＿＿＿」。
-以下是其中一位受訪者的部分逐字稿：
+                        {`我的研究主題是＿＿＿，研究問題是＿＿＿。
 
-【在此貼上該位受訪者的逐字稿】
+以下是我自己寫的四層結論初稿：【貼上初稿】
+
+以下是受訪者逐字稿（姓名已改為代號）：【貼上逐字稿】
 
 請幫我：
-1. 為這段逐字稿做「主題編碼」：找出 3-5 個重複出現的核心主題。
-2. 從原文中找出每個主題的「代表句子」（必須完全直接引用原話）。
-3. 標注這位受訪者是否有任何「反常或獨特」的觀點？
-4. 用 1-2 句話精準總結這位受訪者的整體立場。`}
+1. 檢核描述層有無過度詮釋或遺漏重要現象，並建議修改。
+2. 優化詮釋層，補充可能遺漏的意義。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出質性訪談研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`}
                     </PromptBox>
                 </AIInstructionDropdown>
 
@@ -141,18 +143,19 @@ export const InterviewModule = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500 p-6">
                 <div className="flex items-center gap-2 mb-2">
                     <PenLine className="text-emerald-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 4：黃金寫作草稿</h3>
+                    <h3 className="text-lg font-bold text-slate-800">Step 4：最終四層結論定案</h3>
                 </div>
                 <p className="text-sm text-slate-600 mb-4">
-                    質性研究的結論必須「圖文並茂」，也就是要有你的歸納，也要有受訪者原汁原味的引號。你可以這樣寫下初稿：
+                    質性研究的結論必須「圖文並茂」（有歸納也有原汁原味的引述）。請對照 AI 建議與你的初稿寫下最終版本：
                 </p>
                 <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100 font-serif">
                     <p className="text-sm text-slate-700 leading-loose">
-                        <strong className="text-emerald-700">【數據/資料描述 (客觀)】</strong><br />
-                        在本次訪談的 {`{5}`} 位受訪者中，有 {`{4}`} 位皆提及「＿＿＿＿主題」經驗。例如，受訪者 A 表示：「＿＿＿（完全引述原話）＿＿＿」；受訪者 B 亦指出：「＿＿＿」。
-                        <br /><br />
-                        <strong className="text-emerald-700">【分析推論 (主觀但有依據)】</strong><br />
-                        綜合上述意見，此現象可能代表＿＿＿＿＿＿。相對地，受訪者 C 則提出了截然不同的視角，他認為「＿＿＿」，這顯示出在＿＿＿＿（某種群體或情境）下，可能存在不同的考量脈絡。
+                        <strong className="text-emerald-700">【描述】與【詮釋】</strong><br />
+                        根據訪談結果顯示，＿＿＿＿＿＿＿＿，其中最明顯的是大部分受訪者皆提及「...」（放入一到兩句精彩引言）。這個結果顯示＿＿＿＿＿＿＿＿，可能的原因是＿＿＿＿＿＿＿＿。<br /><br />
+                        <strong className="text-emerald-700">【回扣】(⭐確認內容是你自己的)</strong><br />
+                        本研究原本想了解＿＿＿＿＿＿＿＿。綜合訪談分析，本研究的答案是＿＿＿＿＿＿＿＿。但這個結論只能說明＿＿＿＿＿＿＿＿，無法確定＿＿＿＿＿＿＿＿。<br /><br />
+                        <strong className="text-emerald-700">【批判】(研究限制)</strong><br />
+                        本研究的限制在於訪談樣本僅基於特定＿＿＿＿，因此結論不宜推論至全體。若要更完整回答這個問題，未來可以加入問卷量化調查或增加其他領域受訪者。
                     </p>
                 </div>
             </div>

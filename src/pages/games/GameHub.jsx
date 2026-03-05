@@ -66,21 +66,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #05',
-        tags: ['W10+', '數據解讀', '批判思考'],
-        id: 'data-detective',
-        title: "行動代號：濾鏡",
-        english: "Truth Filter",
-        department: "重案部",
-        departmentColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
-        icon: <Bug size={32} className="text-emerald-500" />,
-        desc: "數字會說話，但有時候會說謊。戴上真相濾鏡，識破樣本偏差、倖存者偏差、辛普森悖論等數據陷阱。學習從客觀數據中得出穩健的結論。",
-        learningObjective: "客觀數據解讀與批判性思維培養",
-        path: "/game/data-detective",
-        status: "active"
-    },
-    {
-        caseCode: 'CASE #06',
-        tags: ['W10+', '圖表選擇', '資訊呈現'],
+        tags: ['W13', '圖表選擇', '資訊呈現'],
         id: 'chart-matcher',
         title: "行動代號：解碼",
         english: "Intel Visualization",
@@ -90,6 +76,20 @@ const RIB_MISSIONS = [
         desc: "將雜亂情報解碼，配對成最高效的視覺化圖表！",
         learningObjective: "統計圖表選擇與資訊呈現最佳化",
         path: "/game/chart-matcher",
+        status: "active"
+    },
+    {
+        caseCode: 'CASE #06',
+        tags: ['W14', '數據解讀', '批判思考'],
+        id: 'data-detective',
+        title: "行動代號：濾鏡",
+        english: "Truth Filter",
+        department: "重案部",
+        departmentColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
+        icon: <Bug size={32} className="text-emerald-500" />,
+        desc: "數字會說話，但有時候會說謊。戴上真相濾鏡，識破樣本偏差、倖存者偏差、辛普森悖論等數據陷阱。學習從客觀數據中得出穩健的結論。",
+        learningObjective: "客觀數據解讀與批判性思維培養",
+        path: "/game/data-detective",
         status: "active"
     }
 ];

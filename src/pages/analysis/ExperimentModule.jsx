@@ -15,9 +15,9 @@ export const ExperimentModule = () => {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
                         <div className="flex items-center gap-4">
-                            <h2 className="text-2xl font-bold text-slate-800">模組 3：實驗法數據分析</h2>
+                            <h2 className="text-2xl font-bold text-slate-800">模組 3：實驗法數據 — 四層次寫作</h2>
                         </div>
-                        <p className="text-slate-600 mt-2 text-sm">目標：證明「獨變項 (X)」的操弄，確實導致了「依變項 (Y)」的改變。</p>
+                        <p className="text-slate-600 mt-2 text-sm">目標：除了證明獨變項的操作有效，更能產出包含研究限制的四層次結論。</p>
                     </div>
                     <DocLinkBtn href="https://docs.google.com/document/d/1RMvSA-ee7DUVFpxrOh6FhqocE0Q2QNgcQA_PO8fik2c/edit?usp=drive_link">
                         完整指南
@@ -49,23 +49,25 @@ export const ExperimentModule = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 p-6">
                 <div className="flex items-center gap-2 mb-2">
                     <Bot className="text-blue-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 2：第一輪分析 (AI 比較差異)</h3>
+                    <h3 className="text-lg font-bold text-slate-800">Step 2：AI 檢核與潤飾</h3>
                 </div>
-                <p className="text-sm text-slate-600 mb-4">把兩組的數據餵給 AI，請它發揮運算優勢，快速比較差異並提出可能的原因假設。</p>
+                <p className="text-sm text-slate-600 mb-4">把兩組的數據以及你的初稿丟給 AI，請它幫忙抓出未控制好的實驗變因。</p>
 
-                <AIInstructionDropdown title="複製 Prompt：對照組數據解析">
+                <AIInstructionDropdown title="複製 Prompt：對齊學習單小卡 C">
                     <PromptBox>
-                        {`【任務】我做了實驗研究，主題是「＿＿＿」。
-- 實驗組條件：【在此說明】
-- 對照組條件：【在此說明】
+                        {`我的研究主題是＿＿＿，研究問題是＿＿＿。
+實驗組條件是＿＿＿，對照組條件是＿＿＿。
 
-以下是我的實驗數據（如：兩組的平均、標準差或原始統計）：
-【在此貼上數據表】
+以下是我自己寫的四層結論初稿：【貼上初稿】
+
+以下是實驗數據：【貼上數據】
 
 請幫我：
-1. 比較實驗組和對照組的數據差異。
-2. 判斷這個差異是否「顯著」（從描述上的差距來推論）。
-3. 提出 3 個可能的原因，解釋為什麼有（或沒有）這樣的差異？`}
+1. 檢核描述層有無數字錯誤或遺漏，並建議修改。
+2. 優化詮釋層，補充可能的原因解釋。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出實驗研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`}
                     </PromptBox>
                 </AIInstructionDropdown>
 
@@ -133,18 +135,19 @@ export const ExperimentModule = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500 p-6">
                 <div className="flex items-center gap-2 mb-2">
                     <PenLine className="text-emerald-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 4：黃金寫作草稿</h3>
+                    <h3 className="text-lg font-bold text-slate-800">Step 4：最終四層結論定案</h3>
                 </div>
                 <p className="text-sm text-slate-600 mb-4">
-                    將兩組的比較數據與你的裁奪結合，寫出嚴謹的實驗結論初稿（請將這段記錄到文件裡，這就是你 W15 要交的報告內容）。
+                    將兩組的差異數據、你自行撰寫的回扣內容、以及 AI 捕捉到的干擾變項，整合成完美的報告結論。
                 </p>
                 <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100 font-serif">
                     <p className="text-sm text-slate-700 leading-loose">
-                        <strong className="text-emerald-700">【數據/資料描述 (客觀)】</strong><br />
-                        本研究探討「＿＿＿＿」的影響。實驗結果顯示，實驗組在＿＿測試上的平均分數為＿＿分，而對照組為＿＿分；兩者相差＿＿分。
-                        <br /><br />
-                        <strong className="text-emerald-700">【分析推論 (主觀但有依據)】</strong><br />
-                        此結果顯示出＿＿操弄可能對＿＿產生正向影響。然而，由於本實驗在執行過程中，受到＿＿＿＿（列出未控制好的變因或環境限制）的影響，因此我們對此結果持保留態度，建議未來研究能進一步控制上述變項。
+                        <strong className="text-emerald-700">【描述】與【詮釋】</strong><br />
+                        根據實驗數據顯示，＿＿＿＿＿＿＿＿，其中最明顯的是實驗組的＿＿顯著高於對照組。這個結果顯示＿＿＿＿＿＿＿＿，可能的原因是受到了我們操弄＿＿帶來的影響。<br /><br />
+                        <strong className="text-emerald-700">【回扣】(⭐確認內容是你自己的)</strong><br />
+                        本研究原本想了解＿＿＿＿的影響。根據分析結果，本研究的答案是＿＿＿＿＿＿＿＿。但這個結論只能說明在特定條件下的差異，無法完全確定兩者之間具有無懈可擊的因果關係。<br /><br />
+                        <strong className="text-emerald-700">【批判】(研究限制)</strong><br />
+                        本研究的限制在於執行過程中受到＿＿＿＿的潛在影響（如霍桑效應或未完全控制的環境變因），因此結論不宜過度延伸推論。未來研究建議進一步排除＿＿變量以獲得更準確的結果。
                     </p>
                 </div>
             </div>

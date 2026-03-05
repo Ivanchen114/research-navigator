@@ -15,9 +15,9 @@ export const SurveyModule = () => {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
                         <div className="flex items-center gap-4">
-                            <h2 className="text-2xl font-bold text-slate-800">模組 1：量化問卷法 — 三段式結論速成</h2>
+                            <h2 className="text-2xl font-bold text-slate-800">模組 1：量化問卷法 — 四層次寫作工作坊</h2>
                         </div>
-                        <p className="text-slate-600 mt-2 text-sm">目標：不再只讓 AI 算數字，而是分三次提問，引導 AI 陪你寫出「描述 → 詮釋 → 批判」的嚴謹結論。</p>
+                        <p className="text-slate-600 mt-2 text-sm">目標：不再只讓 AI 算數字，而是引導 AI 檢核你的初稿，陪你產出「描述 → 詮釋 → 回扣 → 批判」的嚴謹結論。</p>
                     </div>
                 </div>
             </header>
@@ -39,21 +39,24 @@ export const SurveyModule = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 p-6">
                 <div className="flex items-center gap-2 mb-2">
                     <Bot className="text-blue-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 2：第一輪分析 (AI 找規律)</h3>
+                    <h3 className="text-lg font-bold text-slate-800">Step 2：AI 檢核與潤飾</h3>
                 </div>
-                <p className="text-sm text-slate-600 mb-4">把整理好的資料餵給 AI，請它發揮運算優勢，快速幫我們找出資料中的趨勢與反常現象。</p>
+                <p className="text-sm text-slate-600 mb-4">把整理好的資料，加上你「自己先寫好的四層初稿」一起餵給 AI，請它找漏洞並提供建議。</p>
 
-                <AIInstructionDropdown title="複製 Prompt：問卷資料初探">
+                <AIInstructionDropdown title="複製 Prompt：對齊學習單小卡 A">
                     <PromptBox>
-                        {`【任務】我做了一份問卷研究，主題是「＿＿＿」。
-以下是我蒐集到的部分回答資料（或敘述統計結果）：
+                        {`我的研究主題是＿＿＿，研究問題是＿＿＿。
 
-【在此貼上你的問卷資料數據】
+以下是我自己寫的四層結論初稿：【貼上初稿】
+
+以下是問卷統計資料（已去除個資）：【貼上資料】
 
 請幫我：
-1. 找出最有趣的 3 個「規律或趨勢」。
-2. 找出任何「反常或意外」的回答或特別突出的數據。
-3. 試著說明：造成這些發現的可能原因是什麼？`}
+1. 檢核描述層有無數字錯誤或量詞不精準，並建議修改。
+2. 優化詮釋層，補充可能遺漏的原因。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出問卷研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`}
                     </PromptBox>
                 </AIInstructionDropdown>
 
@@ -121,18 +124,19 @@ export const SurveyModule = () => {
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500 p-6">
                 <div className="flex items-center gap-2 mb-2">
                     <PenLine className="text-emerald-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 4：黃金寫作草稿</h3>
+                    <h3 className="text-lg font-bold text-slate-800">Step 4：最終四層結論定案</h3>
                 </div>
                 <p className="text-sm text-slate-600 mb-4">
-                    統整剛才 AI 找出的數據，以及你加上去的「謹慎判斷」，用黃金寫作公式寫出你的結論初稿（請將這段記錄到文件裡，這就是你 W15 要交的報告內容）。
+                    對照 AI 的建議與自己的初稿，做出最終裁奪，寫下完整的四層結論（這就是你 W15 要交的報告內容）。
                 </p>
                 <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100 font-serif">
                     <p className="text-sm text-slate-700 leading-loose">
-                        <strong className="text-emerald-700">【數據描述 (客觀)】</strong><br />
-                        根據問卷統計結顯示，在「＿＿＿」的問題中，高達 ＿＿＿% 的受訪者表示「＿＿＿」。此外，我們也觀察到＿＿組與＿＿組在回答走向上有不同的趨勢...
-                        <br /><br />
-                        <strong className="text-emerald-700">【分析推論 (主觀但有依據)】</strong><br />
-                        此現象可能反映出＿＿＿＿＿＿＿＿。值得注意的是，雖然資料顯示＿＿與＿＿呈＿＿相關，但由於本研究樣本多集中於＿＿（樣本限制），未能涵蓋所有面向，因此這個趨勢僅為一項初步參考，仍需進一步研究。
+                        <strong className="text-emerald-700">【描述】與【詮釋】</strong><br />
+                        根據問卷統計結果顯示，＿＿＿＿＿＿＿＿，其中最明顯的是＿＿＿＿＿＿＿＿。這個結果顯示＿＿＿＿＿＿＿＿，可能的原因是＿＿＿＿＿＿＿＿。<br /><br />
+                        <strong className="text-emerald-700">【回扣】(⭐確認內容是你自己的)</strong><br />
+                        本研究原本想了解＿＿＿＿＿＿＿＿。根據分析結果，本研究的答案是＿＿＿＿＿＿＿＿。但這個結論只能說明＿＿＿＿＿＿＿＿，無法確定＿＿＿＿＿＿＿＿。<br /><br />
+                        <strong className="text-emerald-700">【批判】(研究限制)</strong><br />
+                        本研究的限制在於＿＿＿＿＿＿＿＿，因此結論不宜推論至＿＿＿＿＿＿＿＿。若要更完整回答這個問題，未來可以＿＿＿＿＿＿＿＿。
                     </p>
                 </div>
             </div>

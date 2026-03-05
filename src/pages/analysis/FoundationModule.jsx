@@ -28,45 +28,61 @@ export const FoundationModule = () => {
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl shadow-sm border border-blue-100">
                 <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
                     <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">🚀</span>
-                    W14 核心分析任務：AI 協作三部曲
+                    W14 核心協作任務：先寫初稿，AI 來檢核
                 </h3>
                 <p className="mb-6 text-slate-700 text-sm">
-                    在這場分流工作坊中，我們的主軸是「<strong className="text-blue-700">AI 做初稿，人做裁判</strong>」。請依照你選擇的研究方法（左側選單），進行以下三步驟：
+                    在這場寫作工作坊中，我們的主軸是「<strong className="text-blue-700">人先寫骨幹，AI 協助檢核與潤飾</strong>」。請依照你選擇的研究方法（左側選單），進行以下三步驟：
                 </p>
                 <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100 flex flex-col gap-2">
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100 flex flex-col gap-2 relative">
                         <div className="flex items-center gap-2 text-blue-700 font-bold">
-                            <Bot size={20} /> 1. 第一輪分析
+                            <PenLine size={20} /> 1. 自己寫初稿
                         </div>
-                        <p className="text-sm text-slate-600">把資料餵給 AI，使用專屬 Prompt 請它找出「有趣趨勢」或「主題編碼」。</p>
+                        <p className="text-sm text-slate-600">不依靠 AI，自己先依循「四層寫作架構」寫出數字、推論與解答。</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-rose-100 flex flex-col gap-2 relative">
                         <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center hidden md:flex">➔</div>
                         <div className="flex items-center gap-2 text-rose-700 font-bold">
-                            <BrainCircuit size={20} /> 2. 人工裁奪
+                            <Bot size={20} /> 2. AI 檢核與潤飾
                         </div>
-                        <p className="text-sm text-slate-600">檢驗 AI 有無「過度詮釋」或忽略了「脈絡因素」？你是唯一的裁判！</p>
+                        <p className="text-sm text-slate-600">完成個資清除後，將資料與初稿餵給 AI，請它找漏洞、優化敘述，並提出研究限制建議。</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-100 flex flex-col gap-2 relative">
                         <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center hidden md:flex">➔</div>
                         <div className="flex items-center gap-2 text-emerald-700 font-bold">
-                            <PenLine size={20} /> 3. 專屬寫作草稿
+                            <BrainCircuit size={20} /> 3. 人工最後裁奪
                         </div>
-                        <p className="text-sm text-slate-600">將你的裁奪結果，依循「黃金寫作公式」轉化為精準的結語草稿，帶你去 W15。</p>
+                        <p className="text-sm text-slate-600">你是唯一的裁判！對照 AI 的建議，決定採納或拒絕，產出最終的四層結論段落，帶去 W15 報告使用。</p>
                     </div>
                 </div>
+            </div>
+
+            {/* Privacy Warning */}
+            <div className="bg-rose-50 p-6 rounded-xl shadow-sm border-2 border-rose-200 animate-pulse-slow">
+                <h3 className="text-xl font-bold mb-3 text-rose-900 flex items-center gap-2">
+                    <span className="text-2xl">⚠️</span> 隱私淨身警告 (餵給 AI 前必看)
+                </h3>
+                <p className="text-slate-800 font-medium mb-2">
+                    把資料貼給 AI 會面臨個資外流風險。這是對受訪者的承諾，更是研究倫理的鐵規：
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-slate-700 font-bold ml-2">
+                    <li>問卷組：必須刪除表格內所有人的姓名、學號、Line 暱稱。</li>
+                    <li>訪談組 / 觀察組：必須將受訪者真實姓名改為代號 (受訪者 A、B、C)。</li>
+                </ul>
+                <p className="mt-4 text-sm text-rose-700 bg-rose-100 p-2 rounded-lg border border-rose-200">
+                    絕對禁止：未完成個資清除，不可將任何資料交給 AI。
+                </p>
             </div>
 
             {/* Content 1: Nature of Data Analysis */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                 <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
                     <span className="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-                    如何寫好研究結論？三層次分析法
+                    如何寫好研究結論？四層次寫作法
                 </h3>
                 <p className="mb-6 text-slate-600">
-                    做研究就像當偵探，數據只是你蒐集到的「證物」。
-                    很多人以為把圖表貼上去、數字報一報就是結論，其實那只完成了一小部分。
-                    一個完整嚴謹的研究結論，必須通過以下三個層次：
+                    W13 學的是「單獨一張圖」的局部說明。W14 要大升級，將整份研究的所有發現整合，寫出真正的研究結論。
+                    一個完整嚴謹的研究結論，必須包含這四個層次：
                 </p>
 
                 <div className="space-y-6">
@@ -129,14 +145,43 @@ export const FoundationModule = () => {
                         </div>
                     </div>
 
-                    {/* Layer 3: Critical */}
+                    {/* Layer 3: Reflective */}
+                    <div className="bg-rose-50 p-5 rounded-lg border-l-4 border-l-rose-500 border border-slate-200 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-rose-200/50 rounded-bl-full -z-10 blur-xl"></div>
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">🎯</span>
+                            <h4 className="font-bold text-lg text-rose-900">層次三：回扣 (Reflective)</h4>
+                        </div>
+                        <p className="text-sm text-rose-800 mb-3 font-medium">
+                            <strong>目標：直接回答你當初的研究問題。</strong><br />
+                            <span className="text-rose-600">⭐ 鐵律：這層的內容和邏輯 只能由你親自完成。AI 只能幫你潤飾，因為只有你知道你最初想問什麼！</span>
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <div className="bg-white p-3 rounded border border-rose-100 shadow-sm">
+                                <span className="text-rose-700 font-bold text-sm block mb-1">✅ 這樣寫才對：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li>明確宣告：「本研究原本想了解... 答案是...」</li>
+                                    <li>釐清歸因界線：「只能說明有相關，無法確定是因果」</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white p-3 rounded border border-rose-100 shadow-sm">
+                                <span className="text-rose-700 font-bold text-sm block mb-1">❌ 常見地雷：</span>
+                                <ul className="text-sm text-slate-600 list-disc list-inside space-y-1">
+                                    <li><strong>答非所問：</strong> 研究問題在問「動機」，結論卻一直在聊「結果」。</li>
+                                    <li><strong>依賴 AI：</strong> 讓 AI 自己編造研究目的與邏輯。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Layer 4: Critical */}
                     <div className="bg-slate-50 p-5 rounded-lg border-l-4 border-l-emerald-500 border border-slate-200">
                         <div className="flex items-center gap-2 mb-3">
                             <span className="text-xl">🔍</span>
-                            <h4 className="font-bold text-lg text-slate-800">層次三：批判 (Critical)</h4>
+                            <h4 className="font-bold text-lg text-slate-800">層次四：批判 (Critical)</h4>
                         </div>
                         <p className="text-sm text-slate-700 mb-3">
-                            <strong>目標：檢視自己這份結論的限制與可信度，展現研究者的嚴謹態度。</strong>
+                            <strong>目標：檢視自己這份結論的限制與可信度，展現研究者的嚴謹態度 (說出研究限制)。</strong>
                         </p>
                         <div className="grid md:grid-cols-2 gap-4">
                             <div className="bg-emerald-50 p-3 rounded border border-emerald-100">
@@ -163,23 +208,17 @@ export const FoundationModule = () => {
             <div className="bg-amber-50 p-6 rounded-xl shadow-sm border border-amber-100 mt-8">
                 <h3 className="text-xl font-bold mb-4 text-amber-900 flex items-center gap-2">
                     <span className="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
-                    實戰演練：選對圖表與黃金寫作公式
+                    實戰演練：客觀數據解讀與批判性思維培養
                 </h3>
                 <p className="mb-6 text-slate-700">
-                    數據是食材，圖表是盤子，亂裝會出事！學會「描述＋推論」的黃金公式，讓數據自己說故事。
+                    歡迎來到「行動代號：濾鏡」！在這裡，你將化身為數據偵探，運用你的批判性思維，從看似合理的分析報告中，找出隱藏的偏誤、錯誤詮釋或不當結論。每一份報告都可能藏著「假象」，你的任務就是揭露它們，還原數據的「真相」！
                 </p>
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-white p-5 rounded-lg border border-slate-200 flex flex-col items-center text-center">
-                        <div className="text-4xl mb-3">📊</div>
-                        <h4 className="font-bold text-slate-800 mb-2">行動代號：解碼</h4>
-                        <p className="text-sm text-slate-600 mb-4 flex-1">折線圖、圓餅圖、長條圖怎麼選才對？來挑戰你的圖表直覺！</p>
-                        <a href="/game/chart-matcher" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold transition-colors w-full inline-block">進入任務：行動代號：解碼</a>
-                    </div>
-                    <div className="bg-white p-5 rounded-lg border border-slate-200 flex flex-col items-center text-center">
+                <div className="grid md:grid-cols-1 gap-6">
+                    <div className="bg-white p-5 rounded-lg border border-slate-200 flex flex-col items-center text-center max-w-lg mx-auto w-full">
                         <div className="text-4xl mb-3">🕵️‍♂️</div>
                         <h4 className="font-bold text-slate-800 mb-2">行動代號：濾鏡</h4>
                         <p className="text-sm text-slate-600 mb-4 flex-1">有些研究的推論充滿「神邏輯」。你能找出報告中過度推論的地方嗎？</p>
-                        <a href="/game/data-detective" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold transition-colors w-full inline-block">進入任務：行動代號：濾鏡</a>
+                        <a href="/game/data-detective" className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold transition-colors w-full inline-block">進入任務：行動代號：濾鏡</a>
                     </div>
                 </div>
             </div>
