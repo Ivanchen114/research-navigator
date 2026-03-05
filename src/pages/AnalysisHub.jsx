@@ -49,7 +49,7 @@ export const AnalysisHub = () => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto flex flex-col h-full animate-in fade-in duration-500">
+        <div className="max-w-5xl mx-auto flex flex-col animate-in fade-in duration-500">
 
             {/* Header */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
@@ -82,7 +82,7 @@ export const AnalysisHub = () => {
             </header>
 
             {/* Tabs Layout */}
-            <div className="flex flex-col md:flex-row gap-6 h-full min-h-[600px]">
+            <div className="flex flex-col md:flex-row gap-6 min-h-[600px]">
 
                 {/* Sidebar Tabs */}
                 <div className="md:w-64 flex-shrink-0">
