@@ -177,7 +177,7 @@ export const W4Page = () => {
                             <div className="bg-slate-50 rounded-2xl p-4 md:p-6 border border-slate-200">
                                 <div className="max-w-md mx-auto shadow-xl rounded-lg overflow-hidden border border-slate-300 transform transition-transform hover:scale-[1.02]">
                                     <img
-                                        src="/Users/Ivan/.gemini/antigravity/brain/aded99e8-cb68-4fa5-bf8d-728e8c91d963/user_research_poster.png"
+                                        src="/images/user_research_poster.png"
                                         alt="Research Poster Template"
                                         className="w-full h-auto block"
                                     />
