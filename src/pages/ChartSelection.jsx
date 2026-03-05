@@ -206,12 +206,15 @@ export const ChartSelection = () => {
                             <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4">
                                 <CheckCircle2 size={24} />
                             </div>
-                            <h4 className="font-bold text-slate-800 mb-2">📌 標題格式</h4>
-                            <p className="text-sm text-slate-600 mb-4">
+                            <h4 className="font-bold text-slate-800 mb-2">📌 標題格式 (與 N 值防呆)</h4>
+                            <p className="text-sm text-slate-600 mb-2">
                                 必須放在圖表的<strong className="text-slate-900 underline decoration-blue-300">上方</strong>。
                             </p>
+                            <p className="text-xs text-rose-600 font-medium mb-4 bg-rose-50 p-2 rounded">
+                                ⚠️ 必加細節：請在標題旁或角落標註「(N=有效樣本數)」。100人的 80% 跟 5人的 80% 說服力完全不同！
+                            </p>
                             <div className="p-3 bg-slate-50 rounded border border-dashed border-slate-300 font-mono text-xs text-center">
-                                圖一：高二學生社團參與時數
+                                圖一：高二學生社團參與時數 (N=120)
                                 <div className="mt-2 h-20 w-4/5 mx-auto bg-slate-200 rounded flex items-center justify-center text-[10px] text-slate-400 italic">
                                     ( 此處為圖表圖片 )
                                 </div>
@@ -294,9 +297,12 @@ export const ChartSelection = () => {
                         <div className="p-5 bg-white rounded-xl border border-slate-200 hover:border-violet-300 transition-colors group">
                             <p className="text-xs font-bold text-violet-500 mb-1">案例三：精神病患處置民調</p>
                             <p className="text-sm text-slate-700 mb-3">數據：73.5% 民眾不滿現況；不滿主因是「結束刑期後的社會危害」(85.3%)。</p>
-                            <div className="p-3 bg-violet-50 rounded-lg group-hover:bg-violet-100 transition-colors">
+                            <div className="p-4 bg-violet-50 rounded-lg group-hover:bg-violet-100 transition-colors space-y-2">
                                 <p className="text-sm text-slate-800">
-                                    <strong className="text-violet-700">綜合分析：</strong> 超過七成民眾不滿現況，進一步分析發現，民眾最大的擔憂源自於對<strong className="text-violet-900 border-b-2 border-violet-300">結束刑期後再犯</strong>的恐懼。
+                                    <strong className="text-blue-700">👉 描述 (客觀)：</strong> 高達 73.5% 的民眾不滿現況，其中有 85.3% 的人將不滿主因指向「結束刑期後的社會危害」。
+                                </p>
+                                <p className="text-sm text-slate-800">
+                                    <strong className="text-rose-700">👉 推論 (主觀)：</strong> 這顯示出民眾最大的擔憂，源自於對<strong className="text-rose-900 border-b-2 border-rose-300">結束刑期後再犯</strong>的恐懼。
                                 </p>
                             </div>
                         </div>
@@ -316,10 +322,13 @@ export const ChartSelection = () => {
                             <Rocket size={32} className="text-amber-400" />
                         </div>
                         <h2 className="text-2xl md:text-3xl font-black text-white mb-4">
-                            學會黃金公式了？帶上你的資料出發吧！
+                            W14 下週預告：從一張圖 到 整份結論
                         </h2>
                         <p className="text-indigo-200 mb-8 max-w-2xl text-sm md:text-base leading-relaxed">
-                            從今天開始，你就是獨當一面的知識轉譯者。趕快前往「解讀與結論大廳」，選擇你的研究方法，讓 AI 成為你的第一輪分析助手，完成專題的最後一哩路！
+                            今天學的「描述＋推論」，是針對<strong className="text-amber-300">單獨一張圖</strong>的局部說明。<br />
+                            下週 W14，我們要大升級：將整份研究的所有發現整合，寫出真正的研究結論！<br />
+                            除了「描述＋推論」，還會再疊加兩層：一是<strong className="text-white">對焦研究問題</strong>，二是<strong className="text-white">寫下你的研究限制</strong>。
+                            趕緊帶著你的所有數據，進入 AI 五路分流的分析大廳吧！
                         </p>
                         <button
                             onClick={() => navigate('/analysis')}
