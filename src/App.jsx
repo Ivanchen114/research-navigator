@@ -12,6 +12,7 @@ import { ToolDesignPage } from './pages/ToolDesignPage';
 import { W10Page } from './pages/W10Page';
 import { W11Page } from './pages/W11Page';
 import { W12Page } from './pages/W12Page';
+import { W4Page } from './pages/W4Page';
 import { GameHub } from './pages/games/GameHub';
 import { ToolQuizGame } from './pages/games/ToolQuizGame';
 import { CitationDetectiveGame } from './pages/games/CitationDetectiveGame';
@@ -33,6 +34,7 @@ function App() {
           <Route path="w1" element={<W1Page />} />
           <Route path="problem-focus" element={<ProblemFocus />} />
           <Route path="wizard" element={<Wizard />} />
+          <Route path="w4" element={<W4Page />} />
           <Route path="clinic" element={<ClinicPage />} />
           <Route path="literature-review" element={<LiteratureReview />} />
           <Route path="team-formation" element={<TeamFormation />} />

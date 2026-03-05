@@ -111,7 +111,7 @@ export const Wizard = () => {
                 <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 -translate-x-1/3" />
                 <div className="relative z-10">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm mb-4">
-                        <Search size={16} /> 發現與對焦階段 (W3)
+                        <Search size={16} /> 題目健檢 (W3)
                     </div>
                     <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 drop-shadow-sm">題目健檢與方法快篩</span>
