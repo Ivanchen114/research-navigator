@@ -885,6 +885,7 @@ export const DataDetectiveGame = () => {
                             <div className="pl-3 border-l-2 border-slate-700/80 space-y-2 py-1 my-2">
                                 <p className="flex items-center gap-2"><span className="text-indigo-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">📊 描述</span> <span className="text-slate-400">—</span> 客觀陳述數據</p>
                                 <p className="flex items-center gap-2"><span className="text-amber-500 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🧠 詮釋</span> <span className="text-slate-400">—</span> 解讀數據意義</p>
+                                <p className="flex items-center gap-2"><span className="text-purple-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🎯 回扣</span> <span className="text-slate-400">—</span> 對應研究問題</p>
                                 <p className="flex items-center gap-2"><span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🔍 批判</span> <span className="text-slate-400">—</span> 檢視限制與信度</p>
                             </div>
                             <div className="border-t border-slate-700/50 pt-4 mt-4 space-y-2">
