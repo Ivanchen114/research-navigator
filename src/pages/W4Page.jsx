@@ -33,6 +33,8 @@ export const W4Page = () => {
     const [myTopic, setMyTopic] = useState('');
     const [myWho, setMyWho] = useState('');
     const [myHow, setMyHow] = useState('');
+    const [myDraftTitle, setMyDraftTitle] = useState('');
+    const [myDraftAssumptions, setMyDraftAssumptions] = useState('');
 
     // Part 2：題目定案
     const [finalTopic, setFinalTopic] = useState('');
@@ -44,12 +46,13 @@ export const W4Page = () => {
     const posterPrompt = `我的研究題目是：${myTopic || '【你的題目】'}
 研究對象：${myWho || '【Who】'}
 研究方法：${myHow || '【How】'}
+我自己想的海報標題草稿：${myDraftTitle || '（未填）'}
+我自己想的預期發現草稿：${myDraftAssumptions || '（未填）'}
 
-請幫我設計一個 Gallery Walk 海報的文案，包含：
-1. 一個吸引人的標題（可以用問句形式，20字以內）
-2. 研究對象與方法的簡短說明
-3. 2-3個「預期發現」的假設
-請讓內容簡單、讓高中生能看懂。`;
+請幫我優化海報文案，包含：
+1. 優化我的標題（讓它更吸引人，可用問句，20 字以內）
+2. 幫我補充或優化「預期發現」，給我 3 個假設
+請根據我的草稿調整，不要完全取代我的想法，讓內容簡單讓高中生看懂。`;
 
     const keywordPrompt = `我的研究題目是：${finalTopic || myTopic || '【你的題目】'}
 
@@ -88,44 +91,82 @@ export const W4Page = () => {
                 {openSection === 'part0' && (
                     <div className="bg-white p-6 md:p-8 space-y-5 border-t border-slate-100">
                         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-                            ⚠️ <strong>別忘了：</strong>AI 給文案建議，你決定要不要用——最後要手寫在 A4 紙上！
+                            ⚠️ <strong>順序很重要：</strong>Step 0 先自己草稿（不准用 AI！）→ Step 1 填基本資訊 → Step 2 再讓 AI 優化！最後手寫在 A4 紙上。
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-3">
+                        {/* Step 0：先自己草稿 */}
+                        <div className="bg-orange-50 border-2 border-orange-300 rounded-xl p-5 space-y-4">
+                            <p className="font-bold text-orange-800 text-sm flex items-center gap-2">
+                                <span className="bg-orange-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-black">0</span>
+                                Step 0：先自己草稿（不准用 AI！）
+                            </p>
                             <div>
-                                <label className="font-bold text-slate-700 text-sm block mb-2">我的研究題目（從 W3 帶來）</label>
+                                <label className="text-sm font-bold text-slate-700 block mb-2">我想用什麼標題吸引同學？（白話文，不用管格式！）</label>
                                 <textarea
-                                    className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-400 transition-all min-h-[72px]"
-                                    placeholder="貼上 W3 的最終定案題目…"
-                                    value={myTopic}
-                                    onChange={e => setMyTopic(e.target.value)}
+                                    className="w-full border border-orange-300 bg-white rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-400 transition-all min-h-[56px]"
+                                    placeholder="例：滑手機真的會讓你睡不好嗎？ / 圖書館裡到底有沒有人在真的看書？"
+                                    value={myDraftTitle}
+                                    onChange={e => setMyDraftTitle(e.target.value)}
                                 />
                             </div>
                             <div>
-                                <label className="font-bold text-slate-700 text-sm block mb-2">研究對象（Who）</label>
+                                <label className="text-sm font-bold text-slate-700 block mb-2">我預測研究可能發現什麼？（大膽猜，寫 2-3 個）</label>
                                 <textarea
-                                    className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-400 transition-all min-h-[72px]"
-                                    placeholder="例：本校高一生（50人）"
-                                    value={myWho}
-                                    onChange={e => setMyWho(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label className="font-bold text-slate-700 text-sm block mb-2">研究方法（How）</label>
-                                <textarea
-                                    className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-400 transition-all min-h-[72px]"
-                                    placeholder="例：問卷調查"
-                                    value={myHow}
-                                    onChange={e => setMyHow(e.target.value)}
+                                    className="w-full border border-orange-300 bg-white rounded-xl p-3 text-sm focus:ring-2 focus:ring-orange-400 transition-all min-h-[80px]"
+                                    placeholder="猜測 1：___________&#10;猜測 2：___________&#10;猜測 3：___________"
+                                    value={myDraftAssumptions}
+                                    onChange={e => setMyDraftAssumptions(e.target.value)}
                                 />
                             </div>
                         </div>
 
+                        {/* Step 1：填入基本資訊 */}
                         <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2">複製這段 Prompt 給 AI，讓它設計海報文案</label>
+                            <p className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-3">
+                                <span className="bg-slate-700 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-black">1</span>
+                                Step 1：填入基本資訊（從 W3 帶來）
+                            </p>
+                            <div className="grid md:grid-cols-3 gap-3">
+                                <div>
+                                    <label className="font-bold text-slate-700 text-sm block mb-2">我的研究題目（從 W3 帶來）</label>
+                                    <textarea
+                                        className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-400 transition-all min-h-[72px]"
+                                        placeholder="貼上 W3 的最終定案題目…"
+                                        value={myTopic}
+                                        onChange={e => setMyTopic(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="font-bold text-slate-700 text-sm block mb-2">研究對象（Who）</label>
+                                    <textarea
+                                        className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-400 transition-all min-h-[72px]"
+                                        placeholder="例：本校高一生（50人）"
+                                        value={myWho}
+                                        onChange={e => setMyWho(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="font-bold text-slate-700 text-sm block mb-2">研究方法（How）</label>
+                                    <textarea
+                                        className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-400 transition-all min-h-[72px]"
+                                        placeholder="例：問卷調查"
+                                        value={myHow}
+                                        onChange={e => setMyHow(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Step 2：AI 優化 */}
+                        <div>
+                            <p className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-3">
+                                <span className="bg-blue-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs font-black">2</span>
+                                Step 2：複製這段 Prompt 給 AI（讓它優化你的草稿）
+                            </p>
                             <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
                                 <PromptBox>{posterPrompt}</PromptBox>
                             </div>
+
                         </div>
 
                         {/* 海報格式參考 */}
