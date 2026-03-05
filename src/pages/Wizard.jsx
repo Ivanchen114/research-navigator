@@ -494,6 +494,84 @@ export const Wizard = () => {
                     </div>
                 )}
             </div>
+
+            {/* ===== AI 句型優化器 ===== */}
+            {isTerminal() && refinedTopic && (
+                <section className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl shadow-sm border border-amber-200 p-6 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
+                        <span className="text-2xl">🤖</span>
+                        最後一步｜AI 句型優化器
+                    </h2>
+                    <p className="text-slate-600 text-sm mb-6">
+                        題目通過健檢、方法也確定了！現在請 AI 幫你把題目包裝成專業學術版本。<br />
+                        <strong>⚠️ AI 給你 3 個版本，選哪個是你的決定！</strong>
+                    </p>
+
+                    <div className="space-y-5">
+                        {/* Step 1 */}
+                        <div>
+                            <label className="font-bold text-slate-700 text-sm block mb-2">Step 1：我的題目初稿（先自己寫！）</label>
+                            <textarea
+                                className="w-full border border-amber-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-400 transition-all min-h-[72px] bg-white"
+                                placeholder={`根據「${refinedTopic}」自己先試著寫一個初稿…`}
+                                value={methodAnswers._draft || ''}
+                                onChange={e => setMethodAnswers(prev => ({ ...prev, _draft: e.target.value }))}
+                            />
+                        </div>
+
+                        {/* Step 2 */}
+                        {methodAnswers._draft && (
+                            <div className="animate-in fade-in duration-300">
+                                <label className="font-bold text-slate-700 text-sm block mb-2">Step 2：複製這段 Prompt 給 AI</label>
+                                <div className="relative bg-slate-900 rounded-xl p-4 text-slate-300 text-xs font-mono whitespace-pre-wrap">
+                                    {`我的研究題目初稿是：${methodAnswers._draft}
+
+請幫我優化成更專業的版本：
+1. 加上學術關鍵字（如：相關性、差異分析、影響、探討）
+2. 讓 Who（研究對象）、What（研究焦點）更具體
+3. 保持在 30 字以內，確保高中生做得到
+請給我 3 個優化版本（A/B/C），並簡單說明改動重點。`}
+                                    <button
+                                        onClick={() => navigator.clipboard.writeText(`我的研究題目初稿是：${methodAnswers._draft}\n\n請幫我優化成更專業的版本：\n1. 加上學術關鍵字（如：相關性、差異分析、影響、探討）\n2. 讓 Who（研究對象）、What（研究焦點）更具體\n3. 保持在 30 字以內，確保高中生做得到\n請給我 3 個優化版本（A/B/C），並簡單說明改動重點。`)}
+                                        className="absolute top-3 right-3 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs px-3 py-1 rounded-lg transition-colors"
+                                    >
+                                        📋 複製
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Step 4 */}
+                        <div>
+                            <label className="font-bold text-slate-700 text-sm block mb-3">Step 4：我的最終版（AI 做不到的！）</label>
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
+                                {['初稿', '優化 A', '優化 B', '優化 C', '綜合自己改'].map(opt => (
+                                    <button
+                                        key={opt}
+                                        onClick={() => setMethodAnswers(prev => ({ ...prev, _choice: opt }))}
+                                        className={`py-2 px-2 rounded-lg border text-xs font-bold transition-all ${methodAnswers._choice === opt ? 'bg-amber-500 border-amber-500 text-white' : 'bg-white border-amber-200 text-slate-600 hover:border-amber-400'}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+                            <textarea
+                                className="w-full border-2 border-amber-400 bg-amber-50 rounded-xl p-4 font-bold text-amber-900 text-sm focus:ring-2 focus:ring-amber-500 transition-all min-h-[80px]"
+                                placeholder="🎯 【我的 W3 最終定案題目】"
+                                value={methodAnswers._final || ''}
+                                onChange={e => setMethodAnswers(prev => ({ ...prev, _final: e.target.value }))}
+                            />
+                            {methodAnswers._final && (
+                                <div className="mt-4 bg-amber-100 border border-amber-300 rounded-2xl p-5 text-center animate-in zoom-in-95 duration-300">
+                                    <p className="text-amber-600 text-xs font-mono uppercase tracking-widest mb-2">🎯 W3 最終定案題目</p>
+                                    <p className="text-amber-900 font-black text-xl mb-2">「{methodAnswers._final}」</p>
+                                    <p className="text-amber-700 text-xs">帶著這個題目去 W4 Gallery Walk！</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            )}
         </div>
     );
 };

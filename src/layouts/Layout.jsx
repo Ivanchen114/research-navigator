@@ -28,8 +28,8 @@ export const Layout = () => {
             label: '2️⃣ 研究規劃',
             items: [
                 { name: '方法快篩 (W3-W4)', path: '/wizard', icon: <Navigation2 size={18} /> },
-                { name: '研究診所 (W5)', path: '/clinic', icon: <Stethoscope size={18} /> },
-                { name: '文獻鑑識 (W6)', path: '/literature-review', icon: <BookOpen size={18} /> },
+                { name: '文獻鑑識 (W5)', path: '/literature-review', icon: <BookOpen size={18} /> },
+                { name: '研究診所 (W6)', path: '/clinic', icon: <Stethoscope size={18} /> },
                 { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
             ]
         },

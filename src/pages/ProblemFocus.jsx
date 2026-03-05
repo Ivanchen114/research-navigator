@@ -452,87 +452,33 @@ C. 深究型（某現象的運作機制/背後原因）
                 )}
             </div>
 
-            {/* ── Part 4：AI 協作 3 句型優化器 ──────── */}
-            <div className="rounded-2xl overflow-hidden border border-amber-200">
-                <SectionHeader id="part4" title="Part 4｜🤖 AI 協作 3 — 句型優化器" icon="🤖" subtitle="先自己寫初稿，再問 AI 優化成三個版本，你挑最好的！" badge="AI 協作" {...props} />
-                {openSection === 'part4' && (
-                    <div className="bg-white p-6 md:p-8 space-y-5 border-t border-amber-100">
-                        {/* Step 1 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2">Step 1：我的題目初稿</label>
-                            <textarea
-                                className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-400 transition-all min-h-[64px]"
-                                placeholder="根據 Part 3 選的方向，先自己寫一個題目初稿…"
-                                value={draftTitle}
-                                onChange={e => setDraftTitle(e.target.value)}
-                            />
-                        </div>
 
-                        {/* Step 2 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2">Step 2：複製 Prompt 給 AI，要求它給你三個優化版本</label>
-                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
-                                <PromptBox>{buildOptimizePrompt()}</PromptBox>
-                            </div>
-                        </div>
-
-                        {/* Step 4 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-3">Step 4：我的最終版</label>
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
-                                {['初稿', '優化 A', '優化 B', '優化 C', '綜合改自己的'].map(opt => (
-                                    <button
-                                        key={opt}
-                                        onClick={() => setFinalChoice(opt)}
-                                        className={`py-2 px-2 rounded-lg border text-xs font-bold transition-all ${finalChoice === opt ? 'bg-amber-500 border-amber-500 text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-amber-300'}`}
-                                    >
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
-                            <textarea
-                                className="w-full border-2 border-amber-400 bg-amber-50 rounded-xl p-4 font-bold text-amber-900 text-sm focus:ring-2 focus:ring-amber-500 transition-all min-h-[80px]"
-                                placeholder="🎯 【我的 W2 最終定案題目】（下週 W3 的健檢病人！）"
-                                value={finalTitle}
-                                onChange={e => setFinalTitle(e.target.value)}
-                            />
-                            {finalTitle && (
-                                <div className="mt-3 bg-amber-100 border border-amber-300 rounded-xl p-4 text-center">
-                                    <p className="text-amber-600 text-xs font-mono uppercase tracking-widest mb-1">// W2 定案題目</p>
-                                    <p className="text-amber-900 font-black text-base">🎯 {finalTitle}</p>
-                                    <p className="text-amber-600 text-xs mt-1">帶著這個題目去上 W3——它就是下週的健檢病人！</p>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* 今天做了什麼回顧 */}
-                        <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
-                            <h3 className="font-bold text-slate-700 text-sm mb-3">📊 今天做了什麼回顧</h3>
-                            <div className="grid md:grid-cols-2 gap-3">
-                                <div>
-                                    <p className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">👤 你做的（AI 做不到）</p>
-                                    <ul className="space-y-1 text-sm text-slate-700">
-                                        {['觀察真實現象', '用白話說出核心疑問', '選擇落差方向', '選擇探究角度', '判斷題目好壞'].map(i => (
-                                            <li key={i} className="flex items-start gap-2"><CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />{i}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <p className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">🤖 AI 幫你做的</p>
-                                    <ul className="space-y-1 text-sm text-slate-700">
-                                        {['從 5 個角度看落差', '把白話翻成學術方向（A/B/C）', '優化題目表達'].map(i => (
-                                            <li key={i} className="flex items-start gap-2"><Cpu size={14} className="text-blue-500 shrink-0 mt-0.5" />{i}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="mt-4 text-center bg-white rounded-lg p-3 border border-slate-200">
-                                <span className="font-black text-slate-700">🔑 關鍵心法：AI 給選項，但你做選擇！</span>
-                            </div>
-                        </div>
+            {/* ── 今日回顧卡 ─────────────────────────── */}
+            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+                <h3 className="font-bold text-slate-700 text-sm mb-3">📊 今天做了什麼回顧</h3>
+                <div className="grid md:grid-cols-2 gap-3">
+                    <div>
+                        <p className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">👤 你做的（AI 做不到）</p>
+                        <ul className="space-y-1 text-sm text-slate-700">
+                            {['觀察真實現象', '用白話說出核心疑問', '選擇落差方向', '選擇探究角度'].map(i => (
+                                <li key={i} className="flex items-start gap-2"><CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />{i}</li>
+                            ))}
+                        </ul>
                     </div>
-                )}
+                    <div>
+                        <p className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">🤖 AI 幫你做的</p>
+                        <ul className="space-y-1 text-sm text-slate-700">
+                            {['從 5 個角度看落差', '把白話翻成學術方向（A/B/C）'].map(i => (
+                                <li key={i} className="flex items-start gap-2"><Cpu size={14} className="text-blue-500 shrink-0 mt-0.5" />{i}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+                <div className="mt-4 text-center bg-white rounded-lg p-3 border border-slate-200">
+                    <span className="font-black text-slate-700">🔑 關鍵心法：AI 給選項，但你做選擇！</span>
+                </div>
             </div>
+
 
             {/* ── Part Z：自我檢核 ──────────────────────── */}
             <div className="rounded-2xl overflow-hidden border border-slate-200">
@@ -544,8 +490,7 @@ C. 深究型（某現象的運作機制/背後原因）
                                 '我已完成 Part 2 的三個練習，步驟 1~3 都有填寫。',
                                 '我已完成 Part 2.5 的 AI 協作 1（落差擴充器）。',
                                 '我已完成 Part 3 的 Step 0（核心疑問分類）和 AI 協作 2（探究意圖生成器）。',
-                                '我已完成 Part 4 的 AI 協作 3（句型優化器）。',
-                                '我的「最終定案題目」已經寫好。',
+                                '我的「探究意圖」已經選定（Part 3 Step 4 已完成）。',
                                 '我理解：AI 給選項，但我做選擇。',
                             ].map(item => (
                                 <label key={item} className="flex items-start gap-3 cursor-pointer group">
@@ -562,9 +507,9 @@ C. 深究型（某現象的運作機制/背後原因）
             <div className="bg-slate-900 rounded-3xl p-6 text-white">
                 <p className="text-slate-400 text-xs font-mono tracking-widest mb-2 uppercase">// 📢 下週 W3 預告</p>
                 <p className="text-white font-bold text-lg mb-1">「題目健檢與 AI 協作工作坊」</p>
-                <p className="text-slate-300 text-sm mb-3">你會學到：萬用急救心法、診斷 8 種爛題目、用「5W1H」規格化、用「可行性快篩」檢查。</p>
+                <p className="text-slate-300 text-sm mb-3">你會學到：萬用急救心法、診斷 8 種爛題目、用「5W1H」規格化、用「可行性快篩」確認可行，以及用 <strong className="text-amber-300">AI 句型優化器</strong>把題目包裝成真正的研究題目！</p>
                 <div className="bg-amber-500/20 border border-amber-500/40 rounded-xl p-3">
-                    <p className="text-amber-300 font-bold text-sm">⚠️ 請帶著你 Part 4 的「最終定案題目」來！那就是下週要健檢的病人！</p>
+                    <p className="text-amber-300 font-bold text-sm">⚠️ 請帶著你 Part 3 的「最終探究意圖」來！那就是下週要健檢的病人！</p>
                 </div>
             </div>
 
