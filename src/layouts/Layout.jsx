@@ -53,8 +53,8 @@ export const Layout = () => {
             phase: '📊 實戰分析',
             label: '5️⃣ 分析與報告',
             items: [
-                { name: '解讀與結論 (W13+)', path: '/analysis', icon: <BarChart2 size={18} /> },
-                { name: '圖表選用原則 (W13+)', path: '/chart-selection', icon: <TrendingUp size={18} /> }
+                { name: '數據轉譯 (W13)', path: '/chart-selection', icon: <TrendingUp size={18} /> },
+                { name: '資料分析工作坊 (W14)', path: '/analysis', icon: <BarChart2 size={18} /> }
             ]
         }
     ];
