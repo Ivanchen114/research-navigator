@@ -568,9 +568,9 @@ export const ChartMatcherGame = () => {
     // ================= START SCREEN =================
     if (gameState === 'start') {
         return (
-            <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans min-h-[600px] relative">
+            <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans min-h-[600px] relative">
                 <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none"></div>
-                <div className="bg-slate-900/80 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-cyan-500 relative overflow-hidden backdrop-blur-sm z-10">
+                <div className="bg-slate-900/80 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-cyan-500 relative overflow-hidden backdrop-blur-sm z-10">
                     <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 drop-shadow-[0_0_20px_rgba(6,182,212,0.5)]">📊</div>
                     <div className="text-7xl mb-6 relative">📊<span className="absolute -inset-4 bg-cyan-500/20 rounded-full blur-xl z-[-1]"></span></div>
                     <h1 className="text-3xl md:text-5xl font-black text-cyan-400 mb-2 tracking-widest drop-shadow-[0_0_8px_currentColor]">行動代號：解碼</h1>
@@ -582,7 +582,7 @@ export const ChartMatcherGame = () => {
                         你能幫數據找到<span className="text-cyan-400 font-bold mx-1 drop-shadow-[0_0_5px_currentColor]">最適合的圖表</span>來呈現決策嗎？
                     </p>
 
-                    <div className="bg-slate-800/60 rounded-xl p-5 mb-6 text-center border border-cyan-500/30 shadow-inner">
+                    <div className="bg-slate-800/60 rounded-sm p-5 mb-6 text-center border border-cyan-500/30 shadow-inner">
                         <label className="block text-sm font-bold text-cyan-500 mb-2 tracking-[0.2em] font-mono">📡 CURRENT OPERATIVE</label>
                         {playerName ? (
                             <div className="text-2xl font-black text-emerald-400 border-b-2 border-emerald-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_5px_currentColor]">{playerName} 探員</div>
@@ -597,7 +597,7 @@ export const ChartMatcherGame = () => {
                         </div>
                     </div>
 
-                    <div className="bg-slate-900/60 rounded-xl p-4 mb-8 border border-slate-700 shadow-inner">
+                    <div className="bg-slate-900/60 rounded-sm p-4 mb-8 border border-slate-700 shadow-inner">
                         <h3 className="text-sm font-bold text-slate-400 mb-4 tracking-[0.2em] font-mono">📊 AVAILABLE TOOLS</h3>
                         <div className="grid grid-cols-2 gap-3 text-sm text-slate-300">
                             {Object.values(chartTypes).map((ct, i) => (
@@ -612,7 +612,7 @@ export const ChartMatcherGame = () => {
                     <button
                         onClick={startGame}
                         disabled={!playerName}
-                        className={`font-black py-4 px-12 rounded-full text-xl transition-all duration-300 relative overflow-hidden group tracking-[0.2em] ${!playerName ? 'bg-slate-800 text-slate-500 cursor-not-allowed border-2 border-slate-700' : 'bg-slate-900 border-2 border-cyan-500 hover:border-cyan-400 text-cyan-400 hover:text-white hover:bg-cyan-900/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:-translate-y-1'}`}
+                        className={`font-black py-4 px-12 rounded-sm text-xl transition-all duration-300 relative overflow-hidden group tracking-[0.2em] ${!playerName ? 'bg-slate-800 text-slate-500 cursor-not-allowed border-2 border-slate-700' : 'bg-slate-900 border-2 border-cyan-500 hover:border-cyan-400 text-cyan-400 hover:text-white hover:bg-cyan-900/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:-translate-y-1'}`}
                     >
                         {playerName && <span className="absolute inset-0 w-full h-full bg-white/10 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
                         <span className="relative z-10 flex items-center justify-center gap-3">開始配對 <span>🚀</span></span>
@@ -636,12 +636,12 @@ export const ChartMatcherGame = () => {
         const missedOrWeak = results.filter(r => r.result !== 'best');
 
         return (
-            <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[600px] relative">
+            <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[600px] relative">
                 <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none"></div>
-                <div className="bg-slate-900/80 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-2xl w-full text-center border-t-[8px] border-cyan-500 relative z-10 backdrop-blur-sm">
+                <div className="bg-slate-900/80 p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-2xl w-full text-center border-t-[8px] border-cyan-500 relative z-10 backdrop-blur-sm">
                     <h1 className="text-3xl font-black text-cyan-500 mb-4 tracking-[0.25em] font-mono">MISSION REPORT</h1>
 
-                    <div className="mb-6 bg-slate-800/50 py-3 rounded-xl border border-slate-700/50 inline-block px-10">
+                    <div className="mb-6 bg-slate-800/50 py-3 rounded-sm border border-slate-700/50 inline-block px-10">
                         <p className="text-xs font-bold text-slate-400 tracking-[0.2em] font-mono mb-1">OPERATIVE ID</p>
                         <p className="text-2xl font-black text-emerald-400 drop-shadow-[0_0_5px_currentColor]">{playerName}</p>
                     </div>
@@ -651,25 +651,25 @@ export const ChartMatcherGame = () => {
                     </div>
                     <p className="text-cyan-600 font-mono tracking-widest mb-2">ACCURACY: {percentage}%</p>
                     {maxCombo >= 3 && (
-                        <p className="text-amber-500 font-bold mb-4 bg-amber-950/30 inline-block px-4 py-1 rounded-full border border-amber-500/30">🔥 最高連續答對：{maxCombo} 連擊！</p>
+                        <p className="text-amber-500 font-bold mb-4 bg-amber-950/30 inline-block px-4 py-1 rounded-sm border border-amber-500/30">🔥 最高連續答對：{maxCombo} 連擊！</p>
                     )}
                     <h2 className={`text-3xl font-black mb-8 ${color}`}>{title}</h2>
 
-                    <p className="text-xs text-slate-400 font-bold mb-6 uppercase tracking-[0.2em] bg-slate-800/80 py-2 rounded-lg border border-slate-700 mx-auto max-w-xs shadow-inner">請截圖此頁面作為紀錄</p>
+                    <p className="text-xs text-slate-400 font-bold mb-6 uppercase tracking-[0.2em] bg-slate-800/80 py-2 rounded-sm border border-slate-700 mx-auto max-w-xs shadow-inner">請截圖此頁面作為紀錄</p>
 
                     <button
                         onClick={() => setGameState('start')}
-                        className="bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 font-black py-4 px-10 rounded-full text-lg transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:-translate-y-1 mb-8 border border-cyan-500/50 tracking-[0.2em]"
+                        className="bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 font-black py-4 px-10 rounded-sm text-lg transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:-translate-y-1 mb-8 border border-cyan-500/50 tracking-[0.2em]"
                     >
                         重新執行任務 🔄
                     </button>
 
                     {missedOrWeak.length > 0 && (
-                        <div className="text-left bg-slate-800/80 p-6 rounded-2xl border-l-8 border-amber-500 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
+                        <div className="text-left bg-slate-800/80 p-6 rounded-sm border-l-8 border-amber-500 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
                             <h3 className="text-lg font-black mb-5 text-amber-500 tracking-wider">⚠️ 建議複習情報</h3>
                             <div className="space-y-4">
                                 {missedOrWeak.map((r, i) => (
-                                    <div key={i} className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                                    <div key={i} className="bg-slate-900/60 p-4 rounded-sm border border-slate-700/50 shadow-inner">
                                         <p className="font-bold text-slate-300 mb-3 text-sm leading-relaxed"><span className="text-amber-500 font-mono">Q{r.question.id}.</span> {r.question.scenario}</p>
                                         <div className="flex flex-wrap gap-2">
                                             <span className={`text-xs font-bold px-3 py-1.5 rounded-md border ${r.result === 'acceptable' ? 'bg-amber-950/40 text-amber-400 border-amber-500/30' : 'bg-rose-950/40 text-rose-400 border-rose-500/30'}`}>
@@ -687,7 +687,7 @@ export const ChartMatcherGame = () => {
                     )}
 
                     {missedOrWeak.length === 0 && (
-                        <div className="bg-emerald-950/50 text-emerald-400 border border-emerald-500/50 p-5 rounded-2xl font-black text-xl tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <div className="bg-emerald-950/50 text-emerald-400 border border-emerald-500/50 p-5 rounded-sm font-black text-xl tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                             PERFECT OPERATION! 🎉
                         </div>
                     )}
@@ -702,26 +702,26 @@ export const ChartMatcherGame = () => {
     const isBoss = q.scenario.includes('🔥');
 
     return (
-        <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px] relative">
+        <div className="bg-[url('/images/war_room_bg.png')] bg-cover bg-center rounded-sm overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[600px] relative">
             <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none"></div>
             <div className="max-w-4xl w-full relative z-10 flex flex-col h-full">
 
                 {/* Progress */}
                 <div className="flex justify-between items-center mb-6 px-2">
-                    <div className="bg-slate-900/80 text-cyan-400 font-bold px-5 py-2 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.2)] text-lg border border-cyan-500/50 backdrop-blur-sm tracking-wider font-mono">
+                    <div className="bg-slate-900/80 text-cyan-400 font-bold px-5 py-2 rounded-sm shadow-[0_0_15px_rgba(6,182,212,0.2)] text-lg border border-cyan-500/50 backdrop-blur-sm tracking-wider font-mono">
                         DATASET {currentIdx + 1} / {questions.length}
                     </div>
                     <div className="flex items-center gap-3">
                         {/* Combo indicator */}
                         {combo >= 2 && (
-                            <div className="bg-amber-950/80 text-amber-500 font-black px-4 py-2 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.3)] text-lg border border-amber-500/50 backdrop-blur-sm"
+                            <div className="bg-amber-950/80 text-amber-500 font-black px-4 py-2 rounded-sm shadow-[0_0_15px_rgba(245,158,11,0.3)] text-lg border border-amber-500/50 backdrop-blur-sm"
                                 style={{ animation: comboAnim ? 'combo-fire 0.5s ease-out' : 'none' }}>
                                 🔥 x{combo}
                                 {combo >= 5 && ' OVERKILL!'}
                                 {combo >= 3 && combo < 5 && ' TACTICAL!'}
                             </div>
                         )}
-                        <div className="bg-slate-900/80 text-emerald-400 font-bold px-5 py-2 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.2)] text-lg border border-emerald-500/50 backdrop-blur-sm">
+                        <div className="bg-slate-900/80 text-emerald-400 font-bold px-5 py-2 rounded-sm shadow-[0_0_15px_rgba(16,185,129,0.2)] text-lg border border-emerald-500/50 backdrop-blur-sm">
                             SCORE: {score}
                         </div>
                     </div>
@@ -729,7 +729,7 @@ export const ChartMatcherGame = () => {
 
                 {/* Question Card */}
                 <div
-                    className={`bg-slate-900/80 p-6 md:p-8 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-6 border-l-[8px] transition-all relative overflow-hidden backdrop-blur-sm ${isBoss ? 'border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : 'border-cyan-500'}`}
+                    className={`bg-slate-900/80 p-6 md:p-8 rounded-sm shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-6 border-l-[8px] transition-all relative overflow-hidden backdrop-blur-sm ${isBoss ? 'border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : 'border-cyan-500'}`}
                     style={{ animation: shakeCard ? 'matcher-shake 0.5s ease-in-out' : 'none' }}
                 >
                     {/* Confetti */}
@@ -757,7 +757,7 @@ export const ChartMatcherGame = () => {
                     <div className="grid grid-cols-2 gap-4 mb-6">
                         {q.options.map(opt => (
                             <button key={opt} onClick={() => handleAnswer(opt)}
-                                className="bg-slate-900/60 hover:bg-slate-800/80 border-2 border-slate-700/50 hover:border-cyan-500/80 rounded-2xl p-5 text-center transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:-translate-y-1 group backdrop-blur-none relative overflow-hidden">
+                                className="bg-slate-900/60 hover:bg-slate-800/80 border-2 border-slate-700/50 hover:border-cyan-500/80 rounded-sm p-5 text-center transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:-translate-y-1 group backdrop-blur-none relative overflow-hidden">
                                 <span className="absolute inset-0 w-full h-full bg-cyan-500/0 group-hover:bg-cyan-500/5 transition-colors"></span>
                                 <div className="text-4xl mb-2 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] relative z-10">{chartTypes[opt].icon}</div>
                                 <div className="text-lg font-black text-slate-300 group-hover:text-cyan-400 relative z-10">{chartTypes[opt].name}</div>
@@ -782,23 +782,23 @@ export const ChartMatcherGame = () => {
                                     borderColor = 'border-cyan-500';
                                     bg = 'bg-cyan-950/40';
                                     nameColor = 'text-cyan-400';
-                                    badge = <span className="absolute -top-2 -right-2 bg-cyan-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.5)]">🎯 最佳解</span>;
+                                    badge = <span className="absolute -top-2 -right-2 bg-cyan-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-sm shadow-[0_0_10px_rgba(6,182,212,0.5)]">🎯 最佳解</span>;
                                 } else if (q.acceptable.includes(opt)) {
                                     borderColor = 'border-amber-500/50';
                                     bg = 'bg-amber-950/40';
                                     nameColor = 'text-amber-400';
-                                    badge = <span className="absolute -top-2 -right-2 bg-amber-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.5)]">👍 次佳解</span>;
+                                    badge = <span className="absolute -top-2 -right-2 bg-amber-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-sm shadow-[0_0_10px_rgba(245,158,11,0.5)]">👍 次佳解</span>;
                                 } else {
                                     borderColor = 'border-rose-500/30';
                                     bg = 'bg-rose-950/20';
                                     nameColor = 'text-rose-400/70';
-                                    badge = <span className="absolute -top-2 -right-2 bg-rose-500/80 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">❌ 錯誤</span>;
+                                    badge = <span className="absolute -top-2 -right-2 bg-rose-500/80 text-white text-[10px] font-black px-2 py-0.5 rounded-sm shadow">❌ 錯誤</span>;
                                 }
 
                                 const isSelected = opt === selectedAnswer;
 
                                 return (
-                                    <div key={opt} className={`relative ${bg} border-2 ${borderColor} rounded-xl p-3 text-center transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-offset-slate-900 ring-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)] z-10 scale-[1.02]' : 'opacity-70 grayscale-[0.3]'}`}>
+                                    <div key={opt} className={`relative ${bg} border-2 ${borderColor} rounded-sm p-3 text-center transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-offset-slate-900 ring-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)] z-10 scale-[1.02]' : 'opacity-70 grayscale-[0.3]'}`}>
                                         {badge}
                                         <div className="text-2xl mb-1">{chartTypes[opt].icon}</div>
                                         <div className={`text-sm font-bold ${nameColor}`}>{chartTypes[opt].name}</div>
@@ -808,7 +808,7 @@ export const ChartMatcherGame = () => {
                         </div>
 
                         {/* Feedback */}
-                        <div className={`p-6 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.6)] mb-6 border-l-[8px] relative overflow-hidden backdrop-blur-lg ${answerResult === 'best' ? 'bg-cyan-950/80 border-cyan-500' :
+                        <div className={`p-6 rounded-sm shadow-[0_0_30px_rgba(0,0,0,0.6)] mb-6 border-l-[8px] relative overflow-hidden backdrop-blur-lg ${answerResult === 'best' ? 'bg-cyan-950/80 border-cyan-500' :
                             answerResult === 'acceptable' ? 'bg-amber-950/80 border-amber-500' :
                                 'bg-rose-950/80 border-rose-500'
                             }`}>
@@ -828,28 +828,28 @@ export const ChartMatcherGame = () => {
                             </h3>
 
                             {/* Best reason */}
-                            <div className="mb-4 relative z-10 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                            <div className="mb-4 relative z-10 bg-slate-900/60 p-4 rounded-sm border border-slate-700/50 shadow-inner">
                                 <p className="text-sm font-black text-cyan-500 mb-2 tracking-widest font-mono border-b border-cyan-500/20 pb-2">🎯 為什麼 {chartTypes[q.best].name} 是第一選擇？</p>
                                 <p className="text-slate-300 text-[15px] leading-relaxed font-medium">{q.bestReason}</p>
                             </div>
 
                             {/* Acceptable reason */}
                             {q.acceptable.length > 0 && q.acceptableReason && (
-                                <div className="mb-4 relative z-10 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                                <div className="mb-4 relative z-10 bg-slate-900/60 p-4 rounded-sm border border-slate-700/50 shadow-inner">
                                     <p className="text-sm font-black text-amber-500 mb-2 tracking-widest font-mono border-b border-amber-500/20 pb-2">👍 {q.acceptable.map(a => chartTypes[a].name).join('、')} 為什麼可接受？</p>
                                     <p className="text-slate-300 text-[15px] leading-relaxed font-medium">{q.acceptableReason}</p>
                                 </div>
                             )}
 
                             {/* Wrong reason */}
-                            <div className="mb-5 relative z-10 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                            <div className="mb-5 relative z-10 bg-slate-900/60 p-4 rounded-sm border border-slate-700/50 shadow-inner">
                                 <p className="text-sm font-black text-rose-500 mb-2 tracking-widest font-mono border-b border-rose-500/20 pb-2">❌ 其他選項為什麼不適合？</p>
                                 <p className="text-slate-300 text-[15px] leading-relaxed font-medium">{q.wrongReason}</p>
                             </div>
 
                             {/* Chart Preview */}
-                            <div className="bg-slate-900 p-4 rounded-xl border border-cyan-500/30 shadow-inner relative z-10 mb-2 hover:border-cyan-400/50 transition-colors group">
-                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-xl"></div>
+                            <div className="bg-slate-900 p-4 rounded-sm border border-cyan-500/30 shadow-inner relative z-10 mb-2 hover:border-cyan-400/50 transition-colors group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-sm"></div>
                                 <p className="text-[11px] font-bold text-slate-400 mb-3 tracking-[0.2em] font-mono flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
                                     VISUALIZATION PREVIEW: {chartTypes[q.best].icon} {chartTypes[q.best].name}
@@ -860,7 +860,7 @@ export const ChartMatcherGame = () => {
                             <div className="text-right mt-6 relative z-10">
                                 <button
                                     onClick={nextQuestion}
-                                    className="bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-black py-3.5 px-10 rounded-full text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_15px_rgba(6,182,212,0.4)] tracking-wider group relative overflow-hidden"
+                                    className="bg-cyan-600 hover:bg-cyan-500 text-slate-900 font-black py-3.5 px-10 rounded-sm text-lg transition-all transform hover:-translate-y-1 shadow-[0_0_15px_rgba(6,182,212,0.4)] tracking-wider group relative overflow-hidden"
                                 >
                                     <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
                                     <span className="relative z-10 flex items-center gap-2">{currentIdx < questions.length - 1 ? '載入下一個數據庫 ➡️' : '輸出情報分析報告 📋'}</span>

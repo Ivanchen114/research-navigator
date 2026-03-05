@@ -109,7 +109,7 @@ const LineChart = ({ data, unit = '', color = '#6366f1', axisX, axisY }) => {
     );
 };
 
-// ========== 題目資料庫（三層結構）==========
+// ========== 題目資料庫（四層結構）==========
 // layers: [{ type, icon, label, parts: [{text, suspect?, isError?}] }]
 const caseData = [
     {
@@ -185,7 +185,7 @@ const caseData = [
                 ]
             }
         ],
-        explanation: "三層都寫得很好！📊 描述客觀忠實；🧠 用「更容易」而非「導致」，精準表達相關性；🔍 點出了可能的限制。👍",
+        explanation: "四層都寫得很好！📊 描述客觀忠實；🧠 用「更容易」而非「導致」，精準表達相關性；🔍 點出了可能的限制。👍",
         tags: ["用詞精準", "正確描述相關"]
     },
     {
@@ -294,7 +294,7 @@ const caseData = [
                 ]
             }
         ],
-        explanation: "三層都很標準！📊 忠實列出數據；🧠 「近半數」精確對應 45%，用「主要」而非「唯一」；🔍 指出了推廣限制。👍",
+        explanation: "四層都很標準！📊 忠實列出數據；🧠 「近半數」精確對應 45%，用「主要」而非「唯一」；🔍 指出了推廣限制。👍",
         tags: ["精準描述", "數據忠實"]
     },
     {
@@ -409,7 +409,7 @@ const caseData = [
                 ]
             }
         ],
-        explanation: "三層都精準！📊 忠實描述數據趨勢；🧠 用「有越低的趨勢」精確表達相關方向，避免因果宣稱；🔍 主動指出無法推論因果。教科書級別的寫法！👍",
+        explanation: "四層都精準！📊 忠實描述數據趨勢；🧠 用「有越低的趨勢」精確表達相關方向，避免因果宣稱；🔍 主動指出無法推論因果。教科書級別的寫法！👍",
         tags: ["精準用詞", "避免因果"]
     },
     {
@@ -757,7 +757,7 @@ export const DataDetectiveGame = () => {
             if (c.isValid) {
                 setIsAnswered(true);
                 setScore(s => s + stars);
-                setFeedbackMsg({ type: 'right', text: '✅ 正確！三層分析都沒有問題，寫得很嚴謹！' });
+                setFeedbackMsg({ type: 'right', text: '✅ 正確！四層分析都沒有問題，寫得很嚴謹！' });
             } else {
                 setStars(s => Math.max(0, s - 1));
                 setShakeCard(true);
@@ -855,14 +855,14 @@ export const DataDetectiveGame = () => {
     // ========== START SCREEN ==========
     if (gameState === 'start') {
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-14 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-14 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
                 style={{ backgroundImage: "url('/images/data_detective_bg.png')" }}>
                 <div className="absolute inset-0 bg-slate-900/80  z-0"></div>
-                <div className="bg-slate-900/60 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative flex flex-col  border-x border-b border-white/10 z-10 animate-in fade-in zoom-in-95 duration-500">
+                <div className="bg-slate-900/60 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative flex flex-col  border-x border-b border-white/10 z-10 animate-in fade-in zoom-in-95 duration-500">
                     <div className="absolute top-3 right-4 text-[10px] font-mono text-amber-500 tracking-widest drop-shadow-[0_0_5px_rgba(245,158,11,0.8)]" style={{ fontFamily: 'Courier New, monospace' }}>FILE #001-014</div>
                     <div className="text-6xl mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">🕵️</div>
                     <h1 className="text-4xl md:text-5xl font-black mb-2 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse">行動代號：濾鏡</h1>
-                    <div className="text-sm md:text-base font-bold text-amber-200/90 mb-5 bg-amber-950/60 inline-block px-4 py-1.5 rounded-lg border border-amber-500/30 tracking-widest">
+                    <div className="text-sm md:text-base font-bold text-amber-200/90 mb-5 bg-amber-950/60 inline-block px-4 py-1.5 rounded-sm border border-amber-500/30 tracking-widest">
                         🎯 客觀數據解讀與批判性思維培養
                     </div>
                     <p className="text-lg text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed shadow-sm font-medium">
@@ -871,7 +871,7 @@ export const DataDetectiveGame = () => {
                         每一份報告都可能藏著「假象」，你的任務就是揭露它們，還原數據的「真相」！
                     </p>
 
-                    <div className="bg-slate-950/60 rounded-2xl p-6 mb-8 text-center border border-amber-500/30 shadow-inner  relative overflow-hidden group hover:border-amber-500/50 transition-colors duration-500">
+                    <div className="bg-slate-950/60 rounded-sm p-6 mb-8 text-center border border-amber-500/30 shadow-inner  relative overflow-hidden group hover:border-amber-500/50 transition-colors duration-500">
                         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                         <label className="block text-sm font-black text-amber-500 mb-2 tracking-[0.2em] drop-shadow-[0_0_5px_currentColor]">🕵️ 目前登入身分</label>
                         {playerName ? (
@@ -881,7 +881,7 @@ export const DataDetectiveGame = () => {
                         )}
                         <h3 className="text-sm font-black text-cyan-400 mb-3 tracking-widest border-t border-slate-700/50 pt-5 mt-6 flex items-center justify-center gap-2 drop-shadow-[0_0_5px_currentColor]">📋 偵探手冊</h3>
                         <div className="space-y-3 text-sm text-slate-300 text-left font-medium">
-                            <p>每份分析報告包含 <strong className="text-amber-400">三層結構</strong>：</p>
+                            <p>每份分析報告包含 <strong className="text-amber-400">四層結構</strong>：</p>
                             <div className="pl-3 border-l-2 border-slate-700/80 space-y-2 py-1 my-2">
                                 <p className="flex items-center gap-2"><span className="text-indigo-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">📊 描述</span> <span className="text-slate-400">—</span> 客觀陳述數據</p>
                                 <p className="flex items-center gap-2"><span className="text-amber-500 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🧠 詮釋</span> <span className="text-slate-400">—</span> 解讀數據意義</p>
@@ -890,7 +890,7 @@ export const DataDetectiveGame = () => {
                             <div className="border-t border-slate-700/50 pt-4 mt-4 space-y-2">
                                 <p className="flex items-center gap-2">🔎 <strong className="text-amber-400 drop-shadow-[0_0_5px_currentColor]">第一步：選哪一層有問題</strong></p>
                                 <p className="flex items-center gap-2">🔍 <strong className="text-cyan-400 drop-shadow-[0_0_5px_currentColor]">第二步：找出問題關鍵字</strong></p>
-                                <p className="flex items-center gap-2"><span className="text-emerald-400">✅</span> 三層都 OK？按<strong className="text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">「都沒問題」</strong></p>
+                                <p className="flex items-center gap-2"><span className="text-emerald-400">✅</span> 四層都 OK？按<strong className="text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">「都沒問題」</strong></p>
                                 <p className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-800/80 text-amber-500/80 text-xs">⭐ 每案 3 顆星，選錯扣星！</p>
                             </div>
                         </div>
@@ -899,7 +899,7 @@ export const DataDetectiveGame = () => {
                     <button
                         onClick={startGame}
                         disabled={!playerName}
-                        className={`w-full py-4 rounded-full font-black text-xl tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group ${!playerName ? 'bg-slate-800/50 text-slate-500 border border-slate-700 cursor-not-allowed' : 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 shadow-[0_5px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_8px_25px_rgba(245,158,11,0.6)] hover:-translate-y-1 active:translate-y-0'}`}>
+                        className={`w-full py-4 rounded-sm font-black text-xl tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group ${!playerName ? 'bg-slate-800/50 text-slate-500 border border-slate-700 cursor-not-allowed' : 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 shadow-[0_5px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_8px_25px_rgba(245,158,11,0.6)] hover:-translate-y-1 active:translate-y-0'}`}>
                         {playerName && <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
                         <span className="relative z-10 flex items-center gap-2">開始辦案 🕵️</span>
                     </button>
@@ -920,14 +920,14 @@ export const DataDetectiveGame = () => {
         else { title = "菜鳥偵探，繼續修煉！"; color = "text-rose-400"; emoji = "📉"; }
 
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
                 style={{ backgroundImage: "url('/images/data_detective_bg.png')" }}>
                 <div className="absolute inset-0 bg-slate-900/80 z-0"></div>
-                <div className="bg-slate-900/70 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative  border-x border-b border-white/10 z-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                <div className="bg-slate-900/70 p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative  border-x border-b border-white/10 z-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
                     <div className="absolute top-0 right-6 bg-slate-800 text-slate-400 text-xs font-mono px-4 py-1.5 rounded-b-lg tracking-widest shadow-inner border-x border-b border-slate-700">FINAL DOSSIER</div>
                     <h1 className="text-2xl font-bold text-amber-500 mb-4 tracking-widest mt-4 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" style={{ fontFamily: 'Courier New, monospace' }}>📋 INVESTIGATION REPORT</h1>
 
-                    <div className="mb-6 bg-slate-950/50 py-4 mx-8 rounded-2xl border border-slate-800/80 shadow-inner">
+                    <div className="mb-6 bg-slate-950/50 py-4 mx-8 rounded-sm border border-slate-800/80 shadow-inner">
                         <p className="text-sm font-black text-slate-400 tracking-widest mb-1">探員姓名</p>
                         <p className="text-3xl font-black text-amber-300 border-b-2 border-amber-500/50 inline-block px-8 pb-1 drop-shadow-[0_0_8px_rgba(252,211,77,0.5)]">{playerName}</p>
                     </div>
@@ -937,22 +937,22 @@ export const DataDetectiveGame = () => {
                     <div className="text-6xl my-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] animate-bounce">{emoji}</div>
                     <h2 className={`text-4xl font-black mb-8 ${color} drop-shadow-[0_0_10px_currentColor] tracking-wide`}>{title}</h2>
 
-                    <p className="text-xs text-amber-400/80 font-black mb-6 uppercase tracking-[0.2em] bg-amber-950/40 py-2.5 rounded-xl border border-amber-500/30 mx-12 shadow-inner">請截圖此頁面作為紀錄</p>
+                    <p className="text-xs text-amber-400/80 font-black mb-6 uppercase tracking-[0.2em] bg-amber-950/40 py-2.5 rounded-sm border border-amber-500/30 mx-12 shadow-inner">請截圖此頁面作為紀錄</p>
 
                     <button onClick={() => setGameState('start')}
-                        className="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3.5 px-10 rounded-full text-lg tracking-widest transition-all duration-300 hover:scale-105 shadow-[0_5px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_5px_20px_rgba(245,158,11,0.3)] mb-8 border border-slate-600 hover:border-amber-500/50 flex items-center gap-2 mx-auto">
+                        className="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3.5 px-10 rounded-sm text-lg tracking-widest transition-all duration-300 hover:scale-105 shadow-[0_5px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_5px_20px_rgba(245,158,11,0.3)] mb-8 border border-slate-600 hover:border-amber-500/50 flex items-center gap-2 mx-auto">
                         <span>重新調查</span> <span>🔄</span>
                     </button>
 
                     {wrongCases.length > 0 && (
-                        <div className="text-left bg-slate-900/80 p-6 rounded-2xl border-l-[6px] border-rose-500 shadow-inner max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-rose-900 scrollbar-track-transparent">
+                        <div className="text-left bg-slate-900/80 p-6 rounded-sm border-l-[6px] border-rose-500 shadow-inner max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-rose-900 scrollbar-track-transparent">
                             <h3 className="text-lg font-black mb-4 text-rose-400 tracking-widest flex items-center gap-2 drop-shadow-[0_0_5px_currentColor]">📋 誤判紀錄</h3>
                             <div className="space-y-4">
                                 {wrongCases.map((wc, i) => (
-                                    <div key={i} className="bg-slate-950/60 p-5 rounded-xl border border-slate-700 shadow-sm relative overflow-hidden group hover:border-slate-500 transition-colors">
+                                    <div key={i} className="bg-slate-950/60 p-5 rounded-sm border border-slate-700 shadow-sm relative overflow-hidden group hover:border-slate-500 transition-colors">
                                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-rose-500/50 to-transparent"></div>
                                         <p className="font-bold text-slate-200 mb-2">{wc.title}</p>
-                                        <span className={`text-xs font-black px-3 py-1 rounded-full shadow-inner tracking-wider ${wc.isValid ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950/60 text-rose-400 border border-rose-500/30'}`}>
+                                        <span className={`text-xs font-black px-3 py-1 rounded-sm shadow-inner tracking-wider ${wc.isValid ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950/60 text-rose-400 border border-rose-500/30'}`}>
                                             {wc.isValid ? '✅ 其實是正確分析' : `❌ ${wc.errorType}（${wc.errorLayer === 'descriptive' ? '📊描述層' : wc.errorLayer === 'interpretive' ? '🧠詮釋層' : '🔍批判層'}）`}
                                         </span>
                                         <div className="flex flex-wrap gap-1.5 mt-3">
@@ -966,7 +966,7 @@ export const DataDetectiveGame = () => {
                         </div>
                     )}
                     {wrongCases.length === 0 && (
-                        <div className="bg-emerald-950/60 text-emerald-400 border border-emerald-500/50 p-5 rounded-2xl font-black text-lg tracking-wide shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                        <div className="bg-emerald-950/60 text-emerald-400 border border-emerald-500/50 p-5 rounded-sm font-black text-lg tracking-wide shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                             ✨ 零誤判！你的數據解讀能力堪稱完美！ 🎉
                         </div>
                     )}
@@ -980,7 +980,7 @@ export const DataDetectiveGame = () => {
     const isBoss = current.title.includes('🔥');
 
     return (
-        <div className="relative rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+        <div className="relative rounded-sm overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
             style={{ backgroundImage: "url('/images/data_detective_bg.png')" }}>
             <div className="absolute inset-0 bg-slate-900/80 z-0"></div>
 
@@ -988,12 +988,12 @@ export const DataDetectiveGame = () => {
 
                 {/* Top bar */}
                 <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1 shrink-0">
-                    <div className="bg-slate-900/80 text-amber-500 font-bold px-5 py-2.5 rounded-full shadow-inner border border-amber-500/30 text-lg flex items-center gap-2 ">
+                    <div className="bg-slate-900/80 text-amber-500 font-bold px-5 py-2.5 rounded-sm shadow-inner border border-amber-500/30 text-lg flex items-center gap-2 ">
                         <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
                         案件 <span className="text-amber-300">{currentIdx + 1}</span> <span className="opacity-50 font-normal">/ {shuffledCases.length}</span>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-slate-900/80 px-5 py-2 rounded-full border border-amber-500/30 shadow-inner ">
+                    <div className="flex items-center gap-4 bg-slate-900/80 px-5 py-2 rounded-sm border border-amber-500/30 shadow-inner ">
                         <div className="flex gap-1.5 text-xl items-center mr-4 border-r border-slate-700/80 pr-4">
                             {[0, 1, 2].map(i => (
                                 <span key={i} className="drop-shadow-[0_0_5px_rgba(252,211,77,0.8)]" style={{
@@ -1013,7 +1013,7 @@ export const DataDetectiveGame = () => {
 
                 {/* Case File Card */}
                 <div
-                    className={`bg-slate-900/70 p-6 md:p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] border-t-[8px] relative flex-1 flex flex-col  border-x border-b border-white/10 ${isBoss ? 'border-purple-500' : 'border-amber-500'}`}
+                    className={`bg-slate-900/70 p-6 md:p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] border-t-[8px] relative flex-1 flex flex-col  border-x border-b border-white/10 ${isBoss ? 'border-purple-500' : 'border-amber-500'}`}
                     style={{ animation: shakeCard ? 'detective-shake 0.5s ease-in-out' : 'none' }}
                 >
                     <div className="absolute top-0 right-6 bg-slate-800 text-slate-400 text-xs font-mono px-4 py-1.5 rounded-b-lg tracking-widest shadow-inner border-x border-b border-slate-700">CASE #{String(current.id).padStart(3, '0')}</div>
@@ -1027,10 +1027,10 @@ export const DataDetectiveGame = () => {
                         <span className="text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">🕵️</span>
                         <h2 className={`text-xl font-black tracking-wide ${isBoss ? 'text-purple-400 drop-shadow-[0_0_5px_currentColor]' : 'text-amber-400 drop-shadow-[0_0_5px_currentColor]'}`}>{current.title}</h2>
                     </div>
-                    <p className="text-[11px] text-slate-400 mb-5 font-mono tracking-wider">📁 資料來源：{current.dataSource}</p>
+                    <p className="text-[11px] text-slate-400 mb-3 font-mono tracking-wider">📁 資料來源：{current.dataSource}</p>
 
                     {/* Chart Area */}
-                    <div className="bg-slate-950/80 rounded-2xl p-4 md:p-6 mb-6 border border-slate-800 shadow-inner relative overflow-hidden group">
+                    <div className="bg-slate-950/80 rounded-sm p-3 md:p-4 mb-3 border border-slate-800 shadow-inner relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                         {/* Wrapper for charts to invert colors if they are not naturally dark mode compat */}
                         <div className="chart-container-darkmode opacity-90 hover:opacity-100 transition-opacity">
@@ -1038,9 +1038,9 @@ export const DataDetectiveGame = () => {
                         </div>
                     </div>
 
-                    {/* Three-Layer Analysis */}
+                    {/* Four-Layer Analysis */}
                     <div className="flex-1 flex flex-col min-h-0">
-                        <div className="flex items-center justify-between mb-4 border-b border-slate-700/50 pb-2">
+                        <div className="flex items-center justify-between mb-2 border-b border-slate-700/50 pb-2">
                             <p className="text-sm font-black text-amber-500 tracking-[0.1em] flex items-center gap-2 drop-shadow-[0_0_5px_currentColor]">
                                 {phase === 'select-layer'
                                     ? '📋 第 1 步：判斷哪一層有問題'
@@ -1048,7 +1048,7 @@ export const DataDetectiveGame = () => {
                             </p>
                         </div>
 
-                        <div className="space-y-4 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent flex-1 pb-4">
+                        <div className="space-y-2.5 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent flex-1 pb-4">
                             {current.layers.map((layer, layerIdx) => {
                                 const exhibitLabels = ['EXHIBIT A', 'EXHIBIT B', 'EXHIBIT C', 'EXHIBIT D'];
                                 const isSelectedLayer = selectedLayer === layer.type;
@@ -1064,7 +1064,7 @@ export const DataDetectiveGame = () => {
                                 const colors = layerColors[layer.type];
 
                                 return (
-                                    <div key={layerIdx} className={`relative p-4 md:p-5 rounded-2xl border-l-[6px] transition-all duration-300 shadow-inner  ${isSelectedLayer ? `bg-slate-800/80 ${colors.border}` :
+                                    <div key={layerIdx} className={`relative p-3 md:p-3 rounded-sm border-l-[6px] transition-all duration-300 shadow-inner  ${isSelectedLayer ? `bg-slate-800/80 ${colors.border}` :
                                         isWrongLayer ? 'bg-slate-900/30 border-slate-700/30 opacity-60' :
                                             `bg-slate-900/60 border-slate-700 hover:border-slate-500`
                                         }`}
@@ -1073,7 +1073,7 @@ export const DataDetectiveGame = () => {
                                             filter: (phase === 'find-word' && !isSelectedLayer) ? 'grayscale(0.8)' : 'none',
                                         }}>
 
-                                        <div className="flex items-center justify-between gap-2 mb-3">
+                                        <div className="flex items-center justify-between gap-2 mb-1.5">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xl drop-shadow-md">{layer.icon}</span>
                                                 <span className={`text-sm font-black tracking-widest drop-shadow-[0_0_5px_currentColor] ${colors.text}`}>{layer.label}</span>
@@ -1085,7 +1085,7 @@ export const DataDetectiveGame = () => {
                                             </div>
                                         </div>
 
-                                        <div className="text-base md:text-lg font-medium text-slate-200 leading-relaxed pl-1 pb-1">
+                                        <div className="text-sm md:text-base font-medium text-slate-200 leading-relaxed pl-1 pb-1">
                                             {layer.parts.map((part, partIdx) => {
                                                 if (!part.suspect || phase !== 'find-word' || !isSelectedLayer) {
                                                     return <span key={partIdx}>{part.text}</span>;
@@ -1116,7 +1116,7 @@ export const DataDetectiveGame = () => {
                                         {/* Inline layer select button */}
                                         {phase === 'select-layer' && !isAnswered && !isWrongLayer && (
                                             <button onClick={() => handleLayerSelect(layer.type)}
-                                                className={`mt-4 w-full py-2.5 rounded-xl font-bold text-sm tracking-widest transition-all duration-300 relative overflow-hidden group bg-gradient-to-r ${colors.btnColor} border border-white/10 shadow-lg text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:-translate-y-0.5`}>
+                                                className={`mt-2 w-full py-1.5 rounded-sm font-bold text-sm tracking-widest transition-all duration-300 relative overflow-hidden group bg-gradient-to-r ${colors.btnColor} border border-white/10 shadow-lg text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:-translate-y-0.5`}>
                                                 <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
                                                 <span className="relative z-10 flex items-center justify-center gap-2">🚨 指控此層有誤</span>
                                             </button>
@@ -1133,7 +1133,7 @@ export const DataDetectiveGame = () => {
                     <div className="flex justify-center mb-8 relative z-20">
                         <button onClick={() => handleLayerSelect('none')}
                             disabled={wrongLayers.includes('none')}
-                            className={`py-3.5 px-10 rounded-full font-black text-lg tracking-widest transition-all duration-300 border-2 shadow-lg relative overflow-hidden group ${wrongLayers.includes('none')
+                            className={`py-3.5 px-10 rounded-sm font-black text-lg tracking-widest transition-all duration-300 border-2 shadow-lg relative overflow-hidden group ${wrongLayers.includes('none')
                                 ? 'bg-slate-900/50 text-slate-600 border-slate-800 cursor-not-allowed'
                                 : 'bg-slate-900/80 hover:bg-slate-800 text-emerald-400 border-emerald-500/50 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:-translate-y-1 '}`}>
                             {wrongLayers.includes('none') ? '' : <span className="absolute inset-0 w-full h-full bg-white/5 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>}
@@ -1144,21 +1144,21 @@ export const DataDetectiveGame = () => {
 
                 {/* Phase transition feedback */}
                 {feedbackMsg && phase === 'find-word' && !isAnswered && feedbackMsg.type === 'layer-right' && (
-                    <div className="bg-indigo-950/80 border-2 border-indigo-500 rounded-2xl p-5 mb-8 text-center shadow-[0_0_20px_rgba(99,102,241,0.3)]  relative z-20" style={{ animation: 'detective-pop 0.3s ease-out' }}>
+                    <div className="bg-indigo-950/80 border-2 border-indigo-500 rounded-sm p-5 mb-8 text-center shadow-[0_0_20px_rgba(99,102,241,0.3)]  relative z-20" style={{ animation: 'detective-pop 0.3s ease-out' }}>
                         <p className="text-lg font-black text-indigo-300 tracking-wider drop-shadow-[0_0_5px_currentColor]">{feedbackMsg.text}</p>
                     </div>
                 )}
 
                 {/* Inline hint for wrong layer/word */}
                 {feedbackMsg && !isAnswered && feedbackMsg.type === 'wrong' && (
-                    <div className="bg-amber-950/80 border-2 border-amber-500 rounded-2xl p-5 mb-8 text-center shadow-[0_0_20px_rgba(245,158,11,0.3)]  relative z-20" style={{ animation: 'detective-pop 0.3s ease-out' }}>
+                    <div className="bg-amber-950/80 border-2 border-amber-500 rounded-sm p-5 mb-8 text-center shadow-[0_0_20px_rgba(245,158,11,0.3)]  relative z-20" style={{ animation: 'detective-pop 0.3s ease-out' }}>
                         <p className="text-lg font-black text-amber-400 tracking-wider drop-shadow-[0_0_5px_currentColor]">{feedbackMsg.text}</p>
                     </div>
                 )}
 
                 {/* Full feedback after answering */}
                 {isAnswered && (
-                    <div className={`p-6 md:p-8 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.6)] mb-8 border-l-[8px] relative z-20  ${feedbackMsg?.type === 'right' ? 'bg-emerald-950/80 border-emerald-500' : 'bg-rose-950/80 border-rose-500'}`}
+                    <div className={`p-6 md:p-8 rounded-sm shadow-[0_0_30px_rgba(0,0,0,0.6)] mb-8 border-l-[8px] relative z-20  ${feedbackMsg?.type === 'right' ? 'bg-emerald-950/80 border-emerald-500' : 'bg-rose-950/80 border-rose-500'}`}
                         style={{ animation: 'detective-pop 0.4s ease-out' }}>
                         <div className="absolute top-0 right-0 p-4 opacity-20">
                             <span className="text-6xl">{feedbackMsg?.type === 'right' ? '✔️' : '❌'}</span>
@@ -1169,10 +1169,10 @@ export const DataDetectiveGame = () => {
 
                         {!current.isValid && (
                             <div className="mb-4 flex flex-wrap gap-3">
-                                <span className="bg-rose-950 text-rose-400 font-bold px-4 py-1.5 rounded-full text-sm border border-rose-500/50 shadow-inner">
+                                <span className="bg-rose-950 text-rose-400 font-bold px-4 py-1.5 rounded-sm text-sm border border-rose-500/50 shadow-inner">
                                     🏷️ {current.errorType}
                                 </span>
-                                <span className={`font-bold px-4 py-1.5 rounded-full text-sm border shadow-inner ${current.errorLayer === 'descriptive' ? 'bg-indigo-950/80 text-indigo-400 border-indigo-500/50' :
+                                <span className={`font-bold px-4 py-1.5 rounded-sm text-sm border shadow-inner ${current.errorLayer === 'descriptive' ? 'bg-indigo-950/80 text-indigo-400 border-indigo-500/50' :
                                     current.errorLayer === 'interpretive' ? 'bg-amber-950/80 text-amber-400 border-amber-500/50' :
                                         current.errorLayer === 'relevance' ? 'bg-purple-950/80 text-purple-400 border-purple-500/50' :
                                             'bg-emerald-950/80 text-emerald-400 border-emerald-500/50'
@@ -1186,18 +1186,18 @@ export const DataDetectiveGame = () => {
 
                         <div className="flex flex-wrap gap-2 mb-5">
                             {current.tags.map(tag => (
-                                <span key={tag} className="bg-slate-900/60 text-amber-500 font-black tracking-widest px-3 py-1.5 rounded-lg text-xs border border-amber-500/30">#{tag}</span>
+                                <span key={tag} className="bg-slate-900/60 text-amber-500 font-black tracking-widest px-3 py-1.5 rounded-sm text-xs border border-amber-500/30">#{tag}</span>
                             ))}
                         </div>
 
-                        <div className="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50 relative mb-6">
+                        <div className="bg-slate-900/50 p-5 rounded-sm border border-slate-700/50 relative mb-6">
                             <h4 className="absolute -top-3 left-4 bg-slate-800 x-2 py-0.5 rounded text-[10px] font-black tracking-widest text-slate-400 border border-slate-700">DETECTIVE NOTES</h4>
                             <p className="text-amber-100/90 text-[15px] md:text-base font-medium leading-relaxed whitespace-pre-line tracking-wide mt-2">{current.explanation}</p>
                         </div>
 
                         <div className="text-right">
                             <button onClick={nextCase}
-                                className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black py-4 px-10 rounded-full text-lg tracking-[0.1em] transition-all duration-300 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] hover:-translate-y-1 relative overflow-hidden group inline-flex items-center gap-2">
+                                className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black py-4 px-10 rounded-sm text-lg tracking-[0.1em] transition-all duration-300 hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] hover:-translate-y-1 relative overflow-hidden group inline-flex items-center gap-2">
                                 <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
                                 <span className="relative z-10">{currentIdx < caseData.length - 1 ? '調閱下一宗案件' : '查看最終調查報告'}</span>
                                 <span className="relative z-10">{currentIdx < caseData.length - 1 ? '➡️' : '📋'}</span>

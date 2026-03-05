@@ -35,18 +35,18 @@ const renderQuestionCard = (prompt) => {
         const parts = prompt.split(/原文：|學生寫：/);
         return (
             <div className="space-y-4 w-full text-left font-sans">
-                <div className="bg-slate-50 p-4 rounded-xl border-l-[6px] border-slate-300 shadow-sm relative">
+                <div className="bg-slate-50 p-4 rounded-sm border-l-[6px] border-slate-300 shadow-sm relative">
                     <div className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">📄 原文 (Original)</div>
                     <div className="text-slate-700 leading-relaxed font-medium">{parts[1]?.trim()}</div>
                 </div>
-                <div className="bg-red-50 p-4 rounded-xl border-l-[6px] border-red-400 shadow-sm relative">
+                <div className="bg-red-50 p-4 rounded-sm border-l-[6px] border-red-400 shadow-sm relative">
                     <div className="text-xs font-bold text-red-500 mb-2 uppercase tracking-widest">✍️ 學生寫法 (Suspect)</div>
                     <div className="text-stone-800 leading-relaxed font-semibold">{parts[2]?.trim()}</div>
                 </div>
             </div>
         );
     }
-    return <div className="bg-white p-6 shadow-sm rounded-xl border border-slate-200 text-lg md:text-xl text-slate-800 font-medium whitespace-pre-line leading-relaxed min-h-[150px]">{prompt}</div>;
+    return <div className="bg-white p-6 shadow-sm rounded-sm border border-slate-200 text-lg md:text-xl text-slate-800 font-medium whitespace-pre-line leading-relaxed min-h-[150px]">{prompt}</div>;
 };
 
 const renderHighlight = (text, highlights) => {
@@ -59,18 +59,18 @@ const renderHighlight = (text, highlights) => {
         const parts = text.split(/原文：|學生寫：/);
         return (
             <div className="space-y-4 text-sm md:text-base font-sans mt-3">
-                <div className="bg-white p-4 rounded-xl border border-slate-200">
+                <div className="bg-white p-4 rounded-sm border border-slate-200">
                     <div className="text-xs font-bold text-slate-400 mb-1 uppercase">📄 原文</div>
                     <div className="text-slate-600">{processHighlights(parts[1]?.trim() || "")}</div>
                 </div>
-                <div className="bg-red-50 p-4 rounded-xl border border-red-100">
+                <div className="bg-red-50 p-4 rounded-sm border border-red-100">
                     <div className="text-xs font-bold text-red-400 mb-1 uppercase">✍️ 學生寫法</div>
                     <div className="text-stone-800">{processHighlights(parts[2]?.trim() || "")}</div>
                 </div>
             </div>
         )
     }
-    return <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 whitespace-pre-line text-slate-700 font-medium">{processHighlights(text)}</div>;
+    return <div className="bg-slate-50 p-4 rounded-sm border border-slate-200 whitespace-pre-line text-slate-700 font-medium">{processHighlights(text)}</div>;
 };
 
 export const CitationDetectiveGame = () => {
@@ -229,13 +229,13 @@ export const CitationDetectiveGame = () => {
     // ================= INTRO SCREEN =================
     if (gameState === 'intro') {
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/detective_board_bg.png')" }}>
 
                 {/* 玻璃擬物化深色遮罩 */}
                 <div className="absolute inset-0 bg-slate-900/80  z-0"></div>
 
-                <div className="bg-slate-900/70 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10  border border-white/10 group hover:border-amber-500/30 transition-colors duration-500">
+                <div className="bg-slate-900/70 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10  border border-white/10 group hover:border-amber-500/30 transition-colors duration-500">
                     <div className="absolute top-0 right-0 opacity-5 text-9xl -mt-4 -mr-4 text-white pointer-events-none drop-shadow-md">🕵️‍♂️</div>
 
                     <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">🔍</div>
@@ -255,14 +255,14 @@ export const CitationDetectiveGame = () => {
                         你能火眼金睛，揪出所有違規嗎？
                     </p>
 
-                    <div className="bg-slate-950/60 rounded-2xl p-6 mb-8 text-center border border-slate-700/50 shadow-inner ">
+                    <div className="bg-slate-950/60 rounded-sm p-6 mb-8 text-center border border-slate-700/50 shadow-inner ">
                         <label className="block text-sm font-bold text-slate-400 mb-2 tracking-widest uppercase">🕵️‍♂️ 目前登入身分</label>
                         {playerName ? (
                             <div className="text-2xl font-black text-amber-500 border-b border-amber-500/30 inline-block pb-1 px-4 drop-shadow-[0_0_8px_rgba(245,158,11,0.3)] flex items-center gap-2 justify-center">
                                 {playerName} <span className="text-lg text-amber-300/70 font-bold tracking-widest">探員</span>
                             </div>
                         ) : (
-                            <div className="text-rose-400 font-bold mb-2 flex items-center justify-center gap-2 bg-rose-950/50 py-2 px-4 rounded-lg border border-rose-900/50">
+                            <div className="text-rose-400 font-bold mb-2 flex items-center justify-center gap-2 bg-rose-950/50 py-2 px-4 rounded-sm border border-rose-900/50">
                                 <span className="text-xl">⚠️</span> 無法辨識身分！請返回總部大廳完成報到手續。
                             </div>
                         )}
@@ -270,7 +270,7 @@ export const CitationDetectiveGame = () => {
                             <p className="text-xs text-slate-500 mt-2">（訪客模式將無法參與最終排行榜排名）</p>
                         )}
                         <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700/50 pt-4 mt-6">📋 任務簡報</h3>
-                        <div className="space-y-3 text-sm text-slate-300 text-left bg-slate-900/50 p-4 rounded-xl border border-slate-700/30">
+                        <div className="space-y-3 text-sm text-slate-300 text-left bg-slate-900/50 p-4 rounded-sm border border-slate-700/30">
                             <p className="flex items-start gap-2"><span className="text-emerald-400 drop-shadow-[0_0_5px_currentColor]">✅</span> <span><strong className="text-emerald-300">合法引用</strong>：判斷完全正確且無抄襲。</span></p>
                             <p className="flex items-start gap-2"><span className="text-rose-400 drop-shadow-[0_0_5px_currentColor]">❌</span> <span><strong className="text-rose-300">引用錯誤</strong>：有抄襲嫌疑或格式錯誤，需進一步指認違規罪名。</span></p>
                         </div>
@@ -281,7 +281,7 @@ export const CitationDetectiveGame = () => {
                         <button
                             onClick={enterTutorial}
                             disabled={!playerName}
-                            className={`w-full font-black py-4 px-10 rounded-2xl text-xl md:text-2xl transition-all duration-300 transform flex items-center justify-center gap-3 mx-auto relative overflow-hidden group ${!playerName
+                            className={`w-full font-black py-4 px-10 rounded-sm text-xl md:text-2xl transition-all duration-300 transform flex items-center justify-center gap-3 mx-auto relative overflow-hidden group ${!playerName
                                 ? 'bg-slate-800 text-slate-600 border border-slate-700 cursor-not-allowed'
                                 : 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 hover:-translate-y-1 shadow-[0_5px_20px_rgba(245,158,11,0.4)] hover:shadow-[0_8px_25px_rgba(245,158,11,0.6)]'
                                 }`}
@@ -298,14 +298,14 @@ export const CitationDetectiveGame = () => {
     // ================= TUTORIAL SCREEN =================
     if (gameState === 'tutorial') {
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/detective_board_bg.png')" }}>
 
                 <div className="absolute inset-0 bg-slate-900/80  z-0"></div>
 
-                <div className="bg-slate-900/80 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-4xl w-full border-t-[8px] border-cyan-500 relative z-10  border-x border-b border-white/10">
+                <div className="bg-slate-900/80 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-4xl w-full border-t-[8px] border-cyan-500 relative z-10  border-x border-b border-white/10">
                     <div className="text-center mb-10">
-                        <div className="inline-flex items-center gap-2 bg-cyan-950/60 text-cyan-400 font-bold px-4 py-1.5 rounded-full text-sm mb-6 tracking-widest uppercase border border-cyan-500/30 shadow-inner">
+                        <div className="inline-flex items-center gap-2 bg-cyan-950/60 text-cyan-400 font-bold px-4 py-1.5 rounded-sm text-sm mb-6 tracking-widest uppercase border border-cyan-500/30 shadow-inner">
                             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
                             Tutorial
                         </div>
@@ -319,7 +319,7 @@ export const CitationDetectiveGame = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12">
                         {/* PASS */}
-                        <div className="bg-slate-800/60 p-6 md:p-8 rounded-2xl border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)] relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+                        <div className="bg-slate-800/60 p-6 md:p-8 rounded-sm border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)] relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
                             <div className="absolute -right-6 -top-6 text-7xl opacity-5 group-hover:opacity-10 transition-opacity text-emerald-500">✅</div>
                             <h3 className="flex items-center gap-3 font-black text-emerald-400 text-2xl border-b border-emerald-500/30 pb-4 mb-6 drop-shadow-[0_0_8px_currentColor]">
                                 <CheckCircle2 size={28} /> 合法引用標準 (PASS)
@@ -341,7 +341,7 @@ export const CitationDetectiveGame = () => {
                         </div>
 
                         {/* REJECT */}
-                        <div className="bg-slate-800/60 p-6 md:p-8 rounded-2xl border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.1)] relative overflow-hidden group hover:border-rose-500/50 transition-colors">
+                        <div className="bg-slate-800/60 p-6 md:p-8 rounded-sm border border-rose-500/30 shadow-[0_0_20px_rgba(244,63,94,0.1)] relative overflow-hidden group hover:border-rose-500/50 transition-colors">
                             <div className="absolute -right-6 -top-6 text-7xl opacity-5 group-hover:opacity-10 transition-opacity text-rose-500">❌</div>
                             <h3 className="flex items-center gap-3 font-black text-rose-400 text-2xl border-b border-rose-500/30 pb-4 mb-6 drop-shadow-[0_0_8px_currentColor]">
                                 <XCircle size={28} /> 常見違規樣態 (REJECT)
@@ -370,7 +370,7 @@ export const CitationDetectiveGame = () => {
                     <div className="text-center">
                         <button
                             onClick={startGame}
-                            className={`font-black py-4 px-12 rounded-full text-xl md:text-2xl transition-all duration-300 transform flex items-center justify-center gap-3 mx-auto relative overflow-hidden group bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white hover:-translate-y-1 shadow-[0_5px_20px_rgba(6,182,212,0.4)] hover:shadow-[0_8px_25px_rgba(6,182,212,0.6)]`}
+                            className={`font-black py-4 px-12 rounded-sm text-xl md:text-2xl transition-all duration-300 transform flex items-center justify-center gap-3 mx-auto relative overflow-hidden group bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white hover:-translate-y-1 shadow-[0_5px_20px_rgba(6,182,212,0.4)] hover:shadow-[0_8px_25px_rgba(6,182,212,0.6)]`}
                         >
                             <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:animate-shimmer"></span>
                             <span className="relative z-10 flex items-center justify-center gap-2">我已熟讀，開始辦案 <ArrowRight size={28} /></span>
@@ -393,12 +393,12 @@ export const CitationDetectiveGame = () => {
         else { titleColor = "text-rose-400"; titleBg = "bg-rose-950/50 border-rose-500/30"; }
 
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/detective_board_bg.png')" }}>
 
                 <div className="absolute inset-0 bg-slate-900/80  z-0"></div>
 
-                <div className="bg-slate-900/70 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10  border-x border-b border-white/10 group hover:border-amber-500/30 transition-colors duration-500">
+                <div className="bg-slate-900/70 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10  border-x border-b border-white/10 group hover:border-amber-500/30 transition-colors duration-500">
                     <div className="absolute top-6 left-6 text-slate-500/20 text-6xl pointer-events-none drop-shadow-md">📋</div>
                     <div className="absolute -bottom-10 -right-10 text-9xl opacity-[0.03] text-amber-500 pointer-events-none drop-shadow-[0_0_20px_rgba(251,191,36,0.5)] flex flex-col items-center">
                         <div>📁</div>
@@ -419,16 +419,16 @@ export const CitationDetectiveGame = () => {
                         <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-300 to-amber-600 tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">
                             {score} <span className="text-4xl text-slate-600/80 font-medium tracking-normal">/ {MAX_SCORE}</span>
                         </div>
-                        <h2 className={`text-2xl md:text-3xl font-black px-8 py-3 rounded-2xl ${titleColor} ${titleBg} border shadow-inner mb-6 drop-shadow-[0_0_10px_currentColor] tracking-widest`}>
+                        <h2 className={`text-2xl md:text-3xl font-black px-8 py-3 rounded-sm ${titleColor} ${titleBg} border shadow-inner mb-6 drop-shadow-[0_0_10px_currentColor] tracking-widest`}>
                             {level}
                         </h2>
-                        <p className="text-xs text-slate-300 font-bold uppercase tracking-[0.2em] bg-slate-900/80 py-2.5 px-6 rounded-lg border border-white/10 inline-flex items-center gap-2  shadow-inner group-hover:border-amber-500/30 transition-colors">
+                        <p className="text-xs text-slate-300 font-bold uppercase tracking-[0.2em] bg-slate-900/80 py-2.5 px-6 rounded-sm border border-white/10 inline-flex items-center gap-2  shadow-inner group-hover:border-amber-500/30 transition-colors">
                             <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_5px_rgba(244,63,94,0.8)]"></span>
                             請截圖此頁面作為紀錄
                         </p>
                     </div>
 
-                    <div className="bg-slate-900/60 p-6 rounded-2xl border-l-[6px] border-l-amber-500 border-t border-r border-b border-white/5 shadow-inner text-left mb-10 relative z-10 ">
+                    <div className="bg-slate-900/60 p-6 rounded-sm border-l-[6px] border-l-amber-500 border-t border-r border-b border-white/5 shadow-inner text-left mb-10 relative z-10 ">
                         <h3 className="font-black text-amber-400 flex items-center gap-2 mb-4 border-b border-slate-700/50 pb-3 text-lg drop-shadow-[0_0_5px_currentColor]">
                             <AlertTriangle size={22} className="text-amber-500" /> 局長給你的精進建議
                         </h3>
@@ -437,7 +437,7 @@ export const CitationDetectiveGame = () => {
 
                     <button
                         onClick={() => setGameState('intro')}
-                        className="bg-slate-800/80  hover:bg-slate-700 text-amber-400 font-bold py-4 px-10 rounded-full text-xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:border-amber-500/50 hover:text-amber-300 group inline-flex items-center justify-center gap-3 mx-auto relative z-10 w-full md:w-auto"
+                        className="bg-slate-800/80  hover:bg-slate-700 text-amber-400 font-bold py-4 px-10 rounded-sm text-xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:border-amber-500/50 hover:text-amber-300 group inline-flex items-center justify-center gap-3 mx-auto relative z-10 w-full md:w-auto"
                     >
                         <RefreshCw size={24} className="group-hover:rotate-180 transition-transform duration-500" /> 重新接受特訓
                     </button>
@@ -448,7 +448,7 @@ export const CitationDetectiveGame = () => {
 
     // ================= PLAYING / FEEDBACK SCREEN =================
     return (
-        <div className="relative rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
+        <div className="relative rounded-sm overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 shadow-2xl bg-cover bg-fixed bg-center"
             style={{ backgroundImage: "url('/images/detective_board_bg.png')" }}>
             <div className="absolute inset-0 bg-slate-900/80  z-0"></div>
             {getDebugInfo()}
@@ -456,7 +456,7 @@ export const CitationDetectiveGame = () => {
 
                 {/* Header */}
                 <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1 shrink-0">
-                    <div className="bg-white text-slate-500 font-bold px-5 py-2 rounded-full shadow-sm text-lg border border-slate-200 flex items-center gap-2">
+                    <div className="bg-white text-slate-500 font-bold px-5 py-2 rounded-sm shadow-sm text-lg border border-slate-200 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
                         案件 {currentQIndex + 1} <span className="opacity-40 font-normal">/ {shuffledQuestions.length}</span>
                     </div>
@@ -469,7 +469,7 @@ export const CitationDetectiveGame = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 md:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-t-[8px] border-amber-400 relative flex-1 flex flex-col">
+                <div className="bg-white p-6 md:p-8 rounded-sm shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-t-[8px] border-amber-400 relative flex-1 flex flex-col">
                     <div className="absolute top-0 right-6 bg-amber-400 text-white text-xs font-black px-4 py-1.5 rounded-b-lg tracking-widest shadow-sm">
                         {currentQ.title}
                     </div>
@@ -484,7 +484,7 @@ export const CitationDetectiveGame = () => {
                                 <div className="flex gap-4 md:gap-8 justify-center mb-6">
                                     <button
                                         onClick={() => handleOXSelect('O')}
-                                        className={`group flex-1 max-w-[200px] aspect-square rounded-2xl md:rounded-[2rem] border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'O' ? 'border-emerald-500 bg-emerald-50 text-emerald-600 shadow-md' : 'border-slate-200 text-slate-400 hover:border-emerald-300 hover:bg-emerald-50/50 bg-white'}`}
+                                        className={`group flex-1 max-w-[200px] aspect-square rounded-sm md:rounded-[2rem] border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'O' ? 'border-emerald-500 bg-emerald-50 text-emerald-600 shadow-md' : 'border-slate-200 text-slate-400 hover:border-emerald-300 hover:bg-emerald-50/50 bg-white'}`}
                                     >
                                         <CheckCircle2 size={48} className="mb-3" />
                                         <span className="font-black text-lg md:text-xl">合法引用</span>
@@ -492,7 +492,7 @@ export const CitationDetectiveGame = () => {
                                     </button>
                                     <button
                                         onClick={() => handleOXSelect('X')}
-                                        className={`group flex-1 max-w-[200px] aspect-square rounded-2xl md:rounded-[2rem] border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'X' ? 'border-red-500 bg-red-50 text-red-600 shadow-md' : 'border-slate-200 text-slate-400 hover:border-red-300 hover:bg-red-50/50 bg-white'}`}
+                                        className={`group flex-1 max-w-[200px] aspect-square rounded-sm md:rounded-[2rem] border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'X' ? 'border-red-500 bg-red-50 text-red-600 shadow-md' : 'border-slate-200 text-slate-400 hover:border-red-300 hover:bg-red-50/50 bg-white'}`}
                                     >
                                         <XCircle size={48} className="mb-3" />
                                         <span className="font-black text-lg md:text-xl">引用錯誤</span>
@@ -501,11 +501,11 @@ export const CitationDetectiveGame = () => {
                                 </div>
 
                                 {selectedOX === 'X' && (
-                                    <div className="bg-slate-50 p-5 md:p-6 rounded-2xl border border-slate-200 mb-6 animate-in fade-in slide-in-from-bottom-2">
+                                    <div className="bg-slate-50 p-5 md:p-6 rounded-sm border border-slate-200 mb-6 animate-in fade-in slide-in-from-bottom-2">
                                         <h4 className="text-sm font-black text-slate-700 mb-3 border-b border-slate-200 pb-2">請指認錯誤類型 (必填)：</h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                                             {ERROR_TYPES.map((type) => (
-                                                <label key={type.id} className={`flex items-center p-3 rounded-xl cursor-pointer transition-colors border-2 ${selectedType === type.id ? 'bg-white border-red-500 shadow-sm' : 'border-slate-200 bg-white hover:border-red-300'}`}>
+                                                <label key={type.id} className={`flex items-center p-3 rounded-sm cursor-pointer transition-colors border-2 ${selectedType === type.id ? 'bg-white border-red-500 shadow-sm' : 'border-slate-200 bg-white hover:border-red-300'}`}>
                                                     <input type="radio" name="errorType" value={type.id} checked={selectedType === type.id} onChange={() => setSelectedType(type.id)} className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500" />
                                                     <span className={`ml-3 font-bold text-sm md:text-base ${selectedType === type.id ? 'text-red-700' : 'text-slate-600'}`}>{type.label}</span>
                                                 </label>
@@ -516,7 +516,7 @@ export const CitationDetectiveGame = () => {
                                 <button
                                     onClick={() => handleSubmit()}
                                     disabled={!selectedOX || (selectedOX === 'X' && !selectedType)}
-                                    className={`w-full py-4 rounded-2xl font-black text-lg md:text-xl tracking-widest transition-all ${(!selectedOX || (selectedOX === 'X' && !selectedType)) ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-800 text-white hover:bg-slate-900 shadow-[0_8px_20px_rgba(15,23,42,0.2)] hover:shadow-[0_12px_25px_rgba(15,23,42,0.3)] hover:-translate-y-1 active:translate-y-0'}`}
+                                    className={`w-full py-4 rounded-sm font-black text-lg md:text-xl tracking-widest transition-all ${(!selectedOX || (selectedOX === 'X' && !selectedType)) ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-800 text-white hover:bg-slate-900 shadow-[0_8px_20px_rgba(15,23,42,0.2)] hover:shadow-[0_12px_25px_rgba(15,23,42,0.3)] hover:-translate-y-1 active:translate-y-0'}`}
                                 >
                                     提交證據 SUBMIT
                                 </button>
@@ -524,7 +524,7 @@ export const CitationDetectiveGame = () => {
                         </>
                     ) : (
                         <div className="flex-1 flex flex-col animate-in fade-in slide-in-from-bottom-4 py-2">
-                            <div className={`shrink-0 p-4 md:p-6 mb-6 rounded-2xl border-2 text-center shadow-sm ${getLastAnswerStatus() === 'full' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : getLastAnswerStatus() === 'partial' ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
+                            <div className={`shrink-0 p-4 md:p-6 mb-6 rounded-sm border-2 text-center shadow-sm ${getLastAnswerStatus() === 'full' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : getLastAnswerStatus() === 'partial' ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
                                 <div className="text-2xl md:text-3xl font-black mb-2 flex items-center justify-center gap-3">
                                     {getLastAnswerStatus() === 'full' ? <><CheckCircle2 size={32} /> 完美破案！</> : getLastAnswerStatus() === 'partial' ? <><AlertTriangle size={32} /> 部分正確</> : <><XCircle size={32} /> 判斷錯誤</>}
                                 </div>
@@ -532,7 +532,7 @@ export const CitationDetectiveGame = () => {
                             </div>
 
                             {getLastAnswerStatus() === 'partial' && (
-                                <div className="text-center text-sm mb-6 bg-red-50 p-4 rounded-xl border-2 border-red-100 shadow-inner">
+                                <div className="text-center text-sm mb-6 bg-red-50 p-4 rounded-sm border-2 border-red-100 shadow-inner">
                                     <span className="font-black text-red-700 text-base mb-2 block">罪名指認錯誤！</span>
                                     你選擇了：<span className="text-slate-500 line-through font-bold inline-block mx-2">{ERROR_TYPES.find(t => t.id === userAnswers[userAnswers.length - 1].userType)?.label}</span><br />
                                     正解應為：<span className="text-emerald-600 font-black text-lg inline-block mt-2 bg-emerald-100 px-3 py-1 rounded">{ERROR_TYPES.find(t => t.id === currentQ.correctType)?.label}</span>
@@ -540,19 +540,19 @@ export const CitationDetectiveGame = () => {
                             )}
 
                             <div className="space-y-6 flex-1 overflow-y-auto">
-                                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                                <div className="bg-slate-50 p-5 rounded-sm border border-slate-200">
                                     <h4 className="text-sm font-black text-slate-500 mb-3 flex items-center gap-2"><Search size={18} className="text-blue-500" /> 偵探分析報告</h4>
                                     <p className="text-slate-800 font-medium leading-relaxed">{currentQ.explanation}</p>
                                     {renderHighlight(currentQ.prompt, currentQ.highlightHints)}
                                 </div>
-                                <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 relative shadow-sm">
+                                <div className="bg-emerald-50 p-5 rounded-sm border border-emerald-100 relative shadow-sm">
                                     <h4 className="text-sm font-black text-emerald-700 mb-2 flex items-center gap-2"><CheckCircle2 size={18} /> 典範修正示範</h4>
                                     <div className="text-stone-800 whitespace-pre-line font-medium leading-relaxed">{currentQ.fixExample}</div>
                                 </div>
                             </div>
 
                             <div className="pt-6 mt-4 border-t-2 border-slate-100 shrink-0">
-                                <button onClick={nextQuestion} className="w-full bg-slate-800 hover:bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 text-lg shadow-lg hover:-translate-y-1 transition-all">
+                                <button onClick={nextQuestion} className="w-full bg-slate-800 hover:bg-slate-900 text-white font-black py-4 rounded-sm flex items-center justify-center gap-2 text-lg shadow-lg hover:-translate-y-1 transition-all">
                                     {currentQIndex < shuffledQuestions.length - 1 ? '處理下一個案件' : '查看結案報告'} <ChevronRight size={24} />
                                 </button>
                             </div>

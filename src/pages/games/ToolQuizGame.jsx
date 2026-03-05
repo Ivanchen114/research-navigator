@@ -193,12 +193,12 @@ export const ToolQuizGame = () => {
     // ================= START SCREEN =================
     if (gameState === 'start') {
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/tool_quiz_bg.png')" }}>
 
                 <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none z-0"></div>
 
-                <div className="bg-slate-900/70 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10 backdrop-blur-sm border-x border-b border-white/10 group hover:border-amber-500/50 transition-colors duration-500">
+                <div className="bg-slate-900/70 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10 backdrop-blur-sm border-x border-b border-white/10 group hover:border-amber-500/50 transition-colors duration-500">
                     <div className="absolute top-0 right-0 opacity-[0.03] text-9xl -mt-4 -mr-4 pointer-events-none drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]">🔍</div>
                     <div className="text-7xl mb-6 animate-[bounce_2s_infinite]">🕵️‍♂️</div>
 
@@ -216,8 +216,8 @@ export const ToolQuizGame = () => {
                         面對 11 個越來越困難的研究委託，<br />身為首席調查員的你，<br />該從工具箱拔出哪一項<span className="text-amber-400 font-bold ml-1 drop-shadow-[0_0_5px_rgba(251,191,36,0.6)]">「辦案道具」</span>？
                     </p>
 
-                    <div className="bg-slate-800/60 rounded-2xl p-6 mb-8 text-center border border-slate-700/50 shadow-inner block backdrop-blur-none relative group-hover:border-amber-500/30 transition-colors">
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 px-3 py-1 rounded-full border border-slate-700 text-xs font-bold text-slate-400 tracking-wider shadow-sm z-10">
+                    <div className="bg-slate-800/60 rounded-sm p-6 mb-8 text-center border border-slate-700/50 shadow-inner block backdrop-blur-none relative group-hover:border-amber-500/30 transition-colors">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 px-3 py-1 rounded-sm border border-slate-700 text-xs font-bold text-slate-400 tracking-wider shadow-sm z-10">
                             🕵️‍♂️ 目前登入身分
                         </div>
                         <div className="mt-2">
@@ -234,7 +234,7 @@ export const ToolQuizGame = () => {
                     <button
                         onClick={startGame}
                         disabled={!playerName}
-                        className={`font-black py-4 px-10 rounded-full text-xl transition-all duration-300 transform flex items-center justify-center gap-2 mx-auto relative overflow-hidden group w-full md:w-auto ${!playerName
+                        className={`font-black py-4 px-10 rounded-sm text-xl transition-all duration-300 transform flex items-center justify-center gap-2 mx-auto relative overflow-hidden group w-full md:w-auto ${!playerName
                             ? 'bg-slate-800/80 text-slate-500 cursor-not-allowed border border-slate-700/50 backdrop-blur-none'
                             : 'bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-900 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] border border-amber-300/50'
                             }`}
@@ -257,12 +257,12 @@ export const ToolQuizGame = () => {
         else { title = "🚨 案發現場破壞者！"; color = "text-rose-500"; }
 
         return (
-            <div className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/tool_quiz_bg.png')" }}>
 
                 <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-0"></div>
 
-                <div className="bg-slate-900/70 p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10 backdrop-blur-sm border-x border-b border-white/10 group hover:border-amber-500/30 transition-colors duration-500">
+                <div className="bg-slate-900/70 p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[8px] border-amber-500 relative overflow-hidden z-10 backdrop-blur-sm border-x border-b border-white/10 group hover:border-amber-500/30 transition-colors duration-500">
                     <div className="absolute top-6 left-6 text-slate-500/20 text-6xl pointer-events-none drop-shadow-md">📝</div>
                     <div className="absolute -bottom-10 -right-10 text-9xl opacity-[0.03] text-amber-500 pointer-events-none drop-shadow-[0_0_20px_rgba(251,191,36,0.5)] flex flex-col items-center">
                         <div>📁</div>
@@ -274,7 +274,7 @@ export const ToolQuizGame = () => {
                     </h1>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 relative z-10">
-                        <div className="text-sm font-medium text-amber-300 bg-amber-950/50 px-5 py-2 rounded-full border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.2)] flex items-center gap-2">
+                        <div className="text-sm font-medium text-amber-300 bg-amber-950/50 px-5 py-2 rounded-sm border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.2)] flex items-center gap-2">
                             首席探員：<span className="font-black text-amber-400 text-lg drop-shadow-[0_0_5px_currentColor]">{playerName}</span>
                         </div>
                     </div>
@@ -287,7 +287,7 @@ export const ToolQuizGame = () => {
                         {title}
                     </h2>
 
-                    <p className="text-xs text-slate-300 font-bold uppercase tracking-[0.2em] bg-slate-900/80 py-2.5 px-6 rounded-lg border border-white/10 mb-8 inline-flex items-center gap-2 relative z-10 backdrop-blur-none shadow-inner group-hover:border-amber-500/30 transition-colors">
+                    <p className="text-xs text-slate-300 font-bold uppercase tracking-[0.2em] bg-slate-900/80 py-2.5 px-6 rounded-sm border border-white/10 mb-8 inline-flex items-center gap-2 relative z-10 backdrop-blur-none shadow-inner group-hover:border-amber-500/30 transition-colors">
                         <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_5px_rgba(244,63,94,0.8)]"></span>
                         請截圖此頁面作為紀錄
                     </p>
@@ -295,7 +295,7 @@ export const ToolQuizGame = () => {
                     <div className="relative z-10 flex justify-center mb-10 w-full relative">
                         <button
                             onClick={startGame}
-                            className="bg-slate-800/80 backdrop-blur-none hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:border-amber-500/50 hover:text-amber-300 group inline-flex items-center gap-2"
+                            className="bg-slate-800/80 backdrop-blur-none hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-lg transition-all duration-300 transform hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:border-amber-500/50 hover:text-amber-300 group inline-flex items-center gap-2"
                         >
                             重新調查 <span className="group-hover:rotate-180 transition-transform duration-500 inline-block">🔄</span>
                         </button>
@@ -303,13 +303,13 @@ export const ToolQuizGame = () => {
 
                     {/* 錯題回顧區塊 */}
                     {wrongQuestions.length > 0 && (
-                        <div className="text-left bg-slate-900/60 p-6 rounded-2xl border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 max-h-96 overflow-y-auto shadow-inner backdrop-blur-sm relative z-10 scrollbar-thin scrollbar-thumb-rose-900 scrollbar-track-slate-900">
+                        <div className="text-left bg-slate-900/60 p-6 rounded-sm border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 max-h-96 overflow-y-auto shadow-inner backdrop-blur-sm relative z-10 scrollbar-thin scrollbar-thumb-rose-900 scrollbar-track-slate-900">
                             <h3 className="text-xl font-black mb-5 flex items-center gap-2 text-rose-50 border-b border-slate-700/50 pb-3">
                                 <span className="text-rose-500 text-2xl drop-shadow-[0_0_5px_currentColor]">📁</span> 破案失敗紀錄 <span className="text-slate-400 text-sm font-normal ml-2 tracking-widest">(錯題回顧)</span>
                             </h3>
                             <div className="space-y-4">
                                 {wrongQuestions.map((wq, i) => (
-                                    <div key={i} className="bg-slate-800/80 p-5 rounded-xl shadow-lg border border-slate-700/50 group overflow-hidden relative">
+                                    <div key={i} className="bg-slate-800/80 p-5 rounded-sm shadow-lg border border-slate-700/50 group overflow-hidden relative">
                                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-rose-500 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
                                         <p className="font-bold text-rose-100 text-lg mb-3 leading-relaxed">{wq.topic}</p>
                                         <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -335,7 +335,7 @@ export const ToolQuizGame = () => {
                     )}
 
                     {wrongQuestions.length === 0 && (
-                        <div className="bg-gradient-to-r from-emerald-900/40 via-emerald-800/40 to-emerald-900/40 text-emerald-300 border border-emerald-500/40 p-6 rounded-2xl font-bold text-lg relative z-10 backdrop-blur-sm shadow-[0_0_30px_rgba(16,185,129,0.15)] flex flex-col items-center gap-3">
+                        <div className="bg-gradient-to-r from-emerald-900/40 via-emerald-800/40 to-emerald-900/40 text-emerald-300 border border-emerald-500/40 p-6 rounded-sm font-bold text-lg relative z-10 backdrop-blur-sm shadow-[0_0_30px_rgba(16,185,129,0.15)] flex flex-col items-center gap-3">
                             <span className="text-4xl drop-shadow-[0_0_10px_currentColor] mb-1">🎉</span>
                             <span className="tracking-wide">完美破案！毫無破綻的推理</span>
                             <span className="text-emerald-200/70 text-sm font-medium">你已經完全掌握研究工具的精髓了！</span>
@@ -354,7 +354,7 @@ export const ToolQuizGame = () => {
     const isBossLevel = currentQ.topic.includes("魔王");
 
     return (
-        <div className="relative rounded-xl overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 bg-cover bg-fixed bg-center shadow-2xl"
+        <div className="relative rounded-sm overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 bg-cover bg-fixed bg-center shadow-2xl"
             style={{ backgroundImage: "url('/images/tool_quiz_bg.png')" }}>
             <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-none z-0"></div>
 
@@ -362,19 +362,19 @@ export const ToolQuizGame = () => {
 
                 {/* Progress and Score */}
                 <div className="flex justify-between items-center mb-6 px-1">
-                    <div className="bg-slate-900/60 backdrop-blur-sm text-slate-300 font-bold px-5 py-2 rounded-full shadow-inner text-lg border border-slate-700 flex items-center gap-2">
+                    <div className="bg-slate-900/60 backdrop-blur-sm text-slate-300 font-bold px-5 py-2 rounded-sm shadow-inner text-lg border border-slate-700 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-amber-500 animate-[pulse_1.5s_ease-in-out_infinite] shadow-[0_0_8px_rgba(245,158,11,0.8)]"></span>
                         檔案夾 <span className="text-amber-400">{currentQIndex + 1}</span> <span className="opacity-40 font-normal">/ {gameQuestions.length}</span>
                     </div>
 
-                    <div className="bg-slate-900/60 backdrop-blur-sm text-emerald-400 font-bold px-5 py-2 rounded-full shadow-inner text-lg border border-emerald-500/30 flex items-center gap-2">
+                    <div className="bg-slate-900/60 backdrop-blur-sm text-emerald-400 font-bold px-5 py-2 rounded-sm shadow-inner text-lg border border-emerald-500/30 flex items-center gap-2">
                         <span>成功破案</span>
                         <span className="bg-emerald-900/50 text-emerald-300 px-3 py-0.5 rounded-md font-black min-w-[3rem] text-center border border-emerald-500/20 shadow-inner drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">{score}</span>
                     </div>
                 </div>
 
                 {/* Question Card */}
-                <div className={`bg-slate-900/70 backdrop-blur-lg p-6 md:p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] mb-6 border-t-[8px] border-x border-b border-white/10 transition-all relative overflow-hidden group hover:border-amber-500/30 duration-500 ${isBossLevel ? 'border-t-rose-500 shadow-[0_0_50px_rgba(244,63,94,0.3)]' : 'border-t-amber-500'}`}>
+                <div className={`bg-slate-900/70 backdrop-blur-lg p-6 md:p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] mb-6 border-t-[8px] border-x border-b border-white/10 transition-all relative overflow-hidden group hover:border-amber-500/30 duration-500 ${isBossLevel ? 'border-t-rose-500 shadow-[0_0_50px_rgba(244,63,94,0.3)]' : 'border-t-amber-500'}`}>
                     {isBossLevel && (
                         <div className="absolute top-0 right-0 bg-rose-600/90 text-white text-xs font-black px-5 py-1.5 rounded-bl-xl tracking-widest animate-[pulse_2s_infinite] shadow-[0_0_15px_rgba(244,63,94,0.8)] border-b border-l border-rose-400/50 z-20 backdrop-blur-sm">
                             ⚠️ 高難度混合委託
@@ -388,7 +388,7 @@ export const ToolQuizGame = () => {
                     {/* 判準標籤 (Tags) */}
                     <div className="flex flex-wrap gap-2 mb-4 mt-2 relative z-10">
                         {currentQ.tags.map(tag => (
-                            <span key={tag} className="bg-slate-800/80 text-amber-400 font-bold px-3 py-1.5 rounded-lg text-sm tracking-wider border border-slate-600 shadow-sm leading-none flex items-center gap-1 drop-shadow-sm">
+                            <span key={tag} className="bg-slate-800/80 text-amber-400 font-bold px-3 py-1.5 rounded-sm text-sm tracking-wider border border-slate-600 shadow-sm leading-none flex items-center gap-1 drop-shadow-sm">
                                 <span className="opacity-50 text-amber-500">#</span>{tag}
                             </span>
                         ))}
@@ -427,7 +427,7 @@ export const ToolQuizGame = () => {
                                 key={option}
                                 onClick={() => handleAnswer(option)}
                                 disabled={isAnswered}
-                                className={`flex flex-col md:flex-row items-center justify-center p-4 md:p-6 rounded-2xl font-bold transition-all duration-300 ${buttonStyle} ${!isAnswered ? 'hover:-translate-y-1' : ''}`}
+                                className={`flex flex-col md:flex-row items-center justify-center p-4 md:p-6 rounded-sm font-bold transition-all duration-300 ${buttonStyle} ${!isAnswered ? 'hover:-translate-y-1' : ''}`}
                             >
                                 <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
@@ -444,7 +444,7 @@ export const ToolQuizGame = () => {
 
                 {/* Feedback Section */}
                 {isAnswered && (
-                    <div className={`p-6 md:p-8 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-bottom-4 border-l-[12px] backdrop-blur-lg border-y border-r border-white/10 ${selectedAnswer === currentQ.correct ? 'bg-emerald-900/20 border-l-emerald-500' : 'bg-rose-900/20 border-l-rose-500'}`}>
+                    <div className={`p-6 md:p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-bottom-4 border-l-[12px] backdrop-blur-lg border-y border-r border-white/10 ${selectedAnswer === currentQ.correct ? 'bg-emerald-900/20 border-l-emerald-500' : 'bg-rose-900/20 border-l-rose-500'}`}>
                         <div className="flex items-start justify-between gap-4 mb-4">
                             <div className="flex items-center gap-4 w-full">
                                 <div className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-inner border ${selectedAnswer === currentQ.correct ? 'bg-emerald-900/50 text-emerald-400 border-emerald-500/30' : 'bg-rose-900/50 text-rose-400 border-rose-500/30'}`}>
@@ -471,7 +471,7 @@ export const ToolQuizGame = () => {
                         <div className="flex justify-end pt-5 border-t border-slate-700/50">
                             <button
                                 onClick={nextQuestion}
-                                className={`font-black py-4 px-10 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 text-white overflow-hidden relative group ${currentQIndex < gameQuestions.length - 1 ? 'bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 border border-amber-400/50 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]' : 'bg-slate-700 hover:bg-slate-600 border border-slate-500'}`}
+                                className={`font-black py-4 px-10 rounded-sm text-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 text-white overflow-hidden relative group ${currentQIndex < gameQuestions.length - 1 ? 'bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 border border-amber-400/50 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]' : 'bg-slate-700 hover:bg-slate-600 border border-slate-500'}`}
                             >
                                 <span className="relative z-10 flex items-center gap-2">
                                     {currentQIndex < gameQuestions.length - 1 ? (
