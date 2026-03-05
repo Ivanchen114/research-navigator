@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DocLinkBtn } from '../../components/analysis/DocLinkBtn';
 import { FoundationChart } from '../../components/analysis/FoundationChart';
+import { Bot, BrainCircuit, PenLine } from 'lucide-react';
 
 export const FoundationModule = () => {
     const [showChart, setShowChart] = useState(false);
@@ -22,6 +23,39 @@ export const FoundationModule = () => {
                     </DocLinkBtn>
                 </div>
             </header>
+
+            {/* W14 Core Process */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl shadow-sm border border-blue-100">
+                <h3 className="text-xl font-bold mb-4 text-slate-800 flex items-center gap-2">
+                    <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">🚀</span>
+                    W14 核心分析任務：AI 協作三部曲
+                </h3>
+                <p className="mb-6 text-slate-700 text-sm">
+                    在這場分流工作坊中，我們的主軸是「<strong className="text-blue-700">AI 做初稿，人做裁判</strong>」。請依照你選擇的研究方法（左側選單），進行以下三步驟：
+                </p>
+                <div className="grid md:grid-cols-3 gap-4">
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-100 flex flex-col gap-2">
+                        <div className="flex items-center gap-2 text-blue-700 font-bold">
+                            <Bot size={20} /> 1. 第一輪分析
+                        </div>
+                        <p className="text-sm text-slate-600">把資料餵給 AI，使用專屬 Prompt 請它找出「有趣趨勢」或「主題編碼」。</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-rose-100 flex flex-col gap-2 relative">
+                        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center hidden md:flex">➔</div>
+                        <div className="flex items-center gap-2 text-rose-700 font-bold">
+                            <BrainCircuit size={20} /> 2. 人工裁奪
+                        </div>
+                        <p className="text-sm text-slate-600">檢驗 AI 有無「過度詮釋」或忽略了「脈絡因素」？你是唯一的裁判！</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm border border-emerald-100 flex flex-col gap-2 relative">
+                        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center hidden md:flex">➔</div>
+                        <div className="flex items-center gap-2 text-emerald-700 font-bold">
+                            <PenLine size={20} /> 3. 專屬寫作草稿
+                        </div>
+                        <p className="text-sm text-slate-600">將你的裁奪結果，依循「黃金寫作公式」轉化為精準的結語草稿，帶你去 W15。</p>
+                    </div>
+                </div>
+            </div>
 
             {/* Content 1: Nature of Data Analysis */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { DocLinkBtn } from '../../components/analysis/DocLinkBtn';
 import { PromptBox, AIInstructionDropdown } from '../../components/analysis/PromptBox';
+import { Bot, Scale, AlertTriangle, PenLine } from 'lucide-react';
 
 export const LiteratureModule = () => {
     return (
@@ -21,26 +22,35 @@ export const LiteratureModule = () => {
                 </div>
             </header>
 
-            {/* Step 1 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">Step 1：文獻重點提取</h3>
-                <p className="text-sm text-slate-600 mb-4">不再只有單純翻譯，而是提取核心論點與方法。</p>
+            {/* Step 2: First Round Analysis (W14) */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                    <Bot className="text-blue-600" />
+                    <h3 className="text-lg font-bold text-slate-800">Step 2：第一輪分析 (AI 找共識與缺口)</h3>
+                </div>
+                <p className="text-sm text-slate-600 mb-4">文獻探討最怕變成「流水帳摘要」。請把多篇文獻的重點或摘要餵給 AI，請它幫你進行<strong className="text-blue-600">比較 (Compare)</strong> 與 <strong className="text-blue-600">綜合 (Synthesize)</strong>。</p>
 
-                <AIInstructionDropdown title="重點摘要">
+                <AIInstructionDropdown title="複製 Prompt：多篇文獻交叉比對">
                     <PromptBox>
-                        {`【任務】請閱讀以下這篇文獻的摘要。
-1. 提取作者的核心論點 (Main Argument)。
-2. 作者使用了什麼研究方法？
-3. 這個研究的結論是什麼？
-【文獻內容】[貼上摘要]`}
+                        {`【任務】我正在寫一篇文獻探討，主題是「＿＿＿」。
+以下是我蒐集到的幾篇文獻摘要（或我整理的重點重點）：
+
+[文獻 A]：(貼上標題與摘要)
+[文獻 B]：(貼上標題與摘要)
+[文獻 C]：(貼上標題與摘要)
+
+請幫我綜合分析這三篇文獻：
+1. 找出它們的「最大共識」是什麼？（大家都同意什麼？）
+2. 找出它們的「分歧點」是什麼？（哪裡有爭議或不同觀點？）
+3. 幫我找出一個上述文獻都還沒解決的「研究缺口 (Research Gap)」。`}
                     </PromptBox>
                 </AIInstructionDropdown>
             </div>
 
-            {/* Step 2 */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-indigo-500 p-6">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">Step 2：綜合矩陣 (Synthesis Matrix) 🔥</h3>
-                <p className="text-sm text-slate-600 mb-4">利用 AI 幫你比較多篇文章，找出共識與分歧。這是文獻探討的靈魂！</p>
+            {/* Self-Learning: Synthesis Matrix */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                <h3 className="text-lg font-bold text-slate-800 mb-2">📝 【自學補充】綜合矩陣 (Synthesis Matrix)</h3>
+                <p className="text-sm text-slate-600 mb-4">如果你的文獻很多，可以請 AI 先幫你畫出這個表格，這是文獻探討的靈魂！</p>
 
                 <AIInstructionDropdown title="比較矩陣">
                     <PromptBox>
@@ -81,6 +91,62 @@ export const LiteratureModule = () => {
                     </table>
                 </div>
                 <p className="text-xs text-center text-slate-500 mt-3">👆 綜合矩陣範例：清楚看出不同學科的觀點差異。</p>
+            </div>
+
+            {/* Step 3: Human Judgment (W14) */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-rose-500 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                    <Scale className="text-rose-600" />
+                    <h3 className="text-lg font-bold text-slate-800">Step 3：人工裁奪 (對焦你的研究)</h3>
+                </div>
+                <p className="text-sm text-slate-600 mb-4">
+                    AI 找出的「缺口」可能非常空泛（例如說需要更多研究）。你必須把它<strong className="text-rose-600">拉回你自己的研究題目</strong>：
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
+                        <h4 className="font-bold text-rose-800 mb-2 flex items-center gap-2">
+                            <AlertTriangle size={18} /> 陷阱一：假共識
+                        </h4>
+                        <p className="text-sm text-slate-700 mb-2">
+                            AI 說這三篇都同意手機會讓人變笨。但其實其中一篇說的是「短期記憶下降」，另一篇是「注意力不集中」。
+                        </p>
+                        <div className="bg-white p-2 rounded text-xs text-slate-600 border border-rose-200">
+                            <strong>你的裁奪：</strong> 必須自己回去看那幾篇文獻，確認他們指稱的概念是否真的相同。在寫作時要把概念定義清楚。
+                        </div>
+                    </div>
+                    <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
+                        <h4 className="font-bold text-rose-800 mb-2 flex items-center gap-2">
+                            <AlertTriangle size={18} /> 陷阱二：偏離你的研究
+                        </h4>
+                        <p className="text-sm text-slate-700 mb-2">
+                            AI 找出的缺口是「過去研究缺乏對 50 歲以上成人的探討」。但你的題目明明是研究高中生？
+                        </p>
+                        <div className="bg-white p-2 rounded text-xs text-slate-600 border border-rose-200">
+                            <strong>你的裁奪：</strong> 拒絕 AI 的缺口！你必須自己引導：過去研究雖然探討了高中生，但多半是「量化問卷」，因此「本研究的缺口」在於採用質性訪談來深入了解。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Step 4: Drafting (W14) */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                    <PenLine className="text-emerald-600" />
+                    <h3 className="text-lg font-bold text-slate-800">Step 4：黃金寫作草稿</h3>
+                </div>
+                <p className="text-sm text-slate-600 mb-4">
+                    將 AI 幫你綜合的共識、你的裁奪與你找到的研究缺口，寫成文獻回顧的結語（請記錄到文件裡，這就是你報告第二章的結尾）。
+                </p>
+                <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100 font-serif">
+                    <p className="text-sm text-slate-700 leading-loose">
+                        <strong className="text-emerald-700">【數據/資料描述 (客觀現象、共識)】</strong><br />
+                        綜合上述文獻可知，目前學界對於「＿＿＿＿」的看法，多數傾向認為＿＿＿＿（例如：某某因素是主要成因）。然而，在＿＿＿＿的傾向上，各方研究仍存在分歧。
+                        <br /><br />
+                        <strong className="text-emerald-700">【分析推論 (引出你的研究缺口)】</strong><br />
+                        回顧過往文獻，雖然多數研究已探討了＿＿＿＿，但較少針對＿＿＿＿（你的切入點/特殊族群/新方法）進行深入分析。因此，本研究將試圖填補此一缺口，透過＿＿＿＿方法，進一步探討＿＿＿＿。
+                    </p>
+                </div>
             </div>
 
         </div>

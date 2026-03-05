@@ -14,10 +14,13 @@ import {
     Info,
     PenTool,
     BookOpen,
-    Search
+    Search,
+    Rocket
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const ChartSelection = () => {
+    const navigate = useNavigate();
     const [activeExercise, setActiveExercise] = useState(null);
 
     const chartTypes = [
@@ -301,6 +304,34 @@ export const ChartSelection = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Final CTA: Move to W14 Analysis */}
+            <section className="mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-violet-900 rounded-3xl p-8 md:p-12 shadow-xl border border-indigo-700/50 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 group-hover:bg-fuchsia-500/30 transition-colors" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 group-hover:bg-blue-500/30 transition-colors" />
+
+                    <div className="relative z-10 flex flex-col items-center">
+                        <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm border border-white/20">
+                            <Rocket size={32} className="text-amber-400" />
+                        </div>
+                        <h2 className="text-2xl md:text-3xl font-black text-white mb-4">
+                            學會黃金公式了？帶上你的資料出發吧！
+                        </h2>
+                        <p className="text-indigo-200 mb-8 max-w-2xl text-sm md:text-base leading-relaxed">
+                            從今天開始，你就是獨當一面的知識轉譯者。趕快前往「解讀與結論大廳」，選擇你的研究方法，讓 AI 成為你的第一輪分析助手，完成專題的最後一哩路！
+                        </p>
+                        <button
+                            onClick={() => navigate('/analysis')}
+                            className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all flex items-center gap-3 group/btn"
+                        >
+                            <span>進入 W14 分析大廳 (五路分流)</span>
+                            <TrendingUp size={20} className="group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                    </div>
+                </div>
+            </section>
+
         </div>
     );
 };
