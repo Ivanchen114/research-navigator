@@ -1,8 +1,22 @@
-import React from 'react';
-import { BookOpen, ShieldAlert, CheckCircle, FileSearch, PenTool, AlertTriangle, Info, FileText } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, ShieldAlert, CheckCircle, FileSearch, PenTool, AlertTriangle, Info, FileText, Bot, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PromptBox } from '../components/analysis/PromptBox';
 
 export const LiteratureReview = () => {
+    const [myTopic, setMyTopic] = useState('');
+    const [searchKeywords, setSearchKeywords] = useState('');
+    const [foundPaper, setFoundPaper] = useState('');
+
+    const keywordPrompt = `我的研究題目是：${myTopic || '【你的題目】'}
+
+請幫我：
+1. 列出 5-8 個適合的中文關鍵字
+2. 給我對應的英文關鍵字
+3. 建議哪些關鍵字組合在資料庫搜尋最有效
+
+請用表格呈現，並說明每個關鍵字的用途。`;
+
     return (
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
 
@@ -11,7 +25,7 @@ export const LiteratureReview = () => {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3" />
                 <div className="relative z-10">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 shadow-sm mb-4">
-                        <BookOpen size={16} /> W6 核心模組
+                        <BookOpen size={16} /> W5 核心模組
                     </div>
                     <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight text-center mb-4 leading-snug pb-2">
                         文獻偵探社與<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">學術寫作倫理</span>
@@ -30,6 +44,95 @@ export const LiteratureReview = () => {
                     </div>
                 </div>
             </header>
+
+            {/* Section 0: Literature Search */}
+            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow mb-8">
+                <div className="flex items-center gap-3 border-b-2 border-slate-100 pb-4 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-xl text-white shadow-sm">
+                        <Search size={24} />
+                    </div>
+                    <h2 className="text-2xl font-bold text-slate-800">課前熱身：資料搜集入門</h2>
+                </div>
+
+                <div className="space-y-8">
+                    {/* 三步驟說明 */}
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {[
+                            { icon: '📚', title: '1. 華藝資料庫', desc: '台灣最大的學術資料庫，碩博士論文、期刊都在這裡' },
+                            { icon: '🤖', title: '2. AI 關鍵字生成', desc: 'AI 幫你想出更多搜尋關鍵字，找到你沒想到的資料' },
+                            { icon: '📝', title: '3. 辨識 APA 格式', desc: '知道引用格式長什麼樣，避免落入抄襲的陷阱' },
+                        ].map(item => (
+                            <div key={item.title} className="bg-blue-50 rounded-2xl border border-blue-100 p-5 text-center transition-transform hover:-translate-y-1">
+                                <div className="text-4xl mb-3">{item.icon}</div>
+                                <p className="font-bold text-blue-800 text-base mb-2">{item.title}</p>
+                                <p className="text-blue-600 text-sm">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* 華藝搜尋策略 */}
+                    <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+                        <p className="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2"><BookOpen size={20} className="text-slate-600" /> 華藝搜尋三步驟</p>
+                        <div className="space-y-3 text-slate-700">
+                            <div className="flex gap-3 items-start"><span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">1</span><span className="leading-relaxed"><strong>列出關鍵字</strong>：把題目的核心概念拆開（如「手機使用」「睡眠品質」「高中生」）</span></div>
+                            <div className="flex gap-3 items-start"><span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">2</span><span className="leading-relaxed"><strong>搜尋 → 加條件</strong>：結果太多就加「台灣」「近 5 年」「碩博士論文」</span></div>
+                            <div className="flex gap-3 items-start"><span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">3</span><span className="leading-relaxed"><strong>先看標題和摘要</strong>，再決定要不要下載全文</span></div>
+                        </div>
+                        <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 flex items-start gap-2">
+                            <AlertTriangle size={18} className="shrink-0 mt-0.5" />
+                            <p><strong>注意：</strong>關鍵字不要太具體！不要搜「松山高中」，改搜「高中生」。太具體找不到，太廣泛結果太多——兩者都要用進階搜尋來平衡。</p>
+                        </div>
+                    </div>
+
+                    {/* 實作練習 */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* 左：我的搜巡記錄 */}
+                        <div className="space-y-4">
+                            <h3 className="font-bold text-slate-800 text-lg flex items-center gap-2">
+                                <PenTool size={20} className="text-blue-600" /> 我的搜尋記錄
+                            </h3>
+                            <div>
+                                <label className="text-sm text-slate-600 font-bold mb-1 block">我的研究題目</label>
+                                <input
+                                    className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-400 transition-all shadow-sm"
+                                    placeholder="輸入你的研究題目..."
+                                    value={myTopic}
+                                    onChange={e => setMyTopic(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-sm text-slate-600 font-bold mb-1 block">我的關鍵字（至少 3 個）</label>
+                                <input
+                                    className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-400 transition-all shadow-sm"
+                                    placeholder="例：手機使用 / 睡眠品質 / 高中生"
+                                    value={searchKeywords}
+                                    onChange={e => setSearchKeywords(e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label className="text-sm text-slate-600 font-bold mb-1 block">找到的相關研究（標題 + 作者 + 年份）</label>
+                                <textarea
+                                    className="w-full border border-slate-300 rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-400 transition-all min-h-[100px] shadow-sm"
+                                    placeholder="標題：__________________&#10;作者：_____ 年份：_____"
+                                    value={foundPaper}
+                                    onChange={e => setFoundPaper(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        {/* 右：AI 關鍵字生成 */}
+                        <div className="space-y-4">
+                            <h3 className="font-bold text-slate-800 text-lg flex items-center gap-2">
+                                <Bot size={20} className="text-blue-600" /> AI 關鍵字生成助手
+                            </h3>
+                            <p className="text-sm text-slate-600">讓 AI 幫你想出更多中英文關鍵字，突破搜尋瓶頸。</p>
+                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 shadow-inner">
+                                <PromptBox>{keywordPrompt}</PromptBox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Section 1: Concept 1 */}
             <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">

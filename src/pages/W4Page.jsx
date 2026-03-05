@@ -39,10 +39,6 @@ export const W4Page = () => {
     // Part 2：題目定案
     const [finalTopic, setFinalTopic] = useState('');
 
-    // Part 3：搜尋
-    const [searchKeywords, setSearchKeywords] = useState('');
-    const [foundPaper, setFoundPaper] = useState('');
-
     const posterPrompt = `我的研究題目是：${myTopic || '【你的題目】'}
 研究對象：${myWho || '【Who】'}
 研究方法：${myHow || '【How】'}
@@ -53,15 +49,6 @@ export const W4Page = () => {
 1. 優化我的標題（讓它更吸引人，可用問句，20 字以內）
 2. 幫我補充或優化「預期發現」，給我 3 個假設
 請根據我的草稿調整，不要完全取代我的想法，讓內容簡單讓高中生看懂。`;
-
-    const keywordPrompt = `我的研究題目是：${finalTopic || myTopic || '【你的題目】'}
-
-請幫我：
-1. 列出 5-8 個適合的中文關鍵字
-2. 給我對應的英文關鍵字
-3. 建議哪些關鍵字組合在資料庫搜尋最有效
-
-請用表格呈現，並說明每個關鍵字的用途。`;
 
     const props = { openSection, toggleSection };
 
@@ -269,76 +256,6 @@ export const W4Page = () => {
                 )}
             </div>
 
-            {/* Part 3：資料搜集入門 */}
-            <div className="rounded-2xl overflow-hidden border border-blue-200">
-                <SectionHeader id="part3" title="Part 3｜📚 資料搜集入門" icon="🔍" subtitle="學會三件事：華藝資料庫、AI 關鍵字生成、APA 格式辨識" {...props} />
-                {openSection === 'part3' && (
-                    <div className="bg-white p-6 md:p-8 space-y-6 border-t border-blue-100">
-
-                        {/* 三步驟說明 */}
-                        <div className="grid md:grid-cols-3 gap-3">
-                            {[
-                                { icon: '📚', title: '1. 華藝資料庫', desc: '台灣最大的學術資料庫，碩博士論文、期刊都在這裡' },
-                                { icon: '🤖', title: '2. AI 關鍵字生成', desc: 'AI 幫你想出更多搜尋關鍵字，找到你沒想到的資料' },
-                                { icon: '📝', title: '3. 辨識 APA 格式', desc: '知道引用格式長什麼樣，避免落入抄襲的陷阱' },
-                            ].map(item => (
-                                <div key={item.title} className="bg-blue-50 rounded-xl border border-blue-100 p-4 text-center">
-                                    <div className="text-3xl mb-2">{item.icon}</div>
-                                    <p className="font-bold text-blue-800 text-sm mb-1">{item.title}</p>
-                                    <p className="text-blue-600 text-xs">{item.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* 華藝搜尋策略 */}
-                        <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
-                            <p className="font-bold text-slate-700 text-sm mb-3">💡 華藝搜尋三步驟</p>
-                            <div className="space-y-2 text-sm text-slate-600">
-                                <div className="flex gap-3"><span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-black shrink-0">1</span><span><strong>列出關鍵字</strong>：把題目的核心概念拆開（如「手機使用」「睡眠品質」「高中生」）</span></div>
-                                <div className="flex gap-3"><span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-black shrink-0">2</span><span><strong>搜尋 → 加條件</strong>：結果太多就加「台灣」「近 5 年」「碩博士論文」</span></div>
-                                <div className="flex gap-3"><span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-black shrink-0">3</span><span><strong>先看標題和摘要</strong>，再決定要不要下載全文</span></div>
-                            </div>
-                            <div className="mt-3 bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800">
-                                ⚠️ 關鍵字不要太具體！不要搜「松山高中」，改搜「高中生」。太具體找不到，太廣泛結果太多——兩者都要用進階搜尋來平衡。
-                            </div>
-                        </div>
-
-                        {/* 我的關鍵字 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2">📝 我的搜尋記錄（自己先填！）</label>
-                            <div className="space-y-3">
-                                <div>
-                                    <label className="text-xs text-slate-500 font-bold mb-1 block">我的關鍵字（至少 3 個）</label>
-                                    <input
-                                        className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 transition-all"
-                                        placeholder="例：手機使用 / 睡眠品質 / 高中生 / 課業壓力"
-                                        value={searchKeywords}
-                                        onChange={e => setSearchKeywords(e.target.value)}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-xs text-slate-500 font-bold mb-1 block">我找到的相關研究（標題 + 作者 + 年份）</label>
-                                    <textarea
-                                        className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-400 transition-all min-h-[72px]"
-                                        placeholder="標題：__________________&#10;作者：_____ 年份：_____"
-                                        value={foundPaper}
-                                        onChange={e => setFoundPaper(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* AI 關鍵字生成 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2 flex items-center gap-2"><Bot size={16} className="text-blue-500" /> AI 協作：讓 AI 生成更多關鍵字</label>
-                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
-                                <PromptBox>{keywordPrompt}</PromptBox>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-
             {/* Part Z：自我檢核 */}
             <div className="rounded-2xl overflow-hidden border border-slate-200">
                 <SectionHeader id="partz" title="Part Z｜✅ 自我檢核" icon="✅" subtitle="繳交前確認！" {...props} />
@@ -350,8 +267,6 @@ export const W4Page = () => {
                                 '我已參加 Gallery Walk，報告了 1 次，聆聽了 3 次。',
                                 '我已看完同學的建議，並決定是否修改題目。',
                                 '我的「W4 最終定案題目」已填好（Part 2）。',
-                                '我已在華藝資料庫找到至少 1 篇相關研究（Part 3）。',
-                                '我理解：AI 給關鍵字建議，但我要判斷哪些有用。',
                             ].map(item => (
                                 <label key={item} className="flex items-start gap-3 cursor-pointer group">
                                     <input type="checkbox" className="mt-0.5 w-4 h-4 rounded text-emerald-600 cursor-pointer" />
@@ -369,7 +284,7 @@ export const W4Page = () => {
                 <p className="text-white font-bold text-lg mb-1">「文獻偵探社與學術寫作倫理」</p>
                 <p className="text-slate-300 text-sm mb-3">你會學到：如何鑑識文獻真偽（A-D 級）、正確引用格式、防範抄襲的技巧。</p>
                 <div className="bg-blue-500/20 border border-blue-500/40 rounded-xl p-3">
-                    <p className="text-blue-300 font-bold text-sm">⚠️ 請帶著你的「W4 最終定案題目」和今天找到的文獻來！</p>
+                    <p className="text-blue-300 font-bold text-sm">⚠️ 記得帶著你驕傲的「W4 最終定案題目」前來報到！</p>
                 </div>
             </div>
 
