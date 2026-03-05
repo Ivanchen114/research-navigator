@@ -791,12 +791,12 @@ export const DataDetectiveGame = () => {
                 <div className="bg-slate-900/60 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative flex flex-col  border-x border-b border-white/10 z-10 animate-in fade-in zoom-in-95 duration-500">
                     <div className="absolute top-3 right-4 text-[10px] font-mono text-amber-500 tracking-widest drop-shadow-[0_0_5px_rgba(245,158,11,0.8)]" style={{ fontFamily: 'Courier New, monospace' }}>FILE #001-014</div>
                     <div className="text-6xl mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">🕵️</div>
-                    <h1 className="text-4xl md:text-5xl font-black mb-2 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse">真相濾鏡</h1>
+                    <h1 className="text-4xl md:text-5xl font-black mb-2 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse">行動代號：濾鏡</h1>
                     <div className="text-sm md:text-base font-bold text-amber-200/90 mb-5 bg-amber-950/60 inline-block px-4 py-1.5 rounded-lg border border-amber-500/30 tracking-widest">
                         🎯 客觀數據解讀與批判性思維培養
                     </div>
                     <p className="text-lg text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed shadow-sm font-medium">
-                        歡迎來到「真相濾鏡」！在這裡，你將化身為數據偵探，運用你的批判性思維，
+                        歡迎來到「行動代號：濾鏡」！在這裡，你將化身為數據偵探，運用你的批判性思維，
                         從看似合理的分析報告中，找出隱藏的偏誤、錯誤詮釋或不當結論。
                         每一份報告都可能藏著「假象」，你的任務就是揭露它們，還原數據的「真相」！
                     </p>

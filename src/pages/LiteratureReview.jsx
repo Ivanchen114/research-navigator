@@ -38,7 +38,7 @@ export const LiteratureReview = () => {
                             to="/game/citation-detective"
                             className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group text-lg"
                         >
-                            <span>進入遊戲：行動代號：引註追緝</span>
+                            <span>進入遊戲：行動代號：獵狐</span>
                             <span className="group-hover:translate-x-1 transition-transform">→</span>
                         </Link>
                     </div>

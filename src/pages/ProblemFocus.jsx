@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PromptBox } from '../components/analysis/PromptBox';
-import { PenTool, ArrowRight, Lightbulb, BrainCircuit, Cpu, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
+import { PenTool, ArrowRight, Lightbulb, BrainCircuit, Cpu, CheckCircle2, ChevronDown, ChevronUp, Gamepad2, Target } from 'lucide-react';
 
 // ── 三種探究句型 ──────────────────────────────────────────────
 const QUESTION_TYPES = [
@@ -479,6 +479,27 @@ C. 深究型（某現象的運作機制/背後原因）
                 </div>
             </div>
 
+            {/* ── 遊戲入口 ─────────────────────────── */}
+            <div className="bg-gradient-to-r from-rose-600 to-pink-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow border border-rose-500 mb-8">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                            <Gamepad2 size={24} />
+                            🎮 行動代號：靶心
+                        </h3>
+                        <p className="text-rose-100 text-sm">
+                            在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。這關卡將為陷入迷惘的探員對症下藥，開出精準的問題處方。
+                        </p>
+                    </div>
+                    <Link
+                        to="/game/question-er"
+                        className="bg-white text-rose-700 hover:bg-rose-50 px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group shrink-0"
+                    >
+                        進入行動任務
+                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                </div>
+            </div>
 
             {/* ── Part Z：自我檢核 ──────────────────────── */}
             <div className="rounded-2xl overflow-hidden border border-slate-200">

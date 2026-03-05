@@ -173,7 +173,7 @@ export const ClinicPage = () => {
                     <div>
                         <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
                             <Gamepad2 size={24} />
-                            🎮 辦案工具大考驗
+                            🎮 行動代號：裝備
                         </h3>
                         <p className="text-indigo-100 text-sm">
                             11 個真實研究情境挑戰！用分科三問判斷每個題目該用什麼工具。
@@ -183,7 +183,7 @@ export const ClinicPage = () => {
                         to="/game/tool-quiz"
                         className="bg-white text-indigo-700 hover:bg-indigo-50 px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group shrink-0"
                     >
-                        開始遊戲
+                        進入行動任務
                         <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>

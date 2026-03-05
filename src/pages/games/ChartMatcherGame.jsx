@@ -573,7 +573,7 @@ export const ChartMatcherGame = () => {
                 <div className="bg-slate-900/80 p-8 md:p-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-cyan-500 relative overflow-hidden backdrop-blur-sm z-10">
                     <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 drop-shadow-[0_0_20px_rgba(6,182,212,0.5)]">📊</div>
                     <div className="text-7xl mb-6 relative">📊<span className="absolute -inset-4 bg-cyan-500/20 rounded-full blur-xl z-[-1]"></span></div>
-                    <h1 className="text-3xl md:text-5xl font-black text-cyan-400 mb-2 tracking-widest drop-shadow-[0_0_8px_currentColor]">情報視覺化</h1>
+                    <h1 className="text-3xl md:text-5xl font-black text-cyan-400 mb-2 tracking-widest drop-shadow-[0_0_8px_currentColor]">行動代號：解碼</h1>
                     <div className="text-sm md:text-base font-bold text-cyan-300/80 mb-4 bg-cyan-950/40 inline-block px-3 py-1 rounded border border-cyan-500/20 tracking-wider">
                         🎯 統計圖表選擇與資訊呈現最佳化
                     </div>
