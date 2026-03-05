@@ -124,7 +124,9 @@ export const Home = () => {
                                         <div className="w-10 h-10 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-lg flex items-center justify-center shrink-0"><HeartPulse size={20} /></div>
                                         <div>
                                             <h4 className="font-bold text-slate-100 group-hover:text-rose-400 transition-colors text-sm mb-1">行動代號：靶心</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究問題精煉與對焦訓練。為生病的問題開立處方！</p>\n                                        {/* Game Identifier Badge */}\n                                        <div className="absolute top-0 right-0 bg-rose-500/20 text-rose-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-rose-500/30 backdrop-blur-sm">互動任務</div>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究問題精煉與對焦訓練。為生病的問題開立處方！</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-rose-500/20 text-rose-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-rose-500/30 backdrop-blur-sm">互動任務</div>
                                         </div>
                                     </div>
                                 </div>
@@ -149,22 +151,24 @@ export const Home = () => {
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/wizard')}>
                                         <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shrink-0"><Navigation2 size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">方法快篩 (W3-W4)</h4>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">方法快篩 (W3)</h4>
                                             <p className="text-xs text-slate-500">回答三問題，鎖定適合的方法。</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-slate-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/tool-quiz')}>
-                                        <div className="w-10 h-10 bg-slate-200 text-slate-700 rounded-lg flex items-center justify-center shrink-0"><Gamepad2 size={20} /></div>
+                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/w4')}>
+                                        <div className="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center shrink-0"><Users size={20} /></div>
                                         <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">行動代號：裝備</h4>
-                                            <p className="text-xs text-slate-500">研究工具與蒐集方法辨識。測試你的判斷力！</p>
+                                            <h4 className="font-bold text-slate-800 text-sm mb-1">題目博覽會 (W4)</h4>
+                                            <p className="text-xs text-slate-500">辦一場個人博覽會，讓同學幫你把關。</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/clinic')}>
                                         <div className="w-10 h-10 bg-slate-500/20 text-slate-400 border border-slate-500/30 rounded-lg flex items-center justify-center shrink-0"><Stethoscope size={20} /></div>
                                         <div>
                                             <h4 className="font-bold text-slate-100 group-hover:text-slate-400 transition-colors text-sm mb-1">研究診所 (W5)</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">用分科三問確認選對研究工具。</p>\n                                        {/* Game Identifier Badge */}\n                                        <div className="absolute top-0 right-0 bg-slate-500/20 text-slate-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-slate-500/30 backdrop-blur-sm">互動任務</div>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">用分科三問確認選對研究工具。</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-slate-500/20 text-slate-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-slate-500/30 backdrop-blur-sm">互動任務</div>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/literature-review')}>
@@ -178,7 +182,9 @@ export const Home = () => {
                                         <div className="w-10 h-10 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg flex items-center justify-center shrink-0"><Search size={20} /></div>
                                         <div>
                                             <h4 className="font-bold text-slate-100 group-hover:text-emerald-400 transition-colors text-sm mb-1">行動代號：獵狐</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">文獻真偽辨識與學術倫理審查。判斷引用合法性！</p>\n                                        {/* Game Identifier Badge */}\n                                        <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-emerald-500/30 backdrop-blur-sm">互動任務</div>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">文獻真偽辨識與學術倫理審查。判斷引用合法性！</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-emerald-500/30 backdrop-blur-sm">互動任務</div>
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +243,18 @@ export const Home = () => {
                                         <div className="w-10 h-10 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg flex items-center justify-center shrink-0"><Bug size={20} /></div>
                                         <div>
                                             <h4 className="font-bold text-slate-100 group-hover:text-emerald-400 transition-colors text-sm mb-1">行動代號：防線</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究設計與方法學避險測試。找出設計中的 Bug！</p>\n                                        {/* Game Identifier Badge */}\n                                        <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-emerald-500/30 backdrop-blur-sm">互動任務</div>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究設計與方法學避險測試。找出設計中的 Bug！</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-emerald-500/30 backdrop-blur-sm">互動任務</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-amber-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden sm:col-span-2" onClick={() => navigate('/game/tool-quiz')}>
+                                        <div className="w-10 h-10 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg flex items-center justify-center shrink-0"><Gamepad2 size={20} /></div>
+                                        <div>
+                                            <h4 className="font-bold text-slate-100 group-hover:text-amber-400 transition-colors text-sm mb-1">行動代號：裝備</h4>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究工具與蒐集方法辨識。測試你的判斷力！</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-amber-500/20 text-amber-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-amber-500/30 backdrop-blur-sm">互動任務</div>
                                         </div>
                                     </div>
                                 </div>
@@ -277,14 +294,18 @@ export const Home = () => {
                                         <div className="w-10 h-10 bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30 rounded-lg flex items-center justify-center shrink-0"><Palette size={20} /></div>
                                         <div>
                                             <h4 className="font-bold text-slate-100 group-hover:text-fuchsia-400 transition-colors text-sm mb-1">行動代號：解碼</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">統計圖表選擇與呈現最佳化。幫數據找最佳圖表！</p>\n                                        {/* Game Identifier Badge */}\n                                        <div className="absolute top-0 right-0 bg-fuchsia-500/20 text-fuchsia-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-fuchsia-500/30 backdrop-blur-sm">互動任務</div>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">統計圖表選擇與呈現最佳化。幫數據找最佳圖表！</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-fuchsia-500/20 text-fuchsia-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-fuchsia-500/30 backdrop-blur-sm">互動任務</div>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-cyan-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/data-detective')}>
                                         <div className="w-10 h-10 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-lg flex items-center justify-center shrink-0"><ChartNoAxesCombined size={20} /></div>
                                         <div>
                                             <h4 className="font-bold text-slate-100 group-hover:text-cyan-400 transition-colors text-sm mb-1">行動代號：濾鏡</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">客觀數據解讀與批判性思維培養。分辨正確推論！</p>\n                                        {/* Game Identifier Badge */}\n                                        <div className="absolute top-0 right-0 bg-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-cyan-500/30 backdrop-blur-sm">互動任務</div>
+                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">客觀數據解讀與批判性思維培養。分辨正確推論！</p>
+                                            {/* Game Identifier Badge */}
+                                            <div className="absolute top-0 right-0 bg-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-cyan-500/30 backdrop-blur-sm">互動任務</div>
                                         </div>
                                     </div>
                                 </div>
