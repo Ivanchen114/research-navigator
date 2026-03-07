@@ -5,7 +5,6 @@ import { ShieldAlert, Fingerprint, CheckCircle2, AlertTriangle, Lightbulb, Arrow
 import LessonMap from '../components/ui/LessonMap';
 import { W1Data } from '../data/lessonMaps';
 
-// 嫌疑犯檔案資料
 const SUSPECTS = [
     {
         id: 1,
@@ -38,15 +37,14 @@ const SUSPECTS = [
     },
 ];
 
-
 const AIRED_STEPS = [
     {
         letter: 'A',
         label: 'Ascribe',
         chinese: '歸屬',
-        color: 'text-red-600',
-        bg: 'bg-red-50',
-        border: 'border-red-200',
+        color: 'text-[#e32d5b]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         desc: '誠實說明哪裡用了 AI。',
         example: '例：「問卷題目的初稿，我用 Gemini 生成，再由我修改。」',
     },
@@ -54,9 +52,9 @@ const AIRED_STEPS = [
         letter: 'I',
         label: 'Inquire',
         chinese: '提問',
-        color: 'text-amber-600',
-        bg: 'bg-amber-50',
-        border: 'border-amber-200',
+        color: 'text-[#c9a84c]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         desc: '精準提問，不依賴模糊指令。你的提問，就是你的思考軌跡。',
         example: '例：「我問 AI：請幫我分析這 40 份回答，哪些是工具型、哪些是思維型？」',
     },
@@ -64,9 +62,9 @@ const AIRED_STEPS = [
         letter: 'R',
         label: 'Reference',
         chinese: '引用',
-        color: 'text-emerald-600',
-        bg: 'bg-emerald-50',
-        border: 'border-emerald-200',
+        color: 'text-[#2e7d5a]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         desc: '查證 AI 給的資料來源。不能盲信。',
         example: '例：AI 說某篇論文的結論，我去找到原文確認後才引用。',
     },
@@ -74,9 +72,9 @@ const AIRED_STEPS = [
         letter: 'E',
         label: 'Evaluate',
         chinese: '評估',
-        color: 'text-blue-600',
-        bg: 'bg-blue-50',
-        border: 'border-blue-200',
+        color: 'text-[#2d5be3]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         desc: '判斷內容是否合理，不照單全收。AI 會胡說八道（幻覺）。',
         example: '例：AI 分析說「受訪者都很滿意」，但我重聽錄音發現其實是反諷。',
     },
@@ -84,44 +82,43 @@ const AIRED_STEPS = [
         letter: 'D',
         label: 'Document',
         chinese: '紀錄',
-        color: 'text-purple-600',
-        bg: 'bg-purple-50',
-        border: 'border-purple-200',
+        color: 'text-[#8a2be2]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         desc: '保留與 AI 的對話紀錄。',
         example: '例：保留與 AI 的對話紀錄，附在研究歷程中。',
     },
 ];
 
-// 人機分工三件事
 const THREE_SKILLS = [
     {
-        icon: <Lightbulb size={28} />,
+        icon: <Lightbulb size={24} />,
         key: '品味 Taste',
         tagline: 'AI 沒有好奇心',
         desc: '學會問好問題。AI 只能回答你問的，不會主動對世界產生疑問。研究的起點永遠是「人的好奇心」。',
-        color: 'text-amber-600',
-        bg: 'bg-amber-50',
-        border: 'border-amber-200',
+        color: 'text-[#c9a84c]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         week: 'W2–W3',
     },
     {
-        icon: <Hand size={28} />,
+        icon: <Hand size={24} />,
         key: '接觸 Touch',
         tagline: 'AI 沒有身體',
         desc: '拿到 AI 拿不到的真實數據。問卷、訪談、觀察、現場蹲點——這些「帶著身體」的數據，只有你能取得。',
-        color: 'text-emerald-600',
-        bg: 'bg-emerald-50',
-        border: 'border-emerald-200',
+        color: 'text-[#2e7d5a]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         week: 'W4–W10',
     },
     {
-        icon: <BrainCircuit size={28} />,
+        icon: <BrainCircuit size={24} />,
         key: '判斷 Judgment',
         tagline: 'AI 會胡說八道',
         desc: '批判思考，識破 AI 的錯誤與偏見。數字背後的意義、受訪者的語氣、數據的代表性——這需要你的智慧。',
-        color: 'text-blue-600',
-        bg: 'bg-blue-50',
-        border: 'border-blue-200',
+        color: 'text-[#2d5be3]',
+        bg: 'bg-white',
+        border: 'border-[#dddbd5]',
         week: 'W15–W16',
     },
 ];
@@ -157,13 +154,13 @@ E - Evaluate 評估判斷（不照單全收，批判 AI 的回答）
 D - Document 歷程記錄（保留與 AI 的對話）`;
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e]">
 
             {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
-            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+            <div className="flex justify-end pt-2 pb-0 -mb-8 relative z-20">
                 <button
                     onClick={() => setShowLessonMap(!showLessonMap)}
-                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-amber-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    className="flex items-center gap-1.5 text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors opacity-60 hover:opacity-100 font-['DM_Mono',monospace]"
                     title="教師專用：顯示課程地圖"
                 >
                     <Map size={12} />
@@ -172,66 +169,59 @@ D - Document 歷程記錄（保留與 AI 的對話）`;
             </div>
 
             {showLessonMap && (
-                <div className="mb-8 animate-in slide-in-from-top-4 duration-300">
+                <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
                     <LessonMap data={W1Data} />
                 </div>
             )}
 
-            {/* Header ===== */}
-            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
-                <div className="relative z-10 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 shadow-sm mb-4">
-                        <ShieldAlert size={16} /> W1 研究啟動
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-                        我是大腦，<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-rose-500 drop-shadow-sm">AI 是工具</span>
-                    </h1>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                        AI 已強大到讓我們分不清真假——這堂課的目標，<br />是讓你成為「會用 AI，但不會被 AI 取代的研究者」。
-                    </p>
+            {/* Header */}
+            <header className="mb-14 pt-8">
+                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2d5be3] mb-3 flex items-center gap-2">
+                    <ShieldAlert size={14} /> W1 研究啟動
                 </div>
+                <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                    我是大腦，<br className="hidden md:block" />
+                    <span className="text-[#2d5be3] font-normal italic">AI 是工具</span>
+                </h1>
+                <p className="text-[15px] text-[#4a4a6a] leading-[1.75] max-w-[560px]">
+                    AI 已強大到讓我們分不清真假——這堂課的目標，是讓你成為「會用 AI，但不會被 AI 取代的研究者」。
+                </p>
             </header>
 
             {/* Part 1: 模仿遊戲 */}
-            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                    <span className="text-2xl">🕵️</span> 模仿遊戲：誰是偽裝者？
-                </h2>
-                <p className="text-slate-500 text-sm mb-2">投影幕上有 7 位「學長姐」的回答，但其中 <strong>1 位</strong> 是由 AI 生成的冒牌貨。</p>
-                <p className="text-slate-400 text-xs mb-6">👇 點擊每個檔案閱讀後，再猜猜誰是 AI！</p>
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-4">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                        🕵️ 模仿遊戲：誰是偽裝者？
+                    </h2>
+                </div>
+                <p className="text-[#4a4a6a] text-[14px] mb-6 leading-relaxed">
+                    投影幕上有 7 位「學長姐」的回答，但其中 <strong>1 位</strong> 是由 AI 生成的冒牌貨。點擊檔案閱讀後，再猜猜誰是 AI！
+                </p>
 
                 {/* 嫌疑犯檔案列表 */}
-                <div className="space-y-2 mb-8">
+                <div className="grid grid-cols-1 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden mb-8">
                     {SUSPECTS.map(s => (
-                        <div
-                            key={s.id}
-                            className={`rounded-xl border overflow-hidden transition-all ${openSuspect === s.id
-                                ? s.isAI ? 'border-rose-400 shadow-rose-100 shadow-md' : 'border-slate-300 shadow-sm'
-                                : 'border-slate-200 hover:border-slate-300'
-                                }`}
-                        >
-                            {/* 標題列（點擊展開） */}
+                        <div key={s.id} className="bg-white">
                             <button
                                 onClick={() => toggleSuspect(s.id)}
-                                className={`w-full flex items-center justify-between px-5 py-3 text-left transition-colors ${openSuspect === s.id
-                                    ? s.isAI ? 'bg-rose-950 text-white' : 'bg-slate-800 text-white'
-                                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
+                                className={`w-full flex items-center justify-between px-6 py-4 text-left transition-colors ${openSuspect === s.id
+                                    ? s.isAI ? 'bg-[#1a1a2e] text-white' : 'bg-[#f8f7f4] text-[#1a1a2e]'
+                                    : 'hover:bg-[#f8f7f4] text-[#1a1a2e]'
                                     }`}
                             >
-                                <div className="flex items-center gap-3">
-                                    <span className={`font-mono font-black text-sm px-2 py-0.5 rounded ${openSuspect === s.id
-                                        ? s.isAI ? 'bg-rose-800 text-rose-200' : 'bg-slate-700 text-slate-200'
-                                        : 'bg-slate-200 text-slate-600'
+                                <div className="flex items-center gap-4">
+                                    <span className={`font-['DM_Mono',monospace] font-bold text-[12px] px-2 py-0.5 rounded ${openSuspect === s.id
+                                        ? s.isAI ? 'bg-white/10 text-white' : 'bg-[#dddbd5] text-[#4a4a6a]'
+                                        : 'bg-[#f0ede6] text-[#8888aa]'
                                         }`}>#{s.id}</span>
-                                    <span className="font-bold text-sm">嫌疑犯檔案：第 {s.id} 號</span>
+                                    <span className="font-bold text-[14px]">嫌疑犯檔案：第 {s.id} 號</span>
                                 </div>
                                 {openSuspect === s.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                             </button>
 
-                            {/* 展開內容 */}
                             {openSuspect === s.id && (
-                                <div className={`px-5 py-4 text-sm leading-relaxed whitespace-pre-line ${s.isAI ? 'bg-rose-50 text-rose-900 border-t border-rose-200' : 'bg-white text-slate-700 border-t border-slate-100'
+                                <div className={`px-14 py-6 text-[13px] leading-[1.7] whitespace-pre-line animate-in fade-in duration-300 ${s.isAI ? 'bg-[#1a1a2e] text-white/90 border-t border-white/10' : 'bg-white text-[#4a4a6a] border-t border-[#f0ede6]'
                                     }`}>
                                     {s.content}
                                 </div>
@@ -241,34 +231,34 @@ D - Document 歷程記錄（保留與 AI 的對話）`;
                 </div>
 
                 {/* 真相揭曉 */}
-                <div className="mb-6">
+                <div className="mb-10">
                     <button
                         onClick={toggleTruth}
-                        className={`w-full flex items-center justify-between p-6 rounded-2xl transition-all ${showTruth
-                            ? 'bg-rose-950 text-white rounded-b-none'
-                            : 'bg-slate-800 text-white hover:bg-slate-700 shadow-md'
-                            } relative overflow-hidden`}
+                        className={`w-full flex items-center justify-between p-6 transition-all border ${showTruth
+                            ? 'bg-[#1a1a2e] text-white border-[#1a1a2e] rounded-t-[10px]'
+                            : 'bg-white text-[#1a1a2e] border-[#dddbd5] hover:bg-[#f8f7f4] rounded-[10px]'
+                            }`}
                     >
-                        <div className="relative z-10 flex items-center gap-3">
-                            <ShieldAlert className={showTruth ? 'text-rose-400' : 'text-rose-300'} />
-                            <span className="font-black text-xl tracking-tight">🕵️ 揭曉偵探真相</span>
+                        <div className="flex items-center gap-3">
+                            <ShieldAlert className={showTruth ? 'text-[#c9a84c]' : 'text-[#2d5be3]'} size={24} />
+                            <span className="font-bold text-[16px] tracking-tight">🕵️ 揭曉偵探真相</span>
                         </div>
-                        <div className="relative z-10 flex items-center gap-2">
-                            <span className="text-xs font-mono opacity-60 uppercase tracking-widest">{showTruth ? 'Close' : 'Reveal'}</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-['DM_Mono',monospace] opacity-60 uppercase tracking-widest">{showTruth ? 'Close' : 'Reveal'}</span>
                             {showTruth ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                         </div>
-                        {showTruth && (
-                            <div className="absolute inset-0 opacity-10 text-[200px] font-black text-rose-500 flex items-center justify-center select-none pointer-events-none -right-20">7</div>
-                        )}
                     </button>
 
                     {showTruth && (
-                        <div className="bg-rose-950 text-white rounded-b-2xl p-6 border-t border-rose-800/50 animate-in slide-in-from-top-2 duration-300">
+                        <div className="bg-[#1a1a2e] text-white rounded-b-[10px] p-8 border-t border-white/10 animate-in slide-in-from-top-2 duration-300 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 -mt-10 -mr-10 text-white/5 font-black text-[200px] leading-none select-none pointer-events-none">
+                                7
+                            </div>
                             <div className="relative z-10">
-                                <div className="text-rose-300 text-xs font-mono tracking-widest mb-3 uppercase">// 真相揭曉</div>
-                                <h3 className="text-2xl font-black mb-3 text-rose-100">真正的冒牌貨是 <span className="text-rose-400">7 號</span></h3>
-                                <p className="text-rose-200 text-sm leading-relaxed">
-                                    這份作品雖然看起來很用心，但其實是由 AI 生成的冒牌貨。
+                                <div className="text-white/50 text-[10px] font-['DM_Mono',monospace] tracking-widest mb-3 uppercase">// 真相揭曉</div>
+                                <h3 className="text-[22px] font-bold mb-3 text-white">真正的冒牌貨是 <span className="text-[#c9a84c]">7 號</span></h3>
+                                <p className="text-white/80 text-[14px] leading-relaxed max-w-[500px]">
+                                    這份回答雖然格式工整、語氣客氣，但缺乏了其他「真人」學生檔案中常見的瑣碎細節或口語化的轉折。在 AI 時代，「誠實」不再只是道德問題，更是證明你存在的唯一方式。
                                 </p>
                             </div>
                         </div>
@@ -276,187 +266,199 @@ D - Document 歷程記錄（保留與 AI 的對話）`;
                 </div>
 
                 {/* 核心觀念 */}
-                <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                        <div className="text-amber-600 font-black text-sm mb-2">💡 核心發現 1</div>
-                        <p className="text-slate-700 text-sm">現在的 AI，只要指令下得好，<strong>已經強大到讓我們分不出來</strong>。</p>
+                <div className="grid md:grid-cols-3 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden">
+                    <div className="bg-white p-6 flex flex-col">
+                        <div className="text-[#c9a84c] font-['DM_Mono',monospace] font-bold text-[10px] mb-3 uppercase tracking-[0.1em]">💡 核心發現 1</div>
+                        <p className="text-[#4a4a6a] text-[13px] leading-[1.6]">現在的 AI，只要指令下得好，<strong>已經強大到讓我們分不出來</strong>。</p>
                     </div>
-                    <div className="bg-red-50 rounded-xl p-4 border border-red-100">
-                        <div className="text-red-600 font-black text-sm mb-2">⚠️ 核心發現 2</div>
-                        <p className="text-slate-700 text-sm">「看不出來」，所以<strong>「誠實」變成唯一的防線</strong>。不是為了不被抓，而是確認「我」還存在。</p>
+                    <div className="bg-white p-6 flex flex-col">
+                        <div className="text-[#e32d5b] font-['DM_Mono',monospace] font-bold text-[10px] mb-3 uppercase tracking-[0.1em]">⚠️ 核心發現 2</div>
+                        <p className="text-[#4a4a6a] text-[13px] leading-[1.6]">「看不出來」，所以<strong>「誠實」變成唯一的防線</strong>。不是為了不被抓，而是確認「我」還存在。</p>
                     </div>
-                    <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                        <div className="text-blue-600 font-black text-sm mb-2">🧭 核心發現 3</div>
-                        <p className="text-slate-700 text-sm">如果連研究過程都是假的，你花一學期在這裡，<strong>只是在陪 AI 演戲而已</strong>。</p>
+                    <div className="bg-white p-6 flex flex-col">
+                        <div className="text-[#2d5be3] font-['DM_Mono',monospace] font-bold text-[10px] mb-3 uppercase tracking-[0.1em]">🧭 核心發現 3</div>
+                        <p className="text-[#4a4a6a] text-[13px] leading-[1.6]">如果連研究過程都是假的，你花一學期在這裡，<strong>只是在陪 AI 演戲而已</strong>。</p>
                     </div>
                 </div>
             </section>
 
             {/* Part 2: AI-RED 公約 */}
-            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="bg-slate-900 text-white p-6 md:p-8">
-                    <h2 className="text-2xl font-bold flex items-center gap-3">
-                        <Fingerprint className="text-cyan-400" size={28} />
-                        AI-RED 協作公約
-                    </h2>
-                    <p className="text-slate-300 mt-2 text-sm">
+            <section className="mb-14 border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white">
+                <div className="bg-[#1a1a2e] text-white p-8">
+                    <div className="flex items-center gap-3 mb-3">
+                        <Fingerprint className="text-[#2d5be3]" size={28} />
+                        <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold">AI-RED 協作公約</h2>
+                    </div>
+                    <p className="text-white/70 text-[14px] leading-relaxed max-w-[600px]">
                         因為 AI 已強大到以假亂真，這五個步驟是我們在 AI 時代做研究的標準動作。<br />
-                        <strong className="text-cyan-400">這不是為了防弊，而是為了捍衛「真實的你」存在於研究中。</strong>
+                        <strong className="text-white font-bold opacity-100">這不是為了防弊，而是為了捍衛「真實的你」存在於研究中。</strong>
                     </p>
                 </div>
-                <div className="p-6 md:p-8 space-y-4">
+                <div className="p-8 space-y-4">
                     {AIRED_STEPS.map(step => (
                         <div
                             key={step.letter}
                             onClick={() => toggleStep(step.letter)}
-                            className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkedSteps[step.letter]
-                                ? 'bg-emerald-50 border-emerald-300 shadow-sm'
-                                : `${step.bg} ${step.border}`
+                            className={`flex gap-5 p-5 rounded-[8px] border transition-all cursor-pointer ${checkedSteps[step.letter]
+                                ? 'bg-[#f8f7f4] border-[#2d5be3] shadow-sm'
+                                : `bg-white border-[#dddbd5] hover:bg-[#f8f7f4]`
                                 }`}
                         >
-                            <div className="shrink-0 flex items-start gap-3">
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl ${checkedSteps[step.letter] ? 'bg-emerald-500 text-white' : 'bg-white border-2 ' + step.border + ' ' + step.color}`}>
+                            <div className="shrink-0">
+                                <div className={`w-10 h-10 rounded-md flex items-center justify-center font-bold text-[18px] transition-colors ${checkedSteps[step.letter] ? 'bg-[#2d5be3] text-white' : 'bg-[#f0ede6] text-[#8888aa]'}`}>
                                     {checkedSteps[step.letter] ? <CheckCircle2 size={22} /> : step.letter}
                                 </div>
                             </div>
                             <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className={`font-black text-base ${checkedSteps[step.letter] ? 'text-emerald-700' : step.color}`}>{step.label}</span>
-                                    <span className="text-slate-500 text-sm font-medium">{step.chinese}</span>
+                                    <span className={`font-bold text-[15px] ${checkedSteps[step.letter] ? 'text-[#1a1a2e]' : 'text-[#4a4a6a]'}`}>{step.label}</span>
+                                    <span className="text-[#8888aa] text-[12px] font-medium">{step.chinese}</span>
                                 </div>
-                                <p className="text-slate-700 text-sm mb-1">{step.desc}</p>
-                                <p className="text-slate-500 text-xs italic">{step.example}</p>
+                                <p className="text-[#4a4a6a] text-[13px] mb-1.5 leading-[1.6]">{step.desc}</p>
+                                <p className="text-[#8888aa] text-[11px] italic leading-[1.5]">{step.example}</p>
                             </div>
                         </div>
                     ))}
 
                     {/* 簽署承諾 */}
-                    <div className={`mt-6 rounded-2xl border-2 p-6 transition-all ${allChecked ? 'border-emerald-400 bg-emerald-50' : 'border-slate-200 bg-slate-50'}`}>
+                    <div className={`mt-10 rounded-[10px] border-2 p-8 transition-all flex flex-col items-center text-center ${allChecked ? 'border-[#2e7d5a] bg-[#f0f9f4]' : 'border-dashed border-[#dddbd5] bg-[#f8f7f4]'}`}>
                         {!allChecked && (
-                            <p className="text-slate-500 text-sm text-center mb-4">⬆️ 請先點擊上方五個步驟，確認你都理解了</p>
+                            <p className="text-[#8888aa] text-[13px]">⬆️ 請先點擊並理解上方五個步驟</p>
                         )}
                         {allChecked && !pledgeSigned && (
-                            <div className="text-center">
-                                <p className="text-emerald-700 font-bold mb-1">你已理解所有五個步驟！</p>
-                                <p className="text-slate-600 text-sm mb-4">按下簽署，代表你承諾：在這學期的研究中，誠實記錄使用 AI 的過程，並對自己的研究成果負責。</p>
+                            <div className="animate-in fade-in duration-500">
+                                <div className="text-[#2e7d5a] font-bold mb-2 text-[16px]">你已完全理解 AI-RED！</div>
+                                <p className="text-[#4a4a6a] text-[13px] mb-6 max-w-[400px]">
+                                    按下簽署，代表你承諾在這學期的研究中，<br className="hidden sm:block" />誠實記錄使用 AI 的過程，並對成果負責。
+                                </p>
                                 <button
                                     onClick={() => setPledgeSigned(true)}
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all"
+                                    className="bg-[#1a1a2e] hover:bg-[#2a2a4a] text-white font-bold px-10 py-3 rounded-[6px] transition-all"
                                 >
                                     ✍️ 我同意，簽署 AI-RED 公約
                                 </button>
                             </div>
                         )}
                         {pledgeSigned && (
-                            <div className="text-center">
-                                <div className="text-5xl mb-3">🎖️</div>
-                                <p className="text-emerald-700 font-black text-lg mb-1">公約已簽署！</p>
-                                <p className="text-slate-600 text-sm">你已成為 AI-RED 研究者。我是大腦，AI 是副駕駛。</p>
+                            <div className="animate-in zoom-in-95 duration-500">
+                                <div className="text-[40px] mb-2">🏅</div>
+                                <div className="text-[#2e7d5a] font-bold text-[18px] mb-1">公約已簽署</div>
+                                <p className="text-[#4a4a6a] text-[13px]">你已正式成為 AI-RED 研究者。</p>
                             </div>
                         )}
                     </div>
 
                     {/* AI Prompt 工具 */}
-                    <div className="pt-6 border-t border-slate-200">
-                        <h3 className="text-base font-bold text-slate-800 mb-2 flex items-center gap-2">
-                            <Cpu size={18} className="text-blue-500" />
-                            呼叫 AI：幫我理解 AI-RED 五步驟
-                        </h3>
-                        <p className="text-sm text-slate-500 mb-3">複製下方指令到 ChatGPT / Gemini，AI 會幫你用具體例子說明五個步驟。</p>
-                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                            <PromptBox>{generatePledgePrompt()}</PromptBox>
+                    <div className="mt-8 pt-8 border-t border-[#f0ede6]">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Cpu size={18} className="text-[#2d5be3]" />
+                            <h3 className="text-[14px] font-bold text-[#1a1a2e]">
+                                呼叫 AI：幫我理解 AI-RED 五步驟
+                            </h3>
+                        </div>
+                        <div className="bg-[#f0ede6] p-5 rounded-[8px] border border-[#dddbd5]">
+                            <p className="text-[12px] text-[#4a4a6a] mb-4">複製下方指令到 ChatGPT / Gemini，AI 會用具體例子說明這五個步驟。</p>
+                            <PromptBox variant="paper">{generatePledgePrompt()}</PromptBox>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Part 3: 人機協作三件事 */}
-            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                    <BrainCircuit className="text-blue-600" size={28} />
-                    為什麼還要上 18 週？
-                </h2>
-                <p className="text-slate-500 text-sm mb-6">
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-4">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e] flex items-center gap-3">
+                        <BrainCircuit className="text-[#2d5be3]" size={24} />
+                        為什麼還要上 18 週？
+                    </h2>
+                </div>
+                <p className="text-[#4a4a6a] text-[14px] mb-8 leading-relaxed max-w-[600px]">
                     「老師，如果 AI 只要 30 秒就能分析資料，我們為什麼還要花 18 週？」<br />
-                    <strong className="text-slate-700">因為我們練的，是 AI 永遠做不到的三件事。</strong>
+                    因為我們練的，是 <strong className="text-[#1a1a2e]">AI 永遠做不到的三件事</strong>。
                 </p>
 
                 {/* 人機分工示範 */}
-                <div className="bg-slate-50 rounded-xl border border-slate-200 p-5 mb-6">
-                    <p className="text-xs font-mono text-slate-400 tracking-widest mb-3 uppercase">// 課堂示範：老師的小研究</p>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
-                            <div className="text-blue-700 font-bold text-sm mb-2 flex items-center gap-2"><Eye size={16} /> 人（老師）做的事</div>
-                            <ul className="space-y-1 text-sm text-slate-700">
-                                <li>✅ 產生好奇心，提出研究問題</li>
-                                <li>✅ 決定用 Google 表單蒐集資料</li>
-                                <li>✅ <strong>解讀數據背後的教學意義</strong></li>
-                            </ul>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden mb-8">
+                    <div className="bg-white p-6">
+                        <div className="text-[#1a1a2e] font-bold text-[13px] mb-4 flex items-center gap-2">
+                            人（老師）做的事
                         </div>
-                        <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
-                            <div className="text-purple-700 font-bold text-sm mb-2 flex items-center gap-2"><Cpu size={16} /> AI（Gemini）做的事</div>
-                            <ul className="space-y-1 text-sm text-slate-700">
-                                <li>⚡ 30 秒內分類 40 筆文字</li>
-                                <li>⚡ 計算各類百分比</li>
-                                <li>⚡ 整理關鍵字與範例</li>
-                            </ul>
-                        </div>
+                        <ul className="space-y-3 text-[13px] text-[#4a4a6a]">
+                            <li className="flex gap-2"><span className="text-[#2e7d5a]">✓</span> 產生好奇心，提出研究問題</li>
+                            <li className="flex gap-2"><span className="text-[#2e7d5a]">✓</span> 決定用 Google 表單蒐集實體數據</li>
+                            <li className="flex gap-2"><span className="text-[#2e7d5a]">✓</span> <strong>解讀數據背後對教學的真實意義</strong></li>
+                        </ul>
                     </div>
-                    <div className="mt-3 text-center text-sm font-bold text-slate-600">
-                        結論：我是大腦（提問與解讀），AI 是手腳（運算）。缺一不可！
+                    <div className="bg-white p-6">
+                        <div className="text-[#1a1a2e] font-bold text-[13px] mb-4 flex items-center gap-2">
+                            AI（Gemini）做的事
+                        </div>
+                        <ul className="space-y-3 text-[13px] text-[#4a4a6a]">
+                            <li className="flex gap-2"><span className="text-[#2d5be3]">⚡</span> 30 秒內分類 40 筆文字資料</li>
+                            <li className="flex gap-2"><span className="text-[#2d5be3]">⚡</span> 精準計算各類百分比</li>
+                            <li className="flex gap-2"><span className="text-[#2d5be3]">⚡</span> 整理趨勢、關鍵字與範例項</li>
+                        </ul>
+                    </div>
+                    <div className="md:col-span-2 bg-[#f8f7f4] p-4 text-center text-[13px] font-bold text-[#1a1a2e] border-t border-[#dddbd5]">
+                        我是大腦（提問與解讀），AI 是手腳（運算）。
                     </div>
                 </div>
 
                 {/* 三件事卡片 */}
-                <div className="grid md:grid-cols-3 gap-5">
+                <div className="grid md:grid-cols-3 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     {THREE_SKILLS.map(skill => (
-                        <div key={skill.key} className={`rounded-2xl border p-5 flex flex-col ${skill.bg} ${skill.border}`}>
-                            <div className={`${skill.color} mb-3`}>{skill.icon}</div>
-                            <h3 className={`text-lg font-black ${skill.color} mb-1`}>{skill.key}</h3>
-                            <p className="text-xs text-slate-500 italic mb-2">「{skill.tagline}」</p>
-                            <p className="text-slate-700 text-sm leading-relaxed flex-1">{skill.desc}</p>
-                            <div className="mt-3 text-xs font-mono text-slate-400 border-t border-current/10 pt-2">
-                                👉 練習時間：{skill.week}
+                        <div key={skill.key} className="bg-white p-6 hover:bg-[#f8f7f4] transition-colors flex flex-col">
+                            <div className={`${skill.color} mb-4`}>{skill.icon}</div>
+                            <h3 className="text-[14px] font-bold text-[#1a1a2e] mb-1">{skill.key}</h3>
+                            <p className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] italic mb-3">"{skill.tagline}"</p>
+                            <p className="text-[12px] text-[#4a4a6a] leading-[1.6] flex-1">{skill.desc}</p>
+                            <div className="mt-6 pt-4 border-t border-[#f0ede6] text-[10px] font-['DM_Mono',monospace] text-[#8888aa]">
+                                📍 練習時間 / {skill.week}
                             </div>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* 自我反思 */}
-            <section className="bg-amber-50 rounded-3xl border border-amber-200 p-6 md:p-8">
-                <h2 className="text-lg font-bold text-amber-800 mb-4 flex items-center gap-2">
-                    <AlertTriangle size={20} /> W1 核心問題：你的答案是什麼？
-                </h2>
-                <div className="space-y-3">
-                    <div className="bg-white rounded-xl p-4 border border-amber-100">
-                        <p className="text-slate-600 text-sm font-medium mb-1">🤔 如果 AI 可以假冒你，什麼才能證明「這是我做的研究」？</p>
-                        <p className="text-slate-400 text-xs">（在學習單 Part 1 的討論題中記錄你的答案）</p>
-                    </div>
-                    <div className="bg-white rounded-xl p-4 border border-amber-100">
-                        <p className="text-slate-600 text-sm font-medium mb-1">✍️ AI 可以幫我 ＿＿＿，但這學期我要練的是 ＿＿＿。</p>
-                        <p className="text-slate-400 text-xs">（在學習單 Part 3 第 5 題中填寫）</p>
+            {/* 反思與下一週 */}
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+                {/* 自我反思 */}
+                <div className="border border-[#c9a84c]/40 rounded-[10px] p-8 bg-white">
+                    <h2 className="text-[16px] font-bold text-[#1a1a2e] mb-5 flex items-center gap-2">
+                        <AlertTriangle size={20} className="text-[#c9a84c]" /> W1 核心問題
+                    </h2>
+                    <div className="space-y-6">
+                        <div>
+                            <p className="text-[13px] text-[#1a1a2e] font-bold mb-1">🤔 什麼才能證明「這是我做的研究」？</p>
+                            <p className="text-[11px] text-[#8888aa]">請在學習單 Part 1 的討論題中記錄</p>
+                        </div>
+                        <div>
+                            <p className="text-[13px] text-[#1a1a2e] font-bold mb-1">✍️ AI 可以幫我 ＿＿，但我正要練習 ＿＿。</p>
+                            <p className="text-[11px] text-[#8888aa]">請在學習單 Part 3 第 5 題中填寫</p>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-            {/* 下週預告 */}
-            <div className="bg-slate-900 rounded-3xl p-6 text-white">
-                <p className="text-slate-400 text-xs font-mono tracking-widest mb-2 uppercase">// 📢 下週 W2 預告</p>
-                <p className="text-white font-bold text-lg mb-1">「問題意識的覺醒」</p>
-                <p className="text-slate-300 text-sm mb-4">把你在 W1 學習單 Part 0 寫下的「生活觀察」帶過來。<br />下週我們把那顆種子，變成真正有深度的研究問題。</p>
-                <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
-                    ⚠️ 請務必記得帶那個「讓你好奇的生活現象」！
+                {/* 下週預告 */}
+                <div className="bg-[#1a1a2e] rounded-[10px] p-8 text-white relative flex flex-col justify-center">
+                    <div className="text-white/30 text-[10px] font-['DM_Mono',monospace] tracking-widest mb-4 uppercase">// Next Week</div>
+                    <p className="text-[18px] font-bold mb-2">W2 問題意識的覺醒</p>
+                    <p className="text-white/70 text-[13px] leading-relaxed mb-4">
+                        把在學習單上的「生活觀察」帶過來。下週要把那顆種子變成真正深度的研究問題。
+                    </p>
+                    <div className="flex items-center gap-2 text-[#c9a84c] font-bold text-[12px]">
+                        ⚠️ 務必記得帶那個讓你好奇的現象！
+                    </div>
                 </div>
             </div>
 
             {/* Navigation */}
-            <div className="flex justify-between pt-4 pb-12">
-                <Link to="/discovery" className="inline-flex items-center gap-2 bg-slate-200 text-slate-700 px-5 py-3 rounded-lg font-semibold hover:bg-slate-300 transition">
+            <div className="flex justify-between items-center py-12 border-t border-[#dddbd5]">
+                <Link to="/discovery" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
                     ← 回 W0 觀察力啟動
                 </Link>
-                <Link to="/problem-focus" className="inline-flex items-center gap-2 bg-amber-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 transition shadow-md hover:shadow-lg">
-                    W2 問題意識鍛鍊 <ArrowRight size={20} />
+                <Link to="/problem-focus" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#2a2a4a] transition-all flex items-center gap-2">
+                    W2 問題意識鍛鍊 <ArrowRight size={18} />
                 </Link>
             </div>
 

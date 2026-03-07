@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Link } from 'react-router-dom';
-import { ChevronRight, RefreshCw, CheckCircle2, AlertTriangle, FileSearch, BookOpen, Search, Eye, ClipboardList, Mic, TestTube2, ArrowDown, Map, Gamepad2, ArrowRight } from 'lucide-react';
+import { ChevronRight, RefreshCw, CheckCircle2, AlertTriangle, FileSearch, BookOpen, Search, Eye, ClipboardList, Mic, TestTube2, ArrowDown, Map, Gamepad2, ArrowRight, ChevronUp, ChevronDown } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W3Data } from '../data/lessonMaps';
 
@@ -14,11 +14,11 @@ const DISEASES = [
 ];
 
 const METHODS = [
-    { id: 'survey', name: '問卷研究 (Survey)', icon: <ClipboardList size={24} />, rule: '探討廣泛的相關性、頻率、態度分佈。', desc: '適合收集大量數據看整體趨勢。' },
-    { id: 'interview', name: '訪談研究 (Interview)', icon: <Mic size={24} />, rule: '探討深入的「為什麼」、個人經驗、價值觀。', desc: '適合挖掘少數人的深層想法。' },
-    { id: 'experiment', name: '實驗研究 (Experiment)', icon: <TestTube2 size={24} />, rule: '驗證明確的因果關係，有實驗組與控制組。', desc: '適合控制變數來比較差異。' },
-    { id: 'observation', name: '觀察研究 (Observation)', icon: <Eye size={24} />, rule: '記錄自然環境中的真實行為表現。', desc: '適合看別人「實際怎麼做」而非「怎麼說」。' },
-    { id: 'literature', name: '文獻分析 (Literature)', icon: <BookOpen size={24} />, rule: '整合並比較現有二手資料，產出新觀點。', desc: '不親自收集新數據，而是分析歷史文本。' },
+    { id: 'survey', name: '問卷研究 (Survey)', icon: <ClipboardList size={22} />, rule: '探討廣泛的相關性、頻率、態度分佈。', desc: '適合收集大量數據看整體趨勢。' },
+    { id: 'interview', name: '訪談研究 (Interview)', icon: <Mic size={22} />, rule: '探討深入的「為什麼」、個人經驗、價值觀。', desc: '適合挖掘少數人的深層想法。' },
+    { id: 'experiment', name: '實驗研究 (Experiment)', icon: <TestTube2 size={22} />, rule: '驗證明確的因果關係，有實驗組與控制組。', desc: '適合控制變數來比較差異。' },
+    { id: 'observation', name: '觀察研究 (Observation)', icon: <Eye size={22} />, rule: '記錄自然環境中的真實行為表現。', desc: '適合看別人「實際怎麼做」而非「怎麼說」。' },
+    { id: 'literature', name: '文獻分析 (Literature)', icon: <BookOpen size={22} />, rule: '整合並比較現有二手資料，產出新觀點。', desc: '不親自收集新數據，而是分析歷史文本。' },
 ];
 
 export const Wizard = () => {
@@ -52,69 +52,49 @@ export const Wizard = () => {
         return 'literature';
     };
 
-    // Only show result when we've reached a terminal node in the decision tree
     const isTerminal = () => {
-        if (methodAnswers.causeEffect === 'yes') return true;  // → experiment
-        if (methodAnswers.deepWhy === 'yes') return true;       // → interview
-        if (methodAnswers.broadStats === 'yes') return true;    // → survey
-        if (methodAnswers.naturalBehavior === 'yes') return true; // → observation
-        if (methodAnswers.naturalBehavior === 'no') return true;  // → literature
+        if (methodAnswers.causeEffect === 'yes') return true;
+        if (methodAnswers.deepWhy === 'yes') return true;
+        if (methodAnswers.broadStats === 'yes') return true;
+        if (methodAnswers.naturalBehavior === 'yes') return true;
+        if (methodAnswers.naturalBehavior === 'no') return true;
         return false;
     };
 
-    // Visual tree branch connector
-    const TreeBranch = ({ answer, isYes }) => {
-        if (!answer) return null;
-        const isActive = answer === (isYes ? 'yes' : 'no');
-        if (!isActive) return null;
-        return (
-            <div className="flex justify-center py-2">
-                <div className="flex flex-col items-center">
-                    <div className={`w-0.5 h-6 ${isYes ? 'bg-emerald-400' : 'bg-slate-300'}`} />
-                    <div className={`text-xs font-bold px-3 py-1 rounded-full ${isYes ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                        {isYes ? '✓ 是' : '✗ 否 → 繼續往下'}
-                    </div>
-                    <div className={`w-0.5 h-6 ${isYes ? 'bg-emerald-400' : 'bg-slate-300'}`} />
-                </div>
-            </div>
-        );
-    };
-
-    // Result card component
+    // Result card component updated for Version A
     const ResultCard = ({ method }) => {
         const recommended = METHODS.find(m => m.id === method);
         return (
-            <div className="animate-in zoom-in-95 duration-300 mt-2">
-                <div className="bg-slate-900 text-white p-8 rounded-2xl text-center shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500 rounded-full blur-3xl opacity-20 translate-x-1/2 -translate-y-1/2" />
+            <div className="animate-in zoom-in-95 duration-500 mt-6 max-w-[600px] mx-auto">
+                <div className="bg-[#1a1a2e] text-white p-10 rounded-[10px] text-center relative overflow-hidden">
                     <div className="relative z-10">
-                        <h3 className="text-blue-400 font-bold tracking-widest text-sm mb-4">🎯 系統判定最佳方法</h3>
-                        <div className="text-white flex justify-center mb-4 scale-150">{recommended.icon}</div>
-                        <h4 className="text-3xl font-extrabold mb-3 text-white">{recommended.name}</h4>
-                        <p className="text-slate-300 mb-6 max-w-md mx-auto">{recommended.rule}</p>
-                        <div className="bg-white/10 p-4 rounded-xl border border-white/20 text-left">
-                            <span className="text-blue-300 text-xs font-bold uppercase tracking-wider block mb-1">你的定案題目</span>
-                            <span className="font-bold text-white text-lg">「{refinedTopic}」</span>
+                        <div className="text-[#2d5be3] font-['DM_Mono',monospace] font-bold text-[11px] tracking-[0.2em] uppercase mb-6">🎯 Recommended Method</div>
+                        <div className="text-white flex justify-center mb-4">{recommended.icon}</div>
+                        <h4 className="text-[28px] font-bold mb-3 font-['Noto_Serif_TC',serif]">{recommended.name}</h4>
+                        <p className="text-white/60 text-[14px] mb-8 leading-relaxed px-4">{recommended.rule}</p>
+                        <div className="bg-white/5 border border-white/10 p-6 rounded-[6px] text-left">
+                            <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider block mb-2 font-['DM_Mono',monospace]">Drafted Topic / 你的定案題目</span>
+                            <span className="font-bold text-white text-[16px] leading-relaxed">「{refinedTopic}」</span>
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center mt-6 gap-4">
-                    <Button variant="outline" onClick={handleReset} className="flex items-center gap-2">
-                        <RefreshCw size={16} /> 放棄重來
-                    </Button>
+                <div className="flex justify-center mt-6">
+                    <button onClick={handleReset} className="flex items-center gap-2 text-[12px] text-[#8888aa] hover:text-[#e32d5b] transition-colors font-bold">
+                        <RefreshCw size={14} /> 放棄重來
+                    </button>
                 </div>
             </div>
         );
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in duration-500 pb-16">
+        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
-            {/* ===== Lesson Map (W3) Toggle (Teacher Only) ===== */}
-            <div className="flex justify-end pt-2 pb-0 -mb-10 relative z-20 pr-4">
+            {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-8 relative z-20">
                 <button
                     onClick={() => setShowLessonMap(!showLessonMap)}
-                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-indigo-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    className="flex items-center gap-1.5 text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors opacity-60 hover:opacity-100 font-['DM_Mono',monospace]"
                     title="教師專用：顯示課程地圖"
                 >
                     <Map size={12} />
@@ -123,498 +103,433 @@ export const Wizard = () => {
             </div>
 
             {showLessonMap && (
-                <div className="mb-8 animate-in slide-in-from-top-4 duration-300">
+                <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
                     <LessonMap data={W3Data} />
                 </div>
             )}
 
-            {/* ===== Header ===== */}
-            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
-                <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 -translate-x-1/3" />
-                <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm mb-4">
-                        <Search size={16} /> 題目健檢 (W3)
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 drop-shadow-sm">題目健檢與方法快篩</span>
-                    </h1>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                        做研究最怕一開始題目就走偏！<br />在讓 AI 幫你健檢前，先來了解一下好題目的標準，以及五大研究方法的武器庫。
-                    </p>
+            {/* Header */}
+            <header className="mb-14 pt-8">
+                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2d5be3] mb-3 flex items-center gap-2">
+                    <Search size={14} /> W3 題目健檢
                 </div>
+                <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                    題目健檢與<br className="hidden md:block" />
+                    <span className="text-[#2d5be3] font-normal italic">方法快篩</span>
+                </h1>
+                <p className="text-[15px] text-[#4a4a6a] leading-[1.75] max-w-[560px]">
+                    做研究最怕一開始題目就走偏。在讓 AI 幫你優化前，先學會診斷題目的「四大絕症」，並找到最適合你的武器。
+                </p>
             </header>
 
-            {/* ===== 觀念一：四大絕症 ===== */}
-            <section className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 mb-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <AlertTriangle className="text-amber-500" size={28} />
-                    觀念一：新手題目的「四大絕症」
-                </h2>
-                <p className="text-slate-600 mb-8 leading-relaxed">如果你的題目不幸中了以下任何一種病，研究一定會卡關。請牢記我們的萬用解藥：「大空遠難 → 小實近易」。</p>
-                <div className="grid md:grid-cols-2 gap-6">
+            {/* 觀念一：四大絕症 */}
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-6">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e] flex items-center gap-2">
+                        🛑 觀念一：新手題目的「四大絕症」
+                    </h2>
+                </div>
+                <div className="grid md:grid-cols-2 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     {DISEASES.map((disease) => (
-                        <div key={disease.id} className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                            <div className="flex items-start gap-4">
-                                <span className="text-4xl">{disease.icon}</span>
-                                <div>
-                                    <h3 className="font-bold text-lg text-slate-800 mb-2">{disease.name}</h3>
-                                    <p className="text-sm text-slate-600 mb-4">{disease.description}</p>
-                                    <div className="bg-emerald-50 border border-emerald-100 text-emerald-800 text-sm font-semibold p-3 rounded-lg flex items-start gap-2">
-                                        <span className="shrink-0 mt-0.5">👉 解藥：</span>
-                                        <span>{disease.cure}</span>
-                                    </div>
-                                </div>
+                        <div key={disease.id} className="bg-white p-6 flex flex-col hover:bg-[#f8f7f4] transition-colors">
+                            <div className="flex items-center gap-3 mb-4">
+                                <span className="text-[24px]">{disease.icon}</span>
+                                <h3 className="font-bold text-[15px] text-[#1a1a2e]">{disease.name}</h3>
+                            </div>
+                            <p className="text-[13px] text-[#4a4a6a] leading-relaxed mb-4 flex-1">{disease.description}</p>
+                            <div className="bg-[#f0ede6] border-l-2 border-[#2e7d5a] p-3 text-[12px] text-[#1a1a2e] font-medium leading-[1.6]">
+                                <span className="text-[#2e7d5a] font-bold">👉 解藥：</span>
+                                {disease.cure}
                             </div>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* ── 遊戲入口 ─────────────────────────── */}
-            <div className="bg-gradient-to-r from-rose-600 to-pink-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow border border-rose-500 mb-8">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                            <Gamepad2 size={24} />
-                            🎮 行動代號：靶心
-                        </h3>
-                        <p className="text-rose-100 text-sm">
-                            急診室大作戰！在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。這關卡將為陷入迷惘的探員對症下藥，開出精準的問題處方。
-                        </p>
-                    </div>
+            {/* 遊戲入口 */}
+            <div className="bg-[#1a1a2e] rounded-[10px] p-8 text-white relative mb-14 overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                    <Gamepad2 size={80} />
+                </div>
+                <div className="relative z-10 max-w-[600px]">
+                    <div className="text-[#e32d5b] text-[10px] font-['DM_Mono',monospace] tracking-widest mb-4 uppercase">// Interactive Training</div>
+                    <h3 className="text-[20px] font-bold mb-3">🎮 行動代號：靶心</h3>
+                    <p className="text-white/60 text-[13px] leading-relaxed mb-8">
+                        急診室大作戰！在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。這關卡將為陷入迷惘的探員對症下藥。
+                    </p>
                     <Link
                         to="/game/question-er"
-                        className="bg-white text-rose-700 hover:bg-rose-50 px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group shrink-0"
+                        className="inline-flex items-center gap-2 bg-[#e32d5b] text-white px-6 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#f33d6b] transition-all"
                     >
-                        進入行動任務
-                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        進入行動任務 <ArrowRight size={16} />
                     </Link>
                 </div>
             </div>
-            {/* ===== 觀念二：五大研究方法 ===== */}
-            <section className="bg-gradient-to-br from-indigo-50 to-blue-50(2) rounded-3xl shadow-sm border border-indigo-100 p-6 md:p-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <FileSearch className="text-indigo-600" size={28} />
-                    觀念二：五大研究方法挑選法則
-                </h2>
-                <p className="text-slate-600 mb-8 leading-relaxed">確認題目沒病後，你要選對工具。就像你要喝湯不會拿叉子，選錯方法會讓你白忙一場。</p>
-                <div className="grid md:grid-cols-5 gap-4">
+
+            {/* 觀念二：五大研究方法 */}
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-6">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e] flex items-center gap-2">
+                        🛠️ 觀念二：五大研究方法挑選法則
+                    </h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     {METHODS.map((method) => (
-                        <div key={method.id} className="bg-white rounded-2xl p-5 border border-indigo-100 shadow-sm flex flex-col items-center text-center hover:-translate-y-1 transition-transform cursor-default">
-                            <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mb-4">
+                        <div key={method.id} className="bg-white p-5 flex flex-col items-center text-center hover:bg-[#f8f7f4] transition-colors">
+                            <div className="w-10 h-10 bg-[#f0ede6] text-[#1a1a2e] rounded-md flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
                                 {method.icon}
                             </div>
-                            <h3 className="font-bold text-slate-800 text-sm mb-2">{method.name.split(' ')[0]}</h3>
-                            <p className="text-xs text-slate-500 leading-normal">{method.desc}</p>
+                            <h3 className="font-bold text-[#1a1a2e] text-[13px] mb-2">{method.name.split(' ')[0]}</h3>
+                            <p className="text-[11px] text-[#8888aa] leading-normal">{method.desc}</p>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* ===== Divider ===== */}
-            <div className="flex flex-col items-center justify-center py-4 opacity-50">
-                <ArrowDown className="text-slate-400 animate-bounce" size={32} />
-                <span className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2">進入實戰沙盤</span>
+            {/* 分隔線 */}
+            <div className="flex flex-col items-center justify-center py-6 opacity-40">
+                <ArrowDown className="text-[#8888aa] animate-bounce" size={24} />
+                <span className="text-[10px] font-['DM_Mono',monospace] font-bold tracking-[0.2em] mt-2 uppercase text-[#8888aa]">Interactive Sandbox / 進入實戰</span>
             </div>
 
-            {/* ===== Interactive Wizard Tool ===== */}
-            <div id="wizard-tool" className="scroll-mt-8">
-                {/* Progress Bar */}
-                <div className="flex justify-between mb-8 relative max-w-2xl mx-auto">
-                    <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 -translate-y-1/2 rounded-full" />
-                    <div
-                        className="absolute top-1/2 left-0 h-1 bg-blue-500 -z-10 -translate-y-1/2 rounded-full transition-all duration-300"
-                        style={{ width: `${((step - 1) / 3) * 100}%` }}
-                    />
+            {/* Step Wizard Container */}
+            <div className="space-y-12">
+                {/* Stepper */}
+                <div className="flex justify-center items-center gap-4 py-8">
                     {[1, 2, 3, 4].map(s => (
-                        <div
-                            key={s}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-colors ${step >= s ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-300 text-slate-400'}`}
-                        >
-                            {s}
-                        </div>
+                        <React.Fragment key={s}>
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-[12px] transition-all font-['DM_Mono',monospace] ${step >= s ? 'bg-[#1a1a2e] text-white' : 'bg-[#f0ede6] text-[#8888aa] border border-[#dddbd5]'}`}>
+                                {s}
+                            </div>
+                            {s < 4 && <div className={`h-[1px] w-8 ${step > s ? 'bg-[#1a1a2e]' : 'bg-[#dddbd5]'}`} />}
+                        </React.Fragment>
                     ))}
                 </div>
 
-                {/* ---- Step 1 ---- */}
+                {/* Step 1 */}
                 {step === 1 && (
-                    <Card className="animate-in slide-in-from-right-8 max-w-2xl mx-auto shadow-md border-t-4 border-t-blue-500">
-                        <CardHeader>
-                            <CardTitle>Step 1: 你的初步點子是什麼？</CardTitle>
-                            <CardDescription>先別管對錯，把你現在腦海中想做的題目寫下來。</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
+                    <div className="max-w-[650px] mx-auto animate-in slide-in-from-bottom-4 duration-500">
+                        <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 space-y-6 shadow-sm">
+                            <div>
+                                <h3 className="text-[18px] font-bold text-[#1a1a2e] mb-2 font-['Noto_Serif_TC',serif]">Step 1: 你的初步點子</h3>
+                                <p className="text-[#8888aa] text-[13px]">先別管對錯，把你腦中初步想的主題寫下來。</p>
+                            </div>
                             <textarea
                                 value={researchTopic}
                                 onChange={(e) => setResearchTopic(e.target.value)}
-                                className="w-full p-4 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-800 bg-slate-50"
-                                rows="4"
+                                className="w-full p-5 border border-[#dddbd5] rounded-[6px] focus:outline-none focus:border-[#2d5be3] transition-all text-[#1a1a2e] bg-[#f8f7f4] min-h-[120px] text-[14px]"
                                 placeholder='例如：「我想研究死刑存廢」、「我想知道學生都花多少錢吃早餐」...'
                             />
-                            <div className="flex justify-end">
-                                <Button onClick={handleNextStep} disabled={!researchTopic.trim()} size="lg">
-                                    下一步：自我把脈 <ChevronRight size={18} className="ml-1" />
-                                </Button>
+                            <div className="flex justify-end pt-4">
+                                <button
+                                    onClick={handleNextStep}
+                                    disabled={!researchTopic.trim()}
+                                    className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold items-center flex gap-2 disabled:opacity-20 transition-all hover:bg-[#2a2a4a]"
+                                >
+                                    下一步：自我把脈 <ChevronRight size={16} />
+                                </button>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 )}
 
-                {/* ---- Step 2 ---- */}
+                {/* Step 2 */}
                 {step === 2 && (
-                    <Card className="animate-in slide-in-from-right-8 border-l-4 border-l-amber-500 max-w-3xl mx-auto shadow-md">
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-amber-800">
-                                <AlertTriangle size={20} /> Step 2: 題目健檢診斷
-                            </CardTitle>
-                            <CardDescription>對照上方的「四大絕症」，你覺得自己的題目犯了哪幾種病？（可複選）</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                <span className="text-xs font-bold text-slate-500">你的原版題目：</span>
-                                <p className="text-slate-800 font-medium mt-1 text-lg">「{researchTopic}」</p>
+                    <div className="max-w-[750px] mx-auto animate-in slide-in-from-bottom-4 duration-500">
+                        <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 space-y-8 shadow-sm">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className="text-[18px] font-bold text-[#1a1a2e] mb-2 font-['Noto_Serif_TC',serif]">Step 2: 題目健檢診斷</h3>
+                                    <p className="text-[#8888aa] text-[13px]">你覺得自己的題目犯了哪幾種「絕症」？（可複選）</p>
+                                </div>
+                                <div className="bg-[#f8f7f4] px-4 py-2 rounded-[6px] border border-[#dddbd5] max-w-[300px]">
+                                    <span className="text-[10px] font-bold text-[#8888aa] uppercase block mb-1">Your Draft</span>
+                                    <p className="text-[#1a1a2e] font-bold text-[12px] truncate">「{researchTopic}」</p>
+                                </div>
                             </div>
+
                             <div className="grid md:grid-cols-2 gap-4">
                                 {DISEASES.map(disease => (
                                     <div
                                         key={disease.id}
                                         onClick={() => toggleDisease(disease.id)}
-                                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${selectedDiseases.includes(disease.id) ? 'border-amber-500 bg-amber-50' : 'border-slate-200 hover:border-amber-300'}`}
+                                        className={`p-5 border rounded-[8px] cursor-pointer transition-all ${selectedDiseases.includes(disease.id) ? 'border-[#c9a84c] bg-[#f8f7f4]' : 'border-[#dddbd5] hover:border-[#1a1a2e]'}`}
                                     >
-                                        <div className="flex items-center gap-2 font-bold mb-2">
-                                            <span className="text-2xl">{disease.icon}</span> {disease.name}
+                                        <div className="flex items-center gap-3 font-bold text-[14px] mb-2 text-[#1a1a2e]">
+                                            <span className="text-xl">{disease.icon}</span> {disease.name}
                                         </div>
-                                        <p className="text-sm text-slate-600">{disease.description}</p>
+                                        <p className="text-[12px] text-[#4a4a6a] leading-relaxed mb-3">{disease.description}</p>
                                         {selectedDiseases.includes(disease.id) && (
-                                            <div className="mt-2 text-sm font-semibold text-emerald-700 bg-emerald-100/50 p-2 rounded">
-                                                👉 下一步要用解藥：{disease.cure}
+                                            <div className="text-[11px] font-bold text-[#2e7d5a] bg-white border border-[#2e7d5a]/20 p-2 rounded scale-95 origin-left">
+                                                解藥：{disease.cure}
                                             </div>
                                         )}
                                     </div>
                                 ))}
                             </div>
-                            <div className="flex justify-between items-center pt-4">
-                                <Button variant="outline" onClick={() => setStep(1)}>上一步</Button>
-                                <Button onClick={handleNextStep} disabled={selectedDiseases.length === 0} className="bg-amber-600 hover:bg-amber-700" size="lg">
-                                    服用解藥並修改 <ChevronRight size={18} className="ml-1" />
-                                </Button>
+
+                            <div className="flex justify-between items-center pt-6 border-t border-[#f0ede6]">
+                                <button onClick={() => setStep(1)} className="text-[13px] text-[#8888aa] font-bold hover:text-[#1a1a2e]">上一步</button>
+                                <button
+                                    onClick={handleNextStep}
+                                    disabled={selectedDiseases.length === 0}
+                                    className="bg-[#c9a84c] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold items-center flex gap-2 disabled:opacity-20 transition-all hover:bg-[#d9b85c]"
+                                >
+                                    服用解藥改題 <ChevronRight size={16} />
+                                </button>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 )}
 
-                {/* ---- Step 3 ---- */}
+                {/* Step 3 */}
                 {step === 3 && (
-                    <Card className="animate-in slide-in-from-right-8 border-l-4 border-l-emerald-500 max-w-2xl mx-auto shadow-md">
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-emerald-800">
-                                <CheckCircle2 size={20} /> Step 3: 產生修正版題目
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-100 mb-4">
-                                <p className="text-xs text-emerald-800 font-bold mb-2">請根據你剛才選擇的解藥來修改：</p>
-                                <ul className="list-disc list-inside text-sm text-emerald-700 font-semibold space-y-1">
-                                    {selectedDiseases.map(id => {
-                                        const d = DISEASES.find(x => x.id === id);
-                                        return <li key={id}>{d.cure}</li>;
-                                    })}
+                    <div className="max-w-[650px] mx-auto animate-in slide-in-from-bottom-4 duration-500">
+                        <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 space-y-6 shadow-sm">
+                            <h3 className="text-[18px] font-bold text-[#1a1a2e] mb-2 font-['Noto_Serif_TC',serif]">Step 3: 修正版題目</h3>
+
+                            <div className="bg-[#f0f9f4] border border-[#2e7d5a]/20 p-5 rounded-[8px]">
+                                <p className="text-[11px] text-[#2e7d5a] font-bold mb-3 uppercase tracking-widest font-['DM_Mono',monospace]">Prescription / 修改建議</p>
+                                <ul className="space-y-2">
+                                    {selectedDiseases.map(id => (
+                                        <li key={id} className="text-[13px] text-[#4a4a6a] flex gap-2">
+                                            <span className="text-[#2e7d5a]">●</span> {DISEASES.find(x => x.id === id).cure}
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">
-                                    你的修正版題目（請確保能具體符合人物、地點、事件）：
-                                </label>
+
+                            <div className="space-y-3">
+                                <label className="text-[13px] font-bold text-[#4a4a6a]">你的修正版題目：</label>
                                 <textarea
                                     value={refinedTopic}
                                     onChange={(e) => setRefinedTopic(e.target.value)}
-                                    className="w-full p-4 border-2 border-emerald-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800"
-                                    rows="3"
-                                    placeholder="例如：松山高中高一學生(對象)每天睡眠時數(變數A)與上課打瞌睡頻率(變數B)的關聯性研究。"
+                                    className="w-full p-5 border border-[#dddbd5] rounded-[6px] focus:outline-none focus:border-[#2e7d5a] transition-all text-[#1a1a2e] bg-white min-h-[100px] text-[14px] font-medium leading-relaxed"
+                                    placeholder="例如：松山高中高一學生(對象)每天睡眠時數(變數A)與上課打瞌睡頻率(變數B)的關聯研究。"
                                 />
+                                <p className="text-[11px] text-[#8888aa]">💡 提示：盡量包含具體的人物、地點、事件變項。</p>
                             </div>
-                            <div className="flex justify-between items-center pt-4">
-                                <Button variant="outline" onClick={() => setStep(2)}>上一步</Button>
-                                <Button onClick={handleNextStep} disabled={!refinedTopic.trim()} className="bg-emerald-600 hover:bg-emerald-700" size="lg">
-                                    下一步：進入方法快篩 <ChevronRight size={18} className="ml-1" />
-                                </Button>
+
+                            <div className="flex justify-between items-center pt-6">
+                                <button onClick={() => setStep(2)} className="text-[13px] text-[#8888aa] font-bold hover:text-[#1a1a2e]">上一步</button>
+                                <button
+                                    onClick={handleNextStep}
+                                    disabled={!refinedTopic.trim()}
+                                    className="bg-[#2e7d5a] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold items-center flex gap-2 disabled:opacity-20 transition-all hover:bg-[#3e8d6a]"
+                                >
+                                    下一步：方法快篩 <ChevronRight size={16} />
+                                </button>
                             </div>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 )}
 
-                {/* ---- Step 4: Decision Tree ---- */}
+                {/* Step 4: Decision Tree */}
                 {step === 4 && (
-                    <div className="max-w-3xl mx-auto animate-in slide-in-from-right-8">
-                        <Card className="border-t-8 border-t-blue-600 shadow-xl mb-8">
-                            <CardHeader className="text-center pb-2">
-                                <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <TestTube2 size={32} />
-                                </div>
-                                <CardTitle className="text-2xl text-slate-800">Step 4: 研究方法決策樹</CardTitle>
-                                <CardDescription>順著樹枝往下走，回答問題後就能找到最適合你的研究方法！</CardDescription>
-                            </CardHeader>
-                        </Card>
-
-                        {/* ===== TREE VISUALIZATION ===== */}
-                        <div className="relative">
-                            {/* Vertical trunk line */}
-                            <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-200 -translate-x-1/2 -z-10" />
-
-                            {/* Root node */}
-                            <div className="flex justify-center mb-2">
-                                <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-md z-10">
-                                    🌳 開始診斷
-                                </div>
+                    <div className="max-w-[750px] mx-auto animate-in slide-in-from-bottom-4 duration-500 space-y-12">
+                        <div className="bg-white border border-[#dddbd5] rounded-[10px] p-10 shadow-sm text-center relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-10 opacity-[0.03]">
+                                <TestTube2 size={120} />
                             </div>
+                            <h3 className="text-[24px] font-bold text-[#1a1a2e] mb-3 font-['Noto_Serif_TC',serif]">Step 4: 研究方法決策樹</h3>
+                            <p className="text-[#4a4a6a] text-[14px] max-w-[500px] mx-auto leading-relaxed">順著直覺往下走，透過幾個關鍵提問，幫你鎖定最適合目前題目的武器。</p>
+                        </div>
 
+                        {/* Interactive Tree Section */}
+                        <div className="relative space-y-6">
+                            {/* Question Nodes */}
                             {/* Q1: Experiment */}
-                            <div className="relative bg-white rounded-2xl border-2 border-blue-200 p-6 shadow-sm mb-0 z-10">
-                                <div className="absolute -top-3 left-6 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">Q1</div>
-                                <p className="font-bold text-slate-800 mt-1 mb-4">
-                                    你想驗證明確的「A 導致 B」因果關係，而且有辦法「控制」部分受試者的體驗（例如有實驗組、對照組）嗎？
+                            <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 shadow-sm animate-in fade-in duration-500">
+                                <div className="text-[10px] font-['DM_Mono',monospace] font-bold text-[#2d5be3] uppercase tracking-[0.2em] mb-4">Question 01</div>
+                                <p className="text-[15px] font-bold text-[#1a1a2e] mb-6 leading-relaxed">
+                                    你想驗證明確的「A 導致 B」因果關係，且有辦法「控制」部分受試者的體驗（例如有實驗組、對照組）嗎？
                                 </p>
-                                <div className="flex gap-3 flex-wrap">
-                                    <Button
-                                        variant={methodAnswers.causeEffect === 'yes' ? 'default' : 'outline'}
-                                        className={methodAnswers.causeEffect === 'yes' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
+                                <div className="flex gap-4">
+                                    <button
                                         onClick={() => setMethodAnswers({ causeEffect: 'yes' })}
+                                        className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.causeEffect === 'yes' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
                                     >
                                         ✓ 是，我可以做實驗
-                                    </Button>
-                                    <Button
-                                        variant={methodAnswers.causeEffect === 'no' ? 'default' : 'outline'}
-                                        className={methodAnswers.causeEffect === 'no' ? 'bg-slate-600 hover:bg-slate-700' : ''}
+                                    </button>
+                                    <button
                                         onClick={() => setMethodAnswers({ causeEffect: 'no' })}
+                                        className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.causeEffect === 'no' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
                                     >
-                                        ✗ 否，我無法控制他們
-                                    </Button>
+                                        ✗ 否，我無法控制受試者
+                                    </button>
                                 </div>
                             </div>
 
-                            {/* Q1 → YES → Experiment */}
-                            {methodAnswers.causeEffect === 'yes' && (
-                                <>
-                                    <TreeBranch answer="yes" isYes={true} />
-                                    <ResultCard method="experiment" />
-                                </>
-                            )}
+                            {methodAnswers.causeEffect === 'yes' && <ResultCard method="experiment" />}
 
-                            {/* Q1 → NO → Q2 */}
+                            {/* Q2 */}
                             {methodAnswers.causeEffect === 'no' && (
-                                <>
-                                    <TreeBranch answer="no" isYes={false} />
-
-                                    {/* Q2: Interview */}
-                                    <div className="relative bg-white rounded-2xl border-2 border-indigo-200 p-6 shadow-sm mb-0 z-10 animate-in fade-in slide-in-from-top-4">
-                                        <div className="absolute -top-3 left-6 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">Q2</div>
-                                        <p className="font-bold text-slate-800 mt-1 mb-4">
-                                            你想深入了解某個特定群體「為什麼這麼想」，挖出他們背後的深層原因、人生經驗或價值觀嗎？
-                                        </p>
-                                        <div className="flex gap-3 flex-wrap">
-                                            <Button
-                                                variant={methodAnswers.deepWhy === 'yes' ? 'default' : 'outline'}
-                                                className={methodAnswers.deepWhy === 'yes' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
-                                                onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'yes' })}
-                                            >
-                                                ✓ 是，我想深聊
-                                            </Button>
-                                            <Button
-                                                variant={methodAnswers.deepWhy === 'no' ? 'default' : 'outline'}
-                                                className={methodAnswers.deepWhy === 'no' ? 'bg-slate-600 hover:bg-slate-700' : ''}
-                                                onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no' })}
-                                            >
-                                                ✗ 否，沒那麼深
-                                            </Button>
-                                        </div>
+                                <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 shadow-sm animate-in slide-in-from-top-4 duration-500">
+                                    <div className="text-[10px] font-['DM_Mono',monospace] font-bold text-[#2d5be3] uppercase tracking-[0.2em] mb-4">Question 02</div>
+                                    <p className="text-[15px] font-bold text-[#1a1a2e] mb-6 leading-relaxed">
+                                        你想深入了解某個特定群體「為什麼這麼想」，挖出他們背後的深層原因、個人經驗或價值觀嗎？
+                                    </p>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'yes' })}
+                                            className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.deepWhy === 'yes' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                                        >
+                                            ✓ 是，我想進行深聊
+                                        </button>
+                                        <button
+                                            onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no' })}
+                                            className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.deepWhy === 'no' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                                        >
+                                            ✗ 否，我不需要挖那麼深
+                                        </button>
                                     </div>
-
-                                    {/* Q2 → YES → Interview */}
-                                    {methodAnswers.deepWhy === 'yes' && (
-                                        <>
-                                            <TreeBranch answer="yes" isYes={true} />
-                                            <ResultCard method="interview" />
-                                        </>
-                                    )}
-
-                                    {/* Q2 → NO → Q3 */}
-                                    {methodAnswers.deepWhy === 'no' && (
-                                        <>
-                                            <TreeBranch answer="no" isYes={false} />
-
-                                            {/* Q3: Survey */}
-                                            <div className="relative bg-white rounded-2xl border-2 border-cyan-200 p-6 shadow-sm mb-0 z-10 animate-in fade-in slide-in-from-top-4">
-                                                <div className="absolute -top-3 left-6 bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded-full">Q3</div>
-                                                <p className="font-bold text-slate-800 mt-1 mb-4">
-                                                    你想知道一大群人（例如全校幾百人）的普遍態度、選擇偏好的「比例分佈」，或者是變數之間的「相關性」嗎？
-                                                </p>
-                                                <div className="flex gap-3 flex-wrap">
-                                                    <Button
-                                                        variant={methodAnswers.broadStats === 'yes' ? 'default' : 'outline'}
-                                                        className={methodAnswers.broadStats === 'yes' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
-                                                        onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'yes' })}
-                                                    >
-                                                        ✓ 是，我想看大趨勢
-                                                    </Button>
-                                                    <Button
-                                                        variant={methodAnswers.broadStats === 'no' ? 'default' : 'outline'}
-                                                        className={methodAnswers.broadStats === 'no' ? 'bg-slate-600 hover:bg-slate-700' : ''}
-                                                        onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'no' })}
-                                                    >
-                                                        ✗ 否，不發問卷
-                                                    </Button>
-                                                </div>
-                                            </div>
-
-                                            {/* Q3 → YES → Survey */}
-                                            {methodAnswers.broadStats === 'yes' && (
-                                                <>
-                                                    <TreeBranch answer="yes" isYes={true} />
-                                                    <ResultCard method="survey" />
-                                                </>
-                                            )}
-
-                                            {/* Q3 → NO → Q4 */}
-                                            {methodAnswers.broadStats === 'no' && (
-                                                <>
-                                                    <TreeBranch answer="no" isYes={false} />
-
-                                                    {/* Q4: Observation */}
-                                                    <div className="relative bg-white rounded-2xl border-2 border-amber-200 p-6 shadow-sm mb-0 z-10 animate-in fade-in slide-in-from-top-4">
-                                                        <div className="absolute -top-3 left-6 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full">Q4</div>
-                                                        <p className="font-bold text-slate-800 mt-1 mb-4">
-                                                            那麼，你是想要不打擾對象，默默記錄他們在自然狀態下的「真實行為表現」（例如：中午熱食部排隊動線）嗎？
-                                                        </p>
-                                                        <div className="flex gap-3 flex-wrap">
-                                                            <Button
-                                                                variant={methodAnswers.naturalBehavior === 'yes' ? 'default' : 'outline'}
-                                                                className={methodAnswers.naturalBehavior === 'yes' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
-                                                                onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'no', naturalBehavior: 'yes' })}
-                                                            >
-                                                                ✓ 是，我想做田野觀察
-                                                            </Button>
-                                                            <Button
-                                                                variant={methodAnswers.naturalBehavior === 'no' ? 'default' : 'outline'}
-                                                                className={methodAnswers.naturalBehavior === 'no' ? 'bg-slate-600 hover:bg-slate-700' : ''}
-                                                                onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'no', naturalBehavior: 'no' })}
-                                                            >
-                                                                ✗ 否，以上都不是
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Q4 → YES → Observation */}
-                                                    {methodAnswers.naturalBehavior === 'yes' && (
-                                                        <>
-                                                            <TreeBranch answer="yes" isYes={true} />
-                                                            <ResultCard method="observation" />
-                                                        </>
-                                                    )}
-
-                                                    {/* Q4 → NO → Literature */}
-                                                    {methodAnswers.naturalBehavior === 'no' && (
-                                                        <>
-                                                            <TreeBranch answer="no" isYes={false} />
-                                                            <div className="flex justify-center py-2">
-                                                                <div className="flex flex-col items-center">
-                                                                    <div className="w-0.5 h-4 bg-purple-400" />
-                                                                    <div className="text-xs font-bold px-3 py-1 rounded-full bg-purple-100 text-purple-700">
-                                                                        🔚 所有「否」→ 最後歸宿
-                                                                    </div>
-                                                                    <div className="w-0.5 h-4 bg-purple-400" />
-                                                                </div>
-                                                            </div>
-                                                            <ResultCard method="literature" />
-                                                        </>
-                                                    )}
-                                                </>
-                                            )}
-                                        </>
-                                    )}
-                                </>
+                                </div>
                             )}
+
+                            {methodAnswers.deepWhy === 'yes' && <ResultCard method="interview" />}
+
+                            {/* Q3 */}
+                            {methodAnswers.deepWhy === 'no' && (
+                                <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 shadow-sm animate-in slide-in-from-top-4 duration-500">
+                                    <div className="text-[10px] font-['DM_Mono',monospace] font-bold text-[#2d5be3] uppercase tracking-[0.2em] mb-4">Question 03</div>
+                                    <p className="text-[15px] font-bold text-[#1a1a2e] mb-6 leading-relaxed">
+                                        你想知道一大群人（例如全校幾百人）的普遍態度、選擇偏好的「比例分佈」，或是變數間的「相關性」嗎？
+                                    </p>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'yes' })}
+                                            className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.broadStats === 'yes' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                                        >
+                                            ✓ 是，我想掌握整體趨勢
+                                        </button>
+                                        <button
+                                            onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'no' })}
+                                            className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.broadStats === 'no' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                                        >
+                                            ✗ 否，我不打算發放問卷
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {methodAnswers.broadStats === 'yes' && <ResultCard method="survey" />}
+
+                            {/* Q4 */}
+                            {methodAnswers.broadStats === 'no' && (
+                                <div className="bg-white border border-[#dddbd5] rounded-[10px] p-8 shadow-sm animate-in slide-in-from-top-4 duration-500">
+                                    <div className="text-[10px] font-['DM_Mono',monospace] font-bold text-[#2d5be3] uppercase tracking-[0.2em] mb-4">Question 04</div>
+                                    <p className="text-[15px] font-bold text-[#1a1a2e] mb-6 leading-relaxed">
+                                        那麼，你是否想在不打擾對象的情況下，記錄他們在自然狀態下的「真實行為表現」？
+                                    </p>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'no', naturalBehavior: 'yes' })}
+                                            className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.naturalBehavior === 'yes' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                                        >
+                                            ✓ 是，我想做現場觀察
+                                        </button>
+                                        <button
+                                            onClick={() => setMethodAnswers({ causeEffect: 'no', deepWhy: 'no', broadStats: 'no', naturalBehavior: 'no' })}
+                                            className={`px-6 py-2.5 rounded-[4px] text-[13px] font-bold border transition-all ${methodAnswers.naturalBehavior === 'no' ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                                        >
+                                            ✗ 否，以上皆不需要
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {methodAnswers.naturalBehavior === 'yes' && <ResultCard method="observation" />}
+                            {methodAnswers.naturalBehavior === 'no' && <ResultCard method="literature" />}
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* ===== AI 句型優化器 ===== */}
+            {/* AI 句型優化器 */}
             {isTerminal() && refinedTopic && (
-                <section className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl shadow-sm border border-amber-200 p-6 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                        <span className="text-2xl">🤖</span>
-                        最後一步｜AI 句型優化器
-                    </h2>
-                    <p className="text-slate-600 text-sm mb-6">
-                        題目通過健檢、方法也確定了！現在請 AI 幫你把題目包裝成專業學術版本。<br />
-                        <strong>⚠️ AI 給你 3 個版本，選哪個是你的決定！</strong>
+                <section className="bg-white border border-[#dddbd5] rounded-[10px] p-10 space-y-8 animate-in slide-in-from-bottom-6 duration-700">
+                    <div className="flex items-baseline gap-3">
+                        <h2 className="font-['Noto_Serif_TC',serif] text-[22px] font-bold text-[#1a1a2e]">
+                            🤖 最後一步｜AI 句型優化器
+                        </h2>
+                    </div>
+                    <p className="text-[#4a4a6a] text-[14px] leading-relaxed">
+                        題目通過健檢、方法也確定了！現在請 AI 幫你把題目包裝成更專業的學術版本。記住：AI 給你選項，決定權在你。
                     </p>
 
-                    <div className="space-y-5">
-                        {/* Step 1 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-2">Step 1：我的題目初稿（先自己寫！）</label>
+                    <div className="space-y-8 max-w-[700px]">
+                        <div className="space-y-4">
+                            <label className="font-bold text-[#1a1a2e] text-[14px] block flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a2e]"></span> Step 1 / 寫下題目初稿
+                            </label>
                             <textarea
-                                className="w-full border border-amber-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-400 transition-all min-h-[72px] bg-white"
-                                placeholder={`根據「${refinedTopic}」自己先試著寫一個初稿…`}
+                                className="w-full border border-[#dddbd5] rounded-[6px] p-5 text-[14px] focus:outline-none focus:border-[#2d5be3] min-h-[80px] bg-[#f8f7f4]"
+                                placeholder={`參考「${refinedTopic}」試著寫出初步的研究題目...`}
                                 value={methodAnswers._draft || ''}
                                 onChange={e => setMethodAnswers(prev => ({ ...prev, _draft: e.target.value }))}
                             />
                         </div>
 
-                        {/* Step 2 */}
                         {methodAnswers._draft && (
                             <div className="animate-in fade-in duration-300">
-                                <label className="font-bold text-slate-700 text-sm block mb-2">Step 2：複製這段 Prompt 給 AI</label>
-                                <div className="relative bg-slate-900 rounded-xl p-4 text-slate-300 text-xs font-mono whitespace-pre-wrap">
-                                    {`我的研究題目初稿是：${methodAnswers._draft}
-
-請幫我優化成更專業的版本：
-1. 加上學術關鍵字（如：相關性、差異分析、影響、探討）
-2. 讓 Who（研究對象）、What（研究焦點）更具體
-3. 保持在 30 字以內，確保高中生做得到
-請給我 3 個優化版本（A/B/C），並簡單說明改動重點。`}
-                                    <button
-                                        onClick={() => navigator.clipboard.writeText(`我的研究題目初稿是：${methodAnswers._draft}\n\n請幫我優化成更專業的版本：\n1. 加上學術關鍵字（如：相關性、差異分析、影響、探討）\n2. 讓 Who（研究對象）、What（研究焦點）更具體\n3. 保持在 30 字以內，確保高中生做得到\n請給我 3 個優化版本（A/B/C），並簡單說明改動重點。`)}
-                                        className="absolute top-3 right-3 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs px-3 py-1 rounded-lg transition-colors"
-                                    >
-                                        📋 複製
-                                    </button>
+                                <label className="font-bold text-[#1a1a2e] text-[14px] block mb-3 flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#2d5be3]"></span> Step 2 / 複製 Prompt 給 AI
+                                </label>
+                                <div className="bg-[#f0ede6] p-6 rounded-[8px] border border-[#dddbd5]">
+                                    <PromptBox variant="paper">{`我的研究題目初稿是：${methodAnswers._draft}\n\n請幫我優化成更專業的版本：\n1. 加上學術學術關鍵字（如：相關性、差異分析、影響、探討）\n2. 讓 Who（研究對象）、What（研究焦點）更具體\n3. 保持在 30 字以內，確保高中生做得到\n請給我 3 個優化版本（A/B/C），並簡單說明改動重點。`}</PromptBox>
                                 </div>
                             </div>
                         )}
 
-                        {/* Step 4 */}
-                        <div>
-                            <label className="font-bold text-slate-700 text-sm block mb-3">Step 4：我的最終版（AI 做不到的！）</label>
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
-                                {['初稿', '優化 A', '優化 B', '優化 C', '綜合自己改'].map(opt => (
+                        <div className="pt-8 border-t border-[#f0ede6]">
+                            <label className="font-bold text-[#1a1a2e] text-[14px] block mb-4 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#2e7d5a]"></span> Step 3 / 我的最終定案
+                            </label>
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4">
+                                {['初稿', '優化 A', '優化 B', '優化 C', '手動調整'].map(opt => (
                                     <button
                                         key={opt}
                                         onClick={() => setMethodAnswers(prev => ({ ...prev, _choice: opt }))}
-                                        className={`py-2 px-2 rounded-lg border text-xs font-bold transition-all ${methodAnswers._choice === opt ? 'bg-amber-500 border-amber-500 text-white' : 'bg-white border-amber-200 text-slate-600 hover:border-amber-400'}`}
+                                        className={`py-2 px-1 rounded-md border text-[11px] font-bold transition-all ${methodAnswers._choice === opt ? 'bg-[#1a1a2e] border-[#1a1a2e] text-white' : 'bg-white border-[#dddbd5] text-[#4a4a6a] hover:border-[#1a1a2e]'}`}
                                     >
                                         {opt}
                                     </button>
                                 ))}
                             </div>
                             <textarea
-                                className="w-full border-2 border-amber-400 bg-amber-50 rounded-xl p-4 font-bold text-amber-900 text-sm focus:ring-2 focus:ring-amber-500 transition-all min-h-[80px]"
-                                placeholder="🎯 【我的 W3 最終定案題目】"
+                                className="w-full border-2 border-[#1a1a2e] bg-white rounded-[6px] p-5 font-bold text-[#1a1a2e] text-[15px] focus:outline-none min-h-[90px] leading-relaxed"
+                                placeholder="🎯 W3 最終定案題目寫在這裡..."
                                 value={methodAnswers._final || ''}
                                 onChange={e => setMethodAnswers(prev => ({ ...prev, _final: e.target.value }))}
                             />
                             {methodAnswers._final && (
-                                <div className="mt-4 bg-amber-100 border border-amber-300 rounded-2xl p-5 text-center animate-in zoom-in-95 duration-300">
-                                    <p className="text-amber-600 text-xs font-mono uppercase tracking-widest mb-2">🎯 W3 最終定案題目</p>
-                                    <p className="text-amber-900 font-black text-xl mb-2">「{methodAnswers._final}」</p>
-                                    <p className="text-amber-700 text-xs">帶著這個題目去 W4 Gallery Walk！</p>
+                                <div className="mt-6 bg-[#1a1a2e] text-white rounded-[8px] p-6 text-center animate-in zoom-in-95 duration-500 shadow-xl">
+                                    <div className="text-[#2d5be3] text-[9px] font-['DM_Mono',monospace] tracking-[0.2em] uppercase mb-2">Final Goal achieved</div>
+                                    <p className="text-[20px] font-bold font-['Noto_Serif_TC',serif] leading-tight">「{methodAnswers._final}」</p>
+                                    <p className="text-white/40 text-[11px] mt-4">這是你 W4 Gallery Walk 的正式參賽畫作！</p>
                                 </div>
                             )}
                         </div>
                     </div>
+
+                    {/* Navigation Out */}
+                    <div className="flex justify-end pt-12 items-center border-t border-[#f0ede6]">
+                        <Link to="/w4" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#2a2a4a] transition-all flex items-center gap-2 group">
+                            前進 W4 題目博覽會 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
                 </section>
             )}
+
+            {/* Back to W2 */}
+            {step === 1 && (
+                <div className="flex justify-start">
+                    <Link to="/problem-focus" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2">
+                        ← 回 W2 問題意識
+                    </Link>
+                </div>
+            )}
+
         </div>
     );
 };

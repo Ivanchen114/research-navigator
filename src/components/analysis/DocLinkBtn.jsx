@@ -7,11 +7,11 @@ export const DocLinkBtn = ({ href, children }) => {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:bg-blue-100 hover:text-blue-800 border border-blue-200 shadow-sm"
+            className="inline-flex items-center gap-2 bg-white text-[#1a1a2e] px-4 py-2 rounded-[2px] text-[12px] font-bold transition-all hover:bg-[#1a1a2e] hover:text-white border border-[#1a1a2e] shadow-sm font-['DM_Mono',monospace] uppercase tracking-wider"
         >
-            <FileText size={16} />
+            <FileText size={14} />
             {children}
-            <ExternalLink size={14} className="ml-1 opacity-70" />
+            <ExternalLink size={12} className="ml-1 opacity-50" />
         </a>
     );
 };

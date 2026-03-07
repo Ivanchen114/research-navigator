@@ -33,7 +33,7 @@ const ethicsQuestions = [
         title: '自願性',
         desc: '你打算怎麼招募受訪者？有沒有隱性壓力的可能？',
         placeholder: '例如：我會強調受訪是自願的，不參加不會有任何影響...',
-        risk: '若受訪者（如同班同學）感到「被迫」參加，自願性就不存在。'
+        risk: '若受訪者感到「被迫」參加，自願性就不存在。'
     },
     {
         id: 5,
@@ -47,33 +47,25 @@ const ethicsQuestions = [
 
 const methodChecklist = {
     questionnaire: {
-        icon: <ClipboardList size={20} />, name: '問卷法', color: 'blue',
+        icon: <ClipboardList size={18} />, name: '問卷法', color: '#2d5be3',
         items: ['Google 表單建立完成', '超過 15 題以上', '每題都對應研究問題', '已刪除誘導性敘述', '加上知情同意開場白', '預試修正完畢']
     },
     interview: {
-        icon: <Mic size={20} />, name: '訪談法', color: 'orange',
+        icon: <Mic size={18} />, name: '訪談法', color: '#c9a84c',
         items: ['訪談大綱完成（5-10 題）', '開放式問題為主', '已排除連環轟炸式提問', '準備錄音同意確認', '知情同意書備妥', '預試修正完畢']
     },
     experiment: {
-        icon: <TestTube2 size={20} />, name: '實驗法', color: 'purple',
+        icon: <TestTube2 size={18} />, name: '實驗法', color: '#1a1a2e',
         items: ['實驗流程說明書完成', '已識別所有干擾變因', '設計了對照組', '測量方式已客觀化', '倫理用於人體安全無虞', '預試修正完畢']
     },
     observation: {
-        icon: <Camera size={20} />, name: '觀察法', color: 'teal',
+        icon: <Camera size={18} />, name: '觀察法', color: '#2e7d5a',
         items: ['觀察記錄表格完成', '指標定義明確（可量化）', '取得觀察場地許可', '確認觀察者效應的應對', '隱私保護機制備妥', '預試修正完畢']
     },
     literature: {
-        icon: <FileSearch size={20} />, name: '文獻法', color: 'emerald',
+        icon: <FileSearch size={18} />, name: '文獻法', color: '#1a1a2e',
         items: ['核心文獻清單 5 篇以上', '文獻來源可信（非 C 級）', '已查看文獻年份（近 10 年優先）', '建立摘要比較表', '非剽竊，有引用格式', '可支持研究問題']
     }
-};
-
-const colorMap = {
-    blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', check: 'text-blue-500', badge: 'bg-blue-100 text-blue-700' },
-    orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', check: 'text-orange-500', badge: 'bg-orange-100 text-orange-700' },
-    purple: { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', check: 'text-purple-500', badge: 'bg-purple-100 text-purple-700' },
-    teal: { bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', check: 'text-teal-500', badge: 'bg-teal-100 text-teal-700' },
-    emerald: { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', check: 'text-emerald-500', badge: 'bg-emerald-100 text-emerald-700' }
 };
 
 export const W10Page = () => {
@@ -83,199 +75,236 @@ export const W10Page = () => {
     const [stampGranted, setStampGranted] = useState(false);
 
     const updateEthics = (id, value) => setEthicsAnswers(prev => ({ ...prev, [id]: value }));
-
     const toggleCheck = (method, idx) => {
         const key = `${method}-${idx}`;
         setCheckedItems(prev => ({ ...prev, [key]: !prev[key] }));
     };
-
     const isChecked = (method, idx) => !!checkedItems[`${method}-${idx}`];
 
     const currentMethod = methodChecklist[selectedMethod];
-    const colors = colorMap[currentMethod.color];
     const allChecked = currentMethod.items.every((_, idx) => isChecked(selectedMethod, idx));
     const ethicsComplete = ethicsQuestions.every(q => ethicsAnswers[q.id]?.trim());
 
     return (
-        <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
+        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
             {/* Header */}
-            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden text-center">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-green-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
-                <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100 shadow-sm mb-4">
-                        <ShieldCheck size={16} /> W10 核心模組
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 flex items-center justify-center gap-3">
-                        🛡️ 定案、審查、<span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-teal-600 drop-shadow-sm">出發！</span>
-                    </h1>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                        工具定稿 × 倫理審查 × 施測啟動<br />
-                        <span className="text-sm">沒通過審查，不准出發。這是這門課最重要的一道關卡。</span>
-                    </p>
+            <header className="mb-14 pt-8 text-center max-w-[650px] mx-auto">
+                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2e7d5a] mb-3 flex items-center justify-center gap-2">
+                    <ShieldCheck size={14} /> W10 核心模組
                 </div>
+                <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                    定案、審查、<br className="hidden md:block" />
+                    <span className="text-[#2e7d5a] font-normal italic">準備出發！</span>
+                </h1>
+                <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
+                    工具定稿 × 倫理審查 × 施測啟動。沒通過審查，不准出發。這是這門課最重要的一道安全關卡。
+                </p>
             </header>
 
-            {/* Part 1: 工具定稿核對 */}
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                    <ClipboardList className="text-slate-500" size={26} />
-                    Part 1｜工具定稿自查清單
-                </h2>
-                <p className="text-slate-500 text-sm mb-6">選擇你的研究方法，確認每個項目都打勾後，才算「定稿完成」。</p>
-
-                {/* Method selector */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                    {Object.entries(methodChecklist).map(([key, m]) => (
-                        <button
-                            key={key}
-                            onClick={() => setSelectedMethod(key)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full border font-semibold text-sm transition-all ${selectedMethod === key
-                                ? `${colorMap[m.color].badge} border-current shadow-md scale-105`
-                                : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'}`}
-                        >
-                            {m.icon} {m.name}
-                        </button>
-                    ))}
+            {/* Part 1: 工具定稿 */}
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-8">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                        Part 1｜工具定稿自查清單
+                    </h2>
+                    <span className="text-[11px] text-[#8888aa] font-['DM_Mono',monospace] uppercase tracking-wider">01 / Pre-flight Checklist</span>
                 </div>
 
-                {/* Checklist */}
-                <div className={`rounded-2xl border p-5 ${colors.bg} ${colors.border}`}>
-                    <h3 className={`font-bold text-lg mb-4 ${colors.text}`}>{currentMethod.name} — 出發前確認</h3>
+                <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-[10px] p-8 space-y-8">
+                    {/* Method selector */}
+                    <div className="flex flex-wrap gap-2">
+                        {Object.entries(methodChecklist).map(([key, m]) => (
+                            <button
+                                key={key}
+                                onClick={() => setSelectedMethod(key)}
+                                className={`flex items-center gap-2 px-5 py-2.5 rounded-[4px] border font-bold text-[12px] transition-all uppercase tracking-wider font-['DM_Mono',monospace] ${selectedMethod === key
+                                    ? 'bg-[#1a1a2e] text-white border-[#1a1a2e] shadow-lg'
+                                    : 'bg-white text-[#8888aa] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
+                            >
+                                {m.icon} {m.name}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Checklist */}
                     <div className="space-y-3">
                         {currentMethod.items.map((item, idx) => (
                             <button
                                 key={idx}
                                 onClick={() => toggleCheck(selectedMethod, idx)}
-                                className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${isChecked(selectedMethod, idx)
-                                    ? `bg-white ${colors.border} shadow-sm`
-                                    : 'bg-white/60 border-transparent hover:border-slate-200'}`}
+                                className={`w-full flex items-center gap-4 p-4 rounded-[6px] border transition-all text-left bg-white group ${isChecked(selectedMethod, idx)
+                                    ? 'border-[#2e7d5a] bg-[#f0f9f4]/50'
+                                    : 'border-[#dddbd5] hover:border-[#1a1a2e]'}`}
                             >
-                                <CheckCircle2 size={22} className={isChecked(selectedMethod, idx) ? colors.check : 'text-slate-300'} />
-                                <span className={`text-sm font-medium ${isChecked(selectedMethod, idx) ? 'text-slate-700 line-through' : 'text-slate-600'}`}>{item}</span>
+                                <div className={`w-5 h-5 rounded-[4px] border flex items-center justify-center transition-colors ${isChecked(selectedMethod, idx) ? 'bg-[#2e7d5a] border-[#2e7d5a]' : 'border-[#dddbd5] group-hover:border-[#1a1a2e]'}`}>
+                                    {isChecked(selectedMethod, idx) && <CheckCircle2 size={14} className="text-white" />}
+                                </div>
+                                <span className={`text-[14px] font-medium ${isChecked(selectedMethod, idx) ? 'text-[#2e7d5a] line-through opacity-60' : 'text-[#1a1a2e]'}`}>{item}</span>
                             </button>
                         ))}
                     </div>
+
                     {allChecked && (
-                        <div className={`mt-4 p-3 rounded-xl ${colors.badge} text-center font-bold animate-in fade-in`}>
-                            ✅ 工具定稿完成！可以進行倫理審查了。
+                        <div className="p-4 bg-[#2e7d5a] text-white rounded-[4px] text-center font-bold text-[13px] animate-in zoom-in-95 duration-300">
+                            ✓ 工具定稿確認完成！可以進入倫理審查。
                         </div>
                     )}
                 </div>
-            </div>
+            </section>
 
             {/* Part 2: 倫理五問 */}
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                    <Lock className="text-slate-500" size={26} />
-                    Part 2｜研究倫理五問
-                </h2>
-                <p className="text-slate-500 text-sm mb-6">不是背定義，是真的問你自己的研究。每題都要填，才能拿到審查通過章。</p>
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-8">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                        Part 2｜研究倫理五問
+                    </h2>
+                    <span className="text-[11px] text-[#8888aa] font-['DM_Mono',monospace] uppercase tracking-wider">02 / Ethics Statement</span>
+                </div>
 
-                <div className="space-y-5">
+                <div className="space-y-6">
                     {ethicsQuestions.map(q => (
-                        <div key={q.id} className="rounded-2xl border border-slate-100 bg-slate-50 p-5">
-                            <div className="flex items-start gap-3 mb-3">
-                                <span className="text-2xl">{q.icon}</span>
-                                <div>
-                                    <h3 className="font-bold text-slate-800">{q.title}</h3>
-                                    <p className="text-sm text-slate-600">{q.desc}</p>
+                        <div key={q.id} className="bg-white rounded-[10px] border border-[#dddbd5] p-8 space-y-6 hover:border-[#2e7d5a] transition-colors group">
+                            <div className="flex items-start gap-4">
+                                <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">{q.icon}</span>
+                                <div className="space-y-1">
+                                    <h3 className="font-bold text-[16px] text-[#1a1a2e] font-['Noto_Serif_TC',serif] tracking-wide">{q.title}</h3>
+                                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed">{q.desc}</p>
                                 </div>
                             </div>
-                            <textarea
-                                rows={2}
-                                className="w-full text-sm border border-slate-200 rounded-xl p-3 bg-white focus:outline-none focus:ring-2 focus:ring-green-300 resize-none"
-                                placeholder={q.placeholder}
-                                value={ethicsAnswers[q.id] || ''}
-                                onChange={e => updateEthics(q.id, e.target.value)}
-                            />
-                            <div className="flex items-start gap-2 mt-2 text-xs text-amber-600 bg-amber-50 rounded-lg p-2">
-                                <AlertTriangle size={13} className="mt-0.5 shrink-0" />
-                                <span>{q.risk}</span>
+                            <div className="relative">
+                                <textarea
+                                    rows={3}
+                                    className="w-full text-[14px] border border-[#dddbd5] rounded-[6px] p-5 bg-[#f8f7f4] focus:outline-none focus:border-[#2e7d5a] focus:bg-white transition-all font-['Noto_Sans_TC',sans-serif] leading-relaxed"
+                                    placeholder={q.placeholder}
+                                    value={ethicsAnswers[q.id] || ''}
+                                    onChange={e => updateEthics(q.id, e.target.value)}
+                                />
+                                <div className="mt-4 flex items-start gap-2 text-[11px] text-[#c9a84c] border border-[rgba(201,168,76,0.2)] bg-[rgba(201,168,76,0.05)] rounded-[4px] p-3 leading-snug">
+                                    <AlertTriangle size={14} className="shrink-0" />
+                                    <span>臨床風險：{q.risk}</span>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
 
             {/* Part 3: AI 知情同意書審查 */}
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-3xl border border-purple-100 p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                    <Bot className="text-purple-500" size={26} />
-                    Part 3｜AI 輔助知情同意書審查
-                </h2>
-                <p className="text-slate-600 text-sm mb-6">把你寫的「知情同意說明」貼給 AI，請他從 16-18 歲高中生的角度審查。</p>
-
-                <div className="bg-slate-900 rounded-2xl p-5 text-sm font-mono text-slate-200 relative overflow-hidden">
-                    <div className="absolute top-3 right-3 flex gap-1">
-                        <div className="w-3 h-3 rounded-full bg-red-400" />
-                        <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                        <div className="w-3 h-3 rounded-full bg-green-400" />
+            <section className="mb-14">
+                <div className="bg-[#1a1a2e] text-white rounded-[10px] p-10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-10 opacity-[0.03]">
+                        <Bot size={180} />
                     </div>
-                    <p className="text-green-400 mb-3">// 📋 知情同意書審查 Prompt</p>
-                    <p className="text-slate-300 leading-relaxed">
-                        我寫了一段問卷（或訪談）的知情同意說明，請幫我：<br />
-                        <span className="text-amber-300">1.</span> 從「16-18歲高中生」的角度閱讀這段說明<br />
-                        <span className="text-amber-300">2.</span> 找出任何看不懂或容易誤解的詞彙與句子<br />
-                        <span className="text-amber-300">3.</span> 找出任何可能讓受訪者感到壓力或不舒服的語氣<br />
-                        <span className="text-amber-300">4.</span> 幫我改寫成更清楚、更友善的版本（保留所有必要資訊）<br /><br />
-                        以下是我的知情同意說明：<br />
-                        <span className="text-slate-500">【貼上你的知情同意說明】</span>
-                    </p>
-                </div>
+                    <div className="relative z-10 space-y-8">
+                        <div className="flex items-baseline gap-3">
+                            <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-white">
+                                Part 3｜AI 輔助知情同意書審查
+                            </h2>
+                            <span className="text-[11px] text-white/30 font-['DM_Mono',monospace] uppercase tracking-wider">03 / AI Audit</span>
+                        </div>
 
-                <div className="mt-4 bg-white/60 rounded-xl p-4 border border-purple-100">
-                    <p className="text-sm text-purple-700 font-semibold mb-1">💡 使用步驟</p>
-                    <ol className="text-xs text-slate-600 list-decimal list-inside space-y-1">
-                        <li>把上方 Prompt 複製到 ChatGPT / Claude</li>
-                        <li>把你的知情同意說明貼在最後面</li>
-                        <li>根據 AI 建議修改，並記錄你的採納/不採納理由</li>
-                        <li>完成後，請老師審查並蓋章</li>
-                    </ol>
+                        <p className="text-white/60 text-[14px] leading-relaxed max-w-[600px]">
+                            把你寫好的「知情同意說明」貼給 AI，請他從 16-18 歲高中生的角度閱讀，確認是否足夠友善、易懂且無壓力。
+                        </p>
+
+                        <div className="bg-black/40 rounded-[8px] border border-white/10 p-6 space-y-6 font-['DM_Mono',monospace]">
+                            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                                <div className="text-[10px] font-bold text-[#2e7d5a] uppercase tracking-widest">// Evaluation Prompt</div>
+                                <button
+                                    onClick={() => navigator.clipboard.writeText(`我寫了一段問卷的知情同意說明...`)}
+                                    className="text-[10px] text-white/30 hover:text-white transition-colors"
+                                >
+                                    COPY CODE
+                                </button>
+                            </div>
+                            <div className="text-[13px] leading-relaxed text-white/80">
+                                <span className="text-[#2e7d5a]">SYSTEM:</span> 我寫了一段問卷的知情同意說明，請幫我：<br />
+                                <span className="text-[#c9a84c]">1.</span> 從「16-18歲高中生」角度閱讀<br />
+                                <span className="text-[#c9a84c]">2.</span> 找出難懂或易誤解的詞彙<br />
+                                <span className="text-[#c9a84c]">3.</span> 找出任何可能感到壓力的語氣<br />
+                                <span className="text-[#c9a84c]">4.</span> 改寫成更清楚、更友善的版本<br /><br />
+                                <span className="text-white/40">【貼上你的知情同意說明內容】</span>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-10">
+                            {[
+                                { step: '1', text: '複製並貼上 Prompt' },
+                                { step: '2', text: '根據建議進行微調' },
+                                { step: '3', text: '尋求老師最終審核' },
+                            ].map(item => (
+                                <div key={item.step} className="flex-1 space-y-1">
+                                    <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{item.step}</div>
+                                    <div className="text-[11px] text-white/60 font-medium">{item.text}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
             {/* Part 4: 倫理審查通過證明 */}
-            <div className={`rounded-3xl border-2 p-8 text-center transition-all ${ethicsComplete && allChecked
-                ? 'bg-gradient-to-br from-green-50 to-teal-50 border-green-300'
-                : 'bg-slate-50 border-dashed border-slate-200'}`}>
-                <div className={`text-6xl mb-4 transition-all ${ethicsComplete && allChecked ? '' : 'opacity-30 grayscale'}`}>🏅</div>
-                <h3 className={`text-xl font-bold mb-2 ${ethicsComplete && allChecked ? 'text-green-700' : 'text-slate-400'}`}>
-                    倫理審查通過證明
-                </h3>
-                {ethicsComplete && allChecked ? (
-                    <>
-                        <p className="text-green-600 mb-4 text-sm">工具自查 ✅ + 倫理五問 ✅<br />你已完成 W10 全部任務！</p>
-                        <button
-                            onClick={() => setStampGranted(true)}
-                            className={`inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white transition-all text-sm shadow-lg
-                                ${stampGranted ? 'bg-green-500 cursor-default' : 'bg-green-600 hover:bg-green-500 hover:scale-105'}`}
-                        >
-                            {stampGranted ? '✅ 已蓋章！出發！🛫' : '🖊️ 請老師蓋章（點此確認）'}
-                        </button>
-                        {stampGranted && (
-                            <div className="mt-4 animate-in fade-in">
-                                <p className="text-green-600 font-bold">研究航班正式起飛！🚀</p>
-                                <Link to="/w11" className="inline-flex items-center gap-2 mt-3 px-5 py-2 rounded-full bg-teal-600 text-white text-sm font-semibold hover:bg-teal-500 transition-colors">
-                                    前往 W11 研究診所 <ArrowRight size={16} />
-                                </Link>
+            <section className="mb-14">
+                <div className={`rounded-[10px] border-2 p-12 text-center transition-all duration-500 ${ethicsComplete && allChecked
+                    ? 'bg-white border-[#2e7d5a] shadow-2xl scale-100'
+                    : 'bg-[#f8f7f4] border-[#dddbd5] border-dashed opacity-50 grayscale scale-[0.98]'}`}>
+
+                    <div className="relative mb-6 inline-block">
+                        <div className="text-6xl">🏷️</div>
+                        {ethicsComplete && allChecked && (
+                            <div className="absolute -top-4 -right-4 bg-[#2e7d5a] text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg animate-bounce">
+                                PASSED
                             </div>
                         )}
-                    </>
-                ) : (
-                    <p className="text-slate-400 text-sm">請完成 Part 1 工具自查 ＆ Part 2 倫理五問後，此處將解鎖</p>
-                )}
-            </div>
+                    </div>
+
+                    <h3 className={`text-[20px] font-bold mb-4 font-['Noto_Serif_TC',serif] ${ethicsComplete && allChecked ? 'text-[#1a1a2e]' : 'text-[#8888aa]'}`}>
+                        研究倫理審查通過證明
+                    </h3>
+
+                    {ethicsComplete && allChecked ? (
+                        <div className="space-y-8 animate-in fade-in duration-700">
+                            <p className="text-[14px] text-[#4a4a6a] max-w-[400px] mx-auto leading-relaxed">
+                                工具自查 (Level 2) 確認 ✅<br />
+                                倫理五問 (Audit Complete) 確認 ✅<br />
+                                <strong>你已具備考古（實地調查）的出發資格！</strong>
+                            </p>
+
+                            <div className="space-y-4">
+                                <button
+                                    onClick={() => setStampGranted(true)}
+                                    className={`inline-flex items-center gap-3 px-10 py-4 rounded-[6px] font-bold transition-all text-[15px] shadow-xl border-2
+                                        ${stampGranted ? 'bg-[#2e7d5a] text-white border-[#2e7d5a] cursor-default' : 'bg-white text-[#2e7d5a] border-[#2e7d5a] hover:bg-[#2e7d5a] hover:text-white'}`}
+                                >
+                                    {stampGranted ? '✅ 審查章已蓋印：准予出發' : '🖊️ 申請最終審核 (請老師蓋章)'}
+                                </button>
+
+                                {stampGranted && (
+                                    <div className="pt-6 animate-in slide-in-from-top-4 duration-500">
+                                        <div className="text-[12px] font-bold text-[#2e7d5a] tracking-widest font-['DM_Mono',monospace] mb-4 uppercase">Departure Clearance Granted // 🛫</div>
+                                        <Link to="/w11" className="inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#2a2a4a] transition-all group">
+                                            啟動執行與分析模組 (W11-W14) <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                        </Link>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-[12px] text-[#8888aa] max-w-[300px] mx-auto leading-relaxed">
+                            請先完成 Part 1 與 Part 2 的所有必要項目，<br />系統將自動核發審查解鎖碼。
+                        </p>
+                    )}
+                </div>
+            </section>
 
             {/* Navigation */}
-            <div className="flex justify-between items-center pt-4">
-                <Link to="/tool-design" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700">
-                    ← W8-W9 工具設計
-                </Link>
-                <Link to="/w11" className="flex items-center gap-2 text-sm bg-teal-600 text-white px-5 py-2 rounded-full hover:bg-teal-500 transition-colors font-semibold">
-                    前往 W11 <ArrowRight size={16} />
+            <div className="flex justify-start py-8">
+                <Link to="/tool-design" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
+                    ← 回 W8-W9 工具設計
                 </Link>
             </div>
+
         </div>
     );
 };

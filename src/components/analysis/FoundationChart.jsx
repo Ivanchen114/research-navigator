@@ -54,7 +54,7 @@ export const FoundationChart = () => {
                     { x: 90, y: 82 },
                     { x: 40, y: 55 },
                 ],
-                backgroundColor: '#d97706', // amber-600
+                backgroundColor: '#2d5be3', // Version A Accent Blue
             },
         ],
     };

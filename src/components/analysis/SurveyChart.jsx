@@ -39,12 +39,12 @@ export const SurveyChart = () => {
             {
                 label: '社團投入時數 (小時/週)',
                 data: [2.5, 4.2],
-                backgroundColor: '#3b82f6',
+                backgroundColor: '#2d5be3', // Version A Accent Blue
             },
             {
                 label: '滿意度 (1-5分)',
                 data: [3.8, 3.5],
-                backgroundColor: '#94a3b8',
+                backgroundColor: '#c9a84c', // Version A Gold
             },
         ],
     };

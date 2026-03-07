@@ -47,15 +47,15 @@ export const ExperimentChart = () => {
             {
                 label: '實驗組 (聽音樂)',
                 data: [65, 85],
-                borderColor: '#9333ea', // purple-600
-                backgroundColor: '#9333ea',
+                borderColor: '#2d5be3', // Version A Accent Blue
+                backgroundColor: '#2d5be3',
                 tension: 0.1,
             },
             {
                 label: '控制組 (安靜)',
                 data: [64, 70],
-                borderColor: '#94a3b8', // slate-400
-                backgroundColor: '#94a3b8',
+                borderColor: '#c9a84c', // Version A Gold
+                backgroundColor: '#c9a84c',
                 tension: 0.1,
             },
         ],

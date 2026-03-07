@@ -31,73 +31,63 @@ export const AnalysisHub = () => {
 
     const renderContent = () => {
         switch (activeTab) {
-            case 'foundation':
-                return <FoundationModule />;
-            case 'survey':
-                return <SurveyModule />;
-            case 'interview':
-                return <InterviewModule />;
-            case 'experiment':
-                return <ExperimentModule />;
-            case 'observation':
-                return <ObservationModule />;
-            case 'literature':
-                return <LiteratureModule />;
-            default:
-                return null;
+            case 'foundation': return <FoundationModule />;
+            case 'survey': return <SurveyModule />;
+            case 'interview': return <InterviewModule />;
+            case 'experiment': return <ExperimentModule />;
+            case 'observation': return <ObservationModule />;
+            case 'literature': return <LiteratureModule />;
+            default: return null;
         }
     };
 
     return (
-        <div className="max-w-5xl mx-auto flex flex-col animate-in fade-in duration-500">
+        <div className="max-w-[1100px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
             {/* Header */}
-            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
-                <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100 shadow-sm mb-4">
-                        <span className="text-blue-600">📊</span> W11–W14 執行與分析階段
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight text-center mb-4 leading-normal py-2 px-4 shadow-sm hover:shadow-md transition-shadow">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 pb-2 inline-block">解讀與結論教練</span>
-                    </h1>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-6">
-                        收完數據了嗎？選擇你使用的研究方法，查閱專屬的 AI 協作分析指南與指令範本。
-                    </p>
+            <header className="pt-8 text-center max-w-[650px] mx-auto">
+                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2d5be3] mb-3 flex items-center justify-center gap-2">
+                    <span className="text-[#2d5be3]">📊</span> W11–W14 執行與分析階段
+                </div>
+                <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                    解讀與結論教練：<br className="hidden md:block" />
+                    <span className="text-[#2d5be3] font-normal italic">從數據到真相</span>
+                </h1>
+                <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
+                    收完數據了嗎？選擇你使用的研究方法，查閱專屬的 AI 協作分析指南與指令範本。
+                </p>
 
-                    {/* 階段提醒 */}
-                    <div className="bg-blue-50 border-l-4 border-blue-500 p-5 text-sm rounded-r-2xl shadow-sm inline-block text-left text-slate-700 hover:shadow-md transition-shadow">
-                        <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
-                            📌 你現在在哪個階段？
-                        </h3>
-                        <p>
-                            本模組適合在 <strong className="text-blue-800">W11–W14 執行研究後</strong>使用。如果你還沒設計工具，請先前往
-                            <a href="/tool-design" className="text-blue-600 font-bold hover:underline mx-1">工具設計工作坊 (W8)</a>
-                            完成設計；如果你還不確定該用什麼方法，請先前往
-                            <a href="/clinic" className="text-blue-600 font-bold hover:underline mx-1">研究診所 (W5)</a>
-                            。
-                        </p>
-                    </div>
+                {/* 階段提醒 */}
+                <div className="mt-8 p-6 bg-[#f8f7f4] border border-[#dddbd5] rounded-[6px] text-[13px] text-[#4a4a6a] inline-block text-left max-w-[560px]">
+                    <h3 className="font-bold text-[#1a1a2e] mb-2 flex items-center gap-2 uppercase tracking-widest font-['DM_Mono',monospace]">
+                        // Phase Checkpoint
+                    </h3>
+                    <p>
+                        本模組適合在 <strong className="text-[#2d5be3]">W11–W14 執行研究後</strong>使用。如果你還沒設計工具，請先前往
+                        <a href="/tool-design" className="text-[#2d5be3] font-bold hover:underline mx-1 underline-offset-4">W8 工具設計</a>；
+                        若尚未確定方法，請回
+                        <a href="/clinic" className="text-[#2d5be3] font-bold hover:underline mx-1 underline-offset-4">W5 研究診所</a>。
+                    </p>
                 </div>
             </header>
 
             {/* Tabs Layout */}
-            <div className="flex flex-col md:flex-row gap-6 min-h-[600px]">
+            <div className="flex flex-col lg:flex-row gap-8 items-start min-h-[600px]">
 
                 {/* Sidebar Tabs */}
-                <div className="md:w-64 flex-shrink-0">
-                    <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-3 sticky top-4">
-                        <nav className="space-y-1">
+                <div className="lg:w-60 w-full shrink-0">
+                    <div className="bg-white border border-[#dddbd5] rounded-[10px] p-2 sticky top-24 shadow-sm">
+                        <nav className="flex flex-row lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-hide">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${activeTab === tab.id
-                                        ? 'bg-blue-50 text-blue-700 shadow-sm'
-                                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-[4px] text-[13px] font-bold transition-all whitespace-nowrap lg:whitespace-normal group ${activeTab === tab.id
+                                        ? 'bg-[#1a1a2e] text-white shadow-md'
+                                        : 'text-[#8888aa] hover:bg-[#f8f7f4] hover:text-[#1a1a2e]'
                                         }`}
                                 >
-                                    <span className={`${activeTab === tab.id ? 'text-blue-600' : 'text-slate-400'} transition-colors`}>
+                                    <span className={`${activeTab === tab.id ? 'text-[#2d5be3]' : 'text-[#dddbd5] group-hover:text-[#1a1a2e]'} transition-colors shrink-0`}>
                                         {tab.icon}
                                     </span>
                                     {tab.label}
@@ -108,8 +98,8 @@ export const AnalysisHub = () => {
                 </div>
 
                 {/* Content Area */}
-                <div className="flex-1">
-                    <div className="bg-white rounded-3xl shadow-sm border border-slate-100 min-h-full overflow-hidden hover:shadow-md transition-shadow">
+                <div className="flex-1 w-full">
+                    <div className="bg-white border border-[#dddbd5] rounded-[10px] min-h-[600px] shadow-sm overflow-hidden">
                         {renderContent()}
                     </div>
                 </div>

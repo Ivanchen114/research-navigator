@@ -2,144 +2,173 @@ import React, { useState } from 'react';
 import { DocLinkBtn } from '../../components/analysis/DocLinkBtn';
 import { PromptBox, AIInstructionDropdown } from '../../components/analysis/PromptBox';
 import { SurveyChart } from '../../components/analysis/SurveyChart';
-import { Bot, BrainCircuit, PenLine, AlertTriangle, Scale } from 'lucide-react';
+import { Bot, BrainCircuit, PenLine, AlertTriangle, Scale, Info, ArrowRight } from 'lucide-react';
 
 export const SurveyModule = () => {
     const [showChart, setShowChart] = useState(false);
 
     return (
-        <div className="p-6 md:p-8 space-y-8 animate-in fade-in slide-in-from-right-4">
+        <div className="p-8 md:p-12 space-y-12 animate-in fade-in slide-in-from-right-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e]">
 
             {/* Header */}
-            <header className="border-b border-slate-200 pb-4">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                    <div>
-                        <div className="flex items-center gap-4">
-                            <h2 className="text-2xl font-bold text-slate-800">模組 1：量化問卷法 — 四層次寫作工作坊</h2>
-                        </div>
-                        <p className="text-slate-600 mt-2 text-sm">目標：不再只讓 AI 算數字，而是引導 AI 檢核你的初稿，陪你產出「描述 → 詮釋 → 回扣 → 批判」的嚴謹結論。</p>
-                    </div>
+            <header className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <span className="bg-[#2d5be3] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-['DM_Mono',monospace] uppercase tracking-wider">Method 01</span>
+                    <span className="text-[11px] text-[#8888aa] font-['DM_Mono',monospace] tracking-widest uppercase">Quantitative / 問卷分析</span>
                 </div>
+                <h2 className="font-['Noto_Serif_TC',serif] text-[28px] font-bold text-[#1a1a2e] leading-tight">量化問卷法：四層次寫作工作坊</h2>
+                <p className="text-[14px] text-[#4a4a6a] max-w-[600px] leading-relaxed">
+                    不再只讓 AI 算數字，而是引導 AI 檢核你的初稿，陪你產出「描述 → 詮釋 → 回扣 → 批判」的嚴謹結論。
+                </p>
             </header>
 
             {/* Step 1: Data Cleaning */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">Step 1：把問卷餵給 AI 前的準備</h3>
-                <p className="text-sm text-slate-600 mb-4">AI 很聰明，但如果餵給它垃圾，它也只能產出垃圾 (Garbage in, garbage out)。</p>
-                <div className="bg-slate-50 p-4 rounded-lg mb-4">
-                    <ul className="list-disc list-inside text-sm text-slate-600 space-y-2">
-                        <li><strong>去除個資：</strong>把 Excel/CSV 中的姓名、Email 刪除或改成編號（R01, R02...）。</li>
-                        <li><strong>簡化標題：</strong>把太長的題目改成簡短的變數名稱（例：「請問您平均每天花多少時間滑短影音？」 → 改成「Q1_短影音時數」）。</li>
-                        <li><strong>刪除無效問卷：</strong>把沒填完的、全部選同一個選項的、亂填的（例如一天睡 25 小時）刪掉。</li>
-                    </ul>
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-[#dddbd5] pb-2">
+                    <span className="font-['DM_Mono',monospace] text-[12px] font-bold text-[#8888aa]">STEP 01</span>
+                    <h3 className="font-bold text-[16px] text-[#1a1a2e]">餵給 AI 前的「隱私淨身」</h3>
                 </div>
-            </div>
-
-            {/* Step 2: First Round Analysis (W14) */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-blue-500 p-6">
-                <div className="flex items-center gap-2 mb-2">
-                    <Bot className="text-blue-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 2：AI 檢核與潤飾</h3>
+                <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-[6px] p-8 space-y-6">
+                    <p className="text-[13px] text-[#4a4a6a] italic">AI 很聰明，但如果餵給它垃圾資料，它也只能產出垃圾 (Garbage in, garbage out)。</p>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        {[
+                            { title: '去除個資', desc: '刪除 Excel/CSV 中所有人的姓名、學號、社群帳號。' },
+                            { title: '簡化標題', desc: '將冗長題目改為變數（例：Q1_使用時數）。' },
+                            { title: '排除無效件', desc: '刪除填答不完整、亂填或邏輯相互矛盾的樣本。' },
+                        ].map(item => (
+                            <div key={item.title} className="space-y-2">
+                                <h4 className="font-bold text-[13px] text-[#1a1a2e] flex items-center gap-2 text-[#2d5be3]">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-current"></div> {item.title}
+                                </h4>
+                                <p className="text-[12px] text-[#8888aa] leading-relaxed">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <p className="text-sm text-slate-600 mb-4">把整理好的資料，加上你「自己先寫好的四層初稿」一起餵給 AI，請它找漏洞並提供建議。</p>
+            </section>
 
-                <AIInstructionDropdown title="複製 Prompt：對齊學習單小卡 A">
-                    <PromptBox>
-                        {`我的研究主題是＿＿＿，研究問題是＿＿＿。
+            {/* Step 2: AI Audit */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-[#dddbd5] pb-2 text-[#2d5be3]">
+                    <span className="font-['DM_Mono',monospace] text-[12px] font-bold">STEP 02</span>
+                    <h3 className="font-bold text-[16px] text-[#1a1a2e]">AI 檢核與潤飾</h3>
+                </div>
+                <div className="bg-[#1a1a2e] text-white rounded-[10px] p-10 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-110 transition-transform duration-700">
+                        <Bot size={120} />
+                    </div>
+                    <div className="relative z-10 space-y-8">
+                        <p className="text-white/60 text-[13px] leading-relaxed max-w-[600px]">
+                            將整理後的數據，連同你<strong>親自撰寫的四層初稿</strong>交給 AI。請它扮演審查教授，指出論點中的統計矛盾或語氣瑕疵。
+                        </p>
 
-以下是我自己寫的四層結論初稿：【貼上初稿】
+                        <div className="bg-black/40 rounded-[8px] border border-white/10 p-6 space-y-6 font-['DM_Mono',monospace]">
+                            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                                <div className="text-[10px] font-bold text-[#2d5be3] uppercase tracking-widest">// Analysis Audit Prompt</div>
+                                <button className="text-[10px] text-white/30 hover:text-white transition-colors">COPY</button>
+                            </div>
+                            <div className="text-[12px] leading-relaxed text-white/80">
+                                <p>我寫了四層結論初稿：【貼上初稿】</p>
+                                <p className="mt-2 text-white/40">問卷統計資料（已淨身）：【貼上數據】</p>
+                                <div className="mt-4 p-4 bg-white/5 rounded border-l-2 border-[#2d5be3] space-y-2">
+                                    <p>1. 檢核「描述層」有無數字錯誤或量詞不精準。</p>
+                                    <p>2. 優化「詮釋層」，補充可能遺漏的相關聯想。</p>
+                                    <p>3. 「回扣層」內容請僅幫我潤飾，不要改變我的主見。</p>
+                                    <p>4. 建議這類問卷常見的三種研究限制。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-以下是問卷統計資料（已去除個資）：【貼上資料】
-
-請幫我：
-1. 檢核描述層有無數字錯誤或量詞不精準，並建議修改。
-2. 優化詮釋層，補充可能遺漏的原因。
-3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
-4. 列出問卷研究常見的三種研究限制供我參考。
-5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`}
-                    </PromptBox>
-                </AIInstructionDropdown>
-
-                {/* Chart Placeholder (Retained for visual context) */}
-                <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200 flex flex-col md:flex-row gap-6 items-center">
-                    <div className="flex-1">
-                        <h4 className="font-bold text-slate-800 text-sm mb-2">📈 【自學補充】從圖表客觀看數據</h4>
-                        <p className="text-xs text-slate-600 mb-3">若你已經能先畫出圖表，也可以試問自己：看到哪些最高、最低、轉折點？</p>
+                {/* Optional Chart Toggle */}
+                <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-[6px] p-6 flex flex-col md:flex-row gap-10 items-center">
+                    <div className="flex-1 space-y-4">
+                        <h4 className="font-bold text-[#1a1a2e] text-[14px] flex items-center gap-2">
+                            <span className="text-xl">📈</span> 自學補充：從圖表觀看趨勢
+                        </h4>
+                        <p className="text-[12px] text-[#8888aa] leading-relaxed">
+                            若你已經初步繪製圖表，試著問：最高與最低點代表什麼？轉折點發生在哪？
+                        </p>
                         <button
                             onClick={() => setShowChart(!showChart)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 shadow w-full transition"
+                            className="bg-[#1a1a2e] text-white px-6 py-2 rounded-[4px] text-[12px] font-bold hover:bg-[#2a2a4a] transition-all"
                         >
                             {showChart ? '隱藏圖表' : '顯示長條圖範例'}
                         </button>
                     </div>
-                    {showChart ? (
-                        <div className="flex-1 w-full bg-white h-48 rounded shadow-sm border border-slate-200 flex items-center justify-center p-2 animate-in fade-in">
+                    {showChart && (
+                        <div className="w-full md:w-64 h-48 bg-white border border-[#dddbd5] rounded-[4px] p-4 animate-in zoom-in-95 duration-300 shadow-sm">
                             <SurveyChart />
-                        </div>
-                    ) : (
-                        <div className="flex-1 w-full bg-white h-48 rounded border border-slate-200 border-dashed flex items-center justify-center text-slate-400 font-bold">
-                            點擊左側按鈕顯示
                         </div>
                     )}
                 </div>
-            </div>
+            </section>
 
-            {/* Step 3: Human Judgment (W14) */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-rose-500 p-6">
-                <div className="flex items-center gap-2 mb-2">
-                    <Scale className="text-rose-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 3：人工裁奪 (你的判斷時刻)</h3>
+            {/* Step 3: Human Judgment */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-[#dddbd5] pb-2 text-[#e32d5b]">
+                    <span className="font-['DM_Mono',monospace] text-[12px] font-bold">STEP 03</span>
+                    <h3 className="font-bold text-[16px] text-[#1a1a2e]">人工裁奪：破解「偽相關」</h3>
                 </div>
-                <p className="text-sm text-slate-600 mb-4">
-                    AI 講得再好聽，你也<strong className="text-rose-600">不能照單全收</strong>！做為研究者，你必須對 AI 提出的相關性進行嚴格審查：
+                <p className="text-[14px] text-[#4a4a6a] max-w-[600px] leading-relaxed italic">
+                    AI 講得再好聽，你也<strong>不能照單全收</strong>。研究者的尊嚴在於你的判斷。
                 </p>
+                <div className="grid md:grid-cols-2 gap-6 mt-8">
+                    {[
+                        { title: '陷阱：相關 ≠ 因果', desc: 'AI 說：「有穿校服的人成績好，所以校服提升智力」。', fix: '裁奪：在問卷中，我們只能宣稱兩者「有正相關」，不能斷定因果關係。' },
+                        { title: '陷阱：過度推論', desc: 'AI 說：「這證明了全國高中生的習慣」。', fix: '裁奪：樣本數受限（僅 50 人），結論必須註明「此結果僅供初步參考」。' },
+                    ].map(item => (
+                        <div key={item.title} className="p-6 border border-[#dddbd5] rounded-[10px] space-y-4 hover:border-[#e32d5b] transition-colors bg-white shadow-sm">
+                            <h4 className="font-bold text-[14px] text-[#e32d5b] flex items-center gap-2">
+                                <AlertTriangle size={16} /> {item.title}
+                            </h4>
+                            <p className="text-[12px] text-[#8888aa] leading-relaxed">{item.desc}</p>
+                            <div className="bg-[#f0f9f4] p-3 rounded-[4px] border border-[#2e7d5a]/20 text-[12px] font-bold text-[#2e7d5a]">
+                                ✓ {item.fix}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
-                        <h4 className="font-bold text-rose-800 mb-2 flex items-center gap-2">
-                            <AlertTriangle size={18} /> 陷阱一：相關不等於因果
-                        </h4>
-                        <p className="text-sm text-slate-700 mb-2">
-                            AI 說：「有穿校服的人成績比較好，所以校服能提升智力」。這合理嗎？
-                        </p>
-                        <div className="bg-white p-2 rounded text-xs text-slate-600 border border-rose-200">
-                            <strong>你的裁奪：</strong> 如果只是問卷調查，只能說兩者**「有正相關」**，不能說「因此導致」。
+            {/* Step 4: Final Drafting */}
+            <section className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-[#dddbd5] pb-2 text-[#2e7d5a]">
+                    <span className="font-['DM_Mono',monospace] text-[12px] font-bold">STEP 04</span>
+                    <h3 className="font-bold text-[16px] text-[#1a1a2e]">最終四層結論定案</h3>
+                </div>
+                <div className="bg-white border-2 border-[#1a1a2e] rounded-[10px] p-8 space-y-8 relative overflow-hidden shadow-xl">
+                    <div className="flex items-center gap-3 opacity-20">
+                        <PenLine size={24} />
+                        <span className="font-['DM_Mono',monospace] text-[10px] uppercase tracking-widest font-bold">Drafting Form / W14 Final Output</span>
+                    </div>
+
+                    <div className="space-y-8 font-['Noto_Serif_TC',serif] leading-loose text-[15px]">
+                        <div className="space-y-4">
+                            <span className="bg-[#2d5be3] text-white px-2 py-0.5 text-[10px] font-bold font-['DM_Mono',monospace] uppercase">L1/L2: Analysis</span>
+                            <p className="border-b border-[#dddbd5] pb-4">
+                                根據問卷統計結果顯示，＿＿＿＿＿＿＿＿，其中最明顯的是＿＿＿＿＿＿＿＿。這個結果顯示＿＿＿＿＿＿＿＿，可能的原因是＿＿＿＿＿＿＿＿。
+                            </p>
+                        </div>
+                        <div className="space-y-4 bg-[#f8f7f4] p-6 rounded-[4px] border-l-4 border-[#1a1a2e]">
+                            <div className="flex items-center justify-between">
+                                <span className="bg-[#1a1a2e] text-white px-2 py-0.5 text-[10px] font-bold font-['DM_Mono',monospace] uppercase">L3: Reflection (Human Logic Only)</span>
+                                <Info size={14} className="text-[#1a1a2e] opacity-40" />
+                            </div>
+                            <p className="leading-loose">
+                                本研究原本旨在了解＿＿＿＿＿＿＿＿。根據分析，本研究的回答是＿＿＿＿＿＿＿＿。但需注意此結果僅說明＿＿＿＿＿＿＿＿。
+                            </p>
+                        </div>
+                        <div className="space-y-4">
+                            <span className="bg-[#e32d5b] text-white px-2 py-0.5 text-[10px] font-bold font-['DM_Mono',monospace] uppercase">L4: Critical Thinking</span>
+                            <p className="text-[#4a4a6a]">
+                                本研究的限制在於＿＿＿＿＿＿＿＿。因此不宜推論至＿＿＿＿＿＿＿＿。若要更完整回答此問題，未來可以＿＿＿＿＿＿＿＿。
+                            </p>
                         </div>
                     </div>
-                    <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
-                        <h4 className="font-bold text-rose-800 mb-2 flex items-center gap-2">
-                            <AlertTriangle size={18} /> 陷阱二：忽略樣本限制
-                        </h4>
-                        <p className="text-sm text-slate-700 mb-2">
-                            AI 說：「這清楚證明了現代高中生的習慣...」但你只發了 20 份給同班同學？
-                        </p>
-                        <div className="bg-white p-2 rounded text-xs text-slate-600 border border-rose-200">
-                            <strong>你的裁奪：</strong> 由於樣本數有限且來源單一，必須在結論加上「**受限於樣本數，此結果僅供初步參考**」。
-                        </div>
-                    </div>
                 </div>
-            </div>
-
-            {/* Step 4: Drafting (W14) */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-500 p-6">
-                <div className="flex items-center gap-2 mb-2">
-                    <PenLine className="text-emerald-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Step 4：最終四層結論定案</h3>
-                </div>
-                <p className="text-sm text-slate-600 mb-4">
-                    對照 AI 的建議與自己的初稿，做出最終裁奪，寫下完整的四層結論（這就是你 W15 要交的報告內容）。
-                </p>
-                <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100 font-serif">
-                    <p className="text-sm text-slate-700 leading-loose">
-                        <strong className="text-emerald-700">【描述】與【詮釋】</strong><br />
-                        根據問卷統計結果顯示，＿＿＿＿＿＿＿＿，其中最明顯的是＿＿＿＿＿＿＿＿。這個結果顯示＿＿＿＿＿＿＿＿，可能的原因是＿＿＿＿＿＿＿＿。<br /><br />
-                        <strong className="text-emerald-700">【回扣】(⭐確認內容是你自己的)</strong><br />
-                        本研究原本想了解＿＿＿＿＿＿＿＿。根據分析結果，本研究的答案是＿＿＿＿＿＿＿＿。但這個結論只能說明＿＿＿＿＿＿＿＿，無法確定＿＿＿＿＿＿＿＿。<br /><br />
-                        <strong className="text-emerald-700">【批判】(研究限制)</strong><br />
-                        本研究的限制在於＿＿＿＿＿＿＿＿，因此結論不宜推論至＿＿＿＿＿＿＿＿。若要更完整回答這個問題，未來可以＿＿＿＿＿＿＿＿。
-                    </p>
-                </div>
-            </div>
+            </section>
         </div>
     );
 };

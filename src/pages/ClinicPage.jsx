@@ -9,32 +9,32 @@ const triageQuestions = [
         id: 1,
         question: '我要「比例/趨勢」還是「原因/故事」？',
         options: [
-            { label: '比例趨勢', result: '📋 問卷', color: 'blue' },
-            { label: '原因故事', result: '🎤 訪談', color: 'orange' },
+            { label: '比例趨勢', result: '問卷', color: '#2d5be3' },
+            { label: '原因故事', result: '訪談', color: '#c9a84c' },
         ],
     },
     {
         id: 2,
         question: '我要「證明因果」還是「描述現象」？',
         options: [
-            { label: '證明因果', result: '🧪 實驗', color: 'purple' },
-            { label: '描述現象', result: '其他方法', color: 'slate' },
+            { label: '證明因果', result: '實驗', color: '#1a1a2e' },
+            { label: '描述現象', result: '其他', color: '#8888aa' },
         ],
     },
     {
         id: 3,
         question: '我要「真實行為」還是「想法態度」？',
         options: [
-            { label: '真實行為', result: '👀 觀察', color: 'teal' },
-            { label: '想法態度', result: '📋 問卷 / 🎤 訪談', color: 'amber' },
+            { label: '真實行為', result: '觀察', color: '#2e7d5a' },
+            { label: '想法態度', result: '問卷/訪談', color: '#4a4a6a' },
         ],
     },
     {
         id: 4,
         question: '我要「整理現有研究」嗎？',
         options: [
-            { label: '是', result: '📚 文獻法', color: 'emerald' },
-            { label: '否', result: '用上面三問判斷', color: 'slate' },
+            { label: '是', result: '文獻法', color: '#1a1a2e' },
+            { label: '否', result: '三問判斷', color: '#8888aa' },
         ],
     },
 ];
@@ -56,13 +56,13 @@ export const ClinicPage = () => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
+        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
             {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
-            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+            <div className="flex justify-end pt-2 pb-0 -mb-8 relative z-20">
                 <button
                     onClick={() => setShowLessonMap(!showLessonMap)}
-                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-red-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    className="flex items-center gap-1.5 text-[11px] text-[#8888aa] hover:text-[#e32d5b] transition-colors opacity-60 hover:opacity-100 font-['DM_Mono',monospace]"
                     title="教師專用：顯示課程地圖"
                 >
                     <Map size={12} />
@@ -77,152 +77,156 @@ export const ClinicPage = () => {
             )}
 
             {/* Header */}
-            <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-red-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
-                <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 shadow-sm mb-4">
-                        <Stethoscope size={16} /> W5 核心模組
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 flex items-center justify-center gap-3">
-                        🏥 研究診所：<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600 drop-shadow-sm">掛號判斷工作坊</span>
-                    </h1>
-                    <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                        Level 1 掛號診斷 — 你的研究問題該掛哪一科？<br />
-                        <span className="text-sm">掛錯科，後面所有努力都白費！用「分科三問」快速判斷。</span>
-                    </p>
+            <header className="mb-14 pt-8 text-center max-w-[650px] mx-auto">
+                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#e32d5b] mb-3 flex items-center justify-center gap-2">
+                    <Stethoscope size={14} /> W5 核心模組
                 </div>
+                <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                    研究診所：<br className="hidden md:block" />
+                    <span className="text-[#e32d5b] font-normal italic">掛號判斷工作坊</span>
+                </h1>
+                <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
+                    Level 1 掛號診斷 — 你的研究問題該掛哪一科？掛錯科，後面所有努力都白費！用「分科三問」快速判斷。
+                </p>
             </header>
 
             {/* 分科三問 */}
-            <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl shadow-sm border border-red-100 p-6 md:p-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <Lightbulb className="text-amber-500" size={28} />
-                    分科三問：掛號診斷標準
-                </h2>
-                <p className="text-slate-600 mb-6 leading-relaxed">問自己以下問題，就知道該掛哪科：</p>
+            <section className="mb-14">
+                <div className="p-10 bg-[#fdf2f2] border border-[#f2dada] rounded-[10px] space-y-8">
+                    <div className="flex items-center gap-3">
+                        <Lightbulb className="text-[#e32d5b]" size={24} />
+                        <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                            分科三問：掛號診斷標準
+                        </h2>
+                    </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                    {triageQuestions.map((tq) => (
-                        <div key={tq.id} className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                            <div className="flex items-start gap-3 mb-3">
-                                <span className="bg-red-500 text-white w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0">
-                                    {tq.id}
-                                </span>
-                                <h3 className="font-bold text-slate-800 leading-snug">{tq.question}</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        {triageQuestions.map((tq) => (
+                            <div key={tq.id} className="bg-white p-6 rounded-[8px] border border-[#dddbd5] space-y-4 shadow-sm">
+                                <div className="flex items-start gap-4">
+                                    <span className="bg-[#1a1a2e] text-white w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5 font-['DM_Mono',monospace]">
+                                        {tq.id}
+                                    </span>
+                                    <h3 className="font-bold text-[14px] text-[#1a1a2e] leading-tight">{tq.question}</h3>
+                                </div>
+                                <div className="flex flex-wrap gap-2 pl-9">
+                                    {tq.options.map((opt, i) => (
+                                        <div
+                                            key={i}
+                                            className="px-3 py-1.5 rounded-[4px] text-[11px] font-bold border border-[#dddbd5] bg-[#f8f7f4] text-[#1a1a2e]"
+                                        >
+                                            {opt.label} → <span style={{ color: opt.color }}>{opt.result}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="flex flex-wrap gap-2 ml-10">
-                                {tq.options.map((opt, i) => (
-                                    <div
-                                        key={i}
-                                        className={`px-3 py-1.5 rounded-lg text-sm font-medium border bg-${opt.color}-50 border-${opt.color}-200 text-${opt.color}-800`}
-                                        style={{
-                                            backgroundColor: `var(--color-${opt.color}, #f8fafc)`,
-                                        }}
-                                    >
-                                        {opt.label} → <strong>{opt.result}</strong>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            {/* 五大方法總覽 */}
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6">五大研究方法一覽</h2>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {/* 五大方法覽 */}
+            <section className="mb-14">
+                <div className="flex items-baseline gap-3 mb-6">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                        🔬 五大研究方法一覽
+                    </h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     {[
-                        { icon: '📋', name: '問卷法', desc: '想知道多少人、什麼比例', example: '全校有多少人每天用手機超過3小時？', color: 'blue' },
-                        { icon: '🎤', name: '訪談法', desc: '想知道為什麼、怎麼想的', example: '為什麼學生喜歡用某個社群平台？', color: 'orange' },
-                        { icon: '🧪', name: '實驗法', desc: '想證明A會導致B', example: '聽音樂會不會影響學習效率？', color: 'purple' },
-                        { icon: '👀', name: '觀察法', desc: '想記錄真實行為', example: '學生在小組討論時誰發言最多？', color: 'teal' },
-                        { icon: '📚', name: '文獻法', desc: '想整理別人的研究', example: '過去10年AI教育研究的趨勢？', color: 'emerald' },
+                        { icon: '📋', name: '問卷法', desc: '想知道多少人、什麼比例', example: '有多少人每天用手機超過3小時？' },
+                        { icon: '🎤', name: '訪談法', desc: '想知道為什麼、怎麼想的', example: '為什麼學生喜歡用某個平台？' },
+                        { icon: '🧪', name: '實驗法', desc: '想證明A會導致B', example: '聽音樂會不會影響學習效率？' },
+                        { icon: '👀', name: '觀察法', desc: '想記錄真實行為', example: '學生討論時誰發言最多？' },
+                        { icon: '📚', name: '文獻法', desc: '想整理別人的研究', example: '過去10年AI教育趨勢？' },
                     ].map((m) => (
-                        <div key={m.name} className="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-center hover:-translate-y-1 transition-transform cursor-default">
-                            <div className="text-4xl mb-3">{m.icon}</div>
-                            <h3 className="font-bold text-slate-800 text-sm mb-2">{m.name}</h3>
-                            <p className="text-xs text-slate-600 mb-3 leading-relaxed">{m.desc}</p>
-                            <p className="text-[10px] text-slate-500 italic bg-white p-2 rounded-lg border border-slate-100">例：{m.example}</p>
+                        <div key={m.name} className="bg-white p-6 text-center hover:bg-[#f8f7f4] transition-colors group">
+                            <div className="text-[28px] mb-3 transition-transform group-hover:scale-110">{m.icon}</div>
+                            <h4 className="font-bold text-[#1a1a2e] text-[14px] mb-2">{m.name}</h4>
+                            <p className="text-[#8888aa] text-[12px] leading-relaxed mb-4">{m.desc}</p>
+                            <div className="bg-[#f8f7f4] p-3 rounded-[4px] text-[10px] text-[#4a4a6a] italic leading-snug border border-[#dddbd5]/50">
+                                例：{m.example}
+                            </div>
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
 
             {/* 急診分流練習 */}
-            <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8 hover:shadow-md transition-shadow">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                    <HelpCircle className="text-blue-500" size={28} />
-                    急診分流練習
-                </h2>
-                <p className="text-slate-600 mb-6 leading-relaxed">看到研究問題，試著用分科三問判斷該掛哪科！點擊「顯示答案」檢查你的判斷。</p>
+            <section className="mb-14">
+                <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-baseline gap-3">
+                        <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                            🚨 急診分流練習
+                        </h2>
+                    </div>
+                </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {practiceItems.map((item, idx) => (
-                        <div key={idx} className="bg-slate-50 rounded-lg border border-slate-200 p-4 hover:bg-slate-100 transition-colors">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                                <div className="flex items-start gap-3 flex-1">
-                                    <span className="bg-slate-300 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                                        {idx + 1}
-                                    </span>
-                                    <p className="text-slate-700 font-medium text-sm">「{item.q}」</p>
-                                </div>
+                        <div key={idx} className="bg-white border border-[#dddbd5] rounded-[10px] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 group hover:border-[#1a1a2e] transition-colors">
+                            <div className="flex items-start gap-4 flex-1">
+                                <span className="text-[11px] font-bold text-[#8888aa] font-['DM_Mono',monospace] mt-1 uppercase">Case {String(idx + 1).padStart(2, '0')}</span>
+                                <p className="text-[15px] font-medium text-[#1a1a2e] leading-relaxed italic">「{item.q}」</p>
+                            </div>
+                            <div className="flex flex-col items-end gap-3 min-w-[120px]">
                                 <button
                                     onClick={() => toggleReveal(idx)}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors shrink-0"
+                                    className={`px-4 py-2 rounded-[4px] text-[12px] font-bold border transition-all ${revealedPractice[idx] ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:border-[#1a1a2e]'}`}
                                 >
-                                    {revealedPractice[idx] ? '隱藏答案' : '顯示答案'}
+                                    {revealedPractice[idx] ? '隱藏結果' : '臨床診斷'}
                                 </button>
+                                {revealedPractice[idx] && (
+                                    <div className="animate-in slide-in-from-right-4 duration-300 text-right">
+                                        <p className="text-[14px] font-bold text-[#e32d5b]">{item.a}</p>
+                                        <p className="text-[10px] text-[#8888aa] mt-1">{item.reason}</p>
+                                    </div>
+                                )}
                             </div>
-                            {revealedPractice[idx] && (
-                                <div className="mt-3 ml-9 bg-white p-3 rounded-lg border border-blue-100 animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <p className="text-sm font-bold text-blue-800 flex items-center gap-2">
-                                        <CheckCircle2 size={16} className="text-green-500" />
-                                        {item.a}
-                                    </p>
-                                    <p className="text-xs text-slate-500 mt-1">理由：{item.reason}</p>
-                                </div>
-                            )}
                         </div>
                     ))}
                 </div>
-            </div>
+            </section>
 
             {/* 遊戲入口 */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                            <Gamepad2 size={24} />
-                            🎮 行動代號：裝備
-                        </h3>
-                        <p className="text-indigo-100 text-sm">
-                            11 個真實研究情境挑戰！用分科三問判斷每個題目該用什麼工具。
-                        </p>
-                    </div>
+            <div className="bg-[#1a1a2e] rounded-[10px] p-10 text-white relative mb-14 overflow-hidden group">
+                <div className="absolute top-0 right-0 p-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                    <Gamepad2 size={100} />
+                </div>
+                <div className="relative z-10 max-w-[500px]">
+                    <div className="text-[#e32d5b] text-[10px] font-['DM_Mono',monospace] tracking-widest mb-4 uppercase">// Combat Module</div>
+                    <h3 className="text-[22px] font-bold mb-4 font-['Noto_Serif_TC',serif]">行動代號：裝備</h3>
+                    <p className="text-white/60 text-[14px] leading-relaxed mb-8">
+                        11 個真實研究情境挑戰！練習從研究問題中快速判斷正確的研究科別。在實戰中磨練你的診斷眼光。
+                    </p>
                     <Link
                         to="/game/tool-quiz"
-                        className="bg-white text-indigo-700 hover:bg-indigo-50 px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group shrink-0"
+                        className="inline-flex items-center gap-2 bg-white text-[#1a1a2e] px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#f0ede6] transition-all"
                     >
-                        進入行動任務
-                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        進入行動任務 <ArrowRight size={18} />
                     </Link>
                 </div>
             </div>
 
-            {/* W8 預告 */}
-            <div className="bg-slate-50 rounded-3xl border border-slate-200 p-8 text-center hover:shadow-md transition-shadow">
-                <h3 className="text-xl font-bold text-slate-800 mb-4">📌 下一站：W8 工具設計工作坊</h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                    掛對科之後，你們要學的是——<strong>工具設計得好不好？</strong>那是另一種診斷能力！
-                    <br />W8 會教你「處方診斷」+ 動手設計自己的問卷/訪談大綱/實驗流程。
+            {/* 下一站預告 */}
+            <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-[10px] p-10 text-center">
+                <p className="text-[#8888aa] text-[10px] font-['DM_Mono',monospace] tracking-[0.2em] mb-4 uppercase">// Roadmap Update</p>
+                <h3 className="text-[20px] font-bold text-[#1a1a2e] mb-3 font-['Noto_Serif_TC',serif]">下一站：W8 工具設計工作坊</h3>
+                <p className="text-[#4a4a6a] text-[14px] max-w-[600px] mx-auto leading-relaxed mb-8">
+                    掛對科之後，緊接著要挑戰的是——<strong>你的工具設計得夠好嗎？</strong> 我們將從診斷處方開始，動手設計專屬的問卷、訪談大綱或實驗流程。
                 </p>
                 <Link
                     to="/tool-design"
-                    className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-bold text-sm transition-colors"
+                    className="inline-flex items-center gap-2 bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#2a2a4a] transition-all"
                 >
-                    前往工具設計工作坊 (W8)
-                    <ArrowRight size={16} />
+                    前往工具設計工作坊 (W8) <ArrowRight size={18} />
+                </Link>
+            </div>
+
+            {/* Navigation Out */}
+            <div className="flex justify-start py-8">
+                <Link to="/literature-review" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
+                    ← 回 W6 文獻鑑識
                 </Link>
             </div>
 
