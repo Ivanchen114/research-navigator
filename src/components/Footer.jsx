@@ -4,7 +4,7 @@ import { Target, Lightbulb, ScanText, CheckCircle, FileText, Zap, School, Shield
 
 export const Footer = () => {
     const location = useLocation();
-    
+
     // 如果在任務大廳 (GameHub) 甚至是遊戲內部，顯示特務司令部版本的 Footer
     const isAgentMode = location.pathname.startsWith('/games');
 
@@ -13,13 +13,13 @@ export const Footer = () => {
             <footer className="w-full bg-[#050910] border-t border-slate-800/80 mt-auto relative overflow-hidden text-slate-400 font-mono">
                 {/* Top scanning line effect */}
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
-                
+
                 {/* Warning Tape Border Bottom */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-[repeating-linear-gradient(45deg,#f59e0b,#f59e0b_10px,#000_10px,#000_20px)] opacity-50" />
 
-                <div className="max-w-7xl mx-auto px-6 py-10">
+                <div className="max-w-7xl mx-auto px-6 py-5">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
-                        
+
                         {/* Left: Branding & Core */}
                         <div className="flex items-center gap-6 w-full md:w-auto">
                             <div className="bg-slate-900 border border-slate-700 p-3 flex items-center justify-center text-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.15)] rounded-sm shrink-0">
@@ -42,7 +42,7 @@ export const Footer = () => {
 
                         {/* Middle / Right: School & Specs */}
                         <div className="flex flex-col md:flex-row items-start md:items-center gap-8 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-800 pt-6 md:pt-0 md:pl-8">
-                            
+
                             {/* School Info */}
                             <div className="flex flex-col gap-1.5">
                                 <div className="flex items-center gap-2 text-slate-300 font-bold tracking-widest text-sm">
@@ -68,8 +68,8 @@ export const Footer = () => {
 
                         </div>
                     </div>
-                    
-                    <div className="mt-8 pt-4 border-t border-slate-800/50 flex justify-between items-center text-[9px] text-slate-600 tracking-[0.3em] uppercase">
+
+                    <div className="mt-5 pt-4 border-t border-slate-800/50 flex justify-between items-center text-[9px] text-slate-600 tracking-[0.3em] uppercase">
                         <span>SECURITY CLEARANCE REQUIRED FOR ACCESS</span>
                         <span>RESTRICTED SECTION // SSSH</span>
                     </div>
@@ -78,15 +78,15 @@ export const Footer = () => {
         );
     }
 
-       // Default: 學術/教學版 Footer (溫和、橫向儀表板_白底)
+    // Default: 學術/教學版 Footer (溫和、橫向儀表板_白底)
     return (
         <footer className="w-full bg-white border-t border-slate-200 mt-auto relative overflow-hidden text-slate-500 font-mono">
             {/* Top scanning line effect - light version */}
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
-            
-            <div className="max-w-7xl mx-auto px-6 py-10">
+
+            <div className="max-w-7xl mx-auto px-6 py-5">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
-                    
+
                     {/* Left: Branding & Core */}
                     <div className="flex items-center gap-6 w-full md:w-auto">
                         <div className="bg-blue-50/50 border border-blue-100 p-3 flex items-center justify-center text-blue-600 rounded-sm shrink-0">
@@ -109,7 +109,7 @@ export const Footer = () => {
 
                     {/* Middle / Right: School & Specs */}
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-8 w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-200 pt-6 md:pt-0 md:pl-8">
-                        
+
                         {/* School Info */}
                         <div className="flex flex-col gap-1.5">
                             <div className="flex items-center gap-2 text-slate-700 font-bold tracking-widest text-sm">
@@ -135,8 +135,8 @@ export const Footer = () => {
 
                     </div>
                 </div>
-                
-                <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 tracking-[0.3em] uppercase">
+
+                <div className="mt-5 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 tracking-[0.3em] uppercase">
                     <span>ACADEMIC ACCESS GRANTED</span>
                     <span>TEACHING SECTION // SSSH</span>
                 </div>
