@@ -383,27 +383,27 @@ export const Home = () => {
                         <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
                             <div className="font-bold text-emerald-400 text-lg mb-1">Ascribe</div>
                             <div className="text-sm font-medium text-white mb-2">誠實歸屬</div>
-                            <div className="text-xs text-slate-400">在報告中標示使用 AI 輔助。</div>
+                            <div className="text-xs text-slate-400">誠實說明哪裡用了 AI。</div>
                         </div>
                         <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
                             <div className="font-bold text-emerald-400 text-lg mb-1">Inquire</div>
-                            <div className="text-sm font-medium text-white mb-2">引導探詢</div>
-                            <div className="text-xs text-slate-400">分段下指令，而非一次丟給 AI。</div>
+                            <div className="text-sm font-medium text-white mb-2">提問</div>
+                            <div className="text-xs text-slate-400">精準提問，不依賴模糊指令。</div>
                         </div>
                         <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
                             <div className="font-bold text-emerald-400 text-lg mb-1">Reference</div>
-                            <div className="text-sm font-medium text-white mb-2">保存參照</div>
-                            <div className="text-xs text-slate-400">留存與 AI 的對話紀錄截圖。</div>
+                            <div className="text-sm font-medium text-white mb-2">引用</div>
+                            <div className="text-xs text-slate-400">查證 AI 給的資料來源。</div>
                         </div>
                         <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
                             <div className="font-bold text-emerald-400 text-lg mb-1">Evaluate</div>
-                            <div className="text-sm font-medium text-white mb-2">批判評估</div>
-                            <div className="text-xs text-slate-400">驗證 AI 給的數據，不照單全收。</div>
+                            <div className="text-sm font-medium text-white mb-2">評估</div>
+                            <div className="text-xs text-slate-400">判斷內容是否合理，不照單全收。</div>
                         </div>
                         <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
                             <div className="font-bold text-emerald-400 text-lg mb-1">Document</div>
-                            <div className="text-sm font-medium text-white mb-2">詳實紀錄</div>
-                            <div className="text-xs text-slate-400">紀錄你如何「修正」AI 的建議。</div>
+                            <div className="text-sm font-medium text-white mb-2">紀錄</div>
+                            <div className="text-xs text-slate-400">保留與 AI 的對話紀錄。</div>
                         </div>
                     </div>
                 </div>
