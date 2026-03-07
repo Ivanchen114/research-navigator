@@ -169,7 +169,7 @@ C. 深究型（某現象的運作機制/背後原因）
     const props = { openSection, toggleSection };
 
     return (
-        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e]">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12 py-8 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e]">
 
             {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
             <div className="flex justify-end pt-2 pb-0 -mb-8 relative z-20">

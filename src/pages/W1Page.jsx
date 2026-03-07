@@ -154,7 +154,7 @@ E - Evaluate 評估判斷（不照單全收，批判 AI 的回答）
 D - Document 歷程記錄（保留與 AI 的對話）`;
 
     return (
-        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e]">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12 py-8 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e]">
 
             {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
             <div className="flex justify-end pt-2 pb-0 -mb-8 relative z-20">

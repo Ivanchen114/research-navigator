@@ -94,7 +94,7 @@ export const ToolDesignPage = () => {
     const currentMethod = methodPitfalls[activeMethod];
 
     return (
-        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12 py-8 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
             {/* Header */}
             <header className="mb-14 pt-8 text-center max-w-[650px] mx-auto">

@@ -103,7 +103,7 @@ export const Home = () => {
                 </div>
             </div>
 
-            <div className="p-6 sm:p-8 md:p-[48px_60px] max-w-[900px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="p-6 sm:p-8 md:p-[48px_60px] max-w-5xl lg:max-w-[1100px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
 
                 {/* HERO */}
                 <div className="mb-14">

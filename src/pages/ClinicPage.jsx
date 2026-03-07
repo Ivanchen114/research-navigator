@@ -56,7 +56,7 @@ export const ClinicPage = () => {
     };
 
     return (
-        <div className="max-w-[900px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
+        <div className="max-w-5xl mx-auto px-6 lg:px-12 py-8 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
             {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
             <div className="flex justify-end pt-2 pb-0 -mb-8 relative z-20">
