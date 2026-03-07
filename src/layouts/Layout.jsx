@@ -1,66 +1,91 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
-import { Menu, X, Home, Navigation2, BarChart2, Search, BookOpen, Users, Gamepad2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp, ShieldAlert, PenTool, ShieldCheck, Clock, Target } from 'lucide-react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 export const Layout = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
 
     const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
     const navSections = [
         {
+            label: '首頁',
             items: [
-                { name: '首頁', path: '/', icon: <Home size={18} /> },
-                { name: '🎮 R.I.B. 特務指揮中心', path: '/games', icon: <Gamepad2 size={18} className="text-amber-500" /> },
+                { name: '首頁', path: '/', status: 'active' },
+                { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
             ]
         },
         {
-            phase: '🔍 探索階段',
-            label: '1️⃣ 問題意識',
+            label: '探索階段',
+            sublabel: '問題意識',
             items: [
-                { name: '發掘問題 (W0)', path: '/discovery', icon: <Search size={18} /> },
-                { name: 'AI-RED 公約 (W1)', path: '/w1', icon: <ShieldAlert size={18} className="text-amber-500" /> },
-                { name: '問題意識 (W2)', path: '/problem-focus', icon: <PenTool size={18} /> },
+                { name: '發掘問題', path: '/discovery', week: 'W0', status: 'done' },
+                { name: 'AI-RED 公約', path: '/w1', week: 'W1', status: 'done' },
+                { name: '問題意識', path: '/problem-focus', week: 'W2', status: 'done' },
             ]
         },
         {
-            label: '2️⃣ 研究規劃',
+            sublabel: '研究規劃',
             items: [
-                { name: '題目健檢 (W3)', path: '/wizard', icon: <Navigation2 size={18} /> },
-                { name: '題目博覽會 (W4)', path: '/w4', icon: <Users size={18} /> },
-                { name: '文獻鑑識 (W5)', path: '/literature-review', icon: <BookOpen size={18} /> },
-                { name: '研究診所 (W6)', path: '/clinic', icon: <Stethoscope size={18} /> },
-                { name: '組隊決策 (W7)', path: '/team-formation', icon: <Users size={18} /> },
+                { name: '題目健檢', path: '/wizard', week: 'W3', status: 'done' },
+                { name: '題目博覽會', path: '/w4', week: 'W4', status: 'active' },
+                { name: '文獻鑑識', path: '/literature-review', week: 'W5', status: 'none' },
+                { name: '研究診所', path: '/clinic', week: 'W6', status: 'none' },
+                { name: '組隊決策', path: '/team-formation', week: 'W7', status: 'none' },
             ]
         },
         {
-            phase: '🎒 裝備與執行',
-            label: '3️⃣ 工具準備',
+            sublabel: '裝備與執行',
             items: [
-                { name: '工具設計 (W8-W9)', path: '/tool-design', icon: <Wrench size={18} /> }
+                { name: '工具準備', path: '#', status: 'locked' },
+                { name: '工具設計', path: '/tool-design', week: 'W8-9', status: 'locked' },
+                { name: '定案與倫理', path: '/w10', week: 'W10', status: 'locked' },
+                { name: '研究診所 I', path: '/w11', week: 'W11', status: 'locked' },
+                { name: '中期盤點', path: '/w12', week: 'W12', status: 'locked' }
             ]
         },
         {
-            label: '4️⃣ 執行週 (W10-W12)',
+            sublabel: '分析與報告',
             items: [
-                { name: '定案與倫理 (W10)', path: '/w10', icon: <ShieldCheck size={18} /> },
-                { name: '研究診所 I (W11)', path: '/w11', icon: <Clock size={18} /> },
-                { name: '中期盤點 (W12)', path: '/w12', icon: <Target size={18} /> }
-            ]
-        },
-        {
-            phase: '📊 實戰分析',
-            label: '5️⃣ 分析與報告',
-            items: [
-                { name: '數據轉譯 (W13)', path: '/chart-selection', icon: <TrendingUp size={18} /> },
-                { name: '資料分析工作坊 (W14)', path: '/analysis', icon: <BarChart2 size={18} /> }
+                { name: '數據轉譯', path: '/chart-selection', week: 'W13', status: 'locked' },
+                { name: '資料分析工作坊', path: '/analysis', week: 'W14', status: 'locked' }
             ]
         }
     ];
 
+    // Helper to determine item status based on current path
+    const getItemStatus = (itemPath, isLocked) => {
+        if (isLocked) return 'locked';
+        if (location.pathname === itemPath) return 'active';
+        // Simplified "done" logic for demo purposes: items before current are done.
+        // In reality, this would be based on actual user progress state.
+        return 'none'; // Fallback
+    };
+
+    // We statically define status in our navSections for the sake of the redesign matching the mockup
+    // but we dynamically override "active" based on the current route.
+    const dynamicSections = navSections.map(section => ({
+        ...section,
+        items: section.items.map(item => {
+            let finalStatus = item.status;
+            if (item.status !== 'locked') {
+                if (location.pathname === item.path) {
+                    finalStatus = 'active';
+                } else if (item.status === 'active') { // If it was marked active but isn't current path
+                    finalStatus = 'none';
+                }
+            }
+            if (item.path === '/' && location.pathname === '/') finalStatus = 'active';
+
+            return { ...item, status: finalStatus };
+        })
+    }));
+
+
     return (
-        <div className="flex h-screen overflow-hidden bg-slate-50">
+        <div className="flex min-h-screen bg-[#f8f7f4] font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6]">
 
             {/* Mobile Sidebar Overlay */}
             {isMobileMenuOpen && (
@@ -70,90 +95,113 @@ export const Layout = () => {
                 />
             )}
 
-            {/* Sidebar Navigation */}
-            <nav
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-800 text-slate-300 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            {/* SIDEBAR */}
+            <aside
+                className={`fixed top-0 left-0 z-50 w-[240px] min-h-screen bg-white border-r border-[#dddbd5] flex flex-col transform transition-transform duration-300 ease-in-out md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}
             >
-                <div className="p-5 bg-slate-900 sticky top-0 shadow-md">
-                    <div className="flex items-center gap-3 mb-2">
-                        <img src="/songshan-logo.svg" alt="松山高中" className="w-10 h-10 bg-white rounded-lg p-1 shadow-sm" />
-                        <div>
-                            <h1 className="text-lg font-bold text-white tracking-wider">研究方法與專題</h1>
-                            <p className="text-[10px] text-blue-400 font-semibold tracking-wider">松山高中 SSSH</p>
+                {/* Brand Header */}
+                <div className="p-[24px_20px_20px] border-b border-[#dddbd5]">
+                    <div className="flex items-center gap-[10px] mb-1">
+                        <div className="w-8 h-8 bg-[#1a1a2e] rounded-lg flex items-center justify-center text-white text-[14px]">
+                            研
+                        </div>
+                        <div className="font-['Noto_Serif_TC',serif] font-bold text-[15px] text-[#1a1a2e]">
+                            研究方法與專題
                         </div>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">AI 時代的高中生專題研究教練</p>
+                    <div className="text-[11px] text-[#8888aa] tracking-[0.05em] ml-[42px]">
+                        松山高中 SSSH
+                    </div>
                 </div>
 
-                <div className="flex-1 py-4 overflow-y-auto">
-                    {navSections.map((section, sIdx) => (
-                        <div key={sIdx} className="mb-2">
-                            {/* 大階段標題 (Phase) */}
-                            {section.phase && (
-                                <div className="px-5 pt-4 pb-2 mt-2">
-                                    <div className="flex items-center gap-2">
-                                        <div className="h-px bg-slate-600 flex-1"></div>
-                                        <span className="text-sm font-bold text-slate-300 tracking-widest">
-                                            {section.phase}
-                                        </span>
-                                        <div className="h-px bg-slate-600 flex-1"></div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* 次分類標題 (Label) */}
+                {/* Navigation Links */}
+                <nav className="flex-1 py-4 overflow-y-auto">
+                    {dynamicSections.map((section, sIdx) => (
+                        <div key={sIdx}>
                             {section.label && (
-                                <div className="px-6 pt-2 pb-1">
-                                    <span className="text-xs font-bold text-slate-500 tracking-wider">
-                                        {section.label}
-                                    </span>
+                                <div className={`text-[10px] font-bold tracking-[0.12em] text-[#8888aa] uppercase px-[20px] pb-1 ${sIdx > 0 ? 'mt-2 pt-2' : 'pt-2'}`}>
+                                    {section.label}
                                 </div>
                             )}
 
-                            {/* 導覽按鈕 */}
-                            {section.items.map((item) => (
+                            {section.sublabel && (
+                                <div className={`text-[9px] text-[#bbb] pt-1 pb-1 px-[20px] ${section.items[0]?.status === 'locked' ? 'opacity-50 mt-1' : ''}`}>
+                                    {section.sublabel}
+                                </div>
+                            )}
+
+                            {section.items.map((item, iIdx) => (
                                 <NavLink
-                                    key={item.path}
-                                    to={item.path}
-                                    end={item.path === '/'}
+                                    key={iIdx}
+                                    to={item.status === 'locked' ? '#' : item.path}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-3 px-6 py-2 transition-colors ${isActive
-                                            ? 'bg-blue-600/20 text-blue-400 border-r-4 border-blue-500 font-bold'
-                                            : 'text-slate-400 hover:bg-slate-700 hover:text-white'
-                                        }`
-                                    }
+                                    className={(navData) => {
+                                        // Use our computed status rather than pure router active state for styling
+                                        const isActive = item.status === 'active';
+                                        const isDone = item.status === 'done';
+                                        const isLocked = item.status === 'locked';
+
+                                        let baseClasses = "flex items-center gap-2 py-[7px] px-[20px] text-[13px] transition-all duration-150 border-l-[3px] decoration-none outline-none ";
+
+                                        if (isActive) {
+                                            baseClasses += "text-[#2d5be3] bg-[#e8eeff] border-[#2d5be3] font-medium";
+                                        } else if (isLocked) {
+                                            baseClasses += "text-[#8888aa] border-transparent opacity-40 cursor-default";
+                                        } else {
+                                            baseClasses += "text-[#4a4a6a] border-transparent hover:bg-[#f8f7f4] hover:text-[#1a1a2e]";
+                                        }
+                                        return baseClasses;
+                                    }}
                                 >
-                                    {item.icon}
-                                    <span className="text-sm">{item.name}</span>
+                                    <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.status === 'active' ? 'bg-[#2d5be3] shadow-[0_0_0_3px_#e8eeff]' :
+                                            item.status === 'done' ? 'bg-[#2e7d5a]' :
+                                                item.status === 'locked' ? 'bg-[#c8c5bc]' :
+                                                    'bg-[#c8c5bc]'
+                                        }`} />
+                                    {item.name}
+                                    {item.week && (
+                                        <span className={`ml-auto text-[10px] font-['DM_Mono',monospace] px-1.5 py-[1px] rounded-[3px] ${item.status === 'active' ? 'bg-[#e8eeff] text-[#2d5be3]' :
+                                                'bg-[#f0ede6] text-[#8888aa]'
+                                            }`}>
+                                            {item.week}
+                                        </span>
+                                    )}
                                 </NavLink>
                             ))}
                         </div>
                     ))}
+                </nav>
+
+                {/* AIRed Footer */}
+                <div className="p-[16px_20px] border-t border-[#dddbd5]">
+                    <div className="flex items-center gap-2 text-[11px] text-[#8888aa]">
+                        <span>AI-RED</span>
+                        <span className="font-['DM_Mono',monospace] bg-[#1a1a2e] text-white px-1.5 py-0.5 rounded-[3px] text-[10px]">
+                            V2.0.4
+                        </span>
+                        <span>學習框架</span>
+                    </div>
                 </div>
-            </nav>
+            </aside>
 
-
-            {/* Main Content Area */}
-            <div className="flex flex-col flex-1 w-full min-w-0">
-
+            {/* MAIN CONTENT AREA */}
+            <div className="flex flex-col flex-1 w-full min-w-0 md:ml-[240px]">
                 {/* Mobile Header */}
-                <div className="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center z-20 shadow-md">
-                    <h1 className="font-bold flex items-center gap-2">
-                        <img src="/songshan-logo.svg" alt="松山高中" className="w-7 h-7 bg-white rounded p-0.5" />
-                        研究方法與專題
-                    </h1>
+                <div className="md:hidden bg-white border-b border-[#dddbd5] p-3 flex justify-between items-center z-20 sticky top-0">
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-[#1a1a2e] rounded text-white flex items-center justify-center text-[10px]">研</div>
+                        <h1 className="font-['Noto_Serif_TC',serif] font-bold text-[14px] text-[#1a1a2e]">研究方法與專題</h1>
+                    </div>
                     <button
                         onClick={toggleMobileMenu}
-                        className="text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
+                        className="text-[#4a4a6a] focus:outline-none p-1"
                     >
-                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
                 </div>
 
-                {/* Scrollable Main View */}
-                <main className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+                <main className="flex-1 w-full relative">
                     <Outlet />
                     <Footer />
                 </main>

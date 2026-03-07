@@ -1,414 +1,302 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { Search, BrainCircuit, BarChart2, ArrowRight, BookOpen, Users, Gamepad2, Navigation2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp, Map, Compass, Target, Rocket, Flag } from 'lucide-react';
+import { Search, BarChart2, BookOpen, Users, Gamepad2, Navigation2, Stethoscope, Wrench, HeartPulse, Bug, ChartNoAxesCombined, Palette, TrendingUp, Target } from 'lucide-react';
+
+const CardIconRow = ({ icon: Icon, type, isMission }) => (
+    <div className="flex items-center gap-2 mb-1.5">
+        <div className={`w-7 h-7 rounded-md border flex items-center justify-center text-[13px] ${isMission ? 'bg-white/10 border-white/15 text-white' : 'bg-[#f0ede6] border-[#dddbd5] text-[#1a1a2e]'}`}>
+            <Icon size={16} />
+        </div>
+        <div className={`text-[10px] font-['DM_Mono',monospace] tracking-[0.08em] uppercase px-1.5 py-0.5 rounded-[3px] ${isMission ? 'text-[#2d5be3] bg-[#e8eeff]' : 'text-[#8888aa]'}`}>
+            {type}
+        </div>
+    </div>
+);
+
+const PhaseCard = ({ icon, type, isMission, title, desc, onClick }) => (
+    <div
+        onClick={onClick}
+        className={`p-[18px_22px] flex flex-col gap-1.5 transition-colors duration-150 cursor-pointer group ${isMission
+            ? 'bg-[#1a1a2e] hover:bg-[#2a2a4a] col-span-1 sm:col-span-2'
+            : 'bg-white hover:bg-[#f8f7f4]'
+            }`}
+    >
+        <CardIconRow icon={icon} type={type} isMission={isMission} />
+        <h4 className={`text-[14px] font-bold ${isMission ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
+            {title}
+        </h4>
+        <p className={`text-[12px] leading-[1.55] ${isMission ? 'text-white/90' : 'text-[#4a4a6a]'}`}>
+            {desc}
+        </p>
+        <div className={`mt-auto text-[12px] self-end opacity-0 group-hover:opacity-100 transition-opacity duration-150 ${isMission ? 'text-[#c9a84c]' : 'text-[#2d5be3]'}`}>
+            {isMission ? '→ 進入任務' : '→'}
+        </div>
+    </div>
+);
+
+const PhaseGroup = ({ num, title, weeks, children }) => (
+    <div className="mb-8 border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white">
+        <div className="flex items-center gap-4 p-[18px_24px] border-b border-[#dddbd5] bg-[#f0ede6]">
+            <div className="font-['DM_Mono',monospace] text-[11px] text-[#8888aa] tracking-[0.08em]">
+                Phase {num}
+            </div>
+            <div className="font-bold text-[15px] text-[#1a1a2e]">
+                {title}
+            </div>
+            <div className="ml-auto font-['DM_Mono',monospace] text-[11px] text-[#8888aa] bg-[#f8f7f4] border border-[#dddbd5] px-2 py-0.5 rounded text-center">
+                {weeks}
+            </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-[1px] bg-[#dddbd5]">
+            {children}
+        </div>
+    </div>
+);
+
+const QuickNavItem = ({ step, title, desc, isPrimary, onClick }) => (
+    <div
+        onClick={onClick}
+        className={`p-[20px_24px] cursor-pointer transition-colors duration-150 flex flex-col ${isPrimary ? 'bg-[#1a1a2e] hover:bg-[#2a2a4a]' : 'bg-white hover:bg-[#f8f7f4]'
+            }`}
+    >
+        <div className={`text-[10px] font-['DM_Mono',monospace] uppercase tracking-[0.1em] mb-1.5 ${isPrimary ? 'text-white/50' : 'text-[#8888aa]'}`}>
+            {step}
+        </div>
+        <div className={`text-[14px] font-bold mb-1 ${isPrimary ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
+            {title}
+        </div>
+        <div className={`text-[12px] leading-[1.5] ${isPrimary ? 'text-white/90' : 'text-[#4a4a6a]'}`}>
+            {desc}
+        </div>
+    </div>
+);
+
+const AIRedItem = ({ keyName, zhName, desc }) => (
+    <div className="bg-white p-[16px_18px] flex flex-col justify-start">
+        <div className="font-['DM_Mono',monospace] text-[13px] font-medium text-[#2d5be3] mb-1">
+            {keyName}
+        </div>
+        <div className="font-bold text-[14px] mb-1 text-[#1a1a2e]">
+            {zhName}
+        </div>
+        <div className="text-[11px] text-[#4a4a6a] leading-[1.5]">
+            {desc}
+        </div>
+    </div>
+);
 
 export const Home = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="min-h-screen bg-[#f8f7f4] text-[#1a1a2e] font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6]">
 
-            {/* Hero Section */}
-            <section className="text-center py-12 md:py-20 space-y-6">
-                <div className="flex flex-col items-center gap-3 mb-4">
-                    <img src="/songshan-logo.svg" alt="松山高中" className="w-16 h-16 bg-white rounded-2xl p-2 shadow-lg" />
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold tracking-wider">
-                        松山高中 × 研究方法與專題
-                    </span>
+            {/* TOP BAR */}
+            <div className="h-[52px] bg-white border-b border-[#dddbd5] flex items-center px-6 md:px-10 gap-6 sticky top-0 z-50">
+                <div className="text-[12px] text-[#8888aa] font-['DM_Mono',monospace] flex items-center gap-2">
+                    <span className="text-[#4a4a6a]">研究方法與專題</span> / <span>首頁</span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-                    從發現問題到解讀結論<br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                        AI 陪你做研究
-                    </span>
-                </h1>
-                <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-                    這不是一個幫你寫作業的工具，而是一個專屬你的「研究教練」。
-                    讓我們透過人機協作，把複雜的研究方法變得像通關遊戲一樣簡單！
-                </p>
-            </section>
-
-            {/* Choose Your Path Section */}
-            <section>
-                <h2 className="text-2xl font-bold text-center text-slate-800 mb-8">
-                    你現在的研究進度在哪裡？
-                </h2>
-
-                <div className="grid md:grid-cols-3 gap-6">
-
-                    {/* Path 1: Idea Generation & Method Selection */}
-                    <Card className="hover:shadow-lg transition-shadow duration-300 border-2 border-transparent hover:border-amber-100 cursor-pointer group" onClick={() => navigate('/discovery')}>
-                        <CardContent className="p-6 md:p-8 flex flex-col items-center text-center space-y-4 h-full">
-                            <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform shrink-0">
-                                <Search size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-slate-800">
-                                第一步：發掘問題 (W0-W2)
-                            </h3>
-                            <p className="text-sm text-slate-600 flex-1">
-                                「我還沒有題目...」或「我的問題好像太大太廢話...」<br />
-                                這裡有：<strong>觀察力</strong>、<strong>AI-RED 公約</strong> 與 <strong>問題意識</strong>。
-                            </p>
-                            <div className="grid grid-cols-1 gap-2 w-full mt-2">
-                                <Button variant="outline" size="sm" className="text-xs h-8 border-slate-200" onClick={(e) => { e.stopPropagation(); navigate('/discovery'); }}>W0 觀察力啟動</Button>
-                                <Button variant="outline" size="sm" className="text-xs h-8 border-slate-200" onClick={(e) => { e.stopPropagation(); navigate('/w1'); }}>W1 AI-RED 公約</Button>
-                                <Button variant="outline" size="sm" className="text-xs h-8 border-slate-200" onClick={(e) => { e.stopPropagation(); navigate('/problem-focus'); }}>W2 問題意識鍛鍊</Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Path 2: Execution & Method */}
-                    <Card className="hover:shadow-lg transition-shadow duration-300 border-2 border-transparent hover:border-blue-100 cursor-pointer group" onClick={() => navigate('/wizard')}>
-                        <CardContent className="p-6 md:p-8 flex flex-col items-center text-center space-y-4 h-full">
-                            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform shrink-0">
-                                <Compass size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-slate-800">
-                                第二步：方法與工具 (W3-W9)
-                            </h3>
-                            <p className="text-sm text-slate-600 flex-1">
-                                「要用什麼方法做？」「工具怎麼設計？夥伴怎麼找？」<br />
-                                幫題目掛號，找出合適的研究工具，並組建團隊。
-                            </p>
-                            <div className="grid grid-cols-2 gap-2 w-full mt-2">
-                                <Button variant="outline" size="sm" className="text-[11px] h-8 border-slate-200 px-1" onClick={(e) => { e.stopPropagation(); navigate('/wizard'); }}>W3 方法快篩</Button>
-                                <Button variant="outline" size="sm" className="text-[11px] h-8 border-slate-200 px-1" onClick={(e) => { e.stopPropagation(); navigate('/w4'); }}>W4 題目博覽</Button>
-                                <Button variant="outline" size="sm" className="text-[11px] h-8 border-slate-200 px-1" onClick={(e) => { e.stopPropagation(); navigate('/clinic'); }}>W5 研究診所</Button>
-                                <Button variant="outline" size="sm" className="text-[11px] h-8 border-slate-200 px-1" onClick={(e) => { e.stopPropagation(); navigate('/literature-review'); }}>W6 文獻鑑識</Button>
-                                <Button variant="outline" size="sm" className="text-[11px] h-8 border-slate-200 col-span-2 mt-1" onClick={(e) => { e.stopPropagation(); navigate('/team-formation'); }}>W7 組隊與決策</Button>
-                                <Button variant="outline" size="sm" className="text-[11px] h-8 border-slate-200 col-span-2" onClick={(e) => { e.stopPropagation(); navigate('/tool-design'); }}>W8-W9 工具設計</Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Path 3: Data Analysis */}
-                    <Card className="hover:shadow-lg transition-shadow duration-300 border-2 border-transparent hover:border-indigo-100 cursor-pointer group" onClick={() => navigate('/analysis')}>
-                        <CardContent className="p-6 md:p-8 flex flex-col items-center text-center space-y-4 h-full">
-                            <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform shrink-0">
-                                <BarChart2 size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-slate-800">
-                                第三步：解讀與結論 (W10+)
-                            </h3>
-                            <p className="text-sm text-slate-600 flex-1">
-                                「我有問卷數據/訪談稿了，接下來救命啊...」<br />
-                                來這裡，學習如何正確使用 AI 下指令，產出精美圖表與洞察。
-                            </p>
-                            <div className="flex flex-col gap-2 w-full mt-auto pt-2">
-                                <Button
-                                    variant="outline"
-                                    className="w-full group-hover:bg-indigo-600 group-hover:text-white border-indigo-600 text-indigo-600 hover:bg-indigo-50 transition-colors"
-                                >
-                                    解讀結論大廳 <ArrowRight size={16} className="ml-2" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="w-full text-xs text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50"
-                                    onClick={(e) => { e.stopPropagation(); navigate('/chart-selection'); }}
-                                >
-                                    圖表選用指南 <ArrowRight size={14} className="ml-1" />
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-
+                <div className="ml-auto flex items-center gap-2 sm:gap-3">
+                    <span className="hidden sm:inline-block text-[11px] px-2.5 py-1 border border-[#dddbd5] rounded text-[#4a4a6a] font-['DM_Mono',monospace]">可投影</span>
+                    <span className="hidden sm:inline-block text-[11px] px-2.5 py-1 border border-[#dddbd5] rounded text-[#4a4a6a] font-['DM_Mono',monospace]">可手機</span>
+                    <span className="text-[11px] px-2.5 py-1 border border-[#2d5be3] rounded text-[#2d5be3] bg-[#e8eeff] font-['DM_Mono',monospace]">課堂 + 自學雙模式</span>
                 </div>
-            </section>
+            </div>
 
-            {/* Course Roadmap Section */}
-            <section className="relative max-w-4xl mx-auto py-8">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-                        研究準備地圖 (Course Roadmap)
-                    </h2>
-                    <p className="text-sm text-slate-500 mt-2">
-                        按照週次循序漸進，點擊各階段的卡片以前往對應的學習模組與遊戲。
+            <div className="p-6 sm:p-8 md:p-[48px_60px] max-w-[900px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+
+                {/* HERO */}
+                <div className="mb-14">
+                    <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2d5be3] mb-3">
+                        SSSH × 研究方法與專題 · 高一必修
+                    </div>
+                    <h1 className="font-['Noto_Serif_TC',serif] text-4xl md:text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                        從發現問題<br className="hidden md:block" />
+                        到解讀結論<br className="hidden md:block" />
+                        <span className="text-[#2d5be3] font-normal italic">AI 陪你做研究</span>
+                    </h1>
+                    <p className="text-[15px] text-[#4a4a6a] leading-[1.75] max-w-[560px]">
+                        這不是一個幫你寫作業的工具，而是一個專屬你的「研究教練」。透過人機協作，把複雜的研究方法變得像通關遊戲一樣簡單。
                     </p>
                 </div>
 
-                {/* 垂直時間軸線 */}
-                <div className="absolute left-[39px] md:left-16 top-40 bottom-24 w-1 bg-slate-200 rounded-full z-0"></div>
-
-                <div className="space-y-12 relative z-10 pl-[80px] md:pl-36">
-                    {/* Phase 1 */}
-                    <div className="relative group">
-                        <div className="absolute -left-[80px] md:-left-[108px] top-4 w-14 h-14 md:w-20 md:h-20 bg-white rounded-full border-4 border-amber-100 text-amber-500 z-10 shadow-sm group-hover:scale-110 group-hover:border-amber-400 group-hover:shadow-md transition-all flex flex-col items-center justify-center">
-                            <Map size={24} className="md:w-8 md:h-8" />
-                            <span className="text-[10px] md:text-xs font-bold mt-0.5">Phase 1</span>
-                        </div>
-                        <Card className="hover:shadow-xl hover:border-amber-200 transition-all duration-300">
-                            <CardContent className="p-0">
-                                <div className="bg-amber-50 px-5 py-3 border-b border-amber-100 flex items-center">
-                                    <h3 className="font-bold text-amber-900 text-lg">
-                                        啟航與問題意識 <span className="text-amber-600 font-medium text-sm ml-2">W0-W2</span>
-                                    </h3>
-                                </div>
-                                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white">
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/discovery')}>
-                                        <div className="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center shrink-0"><Search size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">發掘問題筆記本</h4>
-                                            <p className="text-xs text-slate-500">幫你的現象找落差，鍛鍊問題意識。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/w1')}>
-                                        <div className="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center shrink-0"><BookOpen size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">AI-RED 公約 (W1)</h4>
-                                            <p className="text-xs text-slate-500">認識人機協作法則。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/problem-focus')}>
-                                        <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center shrink-0"><Target size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">問題意識鍛鍊 (W2)</h4>
-                                            <p className="text-xs text-slate-500">把問題變精準，找到研究靶心。</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Phase 2 */}
-                    <div className="relative group">
-                        <div className="absolute -left-[80px] md:-left-[108px] top-4 w-14 h-14 md:w-20 md:h-20 bg-white rounded-full border-4 border-blue-100 text-blue-500 z-10 shadow-sm group-hover:scale-110 group-hover:border-blue-400 group-hover:shadow-md transition-all flex flex-col items-center justify-center">
-                            <Compass size={24} className="md:w-8 md:h-8" />
-                            <span className="text-[10px] md:text-xs font-bold mt-0.5">Phase 2</span>
-                        </div>
-                        <Card className="hover:shadow-xl hover:border-blue-200 transition-all duration-300">
-                            <CardContent className="p-0">
-                                <div className="bg-blue-50 px-5 py-3 border-b border-blue-100 flex items-center">
-                                    <h3 className="font-bold text-blue-900 text-lg">
-                                        方法快篩與文獻回顧 <span className="text-blue-600 font-medium text-sm ml-2">W3-W6</span>
-                                    </h3>
-                                </div>
-                                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white">
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/wizard')}>
-                                        <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shrink-0"><Navigation2 size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">方法快篩 (W3)</h4>
-                                            <p className="text-xs text-slate-500">回答三問題，鎖定適合的方法。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/w4')}>
-                                        <div className="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center shrink-0"><Users size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">題目博覽會 (W4)</h4>
-                                            <p className="text-xs text-slate-500">辦一場個人博覽會，讓同學幫你把關。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/clinic')}>
-                                        <div className="w-10 h-10 bg-slate-500/20 text-slate-400 border border-slate-500/30 rounded-lg flex items-center justify-center shrink-0"><Stethoscope size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-slate-400 transition-colors text-sm mb-1">研究診所 (W5)</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">用分科三問確認選對研究工具。</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-slate-500/20 text-slate-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-slate-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/literature-review')}>
-                                        <div className="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center shrink-0"><BookOpen size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">文獻鑑識 (W6)</h4>
-                                            <p className="text-xs text-slate-500">學會辨別可信度與避免抄襲。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-rose-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/question-er')}>
-                                        <div className="w-10 h-10 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-lg flex items-center justify-center shrink-0"><HeartPulse size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-rose-400 transition-colors text-sm mb-1">行動代號：靶心</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究問題精煉與對焦訓練。為生病的問題開立處方！</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-rose-500/20 text-rose-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-rose-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-amber-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/tool-quiz')}>
-                                        <div className="w-10 h-10 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg flex items-center justify-center shrink-0"><Gamepad2 size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-amber-400 transition-colors text-sm mb-1">行動代號：裝備</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究工具與蒐集方法辨識。測試你的判斷力！</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-amber-500/20 text-amber-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-amber-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-emerald-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden sm:col-span-2" onClick={() => navigate('/game/citation-detective')}>
-                                        <div className="w-10 h-10 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg flex items-center justify-center shrink-0"><Search size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-emerald-400 transition-colors text-sm mb-1">行動代號：獵狐</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">文獻真偽辨識與學術倫理審查。判斷引用合法性！</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-emerald-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Phase 3 */}
-                    <div className="relative group">
-                        <div className="absolute -left-[80px] md:-left-[108px] top-4 w-14 h-14 md:w-20 md:h-20 bg-white rounded-full border-4 border-emerald-100 text-emerald-500 z-10 shadow-sm group-hover:scale-110 group-hover:border-emerald-400 group-hover:shadow-md transition-all flex flex-col items-center justify-center">
-                            <Flag size={24} className="md:w-8 md:h-8" />
-                            <span className="text-[10px] md:text-xs font-bold mt-0.5">Phase 3</span>
-                        </div>
-                        <Card className="hover:shadow-xl hover:border-emerald-200 transition-all duration-300">
-                            <CardContent className="p-0">
-                                <div className="bg-emerald-50 px-5 py-3 border-b border-emerald-100 flex items-center">
-                                    <h3 className="font-bold text-emerald-900 text-lg">
-                                        組隊與決策 <span className="text-emerald-600 font-medium text-sm ml-2">W7</span>
-                                    </h3>
-                                </div>
-                                <div className="p-5 grid grid-cols-1 bg-white">
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/team-formation')}>
-                                        <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center shrink-0"><Users size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">組隊決策指南</h4>
-                                            <p className="text-xs text-slate-500">找到能力互補的夥伴，或宣告成為 Solo 極客。</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Phase 4 */}
-                    <div className="relative group">
-                        <div className="absolute -left-[80px] md:-left-[108px] top-4 w-14 h-14 md:w-20 md:h-20 bg-white rounded-full border-4 border-indigo-100 text-indigo-500 z-10 shadow-sm group-hover:scale-110 group-hover:border-indigo-400 group-hover:shadow-md transition-all flex flex-col items-center justify-center">
-                            <Target size={24} className="md:w-8 md:h-8" />
-                            <span className="text-[10px] md:text-xs font-bold mt-0.5">Phase 4</span>
-                        </div>
-                        <Card className="hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
-                            <CardContent className="p-0">
-                                <div className="bg-indigo-50 px-5 py-3 border-b border-indigo-100 flex items-center">
-                                    <h3 className="font-bold text-indigo-900 text-lg">
-                                        研究工具設計 <span className="text-indigo-600 font-medium text-sm ml-2">W8-W9</span>
-                                    </h3>
-                                </div>
-                                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white">
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/tool-design')}>
-                                        <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center shrink-0"><Wrench size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">工具設計指南</h4>
-                                            <p className="text-xs text-slate-500">學會處方診斷三大標準。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-emerald-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/rx-inspector')}>
-                                        <div className="w-10 h-10 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg flex items-center justify-center shrink-0"><Bug size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-emerald-400 transition-colors text-sm mb-1">行動代號：防線</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">研究設計與方法學避險測試。找出設計中的 Bug！</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-emerald-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Phase 5 */}
-                    <div className="relative group">
-                        <div className="absolute -left-[80px] md:-left-[108px] top-4 w-14 h-14 md:w-20 md:h-20 bg-white rounded-full border-4 border-violet-100 text-violet-500 z-10 shadow-sm group-hover:scale-110 group-hover:border-violet-400 group-hover:shadow-md transition-all flex flex-col items-center justify-center">
-                            <Rocket size={24} className="md:w-8 md:h-8" />
-                            <span className="text-[10px] md:text-xs font-bold mt-0.5">Phase 5</span>
-                        </div>
-                        <Card className="hover:shadow-xl hover:border-violet-200 transition-all duration-300">
-                            <CardContent className="p-0">
-                                <div className="bg-violet-50 px-5 py-3 border-b border-violet-100 flex items-center">
-                                    <h3 className="font-bold text-violet-900 text-lg">
-                                        數據分析與結論 <span className="text-violet-600 font-medium text-sm ml-2">W10+</span>
-                                    </h3>
-                                </div>
-                                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white">
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/analysis')}>
-                                        <div className="w-10 h-10 bg-violet-100 text-violet-600 rounded-lg flex items-center justify-center shrink-0"><BarChart2 size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">解讀與結論大廳</h4>
-                                            <p className="text-xs text-slate-500">數據清洗、AI輔助洞察寫作。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 cursor-pointer" onClick={() => navigate('/chart-selection')}>
-                                        <div className="w-10 h-10 bg-sky-100 text-sky-600 rounded-lg flex items-center justify-center shrink-0"><TrendingUp size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 text-sm mb-1">圖表選用原則</h4>
-                                            <p className="text-xs text-slate-500">選圖表如選盤子，掌握數據說故事的黃金公式。</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-fuchsia-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/chart-matcher')}>
-                                        <div className="w-10 h-10 bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30 rounded-lg flex items-center justify-center shrink-0"><Palette size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-fuchsia-400 transition-colors text-sm mb-1">行動代號：解碼</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">統計圖表選擇與呈現最佳化。幫數據找最佳圖表！</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-fuchsia-500/20 text-fuchsia-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-fuchsia-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-4 p-3 rounded-xl transition-all border border-slate-700 bg-slate-900 hover:bg-slate-800 hover:border-cyan-500/50 hover:shadow-lg cursor-pointer group shadow-sm relative overflow-hidden" onClick={() => navigate('/game/data-detective')}>
-                                        <div className="w-10 h-10 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-lg flex items-center justify-center shrink-0"><ChartNoAxesCombined size={20} /></div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-100 group-hover:text-cyan-400 transition-colors text-sm mb-1">行動代號：濾鏡</h4>
-                                            <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">客觀數據解讀與批判性思維培養。分辨正確推論！</p>
-                                            {/* Game Identifier Badge */}
-                                            <div className="absolute top-0 right-0 bg-cyan-500/20 text-cyan-400 text-[10px] font-black tracking-widest px-2 py-0.5 rounded-bl-lg border-b border-l border-cyan-500/30 backdrop-blur-sm">互動任務</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
+                {/* QUICK NAV */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden mb-14">
+                    <QuickNavItem
+                        step="Step 01 · W0–W2"
+                        title="發掘問題"
+                        desc="「我還沒有題目...」從觀察力開始，鍛鍊問題意識。"
+                        onClick={() => {
+                            document.getElementById('phase-1')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                    />
+                    <QuickNavItem
+                        step="Step 02 · W3–W9"
+                        title="方法與工具"
+                        desc="「要用什麼方法做？」「工具怎麼設計？夥伴怎麼找？」幫題目掛號，找出合適的研究工具，並組建團隊。"
+                        onClick={() => {
+                            document.getElementById('phase-2')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                    />
+                    <QuickNavItem
+                        step="Step 03 · W10+"
+                        title="解讀與結論"
+                        desc="「我有問卷數據/訪談稿了，接下來救命啊...」學習正確使用 AI，產出精美圖表與洞察。→"
+                        isPrimary={true}
+                        onClick={() => {
+                            document.getElementById('phase-5')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                    />
                 </div>
-            </section>
 
-
-            {/* AI-RED Ethical Guide */}
-            <section className="mt-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 -mt-16 -mr-16 text-slate-700 opacity-50">
-                    <BrainCircuit size={200} />
-                </div>
-                <div className="relative z-10">
-                    <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                        <span className="bg-emerald-500 text-white p-2 rounded-lg text-sm">協作法則</span>
-                        牢記 AI-RED 五大原則
+                {/* ROADMAP HEADER */}
+                <div className="flex items-baseline gap-3 mb-6 flex-wrap">
+                    <h2 className="font-['Noto_Serif_TC',serif] text-[20px] font-bold text-[#1a1a2e]">
+                        研究準備地圖
                     </h2>
-                    <p className="text-slate-300 mb-8 max-w-2xl">
-                        AI 是你的「研究助理」，不是你的「代筆者」。在使用本網站工具前，請承諾遵守以下準則：
-                    </p>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
-                            <div className="font-bold text-emerald-400 text-lg mb-1">Ascribe</div>
-                            <div className="text-sm font-medium text-white mb-2">誠實歸屬</div>
-                            <div className="text-xs text-slate-400">誠實說明哪裡用了 AI。</div>
-                        </div>
-                        <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
-                            <div className="font-bold text-emerald-400 text-lg mb-1">Inquire</div>
-                            <div className="text-sm font-medium text-white mb-2">提問</div>
-                            <div className="text-xs text-slate-400">精準提問，不依賴模糊指令。</div>
-                        </div>
-                        <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
-                            <div className="font-bold text-emerald-400 text-lg mb-1">Reference</div>
-                            <div className="text-sm font-medium text-white mb-2">引用</div>
-                            <div className="text-xs text-slate-400">查證 AI 給的資料來源。</div>
-                        </div>
-                        <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
-                            <div className="font-bold text-emerald-400 text-lg mb-1">Evaluate</div>
-                            <div className="text-sm font-medium text-white mb-2">評估</div>
-                            <div className="text-xs text-slate-400">判斷內容是否合理，不照單全收。</div>
-                        </div>
-                        <div className="bg-slate-800/80 p-4 rounded-xl border border-slate-700">
-                            <div className="font-bold text-emerald-400 text-lg mb-1">Document</div>
-                            <div className="text-sm font-medium text-white mb-2">紀錄</div>
-                            <div className="text-xs text-slate-400">保留與 AI 的對話紀錄。</div>
-                        </div>
+                    <div className="text-[13px] text-[#8888aa]">
+                        Course Roadmap · 按週次循序漸進
                     </div>
                 </div>
-            </section>
 
+                {/* Phase 1 */}
+                <div id="phase-1">
+                    <PhaseGroup num="01" title="啟航與問題意識" weeks="W0 – W2">
+                        <PhaseCard
+                            icon={Search} type="學習模組"
+                            title="發掘問題筆記本" desc="幫你的現象找落差，鍛鍊問題意識。"
+                            onClick={() => navigate('/discovery')}
+                        />
+                        <PhaseCard
+                            icon={BookOpen} type="學習模組 · W1"
+                            title="AI-RED 公約" desc="認識人機協作法則。"
+                            onClick={() => navigate('/w1')}
+                        />
+                        <PhaseCard
+                            icon={Target} type="互動任務 · 行動代號：靶心" isMission={true}
+                            title="問題意識鍛鍊 (W2)" desc="把問題變精準，找到研究靶心。"
+                            onClick={() => navigate('/problem-focus')}
+                        />
+                    </PhaseGroup>
+                </div>
+
+                {/* Phase 2 */}
+                <div id="phase-2">
+                    <PhaseGroup num="02" title="方法快篩與文獻回顧" weeks="W3 – W6">
+                        <PhaseCard
+                            icon={Navigation2} type="學習模組 · W3"
+                            title="方法快篩 (W3)" desc="回答三問題，鎖定適合的方法。"
+                            onClick={() => navigate('/wizard')}
+                        />
+                        <PhaseCard
+                            icon={Users} type="學習模組 · W4"
+                            title="題目博覽會 (W4)" desc="辦一場個人博覽會，讓同學幫你把關。"
+                            onClick={() => navigate('/w4')}
+                        />
+                        <PhaseCard
+                            icon={Stethoscope} type="互動任務 · 診所" isMission={true}
+                            title="研究診所 (W5)" desc="用分科三問確認選對研究工具。"
+                            onClick={() => navigate('/clinic')}
+                        />
+                        <PhaseCard
+                            icon={BookOpen} type="學習模組 · W6"
+                            title="文獻鑑識 (W6)" desc="學會辨別可信度與避免抄襲。"
+                            onClick={() => navigate('/literature-review')}
+                        />
+                        <PhaseCard
+                            icon={HeartPulse} type="互動任務 · 行動代號：靶心" isMission={true}
+                            title="行動代號：靶心" desc="研究問題精煉與對焦訓練。為生病的問題開立處方！"
+                            onClick={() => navigate('/game/question-er')}
+                        />
+                        <PhaseCard
+                            icon={Gamepad2} type="互動任務 · 行動代號：裝備" isMission={true}
+                            title="行動代號：裝備" desc="研究工具與蒐集方法辨識。測試你的判斷力！"
+                            onClick={() => navigate('/game/tool-quiz')}
+                        />
+                        <PhaseCard
+                            icon={Search} type="互動任務 · 行動代號：獵狐" isMission={true}
+                            title="行動代號：獵狐" desc="文獻真偽辨識與學術倫理審查。判斷引用合法性！"
+                            onClick={() => navigate('/game/citation-detective')}
+                        />
+                    </PhaseGroup>
+                </div>
+
+                {/* Phase 3 */}
+                <div id="phase-3">
+                    <PhaseGroup num="03" title="組隊與決策" weeks="W7">
+                        <PhaseCard
+                            icon={Users} type="學習模組 · W7"
+                            title="組隊決策指南" desc="找到能力互補的夥伴，或宣告成為 Solo 極客。"
+                            onClick={() => navigate('/team-formation')}
+                        />
+                    </PhaseGroup>
+                </div>
+
+                {/* Phase 4 */}
+                <div id="phase-4">
+                    <PhaseGroup num="04" title="研究工具設計" weeks="W8 – W9">
+                        <PhaseCard
+                            icon={Wrench} type="學習模組 · W8-W9"
+                            title="工具設計指南" desc="學會處方診斷三大標準。"
+                            onClick={() => navigate('/tool-design')}
+                        />
+                        <PhaseCard
+                            icon={Bug} type="互動任務 · 行動代號：防線" isMission={true}
+                            title="行動代號：防線" desc="研究設計與方法學避險測試。找出設計中的 Bug！"
+                            onClick={() => navigate('/game/rx-inspector')}
+                        />
+                    </PhaseGroup>
+                </div>
+
+                {/* Phase 5 */}
+                <div id="phase-5">
+                    <PhaseGroup num="05" title="數據分析與結論" weeks="W10+">
+                        <PhaseCard
+                            icon={BarChart2} type="學習模組 · 分析部"
+                            title="解讀與結論大廳" desc="數據清洗、AI輔助洞察寫作。"
+                            onClick={() => navigate('/analysis')}
+                        />
+                        <PhaseCard
+                            icon={TrendingUp} type="學習模組 · 設計部"
+                            title="圖表選用原則" desc="選圖表如選盤子，掌握數據說故事的黃金公式。"
+                            onClick={() => navigate('/chart-selection')}
+                        />
+                        <PhaseCard
+                            icon={Palette} type="互動任務 · 行動代號：解碼" isMission={true}
+                            title="行動代號：解碼" desc="統計圖表選擇與呈現最佳化。幫數據找最佳圖表！"
+                            onClick={() => navigate('/game/chart-matcher')}
+                        />
+                        <PhaseCard
+                            icon={ChartNoAxesCombined} type="互動任務 · 行動代號：濾鏡" isMission={true}
+                            title="行動代號：濾鏡" desc="客觀數據解讀與批判性思維培養。分辨正確推論！"
+                            onClick={() => navigate('/game/data-detective')}
+                        />
+                    </PhaseGroup>
+                </div>
+
+                {/* AI-RED Ethical Guide */}
+                <div className="mt-3 border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white">
+                    <div className="p-[20px_24px] border-b border-[#dddbd5] flex items-center gap-3 flex-wrap">
+                        <span className="text-[11px] font-['DM_Mono',monospace] bg-[#1a1a2e] text-white px-2 py-[3px] rounded tracking-[0.06em]">
+                            協作法則
+                        </span>
+                        <span className="font-bold text-[15px] text-[#1a1a2e]">
+                            牢記 AI-RED 五大原則
+                        </span>
+                        <span className="ml-auto text-[12px] text-[#8888aa] w-full sm:w-auto mt-2 sm:mt-0">
+                            AI 是你的「研究助理」，不是你的「代筆者」
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-[#dddbd5]">
+                        <AIRedItem keyName="Ascribe" zhName="誠實歸屬" desc="誠實說明哪裡用了 AI。" />
+                        <AIRedItem keyName="Inquire" zhName="提問" desc="精準提問，不依賴模糊指令。" />
+                        <AIRedItem keyName="Reference" zhName="引用" desc="查證 AI 給的資料來源。" />
+                        <AIRedItem keyName="Evaluate" zhName="評估" desc="判斷內容是否合理，不照單全收。" />
+                        <AIRedItem keyName="Document" zhName="紀錄" desc="保留與 AI 的對話記錄。" />
+                    </div>
+                </div>
+
+            </div>
         </div>
     );
 };
