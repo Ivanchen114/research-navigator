@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Stethoscope, ArrowRight, Gamepad2, Lightbulb, HelpCircle, CheckCircle2 } from 'lucide-react';
+import { Stethoscope, ArrowRight, Gamepad2, Lightbulb, HelpCircle, CheckCircle2, Map } from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
+import { W6Data } from '../data/lessonMaps';
 
 const triageQuestions = [
     {
@@ -47,6 +49,7 @@ const practiceItems = [
 
 export const ClinicPage = () => {
     const [revealedPractice, setRevealedPractice] = useState({});
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     const toggleReveal = (idx) => {
         setRevealedPractice(prev => ({ ...prev, [idx]: !prev[idx] }));
@@ -54,6 +57,24 @@ export const ClinicPage = () => {
 
     return (
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
+
+            {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+                <button
+                    onClick={() => setShowLessonMap(!showLessonMap)}
+                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-red-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    title="教師專用：顯示課程地圖"
+                >
+                    <Map size={12} />
+                    {showLessonMap ? 'Hide Map' : 'Instructor View'}
+                </button>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W6Data} />
+                </div>
+            )}
 
             {/* Header */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">

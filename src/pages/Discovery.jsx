@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Eye, BrainCircuit, ArrowRight } from 'lucide-react';
+import { Search, Eye, BrainCircuit, ArrowRight, Map } from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
+import { W0Data } from '../data/lessonMaps';
 
 export const Discovery = () => {
+    const [showLessonMap, setShowLessonMap] = useState(false);
+
     return (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
+
+            {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+                <button
+                    onClick={() => setShowLessonMap(!showLessonMap)}
+                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-blue-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    title="教師專用：顯示課程地圖"
+                >
+                    <Map size={12} />
+                    {showLessonMap ? 'Hide Map' : 'Instructor View'}
+                </button>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W0Data} />
+                </div>
+            )}
 
             {/* Header */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden">

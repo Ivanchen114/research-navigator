@@ -10,7 +10,7 @@ import {
 const RIB_MISSIONS = [
     {
         caseCode: 'CASE #01',
-        tags: ['W0-W2', '問題意識', '靶心對焦'],
+        tags: ['W3', '問題意識', '靶心對焦'],
         id: 'question-er',
         title: "行動代號：靶心",
         english: "Operation: Bullseye",
@@ -24,20 +24,6 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #02',
-        tags: ['W3-W5', '方法快篩', '裝備盤點'],
-        id: 'tool-quiz',
-        title: "行動代號：裝備",
-        english: "Gear Check Protocol",
-        department: "重案部",
-        departmentColor: "text-amber-500 bg-amber-500/10 border-amber-500/30",
-        icon: <Search size={32} className="text-amber-500" />,
-        desc: "研究現場千變萬化，裝備拿錯全盤皆輸。面對不同的案件委託，你能迅速判斷該使用問卷、訪談、實驗，還是觀察法嗎？快來測試你的鑑識直覺！",
-        learningObjective: "研究工具與資料蒐集方法辨識",
-        path: "/game/tool-quiz",
-        status: "active"
-    },
-    {
-        caseCode: 'CASE #03',
         tags: ['W6', '文獻鑑識', '學術誠信'],
         id: 'citation-detective',
         title: "行動代號：獵狐",
@@ -48,6 +34,20 @@ const RIB_MISSIONS = [
         desc: "學術界的陰暗角落藏有許多未爆彈！你將扮演獵狐特務，追查 10 件極具爭議的文獻引用疑案。辨識孤兒引用、換字抄襲等違規手法，守護學術誠信的防線。",
         learningObjective: "文獻真偽辨識與學術倫理審查",
         path: "/game/citation-detective",
+        status: "active"
+    },
+    {
+        caseCode: 'CASE #03',
+        tags: ['W3-W5', '方法快篩', '裝備盤點'],
+        id: 'tool-quiz',
+        title: "行動代號：裝備",
+        english: "Gear Check Protocol",
+        department: "重案部",
+        departmentColor: "text-amber-500 bg-amber-500/10 border-amber-500/30",
+        icon: <Search size={32} className="text-amber-500" />,
+        desc: "研究現場千變萬化，裝備拿錯全盤皆輸。面對不同的案件委託，你能迅速判斷該使用問卷、訪談、實驗，還是觀察法嗎？快來測試你的鑑識直覺！",
+        learningObjective: "研究工具與資料蒐集方法辨識",
+        path: "/game/tool-quiz",
         status: "active"
     },
     {

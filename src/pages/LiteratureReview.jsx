@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { BookOpen, ShieldAlert, CheckCircle, FileSearch, PenTool, AlertTriangle, Info, FileText, Bot, Search } from 'lucide-react';
+import { BookOpen, ShieldAlert, CheckCircle, FileSearch, PenTool, AlertTriangle, Info, FileText, Bot, Search, Map } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PromptBox } from '../components/analysis/PromptBox';
+import LessonMap from '../components/ui/LessonMap';
+import { W5Data } from '../data/lessonMaps';
 
 export const LiteratureReview = () => {
     const [myTopic, setMyTopic] = useState('');
     const [searchKeywords, setSearchKeywords] = useState('');
     const [foundPaper, setFoundPaper] = useState('');
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     const keywordPrompt = `我的研究題目是：${myTopic || '【你的題目】'}
 
@@ -19,6 +22,24 @@ export const LiteratureReview = () => {
 
     return (
         <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
+
+            {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+                <button
+                    onClick={() => setShowLessonMap(!showLessonMap)}
+                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-amber-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    title="教師專用：顯示課程地圖"
+                >
+                    <Map size={12} />
+                    {showLessonMap ? 'Hide Map' : 'Instructor View'}
+                </button>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W5Data} />
+                </div>
+            )}
 
             {/* Header */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">

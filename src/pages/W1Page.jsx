@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PromptBox } from '../components/analysis/PromptBox';
-import { ShieldAlert, Fingerprint, CheckCircle2, AlertTriangle, Lightbulb, ArrowRight, BrainCircuit, Hand, Eye, Cpu, ChevronDown, ChevronUp } from 'lucide-react';
+import { ShieldAlert, Fingerprint, CheckCircle2, AlertTriangle, Lightbulb, ArrowRight, BrainCircuit, Hand, Eye, Cpu, ChevronDown, ChevronUp, Map } from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
+import { W1Data } from '../data/lessonMaps';
 
 // 嫌疑犯檔案資料
 const SUSPECTS = [
@@ -41,51 +43,51 @@ const AIRED_STEPS = [
     {
         letter: 'A',
         label: 'Ascribe',
-        chinese: '歸屬說明',
+        chinese: '歸屬',
         color: 'text-red-600',
         bg: 'bg-red-50',
         border: 'border-red-200',
-        desc: '誠實說明哪裡用了 AI、用了哪個工具、用來做什麼。',
+        desc: '誠實說明哪裡用了 AI。',
         example: '例：「問卷題目的初稿，我用 Gemini 生成，再由我修改。」',
     },
     {
         letter: 'I',
         label: 'Inquire',
-        chinese: '提問紀錄',
+        chinese: '提問',
         color: 'text-amber-600',
         bg: 'bg-amber-50',
         border: 'border-amber-200',
-        desc: '把你給 AI 的 Prompt 記錄下來。你的提問，就是你的思考軌跡。',
+        desc: '精準提問，不依賴模糊指令。你的提問，就是你的思考軌跡。',
         example: '例：「我問 AI：請幫我分析這 40 份回答，哪些是工具型、哪些是思維型？」',
     },
     {
         letter: 'R',
         label: 'Reference',
-        chinese: '引用標註',
+        chinese: '引用',
         color: 'text-emerald-600',
         bg: 'bg-emerald-50',
         border: 'border-emerald-200',
-        desc: 'AI 給你的資料來源在哪？你要去查證，不能盲信。',
+        desc: '查證 AI 給的資料來源。不能盲信。',
         example: '例：AI 說某篇論文的結論，我去找到原文確認後才引用。',
     },
     {
         letter: 'E',
         label: 'Evaluate',
-        chinese: '評估判斷',
+        chinese: '評估',
         color: 'text-blue-600',
         bg: 'bg-blue-50',
         border: 'border-blue-200',
-        desc: 'AI 會胡說八道（幻覺）。你要判斷它說的對不對，不照單全收。',
+        desc: '判斷內容是否合理，不照單全收。AI 會胡說八道（幻覺）。',
         example: '例：AI 分析說「受訪者都很滿意」，但我重聽錄音發現其實是反諷。',
     },
     {
         letter: 'D',
         label: 'Document',
-        chinese: '歷程記錄',
+        chinese: '紀錄',
         color: 'text-purple-600',
         bg: 'bg-purple-50',
         border: 'border-purple-200',
-        desc: '記錄你的決策過程：什麼是你決定的，什麼是 AI 建議的。',
+        desc: '保留與 AI 的對話紀錄。',
         example: '例：保留與 AI 的對話紀錄，附在研究歷程中。',
     },
 ];
@@ -129,6 +131,7 @@ export const W1Page = () => {
     const [checkedSteps, setCheckedSteps] = useState({});
     const [openSuspect, setOpenSuspect] = useState(null);
     const [showTruth, setShowTruth] = useState(false);
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     const toggleSuspect = (id) => setOpenSuspect(prev => prev === id ? null : id);
     const toggleTruth = () => setShowTruth(prev => !prev);
@@ -156,7 +159,25 @@ D - Document 歷程記錄（保留與 AI 的對話）`;
     return (
         <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
 
-            {/* Header */}
+            {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+                <button
+                    onClick={() => setShowLessonMap(!showLessonMap)}
+                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-amber-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    title="教師專用：顯示課程地圖"
+                >
+                    <Map size={12} />
+                    {showLessonMap ? 'Hide Map' : 'Instructor View'}
+                </button>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-8 animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W1Data} />
+                </div>
+            )}
+
+            {/* Header ===== */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3" />
                 <div className="relative z-10 text-center">
@@ -224,8 +245,8 @@ D - Document 歷程記錄（保留與 AI 的對話）`;
                     <button
                         onClick={toggleTruth}
                         className={`w-full flex items-center justify-between p-6 rounded-2xl transition-all ${showTruth
-                                ? 'bg-rose-950 text-white rounded-b-none'
-                                : 'bg-slate-800 text-white hover:bg-slate-700 shadow-md'
+                            ? 'bg-rose-950 text-white rounded-b-none'
+                            : 'bg-slate-800 text-white hover:bg-slate-700 shadow-md'
                             } relative overflow-hidden`}
                     >
                         <div className="relative z-10 flex items-center gap-3">

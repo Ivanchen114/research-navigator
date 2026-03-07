@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { ChevronRight, RefreshCw, CheckCircle2, AlertTriangle, FileSearch, BookOpen, Search, Eye, ClipboardList, Mic, TestTube2, ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ChevronRight, RefreshCw, CheckCircle2, AlertTriangle, FileSearch, BookOpen, Search, Eye, ClipboardList, Mic, TestTube2, ArrowDown, Map, Gamepad2, ArrowRight } from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
+import { W3Data } from '../data/lessonMaps';
 
 const DISEASES = [
     { id: 'big', name: '範圍太大 (大)', icon: '🌍', description: '想要研究「全球氣候變遷」或「全台灣高中生」。', cure: '大 → 小 (縮小範圍，例如：單一學校的減塑行為)' },
@@ -24,6 +27,7 @@ export const Wizard = () => {
     const [selectedDiseases, setSelectedDiseases] = useState([]);
     const [refinedTopic, setRefinedTopic] = useState('');
     const [methodAnswers, setMethodAnswers] = useState({});
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     const handleNextStep = () => setStep((prev) => prev + 1);
     const handleReset = () => {
@@ -106,6 +110,24 @@ export const Wizard = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in duration-500 pb-16">
 
+            {/* ===== Lesson Map (W3) Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-10 relative z-20 pr-4">
+                <button
+                    onClick={() => setShowLessonMap(!showLessonMap)}
+                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-indigo-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    title="教師專用：顯示課程地圖"
+                >
+                    <Map size={12} />
+                    {showLessonMap ? 'Hide Map' : 'Instructor View'}
+                </button>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-8 animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W3Data} />
+                </div>
+            )}
+
             {/* ===== Header ===== */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 mb-8 relative overflow-hidden text-center">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-40 -translate-y-1/2 -translate-x-1/3" />
@@ -148,6 +170,27 @@ export const Wizard = () => {
                 </div>
             </section>
 
+            {/* ── 遊戲入口 ─────────────────────────── */}
+            <div className="bg-gradient-to-r from-rose-600 to-pink-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow border border-rose-500 mb-8">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                            <Gamepad2 size={24} />
+                            🎮 行動代號：靶心
+                        </h3>
+                        <p className="text-rose-100 text-sm">
+                            急診室大作戰！在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。這關卡將為陷入迷惘的探員對症下藥，開出精準的問題處方。
+                        </p>
+                    </div>
+                    <Link
+                        to="/game/question-er"
+                        className="bg-white text-rose-700 hover:bg-rose-50 px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group shrink-0"
+                    >
+                        進入行動任務
+                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                </div>
+            </div>
             {/* ===== 觀念二：五大研究方法 ===== */}
             <section className="bg-gradient-to-br from-indigo-50 to-blue-50(2) rounded-3xl shadow-sm border border-indigo-100 p-6 md:p-8 hover:shadow-md transition-shadow">
                 <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">

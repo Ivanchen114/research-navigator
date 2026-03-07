@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PromptBox } from '../components/analysis/PromptBox';
-import { PenTool, ArrowRight, Lightbulb, BrainCircuit, Cpu, CheckCircle2, ChevronDown, ChevronUp, Gamepad2, Target } from 'lucide-react';
+import { PenTool, ArrowRight, Lightbulb, BrainCircuit, Cpu, CheckCircle2, ChevronDown, ChevronUp, Gamepad2, Target, Map } from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
+import { W2Data } from '../data/lessonMaps';
 
 // ── 三種探究句型 ──────────────────────────────────────────────
 const QUESTION_TYPES = [
@@ -129,6 +131,7 @@ export const ProblemFocus = () => {
     // Section open
     const [openSection, setOpenSection] = useState('part1');
     const toggleSection = (id) => setOpenSection(prev => prev === id ? null : id);
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     // Prompts
     const buildGapPrompt = () =>
@@ -162,6 +165,24 @@ C. 深究型（某現象的運作機制/背後原因）
 
     return (
         <div className="max-w-4xl mx-auto space-y-5 animate-in fade-in duration-500">
+
+            {/* ===== Lesson Map Toggle (Teacher Only) ===== */}
+            <div className="flex justify-end pt-2 pb-0 -mb-6 relative z-20 pr-4">
+                <button
+                    onClick={() => setShowLessonMap(!showLessonMap)}
+                    className="flex items-center gap-1.5 text-[11px] text-slate-300 hover:text-blue-500 transition-colors opacity-60 hover:opacity-100 font-mono"
+                    title="教師專用：顯示課程地圖"
+                >
+                    <Map size={12} />
+                    {showLessonMap ? 'Hide Map' : 'Instructor View'}
+                </button>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-4 animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W2Data} />
+                </div>
+            )}
 
             {/* ── Header ─────────────────────────────── */}
             <header className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden">
@@ -479,27 +500,7 @@ C. 深究型（某現象的運作機制/背後原因）
                 </div>
             </div>
 
-            {/* ── 遊戲入口 ─────────────────────────── */}
-            <div className="bg-gradient-to-r from-rose-600 to-pink-600 rounded-3xl shadow-lg p-6 md:p-8 text-white hover:shadow-xl transition-shadow border border-rose-500 mb-8">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
-                            <Gamepad2 size={24} />
-                            🎮 行動代號：靶心
-                        </h3>
-                        <p className="text-rose-100 text-sm">
-                            在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。這關卡將為陷入迷惘的探員對症下藥，開出精準的問題處方。
-                        </p>
-                    </div>
-                    <Link
-                        to="/game/question-er"
-                        className="bg-white text-rose-700 hover:bg-rose-50 px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 group shrink-0"
-                    >
-                        進入行動任務
-                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                </div>
-            </div>
+
 
             {/* ── Part Z：自我檢核 ──────────────────────── */}
             <div className="rounded-2xl overflow-hidden border border-slate-200">
