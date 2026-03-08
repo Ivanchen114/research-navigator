@@ -435,7 +435,7 @@ export const RxInspectorGame = () => {
                 <div className="bg-slate-900/60 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(59,130,246,0.2)] max-w-xl w-full text-center border border-white/10 border-t-[12px] border-t-cyan-500 relative overflow-hidden z-10">
                     <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">🏥</div>
                     <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]">🩺</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500 mb-2 tracking-wide drop-shadow-sm">行動代號：防線</h1>
+                    <h1 className="text-3xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500 mb-2 tracking-wide drop-shadow-sm">行動代號：防線</h1>
                     <div className="text-sm md:text-base font-bold text-cyan-300/80 mb-4 bg-cyan-950/40 inline-block px-3 py-1 rounded border border-cyan-500/20 tracking-wider">
                         🎯 研究設計與方法學避險測試
                     </div>

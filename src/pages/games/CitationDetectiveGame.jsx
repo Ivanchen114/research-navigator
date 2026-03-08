@@ -239,7 +239,7 @@ export const CitationDetectiveGame = () => {
                     <div className="absolute top-0 right-0 opacity-5 text-9xl -mt-4 -mr-4 text-white pointer-events-none drop-shadow-md">🕵️‍♂️</div>
 
                     <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">🔍</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 mb-2 tracking-widest drop-shadow-sm">行動代號：獵狐</h1>
+                    <h1 className="text-3xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 mb-2 tracking-widest drop-shadow-sm">行動代號：獵狐</h1>
                     <div className="text-sm md:text-base font-bold text-amber-300/80 mb-6 bg-amber-950/40 inline-block px-3 py-1 rounded border border-amber-500/20 tracking-wider">
                         🎯 文獻真偽辨識與學術倫理審查
                     </div>

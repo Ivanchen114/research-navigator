@@ -339,7 +339,7 @@ export const QuestionERGame = () => {
                 <div className="bg-slate-900/60 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(244,63,94,0.2)] max-w-xl w-full text-center border border-white/10 border-t-[12px] border-t-rose-500 relative overflow-hidden z-10">
                     <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 text-rose-400 drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">🏥</div>
                     <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(244,63,94,0.8)]">🚑</div>
-                    <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-red-500 mb-2 tracking-wide drop-shadow-sm">行動代號：靶心</h1>
+                    <h1 className="text-3xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-red-500 mb-2 tracking-wide drop-shadow-sm">行動代號：靶心</h1>
                     <div className="text-sm md:text-base font-bold text-rose-300/80 mb-4 bg-rose-950/40 inline-block px-3 py-1 rounded border border-rose-500/20 tracking-wider">
                         🎯 研究問題精煉與對焦訓練
                     </div>

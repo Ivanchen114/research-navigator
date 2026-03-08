@@ -32,7 +32,7 @@ export const Layout = () => {
             items: [
                 { name: '題目健檢', path: '/wizard', week: 'W3', status: 'done' },
                 { name: '題目博覽會', path: '/w4', week: 'W4', status: 'active' },
-                { name: '文獻鑑識', path: '/literature-review', week: 'W5', status: 'none' },
+                { name: '文獻偵探社', path: '/literature-review', week: 'W5', status: 'none' },
                 { name: '研究診所', path: '/clinic', week: 'W6', status: 'none' },
                 { name: '組隊決策', path: '/team-formation', week: 'W7', status: 'none' },
             ]
@@ -166,7 +166,7 @@ export const Layout = () => {
                     {dynamicSections.map((section, sIdx) => (
                         <div key={sIdx}>
                             {section.label && (
-                                <div className={`text-[10px] font-bold tracking-[0.12em] text-[#8888aa] uppercase px-[20px] pb-1 ${sIdx > 0 ? 'mt-2 pt-2' : 'pt-2'}`}>
+                                <div className={`text-[9px] font-bold tracking-[0.2em] text-[#8888aa] opacity-80 uppercase px-[20px] pb-1 ${sIdx > 0 ? 'mt-2 pt-2' : 'pt-2'}`}>
                                     {section.label}
                                 </div>
                             )}

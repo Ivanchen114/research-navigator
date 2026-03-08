@@ -143,7 +143,7 @@ export const GameHub = () => {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <ShieldAlert size={40} className="text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-                            <h1 className="text-4xl md:text-5xl font-black text-slate-100 mb-4 tracking-tight drop-shadow-md">
+                            <h1 className="text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-slate-100 mb-4 tracking-tight drop-shadow-md">
                                 R.I.B. 特務指揮中心
                             </h1>
                             <p className="text-amber-400 font-mono text-sm md:text-base tracking-[0.2em] uppercase font-bold text-shadow-sm">
@@ -219,7 +219,7 @@ export const GameHub = () => {
                             <ShieldAlert size={24} />
                         </div>
                         <div>
-                            <h3 className="text-emerald-400 font-black text-xl leading-tight mb-2 tracking-wide drop-shadow-[0_0_5px_currentColor]">歡迎歸隊，{agentName}。</h3>
+                            <h3 className="text-emerald-400 font-['Noto_Serif_TC',serif] font-bold text-xl leading-tight mb-2 tracking-wide drop-shadow-[0_0_5px_currentColor]">歡迎歸隊，{agentName}。</h3>
                             <p className="text-slate-300 text-sm font-medium leading-relaxed">目前局內三大部門皆有緊急積案，請盡速閱覽下方機密檔案夾並展開調查。</p>
                         </div>
                     </div>
@@ -230,7 +230,7 @@ export const GameHub = () => {
                             <ShieldAlert size={24} />
                         </div>
                         <div>
-                            <h3 className="text-amber-500 font-black text-xl leading-tight mb-2 tracking-wide drop-shadow-[0_0_5px_currentColor]">身分未驗證</h3>
+                            <h3 className="text-amber-500 font-['Noto_Serif_TC',serif] font-bold text-xl leading-tight mb-2 tracking-wide drop-shadow-[0_0_5px_currentColor]">身分未驗證</h3>
                             <p className="text-slate-300 text-sm font-medium leading-relaxed">請先在右上角【辦理報到手續】，方可解鎖總部內所有的機密調查任務。</p>
                         </div>
                     </div>
@@ -295,7 +295,7 @@ export const GameHub = () => {
                                             {/* Title & Desc */}
                                             <div className="mb-6 flex-1 relative z-10">
                                                 <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded-sm truncate max-w-full">{mission.english}</div>
-                                                <h3 className={`text-2xl font-black mb-3 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
+                                                <h3 className={`text-2xl font-['Noto_Serif_TC',serif] font-bold mb-3 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
                                                     {mission.title}
                                                 </h3>
                                                 <div className={`text-[11px] font-bold mb-3 inline-block px-2.5 py-1 rounded-sm border tracking-wider mt-1 ${isLoggedIn ? 'bg-indigo-950/30 text-indigo-300 border-indigo-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>

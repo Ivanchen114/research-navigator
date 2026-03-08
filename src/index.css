@@ -1,26 +1,63 @@
 @import "tailwindcss";
 
 @theme {
-  --font-family-sans: "Noto Sans TC", sans-serif;
+  --font-serif: "Noto Serif TC", serif;
+  --font-sans: "Noto Sans TC", sans-serif;
+  --font-mono: "DM Mono", monospace;
+}
+
+:root {
+  --ink: #1a1a2e;
+  --ink-mid: #4a4a6a;
+  --ink-light: #8888aa;
+  --paper: #f8f7f4;
+  --paper-warm: #f0ede6;
+  --accent: #2d5be3;
+  --accent-light: #e8eeff;
+  --border: #dddbd5;
+  --radius-unified: 10px;
 }
 
 body {
-  font-family: var(--font-family-sans);
-  background-color: #f8fafc; /* slate-50 */
-  color: #334155; /* slate-700 */
+  font-family: var(--font-sans);
+  background-color: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Version A Card Style - Border only, no shadow, 10px radius */
+.card-a {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-unified);
+  background: white;
+  box-shadow: none !important;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #f1f5f9; /* slate-100 */
+  background: var(--paper-warm);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* slate-300 */
+  background: var(--ink-light);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; /* slate-400 */
+  background: var(--ink-mid);
 }

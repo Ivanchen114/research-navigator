@@ -192,10 +192,10 @@ export const W12Page = () => {
             {/* Navigation */}
             <div className="flex justify-between items-center pt-8 border-t border-slate-100">
                 <Link to="/w11" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700">
-                    ← W11 研究診所
+                    ← 回 W11 研究診所
                 </Link>
                 <Link to="/analysis" className="flex items-center gap-2 text-sm bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-500 transition-colors font-semibold shadow-md">
-                    前往 W13+ 分析週 <ArrowRight size={16} />
+                    前往 W13+ 數據分析 <ArrowRight size={16} />
                 </Link>
             </div>
         </div>

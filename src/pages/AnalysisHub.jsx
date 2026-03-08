@@ -51,7 +51,7 @@ export const AnalysisHub = () => {
                 </div>
                 <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
                     解讀與結論教練：<br className="hidden md:block" />
-                    <span className="text-[#2d5be3] font-normal italic">從數據到真相</span>
+                    <span className="text-[#2d5be3]">從數據到真相</span>
                 </h1>
                 <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
                     收完數據了嗎？選擇你使用的研究方法，查閱專屬的 AI 協作分析指南與指令範本。

@@ -191,10 +191,13 @@ export const W11Page = () => {
                     </p>
                     <div className="flex-1 bg-slate-50 rounded-xl border border-dashed border-slate-300 p-4 flex flex-col justify-center items-center text-center">
                         <AlertCircle className="text-slate-400 mb-2" size={24} />
-                        <p className="text-sm text-slate-600 font-medium tracking-wide">
+                        <p className="text-sm text-slate-600 font-medium tracking-wide mb-3">
                             W11 結束前，請至 Google Classroom<br />
                             填寫本週的「關鍵事件日誌」
                         </p>
+                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-500 transition-colors flex items-center gap-2">
+                            前往 Classroom <ArrowRight size={14} />
+                        </a>
                     </div>
                 </div>
             </div>
@@ -202,7 +205,7 @@ export const W11Page = () => {
             {/* Navigation */}
             <div className="flex justify-between items-center pt-8 border-t border-slate-100">
                 <Link to="/w10" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700">
-                    ← W10 定案與倫理
+                    ← 回 W10 最終定案
                 </Link>
                 <Link to="/w12" className="flex items-center gap-2 text-sm bg-orange-600 text-white px-5 py-2 rounded-full hover:bg-orange-500 transition-colors font-semibold">
                     前往 W12 中期盤點 <ArrowRight size={16} />

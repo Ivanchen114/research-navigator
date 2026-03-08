@@ -31,12 +31,18 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="discovery" element={<Discovery />} />
+          <Route path="w0" element={<Discovery />} />
           <Route path="w1" element={<W1Page />} />
           <Route path="problem-focus" element={<ProblemFocus />} />
+          <Route path="w2" element={<ProblemFocus />} />
           <Route path="wizard" element={<Wizard />} />
+          <Route path="w3" element={<Wizard />} />
           <Route path="w4" element={<W4Page />} />
+
           <Route path="clinic" element={<ClinicPage />} />
+          <Route path="w6" element={<ClinicPage />} />
           <Route path="literature-review" element={<LiteratureReview />} />
+          <Route path="w5" element={<LiteratureReview />} />
           <Route path="team-formation" element={<TeamFormation />} />
           <Route path="tool-design" element={<ToolDesignPage />} />
           <Route path="w10" element={<W10Page />} />

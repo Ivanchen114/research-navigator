@@ -56,16 +56,16 @@ const PhaseGroup = ({ num, title, weeks, children }) => (
 const QuickNavItem = ({ step, title, desc, isPrimary, onClick }) => (
     <div
         onClick={onClick}
-        className={`p-[20px_24px] cursor-pointer transition-colors duration-150 flex flex-col ${isPrimary ? 'bg-[#1a1a2e] hover:bg-[#2a2a4a]' : 'bg-white hover:bg-[#f8f7f4]'
+        className={`p-[20px_24px] cursor-pointer transition-colors duration-150 flex flex-col h-full ${isPrimary ? 'bg-[#1a1a2e] hover:bg-[#2a2a4a]' : 'bg-white hover:bg-[#f8f7f4]'
             }`}
     >
         <div className={`text-[10px] font-['DM_Mono',monospace] uppercase tracking-[0.1em] mb-1.5 ${isPrimary ? 'text-white/50' : 'text-[#8888aa]'}`}>
             {step}
         </div>
-        <div className={`text-[14px] font-bold mb-1 ${isPrimary ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
+        <div className={`text-[14px] font-bold mb-2 ${isPrimary ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
             {title}
         </div>
-        <div className={`text-[12px] leading-[1.5] ${isPrimary ? 'text-white/90' : 'text-[#4a4a6a]'}`}>
+        <div className={`text-[12px] leading-[1.6] flex-1 ${isPrimary ? 'text-white/90' : 'text-[#4a4a6a]'}`}>
             {desc}
         </div>
     </div>
@@ -113,7 +113,7 @@ export const Home = () => {
                     <h1 className="font-['Noto_Serif_TC',serif] text-4xl md:text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
                         從發現問題<br className="hidden md:block" />
                         到解讀結論<br className="hidden md:block" />
-                        <span className="text-[#2d5be3] font-normal italic">AI 陪你做研究</span>
+                        <span className="text-[#2d5be3]">AI 陪你做研究</span>
                     </h1>
                     <p className="text-[15px] text-[#4a4a6a] leading-[1.75] max-w-[560px]">
                         這不是一個幫你寫作業的工具，而是一個專屬你的「研究教練」。透過人機協作，把複雜的研究方法變得像通關遊戲一樣簡單。

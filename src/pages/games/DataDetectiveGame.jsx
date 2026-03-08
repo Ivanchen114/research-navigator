@@ -861,7 +861,7 @@ export const DataDetectiveGame = () => {
                 <div className="bg-slate-900/60 p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.6)] max-w-xl w-full text-center border-t-[8px] border-amber-500 relative flex flex-col  border-x border-b border-white/10 z-10 animate-in fade-in zoom-in-95 duration-500">
                     <div className="absolute top-3 right-4 text-[10px] font-mono text-amber-500 tracking-widest drop-shadow-[0_0_5px_rgba(245,158,11,0.8)]" style={{ fontFamily: 'Courier New, monospace' }}>FILE #001-014</div>
                     <div className="text-6xl mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">🕵️</div>
-                    <h1 className="text-4xl md:text-5xl font-black mb-2 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse">行動代號：濾鏡</h1>
+                    <h1 className="text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold mb-2 tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse">行動代號：濾鏡</h1>
                     <div className="text-sm md:text-base font-bold text-amber-200/90 mb-5 bg-amber-950/60 inline-block px-4 py-1.5 rounded-sm border border-amber-500/30 tracking-widest">
                         🎯 客觀數據解讀與批判性思維培養
                     </div>

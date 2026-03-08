@@ -103,7 +103,7 @@ export const ToolDesignPage = () => {
                 </div>
                 <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
                     工具設計工作坊：<br className="hidden md:block" />
-                    <span className="text-[#2d5be3] font-normal italic">處方診斷與除鱗</span>
+                    <span className="text-[#2d5be3]">處方診斷與除鱗</span>
                 </h1>
                 <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
                     Level 2 處方診斷 — 工具設計得好不好？哪裡有毒？怎麼解毒？在動手設計之前，先學會辨識各種設計上的致命傷。
@@ -177,8 +177,8 @@ export const ToolDesignPage = () => {
                                 key={method.id}
                                 onClick={() => setActiveMethod(method.id)}
                                 className={`flex items-center gap-2 px-4 py-3 rounded-[4px] font-bold text-[12px] transition-all flex-1 min-w-[120px] justify-center border font-['DM_Mono',monospace] uppercase tracking-wider ${activeMethod === method.id
-                                        ? 'bg-white text-[#1a1a2e] border-white shadow-xl'
-                                        : 'bg-transparent text-white/40 border-transparent hover:text-white/80'
+                                    ? 'bg-white text-[#1a1a2e] border-white shadow-xl'
+                                    : 'bg-transparent text-white/40 border-transparent hover:text-white/80'
                                     }`}
                             >
                                 {method.icon} {method.name.split(' ')[0]}
@@ -321,7 +321,7 @@ export const ToolDesignPage = () => {
             {/* Navigation Out */}
             <div className="flex justify-start py-8">
                 <Link to="/clinic" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
-                    ← 回 研究急診室 (W5)
+                    ← 回 W6 研究急診室
                 </Link>
             </div>
 

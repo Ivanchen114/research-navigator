@@ -95,7 +95,7 @@ export const W10Page = () => {
                 </div>
                 <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
                     定案、審查、<br className="hidden md:block" />
-                    <span className="text-[#2e7d5a] font-normal italic">準備出發！</span>
+                    <span className="text-[#2e7d5a]">準備出發！</span>
                 </h1>
                 <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
                     工具定稿 × 倫理審查 × 施測啟動。沒通過審查，不准出發。這是這門課最重要的一道安全關卡。

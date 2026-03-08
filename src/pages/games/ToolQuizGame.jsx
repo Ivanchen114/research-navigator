@@ -202,7 +202,7 @@ export const ToolQuizGame = () => {
                     <div className="absolute top-0 right-0 opacity-[0.03] text-9xl -mt-4 -mr-4 pointer-events-none drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]">🔍</div>
                     <div className="text-7xl mb-6 animate-[bounce_2s_infinite]">🕵️‍♂️</div>
 
-                    <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500 mb-2 tracking-wide drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]">行動代號：裝備</h1>
+                    <h1 className="text-3xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500 mb-2 tracking-wide drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]">行動代號：裝備</h1>
                     <div className="text-sm md:text-base font-bold text-amber-300/80 mb-6 bg-amber-950/40 inline-block px-3 py-1 rounded border border-amber-500/20 tracking-wider">
                         🎯 研究工具與資料蒐集方法辨識
                     </div>
