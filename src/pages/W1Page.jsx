@@ -82,6 +82,7 @@ export const W1Page = () => {
                 .w1-next-week-col { background: var(--ink); padding: 20px 24px; }
                 .w1-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
                 .w1-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
+                .w1-section-desc { font-size: 14px; color: #4a4a6a; margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
             `}} />
 
             {/* TOP BAR / NAVIGATION PATH */}
@@ -138,6 +139,7 @@ export const W1Page = () => {
                     <div className="line"></div>
                     <div className="mono">CONCEPT</div>
                 </div>
+                <p className="w1-section-desc">認識 AI-RED 協作公約，學習如何在 AI 輔助下依然保持研究者的誠實與獨立。</p>
 
                 <div className="space-y-6">
                     <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.1em] mb-2">AI-RED 協作公約 · 五步驟</div>
@@ -216,6 +218,7 @@ export const W1Page = () => {
                     <div className="line"></div>
                     <div className="mono">PRACTICE</div>
                 </div>
+                <p className="w1-section-desc">挑戰你的「眼力」！在 7 份自述中，你能找出哪一個是 AI 偽裝而成的嗎？</p>
 
                 <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     <div className="p-4 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center justify-between">
@@ -306,6 +309,7 @@ export const W1Page = () => {
                     <div className="line"></div>
                     <div className="mono">IN-CLASS</div>
                 </div>
+                <p className="w1-section-desc">從模仿遊戲出發，最後簽署誠信宣言，並播下你的「好奇心種子」。</p>
 
                 <div className="grid grid-cols-1 gap-6">
                     {[

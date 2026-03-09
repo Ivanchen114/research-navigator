@@ -102,7 +102,7 @@ export const W11Page = () => {
                     </div>
                     <div>
                         <h2 className="text-2xl font-bold text-slate-800">Part 1｜研究掛號分流系統</h2>
-                        <p className="text-slate-500 text-sm">請依照小組目前的狀況，點選你們的「症狀區塊」。</p>
+                        <p className="text-slate-500 text-sm">根據你目前的施測狀況進行「掛號分流」，讓醫生（老師）能精準診斷你們遇到的困難與瓶頸。</p>
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@ export const W11Page = () => {
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-slate-800">Part 2｜健康區等待急救包</h2>
-                            <p className="text-emerald-700 text-sm">進度超前？太棒了！不要發呆，完成以下任務可以幫 W14/W15 省下大量時間。</p>
+                            <p className="text-emerald-700 text-sm">進度超前的專屬任務包，提早開始整理文獻與預寫報告段落，為後續分析爭取時間。</p>
                         </div>
                     </div>
 
@@ -171,7 +171,7 @@ export const W11Page = () => {
                         AI 專題溝通教練
                     </h2>
                     <p className="text-slate-400 text-sm mb-4 leading-relaxed">
-                        組內吵架？受訪者不理你？遇到溝通困難，讓 AI 幫你想說詞。
+                        施測過程中遇到溝通難題？請 AI 教練幫你擬定最合宜的對話草稿，化解尷輯與壓力。
                     </p>
                     <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700 text-sm font-mono text-slate-300">
                         <p className="text-blue-400 mb-2">// 溝通救星 Prompt</p>

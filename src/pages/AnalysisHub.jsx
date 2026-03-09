@@ -54,7 +54,7 @@ export const AnalysisHub = () => {
                     <span className="text-[#2d5be3]">從數據到真相</span>
                 </h1>
                 <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
-                    收完數據了嗎？選擇你使用的研究方法，查閱專屬的 AI 協作分析指南與指令範本。
+                    歡迎來到解讀與結論中心。本模組將引導你利用 AI 協作，從混亂的數據中提煉出真實的研究發現。請選擇你使用的研究方法，查閱專屬的分析指南與指令範本。
                 </p>
 
                 {/* 階段提醒 */}

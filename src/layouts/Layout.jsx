@@ -22,8 +22,8 @@ export const Layout = () => {
             label: '探索階段',
             sublabel: '問題意識',
             items: [
-                { name: '發掘問題', path: '/w0', week: 'W0', status: 'done' },
-                { name: 'AI-RED 公約', path: '/w1', week: 'W1', status: 'done' },
+                { name: '偵探特訓班', path: '/w0', week: 'W0', status: 'done' },
+                { name: '模仿遊戲', path: '/w1', week: 'W1', status: 'done' },
                 { name: '問題意識', path: '/w2', week: 'W2', status: 'done' },
             ]
         },
@@ -31,18 +31,19 @@ export const Layout = () => {
             sublabel: '研究規劃',
             items: [
                 { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
-                { name: '題目博覽會', path: '/w4', week: 'W4', status: 'active' },
-                { name: '文獻偵探社', path: '/w5', week: 'W5', status: 'none' },
-                { name: '研究診所', path: '/w6', week: 'W6', status: 'none' },
-                { name: '組隊決策', path: '/w7', week: 'W7', status: 'none' },
+                { name: '題目博覽會', path: '/w4', week: 'W4', status: 'done' },
+                { name: '文獻偵探社', path: '/w5', week: 'W5', status: 'done' },
+                { name: '研究診所', path: '/w6', week: 'W6', status: 'done' },
+                { name: '組隊決策週', path: '/w7', week: 'W7', status: 'active' },
             ]
         },
         {
             sublabel: '裝備與執行',
             items: [
                 { name: '工具準備', path: '#', status: 'locked' },
-                { name: '工具設計', path: '/tool-design', week: 'W8-9', status: 'locked' },
-                { name: '定案與倫理', path: '/w10', week: 'W10', status: 'locked' },
+                { name: '工具設計', path: '/tool-design', week: 'W8', status: 'locked' },
+                { name: '工具精進', path: '/tool-refinement', week: 'W9', status: 'locked' },
+                { name: '倫理與定案', path: '/w10', week: 'W10', status: 'locked' },
                 { name: '研究診所 I', path: '/w11', week: 'W11', status: 'locked' },
                 { name: '中期盤點', path: '/w12', week: 'W12', status: 'locked' }
             ]
@@ -50,7 +51,7 @@ export const Layout = () => {
         {
             sublabel: '分析與報告',
             items: [
-                { name: '數據轉譯', path: '/chart-selection', week: 'W13', status: 'locked' },
+                { name: '數據轉譯', path: '/w13', week: 'W13', status: 'locked' },
                 { name: '資料分析工作坊', path: '/analysis', week: 'W14', status: 'locked' }
             ]
         }
@@ -70,10 +71,11 @@ export const Layout = () => {
         if (path === '/clinic' || path === '/w6') return 6;
         if (path === '/team-formation' || path === '/w7') return 7;
         if (path === '/tool-design') return 8;
+        if (path === '/tool-refinement' || path === '/w9') return 9;
         if (path === '/w10') return 10;
         if (path === '/w11') return 11;
         if (path === '/w12') return 12;
-        if (path === '/chart-selection') return 13;
+        if (path === '/w13') return 13;
         if (path === '/analysis') return 14;
         return -1;
     }

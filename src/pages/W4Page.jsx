@@ -44,19 +44,20 @@ export const W4Page = () => {
                 .w4-search-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
                 .w4-search-card { border: 1px solid var(--border); border-radius: 10px; padding: 20px; background: #fff; display: flex; align-items: flex-start; gap: 16px; transition: transform 0.15s; }
                 .w4-search-card:hover { transform: translateY(-2px); border-color: var(--accent); }
-                .w4-search-icon { width: 40px; height: 40px; background: var(--paper-warm); border-radius: 8px; display: flex; align-items: center; justifyContent: center; color: var(--accent); flex-shrink: 0; }
+                .w4-search-icon { width: 40px; height: 40px; background: var(--paper-warm); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
                 .w4-page-eyebrow { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--accent); margin-bottom: 12px; letter-spacing: 0.06em; }
-                .w4-page-title { font-family: 'Noto Serif TC', serif; font-size: 36px; font-weight: 700; line-height: 1.2; color: var(--ink); margin-bottom: 8px; }
+                .w4-page-title { font-family: 'Noto Serif TC', serif; font-size: 42px; font-weight: 700; line-height: 1.2; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.01em; }
                 .w4-page-title em { font-style: normal; color: var(--accent); }
-                .w4-page-subtitle { font-size: 15px; color: var(--ink-mid); line-height: 1.75; margin-bottom: 32px; max-width: 620px; }
-                .w4-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
-                .w4-meta-item { background: #fff; padding: 14px 18px; }
-                .w4-meta-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--ink-light); margin-bottom: 4px; }
-                .w4-meta-value { font-size: 13px; font-weight: 700; color: var(--ink); }
+                .w4-page-subtitle { font-size: 16px; color: var(--ink-mid); line-height: 1.75; margin-bottom: 40px; max-width: 680px; }
+                .w4-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
+                .w4-meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+                .w4-meta-label { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; font-weight: 500; }
+                .w4-meta-value { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
                 .w4-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
                 .w4-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
                 .w4-section-head .line { flex: 1; height: 1px; background: var(--border); }
                 .w4-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); }
+                .w4-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
                 .w4-test-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
                 .w4-test-col { background: #fff; padding: 20px 22px; }
                 .w4-test-col-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
@@ -96,7 +97,7 @@ export const W4Page = () => {
                 .w4-task-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 12px; }
                 .w4-task-hd { padding: 12px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
                 .w4-task-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 2px 8px; border-radius: 3px; }
-                .w4-task-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+                .w4-task-title { font-size: 14px; font-weight: 700; color: var(--ink); }
                 .w4-task-body { padding: 20px 24px; }
                 .w4-task-ol { padding-left: 20px; font-size: 13px; color: var(--ink-mid); line-height: 2; }
                 .w4-notice { margin-top: 14px; padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.75; border-left: 4px solid; color: var(--ink-mid); }
@@ -131,6 +132,7 @@ export const W4Page = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
+                    <span className="bg-[#2d5be3] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">互審與搜尋</span>
                 </div>
             </div>
 
@@ -150,22 +152,49 @@ export const W4Page = () => {
                     W3 的定案是入場券，W4 才是壓力測試。你的題目要在三十幾個同學面前站得住腳——過了，才算真正的定案。
                 </p>
 
-                {/* META STRIP */}
-                <div className="w4-meta-strip">
+                {/* META CARDS */}
+                <div className="w4-meta-grid">
                     {[
-                        { label: '本週任務', value: '海報 + Gallery Walk + 最終定案' },
-                        { label: '課堂產出', value: '手寫海報 + W4 最終定案題目' },
-                        { label: '下週預告', value: '定案題目 + 研究方法選擇' }
+                        { label: '第一節', value: '海報 Pitch + 同儕互審健檢' },
+                        { label: '第二節', value: '題目定案 + 關鍵文獻搜尋' },
+                        { label: '課業產出', value: '最終題目 + 第一篇 APA 文獻' },
+                        { label: '帶去 W5', value: '關鍵文獻內容 + 偵探心態' }
                     ].map((item, idx) => (
-                        <div key={idx} className="w4-meta-item">
-                            <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em] mb-1">{item.label}</div>
-                            <div className="text-[13px] font-bold text-[#1a1a2e]">{item.value}</div>
+                        <div key={idx} className="w4-meta-card">
+                            <div className="w4-meta-label">{item.label}</div>
+                            <div className="w4-meta-value">{item.value}</div>
                         </div>
                     ))}
+                </div>
+
+                {/* COURSE ARC - Standard Version A */}
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="grid grid-cols-7 border border-[#dddbd5] rounded-[12px] overflow-hidden">
+                        {[
+                            { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
+                            { wk: 'W3', name: '題目健檢\n核心心法', past: true },
+                            { wk: 'W4', name: '題目博覽會\n同儕互修', now: true },
+                            { wk: 'W5-W6', name: '文獻鑑識\n診所分流' },
+                            { wk: 'W7', name: '組隊決策\n企劃定案' },
+                            { wk: 'W8-W10', name: '工具設計\n倫理審查' },
+                            { wk: 'W11-W16', name: '執行研究\n成果發表' }
+                        ].map((item, idx) => (
+                            <div key={idx} className={`p-4 text-center border-r border-[#dddbd5] last:border-r-0 ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-[#f8f7f4]'}`}>
+                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
+                                    {item.wk} {item.now && '← 現在'}
+                                </div>
+                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
+                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </header>
 
             <div className="w4-section-head"><h2>學什麼</h2><div className="line"></div><div className="mono">CONCEPT</div></div>
+            <p className="w4-section-desc">了解如何利用同儕回饋來精煉你的題目，並學習如何從圖書館與資料庫中挖出最相關的學術寶藏。</p>
             <div className="w4-test-compare">
                 <div className="w4-test-col">
                     <div className="w4-test-col-hd"><div className="w4-test-dot" style={{ background: 'var(--gold)' }}></div><span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--gold)' }}>W3 最終定案</span><span style={{ fontFamily: 'DM Mono', fontSize: '10px', color: 'var(--ink-light)', marginLeft: '8px' }}>入場券</span></div>
@@ -423,6 +452,7 @@ export const W4Page = () => {
             <div className="w4-notice w4-notice-accent" style={{ marginBottom: '32px' }}>💡 你選哪個方法，決定你下週 W5 去哪一組。</div>
 
             <div className="w4-section-head"><h2>練什麼</h2><div className="line"></div><div className="mono">PRACTICE</div></div>
+            <p className="w4-section-desc">實戰演練進階關鍵字搜尋技巧，學會評估 AI 建議的關鍵字，讓搜查範圍既廣且深。</p>
             <div className="w4-notice w4-notice-gold" style={{ marginBottom: '10px' }}>⚠️ 先自己寫標題草稿和預期發現，再把草稿交給 AI 優化。</div>
             <div className="w4-prompt-box">
                 <div className="w4-prompt-hd"><span>PROMPT · 海報文案優化</span><button className="w4-copy-btn" onClick={() => handleCopy('p1', posterPrompt)}>{copyStatus['p1'] ? '已複製！' : '複製'}</button></div>
@@ -437,6 +467,7 @@ export const W4Page = () => {
             <div className="w4-apa-row"><div className="w4-apa-label">THESIS FORMAT</div><div className="w4-apa-val">作者（年份）。論文題目（碩士論文）。學校名稱。</div></div>
 
             <div className="w4-section-head"><h2>課堂任務</h2><div className="line"></div><div className="mono">IN-CLASS</div></div>
+            <p className="w4-section-desc">參與 Gallery Walk 個人題目博覽會，收集同學的建議，並完成你的 W4 研究海報。</p>
             <div className="w4-task-block">
                 <div className="w4-task-hd"><span className="w4-task-badge">TASK 1</span><span className="w4-task-title">製作手寫海報 (20 MINS)</span></div>
                 <div className="w4-task-body"><ol className="w4-task-ol"><li>抄下 W3 定案題目</li><li>寫標題草稿 + 預期發現</li><li>用 AI 優化文案</li><li>在 A4 紙上手寫海報</li></ol><div className="w4-notice w4-notice-gold">💡 標題是給同學看的，題目是給評審看的。</div></div>

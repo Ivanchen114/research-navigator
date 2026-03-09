@@ -1011,3 +1011,597 @@ export const W6Data = {
         { colorClass: "lm-c3", label: "情境 / 總結" }
     ]
 };
+
+export const W7Data = {
+    id: "W7",
+    title: "組隊決策週：從個人到團隊",
+    duration: 100,
+    durationDesc: "2 節課",
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "團隊協作力",
+            subtitle: "1 + 1 > 2",
+            desc: "分工互補、整合文獻與企劃",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "獨立研究力",
+            subtitle: "掌控節奏、聚焦精悍",
+            desc: "Solo Zone 互助、題目規模控制",
+            colorConfig: "b"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "線上測驗 ＆ 研究博覽會",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeStartFormatted: "00:00",
+                    duration: 5,
+                    colorClass: "c3",
+                    icon: "📝",
+                    title: "一、 開場與測驗說明",
+                    desc: "說明 W7 是重要轉折點。宣佈第一節任務：判定研究判斷力與建立網絡。"
+                },
+                {
+                    timeStart: "0:05",
+                    timeStartFormatted: "00:05",
+                    duration: 25,
+                    colorClass: "c1",
+                    icon: "🧠",
+                    title: "二、 線上測驗（W1-W6 總結驗收）",
+                    desc: "酷AI系統個人測驗，不可討論。測驗後揭曉部分易錯點。",
+                    tags: ["個人測驗", "總結驗收"]
+                },
+                {
+                    timeStart: "0:30",
+                    timeStartFormatted: "00:30",
+                    duration: 5,
+                    colorClass: "c2",
+                    icon: "🎫",
+                    title: "三、 填寫研究交流卡",
+                    desc: "領取交流卡並填寫：題目、王牌文獻、方法與技能。",
+                    tags: ["個人產出"]
+                },
+                {
+                    timeStart: "0:35",
+                    timeStartFormatted: "00:35",
+                    duration: 15,
+                    colorClass: "c5",
+                    icon: "🎪",
+                    title: "四、 三輪走讀博覽會",
+                    desc: "第一輪：同類聚集交流。第二輪：跨界交流。第三輪：自由尋求夥伴。",
+                    tags: ["自由走讀", "拍照記錄"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "確定組隊 ＆ 企劃書定案",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeStartFormatted: "00:00",
+                    duration: 10,
+                    colorClass: "c3",
+                    icon: "🤝",
+                    title: "五、 確定組隊 ＆ 登記表單",
+                    desc: "決定小組或 Solo。組長建立群組，Solo 進入 Solo Zone。填寫組隊登記表。",
+                    tags: ["決策表單"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeStartFormatted: "00:10",
+                    duration: 15,
+                    colorClass: "c1",
+                    icon: "🎙️",
+                    title: "六、 Pitch 題目 ＆ 定案",
+                    desc: "每人輪流 Pitch 題目。小組討論合併方案，確定最終題目。填寫題目登記表。",
+                    tags: ["共識決策"]
+                },
+                {
+                    timeStart: "0:25",
+                    timeStartFormatted: "00:25",
+                    duration: 18,
+                    colorClass: "c4",
+                    icon: "📄",
+                    title: "七、 填寫研究企劃書",
+                    desc: "整合 W5 文獻。完成企劃書（分工/時程），簽名並上傳 Google Classroom。",
+                    tags: ["核心產出"]
+                },
+                {
+                    timeStart: "0:43",
+                    timeStartFormatted: "00:43",
+                    duration: 7,
+                    colorClass: "c2",
+                    icon: "🚀",
+                    title: "八、 結案與 W8 預告",
+                    desc: "總結全班研究網絡建立。預告下週依方法分流進入「工具設計」。",
+                    tags: ["階段完結"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📋",
+            label: "核心產出",
+            text: "研究企劃書<br><small style=\"font-size:11px;color:#888;\">含分工與 3 篇文獻</small>"
+        },
+        {
+            icon: "📈",
+            label: "學習軌跡",
+            text: "研究判斷力測驗紀錄<br><small style=\"font-size:11px;color:#888;\">確認 W1-W6 掌握度</small>"
+        },
+        {
+            icon: "🕸️",
+            label: "人際資產",
+            text: "班級研究網絡照片<br><small style=\"font-size:11px;color:#ccc;\">跨組交流聯絡簿</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "測驗 / 會診" },
+        { colorClass: "lm-c4", label: "企劃 / 決策" },
+        { colorClass: "lm-c2", label: "個人產出" },
+        { colorClass: "lm-c5", label: "互動 / 走讀" },
+        { colorClass: "lm-c3", label: "說明 / 引導" }
+    ]
+};
+
+export const W8Data = {
+    id: "W8",
+    title: "工具設計：處方診斷與三大標準",
+    duration: 100,
+    durationDesc: "2 節課",
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "處方診斷",
+            subtitle: "Level 2 抓雷、修正",
+            desc: "確保工具有效可靠",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "好工具三大標準",
+            subtitle: "有效性、可靠性、可行性",
+            desc: "建立專業工具的判斷力",
+            colorConfig: "g"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "Level 2 診斷 + 三大標準",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:10",
+                    duration: "10 min",
+                    colorClass: "c3",
+                    icon: "🔧",
+                    title: "一、 開場與 Level 升級",
+                    desc: "回顧 W6 掛號判斷。宣佈今天進入 Level 2 處方診斷：不只要選對方法，更要修好工具。",
+                    tags: ["開場引導", "Level 升級"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeEnd: "0:25",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "⚖️",
+                    title: "二、 好工具三大標準 (V.R.F.)",
+                    desc: "詳細介紹有效性 (Validity)、可靠性 (Reliability)、可行性 (Feasibility)。舉例說明為什麼「你常熬夜嗎？」是爛題目。",
+                    tags: ["概念講解", "標準建立"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeEnd: "0:25",
+                    duration: "15 min",
+                    colorClass: "c4",
+                    icon: "⚡",
+                    title: "三、 常見錯誤速查防雷",
+                    desc: "介紹誘導性提問、選項重疊、雙重問題等四大閃避地雷。現場進行 5 分鐘快問快答。",
+                    tags: ["快速演練", "避雷訓練"]
+                },
+                {
+                    timeStart: "0:40",
+                    timeEnd: "0:50",
+                    duration: "10 min",
+                    colorClass: "c2",
+                    icon: "🏥",
+                    title: "四、 病例 XQ1 診斷實戰",
+                    desc: "投影 X 型病例問卷，由全班共同指出雷點並現場提出修改方案（處方）。",
+                    tags: ["實戰示範", "處方開立"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "分流工作坊：工具實作初稿",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:10",
+                    duration: "10 min",
+                    colorClass: "c3",
+                    icon: "🤝",
+                    title: "五、 依方法分流與任務啟動",
+                    desc: "依據 W7 組隊結果，按方法（問卷/訪談...）分流就座。說明「三欄對應表」任務。",
+                    tags: ["任務啟動", "分流就座"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeEnd: "0:35",
+                    duration: "25 min",
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "六、 工具開發工作坊 (禁 AI 第一版)",
+                    desc: "小組討論：將「探究意圖」拆解為具體問題。完成三欄對應表一組，產出第一版草稿。",
+                    tags: ["共識開發", "初稿產出", "🚫 禁用 AI"]
+                },
+                {
+                    timeStart: "0:35",
+                    timeEnd: "0:45",
+                    duration: "10 min",
+                    colorClass: "c5",
+                    icon: "🗣️",
+                    title: "七、 同儕互診與雷點互查",
+                    desc: "兩兩交換初稿，對照「三大標準」與「四大雷點」進行互查回饋。",
+                    tags: ["同儕審核", "互查回饋"]
+                },
+                {
+                    timeStart: "0:45",
+                    timeEnd: "0:50",
+                    duration: "5 min",
+                    colorClass: "c4",
+                    icon: "🚀",
+                    title: "八、 總結與 W9 準備",
+                    desc: "收回初稿。預告 W9 將上機進行數位化與真實預試。提醒攜帶筆電。",
+                    tags: ["總結預告", "工具定案"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📝",
+            label: "初稿產出",
+            text: "工具設計三欄對應表<br><small style=\"font-size:11px;color:#888;\">含研究問題與題目對應</small>"
+        },
+        {
+            icon: "🛡️",
+            label: "避險驗證",
+            text: "四大雷點查證紀錄<br><small style=\"font-size:11px;color:#888;\">通過同儕互查驗證</small>"
+        },
+        {
+            icon: "📅",
+            label: "重要預告",
+            text: "W9 上機與真實預試<br><small style=\"font-size:11px;color:#ccc;\">進入真實場域前哨站</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 診斷" },
+        { colorClass: "lm-c2", label: "實作 / 開發" },
+        { colorClass: "lm-c4", label: "避雷 / 總結" },
+        { colorClass: "lm-c5", label: "互動 / 互診" },
+        { colorClass: "lm-c3", label: "說明 / 引導" }
+    ]
+};
+
+export const W9Data = {
+    id: "W9",
+    title: "工具精進與預試：AI 審稿與人工驗證",
+    duration: 100,
+    durationDesc: "2 節課",
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "AI 協助精進",
+            subtitle: "AI-RED 評估與判斷",
+            desc: "利用 AI 進行第一輪工具審查",
+            colorConfig: "b"
+        },
+        {
+            prefix: "②",
+            title: "真實預試",
+            subtitle: "抓出 AI 看不到的死角",
+            desc: "透過真實反映修正工具細節",
+            colorConfig: "g"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "AI 審稿 + 建議判斷",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:10",
+                    duration: "10 min",
+                    colorClass: "c3",
+                    icon: "🤖",
+                    title: "一、 AI-RED 審稿啟動",
+                    desc: "將工具初稿交給 AI，並說明研究背景。進行 A (Ascribe) 與 I (Inquire) 階段。",
+                    tags: ["AI 互動", "審查啟動"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeEnd: "0:25",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "⚖️",
+                    title: "二、 AI 建議判斷與評估",
+                    desc: "針對 AI 提出的建議進行 R (Reference) 與 E (Evaluate)。區分採納、拒絕或部分採納。",
+                    tags: ["邏輯思考", "判斷決策"]
+                },
+                {
+                    timeStart: "0:25",
+                    timeEnd: "0:50",
+                    duration: "25 min",
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "三、 工具第一輪修正",
+                    desc: "根據評估後的 AI 建議，直接修改問卷或訪談大綱。產出「經 AI 強化後」的版本。",
+                    tags: ["工具開發", "快速修正"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "人工預試 + AI vs 預試比較",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:25",
+                    duration: "25 min",
+                    colorClass: "c5",
+                    icon: "👥",
+                    title: "四、 真實場域預試 (Pilot Test)",
+                    desc: "小組互換工具進行預試。記錄受測者的疑惑、卡住點與填答時長。",
+                    tags: ["使用者測試", "真實回饋"]
+                },
+                {
+                    timeStart: "0:25",
+                    timeEnd: "0:40",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "🔍",
+                    title: "五、 AI vs 人工差異分析",
+                    desc: "比較 AI 審稿與人工預試發現的問題。找出彼此的盲點，決定最終修改方案。",
+                    tags: ["差異分析", "反思總結"]
+                },
+                {
+                    timeStart: "0:40",
+                    timeEnd: "0:50",
+                    duration: "10 min",
+                    colorClass: "c4",
+                    icon: "🚀",
+                    title: "六、 工具定稿與 W10 準備",
+                    desc: "完成最終定稿。說明 W10 倫理審查流程，提醒需準備之文件（知情同意書等）。",
+                    tags: ["成果產出", "倫理預告"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📊",
+            label: "AI 判斷表",
+            text: "AI 建議評估紀錄<br><small style=\"font-size:11px;color:#888;\">含採納與拒絕理由說明</small>"
+        },
+        {
+            icon: "✅",
+            label: "工具定稿",
+            text: "經兩輪驗證之版本<br><small style=\"font-size:11px;color:#888;\">可進入倫理審查程序</small>"
+        },
+        {
+            icon: "🔗",
+            label: "反思比較",
+            text: "AI vs 人工盲點分析<br><small style=\"font-size:11px;color:#ccc;\">建立多元驗證的直覺</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 判斷" },
+        { colorClass: "lm-c2", label: "實作 / 修正" },
+        { colorClass: "lm-c5", label: "互動 / 預試" },
+        { colorClass: "lm-c3", label: "引導 / 工具" },
+        { colorClass: "lm-c4", label: "總結 / 定稿" }
+    ]
+};
+
+export const W10Data = {
+    title: "W10 倫理審查：確認、授權、出發",
+    description: "這不是在刁難，是在保護你的研究。通過倫理審查，拿到出發許可，你的研究才算正式啟程。",
+    periods: [
+        {
+            name: "第一節",
+            duration: "50 min",
+            title: "工具定稿 + 倫理四問自查",
+            stages: [
+                { time: "0:00 - 0:15", title: "一、工具定稿自查", desc: "拿出 W9 修正後的工具，對照 Part 0 自查清單逐項確認。", tags: ["自查清單", "互評交換"], colorClass: "lm-c1" },
+                { time: "0:15 - 0:30", title: "二、倫理四問自查", desc: "誠實回答知情同意、保密、不傷害、自願性四個問題。", tags: ["倫理四問", "敏感議題"], colorClass: "lm-c2" },
+                { time: "0:30 - 0:50", title: "三、AI 審查知情同意書", desc: "利用 AI 檢查說明的語言語氣，完成最終版知情同意書。", tags: ["AI 互動", "語氣修正"], colorClass: "lm-c3" }
+            ]
+        },
+        {
+            name: "第二節",
+            duration: "50 min",
+            title: "執行計畫書 + 施測啟動宣告",
+            stages: [
+                { time: "0:00 - 0:25", title: "四、研究執行計畫書", desc: "填寫 W11-W12 詳細時程，包含理想目標、最低底線與失敗備案。", tags: ["計畫書", "具體備案"], colorClass: "lm-c4" },
+                { time: "0:25 - 0:40", title: "五、教師倫理審查 (巡迴)", desc: "教師於教室各組巡迴，確認計畫書與倫理考量後蓋章授權。", tags: ["教師面談", "授權蓋章"], colorClass: "lm-c5" },
+                { time: "0:40 - 0:50", title: "六、施測啟動宣告", desc: "念出啟動宣告，於黑板出發表打卡，正式啟動研究。", tags: ["出發宣告", "正式啟動"], colorClass: "lm-c3" }
+            ]
+        }
+    ],
+    summary: [
+        "倫理四問自查完成，教師蓋章通過",
+        "知情同意書最終版（AI 審查後修改）",
+        "研究執行計畫書（含具體備案）",
+        "施測宣告完成，黑板出發表打卡 ✈️"
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 判斷" },
+        { colorClass: "lm-c2", label: "實作 / 修正" },
+        { colorClass: "lm-c5", label: "互動 / 預試" },
+        { colorClass: "lm-c3", label: "引導 / 工具" },
+        { colorClass: "lm-c4", label: "總結 / 定稿" }
+    ]
+};
+
+export const W13Data = {
+    id: "W13",
+    title: "讓數據自己說話：圖表選擇與圖說寫作",
+    duration: 100,
+    durationDesc: "2 節課",
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "四大圖表速查",
+            subtitle: "折線、圓餅、長條、散佈",
+            desc: "選對盤子，數據才好讀",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "圖說寫作公式",
+            subtitle: "描述 (客觀) + 推論 (主觀)",
+            desc: "讓讀者看懂數據背後的意義",
+            colorConfig: "b"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "選對盤子：四大圖表與格式規範",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:15",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "📊",
+                    title: "觀念一｜四大圖表與決策口訣",
+                    desc: "講解折線、圓餅、長條、散佈圖的適用場景。從「長條圖」出發的排除法決策流程。",
+                    tags: ["圖表類型", "決策邏輯"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeEnd: "0:30",
+                    duration: "15 min",
+                    colorClass: "c4",
+                    icon: "📌",
+                    title: "觀念二｜圖表格式三鐵則",
+                    desc: "標題位置（上）、資料來源（下）、正文引用（如圖一所示）。強調 N 值防呆的重要性。",
+                    tags: ["格式規範", "學術要求"]
+                },
+                {
+                    timeStart: "0:30",
+                    timeEnd: "0:45",
+                    duration: "15 min",
+                    colorClass: "c2",
+                    icon: "🎨",
+                    title: "實戰一｜圖表決策直覺訓練",
+                    desc: "處理 4 個演練題，判斷最適合的圖表類型。討論複選題為何不能用圓餅圖。",
+                    tags: ["互動演練", "除錯練習"]
+                },
+                {
+                    timeStart: "0:45",
+                    timeEnd: "0:50",
+                    duration: "5 min",
+                    colorClass: "c3",
+                    icon: "🏁",
+                    title: "小結：第一節收尾",
+                    desc: "確認每組都至少決定了一種圖表類型，並開啟原始資料準備製圖。",
+                    tags: ["小組進度"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "賦予意義：描述 vs 推論",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:15",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "⚖️",
+                    title: "觀念三｜一張圖的說明公式",
+                    desc: "區分客觀事實（描述）與主觀見解（推論）。講解「可能」二字在推論中的關鍵地位。",
+                    tags: ["寫作公式", "逻辑分析"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeEnd: "0:30",
+                    duration: "15 min",
+                    colorClass: "c5",
+                    icon: "🧩",
+                    title: "演練二｜Case Study 深度拆解",
+                    desc: "透過三種案例練習填空。討論「絕大多數」等模糊量詞的陷阱，學習引用精確數字。",
+                    tags: ["案例分析", "精準語言"]
+                },
+                {
+                    timeStart: "0:30",
+                    timeEnd: "0:45",
+                    duration: "15 min",
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "實戰二｜寫下你們的圖說段落",
+                    desc: "各組針對自製圖表，用藍紅筆區分完成「描述」與「推論」兩部分寫作。",
+                    tags: ["個人/小組寫作", "實作挑戰"]
+                },
+                {
+                    timeStart: "0:45",
+                    timeEnd: "0:50",
+                    duration: "5 min",
+                    colorClass: "c3",
+                    icon: "🏆",
+                    title: "總結與 W14 預告",
+                    desc: "預看 W14 四層結論。收回學習單，確認各組已準備好所有圖解與初步圖說。",
+                    tags: ["總結收斂", "下週預告"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📈",
+            label: "圖表初稿",
+            text: "正確格式的統計圖表<br><small style=\"font-size:11px;color:#888;\">含標題、N值與來源</small>"
+        },
+        {
+            icon: "📝",
+            label: "圖說段落",
+            text: "描述+推論寫作練習<br><small style=\"font-size:11px;color:#888;\">數據賦能與意義詮釋</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "核心觀念" },
+        { colorClass: "lm-c4", label: "格式規範" },
+        { colorClass: "lm-c2", label: "互動演練" },
+        { colorClass: "lm-c5", label: "案例拆解" },
+        { colorClass: "lm-c3", label: "小結預告" }
+    ]
+};

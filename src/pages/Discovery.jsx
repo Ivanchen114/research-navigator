@@ -72,6 +72,7 @@ export const Discovery = () => {
                     <div className="flex-1 h-[1px] bg-[#dddbd5]"></div>
                     <div className="font-mono text-[10px] text-[#8888aa] tracking-widest whitespace-nowrap uppercase">Concept</div>
                 </div>
+                <p className="text-[14px] text-[#4a4a6a] mb-6 leading-relaxed max-w-[800px]">踏上研究者的旅程，了解接下來 20 週你將會經歷的變身過程，並領取你的「三把研究之劍」。</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                     {[
@@ -97,6 +98,7 @@ export const Discovery = () => {
                     <div className="flex-1 h-[1px] bg-[#dddbd5]"></div>
                     <div className="font-mono text-[10px] text-[#8888aa] tracking-widest whitespace-nowrap uppercase">Practice</div>
                 </div>
+                <p className="text-[14px] text-[#4a4a6a] mb-6 leading-relaxed max-w-[800px]">接受三項偵探試煉——對抗視盲、建立假設、並挑戰 AI 的盲點，喚醒你的研究潛能。</p>
 
                 {/* 試煉一 */}
                 <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white mb-4">
@@ -271,6 +273,7 @@ export const Discovery = () => {
                     <div className="flex-1 h-[1px] bg-[#dddbd5]"></div>
                     <div className="font-mono text-[10px] text-[#8888aa] tracking-widest whitespace-nowrap uppercase">In-Class</div>
                 </div>
+                <p className="text-[14px] text-[#4a4a6a] mb-6 leading-relaxed max-w-[800px]">通過實戰演練與海龜湯攻防，在筆記本中記錄下你對「研究三把劍」的個人領悟。</p>
 
                 <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white mb-4">
                     <div className="px-5 py-3.5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5">
@@ -379,8 +382,8 @@ export const Discovery = () => {
                     </Link>
                 </div>
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

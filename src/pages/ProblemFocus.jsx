@@ -37,6 +37,7 @@ export const ProblemFocus = () => {
                 .w2-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
                 .w2-section-head .line { flex: 1; height: 1px; background: var(--border); }
                 .w2-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; white-space: nowrap; }
+                .w2-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
 
                 .w2-fw-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
                 .w2-fw-table thead th { background: var(--ink); color: #fff; padding: 11px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; text-align: left; border-right: 1px solid rgba(255,255,255,0.08); }
@@ -150,9 +151,8 @@ export const ProblemFocus = () => {
             </header>
 
             {/* ══ 學什麼 ══ */}
-            <div className="w2-section-head">
-                <h2>學什麼</h2><div className="line"></div><div className="mono">CONCEPT</div>
-            </div>
+            <div className="w2-section-head"><h2>學什麼</h2><div className="line"></div><div className="mono">CONCEPT</div></div>
+            <p className="w2-section-desc">學習如何從瑣碎的「煩惱」中提煉出具有研究價值的「問題」，並掌握問題意識的成形過程。</p>
 
             <div className="w2-practice-block">
                 <div className="w2-practice-header" style={{ background: 'var(--danger)', color: '#fff' }}>
@@ -215,9 +215,8 @@ export const ProblemFocus = () => {
             </div>
 
             {/* ══ 練什麼 ══ */}
-            <div className="w2-section-head">
-                <h2>練什麼</h2><div className="line"></div><div className="mono">PRACTICE</div>
-            </div>
+            <div className="w2-section-head"><h2>練什麼</h2><div className="line"></div><div className="mono">PRACTICE</div></div>
+            <p className="w2-section-desc">挑戰「煩惱變身術」！練習將日常觀察轉化為具備 5W1H 要素的研究雛形。</p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                 <span style={{ fontFamily: '"DM Mono", monospace', fontSize: '10px', background: 'var(--success)', color: '#fff', padding: '3px 8px', borderRadius: '3px', letterSpacing: '0.06em' }}>第一節</span>
@@ -236,7 +235,7 @@ export const ProblemFocus = () => {
                     <ol style={{ margin: '8px 0 0 20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         <li><strong>現象：</strong>像攝影機一樣描述（至少 30 字，不解釋，只描述）</li>
                         <li><strong>落差：</strong>哪裡矛盾？規則與現實的衝突在哪？（至少 30 字）</li>
-                        <li><strong>核心疑問：</strong>你最想搞清楚的那件事，白話說出來</li>
+                        <li><strong>核心疑問：：</strong>你最想搞清楚的那件事，白話說出來</li>
                     </ol>
                     <div className="w2-notice block" style={{ marginTop: '12px' }}>❌ 禁止用「為什麼」開頭。Step 3 不需要學術格式，說白話就好。</div>
                 </div>
@@ -352,9 +351,8 @@ export const ProblemFocus = () => {
             </div>
 
             {/* ══ 課堂任務 ══ */}
-            <div className="w2-section-head">
-                <h2>課堂任務</h2><div className="line"></div><div className="mono">IN-CLASS</div>
-            </div>
+            <div className="w2-section-head"><h2>課堂任務</h2><div className="line"></div><div className="mono">IN-CLASS</div></div>
+            <p className="w2-section-desc">參與小組腦力激盪，利用問題牆進行初步篩選，並在便利貼上寫下你的候選研究題目。</p>
 
             <div className="w2-practice-block" style={{ marginBottom: '40px' }}>
                 <div className="w2-practice-header" style={{ fontWeight: 700 }}>今天下課前要完成三件事</div>

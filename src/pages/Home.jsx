@@ -252,14 +252,14 @@ export const Home = () => {
                 <div id="phase-5">
                     <PhaseGroup num="05" title="數據分析與結論" weeks="W10+">
                         <PhaseCard
-                            icon={BarChart2} type="學習模組 · 分析部"
-                            title="解讀與結論大廳" desc="數據清洗、AI輔助洞察寫作。"
-                            onClick={() => navigate('/analysis')}
+                            icon={BarChart2} type="學習模組 · W13"
+                            title="數據轉譯 (W13)" desc="數據清洗、AI輔助洞察寫作。"
+                            onClick={() => navigate('/w13')}
                         />
                         <PhaseCard
-                            icon={TrendingUp} type="學習模組 · 設計部"
+                            icon={TrendingUp} type="學習模組 · 視覺化"
                             title="圖表選用原則" desc="選圖表如選盤子，掌握數據說故事的黃金公式。"
-                            onClick={() => navigate('/chart-selection')}
+                            onClick={() => navigate('/w13')}
                         />
                         <PhaseCard
                             icon={Palette} type="互動任務 · 行動代號：解碼" isMission={true}

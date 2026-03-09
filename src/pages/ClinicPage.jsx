@@ -118,6 +118,7 @@ export const ClinicPage = () => {
 
                 .w6-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; margin-top: 64px; }
                 .w6-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+                .clinic-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
                 .w6-section-head .line { flex: 1; height: 1px; background: var(--border); }
                 .w6-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; white-space: nowrap; }
 
@@ -166,54 +167,84 @@ export const ClinicPage = () => {
                 .w6-hw-row { padding: 12px 20px; display: flex; align-items:center; gap: 12px; background: #fff; transition: background 0.2s; }
                 .w6-hw-row:hover { background: var(--paper); }
                 @media (max-width: 768px) { .w6-meta-strip, .w6-speed-body, .w6-quiz-item, .w6-case-card, .w6-task-block, .w6-next-week-content { grid-template-columns: 1fr; } }
+                .w6-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
+                .w6-meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+                .w6-meta-label { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; font-weight: 500; }
+                .w6-meta-value { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
                 `}
             </style>
 
             {/* TOP BAR / NAVIGATION PATH */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 核心模組 / <span className="text-[#1a1a2e] font-bold">研究診所 W6</span>
+                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">研究診所 W6</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono uppercase">100 MINS</span>
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono uppercase">可投影</span>
+                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
+                    <span className="bg-[#accent] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono" style={{ background: 'var(--accent)' }}>分流週</span>
                 </div>
             </div>
 
             {showLessonMap && (
-                <div className="mb-12 animate-in slide-in-from-top-4 duration-300">
+                <div className="animate-in slide-in-from-top-4 duration-300">
                     <LessonMap data={W6Data} />
                 </div>
             )}
 
             {/* PAGE HEADER */}
-            <header className="mb-12">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em] uppercase">🏥 W6 · 核心模組</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
-                    研究診所：<span className="text-[#2d5be3] italic">掛號判斷工作坊</span>
+            <header className="mb-14">
+                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🏥 W6 · 研究診所</div>
+                <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
+                    診所實戰：<span className="text-[#2d5be3]">掛對科、找對藥、定對案</span>
                 </h1>
-                <p className="text-[15px] text-[#4a4a6a] max-w-[600px] leading-[1.75] mb-8">
-                    你知道要研究什麼，但你知道要怎麼研究嗎？今天只學一件事：<strong>分科三問</strong>——用三個問題判斷你的研究該掛哪一科。掛錯科，後面所有努力都白費。
+                <p className="text-[16px] text-[#4a4a6a] max-w-[680px] leading-[1.75] mb-10">
+                    選錯方法，研究就會「難產」。今天我們要進行一場大型診斷，透過「五科分流」找出最適合你研究目標路徑。
                 </p>
 
-                {/* META STRIP */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden">
+                {/* META CARDS */}
+                <div className="w6-meta-grid">
                     {[
-                        { label: '本週任務', value: '掛號判斷 · Level 1' },
-                        { label: '課堂產出', value: '3 份 Y 型病例' },
-                        { label: '下週預告', value: 'W7 分科三問小考' }
+                        { label: '第一節', value: '五科分流實戰 + 複合案例挑戰' },
+                        { label: '第二節', value: '方法掛號診斷 + 救活研究原石' },
+                        { label: '課課產出', value: 'W6 最終定案方法與路徑' },
+                        { label: '帶去 W7', value: '確定題目與方法 + 組隊企劃' }
                     ].map((item, idx) => (
-                        <div key={idx} className="bg-white p-[14px] px-[18px]">
-                            <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em] mb-1">{item.label}</div>
-                            <div className="text-[13px] font-bold text-[#1a1a2e]">{item.value}</div>
+                        <div key={idx} className="w6-meta-card">
+                            <div className="w6-meta-label">{item.label}</div>
+                            <div className="w6-meta-value">{item.value}</div>
                         </div>
                     ))}
+                </div>
+
+                {/* COURSE ARC - Standard Version A */}
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="grid grid-cols-7 border border-[#dddbd5] rounded-[12px] overflow-hidden">
+                        {[
+                            { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
+                            { wk: 'W5', name: '文獻鑑識\n證據等級', past: true },
+                            { wk: 'W6', name: '研究診所\n方法抉擇', now: true },
+                            { wk: 'W7', name: '組隊決策\n企劃定案' },
+                            { wk: 'W8-W10', name: '工具設計\n倫理審查' },
+                            { wk: 'W11-W15', name: '執行研究\n資料分析' },
+                            { wk: 'W16', name: '成果展示\nGallery Walk' }
+                        ].map((item, idx) => (
+                            <div key={idx} className={`p-4 text-center border-r border-[#dddbd5] last:border-r-0 ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-[#f8f7f4]'}`}>
+                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
+                                    {item.wk} {item.now && '← 現在'}
+                                </div>
+                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
+                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </header>
 
@@ -222,8 +253,9 @@ export const ClinicPage = () => {
                 <div className="w6-section-head">
                     <h2>學什麼</h2>
                     <div className="line"></div>
-                    <div className="mono uppercase">Concept</div>
+                    <span className="mono">CONCEPT</span>
                 </div>
+                <p className="clinic-section-desc">掌握「分科三問」篩選標準，學會判斷研究問題該「掛哪一科」，讓你的研究事半功倍。</p>
 
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
                     {CATEGORIES.map((cat) => (
@@ -270,8 +302,9 @@ export const ClinicPage = () => {
                 <div className="w6-section-head">
                     <h2>練什麼</h2>
                     <div className="line"></div>
-                    <div className="mono uppercase">Practice</div>
+                    <span className="mono">PRACTICE</span>
                 </div>
+                <p className="clinic-section-desc">透過急診搶答與病例診斷，挑戰你的直覺反應，精準找出錯誤掛號的原因。</p>
 
                 {/* 急診分流練習 */}
                 <div className="w6-quiz-block mb-10 shadow-sm">
@@ -415,8 +448,9 @@ export const ClinicPage = () => {
                 <div className="w6-section-head">
                     <h2>課堂任務</h2>
                     <div className="line"></div>
-                    <div className="mono uppercase">In-Class</div>
+                    <span className="mono">IN-CLASS</span>
                 </div>
+                <p className="clinic-section-desc">進入「研究診所」會診現場，與組員共同診斷 3 份 Y 型病例，並與同儕交換意見。</p>
 
                 <div className="grid md:grid-cols-2 gap-8 mb-8">
                     <div className="w6-task-block group">

@@ -68,7 +68,7 @@ export const W12Page = () => {
                     </div>
                     <div>
                         <h2 className="text-2xl font-bold text-slate-800">Part 1｜期中盤點 Elevator Pitch</h2>
-                        <p className="text-indigo-700 text-sm">每組 1.5 分鐘，請依循以下模板填空（強制格式以控制時間）。</p>
+                        <p className="text-indigo-700 text-sm">透過高壓的「電梯簡報」盤點目前的進度與困難，讓全班一起幫你找出生路。</p>
                     </div>
                 </div>
 
@@ -133,7 +133,7 @@ export const W12Page = () => {
                     </div>
                     <div>
                         <h2 className="text-2xl font-bold text-slate-800">Part 2｜資料收齊檢核：Closing the Books</h2>
-                        <p className="text-slate-500 text-sm">下週進廚房（資料分析），今天必須備好料！什麼叫作「資料已收齊」？</p>
+                        <p className="text-slate-500 text-sm">進入「收網」階段，檢核你的原始數據是否已收齊並轉化為數位格式，準備下週進廚房。</p>
                     </div>
                 </div>
 
@@ -175,7 +175,7 @@ export const W12Page = () => {
                     Part 3｜早鳥任務：請 AI 幫你探勘資料
                 </h2>
                 <p className="text-slate-300 mb-6 max-w-2xl">
-                    如果你已經達成標準，不用等其他組！試著把你的資料餵給 AI，讓它幫你找出潛在的規律，當作下週分析的暖身。
+                    進度領先者的早鳥獎勵——率先把數據餵給 AI，找出那些藏在數字背後的「意外點」。
                 </p>
 
                 <div className="bg-slate-800 rounded-xl p-5 border border-slate-700 relative z-10 w-full sm:w-2/3">

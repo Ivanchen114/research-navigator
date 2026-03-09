@@ -79,7 +79,7 @@ export const ChartSelection = () => {
                     選圖表如同選盤子：讓數據說出最清楚的話
                 </h1>
                 <p className="text-[16px] text-[#4a4a6a] max-w-[600px] leading-relaxed">
-                    數據是食材，圖表是盤子。選錯圖表，數據就會失焦；選對圖表，結論自然顯現。
+                    數據是食材，圖表是盤子。本模組將教你如何根據研究目的選擇最合適的「盤子」，讓你的數據說出最有力、最清楚的話。
                 </p>
             </header>
 

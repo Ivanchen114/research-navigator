@@ -1,7 +1,7 @@
 import React from 'react';
 import './LessonMap.css'; // We'll put the specific timeline CSS here.
 
-const LessonMap = ({ data }) => {
+export const LessonMap = ({ data }) => {
     if (!data) return null;
 
     return (

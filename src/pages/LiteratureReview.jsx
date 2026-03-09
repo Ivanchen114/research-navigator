@@ -27,6 +27,12 @@ export const LiteratureReview = () => {
     const [searchKeywords, setSearchKeywords] = useState('');
     const [foundPaper, setFoundPaper] = useState('');
     const [showLessonMap, setShowLessonMap] = useState(false);
+    const [expandedSpecimens, setExpandedSpecimens] = useState({});
+
+    // Toggle specimen expansion
+    const toggleSpecimen = (id) => {
+        setExpandedSpecimens(prev => ({ ...prev, [id]: !prev[id] }));
+    };
 
     // Unlock Answer State
     const [unlockCounts, setUnlockCounts] = useState({});
@@ -62,6 +68,11 @@ export const LiteratureReview = () => {
                     --danger: #c0392b; --danger-light: #fdecea;
                     --border: #dddbd5; --border-mid: #c8c5bc;
                 }
+                .w5-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
+                .w5-meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+                .w5-meta-label { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; font-weight: 500; }
+                .w5-meta-value { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+                
                 .w5-grade-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
                 @media (min-width: 768px) { .w5-grade-grid { grid-template-columns: repeat(4, 1fr); } }
                 .w5-grade-card { background: #fff; padding: 18px 16px; }
@@ -121,13 +132,42 @@ export const LiteratureReview = () => {
                 .w5-meta-item { background: #fff; padding: 14px 18px; }
                 .w5-meta-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--ink-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
                 .w5-meta-value { font-size: 13px; font-weight: 700; color: var(--ink); }
-                @media (max-width: 768px) { .w5-meta-strip { grid-template-columns: 1fr; } }
+                .w5-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
+
+                /* Forensic Record Sheet */
+                .w5-record-card { border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; background: #fff; margin-top: 48px; }
+                .w5-record-hd { background: var(--ink); color: #fff; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+                .w5-record-title { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; }
+                .w5-record-fields { padding: 20px 24px; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; border-bottom: 1px solid var(--border); background: var(--paper-warm); }
+                .w5-field-item { display: flex; align-items: center; gap: 12px; }
+                .w5-field-label { font-size: 11px; font-weight: 700; color: var(--ink-mid); white-space: nowrap; }
+                .w5-field-input { flex: 1; border-bottom: 1px solid var(--border-mid); background: transparent; padding: 4px 0; font-size: 13px; }
+                .w5-record-rules { padding: 24px; }
+                .w5-rule-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+                .w5-rule-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+                .w5-rule-item { }
+                .w5-rule-label { font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 4px; display: block; }
+                .w5-rule-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.6; }
+
+                .w5-specimen-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
+                .w5-specimen { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+                .w5-specimen:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+                .w5-specimen-hd { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+                .w5-specimen-body { padding: 0 20px 20px 20px; border-top: 1px solid var(--paper-warm); background: #fafaf8; animation: slideDown 0.3s ease-out; }
+                @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+                .w5-specimen-expand-btn { margin-left: auto; color: var(--ink-light); }
+                .w5-specimen-detail-section { margin-top: 16px; }
+                .w5-specimen-detail-label { font-size: 10px; font-weight: 700; color: var(--ink-light); text-transform: uppercase; margin-bottom: 4px; display: block; }
+                .w5-specimen-detail-content { font-size: 12px; color: var(--ink-mid); line-height: 1.7; }
+                .w5-specimen-link { color: var(--accent); text-decoration: underline; word-break: break-all; }
+
+                @media (max-width: 768px) { .w5-meta-strip, .w5-record-fields, .w5-rule-grid { grid-template-columns: 1fr; } }
             ` }} />
 
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 核心模組 / <span className="text-[#1a1a2e] font-bold">文獻偵探社 W5</span>
+                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">文獻偵探社 W5</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -137,6 +177,7 @@ export const LiteratureReview = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
+                    <span className="bg-[#2d5be3] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">鑑識週</span>
                 </div>
             </div>
 
@@ -178,6 +219,7 @@ export const LiteratureReview = () => {
                     <div className="line"></div>
                     <span className="mono">CONCEPT</span>
                 </div>
+                <p className="w5-section-desc">掌握文獻等級 (A–D) 的判定標準與兩大查核路徑，學會親手分辨學術真相與 AI 幻覺。</p>
 
                 {/* 四級制 */}
                 <div className="space-y-4">
@@ -313,6 +355,7 @@ export const LiteratureReview = () => {
                     <div className="line"></div>
                     <span className="mono">PRACTICE</span>
                 </div>
+                <p className="w5-section-desc">請觀看原始文獻與同學改寫，判斷這位學生的改寫有什麼問題？並練習正確的改寫，用你自己的話重述這段概念。</p>
 
                 {/* 練習 1 */}
                 <div className="bg-white border border-[var(--border)] rounded-[10px] overflow-hidden shadow-sm">
@@ -455,27 +498,136 @@ export const LiteratureReview = () => {
 
                 {/* 五份證物預覽 */}
                 <div className="space-y-4 pt-6">
-                    <div className="text-[10px] font-['DM_Mono',monospace] text-[var(--ink-light)] uppercase tracking-widest">課堂實戰 · 五份證物預覽</div>
+                    <div className="text-[10px] font-['DM_Mono',monospace] text-[var(--ink-light)] uppercase tracking-widest">課堂實戰 · 五份證物預覽（點擊展開鑑定細節）</div>
+                    <p className="w5-section-desc" style={{ marginTop: '8px', marginBottom: '0' }}>
+                        請小組成員共同協作，運用課堂所學的文獻等級 (A–D) 與查核路徑，依序鑑定下列五份證物的真實性與學術價值。
+                    </p>
                     <div className="w5-specimen-grid">
                         {[
-                            { id: '證物 A', title: '台中市高中職學生數學焦慮與學業成就關係之研究', meta: '鄭淑米 · 2006 · 國立臺灣師範大學碩士論文', color: 'bg-[var(--success-light)] text-[var(--success)]' },
-                            { id: '證物 B', title: 'Smartphone Usage and Sleep Quality in Taiwanese Adolescents', meta: 'Michael Chen, Sarah Wang · 2023 · Journal of Sleep Research', color: 'bg-[var(--danger-light)] text-[var(--danger)]' },
-                            { id: '證物 C', title: '我的不正經人生觀', meta: '黃益中 · 2019 · 寶瓶文化（科普書）', color: 'bg-[var(--gold-light)] text-[#7a6020]' },
-                            { id: '證物 D', title: '生活小竅門 教你如何治療燒傷燙傷', meta: '每日頭條 · 生活竅門點點通 · 2016', color: 'bg-[var(--danger-light)] text-[var(--danger)]' },
-                        ].map((item, idx) => (
-                            <div key={idx} className="w5-specimen group">
-                                <span className={`w5-specimen-tag ${item.color}`}>{item.id}</span>
-                                <h4 className="w5-specimen-title">{item.title}</h4>
-                                <p className="w5-specimen-meta">{item.meta}</p>
+                            {
+                                id: 'A',
+                                title: '台中市高中職學生數學焦慮、數學自我效能與數學學業成就關係之研究',
+                                badge: '證物 A',
+                                color: 'var(--success)',
+                                bg: 'var(--success-light)',
+                                info: [
+                                    { label: '作者', content: '鄭淑米' },
+                                    { label: '指導教授', content: '蔡蓉青' },
+                                    { label: '年份', content: '2006' },
+                                    { label: '來源', content: '碩士論文' }
+                                ],
+                                abstract: '本研究旨在瞭解高中職一年級學生數學焦慮與數學自我效能的現況，並探討其與數學學業成就之關係。研究採問卷調查法，抽樣若干學生，回收有效問卷後進行統計分析。',
+                                link: 'https://www.airitilibrary.com/Article/Detail/U0021-2304200714313183'
+                            },
+                            {
+                                id: 'B',
+                                title: 'Smartphone Usage and Sleep Quality in Taiwanese Adolescents: A Longitudinal Study',
+                                badge: '證物 B',
+                                color: 'var(--danger)',
+                                bg: 'var(--danger-light)',
+                                info: [
+                                    { label: 'Authors', content: 'Michael Chen, Sarah Wang' },
+                                    { label: 'Year', content: '2023' },
+                                    { label: 'Journal', content: 'Journal of Sleep Research and Technology' },
+                                    { label: 'Volume', content: 'Vol. 18(4), pp. 234-251' },
+                                    { label: 'DOI', content: '10.1177/0272989X241231721' }
+                                ],
+                                abstract: 'This longitudinal study followed Taiwanese high school students for three years. Results indicated that excessive smartphone use predicted poorer sleep outcomes. The authors recommend stricter school policies to reduce smartphone exposure.',
+                                keywords: 'smartphone use; sleep quality; adolescents; longitudinal'
+                            },
+                            {
+                                id: 'C',
+                                title: '我的不正經人生觀',
+                                badge: '證物 C',
+                                color: 'var(--gold)',
+                                bg: 'var(--gold-light)',
+                                info: [
+                                    { label: '作者', content: '黃益中' },
+                                    { label: '出版社', content: '寶瓶文化' },
+                                    { label: '出版年', content: '2019' },
+                                    { label: 'ISBN', content: '978-986-406-159-4' }
+                                ],
+                                abstract: '本書以教育現場的案例與社會觀察，討論青少年成長、學習動機、人際互動與價值選擇等議題。內容包含作者的觀點、故事與整理。'
+                            },
+                            {
+                                id: 'D',
+                                title: '生活小竅門 教你如何治療燒傷燙傷',
+                                badge: '證物 D',
+                                color: 'var(--danger)',
+                                bg: 'var(--danger-light)',
+                                info: [
+                                    { label: '來源', content: '每日頭條' },
+                                    { label: '作者', content: '生活竅門點點通' },
+                                    { label: '日期', content: '2016-11-03' },
+                                    { label: '主要主張', content: '使用蔥葉貼敷、蛋清、大白菜等民間療法處理燒燙傷。' }
+                                ],
+                                abstract: '文章整理燒燙傷常見來源與民間處理法：蔥葉貼敷、蛋清加糖、蛋膜貼敷、蛋黃熬油、大白菜外敷、蘆薈塗抹、石灰香油膏等。並強調第一時間以清潔冷水沖洗或浸泡降溫止痛、減少起泡。',
+                                link: 'www.health-info-farm.com/xxx'
+                            },
+                            {
+                                id: 'E',
+                                title: '【Facebook 貼文】國家教育研究院｜全國多所學校開始限制學生上課使用手機…',
+                                badge: '證物 E',
+                                color: 'var(--accent)',
+                                bg: 'var(--accent-light)',
+                                info: [
+                                    { label: '發佈者', content: '國家教育研究院🏛️' },
+                                    { label: '粉專連結', content: '國家教育研究院官方 FB' },
+                                    { label: '發佈日期', content: '2026年1月5日 17:05' }
+                                ],
+                                abstract: '全國多所學校開始限制學生上課使用手機，休息時間也有 63% 禁用。老師們普遍支持，期望恢復純粹的學習環境。但面對 AI 與數位時代，也有教師持保留態度。科技與教育該如何平衡？',
+                                link: 'https://is.gd/xDIT6f'
+                            }
+                        ].map((specimen) => (
+                            <div
+                                key={specimen.id}
+                                className="w5-specimen"
+                                onClick={() => toggleSpecimen(specimen.id)}
+                            >
+                                <div className="w5-specimen-hd">
+                                    <span
+                                        className="w5-specimen-tag"
+                                        style={{ background: specimen.bg, color: specimen.color }}
+                                    >
+                                        {specimen.badge}
+                                    </span>
+                                    <h4 className="w5-specimen-title">{specimen.title}</h4>
+                                    <div className="w5-specimen-expand-btn">
+                                        {expandedSpecimens[specimen.id] ? <ChevronRight size={16} className="rotate-90" /> : <ChevronRight size={16} />}
+                                    </div>
+                                </div>
+                                {expandedSpecimens[specimen.id] && (
+                                    <div className="w5-specimen-body">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {specimen.info.map((info, idx) => (
+                                                <div key={idx} className="w5-specimen-detail-section">
+                                                    <span className="w5-specimen-detail-label">{info.label}</span>
+                                                    <div className="w5-specimen-detail-content">{info.content}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="w5-specimen-detail-section">
+                                            <span className="w5-specimen-detail-label">{specimen.id === 'D' || specimen.id === 'C' ? '內容節錄 / 簡介' : '摘要節錄'}</span>
+                                            <div className="w5-specimen-detail-content italic">{specimen.abstract}</div>
+                                        </div>
+                                        {specimen.keywords && (
+                                            <div className="w5-specimen-detail-section">
+                                                <span className="w5-specimen-detail-label">Keywords</span>
+                                                <div className="w5-specimen-detail-content font-mono text-[10px]">{specimen.keywords}</div>
+                                            </div>
+                                        )}
+                                        {specimen.link && (
+                                            <div className="w5-specimen-detail-section border-t border-[var(--border)] pt-3">
+                                                <span className="w5-specimen-detail-label">連結</span>
+                                                <a href={specimen.link} target="_blank" rel="noopener noreferrer" className="w5-specimen-link text-[11px]" onClick={(e) => e.stopPropagation()}>
+                                                    {specimen.link}
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         ))}
-                    </div>
-                    <div className="bg-white border border-[var(--border)] p-5 rounded-[8px] flex items-center gap-5">
-                        <span className="w5-specimen-tag bg-[var(--danger-light)] text-[var(--danger)] mb-0">證物 E</span>
-                        <div>
-                            <h4 className="w5-specimen-title mb-0">【Facebook 貼文】國家教育研究院｜全國多所學校開始限制學生上課使用手機…</h4>
-                            <p className="w5-specimen-meta">國家教育研究院官方 FB · 2026年1月5日</p>
-                        </div>
                     </div>
                     <div className="w5-notice w5-notice-gold">
                         💡 <strong>查證提醒</strong>：其中隱藏了 A、B、D 三種陷阱——包括「查無此人」的 AI 幻覺、內容農場、以及難辨等級的社群發文。請依照兩步驟路徑進行偵查。
@@ -490,6 +642,7 @@ export const LiteratureReview = () => {
                     <div className="line"></div>
                     <span className="mono">IN-CLASS</span>
                 </div>
+                <p className="w5-section-desc">第一節課你將與小組成員一起鑑識五份神秘證物；第二節課則要為自己的研究題目找齊三篇真實文獻並進行互審。</p>
 
                 <div className="space-y-4">
                     {[
@@ -604,6 +757,50 @@ export const LiteratureReview = () => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* 文獻偵探社：證物鑑識紀錄表 */}
+                    <div className="w5-record-card">
+                        <div className="w5-record-hd">
+                            <div className="w5-record-title">W5 文獻偵探社：證物鑑識紀錄表</div>
+                            <div className="text-[10px] font-mono opacity-60">FORM ID: W5-SPECIMEN-FORENSICS</div>
+                        </div>
+                        <div className="w5-record-fields">
+                            <div className="w5-field-item">
+                                <span className="w5-field-label">組別：</span>
+                                <input className="w5-field-input" placeholder="NO." />
+                            </div>
+                            <div className="w5-field-item">
+                                <span className="w5-field-label">探員簽名：</span>
+                                <input className="w5-field-input" placeholder="班級座號姓名" />
+                            </div>
+                        </div>
+                        <div className="w5-record-rules">
+                            <div className="w5-rule-title">
+                                <ShieldAlert size={14} className="text-var(--danger)" /> 【鑑識規則】
+                            </div>
+                            <div className="w5-rule-grid">
+                                <div className="w5-rule-item">
+                                    <span className="w5-rule-label">等級判定</span>
+                                    <p className="w5-rule-desc">A級 (主證據) / B級 (輔助) / C級 (背景) / D級 (不採用)</p>
+                                </div>
+                                <div className="w5-rule-item">
+                                    <span className="w5-rule-label">用途說明</span>
+                                    <p className="w5-rule-desc">參考課堂投影片說明之文獻定位與引用時機。</p>
+                                </div>
+                                <div className="w5-rule-item">
+                                    <span className="w5-rule-label">理由陳述</span>
+                                    <p className="w5-rule-desc">至少寫出 2 個你在證物中看到的查核線索。</p>
+                                </div>
+                                <div className="w5-rule-item">
+                                    <span className="w5-rule-label">查核路徑</span>
+                                    <p className="w5-rule-desc">記錄你是如何查證該文獻真實性的（如：Google Scholar）。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-var(--paper-warm) p-4 px-6 border-t border-var(--border) text-[11px] text-var(--ink-light) italic">
+                            💡 請對每個證物（A–E）進行嚴密判定，查核路徑需具備可複現性。
                         </div>
                     </div>
                 </div>
