@@ -54,33 +54,40 @@ export const W1Page = () => {
     const allChecked = AIRED_STEPS.every(s => checkedSteps[s.letter]);
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[14px] leading-[1.6] text-[#1a1a2e] pb-32">
+        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
 
             {/* INLINE CSS FOR USER DESIGN SPECIFICS */}
             <style dangerouslySetInnerHTML={{
                 __html: `
-                .user-meta-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
-                .user-meta-item { background: #fff; padding: 14px 18px; }
-                .user-aired-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
-                .user-aired-item { background: #fff; padding: 16px 14px; cursor: pointer; transition: all 0.2s; }
-                .user-aired-item:hover { background: #f8f7f4; }
-                .user-aired-item.checked { background: #e8eeff; }
-                .user-division-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
-                .user-suspect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-                .user-skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-                @media (max-width: 768px) {
-                    .user-meta-strip { grid-template-columns: 1fr 1fr; }
-                    .user-aired-grid { grid-template-columns: 1fr; }
-                    .user-division-grid { grid-template-columns: 1fr; }
-                    .user-suspect-grid { grid-template-columns: 1fr; }
-                    .user-skill-grid { grid-template-columns: 1fr; }
-                }
+                .w1-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
+                .w1-meta-item { background: #fff; padding: 14px 18px; }
+                @media (max-width: 768px) { .w1-meta-strip { grid-template-columns: 1fr; } }
+                .w1-aired-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
+                .w1-aired-item { background: #fff; padding: 16px 14px; cursor: pointer; transition: all 0.2s; }
+                .w1-aired-item:hover { background: #f8f7f4; }
+                .w1-aired-item.checked { background: #e8eeff; }
+                .w1-division-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
+                .w1-suspect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+                .w1-skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+                .w1-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; margin-top: 64px; }
+                .w1-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+                .w1-section-head .line { flex: 1; height: 1px; background: #dddbd5; }
+                .w1-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: #8888aa; letter-spacing: 0.08em; }
+
+                .w1-next-week-preview { background: var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 48px; border: 1px solid #dddbd5; }
+                .w1-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
+                .w1-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
+                .w1-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
+                .w1-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
+                .w1-next-week-col { background: var(--ink); padding: 20px 24px; }
+                .w1-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
+                .w1-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
             `}} />
 
             {/* TOP BAR / NAVIGATION PATH */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 -mt-4">
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 問題意識 / <span className="text-[#1a1a2e]">模仿遊戲 W1</span>
+                    研究方法與專題 / 識能探索 / <span className="text-[#1a1a2e] font-bold">模仿遊戲 W1</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -110,14 +117,13 @@ export const W1Page = () => {
                 </p>
 
                 {/* META STRIP */}
-                <div className="user-meta-strip">
+                <div className="w1-meta-strip">
                     {[
                         { label: '本週任務', value: '找出偽裝者 + 簽署公約' },
                         { label: '課堂產出', value: '好奇心種子' },
-                        { label: '本週作業', value: '學習單（Parts 0–3）' },
-                        { label: '帶去 W2', value: '你觀察到的生活現象' }
+                        { label: '下週預告', value: '你觀察到的生活現象' }
                     ].map((item, idx) => (
-                        <div key={idx} className="user-meta-item">
+                        <div key={idx} className="w1-meta-item">
                             <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em] mb-1">{item.label}</div>
                             <div className="text-[13px] font-bold text-[#1a1a2e]">{item.value}</div>
                         </div>
@@ -126,21 +132,21 @@ export const W1Page = () => {
             </header>
 
             {/* PART 1: 學什麼 (CONCEPT) */}
-            <section className="space-y-8">
-                <div className="flex items-center gap-4">
-                    <h2 className="font-serif text-[18px] font-bold text-[#1a1a2e] whitespace-nowrap">學什麼</h2>
-                    <div className="h-px bg-[#dddbd5] flex-1"></div>
-                    <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em]">Concept</span>
+            <section>
+                <div className="w1-section-head">
+                    <h2>學什麼</h2>
+                    <div className="line"></div>
+                    <div className="mono">CONCEPT</div>
                 </div>
 
                 <div className="space-y-6">
                     <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.1em] mb-2">AI-RED 協作公約 · 五步驟</div>
-                    <div className="user-aired-grid">
+                    <div className="w1-aired-grid">
                         {AIRED_STEPS.map(step => (
                             <div
                                 key={step.letter}
                                 onClick={() => toggleStep(step.letter)}
-                                className={`user-aired-item ${checkedSteps[step.letter] ? 'user-aired-item checked' : ''}`}
+                                className={`w1-aired-item ${checkedSteps[step.letter] ? 'w1-aired-item checked' : ''}`}
                             >
                                 <div className={`text-[22px] font-bold font-mono mb-1 ${checkedSteps[step.letter] ? 'text-[#2d5be3]' : 'text-[#2d5be3]'}`}>
                                     {step.letter}
@@ -161,12 +167,12 @@ export const W1Page = () => {
                 {/* 人機分工 */}
                 <div className="space-y-4">
                     <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.1em]">人機分工</div>
-                    <div className="user-division-grid">
+                    <div className="w1-division-grid">
                         <div className="bg-white">
                             <div className="p-3 px-4 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <span className="text-base">🧠</span>
-                                    <span className="font-bold text-[#1a1a2e] text-[14px]">人類負責</span>
+                                    <span className="font-bold text-[#1a1a2e] text-[13px]">人類負責</span>
                                 </div>
                                 <span className="text-[10px] font-mono text-[#2d5be3]">大腦</span>
                             </div>
@@ -183,7 +189,7 @@ export const W1Page = () => {
                             <div className="p-3 px-4 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <span className="text-base">⚙️</span>
-                                    <span className="font-bold text-[#1a1a2e] text-[14px]">AI 負責</span>
+                                    <span className="font-bold text-[#1a1a2e] text-[13px]">AI 負責</span>
                                 </div>
                                 <span className="text-[10px] font-mono text-[#8888aa]">手腳</span>
                             </div>
@@ -204,18 +210,18 @@ export const W1Page = () => {
             </section>
 
             {/* PART 2: 練什麼 (PRACTICE) */}
-            <section className="space-y-8">
-                <div className="flex items-center gap-4">
-                    <h2 className="font-serif text-[18px] font-bold text-[#1a1a2e] whitespace-nowrap">練什麼</h2>
-                    <div className="h-px bg-[#dddbd5] flex-1"></div>
-                    <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em]">Practice</span>
+            <section>
+                <div className="w1-section-head">
+                    <h2>練什麼</h2>
+                    <div className="line"></div>
+                    <div className="mono">PRACTICE</div>
                 </div>
 
                 <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     <div className="p-4 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <span className="bg-[#c0392b] text-white text-[10px] px-2 py-0.5 rounded-[3px] font-mono">TASK</span>
-                            <span className="font-bold text-[14px]">🕵️ 找出偽裝者</span>
+                            <span className="font-bold text-[13px]">🕵️ 找出偽裝者</span>
                         </div>
                         <span className="text-[12px] text-[#8888aa]">7 份作品中有 1 份是 AI 寫的</span>
                     </div>
@@ -224,7 +230,7 @@ export const W1Page = () => {
                             先自己判斷，再小組討論。不要直接說答案——要說出<strong>你的理由</strong>。
                         </div>
 
-                        <div className="user-suspect-grid">
+                        <div className="w1-suspect-grid">
                             {SUSPECTS.map(s => (
                                 <div key={s.id} className="border border-[#dddbd5] rounded-lg overflow-hidden flex flex-col">
                                     <div className="p-3 px-4 bg-[#f8f7f4] border-b border-[#dddbd5] text-[11px] font-mono text-[#8888aa]">
@@ -242,7 +248,7 @@ export const W1Page = () => {
                             className={`w-full p-8 border rounded-[10px] flex items-center justify-between transition-all ${showTruth ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]' : 'bg-white text-[#1a1a2e] border-[#dddbd5] hover:border-[#1a1a2e]'
                                 }`}
                         >
-                            <div className="flex items-center gap-4 font-bold text-[18px]">
+                            <div className="flex items-center gap-4 font-bold text-[17px]">
                                 <Activity className={showTruth ? 'text-[#c9a84c]' : 'text-[#2d5be3]'} size={28} />
                                 揭曉真相：誰是偽裝者？
                             </div>
@@ -271,11 +277,11 @@ export const W1Page = () => {
                 {/* 這學期要練的三件事 */}
                 <div className="space-y-4 pt-4">
                     <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.1em]">這學期要練的三件 AI 做不到的事</div>
-                    <div className="user-skill-grid">
+                    <div className="w1-skill-grid">
                         {[
                             { icon: '👅', title: '品味', en: 'Taste', desc: 'AI 沒有好奇心。我們要學問好問題——不是問 AI 叫你問的問題，而是你真正想知道的問題。', next: '→ W2–W3 練這個' },
                             { icon: '🤝', title: '接觸', en: 'Touch', desc: 'AI 沒有身體。我們要學拿到真實數據——去現場、去問人、去觀察，拿到 AI 永遠拿不到的東西。', next: '→ W4–W10 練這個' },
-                            { icon: '⚖️', title: '判斷', en: 'Judgment', desc: 'AI 會胡說八道。我們要學批判思考——不照單全收，對數字和結論都要追問「這合理嗎？」', next: '→ W15–W16 練這個' }
+                            { icon: '⚖️', title: '判斷', en: 'Judgment', desc: 'AI 會胡說八道。我們要學批判思考——不照單全收，對數字 and 結論都要追問「這合理嗎？」', next: '→ W15–W16 練這個' }
                         ].map((skill, i) => (
                             <div key={i} className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden flex flex-col">
                                 <div className="p-5 pb-0">
@@ -294,11 +300,11 @@ export const W1Page = () => {
             </section>
 
             {/* PART 3: 課堂任務 (IN-CLASS) */}
-            <section className="space-y-8">
-                <div className="flex items-center gap-4">
-                    <h2 className="font-serif text-[18px] font-bold text-[#1a1a2e] whitespace-nowrap">課堂任務</h2>
-                    <div className="h-px bg-[#dddbd5] flex-1"></div>
-                    <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em]">In-Class</span>
+            <section>
+                <div className="w1-section-head">
+                    <h2>課堂任務</h2>
+                    <div className="line"></div>
+                    <div className="mono">IN-CLASS</div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
@@ -335,15 +341,15 @@ export const W1Page = () => {
                                 }>
                                     TASK {task.id}
                                 </span>
-                                <h3 className="font-bold text-[14px] text-[#1a1a2e]">{task.title}</h3>
+                                <h3 className="font-bold text-[13px] text-[#1a1a2e]">{task.title}</h3>
                             </div>
                             <div className="p-6 md:p-8 space-y-6">
                                 {task.subtitle && (
-                                    <p className="text-[14px] text-[#4a4a6a] leading-relaxed mb-4">
+                                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed mb-4">
                                         {task.subtitle}
                                     </p>
                                 )}
-                                <ol className="list-decimal list-outside ml-6 space-y-2 text-[14px] text-[#4a4a6a]">
+                                <ol className="list-decimal list-outside ml-6 space-y-2 text-[13px] text-[#4a4a6a]">
                                     {task.steps.map((s, idx) => (
                                         <li key={idx} className="leading-relaxed pl-1">{s}</li>
                                     ))}
@@ -364,15 +370,15 @@ export const W1Page = () => {
             </section>
 
             {/* PART 4: 本週總結 (WRAP-UP) */}
-            <section className="space-y-8">
-                <div className="flex items-center gap-4">
-                    <h2 className="font-serif text-[18px] font-bold text-[#1a1a2e] whitespace-nowrap">本週總結</h2>
-                    <div className="h-px bg-[#dddbd5] flex-1"></div>
-                    <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em]">Wrap-Up</span>
+            <section>
+                <div className="w1-section-head">
+                    <h2>本週總結</h2>
+                    <div className="line"></div>
+                    <div className="mono">WRAP-UP</div>
                 </div>
 
                 <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden">
-                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[14px]">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[13px]">
                         ✅ 本週結束，你應該要會
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
@@ -394,7 +400,7 @@ export const W1Page = () => {
                 <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden">
                     <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
                         <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
-                        <span className="font-bold text-[14px]">本週作業</span>
+                        <span className="font-bold text-[13px]">本週作業</span>
                     </div>
                     <div className="divide-y divide-[#dddbd5]">
                         {[
@@ -422,19 +428,19 @@ export const W1Page = () => {
                 </div>
 
                 {/* 下週預告 */}
-                <div className="bg-[#1a1a2e] rounded-[10px] overflow-hidden border border-[#dddbd5]">
-                    <div className="p-4 px-5 border-b border-white/5 flex items-center gap-3">
-                        <span className="text-[10px] font-mono bg-white/10 text-white/60 px-2 py-0.5 rounded-[3px]">NEXT WEEK</span>
-                        <span className="font-bold text-white text-[14px]">W2 預告</span>
+                <div className="w1-next-week-preview">
+                    <div className="w1-next-week-header">
+                        <span className="w1-next-week-badge">NEXT WEEK</span>
+                        <h3 className="w1-next-week-title">W2 預告</h3>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-white/5">
-                        <div className="bg-[#1a1a2e] p-5">
-                            <div className="text-[10px] font-mono text-white/40 uppercase mb-2 tracking-[0.05em]">W2 主題</div>
-                            <div className="text-[13px] text-white/80 leading-relaxed">問題意識的覺醒——把模糊的「為什麼」，變成清楚的「我想探究」。</div>
+                    <div className="w1-next-week-content">
+                        <div className="w1-next-week-col">
+                            <div className="w1-next-week-label">W2 主題</div>
+                            <p className="w1-next-week-text">問題意識的覺醒——把模糊的「為什麼」，變成清楚的「我想探究」。</p>
                         </div>
-                        <div className="bg-[#1a1a2e] p-5">
-                            <div className="text-[10px] font-mono text-white/40 uppercase mb-2 tracking-[0.05em]">你要帶來</div>
-                            <div className="text-[13px] text-white/80 leading-relaxed"><strong>你今天寫的生活觀察</strong>——那就是你研究題目的起點。沒有帶，W2 的課你會跟不上。</div>
+                        <div className="w1-next-week-col">
+                            <div className="w1-next-week-label">你要帶來</div>
+                            <p className="w1-next-week-text"><strong>你今天寫的生活觀察</strong>——那就是你研究題目的起點。沒有帶，W2 的課你會跟不上。</p>
                         </div>
                     </div>
                 </div>
@@ -444,7 +450,7 @@ export const W1Page = () => {
                     <Link to="/w0" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
                         ← 回 W0 偵探特訓班
                     </Link>
-                    <Link to="/w2" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#2a2a4a] transition-all flex items-center gap-2 group">
+                    <Link to="/w2" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#2a2a4a] transition-all flex items-center gap-2 group">
                         前往 W2 問題意識 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>

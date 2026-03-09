@@ -51,20 +51,16 @@ export const Discovery = () => {
                 </p>
 
                 {/* META STRIP */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12 shadow-sm">
-                    <div className="bg-white p-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-[#dddbd5] border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12 shadow-sm">
+                    <div className="bg-white p-4 text-center md:text-left">
                         <div className="text-[10px] font-mono text-[#8888aa] tracking-widest uppercase mb-1">本週任務</div>
                         <div className="text-[13px] font-bold text-[#1a1a2e]">偵探試煉 · Level 0</div>
                     </div>
-                    <div className="bg-white p-4">
+                    <div className="bg-white p-4 text-center md:text-left">
                         <div className="text-[10px] font-mono text-[#8888aa] tracking-widest uppercase mb-1">課堂產出</div>
                         <div className="text-[13px] font-bold text-[#1a1a2e]">三把劍筆記</div>
                     </div>
-                    <div className="bg-white p-4">
-                        <div className="text-[10px] font-mono text-[#8888aa] tracking-widest uppercase mb-1">本週作業</div>
-                        <div className="text-[13px] font-bold text-[#1a1a2e]">無</div>
-                    </div>
-                    <div className="bg-white p-4">
+                    <div className="bg-white p-4 text-center md:text-left">
                         <div className="text-[10px] font-mono text-[#8888aa] tracking-widest uppercase mb-1">下週預告</div>
                         <div className="text-[13px] font-bold text-[#1a1a2e]">W1 模仿遊戲 + AI-RED</div>
                     </div>
@@ -378,7 +374,7 @@ export const Discovery = () => {
                 {/* Navigation */}
                 <div className="flex justify-between items-center py-12 border-t border-[#dddbd5]">
                     <div />
-                    <Link to="/w1" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[14px] font-bold hover:bg-[#2a2a4a] transition-all flex items-center gap-2 group">
+                    <Link to="/w1" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#2a2a4a] transition-all flex items-center gap-2 group">
                         前往 W1 模仿遊戲 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>

@@ -22,19 +22,19 @@ export const Layout = () => {
             label: '探索階段',
             sublabel: '問題意識',
             items: [
-                { name: '發掘問題', path: '/discovery', week: 'W0', status: 'done' },
+                { name: '發掘問題', path: '/w0', week: 'W0', status: 'done' },
                 { name: 'AI-RED 公約', path: '/w1', week: 'W1', status: 'done' },
-                { name: '問題意識', path: '/problem-focus', week: 'W2', status: 'done' },
+                { name: '問題意識', path: '/w2', week: 'W2', status: 'done' },
             ]
         },
         {
             sublabel: '研究規劃',
             items: [
-                { name: '題目健檢', path: '/wizard', week: 'W3', status: 'done' },
+                { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
                 { name: '題目博覽會', path: '/w4', week: 'W4', status: 'active' },
-                { name: '文獻偵探社', path: '/literature-review', week: 'W5', status: 'none' },
-                { name: '研究診所', path: '/clinic', week: 'W6', status: 'none' },
-                { name: '組隊決策', path: '/team-formation', week: 'W7', status: 'none' },
+                { name: '文獻偵探社', path: '/w5', week: 'W5', status: 'none' },
+                { name: '研究診所', path: '/w6', week: 'W6', status: 'none' },
+                { name: '組隊決策', path: '/w7', week: 'W7', status: 'none' },
             ]
         },
         {
@@ -60,14 +60,15 @@ export const Layout = () => {
     // We dynamically override "active", "done", and "locked" based on the current route.
     const getWeekNumber = (path) => {
         if (!path) return -1;
-        if (path === '/discovery') return 0;
+        // Support both descriptive and week-based paths for robustness during migration
+        if (path === '/discovery' || path === '/w0') return 0;
         if (path === '/w1') return 1;
-        if (path === '/problem-focus') return 2;
-        if (path === '/wizard') return 3;
+        if (path === '/problem-focus' || path === '/w2') return 2;
+        if (path === '/wizard' || path === '/w3') return 3;
         if (path === '/w4') return 4;
-        if (path === '/clinic') return 5;
-        if (path === '/literature-review') return 6;
-        if (path === '/team-formation') return 7;
+        if (path === '/literature-review' || path === '/w5') return 5;
+        if (path === '/clinic' || path === '/w6') return 6;
+        if (path === '/team-formation' || path === '/w7') return 7;
         if (path === '/tool-design') return 8;
         if (path === '/w10') return 10;
         if (path === '/w11') return 11;

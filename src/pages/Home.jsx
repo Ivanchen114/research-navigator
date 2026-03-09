@@ -22,7 +22,7 @@ const PhaseCard = ({ icon, type, isMission, title, desc, onClick }) => (
             }`}
     >
         <CardIconRow icon={icon} type={type} isMission={isMission} />
-        <h4 className={`text-[14px] font-bold ${isMission ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
+        <h4 className={`text-[13px] font-bold ${isMission ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
             {title}
         </h4>
         <p className={`text-[12px] leading-[1.55] ${isMission ? 'text-white/90' : 'text-[#4a4a6a]'}`}>
@@ -62,7 +62,7 @@ const QuickNavItem = ({ step, title, desc, isPrimary, onClick }) => (
         <div className={`text-[10px] font-['DM_Mono',monospace] uppercase tracking-[0.1em] mb-1.5 ${isPrimary ? 'text-white/50' : 'text-[#8888aa]'}`}>
             {step}
         </div>
-        <div className={`text-[14px] font-bold mb-2 ${isPrimary ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
+        <div className={`text-[13px] font-bold mb-2 ${isPrimary ? 'text-white/90' : 'text-[#1a1a2e]'}`}>
             {title}
         </div>
         <div className={`text-[12px] leading-[1.6] flex-1 ${isPrimary ? 'text-white/90' : 'text-[#4a4a6a]'}`}>
@@ -76,7 +76,7 @@ const AIRedItem = ({ keyName, zhName, desc }) => (
         <div className="font-['DM_Mono',monospace] text-[13px] font-medium text-[#2d5be3] mb-1">
             {keyName}
         </div>
-        <div className="font-bold text-[14px] mb-1 text-[#1a1a2e]">
+        <div className="font-bold text-[13px] mb-1 text-[#1a1a2e]">
             {zhName}
         </div>
         <div className="text-[11px] text-[#4a4a6a] leading-[1.5]">
@@ -89,21 +89,21 @@ export const Home = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-[#f8f7f4] text-[#1a1a2e] font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6]">
+        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
 
-            {/* TOP BAR */}
-            <div className="h-[52px] bg-white border-b border-[#dddbd5] flex items-center px-6 md:px-10 gap-6 sticky top-0 z-50">
-                <div className="text-[12px] text-[#8888aa] font-['DM_Mono',monospace] flex items-center gap-2">
-                    <span className="text-[#4a4a6a]">研究方法與專題</span> / <span>首頁</span>
+            {/* TOP BAR / NAVIGATION PATH */}
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
+                    研究方法與專題 / <span className="text-[#1a1a2e] font-bold">首頁</span>
                 </div>
-                <div className="ml-auto flex items-center gap-2 sm:gap-3">
-                    <span className="hidden sm:inline-block text-[11px] px-2.5 py-1 border border-[#dddbd5] rounded text-[#4a4a6a] font-['DM_Mono',monospace]">可投影</span>
-                    <span className="hidden sm:inline-block text-[11px] px-2.5 py-1 border border-[#dddbd5] rounded text-[#4a4a6a] font-['DM_Mono',monospace]">可手機</span>
-                    <span className="text-[11px] px-2.5 py-1 border border-[#2d5be3] rounded text-[#2d5be3] bg-[#e8eeff] font-['DM_Mono',monospace]">課堂 + 自學雙模式</span>
+                <div className="flex items-center gap-3">
+                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">可投影</span>
+                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">可手機</span>
+                    <span className="bg-[#e8eeff] text-[#2d5be3] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">課堂 + 自學雙模式</span>
                 </div>
             </div>
 
-            <div className="p-6 sm:p-8 md:p-[48px_60px] max-w-5xl lg:max-w-[1100px] mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
 
                 {/* HERO */}
                 <div className="mb-14">

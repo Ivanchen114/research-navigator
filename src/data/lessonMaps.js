@@ -28,67 +28,74 @@ export const W3Data = {
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:05",
+                    timeEnd: "0:04",
+                    duration: "4 min",
+                    colorClass: "c3",
+                    icon: "🧱",
+                    title: "階段 0｜碰壁體驗 — 你真的做得到嗎？",
+                    desc: "不說前言直接投影 A、B 兩題，問學生「下單第一步要做什麼？」。追問細節讓學生感受「卡住」的感覺。",
+                    tags: ["直接對決", "碰壁體驗"]
+                },
+                {
+                    timeStart: "0:04",
+                    timeEnd: "0:09",
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🌉",
-                    title: "暖身：W2 → W3 的橋樑",
-                    desc: "請學生翻出 W2 學習單，回顧自己上週寫的「探究意圖原石」。老師說明：原石需要打磨，有些題目「生病了」。",
-                    tags: ["個人回顧", "開場引導"]
+                    title: "階段 1｜暖身：W2 → W3 的橋樑",
+                    desc: "回顧 W2 探究意圖。老師說明：原石可能也生病了。今天三任務：診斷、學心法、人機協作。",
+                    tags: ["個人回顧", "回扣 W2"]
                 },
                 {
-                    timeStart: "0:05",
-                    timeEnd: "0:17",
+                    timeStart: "0:09",
+                    timeEnd: "0:21",
                     duration: "12 min",
                     colorClass: "c1",
                     icon: "🏥",
                     title: "階段 2a-b｜題目健檢大作戰：小組會診",
-                    desc: "說明 8 種病例（投影病例選單）。<br>4-5 人一組，討論投影幕上 8 個生病的題目，填入 Part 1 診斷代號。",
-                    tags: ["小組討論", "學習單 Part 1"],
-                    keyPoint: "⚠️ 老師巡視重點：聽理由，不透露答案"
+                    desc: "4-5 人一組，討論投影幕上 8 個生病的題目，填入 Part 1 診斷代號。",
+                    tags: ["小組討論", "學習單 Part 1"]
                 },
                 {
-                    timeStart: "0:17",
-                    timeEnd: "0:25",
+                    timeStart: "0:21",
+                    timeEnd: "0:29",
                     duration: "8 min",
                     colorClass: "c1",
                     icon: "🩺",
                     title: "階段 2c｜總醫師巡房：揭曉答案",
-                    desc: "逐題快速揭曉診斷結果，說明「為什麼生病」。<br>重點：只講病因，暫不講治法，因為接下來要給「萬用心法」。",
-                    tags: ["全班討論", "老師解說"],
-                    additionalNotes: "📌 答案：題1→H｜題2→A｜題3→F｜題4→D｜題5→E｜題6→C｜題7→G｜題8→B"
+                    desc: "逐題揭曉診斷結果，說明「為什麼生病」。重點：暫不講治法。",
+                    tags: ["老師解說"],
+                    additionalNotes: "📌 題1→H 2→A 3→F 4→D 5→E 6→C 7→G 8→B"
                 },
                 {
-                    timeStart: "0:25",
-                    timeEnd: "0:30",
+                    timeStart: "0:29",
+                    timeEnd: "0:34",
                     duration: "5 min",
                     colorClass: "c2",
                     icon: "💊",
-                    title: "階段 3｜發放急救寶典，講解萬用心法",
-                    desc: "發放「題目急救寶典」講義。投影或板書核心口訣，並以 3 個例子示範操作。",
-                    tags: ["講述＋示範", "發放講義"],
-                    additionalNotes: "<div style=\"display:flex;gap:8px;flex-wrap:wrap;\"><span style=\"background:var(--lm-c2);color:#fff;padding:4px 12px;font-weight:700;font-size:13px;\">大→小</span><span style=\"background:var(--lm-c2);color:#fff;padding:4px 12px;font-weight:700;font-size:13px;\">空→實</span><span style=\"background:var(--lm-c2);color:#fff;padding:4px 12px;font-weight:700;font-size:13px;\">遠→近</span><span style=\"background:var(--lm-c2);color:#fff;padding:4px 12px;font-weight:700;font-size:13px;\">難→易</span></div>"
+                    title: "階段 3｜萬用急救心法 (大空遠難)",
+                    desc: "發放「題目急救寶典」。講解核心口訣：大、空、遠、難 → 小、實、近、易。",
+                    tags: ["講述＋示範", "發放寶典"]
                 },
                 {
-                    timeStart: "0:30",
-                    timeEnd: "0:40",
+                    timeStart: "0:34",
+                    timeEnd: "0:44",
                     duration: "10 min",
                     colorClass: "c3",
                     icon: "💪",
-                    title: "階段 4｜人的診斷練習（不准用 AI！）",
-                    desc: "從備選 30 題中選 2 題，自己診斷、自己用心法修改，填入學習單 Part 2。",
-                    tags: ["個人練習", "學習單 Part 2", "🚫 禁用 AI"],
-                    keyPoint: "⚠️ 老師口條：「你要先有斤兩，才知道 AI 說得對不對！」"
+                    title: "階段 4｜人的診斷練習（🚫 禁用 AI）",
+                    desc: "選 2 題自行診斷修改，建立自己的斤兩與判斷力。填入 Part 2。",
+                    tags: ["個人練習", "學習單 Part 2"]
                 },
                 {
-                    timeStart: "0:40",
+                    timeStart: "0:44",
                     timeEnd: "0:50",
-                    duration: "10 min",
+                    duration: "6 min",
                     colorClass: "c4",
                     icon: "🔪",
-                    title: "階段 5｜導入 5W1H 規格化概念",
-                    desc: "介紹 5W1H 框架（Who / Where / What / When / How），說明這是把題目「切開」的手術刀。第一節課結束，休息 10 分鐘。",
-                    tags: ["概念導入", "板書 / 投影"]
+                    title: "階段 5｜導入 5W1H 規格化手術刀",
+                    desc: "介紹 5W1H 框架（Who/Where/What/When/How），說明這是把題目「切開」的工具。",
+                    tags: ["概念導入"]
                 }
             ]
         },
