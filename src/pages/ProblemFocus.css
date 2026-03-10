@@ -1,0 +1,52 @@
+/* ProblemFocus (W2) page-specific styles */
+
+.w2-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
+.w2-meta-item { background: #fff; padding: 14px 18px; }
+.w2-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
+.w2-section-head h2 { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.w2-section-head .line { flex: 1; height: 1px; background: var(--border); }
+.w2-section-head .mono { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; white-space: nowrap; }
+.w2-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; }
+.w2-fw-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+.w2-fw-table thead th { background: var(--ink); color: #fff; padding: 11px 16px; font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.06em; text-align: left; border-right: 1px solid rgba(255,255,255,0.08); }
+.w2-fw-table tbody td { padding: 14px 16px; border: 1px solid var(--border); background: #fff; vertical-align: top; font-size: 13px; color: var(--ink-mid); line-height: 1.75; }
+.w2-fw-table tbody tr:hover td { background: var(--paper); }
+.w2-step-tag { font-family: var(--font-mono); font-size: 10px; color: var(--accent); display: block; margin-bottom: 3px; letter-spacing: 0.06em; }
+.w2-step-name { font-size: 14px; font-weight: 700; color: var(--ink); display: block; margin-bottom: 5px; }
+.w2-step-who { display: inline-block; font-size: 10px; font-family: var(--font-mono); padding: 2px 7px; border-radius: 3px; }
+.w2-step-who.human { background: var(--success-light); color: var(--success); }
+.w2-step-who.both  { background: var(--gold-light); color: var(--gold); }
+.w2-step-who.ai    { background: var(--accent-light); color: var(--accent); }
+.w2-abc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.w2-abc-col { background: #fff; padding: 16px; }
+.w2-abc-letter { font-family: var(--font-mono); font-size: 26px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+.w2-abc-type { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.w2-abc-pattern { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); margin-bottom: 10px; }
+.w2-abc-method { font-size: 11px; color: var(--ink-mid); padding: 7px 10px; background: var(--paper-warm); border-radius: 5px; margin-bottom: 8px; }
+.w2-abc-example { font-size: 12px; color: var(--ink-mid); line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px; }
+.w2-practice-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 12px; }
+.w2-practice-header { padding: 12px 18px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.w2-practice-badge { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.05em; }
+.w2-pb-human { background: var(--success); color: #fff; }
+.w2-pb-ai    { background: var(--accent); color: #fff; }
+.w2-pb-star  { background: var(--danger); color: #fff; }
+.w2-practice-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+.w2-practice-sub { font-size: 12px; color: var(--ink-light); margin-left: auto; }
+.w2-practice-body { padding: 16px 20px; font-size: 13px; color: var(--ink-mid); line-height: 1.85; }
+.w2-notice { border-left: 4px solid var(--accent); padding: 12px 16px; background: var(--accent-light); font-size: 13px; color: var(--ink-mid); line-height: 1.7; border-radius: 0 6px 6px 0; margin-bottom: 12px; }
+.w2-notice.warn  { border-left-color: var(--gold);    background: var(--gold-light); }
+.w2-notice.ok    { border-left-color: var(--success); background: var(--success-light); }
+.w2-notice.block { border-left-color: var(--danger);  background: var(--danger-light); }
+.w2-aired-table { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 14px; }
+.w2-aired-row-item { display: grid; grid-template-columns: 130px 1fr; gap: 1px; background: var(--border); }
+.w2-aired-key { background: var(--paper-warm); padding: 11px 14px; display: flex; align-items: flex-start; gap: 8px; }
+.w2-aired-letter { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--accent); }
+.w2-aired-word { font-size: 11px; color: var(--ink-mid); line-height: 1.4; }
+.w2-aired-val { background: #fff; padding: 11px 14px; font-size: 12px; color: var(--ink-mid); line-height: 1.7; }
+
+@media (max-width: 768px) {
+  .w2-meta-strip { grid-template-columns: 1fr; }
+  .w2-abc-row { grid-template-columns: 1fr; }
+  .w2-fw-table thead { display: none; }
+  .w2-fw-table tbody td { display: block; border: none; border-bottom: 1px solid var(--border); }
+}

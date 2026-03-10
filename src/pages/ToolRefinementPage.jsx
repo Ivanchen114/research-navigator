@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './ToolRefinementPage.css';
 import {
     Bot, Map, ChevronRight, CheckCircle2, AlertCircle,
     ArrowRight, Sparkles, MessageSquare, ClipboardCheck,
     Users, Search, ShieldCheck, Heart, Wrench, Zap
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
+import CopyButton from '../components/ui/CopyButton';
 import { W9Data } from '../data/lessonMaps';
 
 export const ToolRefinementPage = () => {
@@ -18,110 +20,15 @@ export const ToolRefinementPage = () => {
         setExpandedPractice(expandedPractice === id ? null : id);
     };
 
+
     const unlockAnswer = (id, e) => {
         e.stopPropagation();
         setUnlockedAnswers(prev => ({ ...prev, [id]: true }));
     };
 
-    const copyToClipboard = async (text, id) => {
-        try {
-            await navigator.clipboard.writeText(text);
-            const btn = document.getElementById(`copy-btn-${id}`);
-            if (btn) {
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '✓ 已複製！';
-                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
-            }
-        } catch (err) {
-            console.error('Failed to copy!', err);
-        }
-    };
-
     return (
-        <div className="w-[100%] max-w-[1000px] mx-auto p-12 bg-[#f8f7f4]">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                :root {
-                    --ink: #1a1a2e;
-                    --ink-mid: #4a4a6a;
-                    --ink-light: #8888aa;
-                    --paper: #f8f7f4;
-                    --paper-warm: #f0ede6;
-                    --accent: #2d5be3;
-                    --accent-light: #e8eeff;
-                    --gold: #c9a84c;
-                    --gold-light: #fdf6e3;
-                    --success: #2e7d5a;
-                    --success-light: #e8f5ee;
-                    --danger: #c0392b;
-                    --danger-light: #fdecea;
-                    --border: #dddbd5;
-                    --border-mid: #c8c5bc;
-                }
-
-                @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
-
-                .w9-meta-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
-                .w9-meta-item { background: #fff; padding: 14px 18px; }
-                .w9-meta-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--ink-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-                .w9-meta-value { font-size: 13px; font-weight: 700; color: var(--ink); }
-
-                .w9-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
-                .w9-section-title { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-                .w9-section-line { flex: 1; height: 1px; background: var(--border); }
-                .w9-section-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; }
-
-                .w9-notice { padding: 11px 16px; border-radius: 0 6px 6px 0; font-size: 12px; line-height: 1.75; margin-bottom: 24px; border-left: 4px solid transparent; }
-                .w9-notice-gold { background: var(--gold-light); color: #7a6020; border-left-color: var(--gold); }
-                .w9-notice-accent { background: var(--accent-light); color: var(--accent); border-left-color: var(--accent); }
-                .w9-notice-success { background: var(--success-light); color: var(--success); border-left-color: var(--success); }
-                .w9-notice-danger { background: var(--danger-light); color: var(--danger); border-left-color: var(--danger); }
-
-                .w9-flow-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
-                .w9-flow-item { background: #fff; padding: 14px 12px; text-align: center; }
-                .w9-flow-item.active { background: var(--ink); }
-                .w9-flow-letter { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 700; color: var(--border-mid); margin-bottom: 4px; }
-                .w9-flow-item.active .w9-flow-letter { color: var(--gold); }
-                .w9-flow-name { font-size: 11px; font-weight: 700; color: var(--ink-light); margin-bottom: 3px; }
-                .w9-flow-item.active .w9-flow-name { color: #fff; }
-                .w9-flow-desc { font-size: 10px; color: var(--ink-light); line-height: 1.5; }
-                .w9-flow-item.active .w9-flow-desc { color: rgba(255,255,255,0.5); }
-
-                .w9-compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-                .w9-compare-col { background: #fff; }
-                .w9-compare-hd { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-                .w9-compare-tag { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; font-weight: 700; }
-                .w9-compare-title { font-size: 13px; font-weight: 700; color: var(--ink); }
-                .w9-compare-body { padding: 16px 18px; font-size: 12px; color: var(--ink-mid); line-height: 1.9; }
-
-                .w9-verdict-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 32px; border: 1px solid var(--border); }
-                .w9-verdict-item { background: #fff; padding: 12px 14px; }
-                .w9-verdict-tag { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
-                .w9-verdict-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.65; }
-
-                .w9-prompt-box { background: var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
-                .w9-prompt-hd { padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
-                .w9-prompt-body { padding: 18px 20px; font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.9; font-family: 'DM Mono', monospace; white-space: pre-wrap; }
-                .w9-prompt-btn { margin: 0 20px 16px; padding: 8px 16px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
-                .w9-prompt-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
-
-                .w9-practice-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-                .w9-practice-hd { padding: 14px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; cursor: pointer; }
-                .w9-practice-body { padding: 20px 24px; background: #fff; display: none; }
-                .w9-practice-block.open .w9-practice-body { display: block; }
-                
-                .w9-task-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 12px; }
-                .w9-task-hd { padding: 12px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-                .w9-task-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 2px 8px; border-radius: 3px; }
-                .w9-task-title { font-size: 14px; font-weight: 700; color: var(--ink); }
-                
-                .w9-next-week { background: var(--ink); border-radius: 10px; overflow: hidden; color: #fff; }
-                .w9-next-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.1); }
-                .w9-next-item { background: var(--ink); padding: 20px 24px; }
-                
-                .animate-in { animation: slideIn 0.3s ease-out; }
-                @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-            ` }} />
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
 
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -136,7 +43,7 @@ export const ToolRefinementPage = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#accent] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono" style={{ background: 'var(--accent)' }}>AI-RED</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -152,27 +59,52 @@ export const ToolRefinementPage = () => {
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
                     AI 協助工具精進：<span className="text-[#2d5be3]">審稿、判斷、預試</span>
                 </h1>
-                <p className="text-[16px] text-[#4a4a6a] leading-relaxed">
+                <p className="text-[16px] text-[#4a4a6a] leading-relaxed mb-8">
                     今天你要讓 AI 幫你審一輪初稿，但不是照單全收——你要評估 AI 的建議，決定哪些值得採納、哪些不適合你的研究。然後再用真實的人來預試，看看 AI 抓不到的問題是什麼。
                 </p>
+
+                {/* Course Arc - Standard Version A */}
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="arc-grid">
+                        {[
+                            { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
+                            { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
+                            { wk: 'W5', name: '企劃撰寫\n研究藍圖', past: true },
+                            { wk: 'W6', name: '診所分流\n方法處方', past: true },
+                            { wk: 'W7', name: '組隊決策\n企劃定案', past: true },
+                            { wk: 'W8-W10', name: '工具設計\n倫理審查', now: true },
+                            { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
+                        ].map((item, idx) => (
+                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                                <div className="arc-wk">
+                                    {item.wk} {item.now && '← 現在'}
+                                </div>
+                                <div className="arc-name">
+                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <div className="w9-meta-strip">
-                <div className="w9-meta-item">
-                    <div className="w9-meta-label">第一節</div>
-                    <div className="w9-meta-value">AI 審稿 + 建議判斷</div>
+            <div className="meta-strip">
+                <div className="meta-item">
+                    <div className="meta-label">第一節</div>
+                    <div className="meta-value">AI 審稿 + 建議判斷</div>
                 </div>
-                <div className="w9-meta-item">
-                    <div className="w9-meta-label">第二節</div>
-                    <div className="w9-meta-value">人工預試 + AI vs 預試比較</div>
+                <div className="meta-item">
+                    <div className="meta-label">第二節</div>
+                    <div className="meta-value">人工預試 + AI vs 預試比較</div>
                 </div>
-                <div className="w9-meta-item">
-                    <div className="w9-meta-label">課堂產出</div>
-                    <div className="w9-meta-value">AI 建議判斷表 + 預試修改紀錄</div>
+                <div className="meta-item">
+                    <div className="meta-label">課堂產出</div>
+                    <div className="meta-value">AI 建議判斷表 + 預試修改紀錄</div>
                 </div>
-                <div className="w9-meta-item">
-                    <div className="w9-meta-label">帶去 W10</div>
-                    <div className="w9-meta-value">定稿工具（準備倫理審查）</div>
+                <div className="meta-item">
+                    <div className="meta-label">帶去 W10</div>
+                    <div className="meta-value">定稿工具（準備倫理審查）</div>
                 </div>
             </div>
 
@@ -333,13 +265,52 @@ export const ToolRefinementPage = () => {
 4. 以高中生的資源和時間，這個設計實際上可行嗎？`
                         )}
                     </div>
-                    <button
-                        id={`copy-btn-${activePromptTab}`}
-                        onClick={() => copyToClipboard(document.getElementById(`prompt-text-${activePromptTab}`).innerText, activePromptTab)}
+                    <CopyButton
+                        text={
+                            activePromptTab === 'survey' ? (
+                                `我是高中生，正在進行研究專題，題目是「[你的研究題目]」。
+研究對象是「[例：松山高中高一學生]」。
+
+以下是我設計的問卷初稿：
+[貼上你的問卷所有題目]
+
+請你擔任「研究工具審稿者」，幫我檢查：
+1. 有沒有問題不清楚、語意模糊的題目？
+2. 選項是否完整（有沒有重疊或遺漏）？
+3. 有沒有誘導性提問或雙重問題（一題問兩件事）？
+4. 題目順序是否合理？
+5. 研究說明和知情同意部分是否足夠？`
+                            ) : activePromptTab === 'interview' ? (
+                                `我是高中生，正在進行研究專題，題目是「[你的研究題目]」。
+研究對象是「[例：松山高中高一學生]」。
+
+以下是我設計的訪談大綱初稿：
+[貼上你的訪談問題和追問設計]
+
+請你擔任「研究工具審稿者」，幫我檢查：
+1. 問題是否開放式？有沒有封閉式問題需要改成開放式？
+2. 追問設計是否合理、夠深入？
+3. 問題順序是否流暢、符合訪談節奏？
+4. 問題數量是否合理（以 30-45 分鐘訪談為基準）？
+5. 倫理考量是否足夠（開場說明、受訪者權益）？`
+                            ) : (
+                                `我是高中生，正在進行研究專題，題目是「[你的研究題目]」。
+研究方法是「[實驗設計 / 系統性觀察 / 文獻分析]」。
+
+以下是我的工具初稿：
+[貼上實驗流程 / 觀察紀錄表 / 文獻分析架構]
+
+請你擔任「研究工具審稿者」，幫我檢查：
+1. 這份工具能不能回答我的研究問題？
+2. 操作步驟或分類標準是否清楚、可重複？
+3. 有沒有沒控制到的變因（實驗組）/ 過於主觀的分類（觀察組）/ 遺漏的分析角度（文獻組）？
+4. 以高中生的資源 and 時間，這個設計實際上可行嗎？`
+                            )
+                        }
                         className="w9-prompt-btn flex items-center gap-2"
-                    >
-                        <ClipboardCheck size={14} /> 📋 複製這段 Prompt
-                    </button>
+                        label="📋 複製這段 Prompt"
+                        successLabel="✓ 已複製！"
+                    />
                 </div>
 
                 <div className="text-[10px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-4 mt-12">Step 2 · 練習判斷：這條 AI 建議，你採納嗎？</div>

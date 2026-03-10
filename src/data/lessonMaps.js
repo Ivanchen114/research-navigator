@@ -1,3 +1,14 @@
+export const baseCourseArc = [
+    { wk: 'W1-W2', name: '探索階段\nRED公約' },
+    { wk: 'W3-W4', name: '題目診斷\n博覽會' },
+    { wk: 'W5-W7', name: '規劃分流\n企劃定案' },
+    { wk: 'W8-W10', name: '工具設計\n倫理審查' },
+    { wk: 'W11-W12', name: '執行階段\n自主研究' },
+    { wk: 'W13', name: '數據轉譯\n圖表製作' },
+    { wk: 'W14', name: '研究結論\n四層整合' },
+    { wk: 'W15-W16', name: '成果簡報\n博覽發表' }
+];
+
 export const W3Data = {
     id: "W3",
     title: "題目健檢與 AI 協作工作坊",
@@ -180,7 +191,12 @@ export const W3Data = {
         { colorClass: "lm-c3", label: "過渡 / 導入" },
         { colorClass: "lm-c4", label: "規格化 / 快篩" },
         { colorClass: "lm-c5", label: "互動 / 分享" }
-    ]
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 1,
+        now: idx === 1
+    }))
 };
 
 export const W0Data = {
@@ -277,6 +293,15 @@ export const W1Data = {
     title: "研究方法啟動：模仿遊戲與人機協作",
     duration: 100,
     durationDesc: "2 節課",
+    metaCards: [
+        { label: '本週任務', value: '找出偽裝者 + 簽署公約' },
+        { label: '課課產出', value: '好奇心種子' },
+        { label: '下週預告', value: '你觀察到的生活現象' }
+    ],
+    courseArc: baseCourseArc.map(item => ({
+        ...item,
+        now: item.wk === 'W1-W2'
+    })),
     coreConcepts: [
         {
             prefix: "①",
@@ -414,6 +439,11 @@ export const W2Data = {
     title: "問題意識的覺醒",
     duration: 100,
     durationDesc: "2 節課",
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: false,
+        now: idx === 0
+    })),
     coreConcepts: [
         {
             prefix: "①",
@@ -571,6 +601,17 @@ export const W4Data = {
     title: "題目博覽會與資料搜集入門",
     duration: 100,
     durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '海報 Pitch + 同儕互審健檢' },
+        { label: '第二節', value: '題目定案 + 關鍵文獻搜尋' },
+        { label: '課後產出', value: '最終題目 + 第一篇 APA 文獻' },
+        { label: '帶去 W5', value: '關鍵文獻內容 + 偵探心態' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 1, // W1-W2 (idx 0), W3-W4 is idx 1
+        now: idx === 1
+    })),
     coreConcepts: [
         {
             prefix: "①",
@@ -587,6 +628,56 @@ export const W4Data = {
             colorConfig: "g"
         }
     ],
+    posterElements: [
+        { n: '①', l: '吸引人的標題', d: '大字，讓人一眼停下來的那種' },
+        { n: '②', l: '正式研究題目', d: '比標題小一點，W3 的定案版本' },
+        { n: '③', l: '研究對象 Who', d: '具體的人或群體' },
+        { n: '④', l: '研究方法 How', d: '問卷 / 訪談 / 實驗 / 觀察 / 文獻' },
+        { n: '⑤', l: '預期發現', d: '2–3 點大膽猜測，讓人有話聊', h: true }
+    ],
+    examplePoster: {
+        title: "為什麼你的大腦停不下來？",
+        formalTitle: "高中生睡前手機使用時數與課堂專注度之相關性探討",
+        expectations: [
+            { title: "推測一", desc: "睡前使用手機超過 1 小時的同學，其大腦灰質活動可能持續處於興奮狀態，導致隔天專注度明顯下降。" },
+            { title: "推測二", desc: "參與社群媒體互動（如 IG/TikTok）的視覺與心理刺激，可能比單純觀看影片更容易延後褪黑激素的分泌。" }
+        ],
+        image: "/images/user_research_poster.png",
+        analysisNote: "核心對比：手寫海報偏向白話且具備視覺亮點，右方文字則是 W3 定案後的專業轉換，兩者相輔相成。"
+    },
+    galleryWalkRounds: [
+        { n: 'Round 1', d: '第 1-8 號報告，其餘走位', r: 'present' },
+        { n: 'Round 2', d: '第 1-8 號走位，9-16 號報告', r: 'walk' },
+        { n: 'Round 3', d: '第 17-24 號報告，其餘走位', r: 'present' },
+        { n: 'Round 4', d: '第 17-24 號走位，25-32 號報告', r: 'walk' }
+    ],
+    commentRules: [
+        { type: 'positive', label: '粉紅色：我認可的地方', desc: '覺得標題下得很好、預期發現很驚艷、或是題目本身非常有社會意義。' },
+        { type: 'suggestion', label: '黃色：具體建議 / 點子', desc: '「我覺得你可以去查某篇文獻」、「這個對象可能太難找」、「標題建議改為...」。' },
+        { type: 'question', label: 'question', label: '藍色：我想問的問題', desc: '「你為什麼會想做這個？」、「你的專注度要怎麼測量？」、「樣本人數夠多嗎？」。' }
+    ],
+    methodSelection: [
+        { i: '📋', n: '問卷研究', e: 'SURVEY' },
+        { i: '🎤', n: '訪談研究', e: 'INTERVIEW' },
+        { i: '🧪', n: '實驗研究', e: 'EXPERIMENT' },
+        { i: '👀', n: '觀察研究', e: 'OBSERVATION' },
+        { i: '📚', n: '文獻分析', e: 'LITERATURE' }
+    ],
+    tasks: [
+        { badge: 'TASK 1', title: '製作手寫海報 (20 MINS)', steps: ['抄下 W3 定案題目', '寫標題草稿 + 預期發現', '用 AI 優化文案', '在 A4 紙上手寫海報'], note: '💡 標題是給同學看的，題目是給評審看的。' },
+        { badge: 'TASK 2', title: 'Gallery Walk 順轉走讀 (30 MINS)', steps: ['海報貼桌上，四人一組（ABCD 座位）', '每場 5 分鐘，聽鈴聲移動位置', '給予至少 3 個具體建議（✅ 好的回饋）'] },
+        { badge: 'TASK 3', title: '文獻檢索與最終定案 (30 MINS)', steps: ['整理便利貼，做決策分析', '寫下 W4 最終定案題目', '到 Scholar 或華藝找一篇論文摘要'], note: '🏆 今天結束你手上有三個成果：W4 最終定案題目 + 論文摘要筆記 + 第一份 APA。', noteColor: 'success' }
+    ],
+    homework: {
+        deadline: '今晚 11 點',
+        items: [
+            { p: '📷 照片', n: '海報拍照（便利貼貼在上面一起拍）' },
+            { p: '文字 1', n: '你的 W4 最終定案題目' },
+            { p: '文字 2', n: '你接受了哪一條同學建議、改了什麼' },
+            { p: '文字 3', n: '今天找到的那篇論文書目（試寫 APA）' }
+        ],
+        footer: 'Google Classroom 繳交照片＋三行文字'
+    },
     periods: [
         {
             badge: "第一節",
@@ -1017,6 +1108,11 @@ export const W7Data = {
     title: "組隊決策週：從個人到團隊",
     duration: 100,
     durationDesc: "2 節課",
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 2,
+        now: idx === 2
+    })),
     coreConcepts: [
         {
             prefix: "①",
@@ -1161,6 +1257,11 @@ export const W8Data = {
     title: "工具設計：處方診斷與三大標準",
     duration: 100,
     durationDesc: "2 節課",
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 3,
+        now: idx === 3
+    })),
     coreConcepts: [
         {
             prefix: "①",
@@ -1471,6 +1572,17 @@ export const W13Data = {
     title: "讓數據自己說話：圖表選擇與圖說寫作",
     duration: 100,
     durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '選對盤子：四大圖表與格式規範' },
+        { label: '第二節', value: '賦予意義：描述 vs 推論' },
+        { label: '課堂產出', value: '圖表初稿 + 圖說段落' },
+        { label: '帶去 W14', value: '完整圖表，準備撰寫結論' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 5,
+        now: idx === 5
+    })),
     coreConcepts: [
         {
             prefix: "①",
@@ -1603,5 +1715,129 @@ export const W13Data = {
         { colorClass: "lm-c2", label: "互動演練" },
         { colorClass: "lm-c5", label: "案例拆解" },
         { colorClass: "lm-c3", label: "小結預告" }
+    ]
+};
+export const W14Data = {
+    id: "W14",
+    title: "研究結論：四層寫作法",
+    duration: 100,
+    durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '四層公式 + 回扣層精練' },
+        { label: '第二節', value: '批判層 + AI 輔助整合' },
+        { label: '課業產出', value: '完整四層結論段落' },
+        { label: '帶去 W15', value: '結論定稿，準備簡報' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 6,
+        now: idx === 6
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "四層寫作法",
+            subtitle: "描述 / 詮釋 / 回扣 / 批判",
+            desc: "建立完整、嚴謹的研究結論結構",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "回扣層核心",
+            subtitle: "連結發現與研究問題",
+            desc: "確保研究有頭有尾，回答最初的疑問",
+            colorConfig: "b"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "四層公式與回扣精練",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:15",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "🧱",
+                    title: "觀念：四層寫作法核心邏輯",
+                    desc: "介紹從局部圖說到完整結論的升級過程，講解四層公式（Description, Interpretation, Callback, Critique）。",
+                    tags: ["概念導入"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeEnd: "0:30",
+                    duration: "15 min",
+                    colorClass: "c4",
+                    icon: "🏥",
+                    title: "演練：診斷缺失的層級",
+                    desc: "透過兩個案例演練，讓學生學會辨識一段結論中缺少了哪一層，強化結構意識。",
+                    tags: ["互動演練"]
+                },
+                {
+                    timeStart: "0:30",
+                    timeEnd: "0:50",
+                    duration: "20 min",
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "實作：撰寫回扣層草稿",
+                    desc: "學生翻閱 W3 題目，對比現有發現，填寫學習單回扣層草稿。",
+                    tags: ["個人實作", "連回題目"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "批判層與 AI 整合",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:15",
+                    duration: "15 min",
+                    colorClass: "c1",
+                    icon: "⚠️",
+                    title: "觀念：研究限制的真諦",
+                    desc: "講解樣本、工具、時間、測量等四種常見限制，說明批判層是研究誠信的體現。",
+                    tags: ["倫理教育"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeEnd: "0:35",
+                    duration: "20 min",
+                    colorClass: "c2",
+                    icon: "🔬",
+                    title: "實作：撰寫批判層草稿",
+                    desc: "學生診斷自身研究的邊界，選取 1–2 個最相關的限制進行撰寫。",
+                    tags: ["批判思考"]
+                },
+                {
+                    timeStart: "0:35",
+                    timeEnd: "0:50",
+                    duration: "15 min",
+                    colorClass: "c5",
+                    icon: "🤖",
+                    title: "AI 輔助：結構優化與表達磨練",
+                    desc: "掃除個資後，貼上 Prompt 請 AI 潤擬四層草稿，並記錄 AI-RED。",
+                    tags: ["AI 協作", "AI-RED"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📝",
+            label: "課堂產出",
+            text: "完整四層結論段落<br><small style=\"font-size:11px;color:#888;\">含 AI 潤稿歷程</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 觀念" },
+        { colorClass: "lm-c2", label: "實作 / 寫作" },
+        { colorClass: "lm-c4", label: "診斷 / 演練" },
+        { colorClass: "lm-c5", label: "AI 輔助" }
     ]
 };

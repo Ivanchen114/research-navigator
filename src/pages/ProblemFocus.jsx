@@ -2,106 +2,17 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Map, ArrowRight } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
+import CopyButton from '../components/ui/CopyButton';
 import { W2Data } from '../data/lessonMaps';
+import './ProblemFocus.css';
 
 export const ProblemFocus = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
-    const [copyStatus, setCopyStatus] = useState({});
-
-    const handleCopy = (id, text) => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopyStatus(prev => ({ ...prev, [id]: true }));
-            setTimeout(() => setCopyStatus(prev => ({ ...prev, [id]: false })), 1500);
-        });
-    };
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
-            {/* INLINE CSS FROM USER */}
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                :root {
-                    --ink: #1a1a2e; --ink-mid: #4a4a6a; --ink-light: #8888aa;
-                    --paper: #f8f7f4; --paper-warm: #f0ede6;
-                    --accent: #2d5be3; --accent-light: #e8eeff;
-                    --gold: #c9a84c; --gold-light: #fdf6e3;
-                    --success: #2e7d5a; --success-light: #e8f5ee;
-                    --danger: #c0392b; --danger-light: #fdecea;
-                    --border: #dddbd5; --border-mid: #c8c5bc;
-                }
+        <div className="page-container animate-in-fade-slide">
 
-                .w2-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
-                .w2-meta-item { background: #fff; padding: 14px 18px; }
 
-                .w2-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
-                .w2-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-                .w2-section-head .line { flex: 1; height: 1px; background: var(--border); }
-                .w2-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; white-space: nowrap; }
-                .w2-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
-
-                .w2-fw-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-                .w2-fw-table thead th { background: var(--ink); color: #fff; padding: 11px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; text-align: left; border-right: 1px solid rgba(255,255,255,0.08); }
-                .w2-fw-table tbody td { padding: 14px 16px; border: 1px solid var(--border); background: #fff; vertical-align: top; font-size: 13px; color: var(--ink-mid); line-height: 1.75; }
-                .w2-fw-table tbody tr:hover td { background: var(--paper); }
-                .w2-step-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); display: block; margin-bottom: 3px; letter-spacing: 0.06em; }
-                .w2-step-name { font-size: 14px; font-weight: 700; color: var(--ink); display: block; margin-bottom: 5px; }
-                .w2-step-who { display: inline-block; font-size: 10px; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 3px; }
-                .w2-step-who.human { background: var(--success-light); color: var(--success); }
-                .w2-step-who.both  { background: var(--gold-light); color: var(--gold); }
-                .w2-step-who.ai    { background: var(--accent-light); color: var(--accent); }
-
-                .w2-abc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
-                .w2-abc-col { background: #fff; padding: 16px; }
-                .w2-abc-letter { font-family: 'DM Mono', monospace; font-size: 26px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
-                .w2-abc-type { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
-                .w2-abc-pattern { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-light); margin-bottom: 10px; }
-                .w2-abc-method { font-size: 11px; color: var(--ink-mid); padding: 7px 10px; background: var(--paper-warm); border-radius: 5px; margin-bottom: 8px; }
-                .w2-abc-example { font-size: 12px; color: var(--ink-mid); line-height: 1.65; border-top: 1px solid var(--border); padding-top: 10px; }
-
-                .w2-practice-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 12px; }
-                .w2-practice-header { padding: 12px 18px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-                .w2-practice-badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; letter-spacing: 0.05em; }
-                .w2-pb-human { background: var(--success); color: #fff; }
-                .w2-pb-ai    { background: var(--accent); color: #fff; }
-                .w2-pb-star  { background: var(--danger); color: #fff; }
-                .w2-practice-title { font-size: 14px; font-weight: 700; color: var(--ink); }
-                .w2-practice-sub { font-size: 12px; color: var(--ink-light); margin-left: auto; }
-                .w2-practice-body { padding: 16px 20px; font-size: 13px; color: var(--ink-mid); line-height: 1.85; }
-
-                .w2-prompt-box { border: 1px solid var(--border-mid); border-radius: 8px; overflow: hidden; margin: 12px 0; }
-                .w2-prompt-hd { padding: 8px 14px; background: var(--ink); display: flex; align-items: center; gap: 8px; }
-                .w2-prompt-hd span { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; }
-                .w2-copy-btn { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 3px; cursor: pointer; transition: all 0.15s; }
-                .w2-copy-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
-                .w2-prompt-body { padding: 14px 16px; background: #fafaf8; font-size: 12px; color: var(--ink-mid); line-height: 1.85; font-family: 'DM Mono', monospace; white-space: pre-wrap; }
-
-                .w2-notice { border-left: 4px solid var(--accent); padding: 12px 16px; background: var(--accent-light); font-size: 13px; color: var(--ink-mid); line-height: 1.7; border-radius: 0 6px 6px 0; margin-bottom: 12px; }
-                .w2-notice.warn  { border-left-color: var(--gold);    background: var(--gold-light); }
-                .w2-notice.ok    { border-left-color: var(--success); background: var(--success-light); }
-                .w2-notice.block { border-left-color: var(--danger);  background: var(--danger-light); }
-
-                .w2-aired-table { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 14px; }
-                .w2-aired-row-item { display: grid; grid-template-columns: 130px 1fr; gap: 1px; background: var(--border); }
-                .w2-aired-key { background: var(--paper-warm); padding: 11px 14px; display: flex; align-items: flex-start; gap: 8px; }
-                .w2-aired-letter { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 700; color: var(--accent); }
-                .w2-aired-word { font-size: 11px; color: var(--ink-mid); line-height: 1.4; }
-                .w2-aired-val { background: #fff; padding: 11px 14px; font-size: 12px; color: var(--ink-mid); line-height: 1.7; }
-                @media (max-width: 768px) {
-                    .w2-meta-strip { grid-template-columns: 1fr; }
-                    .w2-abc-row { grid-template-columns: 1fr; }
-                    .w2-fw-table thead { display: none; }
-                    .w2-fw-table tbody td { display: block; border: none; border-bottom: 1px solid var(--border); }
-                }
-
-                .w2-next-week-preview { background: var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 48px; border: 1px solid var(--border); }
-                .w2-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-                .w2-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
-                .w2-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
-                .w2-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
-                .w2-next-week-col { background: var(--ink); padding: 20px 24px; }
-                .w2-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
-                .w2-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
-            ` }} />
 
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -116,6 +27,7 @@ export const ProblemFocus = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -135,23 +47,35 @@ export const ProblemFocus = () => {
                     「為什麼」是爛問題——太大、太空、太發散。今天你要學四段式思考框架。第一節靠自己，第二節用 AI 協助翻譯。
                 </p>
 
-                {/* META STRIP */}
-                <div className="w2-meta-strip">
-                    {[
-                        { label: '本週任務', value: '練「品味」' },
-                        { label: '課堂產出', value: '探究意圖（初稿）' },
-                        { label: '下週預告', value: '最終探究意圖' }
-                    ].map((item, idx) => (
-                        <div key={idx} className="w2-meta-item">
-                            <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em] mb-1">{item.label}</div>
-                            <div className="text-[13px] font-bold text-[#1a1a2e]">{item.value}</div>
-                        </div>
-                    ))}
+                {/* COURSE ARC */}
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="arc-grid">
+                        {W2Data.courseArc.map((item, idx) => (
+                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
+                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </header>
+            {/* META STRIP */}
+            <div className="meta-strip">
+                {[
+                    { label: '本週任務', value: '練「品味」' },
+                    { label: '課堂產出', value: '探究意圖（初稿）' },
+                    { label: '下週預告', value: '最終探究意圖' }
+                ].map((item, idx) => (
+                    <div key={idx} className="meta-item">
+                        <div className="meta-label">{item.label}</div>
+                        <div className="meta-value">{item.value}</div>
+                    </div>
+                ))}
+            </div>
 
             {/* ══ 學什麼 ══ */}
-            <div className="w2-section-head"><h2>學什麼</h2><div className="line"></div><div className="mono">CONCEPT</div></div>
+            <div className="section-head"><h2>學什麼</h2><div className="line"></div><div className="mono">CONCEPT</div></div>
             <p className="w2-section-desc">學習如何從瑣碎的「煩惱」中提煉出具有研究價值的「問題」，並掌握問題意識的成形過程。</p>
 
             <div className="w2-practice-block">
@@ -272,14 +196,12 @@ export const ProblemFocus = () => {
                 <div className="w2-practice-body">
                     AI 沒去過你的學校，觀察只能靠人。但它可以從多角度幫你找矛盾，當你的第二雙眼睛。把練習 0 的現象貼進去：
 
-                    <div className="w2-prompt-box">
-                        <div className="w2-prompt-hd">
+                    <div className="prompt-box">
+                        <div className="prompt-hd">
                             <span>PROMPT · 落差擴充器</span>
-                            <button className="w2-copy-btn" onClick={() => handleCopy('p1', `我觀察到一個現象：[請貼上你的現象]\n\n請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。\n（例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）\n\n請給我 5 個不同的矛盾點，每個用一句話說明。`)}>
-                                {copyStatus['p1'] ? '已複製！' : '複製'}
-                            </button>
+                            <CopyButton text={`我觀察到一個現象：[請貼上你的現象]\n\n請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。\n（例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）\n\n請給我 5 個不同的矛盾點，每個用一句話說明。`} label="複製" />
                         </div>
-                        <div className="w2-prompt-body" id="p1">
+                        <div className="prompt-body">
                             我觀察到一個現象：[請貼上你的現象]<br /><br />
                             請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。<br />
                             （例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）<br /><br />
@@ -309,14 +231,12 @@ export const ProblemFocus = () => {
 
                     現象、落差、核心疑問都填好後，貼進下方 Prompt，請 AI 翻譯成三種方向，然後<strong>你選一個</strong>。
 
-                    <div className="w2-prompt-box">
-                        <div className="w2-prompt-hd">
+                    <div className="prompt-box">
+                        <div className="prompt-hd">
                             <span>PROMPT · 探究意圖生成器</span>
-                            <button className="w2-copy-btn" onClick={() => handleCopy('p2', `我觀察到：[你的現象]\n發現落差：[你最終決定的落差]\n我最想搞清楚的核心疑問是：[你的白話疑問]\n\n請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：\n\nA. 影響型（某因素如何影響某結果）\nB. 比較型（兩種對象/情境的差異）\nC. 深究型（某現象的運作機制/背後原因）\n\n每個方向請用一句話說明，並標註適合的研究方法。`)}>
-                                {copyStatus['p2'] ? '已複製！' : '複製'}
-                            </button>
+                            <CopyButton text={`我觀察到：[你的現象]\n發現落差：[你最終決定的落差]\n我最想搞清楚的核心疑問是：[你的白話疑問]\n\n請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：\n\nA. 影響型（某因素如何影響某結果）\nB. 比較型（兩種對象/情境的差異）\nC. 深究型（某現象的運作機制/背後原因）\n\n每個方向請用一句話說明，並標註適合的研究方法。`} label="複製" />
                         </div>
-                        <div className="w2-prompt-body" id="p2">
+                        <div className="prompt-body">
                             我觀察到：[你的現象]<br />
                             發現落差：[你最終決定的落差]<br />
                             我最想搞清楚的核心疑問是：[你的白話疑問]<br /><br />
@@ -422,23 +342,23 @@ export const ProblemFocus = () => {
                 </div>
                 <div style={{ padding: '14px 20px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: '13px', color: 'var(--ink-mid)' }}>學習單在 Google Classroom 下載</span>
-                    <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: '"DM Mono", monospace', color: 'var(--accent)', background: 'var(--accent-light)', border: '1px solid rgba(45,91,227,0.2)', padding: '6px 14px', borderRadius: '5px', textDecoration: 'none' }}>→ Google Classroom</a>
+                    <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontFamily: '"DM Mono", monospace', color: 'var(--accent)', background: 'var(--accent-light)', border: '1px solid rgba(45,91,227,0.2)', padding: '6px 14px', borderRadius: '5px', textDecoration: 'none' }}>→ Google Classroom</a>
                 </div>
             </div>
 
-            <div className="w2-next-week-preview">
-                <div className="w2-next-week-header">
-                    <span className="w2-next-week-badge">NEXT WEEK</span>
-                    <h3 className="w2-next-week-title">W3 預告</h3>
+            <div className="next-week-preview">
+                <div className="next-week-header">
+                    <span className="next-week-badge">NEXT WEEK</span>
+                    <h3 className="next-week-title">W3 預告</h3>
                 </div>
-                <div className="w2-next-week-content">
-                    <div className="w2-next-week-col">
-                        <div className="w2-next-week-label">W3 主題</div>
-                        <p className="w2-next-week-text">題目健檢——診斷 8 種爛題目、5W1H 規格化、可行性快篩、AI 優化成專業版本。</p>
+                <div className="next-week-content">
+                    <div className="next-week-col">
+                        <div className="next-week-label">W3 主題</div>
+                        <p className="next-week-text">題目健檢——診斷 8 種爛題目、5W1H 規格化、可行性快篩、AI 優化成專業版本。</p>
                     </div>
-                    <div className="w2-next-week-col">
-                        <div className="w2-next-week-label">你要帶來</div>
-                        <p className="w2-next-week-text"><strong className="text-white">你的最終探究意圖</strong>（Part 3 Step 4）——那就是下週的「病人」，沒有帶就沒得健檢。</p>
+                    <div className="next-week-col">
+                        <div className="next-week-label">你要帶來</div>
+                        <p className="next-week-text"><strong className="text-white">你的最終探究意圖</strong>（Part 3 Step 4）——那就是下週的「病人」，沒有帶就沒得健檢。</p>
                     </div>
                 </div>
             </div>
@@ -452,6 +372,6 @@ export const ProblemFocus = () => {
                     前往 W3 題目健檢 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
-        </div>
+        </div >
     );
 };

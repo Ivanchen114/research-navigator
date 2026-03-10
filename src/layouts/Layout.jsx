@@ -10,6 +10,11 @@ export const Layout = () => {
 
     const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+    // Scroll to top on route change (handles all pagination Link clicks)
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [location.pathname]);
+
     const navSections = [
         {
             label: '首頁',
@@ -43,16 +48,16 @@ export const Layout = () => {
                 { name: '工具準備', path: '#', status: 'locked' },
                 { name: '工具設計', path: '/tool-design', week: 'W8', status: 'locked' },
                 { name: '工具精進', path: '/tool-refinement', week: 'W9', status: 'locked' },
-                { name: '倫理與定案', path: '/w10', week: 'W10', status: 'locked' },
-                { name: '研究診所 I', path: '/w11', week: 'W11', status: 'locked' },
-                { name: '中期盤點', path: '/w12', week: 'W12', status: 'locked' }
+                { name: '倫理與定案', path: '/w10', week: 'W10', status: 'locked' }
             ]
         },
         {
             sublabel: '分析與報告',
             items: [
                 { name: '數據轉譯', path: '/w13', week: 'W13', status: 'locked' },
-                { name: '資料分析工作坊', path: '/analysis', week: 'W14', status: 'locked' }
+                { name: '研究結論', path: '/w14', week: 'W14', status: 'locked' },
+                { name: '簡報與海報', path: '/w15', week: 'W15', status: 'locked' },
+                { name: 'Gallery Walk', path: '/w16', week: 'W16', status: 'locked' }
             ]
         }
     ];
@@ -76,6 +81,9 @@ export const Layout = () => {
         if (path === '/w11') return 11;
         if (path === '/w12') return 12;
         if (path === '/w13') return 13;
+        if (path === '/w14') return 14;
+        if (path === '/w15') return 15;
+        if (path === '/w16') return 16;
         if (path === '/analysis') return 14;
         return -1;
     }

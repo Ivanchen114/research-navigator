@@ -18,6 +18,7 @@ import {
     Download
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import './LiteratureReview.css';
 import { PromptBox } from '../components/analysis/PromptBox';
 import LessonMap from '../components/ui/LessonMap';
 import { W5Data } from '../data/lessonMaps';
@@ -56,113 +57,8 @@ export const LiteratureReview = () => {
 請用表格呈現，並說明每個關鍵字的用途。`;
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                :root {
-                    --ink: #1a1a2e; --ink-mid: #4a4a6a; --ink-light: #8888aa;
-                    --paper: #f8f7f4; --paper-warm: #f0ede6;
-                    --accent: #2d5be3; --accent-light: #e8eeff;
-                    --gold: #c9a84c; --gold-light: #fdf6e3;
-                    --success: #2e7d5a; --success-light: #e8f5ee;
-                    --danger: #c0392b; --danger-light: #fdecea;
-                    --border: #dddbd5; --border-mid: #c8c5bc;
-                }
-                .w5-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
-                .w5-meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
-                .w5-meta-label { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; font-weight: 500; }
-                .w5-meta-value { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
-                
-                .w5-grade-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-                @media (min-width: 768px) { .w5-grade-grid { grid-template-columns: repeat(4, 1fr); } }
-                .w5-grade-card { background: #fff; padding: 18px 16px; }
-                .w5-grade-badge { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-                .w5-grade-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-                .w5-grade-letter { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; }
-                .w5-grade-name { font-size: 11px; font-weight: 700; color: var(--ink); display: block; margin-bottom: 4px; }
-                .w5-grade-examples { font-size: 11px; color: var(--ink-light); line-height: 1.7; }
-                .w5-grade-usage { margin-top: 8px; font-size: 11px; padding: 6px 8px; border-radius: 4px; line-height: 1.5; }
-
-                .w5-plagiarism-row { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-                @media (min-width: 768px) { .w5-plagiarism-row { grid-template-columns: repeat(3, 1fr); } }
-                .w5-plag-card { background: #fff; padding: 18px 20px; }
-                .w5-plag-icon { font-size: 18px; margin-bottom: 8px; }
-                .w5-plag-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
-                .w5-plag-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.7; }
-                .w5-plag-example { margin-top: 10px; padding: 8px 10px; border-radius: 4px; font-size: 11px; line-height: 1.7; font-style: italic; }
-
-                .w5-sandwich { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-                .w5-sandwich-layer { display: flex; align-items: flex-start; gap: 16px; padding: 16px 20px; }
-                .w5-sandwich-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-                .w5-sandwich-role { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
-                .w5-sandwich-desc { font-size: 13px; color: var(--ink-mid); line-height: 1.65; }
-
-                .w5-specimen-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
-                @media (min-width: 768px) { .w5-specimen-grid { grid-template-columns: 1fr 1fr; } }
-                .w5-specimen { background: #fff; padding: 14px 16px; }
-                .w5-specimen-tag { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 7px; border-radius: 3px; margin-bottom: 8px; display: inline-block; }
-                .w5-specimen-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-                .w5-specimen-meta { font-size: 11px; color: var(--ink-light); line-height: 1.65; }
-
-                .w5-next-week-preview { background: var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 48px; border: 1px solid var(--border); }
-                .w5-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-                .w5-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
-                .w5-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
-                .w5-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
-                .w5-next-week-col { background: var(--ink); padding: 20px 24px; }
-                .w5-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
-                .w5-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
-
-                .w5-notice { padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.75; margin-bottom: 32px; border-left: 4px solid transparent; }
-                .w5-notice-danger { background: var(--danger-light); color: var(--danger); border-left-color: var(--danger); }
-                .w5-notice-gold { background: var(--gold-light); color: #7a6020; border-left-color: var(--gold); }
-                .w5-notice-accent { background: var(--accent-light); color: var(--accent); border-left-color: var(--accent); }
-                .w5-notice-success { background: var(--success-light); color: var(--success); border-left-color: var(--success); }
-
-                .w5-hw-item { background: #fff; padding: 12px 20px; display: flex; align-items: flex-start; gap: 16px; }
-                .w5-hw-part { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); width: 80px; flex-shrink: 0; font-weight: 700; padding-top: 1px; }
-                .w5-hw-name { font-size: 13px; color: var(--ink-mid); flex: 1; line-height: 1.65; }
-
-                .w5-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
-                .w5-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-                .w5-section-head .line { flex: 1; height: 1px; background: var(--border); }
-                .w5-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; }
-
-                .w5-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
-                .w5-meta-item { background: #fff; padding: 14px 18px; }
-                .w5-meta-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--ink-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-                .w5-meta-value { font-size: 13px; font-weight: 700; color: var(--ink); }
-                .w5-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
-
-                /* Forensic Record Sheet */
-                .w5-record-card { border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; background: #fff; margin-top: 48px; }
-                .w5-record-hd { background: var(--ink); color: #fff; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
-                .w5-record-title { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; }
-                .w5-record-fields { padding: 20px 24px; display: grid; grid-template-columns: 1fr 2fr; gap: 20px; border-bottom: 1px solid var(--border); background: var(--paper-warm); }
-                .w5-field-item { display: flex; align-items: center; gap: 12px; }
-                .w5-field-label { font-size: 11px; font-weight: 700; color: var(--ink-mid); white-space: nowrap; }
-                .w5-field-input { flex: 1; border-bottom: 1px solid var(--border-mid); background: transparent; padding: 4px 0; font-size: 13px; }
-                .w5-record-rules { padding: 24px; }
-                .w5-rule-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-                .w5-rule-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-                .w5-rule-item { }
-                .w5-rule-label { font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 4px; display: block; }
-                .w5-rule-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.6; }
-
-                .w5-specimen-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
-                .w5-specimen { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
-                .w5-specimen:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-                .w5-specimen-hd { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
-                .w5-specimen-body { padding: 0 20px 20px 20px; border-top: 1px solid var(--paper-warm); background: #fafaf8; animation: slideDown 0.3s ease-out; }
-                @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-                .w5-specimen-expand-btn { margin-left: auto; color: var(--ink-light); }
-                .w5-specimen-detail-section { margin-top: 16px; }
-                .w5-specimen-detail-label { font-size: 10px; font-weight: 700; color: var(--ink-light); text-transform: uppercase; margin-bottom: 4px; display: block; }
-                .w5-specimen-detail-content { font-size: 12px; color: var(--ink-mid); line-height: 1.7; }
-                .w5-specimen-link { color: var(--accent); text-decoration: underline; word-break: break-all; }
-
-                @media (max-width: 768px) { .w5-meta-strip, .w5-record-fields, .w5-rule-grid { grid-template-columns: 1fr; } }
-            ` }} />
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
 
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -177,7 +73,7 @@ export const LiteratureReview = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#2d5be3] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">鑑識週</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -197,20 +93,43 @@ export const LiteratureReview = () => {
                     AI 會幫你找文獻，但 AI 也會造假。今天你要學兩種能力：鑑識文獻的真偽與等級，以及合法引用而不抄襲。
                 </p>
 
-                {/* META STRIP */}
-                <div className="w5-meta-strip">
-                    {[
-                        { label: '本週任務', value: '文獻鑑識 + 引用寫作' },
-                        { label: '課堂產出', value: '文獻偵探任務單（雙面）' },
-                        { label: '下週預告', value: '3 篇已查證的真實文獻' }
-                    ].map((item, idx) => (
-                        <div key={idx} className="w5-meta-item">
-                            <div className="w5-meta-label">{item.label}</div>
-                            <div className="w5-meta-value">{item.value}</div>
-                        </div>
-                    ))}
+                {/* Course Arc - Standard Version A */}
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="arc-grid">
+                        {[
+                            { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
+                            { wk: 'W5', name: '文獻鑑識\n證據等級', now: true },
+                            { wk: 'W6', name: '研究診所\n方法抉擇' },
+                            { wk: 'W7', name: '組隊決策\n企劃定案' },
+                            { wk: 'W8-W10', name: '工具設計\n倫理審查' },
+                            { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
+                        ].map((item, idx) => (
+                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                                <div className="arc-wk">
+                                    {item.wk} {item.now && '← 現在'}
+                                </div>
+                                <div className="arc-name">
+                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </header>
+            {/* META STRIP */}
+            <div className="meta-strip">
+                {[
+                    { label: '本週任務', value: '文獻鑑識 + 引用寫作' },
+                    { label: '課堂產出', value: '文獻偵探任務單（雙面）' },
+                    { label: '下週預告', value: '3 篇已查證的真實文獻' }
+                ].map((item, idx) => (
+                    <div key={idx} className="meta-item">
+                        <div className="meta-label">{item.label}</div>
+                        <div className="meta-value">{item.value}</div>
+                    </div>
+                ))}
+            </div>
 
             {/* ═══ 學什麼 ═══ */}
             <section className="space-y-10">
@@ -346,7 +265,7 @@ export const LiteratureReview = () => {
                         </div>
                     </div>
                 </div>
-            </section >
+            </section>
 
             {/* ═══ 練什麼 ═══ */}
             <section className="space-y-10">
@@ -633,7 +552,7 @@ export const LiteratureReview = () => {
                         💡 <strong>查證提醒</strong>：其中隱藏了 A、B、D 三種陷阱——包括「查無此人」的 AI 幻覺、內容農場、以及難辨等級的社群發文。請依照兩步驟路徑進行偵查。
                     </div>
                 </div>
-            </section >
+            </section>
 
             {/* ═══ 課堂任務 ═══ */}
             <section className="space-y-10">
@@ -804,7 +723,7 @@ export const LiteratureReview = () => {
                         </div>
                     </div>
                 </div>
-            </section >
+            </section>
 
             {/* ═══ 本週總結 ═══ */}
             <section className="space-y-10">
@@ -834,33 +753,33 @@ export const LiteratureReview = () => {
                 </div>
 
                 {/* 本週作業 */}
-                <div className="bg-white border-2 border-[var(--ink)] rounded-[10px] overflow-hidden shadow-sm">
-                    <div className="bg-[var(--ink)] p-5 flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-white font-bold">
-                            <BookOpen size={18} /> 本週作業
-                        </div>
-                        <span className="text-[11px] font-mono text-white/60">DEADLINE: 下週一 23:59</span>
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
+                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
+                        <span className="font-bold text-[13px]">本週作業</span>
                     </div>
-                    <div className="divide-y divide-[var(--border)]">
+                    <div className="divide-y divide-[#dddbd5]">
                         {[
                             { part: '任務單', text: '文獻偵探任務單（雙面）拍照上傳', badge: 'IN-CLASS' },
                             { part: '線上闖關', text: '引用偵錯遊戲（10 題）過關截圖', badge: 'AFTER-CLASS' },
-                            { part: '必備證物', text: '3 篇已查證文獻書目（帶去 W6 使用）', badge: 'CRITICAL' },
+                            { part: '必備證物', text: '3 篇已查證文獻書目（帶去 W6 使用）', badge: '最重要' },
                         ].map((hw, idx) => (
-                            <div key={idx} className="w5-hw-item group hover:bg-[var(--paper)] transition-colors">
-                                <span className="w5-hw-part">{hw.part}</span>
-                                <span className="w5-hw-name">{hw.text}</span>
-                                <span className={`text-[9px] font-bold px-1.5 py-0.5 border rounded-[2px] ${hw.badge === 'CRITICAL' ? 'text-[var(--danger)] border-[var(--danger-light)] bg-[var(--danger-light)]' :
-                                    hw.badge === 'IN-CLASS' ? 'text-[var(--success)] border-[var(--success-light)] bg-[var(--success-light)]' :
-                                        'text-[var(--accent)] border-[var(--accent-light)] bg-[var(--accent-light)]'
+                            <div key={idx} className="p-4 px-6 flex items-center justify-between text-[13px]">
+                                <div className="flex items-center gap-6">
+                                    <span className="font-bold font-mono text-[#2d5be3] w-16 shrink-0">{hw.part}</span>
+                                    <span className="text-[#4a4a6a]">{hw.text}</span>
+                                </div>
+                                <span className={`text-[10px] px-2 py-0.5 rounded border font-bold ${hw.badge === '最重要' ? 'bg-[#fdecea] text-[#c0392b] border-[#c0392b]/20' :
+                                    hw.badge === 'IN-CLASS' ? 'bg-[#eaf4ee] text-[#2e7d5a] border-[#2e7d5a]/20' :
+                                        'bg-[#eef0fb] text-[#2d5be3] border-[#2d5be3]/20'
                                     }`}>{hw.badge}</span>
                             </div>
                         ))}
                     </div>
-                    <div className="p-5 bg-[var(--paper-warm)] border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <p className="text-[12px] text-[var(--ink-light)]">請將作業（任務單折疊、遊戲截圖）統一上傳至 Google Classroom。</p>
-                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="bg-[var(--ink)] text-white px-6 py-2 rounded-[4px] text-[12px] font-bold hover:bg-[var(--accent)] transition-colors flex items-center gap-2">
-                            Classroom <ArrowRight size={14} />
+                    <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
+                        <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
+                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">
+                            → Google Classroom
                         </a>
                     </div>
                 </div>

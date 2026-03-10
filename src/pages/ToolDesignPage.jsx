@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Wrench, ArrowRight, AlertTriangle, ShieldCheck, Heart, ClipboardList, Mic, TestTube2, Camera, Target, Zap, FileSearch, Scale, Map } from 'lucide-react';
+import './ToolDesignPage.css';
+import { Wrench, ArrowRight, AlertTriangle, ShieldCheck, Heart, ClipboardList, Mic, TestTube2, Camera, Target, Zap, FileSearch, Scale, Map, Gamepad2 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W8Data } from '../data/lessonMaps';
 
@@ -70,89 +71,9 @@ export const ToolDesignPage = () => {
     const currentMethod = methodPitfalls[activeMethod];
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
-                
-                .w8-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; margin-top: 64px; }
-                .w8-section-title { font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; color: #1a1a2e; white-space: nowrap; }
-                .w8-section-line { flex: 1; height: 1px; background: #dddbd5; }
-                .w8-section-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: #8888aa; letter-spacing: 0.08em; }
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
 
-                .w8-meta-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
-                .w8-meta-item { background: #fff; padding: 18px; }
-                .w8-meta-label { font-size: 10px; font-family: 'DM Mono', monospace; color: #8888aa; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-                .w8-meta-value { font-size: 14px; font-weight: 700; color: #1a1a2e; }
-
-                .w8-notice { padding: 16px 20px; border-left: 4px solid; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.6; margin: 20px 0; }
-                .w8-notice-gold { background: #fdf6e3; color: #7a6020; border-left-color: #c9a84c; }
-                .w8-notice-accent { background: #e8eeff; color: #2d5be3; border-left-color: #2d5be3; }
-                .w8-notice-success { background: #e8f5ee; color: #2e7d5a; border-left-color: #2e7d5a; }
-                .w8-notice-danger { background: #fdecea; color: #c0392b; border-left-color: #c0392b; }
-
-                .w8-level-banner { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
-                .w8-level-card { background: #fff; padding: 24px; }
-                .w8-level-tag { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; display: inline-block; font-weight: 700; }
-                .w8-level-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
-                .w8-level-desc { font-size: 13px; color: #4a4a6a; line-height: 1.6; }
-                .w8-level-card.now { background: #1a1a2e; }
-                .w8-level-card.now .w8-level-title { color: #fff; }
-                .w8-level-card.now .w8-level-desc { color: rgba(255,255,255,0.6); }
-
-                .w8-standards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
-                .w8-std-card { background: #fff; padding: 24px; }
-                .w8-std-icon { font-size: 24px; margin-bottom: 12px; }
-                .w8-std-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
-                .w8-std-en { font-family: 'DM Mono', monospace; font-size: 10px; color: #8888aa; margin-bottom: 12px; }
-                .w8-std-good { font-size: 12px; color: #2e7d5a; margin-bottom: 6px; line-height: 1.6; }
-                .w8-std-bad  { font-size: 12px; color: #c0392b; line-height: 1.6; }
-
-                .w8-errors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #dddbd5; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
-                .w8-err-item { background: #fff; padding: 20px; }
-                .w8-err-tag { font-family: 'DM Mono', monospace; font-size: 10px; background: #fdecea; color: #c0392b; padding: 2px 8px; border-radius: 3px; display: inline-block; margin-bottom: 8px; font-weight: 700; }
-                .w8-err-name { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
-                .w8-err-bad  { font-size: 12px; color: #c0392b; margin-bottom: 4px; line-height: 1.6; }
-                .w8-err-good { font-size: 12px; color: #2e7d5a; line-height: 1.6; }
-
-                .w8-method-tabs { display: flex; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; margin-bottom: 2px; }
-                .w8-tab-btn { flex: 1; padding: 12px 6px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; background: #f0ede6; color: #4a4a6a; transition: all 0.15s; border-right: 1px solid #dddbd5; }
-                .w8-tab-btn:last-child { border-right: none; }
-                .w8-tab-btn.active { background: #1a1a2e; color: #fff; }
-                
-                .w8-panel { background: #fff; border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; }
-                .w8-panel-hd { padding: 16px 24px; background: #f0ede6; border-bottom: 1px solid #dddbd5; display: flex; align-items: center; gap: 10px; }
-                .w8-panel-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: #1a1a2e; color: #fff; padding: 2px 8px; border-radius: 3px; }
-                .w8-panel-body { padding: 24px; }
-                .w8-panel-section-title { font-size: 12px; font-weight: 700; color: #1a1a2e; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; margin-bottom: 12px; text-transform: uppercase; }
-
-                .w8-pitfall-list { display: flex; flex-direction: column; gap: 1px; background: #dddbd5; border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
-                .w8-pitfall-item { background: #fff; padding: 16px; display: flex; align-items: flex-start; gap: 12px; }
-                .w8-pitfall-x { color: #c0392b; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-                .w8-pitfall-text { font-size: 13px; color: #4a4a6a; line-height: 1.6; }
-                .w8-pitfall-fix { font-size: 13px; color: #2e7d5a; margin-top: 4px; display: block; }
-
-                .w8-task-block { border: 1px solid #dddbd5; border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 20px; }
-                .w8-task-hd { padding: 16px 24px; background: #f0ede6; border-bottom: 1px solid #dddbd5; display: flex; align-items: center; gap: 10px; }
-                .w8-task-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: #1a1a2e; color: #fff; padding: 2px 8px; border-radius: 3px; }
-                .w8-task-title { font-size: 15px; font-weight: 700; color: #1a1a2e; }
-                .w8-task-body { padding: 24px; }
-                .w8-task-ol { padding-left: 20px; font-size: 14px; color: #4a4a6a; line-height: 1.8; }
-
-                .w8-next-week-preview { background: #1a1a2e; border-radius: 12px; overflow: hidden; margin-top: 64px; border: 1px solid #dddbd5; }
-                .w8-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-                .w8-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
-                .w8-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
-                .w8-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
-                .w8-next-week-col { background: #1a1a2e; padding: 24px; }
-                .w8-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 6px; }
-                .w8-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
-
-                @media (max-width: 768px) {
-                    .w8-meta-strip, .w8-level-banner, .w8-standards-grid, .w8-errors-grid, .w8-next-week-content { grid-template-columns: 1fr; }
-                    .w8-tab-btn { padding: 8px 2px; font-size: 11px; }
-                }
-            ` }} />
 
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -167,7 +88,7 @@ export const ToolDesignPage = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">Level 2</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -183,9 +104,22 @@ export const ToolDesignPage = () => {
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
                     工具設計：<span className="text-[#2d5be3]">處方診斷與三大標準</span>
                 </h1>
-                <p className="text-[16px] text-[#4a4a6a] leading-relaxed">
+                <p className="text-[16px] text-[#4a4a6a] leading-relaxed mb-8">
                     你在 W6 學會「選方法」。今天要升級到 Level 2——學會設計出好的工具，知道壞工具長什麼樣，然後動手寫出初稿。
                 </p>
+
+                {/* Course Arc - Standard Version A */}
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="arc-grid">
+                        {W8Data.courseArc.map((item, idx) => (
+                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
+                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             <div className="w8-meta-strip">
@@ -364,19 +298,66 @@ export const ToolDesignPage = () => {
                     <span className="w8-section-tag">WRAP-UP</span>
                 </div>
 
-                <div className="w8-next-week-preview">
-                    <div className="w8-next-week-header">
-                        <span className="w8-next-week-badge">NEXT WEEK</span>
-                        <h2 className="w8-next-week-title">W9 預告：工具精進與預試</h2>
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-4">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[13px]">
+                        ✅ 本週結束，你應該要會
                     </div>
-                    <div className="w8-next-week-content">
-                        <div className="w8-next-week-col">
-                            <div className="w8-next-week-label">真實反饋</div>
-                            <p className="w8-next-week-text">W9 會找真實的人進行測試並進行數位化上機實作。</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
+                        {[
+                            '說出三大設計標準：能測到、能分析、高中生能做',
+                            '看到一份工具稿，能指出至少 2 個設計地雷',
+                            '完成 1.0 版研究工具初稿（三欄對應表填完）',
+                            '說出你的方法有哪些獨特地雷需要注意'
+                        ].map((item, i) => (
+                            <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
+                                <span className="text-[#2e7d5a] mt-0.5">✓</span>
+                                <span className="text-[13px] text-[#4a4a6a]">{item}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-8">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
+                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
+                        <span className="font-bold text-[13px]">本週作業</span>
+                    </div>
+                    <div className="divide-y divide-[#dddbd5]">
+                        {[
+                            { part: 'Part 1', text: '工具初稿完整版（三欄對應表 + 所有題目）' },
+                            { part: 'Part 2', text: 'AI 審稿記錄（至少 3 條 AI-RED 記錄）', badge: '最重要' },
+                            { part: 'Part Z', text: '自我檢核（攜帶初稿準備 W9 真人預試）', light: true },
+                        ].map((hw, idx) => (
+                            <div key={idx} className="p-4 px-6 flex items-center justify-between text-[13px]">
+                                <div className="flex items-center gap-6">
+                                    <span className={`font-bold font-mono w-12 shrink-0 ${hw.light ? 'text-[#8888aa]' : 'text-[#2d5be3]'}`}>{hw.part}</span>
+                                    <span className={hw.light ? 'text-[#8888aa]' : 'text-[#4a4a6a]'}>{hw.text}</span>
+                                </div>
+                                {hw.badge && <span className="bg-[#fdecea] text-[#c0392b] text-[10px] px-2 py-0.5 rounded border border-[#c0392b]/20 font-bold">{hw.badge}</span>}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
+                        <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
+                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">
+                            → Google Classroom
+                        </a>
+                    </div>
+                </div>
+
+                <div className="next-week-preview">
+                    <div className="next-week-header">
+                        <span className="next-week-badge">NEXT WEEK</span>
+                        <h2 className="next-week-title">W9 預告：工具精進與預試</h2>
+                    </div>
+                    <div className="next-week-content">
+                        <div className="next-week-col">
+                            <div className="next-week-label">真實反饋</div>
+                            <p className="next-week-text">W9 會找真實的人進行測試並進行數位化上機實作。</p>
                         </div>
-                        <div className="w8-next-week-col">
-                            <div className="w8-next-week-label">準備工作</div>
-                            <p className="w8-next-week-text">⚠️ 下週請務必攜帶筆電。問卷組需完成數位化。</p>
+                        <div className="next-week-col">
+                            <div className="next-week-label">準備工作</div>
+                            <p className="next-week-text">⚠️ 下週請務必攜帶筆電。問卷組需完成數位化。</p>
                         </div>
                     </div>
                 </div>
@@ -385,8 +366,26 @@ export const ToolDesignPage = () => {
                     <Link to="/w7" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
                         ← 回 W7 組隊決策週
                     </Link>
-                    <Link to="/game/rx-inspector" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
-                        前往 實作模擬遊戲 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    <Link to="/w9" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
+                        前往 W9 工具精進 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                </div>
+
+                {/* 進入遊戲 CTA */}
+                <div className="mt-20 bg-[#fdecea] border-2 border-[#c0392b] rounded-[10px] p-10 text-center relative overflow-hidden group">
+                    <div className="absolute -top-10 -right-10 opacity-5 group-hover:rotate-12 transition-transform duration-700">
+                        <Gamepad2 size={200} />
+                    </div>
+                    <h3 className="text-[22px] font-bold text-[#1a1a2e] mb-4 font-['Noto_Serif_TC',serif]">準備好接受挑戰了嗎？</h3>
+                    <p className="text-[#4a4a6a] text-[15px] max-w-[600px] mx-auto leading-relaxed mb-8">
+                        進入「Rx 偵探：處方診斷」，考驗你在各類工具設計中找出病灶的眼力。
+                    </p>
+                    <Link
+                        to="/game/rx-inspector"
+                        className="inline-flex items-center gap-3 bg-[#c0392b] text-white px-10 py-4 rounded-[6px] text-[16px] font-bold hover:bg-[#1a1a2e] transition-all shadow-lg hover:translate-y-[-2px]"
+                    >
+                        <Gamepad2 size={22} />
+                        進入遊戲：Rx 偵探：處方診斷 <ArrowRight size={20} />
                     </Link>
                 </div>
             </section>

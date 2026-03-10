@@ -1,0 +1,65 @@
+/* ToolDesignPage (W8) page-specific styles */
+
+.w8-meta-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
+.w8-meta-item { background: #fff; padding: 14px 18px; }
+.w8-meta-label { font-size: 10px; font-family: var(--font-mono); color: var(--ink-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.w8-meta-value { font-size: 13px; font-weight: 700; color: var(--ink); }
+
+.w8-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
+.w8-section-title { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.w8-section-line { flex: 1; height: 1px; background: var(--border); }
+.w8-section-tag { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; }
+
+.w8-level-banner { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
+.w8-level-card { background: #fff; padding: 18px 20px; }
+.w8-level-card.now { background: var(--ink); }
+.w8-level-tag { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 3px; font-weight: 700; display: inline-block; margin-bottom: 8px; }
+.w8-level-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.w8-level-card.now .w8-level-title { color: var(--gold); }
+.w8-level-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.7; }
+.w8-level-card.now .w8-level-desc { color: rgba(255,255,255,0.6); }
+
+.w8-standards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.w8-std-card { background: #fff; padding: 18px 20px; }
+.w8-std-icon { font-size: 20px; margin-bottom: 8px; }
+.w8-std-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.w8-std-en { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); margin-bottom: 12px; }
+.w8-std-bad { font-size: 12px; color: var(--danger); line-height: 1.6; margin-bottom: 8px; }
+.w8-std-good { font-size: 12px; color: var(--success); line-height: 1.6; }
+
+.w8-errors-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 32px; }
+.w8-err-item { background: #fff; padding: 16px 20px; }
+.w8-err-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--danger); background: var(--danger-light); padding: 2px 8px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+.w8-err-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.w8-err-bad { font-size: 12px; color: var(--danger); line-height: 1.6; margin-bottom: 6px; }
+.w8-err-good { font-size: 12px; color: var(--success); line-height: 1.6; }
+
+.w8-method-tabs { display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 0; }
+.w8-tab-btn { flex: 1; padding: 10px 8px; font-size: 12px; font-weight: 700; background: #fff; color: var(--ink-light); border: none; cursor: pointer; transition: all 0.15s; text-align: center; }
+.w8-tab-btn:hover { background: var(--paper-warm); color: var(--ink); }
+.w8-tab-btn.active { background: var(--ink); color: #fff; }
+
+.w8-panel { border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; margin-bottom: 24px; }
+.w8-panel-hd { padding: 12px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.w8-panel-badge { font-family: var(--font-mono); font-size: 10px; background: var(--ink); color: #fff; padding: 2px 8px; border-radius: 3px; font-weight: 700; }
+.w8-panel-body { padding: 20px 24px; background: #fff; }
+.w8-panel-section-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.w8-pitfall-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.w8-pitfall-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--danger-light); border-radius: 8px; }
+.w8-pitfall-x { color: var(--danger); font-size: 14px; flex-shrink: 0; }
+.w8-pitfall-text { font-size: 13px; color: var(--ink); flex: 1; line-height: 1.6; }
+.w8-pitfall-fix { font-size: 12px; color: var(--success); margin-top: 4px; }
+
+.w8-task-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 12px; }
+.w8-task-hd { padding: 12px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.w8-task-badge { font-family: var(--font-mono); font-size: 10px; background: var(--ink); color: #fff; padding: 2px 8px; border-radius: 3px; font-weight: 700; }
+.w8-task-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+.w8-task-body { padding: 20px 24px; }
+.w8-task-ol { list-style: none; padding: 0; margin: 0; counter-reset: task-counter; display: flex; flex-direction: column; gap: 8px; }
+.w8-task-ol li { counter-increment: task-counter; font-size: 13px; color: var(--ink-mid); line-height: 1.65; padding-left: 28px; position: relative; }
+.w8-task-ol li::before { content: counter(task-counter); position: absolute; left: 0; width: 20px; height: 20px; background: var(--ink); color: #fff; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; top: 1px; }
+
+@media (max-width: 768px) {
+    .w8-meta-strip, .w8-level-banner, .w8-standards-grid, .w8-errors-grid { grid-template-columns: 1fr; }
+}

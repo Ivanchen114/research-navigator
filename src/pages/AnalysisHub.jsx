@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { BookOpen, ClipboardList, Mic, TestTube2, Camera, Library } from 'lucide-react';
+import { BookOpen, ClipboardList, Mic, TestTube2, Camera, Library, Map } from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
+import { W14Data } from '../data/lessonMaps';
 import { FoundationModule } from './analysis/FoundationModule';
 import { SurveyModule } from './analysis/SurveyModule';
 import { InterviewModule } from './analysis/InterviewModule';
@@ -12,6 +14,7 @@ export const AnalysisHub = () => {
     const [searchParams] = useSearchParams();
     const initialTab = searchParams.get('tab') || 'foundation';
     const [activeTab, setActiveTab] = useState(initialTab);
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     useEffect(() => {
         const tabParam = searchParams.get('tab');
@@ -44,29 +47,68 @@ export const AnalysisHub = () => {
     return (
         <div className="max-w-[1100px] mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-['Noto_Sans_TC',sans-serif] text-[14px] leading-[1.6] text-[#1a1a2e] pb-16">
 
+            {/* TOP BAR / NAVIGATION PATH */}
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
+                    研究方法與專題 / 執行與分析 / <span className="text-[#1a1a2e] font-bold">解讀與結論 W14</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <button
+                        onClick={() => setShowLessonMap(!showLessonMap)}
+                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
+                    >
+                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                    </button>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                </div>
+            </div>
+
+            {showLessonMap && (
+                <div className="animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W14Data} />
+                </div>
+            )}
+
             {/* Header */}
-            <header className="pt-8 text-center max-w-[650px] mx-auto">
-                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2d5be3] mb-3 flex items-center justify-center gap-2">
-                    <span className="text-[#2d5be3]">📊</span> W11–W14 執行與分析階段
+            <header>
+                <div className="text-[11px] font-['DM_Mono',monospace] tracking-[0.12em] uppercase text-[#2d5be3] mb-3">
+                    📊 W11–W14 執行與分析階段
                 </div>
                 <h1 className="font-['Noto_Serif_TC',serif] text-[38px] font-bold leading-[1.25] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
                     解讀與結論教練：<br className="hidden md:block" />
                     <span className="text-[#2d5be3]">從數據到真相</span>
                 </h1>
-                <p className="text-[15px] text-[#4a4a6a] leading-[1.75]">
+                <p className="text-[15px] text-[#4a4a6a] leading-[1.75] max-w-[650px] mb-8">
                     歡迎來到解讀與結論中心。本模組將引導你利用 AI 協作，從混亂的數據中提煉出真實的研究發現。請選擇你使用的研究方法，查閱專屬的分析指南與指令範本。
                 </p>
 
+                <div className="mb-14">
+                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
+                    <div className="grid grid-cols-2 md:grid-cols-8 border border-[#dddbd5] rounded-xl overflow-hidden divide-x divide-[#dddbd5]">
+                        {W14Data.courseArc.map((item, idx) => (
+                            <div key={idx} className={`p-4 text-center ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-white'}`}>
+                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
+                                    {item.wk} {item.now && '← 現在'}
+                                </div>
+                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
+                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* 階段提醒 */}
-                <div className="mt-8 p-6 bg-[#f8f7f4] border border-[#dddbd5] rounded-[6px] text-[13px] text-[#4a4a6a] inline-block text-left max-w-[560px]">
+                <div className="p-6 bg-[#f8f7f4] border border-[#dddbd5] rounded-[6px] text-[13px] text-[#4a4a6a] inline-block text-left max-w-[560px] mb-12">
                     <h3 className="font-bold text-[#1a1a2e] mb-2 flex items-center gap-2 uppercase tracking-widest font-['DM_Mono',monospace]">
                         // Phase Checkpoint
                     </h3>
                     <p>
                         本模組適合在 <strong className="text-[#2d5be3]">W11–W14 執行研究後</strong>使用。如果你還沒設計工具，請先前往
-                        <a href="/tool-design" className="text-[#2d5be3] font-bold hover:underline mx-1 underline-offset-4">W8 工具設計</a>；
+                        <Link to="/tool-design" className="text-[#2d5be3] font-bold hover:underline mx-1 underline-offset-4">W8 工具設計</Link>；
                         若尚未確定方法，請回
-                        <a href="/clinic" className="text-[#2d5be3] font-bold hover:underline mx-1 underline-offset-4">W5 研究診所</a>。
+                        <Link to="/clinic" className="text-[#2d5be3] font-bold hover:underline mx-1 underline-offset-4">W5 研究診所</Link>。
                     </p>
                 </div>
             </header>

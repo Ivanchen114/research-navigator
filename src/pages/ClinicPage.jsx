@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './ClinicPage.css';
 import {
     Stethoscope,
     ArrowRight,
@@ -103,76 +104,8 @@ export const ClinicPage = () => {
     };
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
-            <style>
-                {`
-                :root {
-                    --ink: #1a1a2e; --ink-mid: #4a4a6a; --ink-light: #8888aa;
-                    --paper: #f8f7f4; --paper-warm: #f0ede6;
-                    --accent: #2d5be3; --accent-light: #e8eeff;
-                    --gold: #c9a84c; --gold-light: #fdf6e3;
-                    --success: #2e7d5a; --success-light: #e8f5ee;
-                    --danger: #c0392b; --danger-light: #fdecea;
-                    --border: #dddbd5; --border-mid: #c8c5bc;
-                }
-
-                .w6-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; margin-top: 64px; }
-                .w6-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-                .clinic-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
-                .w6-section-head .line { flex: 1; height: 1px; background: var(--border); }
-                .w6-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); letter-spacing: 0.08em; white-space: nowrap; }
-
-                .w6-method-card { border: 1px solid var(--border); border-radius: 10px; padding: 16px 12px; background: #fff; text-align: center; transition: all 0.2s; }
-                .w6-method-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-                .w6-method-icon { font-size: 24px; margin-bottom: 8px; }
-                .w6-method-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-                .w6-method-desc { font-size: 11px; color: var(--ink-mid); line-height: 1.5; }
-
-                .w6-speed-card { border: 2px solid var(--ink); border-radius: 10px; overflow: hidden; }
-                .w6-speed-header { padding: 14px 20px; background: var(--ink); color: #fff; font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 15px; letter-spacing: 0.03em; display: flex; align-items: center; gap: 8px; }
-                .w6-speed-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
-                .w6-speed-q { background: #fff; padding: 16px 18px; }
-                .w6-speed-q-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); margin-bottom: 5px; }
-                .w6-speed-q-text { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
-                .w6-method-tag { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(45,91,227,0.2); padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
-
-                .w6-quiz-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; }
-                .w6-quiz-header { padding: 14px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-                .w6-quiz-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 20px; border-top: 1px solid var(--border); background: #fff; }
-
-                .w6-case-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; transition: all 0.2s; }
-                .w6-case-card:hover { border-color: var(--border-mid); transform: translateY(-2px); }
-                .w6-case-top { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--paper-warm); border-bottom: 1px solid var(--border); }
-
-                .w6-task-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; transition: all 0.2s; }
-                .w6-task-header { padding: 14px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-                .w6-task-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--accent); color: #fff; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.05em; }
-                .w6-task-title { font-weight: 700; font-size: 13px; color: var(--ink); }
-                .w6-task-body { padding: 16px 20px; font-size: 13px; color: var(--ink-mid); line-height: 1.8; }
-
-                .w6-notice { padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7; border-left: 4px solid var(--accent); background: var(--accent-light); color: var(--ink-mid); }
-                .w6-notice-danger { background: var(--danger-light); color: var(--danger); border-left-color: var(--danger); }
-                .w6-notice-gold { background: var(--gold-light); color: #7a6020; border-left-color: var(--gold); }
-                .w6-notice-success { background: var(--success-light); color: var(--success); border-left-color: var(--success); }
-
-                .w6-next-week-preview { background: var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 48px; border: 1px solid var(--border); }
-                .w6-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-                .w6-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
-                .w6-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
-                .w6-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
-                .w6-next-week-col { background: var(--ink); padding: 20px 24px; }
-                .w6-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
-                .w6-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
-
-                .w6-hw-row { padding: 12px 20px; display: flex; align-items:center; gap: 12px; background: #fff; transition: background 0.2s; }
-                .w6-hw-row:hover { background: var(--paper); }
-                @media (max-width: 768px) { .w6-meta-strip, .w6-speed-body, .w6-quiz-item, .w6-case-card, .w6-task-block, .w6-next-week-content { grid-template-columns: 1fr; } }
-                .w6-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
-                .w6-meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
-                .w6-meta-label { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; font-weight: 500; }
-                .w6-meta-value { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
-                `}
-            </style>
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style> - styles moved to index.css */}
 
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -187,7 +120,7 @@ export const ClinicPage = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#accent] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono" style={{ background: 'var(--accent)' }}>分流週</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -198,54 +131,55 @@ export const ClinicPage = () => {
             )}
 
             {/* PAGE HEADER */}
-            <header className="mb-14">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🏥 W6 · 研究診所</div>
-                <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
-                    診所實戰：<span className="text-[#2d5be3]">掛對科、找對藥、定對案</span>
+            <header className="max-w-[800px] mb-16">
+                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🩺 W6 · 研究規劃</div>
+                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
+                    研究診所：<span className="text-[#2d5be3] italic">分流建議與方法處方</span>
                 </h1>
-                <p className="text-[16px] text-[#4a4a6a] max-w-[680px] leading-[1.75] mb-10">
-                    選錯方法，研究就會「難產」。今天我們要進行一場大型診斷，透過「五科分流」找出最適合你研究目標路徑。
+                <p className="text-[15px] text-[#4a4a6a] max-w-[600px] leading-[1.75] mb-8">
+                    你的題目適合用什麼方法？問卷、訪談、還是實驗？今天進入診所分流，讓老師和 AI 幫你開出最適合的「方法處方」。
                 </p>
 
-                {/* META CARDS */}
-                <div className="w6-meta-grid">
-                    {[
-                        { label: '第一節', value: '五科分流實戰 + 複合案例挑戰' },
-                        { label: '第二節', value: '方法掛號診斷 + 救活研究原石' },
-                        { label: '課課產出', value: 'W6 最終定案方法與路徑' },
-                        { label: '帶去 W7', value: '確定題目與方法 + 組隊企劃' }
-                    ].map((item, idx) => (
-                        <div key={idx} className="w6-meta-card">
-                            <div className="w6-meta-label">{item.label}</div>
-                            <div className="w6-meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* COURSE ARC - Standard Version A */}
+                {/* Course Arc - Standard Version A */}
                 <div className="mb-14">
                     <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="grid grid-cols-7 border border-[#dddbd5] rounded-[12px] overflow-hidden">
+                    <div className="arc-grid">
                         {[
-                            { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
-                            { wk: 'W5', name: '文獻鑑識\n證據等級', past: true },
-                            { wk: 'W6', name: '研究診所\n方法抉擇', now: true },
+                            { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
+                            { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
+                            { wk: 'W5', name: '企劃撰寫\n研究藍圖', status: 'past' },
+                            { wk: 'W6', name: '診所分流\n方法處方', status: 'now' },
                             { wk: 'W7', name: '組隊決策\n企劃定案' },
                             { wk: 'W8-W10', name: '工具設計\n倫理審查' },
-                            { wk: 'W11-W15', name: '執行研究\n資料分析' },
-                            { wk: 'W16', name: '成果展示\nGallery Walk' }
+                            { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
                         ].map((item, idx) => (
-                            <div key={idx} className={`p-4 text-center border-r border-[#dddbd5] last:border-r-0 ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-[#f8f7f4]'}`}>
-                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
-                                    {item.wk} {item.now && '← 現在'}
+                            <div key={idx} className={`arc-item ${item.status === 'past' ? 'past' : item.status === 'now' ? 'now' : ''}`}>
+                                <div className="arc-wk">
+                                    {item.wk} {item.status === 'now' && '← 現在'}
                                 </div>
-                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
+                                <div className="arc-name">
                                     {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
+
+                {/* META CARDS */}
+                <div className="meta-grid">
+                    {[
+                        { label: '第一節', value: '五科分流實戰 + 複合案例挑戰' },
+                        { label: '第二節', value: '方法掛號診斷 + 救活研究原石' },
+                        { label: '課課產出', value: 'W6 最終定案方法與路徑' },
+                        { label: '帶去 W7', value: '確定題目與方法 + 組隊企劃' }
+                    ].map((item, idx) => (
+                        <div key={idx} className="meta-item">
+                            <div className="meta-label">{item.label}</div>
+                            <div className="meta-value">{item.value}</div>
+                        </div>
+                    ))}
+                </div>
+
             </header>
 
             {/* PART 1: 學什麼 (CONCEPT) */}
@@ -502,52 +436,51 @@ export const ClinicPage = () => {
                 </div>
 
                 {/* 學會什麼 */}
-                <div className="w6-quiz-block mb-10">
-                    <div className="w6-quiz-header font-bold text-[13px] text-[#1a1a2e]">
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-4">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[13px]">
                         ✅ 本週結束，你應該要會
                     </div>
-                    <div className="grid md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
                         {[
-                            { text: <>用<strong className="text-[#1a1a2e]">分科三問</strong>判斷一個研究問題該掛哪科</> },
-                            { text: <>辨識<strong className="text-[#1a1a2e]">問卷、訪談、實驗、觀察、文獻</strong>各自的適用情境</> },
-                            { text: <>看到「掛錯科」的病例，能<strong className="text-[#1a1a2e]">說出理由</strong>指出問題所在</> },
-                            { text: <>為你自己的 W4 題目選出<strong className="text-[#1a1a2e]">主要方法</strong>並說明理由</> }
+                            { text: <>用<strong>分科三問</strong>判斷一個研究問題該掛哪科</> },
+                            { text: <>辨識<strong>問卷、訪談、實驗、觀察、文獻</strong>各自的適用情境</> },
+                            { text: <>看到「掛錯科」的病例，能<strong>說出理由</strong>指出問題所在</> },
+                            { text: <>為你自己的 W4 題目選出<strong>主要方法</strong>並說明理由</> }
                         ].map((goal, idx) => (
-                            <div key={idx} className="bg-white p-5 flex items-start gap-4">
-                                <span className="text-[#2e7d5a] font-bold">✓</span>
-                                <p className="text-[13px] text-[#4a4a6a] leading-relaxed">{goal.text}</p>
+                            <div key={idx} className="p-4 px-6 bg-white flex items-start gap-3">
+                                <span className="text-[#2e7d5a] mt-0.5">✓</span>
+                                <span className="text-[13px] text-[#4a4a6a]">{goal.text}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* 本週作業 */}
-                <div className="w6-task-block border-2 border-[#1a1a2e] mb-12">
-                    <div className="bg-[#1a1a2e] p-5 flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-white font-bold">
-                            <span className="text-[10px] font-mono bg-[#2d5be3] px-2 py-0.5 rounded-[2px] tracking-widest">HOMEWORK</span>
-                            <span>本週作業</span>
-                        </div>
-                        <span className="text-[11px] font-mono text-white/50">截止：下週一 23:59</span>
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
+                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
+                        <span className="font-bold text-[13px]">本週作業</span>
                     </div>
                     <div className="divide-y divide-[#dddbd5]">
                         {[
-                            { part: 'PART 1', text: '分科三問——用你自己的話說，不要抄速查卡' },
-                            { part: 'PART 2', text: '幫你的 W4 題目掛號', critical: true },
-                            { part: 'PART 3', text: 'AI 補漏記錄（選做但推薦）', light: true },
-                            { part: 'PART 4', text: '整體反思', light: true },
+                            { part: 'Part 1', text: '分科三問——用你自己的話說，不要抄速查卡' },
+                            { part: 'Part 2', text: '幫你的 W4 題目掛號', badge: '最重要' },
+                            { part: 'Part 3', text: 'AI 補漏記錄（選做但推薦）', light: true },
+                            { part: 'Part 4', text: '整體反思', light: true },
                         ].map((hw, idx) => (
-                            <div key={idx} className="w6-hw-row">
-                                <span className={`text-[10px] font-mono font-bold w-12 ${hw.light ? 'text-[#8888aa]' : 'text-[#2d5be3]'}`}>{hw.part}</span>
-                                <span className={`text-[13px] ${hw.light ? 'text-[#8888aa]' : 'text-[#1a1a2e]'}`}>{hw.text}</span>
-                                {hw.critical && <span className="ml-auto text-[9px] font-bold text-[#e32d5b] px-2 py-0.5 border border-[#e32d5b]/20 rounded-[2px] font-mono lowercase">最重要</span>}
+                            <div key={idx} className="p-4 px-6 flex items-center justify-between text-[13px]">
+                                <div className="flex items-center gap-6">
+                                    <span className={`font-bold font-mono w-12 shrink-0 ${hw.light ? 'text-[#8888aa]' : 'text-[#2d5be3]'}`}>{hw.part}</span>
+                                    <span className={hw.light ? 'text-[#8888aa]' : 'text-[#4a4a6a]'}>{hw.text}</span>
+                                </div>
+                                {hw.badge && <span className="bg-[#fdecea] text-[#c0392b] text-[10px] px-2 py-0.5 rounded border border-[#c0392b]/20 font-bold">{hw.badge}</span>}
                             </div>
                         ))}
                     </div>
-                    <div className="p-5 bg-[#f8f7f4] border-t border-[#dddbd5] flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <p className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</p>
-                        <a href="#" className="bg-[#1a1a2e] text-white px-8 py-2.5 rounded-[4px] text-[12px] font-bold hover:bg-[#2d5be3] transition-colors flex items-center gap-2">
-                            前往 Google Classroom <ArrowRight size={14} />
+                    <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
+                        <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
+                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">
+                            → Google Classroom
                         </a>
                     </div>
                 </div>

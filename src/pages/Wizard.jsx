@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Map, ArrowRight } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
+import CopyButton from '../components/ui/CopyButton';
 import { W3Data } from '../data/lessonMaps';
+import './Wizard.css';
 
 export const Wizard = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
@@ -25,118 +27,8 @@ export const Wizard = () => {
     };
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                :root { --ink: #1a1a2e; --ink-mid: #4a4a6a; --ink-light: #8888aa; --paper: #f8f7f4; --paper-warm: #f0ede6; --accent: #2d5be3; --accent-light: #e8eeff; --gold: #c9a84c; --gold-light: #fdf6e3; --success: #2e7d5a; --success-light: #e8f5ee; --danger: #c0392b; --danger-light: #fdecea; --border: #dddbd5; --border-mid: #c8c5bc; }
-                .w3-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }
-                .w3-meta-item { background: #fff; padding: 14px 18px; }
-                .w3-meta-label { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--ink-light); margin-bottom: 4px; }
-                .w3-meta-value { font-size: 13px; font-weight: 700; color: var(--ink); }
-                .w3-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 48px; }
-                .w3-section-head h2 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-                .w3-section-head .line { flex: 1; height: 1px; background: var(--border); }
-                .w3-section-head .mono { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); }
-                .w3-disease-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
-                .w3-disease-card { background: #fff; padding: 14px 16px; }
-                .w3-disease-code { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-                .w3-disease-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-                .w3-disease-symptom { font-size: 11px; color: var(--ink-light); line-height: 1.6; }
-                .w3-mantra-box { border: 2px solid var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-                .w3-mantra-hd { background: var(--ink); color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
-                .w3-mantra-hd .title { font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 700; }
-                .w3-mantra-core { padding: 20px; background: #fff; text-align: center; }
-                .w3-mantra-rows { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-                .w3-mantra-row-item { background: #fff; padding: 12px 14px; text-align: center; }
-                .w3-mantra-from { font-size: 18px; font-weight: 700; color: var(--danger); font-family: 'Noto Serif TC', serif; }
-                .w3-mantra-to { font-size: 18px; font-weight: 700; color: var(--success); font-family: 'Noto Serif TC', serif; }
-                .w3-mantra-arrow-sm { font-size: 12px; color: var(--ink-light); margin: 2px 0; }
-                .w3-w5h1-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-                .w3-w5h1-item { background: #fff; padding: 14px 14px; }
-                .w3-w5h1-w { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
-                .w3-w5h1-label { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-                .w3-w5h1-q { font-size: 11px; color: var(--ink-light); line-height: 1.6; }
-                .w3-patient-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-                .w3-patient-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; }
-                .w3-patient-hd { padding: 8px 14px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-                .w3-patient-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-light); }
-                .w3-unlock-btn { opacity: 0; background: none; border: none; cursor: pointer; padding: 4px; font-size: 14px; margin-left: auto; transition: opacity 0.2s; }
-                .w3-unlock-btn:hover { opacity: 0.4; }
-                .w3-patient-body { padding: 12px 14px; font-size: 13px; color: var(--ink); font-weight: 500; }
-                .w3-patient-answer { padding: 10px 14px; background: var(--success-light); border-top: 1px solid var(--border); font-size: 12px; color: var(--success); line-height: 1.6; }
-                .w3-drill-section { margin-bottom: 20px; }
-                .w3-drill-level-hd { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 6px; margin-bottom: 10px; }
-                .w3-drill-level-hd.green { background: var(--success-light); }
-                .w3-drill-dot { width: 10px; height: 10px; border-radius: 50%; shrink: 0; }
-                .w3-drill-dot.green { background: var(--success); }
-                .w3-drill-level-title { font-size: 13px; font-weight: 700; color: var(--success); }
-                .w3-drill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-                .w3-drill-pill { font-size: 12px; color: var(--ink-mid); background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; }
-                .w3-collab-steps { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-                .w3-collab-step { background: #fff; padding: 14px 20px; display: flex; align-items: flex-start; gap: 16px; }
-                .w3-collab-step-num { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; shrink: 0; }
-                .w3-step-human { background: var(--success-light); color: var(--success); }
-                .w3-step-ai    { background: var(--accent-light); color: var(--accent); }
-                .w3-step-you   { background: var(--gold-light); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
-                .w3-collab-step-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
-                .w3-collab-step-desc { font-size: 12px; color: var(--ink-mid); line-height: 1.65; }
-                .w3-prompt-box { border: 1px solid var(--border-mid); border-radius: 8px; overflow: hidden; margin: 12px 0; }
-                .w3-prompt-hd { padding: 8px 14px; background: var(--ink); display: flex; align-items: center; gap: 8px; }
-                .w3-prompt-hd span { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); }
-                .w3-copy-btn { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 3px; cursor: pointer; }
-                .w3-copy-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
-                .w3-prompt-body { padding: 14px 16px; background: #fafaf8; font-size: 12px; color: var(--ink-mid); line-height: 1.85; font-family: 'DM Mono', monospace; white-space: pre-wrap; }
-                .w3-task-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 12px; }
-                .w3-task-hd { padding: 12px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-                .w3-task-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--ink); color: #fff; padding: 2px 8px; border-radius: 3px; }
-                .w3-task-title { font-size: 13px; font-weight: 700; color: var(--ink); }
-                .w3-task-body { padding: 20px 24px; }
-                .w3-hw-block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
-                .w3-hw-header { padding: 14px 20px; background: var(--paper-warm); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-                .w3-hw-header-left { display: flex; align-items: center; gap: 10px; }
-                .w3-hw-header-title { font-size: 13px; font-weight: 700; }
-                .w3-hw-deadline { font-size: 11px; color: var(--danger); font-weight: bold; }
-                .w3-hw-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
-                .w3-hw-item { background: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
-                .w3-hw-part { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; color: var(--ink-light); width: 45px; shrink: 0; }
-                .w3-hw-name { font-size: 13px; color: var(--ink); flex: 1; }
-                .w3-hw-badge { font-size: 9px; background: var(--gold-light); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); padding: 1px 6px; border-radius: 3px; font-weight: 700; }
-                .w3-hw-foot { padding: 14px 20px; background: #fafaf8; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-                .w3-gc-link { font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: none; }
-                .w3-gc-link:hover { text-decoration: underline; }
-                .w3-next-week-preview { background: var(--ink); border-radius: 10px; overflow: hidden; margin-bottom: 48px; border: 1px solid var(--border); }
-                .w3-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-                .w3-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
-                .w3-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
-                .w3-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
-                .w3-next-week-col { background: var(--ink); padding: 20px 24px; }
-                .w3-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
-                .w3-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
-                .w3-mantra-map { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
-                .w3-mantra-map-item { background: #fff; padding: 10px 12px; font-size: 11px; color: var(--ink-mid); }
-                .w3-mantra-map-item strong { display: block; font-size: 10px; font-family: 'DM Mono', monospace; color: var(--ink-light); margin-bottom: 2px; }
-                .w3-drill-level-hd.yellow { background: var(--gold-light); }
-                .w3-drill-level-hd.red { background: var(--danger-light); }
-                .w3-drill-dot.yellow { background: var(--gold); }
-                .w3-drill-dot.red { background: var(--danger); }
-                .w3-drill-level-title.yellow { color: var(--gold); }
-                .w3-drill-level-title.red { color: var(--danger); }
-                .w3-hint-strip { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 16px; margin-bottom: 20px; }
-                .w3-hint-strip-hd { padding: 10px 16px; background: var(--paper-warm); border-bottom: 1px solid var(--border); font-size: 11px; font-family: 'DM Mono', monospace; color: var(--ink-light); letter-spacing: 0.08em; }
-                .w3-hint-body { background: #fff; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
-                .w3-hint-item { background: #fff; padding: 12px 14px; }
-                .w3-hint-from { font-weight: 700; color: var(--danger); font-size: 13px; margin-bottom: 3px; }
-                .w3-hint-to { font-weight: 700; color: var(--success); font-size: 13px; margin-bottom: 3px; }
-                .w3-hint-text { font-size: 11px; color: var(--ink-light); line-height: 1.6; }
-                .w3-collab-step-num.step-red { background: var(--ink); color: #fff; }
-                .w3-core-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px; background: var(--gold); color: #fff; padding: 1px 6px; border-radius: 3px; margin-left: 6px; letter-spacing: 0.05em; }
-                .w3-section-desc { font-size: 14px; color: var(--ink-mid); margin-bottom: 32px; line-height: 1.6; max-width: 800px; }
-                .w3-notice { padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7; margin-bottom: 32px; border-left: 4px solid var(--accent); background: var(--accent-light); color: var(--ink-mid); }
-                .w3-notice-danger { background: var(--danger-light); color: var(--danger); border-left-color: var(--danger); }
-                .w3-notice-gold { background: var(--gold-light); color: #7a6020; border-left-color: var(--gold); }
-                .w3-notice-success { background: var(--success-light); color: var(--success); border-left-color: var(--success); }
-                @media (max-width: 768px) { .w3-content { padding: 24px 20px; } .w3-topbar { padding: 0 20px; } .w3-meta-strip, .w3-disease-grid, .w3-mantra-rows, .w3-mantra-map, .w3-w5h1-grid, .w3-patient-grid, .w3-hint-body, .w3-next-week-content { grid-template-columns: 1fr; } }
-            ` }} />
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
 
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -151,7 +43,7 @@ export const Wizard = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#2d5be3] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">健檢週</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -171,41 +63,29 @@ export const Wizard = () => {
                     好的研究不是「想出來」的，是「磨出來」的。今天我們先感受「碰壁」的真實感，再學會用一個心法診斷並救活你的原石題目。
                 </p>
 
-                {/* META CARDS */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-14">
+                {/* META STRIP */}
+                <div className="meta-strip">
                     {[
                         { label: '本週任務', value: '診斷8題 + AI協作 + 快篩定案' },
                         { label: '課課產出', value: 'W3 最終定案題目' },
                         { label: '本週作業', value: '學習單（Parts 1–7）' },
                         { label: '帶去 W4', value: '定案題目 + 海報資料' }
                     ].map((item, idx) => (
-                        <div key={idx} className="bg-white border border-[#dddbd5] rounded-[12px] p-4">
-                            <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-[0.08em] mb-1">{item.label}</div>
-                            <div className="text-[13px] font-bold text-[#1a1a2e]">{item.value}</div>
+                        <div key={idx} className="meta-item">
+                            <div className="meta-label">{item.label}</div>
+                            <div className="meta-value">{item.value}</div>
                         </div>
                     ))}
                 </div>
 
-                {/* COURSE ARC - Standard Version A */}
+                {/* COURSE ARC */}
                 <div className="mb-14">
                     <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="grid grid-cols-7 border border-[#dddbd5] rounded-[12px] overflow-hidden">
-                        {[
-                            { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                            { wk: 'W3', name: '題目健檢\n核心心法', now: true },
-                            { wk: 'W4', name: '題目博覽會\n同儕互修' },
-                            { wk: 'W5-W6', name: '文獻鑑識\n診所分流' },
-                            { wk: 'W7', name: '組隊決策\n企劃定案' },
-                            { wk: 'W8-W10', name: '工具設計\n倫理審查' },
-                            { wk: 'W11-W16', name: '執行研究\n成果發表' }
-                        ].map((item, idx) => (
-                            <div key={idx} className={`p-4 text-center border-r border-[#dddbd5] last:border-r-0 ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-[#f8f7f4]'}`}>
-                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
-                                    {item.wk} {item.now && '← 現在'}
-                                </div>
-                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
-                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
-                                </div>
+                    <div className="arc-grid">
+                        {W3Data.courseArc.map((item, idx) => (
+                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
+                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
                             </div>
                         ))}
                     </div>
@@ -433,12 +313,31 @@ export const Wizard = () => {
                     </div>
                 </div>
             </div>
-            <div className="w3-prompt-box">
-                <div className="w3-prompt-hd"><span>PROMPT · 句型優化器</span><button className="w3-copy-btn" onClick={() => handleCopy('p1', `我的研究題目初稿是：【請貼上你的初稿】\n\n請幫我優化成更專業的版本：\n1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）\n2. 讓 Who(研究對象) / What(研究變數) 描述更精確\n3. 確保高中生可以執行，字數不要過長\n請給我 3 個優化版本。`)}>{copyStatus['p1'] ? '已複製！' : '複製'}</button></div>
-                <div className="w3-prompt-body">我的研究題目初稿是：【請貼上你的初稿】<br /><br />請幫我優化成更專業的版本：<br />1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）<br />2. 讓 Who(研究對象) / What(研究變數) 描述更精確<br />3. 確保高中生可以執行，字數不要過長<br /><br />請給我 3 個優化版本。</div>
+            <div className="prompt-box">
+                <div className="prompt-hd"><span>PROMPT · 句型優化器</span><CopyButton text={`我的研究題目初稿是：【請貼上你的初稿】\n\n請幫我優化成更專業的版本：\n1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）\n2. 讓 Who(研究對象) / What(研究變數) 描述更精確\n3. 確保高中生可以執行，字數不要過長\n請給我 3 個優化版本。`} label="複製" /></div>
+                <div className="prompt-body">我的研究題目初稿是：【請貼上你的初稿】<br /><br />請幫我優化成更專業的版本：<br />1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）<br />2. 讓 Who(研究對象) / What(研究變數) 描述更精確<br />3. 確保高中生可以執行，字數不要過長<br /><br />請給我 3 個優化版本。</div>
             </div>
 
             <div className="w3-section-head"><h2>本週總結</h2><div className="line"></div><div className="mono">WRAP-UP</div></div>
+
+            <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-4">
+                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[13px]">
+                    ✅ 本週結束，你應該要會
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
+                    {[
+                        '看懂 8 種爛題型，能說出每種問題在哪裡',
+                        '用 5W1H 框架把模糊題目規格化成專業版本',
+                        '通過可行性快篩的全部關卡，確認題目能執行',
+                        '產出一個有 AI-RED 記錄的最終定案題目'
+                    ].map((item, i) => (
+                        <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
+                            <span className="text-[#2e7d5a] mt-0.5">✓</span>
+                            <span className="text-[13px] text-[#4a4a6a]">{item}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             <div className="w3-hw-block">
                 <div className="w3-hw-header">
@@ -464,23 +363,23 @@ export const Wizard = () => {
                 </div>
                 <div className="w3-hw-foot">
                     <span style={{ fontSize: '12px', color: 'var(--ink-light)' }}>學習單在 Google Classroom 下載</span>
-                    <a href="#" className="w3-gc-link">→ Google Classroom</a>
+                    <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="w3-gc-link">→ Google Classroom</a>
                 </div>
             </div>
 
-            <div className="w3-next-week-preview">
-                <div className="w3-next-week-header">
-                    <span className="w3-next-week-badge">NEXT WEEK</span>
-                    <h3 className="w3-next-week-title">W4 預告</h3>
+            <div className="next-week-preview">
+                <div className="next-week-header">
+                    <span className="next-week-badge">NEXT WEEK</span>
+                    <h3 className="next-week-title">W4 預告</h3>
                 </div>
-                <div className="w3-next-week-content">
-                    <div className="w3-next-week-col">
-                        <div className="w3-next-week-label">W4 主題</div>
-                        <p className="w3-next-week-text">Gallery Walk 題目博覽會——帶著你的定案題目公諸於世。</p>
+                <div className="next-week-content">
+                    <div className="next-week-col">
+                        <div className="next-week-label">W4 主題</div>
+                        <p className="next-week-text">Gallery Walk 題目博覽會——帶著你的定案題目公諸於世。</p>
                     </div>
-                    <div className="w3-next-week-col">
-                        <div className="w3-next-week-label">你要帶來</div>
-                        <p className="w3-next-week-text"><strong>海報</strong>：包含定案題目、Who、How、為什麼想研究。</p>
+                    <div className="next-week-col">
+                        <div className="next-week-label">你要帶來</div>
+                        <p className="next-week-text"><strong>海報</strong>：包含定案題目、Who、How、為什麼想研究。</p>
                     </div>
                 </div>
             </div>

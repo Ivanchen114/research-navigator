@@ -13,7 +13,8 @@ import {
     Lightbulb,
     AlertTriangle,
     FileText,
-    MousePointer2
+    MousePointer2,
+    Map
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W13Data } from '../data/lessonMaps';
@@ -23,7 +24,7 @@ const ChartCard = ({ icon: Icon, type, name, trigger, keywords }) => (
         <div className="text-2xl mb-2.5">
             <Icon size={28} className="text-[#1a1a2e]" />
         </div>
-        <div className="font-['DM_Mono',monospace] text-[10px] font-bold text-[#8888aa] tracking-[0.1em] uppercase mb-1">
+        <div className="font-mono text-[10px] font-bold text-[#8888aa] tracking-[0.1em] uppercase mb-1">
             {type}
         </div>
         <div className="text-[14px] font-bold text-[#1a1a2e] mb-2">
@@ -69,7 +70,7 @@ const FormatItem = ({ label, value, example, isDark }) => (
     </div>
 );
 
-const PracticeBlock = ({ id, badge, title, children }) => {
+const PracticeBlock = ({ badge, title, children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [unlockCount, setUnlockCount] = useState(0);
     const [isUnlocked, setIsUnlocked] = useState(false);
@@ -141,33 +142,24 @@ export const W13Page = () => {
     const [showInstructorView, setShowInstructorView] = useState(false);
 
     return (
-        <div className="max-w-[940px] mx-auto px-6 lg:px-12 py-12 pb-32">
-            {/* Top Meta */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-[#dddbd5] pb-6">
-                <div>
-                    <div className="text-[11px] font-['DM_Mono',monospace] text-[#2d5be3] tracking-[0.06em] uppercase mb-2">
-                        📊 W13 · 分析與撰寫
-                    </div>
-                    <h1 className="font-['Noto_Serif_TC',serif] text-3xl md:text-[36px] font-bold text-[#1a1a2e] leading-tight flex items-center gap-3">
-                        讓數據自己說話：<span className="text-[#2d5be3] italic">圖表選擇與圖說寫作</span>
-                    </h1>
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
+            {/* TOP BAR / NAVIGATION PATH */}
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
+                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">讓數據自己說話 W13</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
+                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowInstructorView(!showInstructorView)}
-                        className={`px-4 py-1.5 rounded-full text-[12px] font-bold transition-all border ${showInstructorView
-                            ? 'bg-[#1a1a2e] text-white border-[#1a1a2e]'
-                            : 'bg-white text-[#4a4a6a] border-[#dddbd5] hover:bg-[#f8f7f4]'
-                            }`}
+                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
                     >
-                        {showInstructorView ? '退出教案模式' : '開啟 Instructor View'}
+                        <Map size={12} /> {showInstructorView ? 'Hide Plan' : 'Instructor View'}
                     </button>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
-
-            <p className="text-[15px] text-[#4a4a6a] leading-[1.75] mb-8 max-w-[620px]">
-                數據是食材，圖表是盤子。今天要學兩件事：選對盤子（圖表類型），以及幫圖表寫一段說明——哪裡是客觀描述、哪裡是主觀推論。
-            </p>
 
             {showInstructorView && (
                 <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
@@ -175,24 +167,36 @@ export const W13Page = () => {
                 </div>
             )}
 
-            {/* Meta Strip */}
-            <div className="grid grid-cols-2 md:grid-cols-4 border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
-                <div className="bg-white p-[14px_18px] border-r border-b md:border-b-0 border-[#dddbd5]">
-                    <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] uppercase tracking-[0.08em] mb-1">第一節</div>
-                    <div className="text-[13px] font-bold text-[#1a1a2e]">四大圖表 + 格式規範</div>
-                </div>
-                <div className="bg-white p-[14px_18px] border-b md:border-b-0 md:border-r border-[#dddbd5]">
-                    <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] uppercase tracking-[0.08em] mb-1">第二節</div>
-                    <div className="text-[13px] font-bold text-[#1a1a2e]">描述 vs 推論 + 寫圖說</div>
-                </div>
-                <div className="bg-white p-[14px_18px] border-r border-[#dddbd5]">
-                    <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] uppercase tracking-[0.08em] mb-1">課堂產出</div>
-                    <div className="text-[13px] font-bold text-[#1a1a2e]">至少一張圖表 + 一段圖說</div>
-                </div>
-                <div className="bg-white p-[14px_18px]">
-                    <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] uppercase tracking-[0.08em] mb-1">帶去 W14</div>
-                    <div className="text-[13px] font-bold text-[#1a1a2e]">完整圖說，寫四層結論</div>
-                </div>
+            {/* PAGE HEADER */}
+            <div className="max-w-[800px] mb-16">
+                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">📊 W13 · 分析與撰寫</div>
+                <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
+                    讓數據自己說話：<span className="text-[#2d5be3]">圖表選擇與圖說寫作</span>
+                </h1>
+                <p className="text-[16px] text-[#4a4a6a] leading-relaxed">
+                    數據是食材，圖表是盤子。今天要學兩件事：選對盤子（圖表類型），以及幫圖表寫一段說明——哪裡是客觀描述、哪裡是主觀推論。
+                </p>
+            </div>
+
+            {/* META STRIP */}
+            <div className="meta-strip">
+                {W13Data.metaCards.map((item, idx) => (
+                    <div key={idx} className="meta-item">
+                        <div className="meta-label">{item.label}</div>
+                        <div className="meta-value">{item.value}</div>
+                    </div>
+                ))}
+            </div>
+
+            {/* COURSE ARC */}
+            <div className="text-[11px] text-[#8888aa] mb-4 font-mono uppercase tracking-wider">課程弧線 · 你在哪裡</div>
+            <div className="arc-grid">
+                {W13Data.courseArc.map((item, idx) => (
+                    <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                        <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
+                        <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
+                    </div>
+                ))}
             </div>
 
             {/* Concept Section */}
@@ -391,7 +395,7 @@ export const W13Page = () => {
                         數據：年齡 19–25 歲者佔「絕大多數」（男生 77.3%，女生 86.83%）。
                     </div>
                     <div className="text-[12px] text-[#4a4a6a] leading-[2.0]">
-                        （推論）這份問卷的主要調查對象大多為 <span className="inline-block border-b border-[#dddbd5] min-width-[120px] mx-1">大學學齡段青年</span>。<br /><br />
+                        （推論）這份問卷的主要調查對象大多為 <span className="inline-block border-b border-[#dddbd5] min-w-[120px] mx-1">大學學齡段青年</span>。<br /><br />
                         <strong className="text-[#c0392b] font-bold">重點討論：「絕大多數」這個說法精準嗎？</strong><br />
                         兩性比例差了將近 10%，說「絕大多數」會遮蔽細節。描述時應直接引用精確數字。
                     </div>
@@ -554,10 +558,10 @@ export const W13Page = () => {
 
             {/* Navigation */}
             <div className="flex justify-between items-center py-8 border-t border-[#dddbd5]">
-                <Link to="/w12" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
-                    <ArrowLeft size={16} /> 回 W12 研究診所 II
+                <Link to="/w10" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
+                    <ArrowLeft size={16} /> 回 W10 倫理審查
                 </Link>
-                <Link to="/analysis" className="bg-[#1a1a2e] hover:bg-[#2a2a4a] text-white px-6 py-2.5 rounded-[6px] text-[14px] font-bold transition-colors flex items-center gap-2">
+                <Link to="/w14" className="bg-[#1a1a2e] hover:bg-[#2a2a4a] text-white px-6 py-2.5 rounded-[6px] text-[14px] font-bold transition-colors flex items-center gap-2">
                     前往 W14 研究結論 <ArrowRight size={16} />
                 </Link>
             </div>

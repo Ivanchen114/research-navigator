@@ -14,6 +14,9 @@ import { W10Page } from './pages/W10Page';
 import { W11Page } from './pages/W11Page';
 import { W12Page } from './pages/W12Page';
 import { W13Page } from './pages/W13Page';
+import { W14Page } from './pages/W14Page';
+import { W15Page } from './pages/W15Page';
+import { W16Page } from './pages/W16Page';
 import { W4Page } from './pages/W4Page';
 import { GameHub } from './pages/games/GameHub';
 import { ToolQuizGame } from './pages/games/ToolQuizGame';
@@ -54,6 +57,9 @@ function App() {
           <Route path="w11" element={<W11Page />} />
           <Route path="w12" element={<W12Page />} />
           <Route path="w13" element={<W13Page />} />
+          <Route path="w14" element={<W14Page />} />
+          <Route path="w15" element={<W15Page />} />
+          <Route path="w16" element={<W16Page />} />
           <Route path="analysis" element={<AnalysisHub />} />
           <Route path="chart-selection" element={<ChartSelection />} />
 

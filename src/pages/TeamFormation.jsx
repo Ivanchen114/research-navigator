@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './TeamFormation.css';
 import { Users, User, ArrowRight, CheckCircle2, Search, Map, Zap, Music, Camera, Mic, Info } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W7Data } from '../data/lessonMaps';
@@ -8,129 +9,8 @@ export const TeamFormation = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans text-[13px] leading-[1.6] text-[#1a1a2e] pb-32">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                :root { --ink: #1a1a2e; --ink-mid: #4a4a6a; --ink-light: #8888aa; --paper: #f8f7f4; --paper-warm: #f0ede6; --accent: #2d5be3; --accent-light: #e8eeff; --gold: #c9a84c; --gold-light: #fdf6e3; --success: #2e7d5a; --success-light: #e8f5ee; --danger: #c0392b; --danger-light: #fdecea; --border: #dddbd5; --border-mid: #c8c5bc; }
-                .w7-content { padding: 48px 0; max-width: 1000px; margin: 0 auto; }
-                
-                .w7-top-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 24px; color: var(--accent); font-weight: 500; }
-                .w7-breadcrumb-sep { color: var(--ink-light); margin: 0 4px; }
-
-                .w7-page-title { font-family: 'Noto Serif TC', serif; font-size: 42px; font-weight: 700; line-height: 1.2; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.01em; }
-                .w7-page-title em { font-style: normal; color: var(--accent); }
-                .w7-page-subtitle { font-size: 16px; color: var(--ink-mid); line-height: 1.75; margin-bottom: 40px; max-width: 680px; }
-
-                .w7-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 56px; }
-                .w7-meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
-                .w7-meta-label { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; font-weight: 500; }
-                .w7-meta-value { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.4; }
-
-                .w7-section-divider { display: flex; align-items: center; gap: 16px; margin: 56px 0 24px; }
-                .w7-section-title { font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700; color: var(--ink); white-space: nowrap; }
-                .w7-section-line { flex: 1; height: 1px; background: var(--border); }
-                .w7-section-tag { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-light); letter-spacing: 0.1em; text-transform: uppercase; }
-
-                .w7-sub-label { font-size: 12px; color: var(--ink-light); margin-bottom: 16px; }
-
-                .w7-timeline { display: grid; grid-template-columns: repeat(7, 1fr); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
-                .w7-timeline-item { padding: 16px 12px; text-align: center; border-right: 1px solid var(--border); }
-                .w7-timeline-item:last-child { border-right: none; }
-                .w7-timeline-item.past { background: #f0f7f4; }
-                .w7-timeline-item.now { background: #1a1a2e; }
-                .w7-timeline-item.future { background: #f8f7f4; }
-                .w7-time-wk { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; margin-bottom: 6px; }
-                .past .w7-time-wk { color: #2e7d5a; }
-                .now .w7-time-wk { color: rgba(255,255,255,0.4); }
-                .future .w7-time-wk { color: var(--ink-light); }
-                .w7-time-name { font-size: 13px; font-weight: 700; line-height: 1.4; }
-                .past .w7-time-name { color: var(--ink); }
-                .now .w7-time-name { color: var(--gold); }
-                .future .w7-time-name { color: var(--ink-light); }
-
-                .w7-decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
-                .w7-decision-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; position: relative; }
-                .w7-decision-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-                .w7-decision-icon { font-size: 24px; }
-                .w7-decision-title { font-size: 17px; font-weight: 700; color: var(--ink); }
-                .w7-decision-meta { font-size: 12px; color: var(--ink-light); margin-left: auto; }
-                .w7-decision-ul { list-style: none; padding: 0; }
-                .w7-decision-li { font-size: 13px; color: var(--ink-mid); line-height: 2; display: flex; align-items: flex-start; gap: 8px; }
-                .w7-decision-li::before { content: "•"; color: var(--ink-light); }
-
-                .w7-solo-hub { background: #1a1a2e; border-radius: 12px; padding: 0; overflow: hidden; margin-bottom: 48px; }
-                .w7-hub-hd { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; }
-                .w7-hub-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--gold); color: #1a1a2e; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-                .w7-hub-title { font-size: 15px; font-weight: 700; color: #fff; }
-                .w7-hub-body { display: grid; grid-template-columns: 1fr 1fr; }
-                .w7-hub-col { padding: 24px 32px; border-right: 1px solid rgba(255,255,255,0.1); }
-                .w7-hub-col:last-child { border-right: none; }
-                .w7-hub-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 12px; font-family: 'DM Mono', monospace; text-transform: uppercase; }
-                .w7-hub-text { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.8; }
-                .w7-hub-ul { list-style: none; padding: 0; }
-                .w7-hub-li { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 2; margin-bottom: 4px; }
-
-                .w7-expo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-                .w7-expo-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-                .w7-expo-num { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 8px; display: block; border: 1px solid var(--accent-light); width: 40px; height: 40px; display: flex; items-center; justify-center; border-radius: 50%; padding-top: 2px;}
-                .w7-expo-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 6px; display: block; }
-                .w7-expo-desc { font-size: 13px; color: var(--ink-mid); line-height: 1.7; }
-
-                .w7-music-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 40px; }
-                .w7-mbar { border-radius: 8px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 12px; }
-                .w7-mbar-hd { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-                .w7-mbar-desc { font-size: 13px; color: var(--ink-mid); }
-
-                .w7-pitch-row { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; display: flex; align-items: flex-start; gap: 20px; margin-bottom: 12px; border-left: 4px solid var(--accent); }
-                .w7-pitch-idx { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-light); color: var(--accent); display: flex; align-items: center; justify-center; font-weight: 800; font-family: 'DM Mono', monospace; flex-shrink: 0; margin-top: 2px; }
-                .w7-pitch-content { font-size: 14px; color: var(--ink-mid); line-height: 1.8; }
-                .w7-pitch-content strong { color: var(--ink); font-weight: 700; }
-
-                .w7-task-box { background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
-                .w7-task-header { background: #f0ede6; padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-                .w7-task-badge { background: #1a1a2e; color: #fff; font-size: 11px; font-weight: 800; font-family: 'DM Mono', monospace; padding: 2px 10px; border-radius: 4px; }
-                .w7-task-title { font-size: 15px; font-weight: 700; color: var(--ink); }
-                .w7-task-content { padding: 24px 32px; }
-                .w7-task-ul { list-style: none; padding: 0; margin: 0; }
-                .w7-task-li { font-size: 14px; color: var(--ink-mid); line-height: 2.2; position: relative; padding-left: 20px; }
-                .w7-task-li::before { content: "1."; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
-                .w7-task-li:nth-child(2)::before { content: "2."; }
-                .w7-task-li:nth-child(3)::before { content: "3."; }
-                .w7-task-li:nth-child(4)::before { content: "4."; }
-                .w7-task-li:nth-child(5)::before { content: "5."; }
-                .w7-task-li:nth-child(6)::before { content: "6."; }
-
-                .w7-hw-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: #fff; }
-                .w7-hw-hd { padding: 14px 24px; background: #f8f7f4; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-                .w7-hw-tag { font-size: 11px; font-weight: 800; padding: 2px 10px; border-radius: 4px; font-family: 'Noto Sans TC', sans-serif; }
-                .w7-hw-name { font-size: 15px; font-weight: 700; }
-                .w7-hw-row { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid var(--border); }
-                .w7-hw-row:last-child { border-bottom: none; }
-                .w7-hw-label { padding: 16px 24px; color: var(--accent); font-weight: 700; font-size: 13px; }
-                .w7-hw-desc { padding: 16px 24px; color: var(--ink-mid); font-size: 14px; }
-
-                @media (max-width: 768px) {
-                    .w7-content { padding: 24px 20px; }
-                    .w7-meta-grid, .w7-timeline, .w7-decision-grid, .w7-hub-body, .w7-expo-grid, .w7-music-bar, .w7-hw-row { grid-template-columns: 1fr; }
-                    .w7-hw-row { border-bottom: 1px solid var(--border); }
-                    .w7-hw-label { padding-bottom: 0; }
-                    .w7-next-week-content { grid-template-columns: 1fr; }
-                }
-
-                /* Next Week Preview */
-                .w7-next-week-preview { background: var(--ink); border-radius: 12px; overflow: hidden; margin: 48px 0; border: 1px solid var(--border); }
-                .w7-next-week-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
-                .w7-next-week-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 3px; }
-                .w7-next-week-title { font-size: 14px; font-weight: 700; color: #fff; }
-                .w7-next-week-content { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); }
-                .w7-next-week-col { background: var(--ink); padding: 20px 24px; }
-                .w7-next-week-label { font-size: 10px; font-family: 'DM Mono', monospace; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
-                .w7-next-week-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.75; }
-
-                /* Instructor toggle styles */
-                .w7-topbar { height: 52px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 48px; position: sticky; top: 0; z-index: 50; }
-                .w7-top-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
-            ` }} />
+        <div className="page-container animate-in-fade-slide">
+            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
 
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
@@ -145,7 +25,7 @@ export const TeamFormation = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">轉折點</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -194,35 +74,13 @@ export const TeamFormation = () => {
                 </div>
 
                 <div className="w7-sub-label">課程弧線 · 你在哪裡</div>
-                <div className="w7-timeline">
-                    <div className="w7-timeline-item past">
-                        <div className="w7-time-wk">W1-W4</div>
-                        <div className="w7-time-name">問題意識<br />題目定案</div>
-                    </div>
-                    <div className="w7-timeline-item past">
-                        <div className="w7-time-wk">W5</div>
-                        <div className="w7-time-name">文獻<br />偵探社</div>
-                    </div>
-                    <div className="w7-timeline-item past">
-                        <div className="w7-time-wk">W6</div>
-                        <div className="w7-time-name">研究<br />診所</div>
-                    </div>
-                    <div className="w7-timeline-item now">
-                        <div className="w7-time-wk" style={{ color: 'rgba(255,255,255,0.4)' }}>W7 ← 現在</div>
-                        <div className="w7-time-name">組隊<br />決策週</div>
-                    </div>
-                    <div className="w7-timeline-item future">
-                        <div className="w7-time-wk">W8-W10</div>
-                        <div className="w7-time-name">方法深化<br />訓練</div>
-                    </div>
-                    <div className="w7-timeline-item future">
-                        <div className="w7-time-wk">W11-W15</div>
-                        <div className="w7-time-name">執行<br />研究</div>
-                    </div>
-                    <div className="w7-timeline-item future">
-                        <div className="w7-time-wk">W16</div>
-                        <div className="w7-time-name">Gallery<br />Walk</div>
-                    </div>
+                <div className="arc-grid mb-14">
+                    {W7Data.courseArc.map((item, idx) => (
+                        <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                            <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
+                            <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="w7-sub-label">今天的決定 · 兩條都是好路</div>
@@ -432,6 +290,25 @@ export const TeamFormation = () => {
                     <span className="w7-section-tag">WRAP-UP</span>
                 </div>
 
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-6">
+                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[13px]">
+                        ✅ 本週結束，你應該要會
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
+                        {[
+                            '做出組隊決策，說得出選擇獨研或組隊的理由',
+                            '完成 W7 題目登記，確認研究題目與研究方法',
+                            '建立或加入研究社群（小組群組 or Solo Zone）',
+                            '拿到已簽名的研究企劃書，準備下週開工'
+                        ].map((item, i) => (
+                            <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
+                                <span className="text-[#2e7d5a] mt-0.5">✓</span>
+                                <span className="text-[13px] text-[#4a4a6a]">{item}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="w7-hw-card">
                     <div className="w7-hw-hd">
                         <span className="w7-hw-tag" style={{ background: '#1a1a2e', color: '#fff' }}>全體</span>
@@ -477,19 +354,19 @@ export const TeamFormation = () => {
                     </div>
                 </div>
 
-                <div className="w7-next-week-preview">
-                    <div className="w7-next-week-header">
-                        <span className="w7-next-week-badge">NEXT WEEK</span>
-                        <h3 className="w7-next-week-title">W8 工具設計 預告</h3>
+                <div className="next-week-preview">
+                    <div className="next-week-header">
+                        <span className="next-week-badge">NEXT WEEK</span>
+                        <h3 className="next-week-title">W8 工具設計 預告</h3>
                     </div>
-                    <div className="w7-next-week-content">
-                        <div className="w7-next-week-col">
-                            <div className="w7-next-week-label">W8 上半節</div>
-                            <p className="w7-next-week-text">各科工具核心邏輯：問卷、訪談、實驗樣樣通。</p>
+                    <div className="next-week-content">
+                        <div className="next-week-col">
+                            <div className="next-week-label">W8 上半節</div>
+                            <p className="next-week-text">各科工具核心邏輯：問卷、訪談、實驗樣樣通。</p>
                         </div>
-                        <div className="w7-next-week-col">
-                            <div className="w7-next-week-label">W8 下半節</div>
-                            <p className="w7-next-week-text">設計你的研究工具 1.0 版本，避開常見的設計大坑。</p>
+                        <div className="next-week-col">
+                            <div className="next-week-label">W8 下半節</div>
+                            <p className="next-week-text">設計你的研究工具 1.0 版本，避開常見的設計大坑。</p>
                         </div>
                     </div>
                 </div>
