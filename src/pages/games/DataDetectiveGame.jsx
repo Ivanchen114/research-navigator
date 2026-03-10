@@ -940,10 +940,18 @@ export const DataDetectiveGame = () => {
 
                     <p className="text-xs text-amber-400/80 font-black mb-6 uppercase tracking-[0.2em] bg-amber-950/40 py-2.5 rounded-sm border border-amber-500/30 mx-12 shadow-inner">請截圖此頁面作為紀錄</p>
 
-                    <button onClick={() => setGameState('start')}
-                        className="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3.5 px-10 rounded-sm text-lg tracking-widest transition-all duration-300 hover:scale-105 shadow-[0_5px_15px_rgba(0,0,0,0.5)] hover:shadow-[0_5px_20px_rgba(245,158,11,0.3)] mb-8 border border-slate-600 hover:border-amber-500/50 flex items-center gap-2 mx-auto">
-                        <span>重新調查</span> <span>🔄</span>
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+                        <button onClick={() => setGameState('start')}
+                            className="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-base tracking-widest transition-all border border-slate-600 hover:border-amber-500/50 inline-flex items-center justify-center gap-2">
+                            <span>重新調查</span> <span>🔄</span>
+                        </button>
+                        <a
+                            href="/games"
+                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-8 rounded-sm text-base transition-all border border-amber-400/50 inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        >
+                            ← 返回指揮中心
+                        </a>
+                    </div>
 
                     {wrongCases.length > 0 && (
                         <div className="text-left bg-slate-900/80 p-6 rounded-sm border-l-[6px] border-rose-500 shadow-inner max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-rose-900 scrollbar-track-transparent">

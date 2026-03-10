@@ -657,12 +657,20 @@ export const ChartMatcherGame = () => {
 
                     <p className="text-xs text-slate-400 font-bold mb-6 uppercase tracking-[0.2em] bg-slate-800/80 py-2 rounded-sm border border-slate-700 mx-auto max-w-xs shadow-inner">請截圖此頁面作為紀錄</p>
 
-                    <button
-                        onClick={() => setGameState('start')}
-                        className="bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 font-black py-4 px-10 rounded-sm text-lg transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:-translate-y-1 mb-8 border border-cyan-500/50 tracking-[0.2em]"
-                    >
-                        重新執行任務 🔄
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+                        <button
+                            onClick={() => setGameState('start')}
+                            className="bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 font-black py-3 px-8 rounded-sm text-base transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] border border-cyan-500/50 tracking-[0.2em] inline-flex items-center justify-center gap-2"
+                        >
+                            重新執行任務 🔄
+                        </button>
+                        <a
+                            href="/games"
+                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-black py-3 px-8 rounded-sm text-base transition-all border border-amber-400/50 inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)] tracking-[0.1em]"
+                        >
+                            ← 返回指揮中心
+                        </a>
+                    </div>
 
                     {missedOrWeak.length > 0 && (
                         <div className="text-left bg-slate-800/80 p-6 rounded-sm border-l-8 border-amber-500 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">

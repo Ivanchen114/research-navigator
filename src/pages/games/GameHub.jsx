@@ -24,7 +24,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #02',
-        tags: ['W6', '文獻鑑識', '學術誠信'],
+        tags: ['W5', '文獻鑑識', '學術誠信'],
         id: 'citation-detective',
         title: "行動代號：獵狐",
         english: "Operation: Foxhunt",

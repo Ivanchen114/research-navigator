@@ -507,12 +507,20 @@ export const RxInspectorGame = () => {
                         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-800/80 py-2 px-6 rounded-sm border border-slate-700 shadow-inner">請截圖此畫面回報長官</p>
                     </div>
 
-                    <button
-                        onClick={() => setGameState('start')}
-                        className="bg-slate-800/80 hover:bg-slate-700 text-cyan-400 font-bold py-3 px-8 rounded-sm text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(34,211,238,0.2)] hover:shadow-[0_0_25px_rgba(34,211,238,0.5)] mb-8 border border-cyan-500/50 flex items-center justify-center gap-2 mx-auto relative z-10 backdrop-blur-sm"
-                    >
-                        重新開始受訓 🔄
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 relative z-10">
+                        <button
+                            onClick={() => setGameState('start')}
+                            className="bg-slate-800/80 hover:bg-slate-700 text-cyan-400 font-bold py-3 px-8 rounded-sm text-base transition-all border border-cyan-500/50 inline-flex items-center justify-center gap-2"
+                        >
+                            重新開始受訓 🔄
+                        </button>
+                        <a
+                            href="/games"
+                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-8 rounded-sm text-base transition-all border border-amber-400/50 inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        >
+                            ← 返回指揮中心
+                        </a>
+                    </div>
 
                     {/* Round-by-round review */}
                     <div className="text-left bg-slate-800/40 p-6 md:p-8 rounded-sm border-l-8 border-cyan-500 max-h-96 overflow-y-auto shadow-inner border-y border-r border-white/5 scrollbar-thin scrollbar-thumb-cyan-700 scrollbar-track-slate-800">

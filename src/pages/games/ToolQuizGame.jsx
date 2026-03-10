@@ -292,13 +292,19 @@ export const ToolQuizGame = () => {
                         請截圖此頁面作為紀錄
                     </p>
 
-                    <div className="relative z-10 flex justify-center mb-10 w-full relative">
+                    <div className="relative z-10 flex flex-col sm:flex-row justify-center gap-3 mb-10 w-full">
                         <button
                             onClick={startGame}
-                            className="bg-slate-800/80 backdrop-blur-none hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-lg transition-all duration-300 transform hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:border-amber-500/50 hover:text-amber-300 group inline-flex items-center gap-2"
+                            className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-base transition-all border border-slate-600 hover:border-amber-500/50 inline-flex items-center justify-center gap-2"
                         >
-                            重新調查 <span className="group-hover:rotate-180 transition-transform duration-500 inline-block">🔄</span>
+                            重新調查 <span className="inline-block">🔄</span>
                         </button>
+                        <a
+                            href="/games"
+                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-8 rounded-sm text-base transition-all border border-amber-400/50 inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        >
+                            ← 返回指揮中心
+                        </a>
                     </div>
 
                     {/* 錯題回顧區塊 */}

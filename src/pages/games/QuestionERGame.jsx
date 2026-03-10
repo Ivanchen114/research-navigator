@@ -420,12 +420,20 @@ export const QuestionERGame = () => {
                         </div>
                     </div>
 
-                    <button
-                        onClick={() => setGameState('start')}
-                        className="bg-slate-800/80 hover:bg-slate-700 text-rose-400 font-bold py-3 px-8 rounded-sm text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:shadow-[0_0_25px_rgba(244,63,94,0.5)] mb-8 border border-rose-500/50 flex items-center justify-center gap-2 mx-auto relative z-10 backdrop-blur-sm"
-                    >
-                        重新開始實習 🔄
-                    </button>
+                    <div className="flex gap-3 justify-center mt-6 mb-8">
+                        <button
+                            onClick={() => setGameState('start')}
+                            className="bg-slate-800/80 hover:bg-slate-700 text-rose-400 font-bold py-3 px-6 rounded-sm text-base transition-all duration-300 border border-rose-500/50 flex items-center gap-2 backdrop-blur-sm"
+                        >
+                            重新開始 🔄
+                        </button>
+                        <a
+                            href="/games"
+                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-6 rounded-sm text-base transition-all duration-300 border border-amber-400/50 flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        >
+                            ← 返回指揮中心
+                        </a>
+                    </div>
 
                     {wrongCases.length > 0 && (
                         <div className="text-left bg-slate-800/40 p-6 md:p-8 rounded-sm border-l-8 border-rose-500 max-h-[400px] overflow-y-auto shadow-inner border-y border-r border-white/5 scrollbar-thin scrollbar-thumb-rose-700 scrollbar-track-slate-800">

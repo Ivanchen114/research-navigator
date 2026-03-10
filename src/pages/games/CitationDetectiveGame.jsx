@@ -435,12 +435,20 @@ export const CitationDetectiveGame = () => {
                         <p className="text-slate-200 font-medium leading-relaxed text-lg">{getWeakestPoint()}</p>
                     </div>
 
-                    <button
-                        onClick={() => setGameState('intro')}
-                        className="bg-slate-800/80  hover:bg-slate-700 text-amber-400 font-bold py-4 px-10 rounded-sm text-xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_4px_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:border-amber-500/50 hover:text-amber-300 group inline-flex items-center justify-center gap-3 mx-auto relative z-10 w-full md:w-auto"
-                    >
-                        <RefreshCw size={24} className="group-hover:rotate-180 transition-transform duration-500" /> 重新接受特訓
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+                        <button
+                            onClick={() => setGameState('intro')}
+                            className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-base transition-all border border-slate-600 hover:border-amber-500/50 inline-flex items-center justify-center gap-2"
+                        >
+                            <RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-500" /> 重新接受特訓
+                        </button>
+                        <a
+                            href="/games"
+                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-8 rounded-sm text-base transition-all border border-amber-400/50 inline-flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        >
+                            ← 返回指揮中心
+                        </a>
+                    </div>
                 </div>
             </div>
         );
