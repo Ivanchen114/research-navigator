@@ -306,8 +306,11 @@ export const W10Page = () => {
                     </div>
                 </div>
 
-                <div className="w10-summary-box">
-                    <div className="w10-summary-hd">📋 課後作業</div>
+                <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-3">
+                    <div className="p-[12px_18px] bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5">
+                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
+                        <span className="font-bold text-[13px] text-[#1a1a2e]">本週作業</span>
+                    </div>
                     <div className="w10-hw-list">
                         <div className="w10-hw-item">
                             <span className="w10-hw-part">上傳表單</span>
@@ -321,6 +324,10 @@ export const W10Page = () => {
                             <span className="w10-hw-part">開始施測</span>
                             <span className="w10-hw-name">按計畫 W11 課前就可以開始發問卷/約訪。不要等到上課才動。</span>
                         </div>
+                    </div>
+                    <div className="p-[10px_18px] bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
+                        <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
+                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">→ Google Classroom</a>
                     </div>
                 </div>
 

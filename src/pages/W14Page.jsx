@@ -400,7 +400,7 @@ export const W14Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-4">
-                <div className="p-4 px-5 bg-[#f8f7f4] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">✅ 今天結束，你應該有</div>
+                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">✅ 今天結束，你應該有</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#dddbd5]">
                     {[
                         '學習單 Part 3 四層草稿全部填完',
@@ -417,7 +417,10 @@ export const W14Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-12">
-                <div className="p-4 px-5 bg-[#f8f7f4] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">📋 課後作業</div>
+                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
+                    <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
+                    <span className="font-bold text-sm text-[#1a1a2e]">本週作業</span>
+                </div>
                 <div className="divide-y divide-[#dddbd5]">
                     {[
                         { part: '定稿上傳', name: '四層結論最終版（含 AI 紀錄）上傳 Google Classroom' },
@@ -428,6 +431,10 @@ export const W14Page = () => {
                             <span className="text-[#4a4a6a]">{hw.name}</span>
                         </div>
                     ))}
+                </div>
+                <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
+                    <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
+                    <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">→ Google Classroom</a>
                 </div>
             </div>
 

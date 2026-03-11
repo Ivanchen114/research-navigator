@@ -519,7 +519,10 @@ export const W13Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
-                <div className="p-[12px_20px] bg-[#f0ede6] border-b border-[#dddbd5] text-[14px] font-bold text-[#1a1a2e]">📋 課後作業</div>
+                <div className="p-[12px_20px] bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5">
+                    <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
+                    <span className="font-bold text-[14px] text-[#1a1a2e]">本週作業</span>
+                </div>
                 <div className="flex flex-col bg-[#dddbd5] gap-[1px]">
                     <div className="bg-white p-[11px_20px] flex items-start gap-4">
                         <span className="font-['DM_Mono',monospace] text-[11px] font-bold text-[#2d5be3] w-[72px] shrink-0 mt-0.5">圖說段落</span>
@@ -529,6 +532,10 @@ export const W13Page = () => {
                         <span className="font-['DM_Mono',monospace] text-[11px] font-bold text-[#2d5be3] w-[72px] shrink-0 mt-0.5">帶去 W14</span>
                         <span className="text-[13px] text-[#4a4a6a] flex-1 leading-[1.65]">攜帶所有圖表、圖說段落與研究問題</span>
                     </div>
+                </div>
+                <div className="p-[12px_20px] bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
+                    <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
+                    <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">→ Google Classroom</a>
                 </div>
             </div>
 

@@ -431,7 +431,7 @@ export const W4Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-6">
-                <div className="p-4 bg-[#f8f7f4] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">
+                <div className="p-4 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">
                     ✅ 本週結束，你應該要會
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#dddbd5] bg-[#dddbd5]">
@@ -443,7 +443,7 @@ export const W4Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-16">
-                <div className="p-4 bg-[#f8f7f4] border-b border-[#dddbd5] flex items-center justify-between">
+                <div className="p-4 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <span className="bg-[#1a1a2e] text-white text-[10px] font-mono px-2 py-0.5 rounded">HOMEWORK</span>
                         <span className="font-bold text-sm text-[#1a1a2e]">本週作業</span>
