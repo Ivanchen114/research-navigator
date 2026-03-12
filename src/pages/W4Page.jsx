@@ -138,11 +138,11 @@ export const W4Page = () => {
                     <span className="text-[11px] text-[#2e7d5a]/60 ml-auto">這是一張會吸引人停下來的海報</span>
                 </div>
                 <div className="p-8 md:p-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-12 items-start">
                         {/* Visual Column */}
                         <div>
-                            <div className="text-[11px] font-mono text-[#8888aa] mb-4 uppercase tracking-widest font-bold">視覺海報 (A4 內容)</div>
-                            <div className="border border-[#dddbd5] rounded-xl overflow-hidden shadow-xl shadow-black/5 aspect-[1/1.414] bg-[#f8f7f4] flex items-center justify-center group overflow-hidden relative">
+                            <div className="text-[11px] font-mono text-[#8888aa] mb-4 uppercase tracking-widest font-bold">視覺海報 (橫式內容)</div>
+                            <div className="border border-[#dddbd5] rounded-xl overflow-hidden shadow-xl shadow-black/5 aspect-[4/3] lg:aspect-[1.414/1] bg-[#f8f7f4] flex items-center justify-center group relative">
                                 <img src="/images/user_research_poster.png" alt="User Research Poster" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors pointer-events-none"></div>
                             </div>
