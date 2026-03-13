@@ -63,21 +63,6 @@ export const Wizard = () => {
                     好的研究不是「想出來」的，是「磨出來」的。今天我們先感受「碰壁」的真實感，再學會用一個心法診斷並救活你的原石題目。
                 </p>
 
-                {/* META STRIP */}
-                <div className="meta-strip">
-                    {[
-                        { label: '本週任務', value: '診斷8題 + AI協作 + 快篩定案' },
-                        { label: '課課產出', value: 'W3 最終定案題目' },
-                        { label: '本週作業', value: '學習單（Parts 1–5 & Z）' },
-                        { label: '帶去 W4', value: '定案題目 + 海報資料' }
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-
                 {/* COURSE ARC */}
                 <div className="mb-14">
                     <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
@@ -91,6 +76,20 @@ export const Wizard = () => {
                     </div>
                 </div>
             </header>
+
+            {/* META STRIP */}
+            <div className="meta-strip">
+                {[
+                    { label: '本週任務', value: '診斷8題 + AI協作 + 快篩定案' },
+                    { label: '課堂產出', value: 'W3 最終定案題目' },
+                    { label: '下週預告', value: '定案題目 + 海報資料' }
+                ].map((item, idx) => (
+                    <div key={idx} className="meta-item">
+                        <div className="meta-label">{item.label}</div>
+                        <div className="meta-value">{item.value}</div>
+                    </div>
+                ))}
+            </div>
 
             {/* PHASE 0: OBSTACLE EXPERIENCE */}
             <div className="w3-section-head"><h2>碰壁體驗</h2><div className="line"></div><div className="mono">PHASE 0</div></div>
