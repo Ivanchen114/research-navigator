@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     ShieldAlert, Search, Stethoscope, BriefcaseMedical,
     BarChart3, PieChart, UserCircle2, LogIn, LogOut,
-    Activity, ArrowRight, BookOpen, Bug
+    Activity, ArrowRight, BookOpen, Bug, Star, StarHalf
 } from 'lucide-react';
 
 // 定義六大任務卡片資料
@@ -13,6 +13,7 @@ const RIB_MISSIONS = [
         tags: ['W3', '問題意識', '靶心對焦'],
         id: 'question-er',
         title: "行動代號：靶心",
+        difficulty: 4.0,
         english: "Operation: Bullseye",
         department: "法醫部",
         departmentColor: "text-rose-500 bg-rose-500/10 border-rose-500/30",
@@ -27,6 +28,7 @@ const RIB_MISSIONS = [
         tags: ['W5', '文獻鑑識', '學術誠信'],
         id: 'citation-detective',
         title: "行動代號：獵狐",
+        difficulty: 4.5,
         english: "Operation: Foxhunt",
         department: "重案部",
         departmentColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
@@ -41,6 +43,7 @@ const RIB_MISSIONS = [
         tags: ['W3-W5', '方法快篩', '裝備盤點'],
         id: 'tool-quiz',
         title: "行動代號：裝備",
+        difficulty: 2.0,
         english: "Gear Check Protocol",
         department: "重案部",
         departmentColor: "text-amber-500 bg-amber-500/10 border-amber-500/30",
@@ -55,6 +58,7 @@ const RIB_MISSIONS = [
         tags: ['W8-W9', '研究設計', '避險測試'],
         id: 'rx-inspector',
         title: "行動代號：防線",
+        difficulty: 3.5,
         english: "Operation: Defense",
         department: "法醫部",
         departmentColor: "text-rose-500 bg-rose-500/10 border-rose-500/30",
@@ -69,6 +73,7 @@ const RIB_MISSIONS = [
         tags: ['W13', '圖表選擇', '資訊呈現'],
         id: 'chart-matcher',
         title: "行動代號：解碼",
+        difficulty: 3.0,
         english: "Intel Visualization",
         department: "情報部",
         departmentColor: "text-cyan-500 bg-cyan-500/10 border-cyan-500/30",
@@ -83,6 +88,7 @@ const RIB_MISSIONS = [
         tags: ['W14', '數據解讀', '批判思考'],
         id: 'data-detective',
         title: "行動代號：濾鏡",
+        difficulty: 5.0,
         english: "Truth Filter",
         department: "重案部",
         departmentColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/30",
@@ -93,6 +99,31 @@ const RIB_MISSIONS = [
         status: "active"
     }
 ];
+
+// 渲染難度星星小組件
+const DifficultyStars = ({ rating }) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < 5; i++) {
+        if (i < fullStars) {
+            stars.push(<Star key={i} size={12} className="fill-amber-400 text-amber-400 drop-shadow-[0_0_2px_rgba(245,158,11,0.5)]" />);
+        } else if (i === fullStars && hasHalfStar) {
+            stars.push(<StarHalf key={i} size={12} className="fill-amber-400 text-amber-400 drop-shadow-[0_0_2px_rgba(245,158,11,0.5)]" />);
+        } else {
+            stars.push(<Star key={i} size={12} className="text-slate-700/80" />);
+        }
+    }
+
+    return (
+        <div className="flex items-center gap-1.5 bg-slate-950/60 px-2 py-1 rounded-sm border border-slate-700/50 shadow-inner group-hover:border-amber-500/30 transition-colors shrink-0">
+            <span className="text-[9px] font-black text-slate-500 tracking-widest uppercase mb-[1px]">挑戰難度</span>
+            <div className="flex items-center gap-0.5">{stars}</div>
+            <span className="text-xs font-black text-amber-500 ml-1">{rating.toFixed(1)}</span>
+        </div>
+    );
+};
 
 export const GameHub = () => {
     const navigate = useNavigate();
@@ -294,10 +325,13 @@ export const GameHub = () => {
 
                                             {/* Title & Desc */}
                                             <div className="mb-6 flex-1 relative z-10">
-                                                <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded-sm truncate max-w-full">{mission.english}</div>
-                                                <h3 className={`text-2xl font-['Noto_Serif_TC',serif] font-bold mb-3 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
+                                                <div className="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase mb-2 bg-slate-950/40 inline-block px-2 py-1 rounded-sm truncate max-w-full self-start">{mission.english}</div>
+                                                <h3 className={`text-2xl font-['Noto_Serif_TC',serif] font-bold mb-2 ${isLoggedIn ? 'text-slate-100 group-hover:text-amber-400 transition-colors drop-shadow-sm' : 'text-slate-400'}`}>
                                                     {mission.title}
                                                 </h3>
+                                                <div className="mb-3 inline-block">
+                                                    <DifficultyStars rating={mission.difficulty} />
+                                                </div>
                                                 <div className={`text-[11px] font-bold mb-3 inline-block px-2.5 py-1 rounded-sm border tracking-wider mt-1 ${isLoggedIn ? 'bg-indigo-950/30 text-indigo-300 border-indigo-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
                                                     🎯 {mission.learningObjective}
                                                 </div>
