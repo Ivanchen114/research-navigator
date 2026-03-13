@@ -217,12 +217,21 @@ export const QuestionERGame = () => {
                     <div className="text-sm md:text-base font-bold text-teal-300/80 mb-4 bg-teal-950/40 inline-block px-4 py-1.5 rounded-sm border border-teal-500/20 tracking-widest">
                         賽博法醫診斷室
                     </div>
-                    <p className="text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed text-[15px]">
-                        急診室湧入了 10 個<span className="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.4)] mx-1">「生病的研究問題」</span>！<br />
-                        身為法醫，你必須先找出導致題目標籤化的病因，<br />
-                        再對症下藥。多重併發症可能需要<span className="text-teal-400 font-bold border-b border-teal-400/50 drop-shadow-[0_0_8px_rgba(45,212,191,0.4)] px-1">「連環 Combo」</span>！<br />
-                        （⚠️ 若答錯將被扣分並強制重答，直到正確為止）
-                    </p>
+                    <div className="bg-slate-800/50 rounded-sm p-6 mb-8 text-center border border-slate-600/50 shadow-inner">
+                        <label className="block text-sm font-bold text-teal-300 mb-2 tracking-wider drop-shadow-sm">👨‍⚕️ 目前登入身分</label>
+                        {playerName ? (
+                            <div className="text-2xl font-black text-teal-400 border-b-2 border-teal-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_10px_rgba(45,212,191,0.4)]">{playerName} 醫師</div>
+                        ) : (
+                            <div className="text-rose-400 font-bold mb-2 drop-shadow-sm">無法辨識身分！請返回總部大廳完成報到手續。</div>
+                        )}
+                        <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700 pt-6 mt-6">📋 看診須知</h3>
+                        <div className="space-y-3 text-sm text-slate-300 text-left md:px-4">
+                            <p className="flex items-start gap-2">🩺 <span>急診室湧入了 10 個<strong className="text-rose-400 font-bold bg-rose-900/40 px-1 rounded shadow-sm border border-rose-500/20">「生病的研究問題」</strong></span></p>
+                            <p className="flex items-start gap-2">🔎 <span>身為法醫，你必須先透過切片找出導致題目標籤化的病因</span></p>
+                            <p className="flex items-start gap-2">💊 <span>再搭配小、實、近、易進行對症下藥。多重併發症可能需要<strong className="text-teal-400 font-bold bg-teal-900/40 px-1 rounded shadow-sm border border-teal-500/20">連環 Combo</strong>！</span></p>
+                            <p className="flex items-start gap-2">⚠️ <span>若答錯將被扣分並<strong className="text-amber-400 font-bold bg-amber-900/40 px-1 rounded shadow-sm border border-amber-500/20">強制重答</strong>，直到正確為止</span></p>
+                        </div>
+                    </div>
 
                     <button
                         onClick={startGame}
