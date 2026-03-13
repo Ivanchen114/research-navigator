@@ -1,175 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { patientData } from '../../data/patientData'; // 匯入新的 30 題庫
 
-// 題目資料庫：10 個「生病的研究問題」
-const patientData = [
-    {
-        id: 1,
-        question: "什麼是溫室效應？",
-        diagnosis: "Google 直接答症",
-        correctRxs: ["把常識問題轉為在地探究", "縮小研究範圍"],
-        options: [
-            "把常識問題轉為在地探究",
-            "縮小研究範圍",
-            "加入衝突點",
-            "增加可測量變項"
-        ],
-        healed: "本校教室冷氣使用量與學生節能意識之間的落差？",
-        explanation: "這個問題 AI 一秒就能回答，代表它沒有研究價值。必須轉化為你身邊才看得到的「在地現象」，同時也必須「縮小範圍」到一個特定的場域（如學校）。",
-        severity: "mild",
-        tags: ["太常識", "AI能直接答"]
-    },
-    {
-        id: 2,
-        question: "青少年喜歡滑手機嗎？",
-        diagnosis: "答案顯而易見症 + 封閉式提問症",
-        correctRxs: ["加入衝突點", "改為開放式探究"],
-        options: [
-            "加入衝突點",
-            "把常識問題轉為在地探究",
-            "改為開放式探究",
-            "增加可測量變項"
-        ],
-        healed: "為什麼本校學生明知滑手機影響睡眠，卻仍在睡前平均使用 2 小時以上？",
-        explanation: "「喜歡滑手機」人人都知道，且「喜歡嗎？」只能回答是或否。加入「明知有害卻還是做」的衝突點，並改為問「為什麼」，問題就活了！",
-        severity: "moderate",
-        tags: ["太顯而易見", "缺乏衝突"]
-    },
-    {
-        id: 3,
-        question: "如何解決全球貧窮問題？",
-        diagnosis: "範圍膨脹症",
-        correctRxs: ["縮小研究範圍", "聚焦可行面"],
-        options: [
-            "縮小研究範圍",
-            "聚焦可行面",
-            "把常識問題轉為在地探究",
-            "改為因果假設"
-        ],
-        healed: "本校弱勢補助學生在學用品支出上面臨哪些具體困難？",
-        explanation: "全球貧窮這個題目寫一輩子都寫不完！要「縮小範圍」到你身邊，並「聚焦可行面」（如學用品支出），確保高中生有能力收集資料。",
-        severity: "severe",
-        tags: ["範圍太大", "無法執行"]
-    },
-    {
-        id: 4,
-        question: "社群媒體對年輕人有什麼影響？",
-        diagnosis: "定義模糊症",
-        correctRxs: ["增加可測量變項", "縮小研究範圍"],
-        options: [
-            "增加可測量變項",
-            "縮小研究範圍",
-            "加入衝突點",
-            "把常識問題轉為在地探究"
-        ],
-        healed: "本校高一生每日 Instagram 使用時間與自我形象滿意度之間的關聯？",
-        explanation: "「社群媒體」和「影響」太模糊了。必須把抽象概念換成具體「可測量」的變項（使用時間、滿意度分數），並將對象「縮小範圍」至高中生。",
-        severity: "moderate",
-        tags: ["定義模糊", "不可測量"]
-    },
-    {
-        id: 5,
-        question: "為什麼台灣教育這麼失敗？",
-        diagnosis: "預設立場症",
-        correctRxs: ["移除主觀價值判斷", "把常識問題轉為在地探究"],
-        options: [
-            "移除主觀價值判斷",
-            "縮小研究範圍",
-            "增加可測量變項",
-            "把常識問題轉為在地探究"
-        ],
-        healed: "本校學生對 108 課綱自主學習計畫的執行困難與需求調查",
-        explanation: "「教育失敗」是個人價值判斷，不是客觀事實。必須「移除主觀判斷」保持中立，並將龐大的台灣教育議題「轉為在地」（本校課綱執行狀況）。",
-        severity: "severe",
-        tags: ["預設立場", "主觀價值"]
-    },
-    {
-        id: 6,
-        question: "學生壓力大嗎？",
-        diagnosis: "封閉式提問症 + 範圍膨脹症",
-        correctRxs: ["改為開放式探究", "縮小研究範圍", "增加可測量變項"],
-        options: [
-            "改為開放式探究",
-            "加入衝突點",
-            "增加可測量變項",
-            "縮小研究範圍"
-        ],
-        healed: "本校高三生在學測前三個月的壓力來源分佈？",
-        explanation: "「大嗎？」只能答是或否，且「學生」範圍太廣、「壓力」難以量化。必須改為開放式（來源分佈）、縮小對象（高三生），並變成具體變項。",
-        severity: "severe",
-        tags: ["封閉式問題", "只能答是否"]
-    },
-    {
-        id: 7,
-        question: "網路霸凌會導致自殺嗎？",
-        diagnosis: "倫理風險症 + 範圍膨脹症",
-        correctRxs: ["降低敏感度並聚焦可行面", "移除因果斷定", "縮小研究範圍"],
-        options: [
-            "降低敏感度並聚焦可行面",
-            "縮小研究範圍",
-            "移除因果斷定",
-            "增加可測量變項"
-        ],
-        healed: "高中生遭遇網路負面言論時的情緒反應與求助行為調查",
-        explanation: "探討「自殺」會觸及重大倫理風險，且「導致」的因果關係極難由高中生證明。應「降低敏感度」探討情緒反應，並「移除絕對的因果斷定」。此外，沒有界定對象，也需要補上「縮小研究範圍」（如高中生）。",
-        severity: "severe",
-        tags: ["倫理敏感", "範圍太大"]
-    },
-    {
-        id: 8,
-        question: "手搖飲對身體好不好？",
-        diagnosis: "Google 直接答症 + 定義模糊症",
-        correctRxs: ["把常識問題轉為在地探究", "加入衝突點", "增加可測量變項"],
-        options: [
-            "把常識問題轉為在地探究",
-            "改為開放式探究",
-            "增加可測量變項",
-            "加入衝突點"
-        ],
-        healed: "本校學生每週手搖飲消費杯數與其對含糖飲料健康風險認知程度間的落差？",
-        explanation: "「好不好」大家心知肚明，缺乏研究張力，且「身體」定義模糊。加上「明知道不好還是喝」的衝突點，並改為可測量的「杯數」與「認知分數」。",
-        severity: "boss",
-        tags: ["雙重病症", "常識+封閉"]
-    },
-    {
-        id: 9,
-        question: "AI 會取代老師嗎？",
-        diagnosis: "預測未來症 + 範圍膨脹症",
-        correctRxs: ["改成現在式的可驗證問題", "把大哉問轉為在地探究", "縮小研究範圍"],
-        options: [
-            "改成現在式的可驗證問題",
-            "縮小研究範圍",
-            "移除主觀價值判斷",
-            "把大哉問轉為在地探究"
-        ],
-        healed: "本校師生對 AI 輔助教學的接受度差異，以及雙方認為最適合的應用環節？",
-        explanation: "這是一個沒有標準答案的「大哉問」，且「預測未來」無法收集數據驗證。必須把時間軸拉回「現在（改成可驗證的問題）」，並且不要空談世界趨勢，而是結合「縮小範圍」將大哉問「轉為在地探究」，討論校內師生目前的真實態度。",
-        severity: "severe",
-        tags: ["預測未來", "大哉問", "無法驗證"]
-    },
-    {
-        id: 10,
-        question: "🔥 為什麼現在的學生都不讀書只打遊戲而且品德越來越差同時也不尊重老師？",
-        diagnosis: "多重器官衰竭症（超級重症）",
-        correctRxs: ["拆解問題並逐一聚焦", "移除主觀價值判斷", "縮小研究範圍"],
-        options: [
-            "拆解問題並逐一聚焦",
-            "移除主觀價值判斷",
-            "縮小研究範圍",
-            "改成現在式的可驗證問題"
-        ],
-        healed: "本校學生課後時間分配中，遊戲娛樂與課業複習的比例關係為何？",
-        explanation: "這個問題塞了太多東西（多管問題）！必須「拆解」只挑一個重點做。同時含有強烈的「預設立場」（品德差），必須移除。並將對象「縮小」到特定群體。",
-        severity: "boss",
-        tags: ["預設立場", "多管問題", "範圍太大", "價值判斷"]
-    }
+// 掃描器選項 (病理切片)
+const CAUSE_OPTIONS = [
+    { id: '大', label: '🔎 [太大] 範圍膨脹' },
+    { id: '空', label: '🌫️ [太空] 抽象不具體' },
+    { id: '遠', label: '🔭 [太遠] 對象接觸不到' },
+    { id: '難', label: '🤯 [太難] 無法驗證、主觀' }
+];
+
+// 處方卡片 (對症下藥)
+const CURE_OPTIONS = [
+    { id: '小', label: '💊 [縮小藥丸] 大 → 小' },
+    { id: '實', label: '💉 [具體疫苗] 空 → 實' },
+    { id: '近', label: '🚪 [任意門探測儀] 遠 → 近' },
+    { id: '易', label: '🔪 [降維手術刀] 難 → 易' }
 ];
 
 // 病情嚴重度樣式
 const severityStyles = {
-    mild: { bg: "bg-green-50", border: "border-green-200", label: "輕症", color: "text-green-700", icon: "🤒" },
-    moderate: { bg: "bg-amber-50", border: "border-amber-200", label: "中度", color: "text-amber-700", icon: "🤕" },
-    severe: { bg: "bg-red-50", border: "border-red-200", label: "重症", color: "text-red-700", icon: "🚑" },
-    boss: { bg: "bg-purple-50", border: "border-purple-200", label: "超級重症", color: "text-purple-700", icon: "☠️" }
+    mild: { bg: "bg-green-50", border: "border-green-200", label: "輕症 (單病灶)", color: "text-green-700", icon: "🟢" },
+    moderate: { bg: "bg-amber-50", border: "border-amber-200", label: "中度 (雙併發)", color: "text-amber-700", icon: "🟡" },
+    severe: { bg: "bg-red-50", border: "border-red-200", label: "重症 (大Combo)", color: "text-red-700", icon: "🔴" },
+    boss: { bg: "bg-purple-50", border: "border-purple-200", label: "🚨多重器官衰竭", color: "text-purple-700", icon: "☠️" }
 };
 
 // 洗牌函式
@@ -191,24 +44,23 @@ const arraysEqual = (a, b) => {
 };
 
 export const QuestionERGame = () => {
-    const [gameState, setGameState] = useState('start');
+    const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'end'
+    const [playingPhase, setPlayingPhase] = useState('diagnosis'); // 'diagnosis', 'prescription', 'healedSelection', 'healed'
     const [playerName, setPlayerName] = useState('');
     const [patients, setPatients] = useState([]);
     const [currentIdx, setCurrentIdx] = useState(0);
     const [score, setScore] = useState(0);
 
-    // 現在是陣列型態的反選
-    const [selectedRxs, setSelectedRxs] = useState([]);
+    const [selectedCauses, setSelectedCauses] = useState([]);
+    const [selectedCures, setSelectedCures] = useState([]);
 
-    const [isAnswered, setIsAnswered] = useState(false);
-    const [wrongCases, setWrongCases] = useState([]);
-    const [showHealed, setShowHealed] = useState(false);
+    const [wrongCases, setWrongCases] = useState([]); // 記錄曾經錯過(被扣過分)的題目
     const [timer, setTimer] = useState(0);
 
-    // 新增：提示與重試機制
+    // Track score deduction for current question
+    const [currentQuestionPts, setCurrentQuestionPts] = useState(10);
     const [hintUsed, setHintUsed] = useState(false);
-    const [submitAttempts, setSubmitAttempts] = useState(0);
-    const [partialFeedback, setPartialFeedback] = useState(null); // { type: 'success'|'missing'|'extra'|'both'|'fail', message: string, pts?: number }
+    const [partialFeedback, setPartialFeedback] = useState(null);
 
     // Timer & Player Name
     useEffect(() => {
@@ -231,102 +83,124 @@ export const QuestionERGame = () => {
     };
 
     const startGame = () => {
-        const prepared = patientData.map(p => ({
+        // 從 30 題中隨機挑選 10 題 (4 綠, 3 黃, 3 紅)
+        const greens = shuffleArray(patientData.filter(p => p.id >= 1 && p.id <= 10)).slice(0, 4);
+        const yellows = shuffleArray(patientData.filter(p => p.id >= 11 && p.id <= 20)).slice(0, 3);
+        const reds = shuffleArray(patientData.filter(p => p.id >= 21 && p.id <= 30)).slice(0, 3);
+        
+        const selectedPatients = shuffleArray([...greens, ...yellows, ...reds]);
+
+        // 將每題的 healedOptions 打亂順序
+        const preparedPatients = selectedPatients.map(p => ({
             ...p,
-            shuffledOptions: shuffleArray(p.options)
+            shuffledHealedOptions: shuffleArray(p.healedOptions)
         }));
-        setPatients(prepared);
+
+        setPatients(preparedPatients);
         setWrongCases([]);
         setCurrentIdx(0);
         setScore(0);
-        setSelectedRxs([]); // 初始化為空陣列
-        setIsAnswered(false);
-        setShowHealed(false);
-        setHintUsed(false);
-        setSubmitAttempts(0);
-        setPartialFeedback(null);
+        resetQuestionState();
         setTimer(0);
         setGameState('playing');
     };
 
-    const toggleRx = (option) => {
-        if (isAnswered) return;
-        // 如果正在顯示 partialFeedback (重試階段)，可以繼續切換，切換時維持 feedback (或者您可以選擇清空它)
-        setSelectedRxs(prev =>
-            prev.includes(option)
-                ? prev.filter(item => item !== option)
-                : [...prev, option]
+    const resetQuestionState = () => {
+        setSelectedCauses([]);
+        setSelectedCures([]);
+        setCurrentQuestionPts(10);
+        setHintUsed(false);
+        setPartialFeedback(null);
+        setPlayingPhase('diagnosis');
+    };
+
+    const toggleCause = (id) => {
+        if (playingPhase !== 'diagnosis') return;
+        setSelectedCauses(prev =>
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
         );
     };
 
-    const submitAnswer = () => {
-        if (isAnswered || selectedRxs.length === 0) return;
+    const toggleCure = (id) => {
+        if (playingPhase !== 'prescription') return;
+        setSelectedCures(prev =>
+            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+        );
+    };
 
+    // 處理錯誤：扣分並標記為錯題（強制重新作答，直到對為止）
+    const handleMistake = (errorMsg) => {
+        setPartialFeedback({
+            type: 'error',
+            title: '⚠️ 醫療事故！',
+            message: errorMsg
+        });
+        
+        // 分數歸零，並加入錯題本（如果還沒加過）
+        setCurrentQuestionPts(0);
+        if (!wrongCases.find(c => c.id === patients[currentIdx].id)) {
+            setWrongCases(prev => [...prev, patients[currentIdx]]);
+        }
+    };
+
+    const submitDiagnosis = () => {
         const current = patients[currentIdx];
-
-        // 判斷是否全對（無多選或少選）
-        const isCorrect = arraysEqual(selectedRxs, current.correctRxs);
-
-        if (isCorrect) {
-            // 全對
-            setIsAnswered(true);
-            let pts = 10;
-            if (hintUsed) pts -= 3;
-            // 每次重試成功扣 2 分
-            if (submitAttempts > 0) pts -= (submitAttempts * 2);
-            // 最低得 1 分
-            if (pts < 1) pts = 1;
-
-            setScore(s => s + pts);
-            setPartialFeedback({ type: 'success', message: `精準診斷！成功治癒病患`, pts: pts });
+        if (arraysEqual(selectedCauses, current.causes)) {
+            // Correct Diagnosis
+            setPlayingPhase('prescription');
+            setPartialFeedback(null);
         } else {
-            // 答錯邏輯
-            if (submitAttempts === 0) {
-                // 第一次答錯，給予提示
-                const missing = current.correctRxs.filter(rx => !selectedRxs.includes(rx));
-                const extra = selectedRxs.filter(rx => !current.correctRxs.includes(rx));
+            // Wrong Diagnosis -> Forced Retry
+            handleMistake("你的切片診斷有誤！病患的心跳加快了，請重新檢視「大空遠難」的特徵。你必須診斷正確才能進行下一步。");
+        }
+    };
 
-                let feedbackType = '';
-                let message = '';
-
-                if (missing.length > 0 && extra.length === 0) {
-                    feedbackType = 'missing';
-                    message = `你少開了 ${missing.length} 張處方！病患還沒痊癒。`;
-                } else if (extra.length > 0 && missing.length === 0) {
-                    feedbackType = 'extra';
-                    message = `你多開了 ${extra.length} 張不必要的處方！會產生副作用。`;
-                } else {
-                    feedbackType = 'both';
-                    message = `處方有誤！既少開了必備處方，又開了不必要的藥。`;
-                }
-
-                setPartialFeedback({
-                    type: feedbackType,
-                    message: message,
-                    hint: `(重新評估扣 2 分)`
-                });
-                setSubmitAttempts(1);
-            } else {
-                // 第二次也答錯，直接失敗
-                setIsAnswered(true);
-                setWrongCases(prev => [...prev, current]);
-                setPartialFeedback({ type: 'fail', message: `兩次處方皆有誤！發生醫療糾紛。`, pts: 0 });
+    const submitPrescription = () => {
+        const current = patients[currentIdx];
+        if (arraysEqual(selectedCures, current.cures)) {
+            // Correct Cure -> go to healedSelection
+            setPlayingPhase('healedSelection');
+            setPartialFeedback(null);
+        } else {
+            // Wrong Cure -> Forced Retry
+            const missing = current.cures.filter(c => !selectedCures.includes(c));
+            let hintMsg = "你開的處方無法治好這個病因！若是抽象名詞太空洞，應施打「具體疫苗」；如果是範圍太大，則需要「縮小藥丸」唷！別忘了對症下藥！";
+            if(current.causes.length > 1 && selectedCures.length < missing.length){
+                hintMsg = "注意！這名病患有多重併發症，你需要同時打出 Combo 處方箋！你必須開對藥才能進行下一步。";
             }
+            handleMistake(hintMsg);
+        }
+    };
+
+    const submitHealedSelection = (option) => {
+        if (option.isCorrect) {
+            // Correct Healed Selection
+            setPlayingPhase('healed');
+            setScore(s => s + currentQuestionPts); // 結算這題分數
+            setPartialFeedback({
+                type: 'success',
+                title: '💚 完美治癒',
+                message: option.feedback,
+                pts: currentQuestionPts
+            });
+        } else {
+            // Wrong Healed Selection
+            handleMistake(option.feedback);
         }
     };
 
     const nextPatient = () => {
         if (currentIdx < patients.length - 1) {
             setCurrentIdx(i => i + 1);
-            setSelectedRxs([]);
-            setIsAnswered(false);
-            setShowHealed(false);
-            setHintUsed(false);
-            setSubmitAttempts(0);
-            setPartialFeedback(null);
+            resetQuestionState();
         } else {
             setGameState('end');
         }
+    };
+
+    const useHint = () => {
+        setHintUsed(true);
+        setCurrentQuestionPts(Math.max(0, currentQuestionPts - 3)); // 扣 3 分
     };
 
     // ================= START SCREEN =================
@@ -334,44 +208,28 @@ export const QuestionERGame = () => {
         return (
             <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
-                <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-none z-0"></div>
+                <div className="absolute inset-0 bg-[#0f172a]/85 backdrop-blur-none z-0"></div>
 
-                <div className="bg-slate-900/60 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(244,63,94,0.2)] max-w-xl w-full text-center border border-white/10 border-t-[12px] border-t-rose-500 relative overflow-hidden z-10">
-                    <div className="absolute top-0 right-0 opacity-10 text-9xl -mt-4 -mr-4 text-rose-400 drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">🏥</div>
-                    <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(244,63,94,0.8)]">🚑</div>
-                    <h1 className="text-3xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-red-500 mb-2 tracking-wide drop-shadow-sm">行動代號：靶心</h1>
-                    <div className="text-sm md:text-base font-bold text-rose-300/80 mb-4 bg-rose-950/40 inline-block px-3 py-1 rounded border border-rose-500/20 tracking-wider">
-                        🎯 研究問題精煉與對焦訓練
+                <div className="bg-[#1e293b]/70 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(45,212,191,0.15)] max-w-xl w-full text-center border border-white/5 border-t-[8px] border-t-teal-500 relative overflow-hidden z-10">
+                    <div className="absolute top-0 right-0 opacity-[0.03] text-9xl -mt-4 -mr-4 text-teal-400">🏥</div>
+                    <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]">🩺</div>
+                    <h1 className="text-4xl md:text-5xl font-sans font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-500 mb-2 tracking-wide drop-shadow-sm">行動代號：靶心</h1>
+                    <div className="text-sm md:text-base font-bold text-teal-300/80 mb-4 bg-teal-950/40 inline-block px-4 py-1.5 rounded-sm border border-teal-500/20 tracking-widest">
+                        賽博法醫診斷室
                     </div>
-                    <p className="text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed">
-                        急診室湧入了 10 個<span className="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]">「生病的研究問題」</span>！<br />
-                        有些問題可能需要<span className="text-cyan-400 font-bold border-b-2 border-cyan-400/50 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] px-1">「多張處方」</span>才能治癒它。<br />
-                        你能對症下藥，拿滿 <span className="font-bold text-amber-300 bg-amber-900/40 px-2 rounded border border-amber-500/30 drop-shadow-sm">100 分</span> 嗎？
+                    <p className="text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed text-[15px]">
+                        急診室湧入了 10 個<span className="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.4)] mx-1">「生病的研究問題」</span>！<br />
+                        身為法醫，你必須先找出導致題目標籤化的病因，<br />
+                        再對症下藥。多重併發症可能需要<span className="text-teal-400 font-bold border-b border-teal-400/50 drop-shadow-[0_0_8px_rgba(45,212,191,0.4)] px-1">「連環 Combo」</span>！<br />
+                        （⚠️ 若答錯將被扣分並強制重答，直到正確為止）
                     </p>
-
-                    <div className="bg-slate-800/50 rounded-sm p-6 mb-8 text-center border border-slate-600/50 shadow-inner">
-                        <label className="block text-sm font-bold text-rose-300 mb-2 tracking-wider drop-shadow-sm">👨‍⚕️ 目前登入身分</label>
-                        {playerName ? (
-                            <div className="text-2xl font-black text-rose-400 border-b-2 border-rose-500/50 inline-block pb-1 px-4 drop-shadow-[0_0_10px_rgba(244,63,94,0.4)]">{playerName} 醫師</div>
-                        ) : (
-                            <div className="text-amber-400 font-bold mb-2 drop-shadow-sm">無法辨識身分！請返回總部大廳完成報到手續。</div>
-                        )}
-
-                        <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700 pt-6 mt-6">📋 值班須知（提示與重考機制）</h3>
-                        <div className="space-y-3 text-sm text-slate-300 text-left">
-                            <p className="flex items-start gap-2">✅ <span><span className="text-emerald-400 font-bold bg-emerald-900/40 px-2 rounded border border-emerald-500/20 shadow-sm">精準投藥 (+10 分)</span><br />完全正確勾選所有處方即可得分。</span></p>
-                            <p className="flex items-start gap-2">🔄 <span><span className="text-amber-400 font-bold bg-amber-900/40 px-2 rounded border border-amber-500/20 shadow-sm">修改處方 (-2 分)</span><br />若第一次開錯藥，系統會給予提示，讓你修改並「補考」一次。</span></p>
-                            <p className="flex items-start gap-2">⚠️ <span><span className="text-rose-400 font-bold bg-rose-900/40 px-2 rounded border border-rose-500/20 shadow-sm">醫療糾紛 (+0 分)</span><br />若修改後依然錯誤，就真的急救失敗了。</span></p>
-                            <p className="flex items-start gap-2">🔍 <span><span className="text-cyan-400 font-bold bg-cyan-900/40 px-2 rounded border border-cyan-500/20 shadow-sm">顧問報告 (-3 分)</span><br />若完全沒頭緒，一開始就能花分數查看報告。</span></p>
-                        </div>
-                    </div>
 
                     <button
                         onClick={startGame}
                         disabled={!playerName}
-                        className={`font-black py-4 px-10 rounded-sm text-xl transition-all duration-300 transform shadow-[0_0_20px_rgba(244,63,94,0.4)] flex items-center justify-center gap-2 mx-auto overflow-hidden group ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(244,63,94,0.6)] border border-rose-400/50'}`}
+                        className={`font-black py-4 px-10 rounded-sm text-lg tracking-widest transition-all duration-300 transform shadow-[0_0_20px_rgba(20,184,166,0.3)] flex items-center justify-center gap-2 mx-auto overflow-hidden group ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(20,184,166,0.5)] border border-teal-400/50'}`}
                     >
-                        <span className="relative z-10">穿上白袍，開始值班 🩺</span>
+                        <span className="relative z-10">穿上白袍，開始值班</span>
                     </button>
                 </div>
             </div>
@@ -384,38 +242,35 @@ export const QuestionERGame = () => {
         let color = "";
         let bg = "";
         let borderColor = "";
-        if (score === 100) { title = "🏆 完美的神醫！"; color = "text-amber-400"; bg = "bg-amber-900/40"; borderColor = "border-amber-500/50"; }
-        else if (score >= 80) { title = "👨‍⚕️ 主治醫師！"; color = "text-cyan-400"; bg = "bg-cyan-900/40"; borderColor = "border-cyan-500/50"; }
-        else if (score >= 60) { title = "🩺 住院醫師！"; color = "text-emerald-400"; bg = "bg-emerald-900/40"; borderColor = "border-emerald-500/50"; }
-        else { title = "💊 實習生，多加練習！"; color = "text-rose-400"; bg = "bg-rose-900/40"; borderColor = "border-rose-500/50"; }
+        if (score === 100) { title = "🏆 完美賽博神醫！"; color = "text-amber-400"; bg = "bg-amber-900/40"; borderColor = "border-amber-500/50"; }
+        else if (score >= 80) { title = "👨‍⚕️ 首席主治醫師！"; color = "text-teal-400"; bg = "bg-teal-900/40"; borderColor = "border-teal-500/50"; }
+        else if (score >= 60) { title = "🩺 資深住院醫師！"; color = "text-emerald-400"; bg = "bg-emerald-900/40"; borderColor = "border-emerald-500/50"; }
+        else { title = "💊 實習生，多練練吧！"; color = "text-rose-400"; bg = "bg-rose-900/40"; borderColor = "border-rose-500/50"; }
 
         return (
             <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-10 font-sans text-blue-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
                 style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
-                <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-0"></div>
+                <div className="absolute inset-0 bg-[#0f172a]/90 backdrop-blur-sm z-0"></div>
 
-                <div className="bg-slate-900/70 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[12px] border-t-rose-500 border-x border-b border-white/10 relative z-10">
-                    <div className="absolute top-6 left-6 text-rose-500/20 text-6xl drop-shadow-md">📋</div>
+                <div className="bg-[#1e293b]/70 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center border-t-[8px] border-t-teal-500 border-x border-b border-white/5 relative z-10">
                     <h2 className="text-2xl font-black text-amber-500 mb-4 tracking-widest drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">🎯 任務結案報告</h2>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6 relative z-10">
                         <div className="text-sm font-medium text-slate-400 bg-slate-800/60 shadow-inner px-4 py-1 rounded-sm border border-slate-600/50">值班時間：{formatTime(timer)}</div>
-                        <div className="text-sm font-medium text-rose-300 bg-rose-900/40 shadow-inner px-4 py-1 rounded-sm border border-rose-500/30">主治醫師：<span className="font-bold">{playerName}</span></div>
+                        <div className="text-sm font-medium text-teal-300 bg-teal-900/40 shadow-inner px-4 py-1 rounded-sm border border-teal-500/30">主治醫師：<span className="font-bold">{playerName}</span></div>
                     </div>
 
                     <div className="flex flex-col items-center justify-center mb-6 relative z-10">
-                        <div className="text-7xl font-black text-rose-400 tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">{score} <span className="text-3xl text-slate-500 font-medium">/ 100</span></div>
+                        <div className="text-7xl font-black text-teal-400 tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]">{score} <span className="text-3xl text-slate-500 font-medium">/ 100</span></div>
                         <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-sm ${color} ${bg} border ${borderColor} mb-4 shadow-lg drop-shadow-md`}>{title}</h2>
-
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-800/80 py-2 px-6 rounded-sm border border-slate-700 shadow-inner mb-2">請截圖此畫面作為紀錄</p>
 
                         <div className="flex gap-4 mt-6">
                             <div className="bg-emerald-900/40 border border-emerald-500/50 shadow-inner px-5 py-3 rounded-sm flex flex-col items-center">
                                 <span className="text-emerald-400 font-black block text-2xl drop-shadow-sm">{10 - wrongCases.length}</span>
-                                <span className="text-xs text-emerald-200/60 font-medium tracking-wider mt-1">成功治癒</span>
+                                <span className="text-xs text-emerald-200/60 font-medium tracking-wider mt-1">一針見血 (滿分)</span>
                             </div>
                             <div className="bg-rose-900/40 border border-rose-500/50 shadow-inner px-5 py-3 rounded-sm flex flex-col items-center">
                                 <span className="text-rose-400 font-black block text-2xl drop-shadow-sm">{wrongCases.length}</span>
-                                <span className="text-xs text-rose-200/60 font-medium tracking-wider mt-1">醫療誤診</span>
+                                <span className="text-xs text-rose-200/60 font-medium tracking-wider mt-1">醫療誤診 (扣分)</span>
                             </div>
                         </div>
                     </div>
@@ -423,49 +278,28 @@ export const QuestionERGame = () => {
                     <div className="flex gap-3 justify-center mt-6 mb-8">
                         <button
                             onClick={() => setGameState('start')}
-                            className="bg-slate-800/80 hover:bg-slate-700 text-rose-400 font-bold py-3 px-6 rounded-sm text-base transition-all duration-300 border border-rose-500/50 flex items-center gap-2 backdrop-blur-sm"
+                            className="bg-slate-800/80 hover:bg-slate-700 text-teal-400 font-bold py-3 px-6 rounded-sm text-base transition-all duration-300 border border-teal-500/50 flex items-center gap-2 backdrop-blur-sm"
                         >
                             重新開始 🔄
                         </button>
-                        <a
-                            href="/games"
-                            className="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-6 rounded-sm text-base transition-all duration-300 border border-amber-400/50 flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
-                        >
-                            ← 返回指揮中心
-                        </a>
                     </div>
 
                     {wrongCases.length > 0 && (
-                        <div className="text-left bg-slate-800/40 p-6 md:p-8 rounded-sm border-l-8 border-rose-500 max-h-[400px] overflow-y-auto shadow-inner border-y border-r border-white/5 scrollbar-thin scrollbar-thumb-rose-700 scrollbar-track-slate-800">
+                        <div className="text-left bg-[#0f172a]/90 p-6 md:p-8 rounded-sm border-l-[6px] border-rose-500 max-h-[400px] overflow-y-auto shadow-inner border-y border-r border-white/5 scrollbar-thin scrollbar-thumb-teal-700 scrollbar-track-slate-800">
                             <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-rose-300 border-b border-slate-700 pb-4 drop-shadow-sm">
                                 🚨 誤診檢討筆記
                             </h3>
                             <div className="space-y-5">
                                 {wrongCases.map((wc, i) => (
-                                    <div key={i} className="bg-slate-900/80 p-5 rounded-sm shadow-lg border border-slate-700 relative overflow-hidden group hover:border-rose-500/50 transition-colors">
-                                        <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
-                                        <p className="font-bold text-rose-100 text-lg mb-2 flex items-start gap-2">🤒「{wc.question}」</p>
-                                        <p className="text-sm text-slate-300 mb-3 bg-slate-800/80 inline-block px-3 py-1.5 rounded border border-slate-600/50 shadow-inner">病因診斷：<span className="text-rose-300 font-bold">{wc.diagnosis}</span></p>
-                                        <div className="mb-3">
-                                            <p className="text-sm font-bold text-slate-400 mb-2">✅ 完整標準處方應為：</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {wc.correctRxs.map(rx => (
-                                                    <span key={rx} className="bg-emerald-900/40 text-emerald-400 font-bold px-3 py-1 rounded-sm text-sm border border-emerald-500/40 shadow-inner">
-                                                        💊 {rx}
-                                                    </span>
-                                                ))}
-                                            </div>
+                                    <div key={i} className="bg-slate-800/80 p-5 rounded-sm shadow-lg border border-slate-700 relative overflow-hidden group hover:border-teal-500/50 transition-colors">
+                                        <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 opacity-60"></div>
+                                        <p className="font-bold text-rose-100 text-lg mb-2 flex items-start gap-2 max-w-[90%]">🤕「{wc.question}」</p>
+                                        <div className="mb-3 space-y-2 mt-4 text-sm">
+                                            <p className="font-bold text-slate-400">✅ 正確病因： <span className="text-rose-300 ml-1">{wc.causes.join(", ")}</span> (需服用：<span className="text-teal-300">{wc.cures.join(", ")}</span>)</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                        </div>
-                    )}
-
-                    {wrongCases.length === 0 && (
-                        <div className="bg-emerald-900/40 text-emerald-400 border border-emerald-500/50 p-6 rounded-sm font-bold text-lg shadow-[0_0_20px_rgba(16,185,129,0.2)] flex items-center justify-center gap-3 mt-6 backdrop-blur-sm">
-                            <span className="text-3xl drop-shadow-sm">🎉</span>
-                            零誤診！各種疑難雜症都難不倒你！
                         </div>
                     )}
                 </div>
@@ -476,259 +310,219 @@ export const QuestionERGame = () => {
     // ================= PLAYING SCREEN =================
     const current = patients[currentIdx];
     if (!current) return null;
-    const sv = severityStyles[current.severity];
-    const isBoss = current.severity === 'boss';
+    let sevType = "mild";
+    if (current.id > 10 && current.id <= 20) sevType = "moderate";
+    if (current.id > 20) sevType = "severe";
+    if (current.id > 20 && current.causes.length > 1) sevType = "boss";
+
+    const sv = severityStyles[sevType];
+    const isBoss = sevType === 'boss' || sevType === 'moderate' || current.causes.length > 1;
 
     return (
-        <div className="relative rounded-sm overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-rose-50 bg-cover bg-fixed bg-center shadow-2xl"
+        <div className="relative rounded-sm overflow-hidden flex flex-col items-center p-4 md:p-8 font-sans min-h-[700px] text-teal-50 bg-[#064e3b] bg-cover bg-fixed bg-center shadow-2xl"
             style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
-            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-0"></div>
-            <div className="max-w-4xl w-full relative z-10">
+            <div className="absolute inset-0 bg-[#0f172a]/85 backdrop-blur-sm z-0"></div>
+            <div className="max-w-4xl w-full relative z-10 flex flex-col items-center text-center">
 
                 {/* Progress & Score */}
-                <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1">
-                    <div className="bg-slate-900/60 backdrop-blur-sm text-slate-300 font-bold px-5 py-2 rounded-sm shadow-inner text-lg border border-slate-700 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-[pulse_1.5s_ease-in-out_infinite] shadow-[0_0_8px_rgba(244,63,94,0.8)]"></span>
-                        病患 <span className="text-rose-400">{currentIdx + 1}</span> <span className="opacity-40 font-normal">/ {patients.length}</span>
+                <div className="flex w-full justify-between items-center gap-3 mb-8">
+                    <div className="text-slate-300 font-bold text-sm tracking-widest flex items-center gap-2 uppercase">
+                        <span>Case <span className="text-teal-400 text-lg">{currentIdx + 1}</span>_{patients.length}</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-[pulse_1s_ease-in-out_infinite] shadow-[0_0_8px_rgba(244,63,94,0.8)]"></span>
                     </div>
 
-                    <div className="bg-slate-900/60 backdrop-blur-sm text-emerald-400 font-bold px-5 py-2 rounded-sm shadow-inner text-lg border border-emerald-500/30 flex items-center gap-2">
-                        <span>總積分</span>
-                        <span className="bg-emerald-900/50 text-emerald-300 px-3 py-0.5 rounded-md font-black min-w-[3rem] text-center border border-emerald-500/20 shadow-inner drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">{score}</span>
+                    <div className="text-emerald-400 font-bold px-4 py-1.5 rounded-full border border-emerald-500/30 font-mono tracking-widest flex items-center gap-2">
+                        SCORE <span className="text-emerald-300 font-black text-xl drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">{score}</span>
+                        {/* Currently solving potential score */}
+                        {playingPhase !== 'healed' && (
+                            <span className="ml-2 text-xs text-teal-200/50 block">+(本題最高 {currentQuestionPts})</span>
+                        )}
                     </div>
                 </div>
 
-                {/* Patient Card */}
-                <div className={`bg-slate-900/70 backdrop-blur-lg p-6 md:p-10 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] mb-8 border-t-[8px] border-x border-b border-white/10 transition-all relative overflow-hidden group hover:border-rose-500/30 duration-500 ${isBoss ? 'border-t-purple-500 shadow-[0_0_50px_rgba(168,85,247,0.3)]' : 'border-t-rose-500'}`}>
+                {/* Patient / Question Card */}
+                <div className={`w-full max-w-2xl bg-[#1e293b]/80 backdrop-blur-md p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.4)] mb-8 border border-white/5 transition-all relative overflow-hidden group hover:border-teal-500/30 duration-500`}>
+                    
                     {isBoss && (
-                        <div className="absolute top-0 right-0 bg-purple-600/90 text-white text-xs font-black px-5 py-1.5 rounded-bl-xl tracking-widest animate-[pulse_2s_infinite] shadow-[0_0_15px_rgba(168,85,247,0.8)] border-b border-l border-purple-400/50 z-20 backdrop-blur-sm">
-                            ☠️ 超級重症
+                        <div className="absolute top-0 right-0 bg-rose-600/90 text-white text-[10px] font-black px-6 py-1 tracking-[0.2em] transform translate-x-[20px] translate-y-[15px] rotate-45 shadow-[0_0_15px_rgba(244,63,94,0.6)]">
+                            ⚠️ MULTIPLE COMBO
                         </div>
                     )}
 
-                    <div className="absolute -bottom-10 -right-10 text-9xl opacity-5 text-rose-500 pointer-events-none drop-shadow-[0_0_20px_rgba(244,63,94,0.5)]">
-                        🏥
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-wrap mb-4 pb-4 border-b border-slate-700 relative z-10">
-                        {/* Always visible severity badge */}
-                        <span className={`bg-slate-800/80 font-bold px-4 py-1.5 rounded-sm border border-slate-600 shadow-inner inline-flex items-center gap-1.5 ${current.severity === 'boss' ? 'text-purple-400 border-purple-500/50 drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]' : current.severity === 'severe' ? 'text-rose-400 border-rose-500/50 drop-shadow-[0_0_8px_rgba(244,63,94,0.5)]' : current.severity === 'moderate' ? 'text-amber-400 border-amber-500/50 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]' : 'text-emerald-400 border-emerald-500/50 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`}>
-                            <span className="text-base leading-none">{sv.icon}</span> {sv.label}
+                    <div className="flex items-center justify-center gap-2 flex-wrap mb-6">
+                        <span className={`px-4 py-1 rounded border shadow-inner inline-flex items-center gap-1.5 text-xs font-black tracking-widest bg-[#0f172a]/80 ${sv.border} ${sv.color}`}>
+                            {sv.icon} {sv.label}
                         </span>
 
-                        {/* Hint Area Toggle Info */}
                         {hintUsed && (
-                            <span className="text-amber-400 bg-amber-900/30 px-3 py-1 text-xs font-bold rounded-sm border border-amber-500/30 ml-auto flex items-center gap-1 shadow-inner">
+                             <span className="text-amber-400 bg-amber-900/30 px-3 py-1 text-xs font-bold rounded-sm border border-amber-500/30 ml-2 flex items-center gap-1 shadow-inner">
                                 <span className="opacity-80 animate-ping h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_5px_rgba(251,191,36,0.8)]"></span>
-                                已啟用檢查報告 (-3 分)
-                            </span>
-                        )}
-                        {submitAttempts > 0 && !isAnswered && (
-                            <span className="text-amber-400 bg-amber-900/30 px-3 py-1 text-xs font-bold rounded-sm border border-amber-500/30 ml-2 flex items-center gap-1 shadow-inner">
-                                <span>⚠️</span>
-                                處方重調中 (-2 分)
+                                已啟用檢查報告
                             </span>
                         )}
                     </div>
 
-                    <div className="relative z-10 text-center py-4">
-                        <p className="text-2xl md:text-3xl font-black text-rose-100 leading-tight drop-shadow-md">
-                            「{current.question}」
-                        </p>
+                    {/* ECG Line (Decorative) */}
+                    <svg className="absolute bottom-0 left-0 w-full h-16 opacity-10 text-teal-400 pointer-events-none" viewBox="0 0 100 20" preserveAspectRatio="none">
+                        <polyline points="0,10 20,10 25,5 30,15 35,2 40,18 45,10 100,10" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="100 0" />
+                    </svg>
+
+                    <div className="relative z-10 py-6 my-2">
+                        {playingPhase === 'healed' ? (
+                            <div className="animate-in zoom-in-95 duration-500">
+                                <p className="text-sm font-bold text-teal-400 tracking-widest mb-3 uppercase drop-shadow-[0_0_8px_rgba(45,212,191,0.5)]">
+                                    ✓ 治癒完成的健康題目
+                                </p>
+                                <p className="text-2xl md:text-3xl font-black text-teal-50 leading-snug drop-shadow-md">
+                                    {current.shuffledHealedOptions.find(o => o.isCorrect).text}
+                                </p>
+                            </div>
+                        ) : (
+                            <p className="text-2xl md:text-3xl font-black text-rose-100 leading-snug drop-shadow-md">
+                                {current.question}
+                            </p>
+                        )}
                     </div>
-
-                    {/* Hint Component */}
-                    {(!hintUsed && !isAnswered) ? (
-                        <div className="bg-slate-800/40 border border-slate-600/50 border-dashed rounded-sm p-5 flex flex-col items-center justify-center gap-3 mt-4 relative z-10 mx-auto max-w-md shadow-inner backdrop-blur-none">
-                            <p className="text-slate-400 font-bold mb-1 text-sm">完全沒頭緒，不知道這病人哪裡有問題？</p>
-                            <button
-                                onClick={() => setHintUsed(true)}
-                                className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-2.5 px-6 rounded-sm transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-slate-600 hover:border-amber-400/50 shadow-md hover:shadow-[0_0_15px_rgba(251,191,36,0.3)] w-full backdrop-blur-sm"
-                            >
-                                <span>🔍</span> 申請醫療顧問檢查報告
-                                <span className="text-xs bg-amber-900/50 text-amber-300 px-2 py-0.5 rounded-md ml-1 border border-amber-500/30">扣 3 分</span>
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="bg-slate-800/60 border-x border-b border-t-0 border-white/5 rounded-b-xl p-5 md:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 mt-6 relative z-10 animate-in fade-in slide-in-from-top-4 duration-300 -mx-6 md:-mx-10 -mb-6 md:-mb-10 shadow-inner backdrop-blur-sm">
-                            {/* Tags */}
-                            <div className="flex-1 space-y-2">
-                                <span className="text-xs font-black tracking-widest text-slate-400 bg-slate-900/80 border border-slate-700 px-2 py-1 rounded inline-block shadow-inner">病徵標籤</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {current.tags.map(tag => (
-                                        <span key={tag} className="bg-slate-700/50 text-rose-200 font-semibold px-3 py-1.5 rounded-sm text-sm border border-slate-600 shadow-sm leading-none flex items-center gap-1">
-                                            <span className="opacity-50 text-rose-400">#</span>{tag}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Diagnosis */}
-                            <div className="flex-1 space-y-2">
-                                <span className="text-xs font-black tracking-widest text-rose-400 bg-rose-900/40 border border-rose-500/30 px-2 py-1 rounded inline-block shadow-inner">醫療團隊初步評估</span>
-                                <div className="bg-rose-900/20 text-rose-300 px-4 py-3 rounded-sm border border-rose-500/30 shadow-inner">
-                                    <span className="font-bold text-lg leading-snug drop-shadow-[0_0_5px_rgba(244,63,94,0.4)]">{current.diagnosis}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
 
-                {/* Prescription Options */}
-                <h3 className="text-rose-200 font-bold text-base mb-4 px-2 tracking-wide flex items-center gap-2 drop-shadow-sm">
-                    <span className="text-xl">💊</span>
-                    <span>請選擇 <span className="text-cyan-400 border-b-2 border-cyan-400/50 font-black drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">所有</span> 病患需要的處方<span className="text-sm font-normal text-slate-400 ml-1">(可複選)</span>：</span>
-                </h3>
+                {/* Hint Component */}
+                {(!hintUsed && playingPhase === 'diagnosis') && (
+                    <div className="bg-slate-800/40 border border-slate-600/50 border-dashed rounded-sm p-4 flex flex-col items-center justify-center gap-2 mb-6 relative z-10 mx-auto max-w-md shadow-inner backdrop-blur-none">
+                        <button
+                            onClick={useHint}
+                            className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-2 px-6 rounded-sm transition-all flex items-center justify-center gap-2 border border-slate-600 hover:border-amber-400/50 text-sm"
+                        >
+                            <span>🔍</span> 申請醫療顧問檢查報告 (-3 分)
+                        </button>
+                    </div>
+                )}
+                {hintUsed && playingPhase !== 'healed' && (
+                    <div className="bg-slate-800/60 border-x border-b border-t-0 border-white/5 rounded-b-xl p-5 md:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 relative z-10 animate-in fade-in slide-in-from-top-4 duration-300 w-full max-w-2xl mb-6 shadow-inner backdrop-blur-sm -mt-10">
+                        {/* Tags */}
+                        <div className="flex-1 space-y-2">
+                            <span className="text-xs font-black tracking-widest text-slate-400 bg-slate-900/80 border border-slate-700 px-2 py-1 rounded inline-block shadow-inner">病徵標籤</span>
+                            <div className="flex flex-wrap gap-2 text-left">
+                                {current.tags.map(tag => (
+                                    <span key={tag} className="bg-slate-700/50 text-rose-200 font-semibold px-3 py-1.5 rounded-sm text-sm border border-slate-600 shadow-sm leading-none flex items-center gap-1">
+                                        <span className="opacity-50 text-rose-400">#</span>{tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {current.shuffledOptions.map((option) => {
-                        const isSelected = selectedRxs.includes(option);
-                        const isAcutallyCorrect = current.correctRxs.includes(option);
-
-                        // 基礎樣式
-                        let buttonStyle = "bg-slate-900/60 backdrop-blur-sm border border-slate-700 shadow-[0_4px_15px_rgba(0,0,0,0.3)] text-left transition-all duration-300 relative overflow-hidden group hover:border-cyan-400/50";
-
-                        if (!isAnswered) {
-                            // 答題中狀態
-                            if (isSelected) {
-                                buttonStyle = "bg-cyan-900/30 backdrop-blur-sm border border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.2)] text-left transition-all duration-300 translate-y-[2px] relative overflow-hidden";
-                            } else {
-                                buttonStyle = "bg-slate-900/60 backdrop-blur-sm border border-slate-700 shadow-[0_4px_15px_rgba(0,0,0,0.3)] text-left transition-all duration-300 hover:border-cyan-400/50 hover:bg-slate-800/80 active:translate-y-[1px] relative overflow-hidden group";
-                            }
-                        } else {
-                            // 結算狀態
-                            if (isAcutallyCorrect && isSelected) {
-                                buttonStyle = "bg-emerald-900/30 backdrop-blur-sm border border-emerald-400 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)] text-left transition-all duration-300 relative overflow-hidden";
-                            } else if (isAcutallyCorrect && !isSelected) {
-                                buttonStyle = "bg-slate-900/60 backdrop-blur-sm border border-rose-400 border-dashed text-slate-400 text-left transition-all duration-300 relative overflow-hidden opacity-80";
-                            } else if (!isAcutallyCorrect && isSelected) {
-                                buttonStyle = "bg-rose-900/30 backdrop-blur-sm border border-rose-500 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.3)] text-left transition-all duration-300 relative overflow-hidden";
-                            } else {
-                                buttonStyle = "bg-slate-900/40 backdrop-blur-sm border border-slate-800 text-slate-500 opacity-50 text-left transition-all duration-300 relative overflow-hidden";
-                            }
-                        }
-
-                        return (
-                            <button
-                                key={option}
-                                onClick={() => toggleRx(option)}
-                                disabled={isAnswered}
-                                className={`flex items-center px-5 py-4 rounded-sm font-bold text-lg ${buttonStyle} ${isAnswered ? 'cursor-default' : 'cursor-pointer'}`}
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div className="flex items-center gap-4 w-full relative z-10">
-                                    {/* 模擬 Checkbox */}
-                                    <div className={`shrink-0 w-6 h-6 rounded flex items-center justify-center border-2 transition-colors shadow-inner ${!isAnswered
-                                        ? (isSelected ? 'bg-cyan-500 border-cyan-400 text-white shadow-[0_0_10px_rgba(34,211,238,0.5)]' : 'border-slate-500 group-hover:border-cyan-400/50 bg-slate-800/80 text-slate-400')
-                                        : (isAcutallyCorrect && isSelected ? 'bg-emerald-500 border-emerald-400 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)]'
-                                            : !isAcutallyCorrect && isSelected ? 'bg-rose-500 border-rose-400 text-white shadow-[0_0_10px_rgba(244,63,94,0.5)]'
-                                                : isAcutallyCorrect && !isSelected ? 'border-rose-400 border-dashed bg-transparent text-rose-400'
-                                                    : 'border-slate-700 bg-slate-800/50 text-slate-600')
-                                        }`}>
-                                        {(!isAnswered && isSelected) && '✓'}
-                                        {isAnswered && isAcutallyCorrect && isSelected && '✓'}
-                                        {isAnswered && !isAcutallyCorrect && isSelected && '✗'}
-                                        {isAnswered && isAcutallyCorrect && !isSelected && '⚠️'}
-                                    </div>
-                                    <span className={`leading-snug ${(!isAnswered && !isSelected) ? 'text-slate-300 group-hover:text-rose-100' : ''}`}>{option}</span>
-                                </div>
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* Partial Feedback Alert (Shown when hint is active) */}
-                {partialFeedback && !isAnswered && (
-                    <div className="w-full mb-6 bg-amber-900/30 backdrop-blur-sm border border-amber-500/50 border-dashed rounded-sm p-4 flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 shadow-[0_0_20px_rgba(251,191,36,0.1)]">
-                        <div className="flex items-start md:items-center gap-4">
-                            <span className="text-3xl shrink-0 mt-1 md:mt-0 drop-shadow-md">🩺</span>
-                            <div>
-                                <h4 className="font-bold text-amber-400 text-lg mb-1 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">{partialFeedback.message}</h4>
-                                <p className="text-sm text-amber-200/80 font-medium">請重新思考並調整你的處方再送出 {partialFeedback.hint}</p>
+                        {/* Diagnosis */}
+                        <div className="flex-1 space-y-2">
+                            <span className="text-xs font-black tracking-widest text-rose-400 bg-rose-900/40 border border-rose-500/30 px-2 py-1 rounded inline-block shadow-inner">醫療團隊初步評估</span>
+                            <div className="bg-rose-900/20 text-rose-300 px-4 py-3 rounded-sm border border-rose-500/30 shadow-inner text-left">
+                                <span className="font-bold text-base leading-snug drop-shadow-[0_0_5px_rgba(244,63,94,0.4)]">{current.diagnosis}</span>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Submit / Feedback Area */}
-                <div className="mb-6 flex flex-col items-center">
-                    {!isAnswered ? (
-                        <button
-                            onClick={submitAnswer}
-                            disabled={selectedRxs.length === 0}
-                            className={`font-black py-4 px-12 rounded-sm text-xl transition-all duration-300 transform flex items-center gap-2 shadow-lg relative overflow-hidden group ${selectedRxs.length > 0 ? (submitAttempts > 0 ? 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-rose-50 border border-amber-400/50 shadow-[0_0_20px_rgba(245,158,11,0.4)]' : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white hover:scale-105 active:scale-95 border border-rose-400/50 shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-[0_0_30px_rgba(244,63,94,0.6)]') : 'bg-slate-800/80 text-slate-500 cursor-not-allowed border border-slate-700/50 backdrop-blur-none shadow-none'}`}
-                        >
-                            <span className="relative z-10">{submitAttempts === 0 ? '確認開立處方箋 📄' : '重新送出處方箋 🔄'}</span>
+                {/* GAME PHASES UI */}
+                {playingPhase === 'diagnosis' && (
+                    <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
+                        <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
+                            <span className="text-xl">1.</span> 第一階段：病理切片 {isBoss && <span className="text-rose-400 text-xs">(含併發症，可多選)</span>}
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                            {CAUSE_OPTIONS.map(opt => {
+                                const isSelected = selectedCauses.includes(opt.id);
+                                return (
+                                    <button key={opt.id} onClick={() => toggleCause(opt.id)}
+                                        className={`p-4 rounded-sm border font-bold text-left transition-all ${isSelected ? 'bg-teal-900/40 border-teal-400 text-teal-200 shadow-[0_0_15px_rgba(45,212,191,0.3)]' : 'bg-slate-800/40 border-slate-700 text-slate-400 hover:border-teal-400/50 hover:text-teal-100'}`}>
+                                        {opt.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <button onClick={submitDiagnosis} disabled={selectedCauses.length === 0}
+                            className={`w-full py-4 rounded-sm font-black tracking-widest text-lg transition-all ${selectedCauses.length > 0 ? 'bg-slate-100 text-slate-900 hover:bg-teal-400 hover:text-slate-900 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)]' : 'bg-slate-800/50 text-slate-500 cursor-not-allowed'}`}>
+                            確定病因
                         </button>
-                    ) : (
-                        <div className={`w-full p-6 md:p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-bottom-4 border-l-[12px] backdrop-blur-lg border-y border-r border-white/10 ${partialFeedback?.type === 'success' ? 'bg-emerald-900/20 border-l-emerald-500' : 'bg-rose-900/20 border-l-rose-500'}`}>
-                            <div className="flex items-start justify-between gap-4 mb-4">
-                                <div className="flex items-center gap-4">
-                                    <div className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-inner border ${partialFeedback?.type === 'success' ? 'bg-emerald-900/50 text-emerald-400 border-emerald-500/30' : 'bg-rose-900/50 text-rose-400 border-rose-500/30'}`}>
-                                        {partialFeedback?.type === 'success' ? '🏥' : '🚨'}
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-xl md:text-2xl font-black mb-1 drop-shadow-[0_0_8px_currentColor] ${partialFeedback?.type === 'success' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                                            {partialFeedback?.message}
-                                        </h3>
-                                        {partialFeedback?.type !== 'success' && (
-                                            <div className="text-sm text-emerald-400 font-bold bg-slate-900/80 p-2 rounded border border-emerald-500/30 shadow-inner inline-block mt-2">
-                                                完整標準處方應為：{current.correctRxs.join(" ＋ ")}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className={`flex flex-col items-end shrink-0 bg-slate-900/60 p-3 rounded-sm border border-white/5 shadow-inner`}>
-                                    <div className={`text-3xl font-black flex items-center gap-1 drop-shadow-md ${partialFeedback?.type === 'success' ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'text-slate-400'}`}>
-                                        {partialFeedback?.type === 'success' ? `+${partialFeedback.pts}` : '0'} <span className="text-base font-bold text-slate-500">分</span>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                )}
 
-                            <div className="bg-slate-900/60 p-5 rounded-sm border border-slate-700 shadow-inner mb-5 relative group hover:border-cyan-500/30 transition-colors">
-                                <span className="absolute top-0 right-0 p-3 opacity-20 text-3xl pointer-events-none group-hover:opacity-40 transition-opacity">💡</span>
-                                <p className="text-slate-300 text-lg font-medium leading-relaxed relative z-10 group-hover:text-rose-100 transition-colors">
-                                    {current.explanation}
-                                </p>
-                            </div>
-
-                            {/* Show healed question */}
-                            {!showHealed ? (
-                                <button
-                                    onClick={() => setShowHealed(true)}
-                                    className="bg-slate-800/80 hover:bg-slate-700 text-cyan-400 font-bold py-3 px-6 rounded-sm transition-all duration-300 mb-6 w-full md:w-auto flex justify-center items-center gap-2 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] backdrop-blur-none mx-auto md:mx-0"
-                                >
-                                    <span>👀</span> 查看治癒後的問題樣貌
-                                </button>
-                            ) : (
-                                <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-sm p-6 mb-6 relative overflow-hidden animate-in fade-in slide-in-from-top-2 backdrop-blur-none shadow-inner mx-auto md:mx-0">
-                                    <div className="absolute top-0 left-0 w-1.5 h-full bg-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div>
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="bg-cyan-900/80 text-cyan-300 text-xs font-black px-2 py-1 rounded-md tracking-widest border border-cyan-500/50 shadow-inner">AFTER</span>
-                                        <p className="text-sm text-cyan-200/80 font-bold">治癒後的研究問題：</p>
-                                    </div>
-                                    <p className="text-cyan-100 text-xl font-bold leading-snug drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">「{current.healed}」</p>
-                                </div>
+                {playingPhase === 'prescription' && (
+                    <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
+                        <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
+                            <span className="text-xl">2.</span> 第二階段：對症下藥 {isBoss && <span className="text-teal-400 text-xs">(請打出 Combo 連擊處方！)</span>}
+                        </h3>
+                        {/* Display confirmed diagnosis as a subtle reminder */}
+                        <div className="flex flex-wrap items-center justify-center gap-2 mb-6 opacity-60 pointer-events-none">
+                            <span className="text-xs text-slate-400">已確認病灶：</span>
+                            {selectedCauses.map(c => 
+                                <span key={c} className="text-xs font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-rose-300">{c} 的問題</span>
                             )}
+                        </div>
 
-                            <div className="flex justify-end pt-5 border-t border-slate-700/50">
-                                <button
-                                    onClick={nextPatient}
-                                    className={`font-black py-4 px-10 rounded-sm text-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 text-white overflow-hidden relative group ${currentIdx < patients.length - 1 ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 border border-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)]' : 'bg-slate-700 hover:bg-slate-600 border border-slate-500'}`}
-                                >
-                                    <span className="relative z-10">
-                                        {currentIdx < patients.length - 1 ? (
-                                            <>呼叫下一位病患 <span className="text-2xl leading-none">🩺</span></>
-                                        ) : (
-                                            <>完成交班，查看報告 <span className="text-2xl leading-none drop-shadow-md">📋</span></>
-                                        )}
-                                    </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                            {CURE_OPTIONS.map(opt => {
+                                const isSelected = selectedCures.includes(opt.id);
+                                return (
+                                    <button key={opt.id} onClick={() => toggleCure(opt.id)}
+                                        className={`p-4 rounded-sm border font-bold text-left transition-all ${isSelected ? 'bg-cyan-900/60 border-cyan-400 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]' : 'bg-slate-800/40 border-slate-700 text-slate-400 hover:border-cyan-400/50 hover:text-cyan-100'}`}>
+                                        {opt.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        <button onClick={submitPrescription} disabled={selectedCures.length === 0}
+                            className={`w-full py-4 rounded-sm font-black tracking-widest text-lg transition-all ${selectedCures.length > 0 ? 'bg-cyan-400 text-slate-900 hover:bg-cyan-300 hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]' : 'bg-slate-800/50 text-slate-500 cursor-not-allowed'}`}>
+                            開立處方
+                        </button>
+                    </div>
+                )}
+
+                {playingPhase === 'healedSelection' && (
+                    <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
+                        <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
+                            <span className="text-xl">3.</span> 最終階段：驗收治癒結果
+                        </h3>
+                        <p className="text-slate-400 text-sm mb-6">處方已生效！請根據你開立的處方，選擇出哪一個是真正治癒後的好題目：</p>
+
+                        <div className="flex flex-col gap-4 mb-6">
+                            {current.shuffledHealedOptions.map((opt, i) => (
+                                <button key={i} onClick={() => submitHealedSelection(opt)}
+                                    className="p-5 rounded-sm border bg-slate-800/60 border-slate-600 text-slate-200 hover:border-teal-400 hover:bg-teal-900/20 text-left transition-all hover:shadow-[0_0_15px_rgba(45,212,191,0.2)] text-lg leading-snug font-bold">
+                                    <span className="text-teal-400 mr-2 text-sm">▶</span>
+                                    {opt.text}
                                 </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Error Reports Popups */}
+                {partialFeedback && playingPhase !== 'healed' && (
+                    <div className="w-full max-w-2xl mt-6">
+                        <div className="bg-rose-950/80 border border-rose-500/50 p-5 rounded-sm flex items-start gap-4 animate-[shake_0.5s] shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+                            <div className="text-3xl shrink-0 drop-shadow-md">🚨</div>
+                            <div className="text-left">
+                                <h4 className="font-bold text-rose-400 text-lg mb-1 drop-shadow-sm">{partialFeedback.title}</h4>
+                                <p className="text-sm text-rose-200 font-medium leading-loose">{partialFeedback.message}</p>
                             </div>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
 
+                {/* Healed Result Screen */}
+                {playingPhase === 'healed' && (
+                    <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
+                        <div className={`p-6 rounded-sm border flex items-start gap-4 mb-8 text-left bg-[#064e3b]/80 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]`}>
+                            <div className="text-4xl shrink-0 mt-1">💡</div>
+                            <div>
+                                <h4 className={`font-black tracking-widest text-xl mb-2 text-emerald-400`}>{partialFeedback?.title}</h4>
+                                <p className="text-slate-300 font-medium leading-relaxed mb-4">{current.explanation}</p>
+                            </div>
+                        </div>
+
+                        <button onClick={nextPatient} className="bg-slate-800/80 hover:bg-slate-700 text-teal-400 hover:text-teal-300 font-bold tracking-widest py-4 px-10 rounded-sm w-full transition-all border border-teal-500/30 flex justify-center items-center gap-3 active:scale-[0.98]">
+                            {currentIdx < patients.length - 1 ? '呼叫下一位病患 ⏭️' : '結束值班，查看報告 📊'}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
