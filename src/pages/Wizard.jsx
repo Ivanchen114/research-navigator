@@ -68,7 +68,7 @@ export const Wizard = () => {
                     {[
                         { label: '本週任務', value: '診斷8題 + AI協作 + 快篩定案' },
                         { label: '課課產出', value: 'W3 最終定案題目' },
-                        { label: '本週作業', value: '學習單（Parts 1–7）' },
+                        { label: '本週作業', value: '學習單（Parts 1–5 & Z）' },
                         { label: '帶去 W4', value: '定案題目 + 海報資料' }
                     ].map((item, idx) => (
                         <div key={idx} className="meta-item">
@@ -179,18 +179,7 @@ export const Wizard = () => {
                 </div>
             </div>
             <div className="w3-notice w3-notice-gold">
-                💡 如果你的 Who 太大、What 太空、How 做不到——回頭用萬用心法修！
-            </div>
-            <div className="w3-w5h1-grid">
-                {[
-                    { w: 'Who', l: '對象', q: '研究的是誰？要具體到一個可接觸的群體。' },
-                    { w: 'Where', l: '場域', q: '在哪個地點或範圍內進行？' },
-                    { w: 'What', l: '變項', q: '核心概念是什麼？要能測量。' },
-                    { w: 'When', l: '時間', q: '有特定的時間點或情境嗎？' },
-                    { w: 'How', l: '方法', q: '用問卷？訪談？觀察？文獻？實驗？' }
-                ].map(item => (
-                    <div className="w3-w5h1-item" key={item.w}><div className="w3-w5h1-w">{item.w}</div><div className="w3-w5h1-label">{item.l}</div><div className="w3-w5h1-q">{item.q}</div></div>
-                ))}
+                💡 如果你的題目太大、太空、太遠、太難——回頭用萬用心法修！
             </div>
             <div className="w3-section-head"><h2>練什麼</h2><div className="line"></div><div className="mono">PRACTICE</div></div>
             <p className="w3-section-desc">
@@ -286,10 +275,10 @@ export const Wizard = () => {
             </div>
 
             <div className="w3-task-block">
-                <div className="w3-task-hd"><span className="w3-task-badge">PART 3</span><span className="w3-task-title">🤖 AI 協作工作坊</span></div>
+                <div className="w3-task-hd"><span className="w3-task-badge">PART 3</span><span className="w3-task-title">🤖 AI 協作工作坊（練手感）</span></div>
                 <div className="w3-task-body">
                     <div className="w3-notice" style={{ marginBottom: '24px' }}>
-                        重點不是 AI 改得多好，而是<strong>你怎麼選、為什麼選</strong>。你要當老闆，不是當員工！
+                        選 1 題爛題目來練手。重點不是 AI 改得多好，而是<strong>你怎麼選、為什麼選</strong>。
                     </div>
                     <div className="w3-collab-steps">
                         {[
@@ -313,9 +302,68 @@ export const Wizard = () => {
                     </div>
                 </div>
             </div>
-            <div className="prompt-box">
-                <div className="prompt-hd"><span>PROMPT · 句型優化器</span><CopyButton text={`我的研究題目初稿是：【請貼上你的初稿】\n\n請幫我優化成更專業的版本：\n1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）\n2. 讓 Who(研究對象) / What(研究變數) 描述更精確\n3. 確保高中生可以執行，字數不要過長\n請給我 3 個優化版本。`} label="複製" /></div>
-                <div className="prompt-body">我的研究題目初稿是：【請貼上你的初稿】<br /><br />請幫我優化成更專業的版本：<br />1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）<br />2. 讓 Who(研究對象) / What(研究變數) 描述更精確<br />3. 確保高中生可以執行，字數不要過長<br /><br />請給我 3 個優化版本。</div>
+
+            {/* PART 4 & 5: YOUR OWN TOPIC */}
+            <div className="w3-task-block">
+                <div className="w3-task-hd"><span className="w3-task-badge" style={{ background: '#e67e22' }}>PART 4</span><span className="w3-task-title">🔪 5W1H 規格化（回到你自己的題目）</span></div>
+                <div className="w3-task-body">
+                    <div className="w3-notice w3-notice-gold" style={{ marginBottom: '24px' }}>
+                        拿出 W2 你的「最終探究意圖」，用 5W1H 切開它。只要有一格寫不出來或做不到，就用心法立刻修改！
+                    </div>
+                    
+                    <div className="w3-w5h1-grid mb-6">
+                        {[
+                            { w: 'Who', l: '對象', q: '研究的是誰？要具體到一個可接觸的群體。' },
+                            { w: 'Where', l: '場域', q: '在哪個地點或範圍內進行？' },
+                            { w: 'What', l: '變項', q: '核心概念是什麼？要能測量。' },
+                            { w: 'When', l: '時間', q: '有特定的時間點或情境嗎？' },
+                            { w: 'How', l: '方法', q: '用問卷？訪談？觀察？文獻？實驗？' }
+                        ].map(item => (
+                            <div className="w3-w5h1-item" key={item.w}><div className="w3-w5h1-w">{item.w}</div><div className="w3-w5h1-label">{item.l}</div><div className="w3-w5h1-q">{item.q}</div></div>
+                        ))}
+                    </div>
+                    
+                    <div className="p-4 bg-[#fdecea] rounded-[6px] border border-[#c0392b]/20">
+                        <strong className="text-[#c0392b] text-[13px] block mb-2">⚡ 殘酷的可行性快篩</strong>
+                        <p className="text-[12px] text-[#4a4a6a]">檢查你選的方法做不做得到：發得完問卷嗎？約得到人訪談嗎？有設備做實驗嗎？只要一項不行，馬上退件重修。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="w3-task-block">
+                <div className="w3-task-hd"><span className="w3-task-badge" style={{ background: '#9b59b6' }}>PART 5</span><span className="w3-task-title">🤖 AI 最終協作（你的題目）</span></div>
+                <div className="w3-task-body">
+                    <div className="w3-notice" style={{ marginBottom: '24px' }}>
+                        你的題目通過快篩了！現在請 AI 把這個粗糙的初稿，包裝成專業的學術標題。
+                    </div>
+                    
+                    <div className="w3-collab-steps mb-8">
+                        {[
+                            { n: '1', t: '修改初稿', d: '寫出你 5W1H 修改後的題目。', s: 'w3-step-human' },
+                            { n: '2', t: '問 AI 診斷', d: '讓 AI 幫你做最後掃描。', s: 'w3-step-ai' },
+                            { n: '3', t: '確認心意', d: '聽聽看就好，還是你做主。', s: 'w3-step-you' },
+                            { n: '4', t: '要 3 個建議', d: '請 AI 給三個方向的修改建議。', s: 'w3-step-ai' },
+                            { n: '5', t: '你來選', d: '選出一個方向。', s: 'w3-step-you' },
+                            { n: '6', t: '機器包裝', d: '使用下方【句型優化器】產生專業標題。', s: 'w3-step-ai' },
+                            { n: '7', t: '定案！', d: '產出你最終的【W3 專題定案題目】。', s: 'w3-step-you step-green', badge: '學期起點' }
+                        ].map(step => (
+                            <div className="w3-collab-step" key={step.n}>
+                                <div className={step.s.includes('step-num') ? step.s : `w3-collab-step-num ${step.s}`}>{step.n}</div>
+                                <div className="w3-collab-step-content">
+                                    <div className="w3-collab-step-title">
+                                        {step.t} {step.badge && <span className="w3-core-badge" style={{ background: '#27ae60' }}>{step.badge}</span>}
+                                    </div>
+                                    <div className="w3-collab-step-desc">{step.d}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="prompt-box">
+                        <div className="prompt-hd"><span>PROMPT · 句型優化器 (Step 6 用)</span><CopyButton text={`我的研究題目初稿是：【請貼上你的初稿】\n\n請幫我優化成更專業的版本：\n1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）\n2. 讓 Who(研究對象) / What(研究變數) 描述更精確\n3. 確保高中生可以執行，字數不要過長\n請給我 3 個優化版本。`} label="複製" /></div>
+                        <div className="prompt-body">我的研究題目初稿是：【請貼上你的初稿】<br /><br />請幫我優化成更專業的版本：<br />1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）<br />2. 讓 Who(研究對象) / What(研究變數) 描述更精確<br />3. 確保高中生可以執行，字數不要過長<br /><br />請給我 3 個優化版本。</div>
+                    </div>
+                </div>
             </div>
 
             <div className="w3-section-head"><h2>本週總結</h2><div className="line"></div><div className="mono">WRAP-UP</div></div>
@@ -351,12 +399,11 @@ export const Wizard = () => {
                     {[
                         { p: 'Part 1', n: '急診室大作戰：8 題診斷填代號' },
                         { p: 'Part 2', n: '人的診斷練習：自選 2 題，不准用 AI' },
-                        { p: 'Part 3', n: 'AI 協作工作坊：5 步驟 + AI-RED 記錄' },
-                        { p: 'Part 4', n: '同儕驗證（互換學習單 + 簽名）' },
-                        { p: 'Part 5', n: '5W1H 規格化（帶入 W2 探究意圖）' },
-                        { p: 'Part 6', n: '可行性快篩（全部通過才算完成）' },
-                        { p: 'Part 7', n: 'AI 句型優化器 + 最終定案題目', b: '最終定案' },
-                        { p: 'Part Z', n: '自我檢核（5 項全部打勾才算完成）' }
+                        { p: 'Part 3', n: 'AI 協作工作坊（練手感）' },
+                        { p: 'Part 4', n: '5W1H 規格化（回到你自己的題目）' },
+                        { p: 'Part 5', n: 'AI 最終協作 + 產生定案', b: '最終定案' },
+                        { p: 'AI-RED', n: '完整記錄 AI 使用歷程' },
+                        { p: 'Part Z', n: '自我檢核（5 項全部打勾）' }
                     ].map(hw => (
                         <div className="w3-hw-item" key={hw.p}><span className="w3-hw-part">{hw.p}</span><span className="w3-hw-name">{hw.n}</span>{hw.b && <span className="w3-hw-badge">{hw.b}</span>}</div>
                     ))}
