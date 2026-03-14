@@ -83,10 +83,10 @@ export const QuestionERGame = () => {
     };
 
     const startGame = () => {
-        // 從 30 題中隨機挑選 10 題 (4 綠, 3 黃, 3 紅)
-        const greens = shuffleArray(patientData.filter(p => p.id >= 1 && p.id <= 10)).slice(0, 4);
-        const yellows = shuffleArray(patientData.filter(p => p.id >= 11 && p.id <= 20)).slice(0, 3);
-        const reds = shuffleArray(patientData.filter(p => p.id >= 21 && p.id <= 30)).slice(0, 3);
+        // 從 30 題中隨機挑選 5 題 (2 綠, 2 黃, 1 紅) 控制遊戲時長與專注度負擔
+        const greens = shuffleArray(patientData.filter(p => p.id >= 1 && p.id <= 10)).slice(0, 2);
+        const yellows = shuffleArray(patientData.filter(p => p.id >= 11 && p.id <= 20)).slice(0, 2);
+        const reds = shuffleArray(patientData.filter(p => p.id >= 21 && p.id <= 30)).slice(0, 1);
         
         const selectedPatients = shuffleArray([...greens, ...yellows, ...reds]);
 
@@ -527,19 +527,66 @@ export const QuestionERGame = () => {
                     </div>
                 )}
 
-                {/* Healed Result Screen */}
+                {/* Healed Result Screen & Case Review Report */}
                 {playingPhase === 'healed' && (
                     <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
-                        <div className={`p-6 rounded-sm border flex items-start gap-4 mb-8 text-left bg-[#064e3b]/80 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]`}>
-                            <div className="text-4xl shrink-0 mt-1">💡</div>
-                            <div>
-                                <h4 className={`font-black tracking-widest text-xl mb-2 text-emerald-400`}>{partialFeedback?.title}</h4>
-                                <p className="text-slate-300 font-medium leading-relaxed mb-4">{current.explanation}</p>
+                        <div className="bg-emerald-950/80 rounded-sm border border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.3)] mb-8 overflow-hidden">
+                            {/* Header */}
+                            <div className="bg-emerald-900/60 p-4 border-b border-emerald-500/30 flex items-center justify-between">
+                                <h4 className="font-black tracking-widest text-lg text-emerald-400 flex items-center gap-2">
+                                    <span>📋</span> 診療檢討報告
+                                </h4>
+                                <span className="text-xs font-bold text-emerald-200/60 tracking-widest bg-emerald-950/50 px-2 py-1 rounded">
+                                    CASE CLOSED
+                                </span>
+                            </div>
+                            
+                            {/* Review Content */}
+                            <div className="p-6 md:p-8 space-y-6 text-left">
+                                {/* Error Analysis */}
+                                <div>
+                                    <div className="text-xs font-black tracking-widest text-rose-400 mb-2 flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 inline-block"></span>
+                                        主訴病兆分析
+                                    </div>
+                                    <div className="bg-slate-900/50 p-4 rounded border border-slate-700/50">
+                                        <p className="text-slate-300 font-medium leading-relaxed mb-3">
+                                            {current.explanation}
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="text-xs text-slate-500">確診病因：</span>
+                                            {current.causes.map(c => 
+                                                <span key={c} className="text-xs font-bold bg-rose-950/40 border border-rose-500/30 text-rose-300 px-2 py-0.5 rounded">
+                                                    {CAUSE_OPTIONS.find(o => o.id === c)?.title || c}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Before & After Comparison */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {/* Before */}
+                                    <div className="bg-rose-950/20 p-4 rounded border-l-2 border-rose-500/50">
+                                        <div className="text-xs font-bold text-rose-400/80 mb-1">❌ 原始瑕疵題目</div>
+                                        <div className="text-sm text-slate-300 font-medium leading-snug">
+                                            {current.question}
+                                        </div>
+                                    </div>
+                                    
+                                    {/* After */}
+                                    <div className="bg-emerald-950/30 p-4 rounded border-l-2 border-emerald-500/50">
+                                        <div className="text-xs font-bold text-emerald-400 mb-1">✅ 成功治癒題目</div>
+                                        <div className="text-sm text-emerald-100 font-bold leading-snug drop-shadow-sm">
+                                            {current.shuffledHealedOptions.find(o => o.isCorrect).text}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <button onClick={nextPatient} className="bg-slate-800/80 hover:bg-slate-700 text-teal-400 hover:text-teal-300 font-bold tracking-widest py-4 px-10 rounded-sm w-full transition-all border border-teal-500/30 flex justify-center items-center gap-3 active:scale-[0.98]">
-                            {currentIdx < patients.length - 1 ? '呼叫下一位病患 ⏭️' : '結束值班，查看報告 📊'}
+                            {currentIdx < patients.length - 1 ? '已了解，呼叫下一位病患 ⏭️' : '結束值班，查看總結報告 📊'}
                         </button>
                     </div>
                 )}
