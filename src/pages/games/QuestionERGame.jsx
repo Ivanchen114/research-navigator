@@ -57,10 +57,10 @@ export const QuestionERGame = () => {
     const [wrongCases, setWrongCases] = useState([]); // 記錄曾經錯過(被扣過分)的題目
     const [timer, setTimer] = useState(0);
 
-    // Track score deduction for current question
     const [currentQuestionPts, setCurrentQuestionPts] = useState(10);
     const [hintUsed, setHintUsed] = useState(false);
     const [partialFeedback, setPartialFeedback] = useState(null);
+    const [selectedHealedOption, setSelectedHealedOption] = useState(null);
 
     // Timer & Player Name
     useEffect(() => {
@@ -111,6 +111,7 @@ export const QuestionERGame = () => {
         setCurrentQuestionPts(10);
         setHintUsed(false);
         setPartialFeedback(null);
+        setSelectedHealedOption(null);
         setPlayingPhase('diagnosis');
     };
 
@@ -175,6 +176,7 @@ export const QuestionERGame = () => {
     const submitHealedSelection = (option) => {
         if (option.isCorrect) {
             // Correct Healed Selection
+            setSelectedHealedOption(option);
             setPlayingPhase('healed');
             setScore(s => s + currentQuestionPts); // 結算這題分數
             setPartialFeedback({
@@ -252,9 +254,13 @@ export const QuestionERGame = () => {
         let color = "";
         let bg = "";
         let borderColor = "";
-        if (score === 100) { title = "🏆 完美賽博神醫！"; color = "text-amber-400"; bg = "bg-amber-900/40"; borderColor = "border-amber-500/50"; }
-        else if (score >= 80) { title = "👨‍⚕️ 首席主治醫師！"; color = "text-teal-400"; bg = "bg-teal-900/40"; borderColor = "border-teal-500/50"; }
-        else if (score >= 60) { title = "🩺 資深住院醫師！"; color = "text-emerald-400"; bg = "bg-emerald-900/40"; borderColor = "border-emerald-500/50"; }
+        
+        const maxScore = patients.length * 10;
+        const scoreRatio = maxScore > 0 ? (score / maxScore) : 0;
+
+        if (scoreRatio === 1) { title = "🏆 完美賽博神醫！"; color = "text-amber-400"; bg = "bg-amber-900/40"; borderColor = "border-amber-500/50"; }
+        else if (scoreRatio >= 0.8) { title = "👨‍⚕️ 首席主治醫師！"; color = "text-teal-400"; bg = "bg-teal-900/40"; borderColor = "border-teal-500/50"; }
+        else if (scoreRatio >= 0.6) { title = "🩺 資深住院醫師！"; color = "text-emerald-400"; bg = "bg-emerald-900/40"; borderColor = "border-emerald-500/50"; }
         else { title = "💊 實習生，多練練吧！"; color = "text-rose-400"; bg = "bg-rose-900/40"; borderColor = "border-rose-500/50"; }
 
         return (
@@ -270,12 +276,12 @@ export const QuestionERGame = () => {
                     </div>
 
                     <div className="flex flex-col items-center justify-center mb-6 relative z-10">
-                        <div className="text-7xl font-black text-teal-400 tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]">{score} <span className="text-3xl text-slate-500 font-medium">/ 100</span></div>
+                        <div className="text-7xl font-black text-teal-400 tracking-tighter mb-2 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]">{score} <span className="text-3xl text-slate-500 font-medium">/ {maxScore}</span></div>
                         <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-sm ${color} ${bg} border ${borderColor} mb-4 shadow-lg drop-shadow-md`}>{title}</h2>
 
                         <div className="flex gap-4 mt-6">
                             <div className="bg-emerald-900/40 border border-emerald-500/50 shadow-inner px-5 py-3 rounded-sm flex flex-col items-center">
-                                <span className="text-emerald-400 font-black block text-2xl drop-shadow-sm">{10 - wrongCases.length}</span>
+                                <span className="text-emerald-400 font-black block text-2xl drop-shadow-sm">{patients.length - wrongCases.length}</span>
                                 <span className="text-xs text-emerald-200/60 font-medium tracking-wider mt-1">一針見血 (滿分)</span>
                             </div>
                             <div className="bg-rose-900/40 border border-rose-500/50 shadow-inner px-5 py-3 rounded-sm flex flex-col items-center">
@@ -320,11 +326,9 @@ export const QuestionERGame = () => {
     // ================= PLAYING SCREEN =================
     const current = patients[currentIdx];
     if (!current) return null;
-    let sevType = "mild";
-    if (current.id > 10 && current.id <= 20) sevType = "moderate";
-    if (current.id > 20) sevType = "severe";
-    if (current.id > 20 && current.causes.length > 1) sevType = "boss";
-
+    
+    // 直接使用 json 裡的 severity
+    const sevType = current.severity || "mild";
     const sv = severityStyles[sevType];
     const isBoss = sevType === 'boss' || sevType === 'moderate' || current.causes.length > 1;
 
@@ -384,7 +388,7 @@ export const QuestionERGame = () => {
                                     ✓ 治癒完成的健康題目
                                 </p>
                                 <p className="text-2xl md:text-3xl font-black text-teal-50 leading-snug drop-shadow-md">
-                                    {current.shuffledHealedOptions.find(o => o.isCorrect).text}
+                                    {selectedHealedOption?.text}
                                 </p>
                             </div>
                         ) : (
@@ -550,9 +554,23 @@ export const QuestionERGame = () => {
                                         主訴病兆分析
                                     </div>
                                     <div className="bg-slate-900/50 p-4 rounded border border-slate-700/50">
-                                        <p className="text-slate-300 font-medium leading-relaxed mb-3">
-                                            {current.explanation}
-                                        </p>
+                                        <div className="mb-4 space-y-3">
+                                            {Array.isArray(current.explanation) ? (
+                                                current.explanation.map((step, idx) => (
+                                                    <div key={idx} className="flex items-start gap-2">
+                                                        <span className="text-lg">{step.icon}</span>
+                                                        <div>
+                                                            <span className="text-sm font-bold text-slate-300">{step.label}：</span>
+                                                            <span className="text-sm text-slate-400 leading-snug">{step.text}</span>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p className="text-slate-300 font-medium leading-relaxed">
+                                                    {current.explanation}
+                                                </p>
+                                            )}
+                                        </div>
                                         <div className="flex flex-wrap gap-2">
                                             <span className="text-xs text-slate-500">確診病因：</span>
                                             {current.causes.map(c => 
@@ -578,8 +596,30 @@ export const QuestionERGame = () => {
                                     <div className="bg-emerald-950/30 p-4 rounded border-l-2 border-emerald-500/50">
                                         <div className="text-xs font-bold text-emerald-400 mb-1">✅ 成功治癒題目</div>
                                         <div className="text-sm text-emerald-100 font-bold leading-snug drop-shadow-sm">
-                                            {current.shuffledHealedOptions.find(o => o.isCorrect).text}
+                                            {selectedHealedOption?.text}
                                         </div>
+                                        {selectedHealedOption?.researchType && (
+                                            <span className="inline-block mt-2 px-2 py-0.5 bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold rounded-sm tracking-widest">
+                                                {selectedHealedOption.researchType}研究
+                                            </span>
+                                        )}
+                                        {current.healedOptions.filter(o => o.isCorrect && o.text !== selectedHealedOption?.text).length > 0 && (
+                                            <div className="mt-3 pt-3 border-t border-emerald-500/30">
+                                                <div className="text-xs font-bold text-emerald-300/80 mb-1">💡 另一條路也走得通：</div>
+                                                {current.healedOptions.filter(o => o.isCorrect && o.text !== selectedHealedOption?.text).map((altOpt, idx) => (
+                                                    <div key={idx} className="mt-1 flex flex-col items-start">
+                                                        <div className="text-sm text-emerald-200/80 font-medium leading-snug">
+                                                            {altOpt.text}
+                                                        </div>
+                                                        {altOpt.researchType && (
+                                                            <span className="inline-block mt-1 px-2 py-0.5 bg-emerald-900/40 border border-emerald-500/30 text-emerald-400/80 text-[10px] font-bold rounded-sm tracking-widest">
+                                                                {altOpt.researchType}研究
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
