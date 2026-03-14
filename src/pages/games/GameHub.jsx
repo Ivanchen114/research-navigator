@@ -133,6 +133,10 @@ export const GameHub = () => {
     
     // 儲存已通過的案件ID
     const [completedGames, setCompletedGames] = useState({});
+    
+    // 隱藏解鎖彩蛋狀態
+    const [unlockClicks, setUnlockClicks] = useState(0);
+    const [isMasterUnlocked, setIsMasterUnlocked] = useState(false);
 
     // 啟動時讀取探員名稱與過關紀錄
     useEffect(() => {
@@ -153,6 +157,12 @@ export const GameHub = () => {
                 }
             });
             setCompletedGames(completed);
+
+            // 讀取隱藏解鎖狀態
+            const masterUnlocked = localStorage.getItem('rib_master_unlocked');
+            if (masterUnlocked === 'true') {
+                setIsMasterUnlocked(true);
+            }
         };
         
         checkSavedData();
@@ -186,6 +196,19 @@ export const GameHub = () => {
         navigate(path);
     };
 
+    const handleSecretUnlock = () => {
+        if (isMasterUnlocked) return;
+        
+        const newClicks = unlockClicks + 1;
+        setUnlockClicks(newClicks);
+        
+        if (newClicks >= 10) {
+            setIsMasterUnlocked(true);
+            localStorage.setItem('rib_master_unlocked', 'true');
+            // 可以加個小音效或直接用視覺回饋
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[url('/images/game_hub_bg.png')] bg-cover bg-center bg-fixed font-sans text-slate-200 p-4 md:p-8 relative">
             <div className="absolute inset-0 bg-slate-900/85 backdrop-blur-none z-0"></div>
@@ -196,11 +219,15 @@ export const GameHub = () => {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <ShieldAlert size={40} className="text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-                            <h1 className="text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-slate-100 mb-4 tracking-tight drop-shadow-md">
+                            <h1 
+                                onClick={handleSecretUnlock}
+                                className={`text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold mb-4 tracking-tight drop-shadow-md select-none cursor-pointer transition-colors duration-500 ${isMasterUnlocked ? 'text-amber-300 drop-shadow-[0_0_15px_rgba(252,211,77,0.8)]' : 'text-slate-100'}`}
+                            >
                                 R.I.B. 特務指揮中心
                             </h1>
                             <p className="text-amber-400 font-mono text-sm md:text-base tracking-[0.2em] uppercase font-bold text-shadow-sm">
-                                Research Investigation Bureau / 機密任務總覽
+                                Research Investigation Bureau / 機密任務總覽 
+                                {isMasterUnlocked && <span className="ml-2 text-amber-300 text-xs bg-amber-900/40 px-2 py-0.5 rounded border border-amber-500/30">MASTER BYPASS ACTIVE</span>}
                             </p>
                         </div>
                         {/* Progress Bar Component */}
@@ -298,7 +325,8 @@ export const GameHub = () => {
                             // 判斷該關卡是否解鎖
                             // 1. 第一關永遠解鎖 (index === 0)
                             // 2. 如果前一關已經完成，則解鎖目前關卡
-                            const isUnlocked = index === 0 || completedGames[RIB_MISSIONS[index - 1].id];
+                            // 3. 隱藏指令啟動時全部解鎖
+                            const isUnlocked = isMasterUnlocked || index === 0 || completedGames[RIB_MISSIONS[index - 1].id];
                             const isCompeted = completedGames[mission.id];
 
                             return (

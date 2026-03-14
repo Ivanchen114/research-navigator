@@ -2,6 +2,7 @@ export const patientData = [
   // 🟢 綠卡（新手好救｜單一問題為主）
   {
     id: 1,
+    primaryDiagnosisKey: "A",
     question: "探究美的本質",
     diagnosis: "抽象哲學病",
     causes: ["空"],
@@ -30,6 +31,7 @@ export const patientData = [
   },
   {
     id: 2,
+    primaryDiagnosisKey: "E",
     question: "本校學生有沒有在用社群媒體？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -58,6 +60,7 @@ export const patientData = [
   },
   {
     id: 3,
+    primaryDiagnosisKey: "B",
     question: "2030年最熱門的工作會是什麼？",
     diagnosis: "算命占卜病",
     causes: ["遠"],
@@ -86,6 +89,7 @@ export const patientData = [
   },
   {
     id: 4,
+    primaryDiagnosisKey: "C",
     question: "全球暖化的成因與解決方法",
     diagnosis: "百科全書病",
     causes: ["大"],
@@ -114,6 +118,7 @@ export const patientData = [
   },
   {
     id: 5,
+    primaryDiagnosisKey: "E",
     question: "本校學生有沒有在段考前熬夜？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -142,6 +147,7 @@ export const patientData = [
   },
   {
     id: 6,
+    primaryDiagnosisKey: "E",
     question: "本校學生有沒有在上課偷滑手機？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -150,7 +156,7 @@ export const patientData = [
       {
         text: "本校高一各班在下午第一節課學生分心使用手機的頻率與時段觀察",
         isCorrect: true,
-        researchType: "觀察",
+        researchType: "量化",
         feedback: "正確！你把問題改成可觀察的頻率與時段，這樣才有辦法記錄。"
       },
       {
@@ -170,6 +176,7 @@ export const patientData = [
   },
   {
     id: 7,
+    primaryDiagnosisKey: "D",
     question: "為什麼我們班那麼吵？",
     diagnosis: "主觀偏見病",
     causes: ["難"],
@@ -204,6 +211,7 @@ export const patientData = [
   },
   {
     id: 8,
+    primaryDiagnosisKey: "D",
     question: "高中生為什麼很常遲到？",
     diagnosis: "主觀偏見病",
     causes: ["難"],
@@ -232,6 +240,7 @@ export const patientData = [
   },
   {
     id: 9,
+    primaryDiagnosisKey: "D",
     question: "高中福利社為什麼都很難吃？",
     diagnosis: "主觀偏見病",
     causes: ["難"],
@@ -260,6 +269,7 @@ export const patientData = [
   },
   {
     id: 10,
+    primaryDiagnosisKey: "E",
     question: "高中生是不是都會熬夜？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -290,6 +300,7 @@ export const patientData = [
   // 🟡 黃卡（進階：通常兩個問題疊加）
   {
     id: 11,
+    primaryDiagnosisKey: "C",
     question: "為什麼現代人越來越不快樂？",
     diagnosis: "百科全書病 + 抽象哲學病",
     causes: ["大", "空"],
@@ -318,8 +329,9 @@ export const patientData = [
   },
   {
     id: 12,
+    primaryDiagnosisKey: "A",
     question: "人類存在的意義是什麼？",
-    diagnosis: "抽象哲學病 + 距離發病(範圍過大)",
+    diagnosis: "抽象哲學病 + 百科全書病",
     causes: ["空", "大"],
     cures: ["實", "小"],
     healedOptions: [
@@ -346,6 +358,7 @@ export const patientData = [
   },
   {
     id: 13,
+    primaryDiagnosisKey: "D",
     question: "為什麼讀書比打電動更好？",
     diagnosis: "主觀偏見病 + 範圍膨脹",
     causes: ["大", "難"],
@@ -374,6 +387,7 @@ export const patientData = [
   },
   {
     id: 14,
+    primaryDiagnosisKey: "C",
     question: "台灣的教育制度好不好？",
     diagnosis: "百科全書病 + 主觀偏見病",
     causes: ["大", "難"],
@@ -402,6 +416,7 @@ export const patientData = [
   },
   {
     id: 15,
+    primaryDiagnosisKey: "F",
     question: "訪談賈伯斯的創新理念",
     diagnosis: "觀落陰病 + 百科全書病",
     causes: ["遠", "大"],
@@ -430,6 +445,7 @@ export const patientData = [
   },
   {
     id: 16,
+    primaryDiagnosisKey: "D",
     question: "為什麼高中生上課都不專心？",
     diagnosis: "範圍膨脹 + 主觀偏見病",
     causes: ["大", "難"],
@@ -458,6 +474,7 @@ export const patientData = [
   },
   {
     id: 17,
+    primaryDiagnosisKey: "A",
     question: "為什麼段考週壓力特別大？",
     diagnosis: "抽象哲學病 + 主觀偏見病",
     causes: ["空", "難"],
@@ -492,6 +509,7 @@ export const patientData = [
   },
   {
     id: 18,
+    primaryDiagnosisKey: "D",
     question: "為什麼有些老師上課很無聊？",
     diagnosis: "主觀偏見病 + 範圍膨脹",
     causes: ["難", "大"],
@@ -526,6 +544,7 @@ export const patientData = [
   },
   {
     id: 19,
+    primaryDiagnosisKey: "D",
     question: "為什麼班上同學不愛運動？",
     diagnosis: "主觀偏見病 + 抽象哲學",
     causes: ["難", "空"],
@@ -560,6 +579,7 @@ export const patientData = [
   },
   {
     id: 20,
+    primaryDiagnosisKey: "C",
     question: "為什麼社團活動常常辦不出成效？",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -590,6 +610,7 @@ export const patientData = [
   // 🔴 紅卡（魔王病歷）
   {
     id: 21,
+    primaryDiagnosisKey: "H",
     question: "早餐對人生成就的影響",
     diagnosis: "變因失控 + 算命占卜病",
     causes: ["難", "遠"],
@@ -618,6 +639,7 @@ export const patientData = [
   },
   {
     id: 22,
+    primaryDiagnosisKey: "G",
     question: "靈魂到底存不存在？",
     diagnosis: "方法無效病 + 算命占卜病(形而上)",
     causes: ["難", "遠"],
@@ -646,6 +668,7 @@ export const patientData = [
   },
   {
     id: 23,
+    primaryDiagnosisKey: "C",
     question: "手機使用對學業成績的影響",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -674,6 +697,7 @@ export const patientData = [
   },
   {
     id: 24,
+    primaryDiagnosisKey: "A",
     question: "滑手機會不會讓人變笨？",
     diagnosis: "多重器官衰竭：大 + 空 + 難",
     causes: ["大", "空", "難"],
@@ -702,6 +726,7 @@ export const patientData = [
   },
   {
     id: 25,
+    primaryDiagnosisKey: "E",
     question: "補習到底有沒有用？",
     diagnosis: "百科全書病 + 是非廢話病",
     causes: ["大", "空"],
@@ -730,6 +755,7 @@ export const patientData = [
   },
   {
     id: 26,
+    primaryDiagnosisKey: "H",
     question: "高中生談戀愛會不會影響成績？",
     diagnosis: "變因失控 + 是非廢話",
     causes: ["大", "空", "難"],
@@ -764,6 +790,7 @@ export const patientData = [
   },
   {
     id: 27,
+    primaryDiagnosisKey: "A",
     question: "IG / 抖音讓高中生焦慮嗎？",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -792,6 +819,7 @@ export const patientData = [
   },
   {
     id: 28,
+    primaryDiagnosisKey: "G",
     question: "為什麼有些同學天生就比較會讀書？",
     diagnosis: "方法無效病 + 觀落陰病",
     causes: ["遠", "難"],
@@ -826,6 +854,7 @@ export const patientData = [
   },
   {
     id: 29,
+    primaryDiagnosisKey: "F",
     question: "訪談現任總統對教育改革的看法",
     diagnosis: "觀落陰病 + 方法無效",
     causes: ["遠", "難"],
@@ -854,6 +883,7 @@ export const patientData = [
   },
   {
     id: 30,
+    primaryDiagnosisKey: "G",
     question: "為什麼有些人天生就比較聰明？",
     diagnosis: "變因失控 + 方法無效病",
     causes: ["大", "難"],
