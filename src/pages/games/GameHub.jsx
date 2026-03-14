@@ -221,7 +221,7 @@ export const GameHub = () => {
                             <ShieldAlert size={40} className="text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
                             <h1 
                                 onClick={handleSecretUnlock}
-                                className={`text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold mb-4 tracking-tight drop-shadow-md select-none cursor-pointer transition-colors duration-500 ${isMasterUnlocked ? 'text-amber-300 drop-shadow-[0_0_15px_rgba(252,211,77,0.8)]' : 'text-slate-100'}`}
+                                className={`text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold mb-4 tracking-tight drop-shadow-md select-none cursor-pointer touch-manipulation transition-colors duration-500 ${isMasterUnlocked ? 'text-amber-300 drop-shadow-[0_0_15px_rgba(252,211,77,0.8)]' : 'text-slate-100'}`}
                             >
                                 R.I.B. 特務指揮中心
                             </h1>
