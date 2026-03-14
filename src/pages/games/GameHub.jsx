@@ -130,14 +130,36 @@ export const GameHub = () => {
     const [agentName, setAgentName] = useState('');
     const [inputName, setInputName] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+    // 儲存已通過的案件ID
+    const [completedGames, setCompletedGames] = useState({});
 
-    // 啟動時從 localStorage 讀取探員名稱
+    // 啟動時讀取探員名稱與過關紀錄
     useEffect(() => {
-        const savedName = localStorage.getItem('rib_agent_name');
-        if (savedName) {
-            setAgentName(savedName);
-            setIsLoggedIn(true);
-        }
+        const checkSavedData = () => {
+            // 讀取登入狀態
+            const savedName = localStorage.getItem('rib_agent_name');
+            if (savedName) {
+                setAgentName(savedName);
+                setIsLoggedIn(true);
+            }
+
+            // 讀取六個任務的破關狀態
+            const completed = {};
+            RIB_MISSIONS.forEach(mission => {
+                const isDone = localStorage.getItem(`rib_completed_${mission.id}`);
+                if (isDone === 'true') {
+                    completed[mission.id] = true;
+                }
+            });
+            setCompletedGames(completed);
+        };
+        
+        checkSavedData();
+        
+        // 為了讓返回此頁面時能即時更新，監聽 focus 事件
+        window.addEventListener('focus', checkSavedData);
+        return () => window.removeEventListener('focus', checkSavedData);
     }, []);
 
     const handleLogin = (e) => {
@@ -185,10 +207,10 @@ export const GameHub = () => {
                         <div className="mt-8 max-w-sm">
                             <div className="flex justify-between text-[11px] font-mono tracking-widest mb-3">
                                 <span className="text-slate-400">總進度</span>
-                                <span className="text-amber-500 font-bold">0 / 6 案件完成</span>
+                                <span className="text-amber-500 font-bold">{Object.keys(completedGames).length} / 6 案件完成</span>
                             </div>
                             <div className="h-1.5 bg-slate-800 rounded-sm overflow-hidden border border-slate-700/50 relative">
-                                <div className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-amber-600 to-amber-400 w-[0%] transition-all duration-1000" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.5)' }}></div>
+                                <div className="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-1000" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.5)', width: `${(Object.keys(completedGames).length / 6) * 100}%` }}></div>
                             </div>
                         </div>
                     </div>
@@ -272,17 +294,28 @@ export const GameHub = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 relative z-10 w-full">
                         {RIB_MISSIONS.map((mission, index) => {
                             const missionNumber = String(index + 1).padStart(2, '0');
+                            
+                            // 判斷該關卡是否解鎖
+                            // 1. 第一關永遠解鎖 (index === 0)
+                            // 2. 如果前一關已經完成，則解鎖目前關卡
+                            const isUnlocked = index === 0 || completedGames[RIB_MISSIONS[index - 1].id];
+                            const isCompeted = completedGames[mission.id];
+
                             return (
                                 <div key={mission.id} className="w-full flex">
-
                                     {/* 卡片容器 */}
                                     <div className="w-full flex h-full">
                                         <div
-                                            onClick={() => navigateToMission(mission.path)}
-                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-sm p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${isLoggedIn
+                                            onClick={() => {
+                                                if (isUnlocked && isLoggedIn) {
+                                                    navigateToMission(mission.path);
+                                                }
+                                            }}
+                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-sm p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${
+                                                isLoggedIn && isUnlocked
                                                 ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
-                                                : 'border-slate-800/50 opacity-60 grayscale cursor-not-allowed'
-                                                }`}
+                                                : 'border-slate-800/50 opacity-50 grayscale cursor-not-allowed pointer-events-none'
+                                            }`}
                                         >
                                             {/* Top Accent Line */}
                                             {isLoggedIn && (
@@ -294,10 +327,14 @@ export const GameHub = () => {
                                                 <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
                                             )}
 
-                                            {/* ACTIVE / LOCKED Stamp */}
-                                            {isLoggedIn ? (
-                                                <div className="absolute top-20 right-8 sm:top-20 sm:right-28 border-2 border-amber-500/30 text-amber-500/40 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] pointer-events-none opacity-60 group-hover:opacity-100 scale-90 sm:scale-100">
-                                                    ACTIVE
+                                            {/* ACTIVE / COMPLETED / LOCKED Stamp */}
+                                            {isLoggedIn && isUnlocked ? (
+                                                <div className={`absolute top-20 right-8 sm:top-20 sm:right-28 border-2 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none scale-90 sm:scale-100 ${
+                                                    isCompeted 
+                                                    ? 'border-emerald-500/50 text-emerald-500/70 opacity-100 shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
+                                                    : 'border-amber-500/30 text-amber-500/40 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] opacity-60 group-hover:opacity-100'
+                                                }`}>
+                                                    {isCompeted ? 'CLEARED' : 'ACTIVE'}
                                                 </div>
                                             ) : (
                                                 <div className="absolute top-20 right-8 sm:top-20 sm:right-28 border-2 border-slate-700 text-slate-600 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none opacity-60 scale-90 sm:scale-100">
@@ -351,13 +388,17 @@ export const GameHub = () => {
 
                                                 <div className="flex items-center justify-between w-full">
                                                     <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
-                                                    {isLoggedIn ? (
-                                                        <div className="flex items-center gap-2 text-sm font-black text-amber-500 group-hover:translate-x-2 transition-transform tracking-widest bg-amber-950/20 hover:bg-amber-900/40 px-3 py-1.5 rounded-sm border border-amber-500/20 backdrop-blur-sm">
-                                                            解密檔案 <ArrowRight size={16} />
+                                                    {isLoggedIn && isUnlocked ? (
+                                                        <div className={`flex items-center gap-2 text-sm font-black transition-transform tracking-widest px-3 py-1.5 rounded-sm border backdrop-blur-sm ${
+                                                            isCompeted 
+                                                            ? 'text-emerald-400 bg-emerald-950/20 border-emerald-500/20 group-hover:bg-emerald-900/40' 
+                                                            : 'text-amber-500 bg-amber-950/20 border-amber-500/20 group-hover:bg-amber-900/40 group-hover:translate-x-2'
+                                                        }`}>
+                                                            {isCompeted ? '重新調查' : '解密檔案'} <ArrowRight size={16} />
                                                         </div>
                                                     ) : (
                                                         <div className="text-xs font-bold text-slate-500 tracking-widest bg-slate-900/80 px-3 py-1.5 rounded-sm border border-slate-800">
-                                                            🔒 權限不足
+                                                            🔒 權限不足 / 未解鎖
                                                         </div>
                                                     )}
                                                 </div>

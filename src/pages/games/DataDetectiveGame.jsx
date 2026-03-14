@@ -839,6 +839,7 @@ export const DataDetectiveGame = () => {
             setClickedParts([]); setFeedbackMsg(null);
             setShakeCard(false); setWrongLayers([]);
         } else {
+            localStorage.setItem('rib_completed_data-detective', 'true');
             setGameState('end');
         }
     };

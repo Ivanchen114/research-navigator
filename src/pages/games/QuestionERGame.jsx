@@ -3,18 +3,18 @@ import { patientData } from '../../data/patientData'; // 匯入新的 30 題庫
 
 // 掃描器選項 (病理切片)
 const CAUSE_OPTIONS = [
-    { id: '大', label: '🔎 [太大] 範圍膨脹' },
-    { id: '空', label: '🌫️ [太空] 抽象不具體' },
-    { id: '遠', label: '🔭 [太遠] 對象接觸不到' },
-    { id: '難', label: '🤯 [太難] 無法驗證、主觀' }
+    { id: '大', icon: '🔎', title: '[太大] 範圍膨脹', subtitle: '涵蓋過廣，單人無法完成' },
+    { id: '空', icon: '🌫️', title: '[太空] 抽象不具體', subtitle: '缺乏客觀定義/僅為是非題' },
+    { id: '遠', icon: '🔭', title: '[太遠] 對象接觸不到', subtitle: '包含未來/無法觸及之人' },
+    { id: '難', icon: '🤯', title: '[太難] 無法驗證', subtitle: '充滿主觀評價/缺乏設備驗證' }
 ];
 
 // 處方卡片 (對症下藥)
 const CURE_OPTIONS = [
-    { id: '小', label: '💊 [縮小藥丸] 大 → 小' },
-    { id: '實', label: '💉 [具體疫苗] 空 → 實' },
-    { id: '近', label: '🚪 [任意門探測儀] 遠 → 近' },
-    { id: '易', label: '🔪 [降維手術刀] 難 → 易' }
+    { id: '小', icon: '💊', title: '[縮小藥丸] 大 → 小', subtitle: '聚焦特定對象/地點' },
+    { id: '實', icon: '💉', title: '[具體疫苗] 空 → 實', subtitle: '轉為量化分數/時數' },
+    { id: '近', icon: '🚪', title: '[任意門探測儀] 遠 → 近', subtitle: '拉回現在/身邊' },
+    { id: '易', icon: '🔪', title: '[降維手術刀] 難 → 易', subtitle: '改為客觀指標/拿掉偏見字眼' }
 ];
 
 // 病情嚴重度樣式
@@ -194,6 +194,7 @@ export const QuestionERGame = () => {
             setCurrentIdx(i => i + 1);
             resetQuestionState();
         } else {
+            localStorage.setItem('rib_completed_question-er', 'true');
             setGameState('end');
         }
     };
@@ -440,8 +441,13 @@ export const QuestionERGame = () => {
                                 const isSelected = selectedCauses.includes(opt.id);
                                 return (
                                     <button key={opt.id} onClick={() => toggleCause(opt.id)}
-                                        className={`p-4 rounded-sm border font-bold text-left transition-all ${isSelected ? 'bg-teal-900/40 border-teal-400 text-teal-200 shadow-[0_0_15px_rgba(45,212,191,0.3)]' : 'bg-slate-800/40 border-slate-700 text-slate-400 hover:border-teal-400/50 hover:text-teal-100'}`}>
-                                        {opt.label}
+                                        className={`p-4 rounded-sm border text-left transition-all flex flex-col items-start gap-1 justify-center min-h-[100px] ${isSelected ? 'bg-teal-900/40 border-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.3)]' : 'bg-slate-800/40 border-slate-700 hover:border-teal-400/50 hover:bg-slate-800/80'}`}>
+                                        <div className={`font-bold text-lg ${isSelected ? 'text-teal-300' : 'text-slate-200'}`}>
+                                            <span className="mr-2">{opt.icon}</span>{opt.title}
+                                        </div>
+                                        <div className={`text-sm font-medium ${isSelected ? 'text-teal-100/80' : 'text-slate-400'}`}>
+                                            {opt.subtitle}
+                                        </div>
                                     </button>
                                 );
                             })}
@@ -471,8 +477,13 @@ export const QuestionERGame = () => {
                                 const isSelected = selectedCures.includes(opt.id);
                                 return (
                                     <button key={opt.id} onClick={() => toggleCure(opt.id)}
-                                        className={`p-4 rounded-sm border font-bold text-left transition-all ${isSelected ? 'bg-cyan-900/60 border-cyan-400 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]' : 'bg-slate-800/40 border-slate-700 text-slate-400 hover:border-cyan-400/50 hover:text-cyan-100'}`}>
-                                        {opt.label}
+                                        className={`p-4 rounded-sm border text-left transition-all flex flex-col items-start gap-1 justify-center min-h-[100px] ${isSelected ? 'bg-cyan-900/60 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.3)]' : 'bg-slate-800/40 border-slate-700 hover:border-cyan-400/50 hover:bg-slate-800/80'}`}>
+                                        <div className={`font-bold text-lg ${isSelected ? 'text-cyan-300' : 'text-slate-200'}`}>
+                                            <span className="mr-2">{opt.icon}</span>{opt.title}
+                                        </div>
+                                        <div className={`text-sm font-medium ${isSelected ? 'text-cyan-100/80' : 'text-slate-400'}`}>
+                                            {opt.subtitle}
+                                        </div>
                                     </button>
                                 );
                             })}

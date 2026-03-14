@@ -561,6 +561,7 @@ export const ChartMatcherGame = () => {
             setAnswerResult(null);
             setShakeCard(false);
         } else {
+            localStorage.setItem('rib_completed_chart-matcher', 'true');
             setGameState('end');
         }
     };

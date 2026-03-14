@@ -186,6 +186,7 @@ export const ToolQuizGame = () => {
             setSelectedAnswer(null);
             setIsAnswered(false);
         } else {
+            localStorage.setItem('rib_completed_tool-quiz', 'true');
             setGameState('end');
         }
     };

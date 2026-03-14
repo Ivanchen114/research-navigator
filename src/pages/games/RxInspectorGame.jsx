@@ -421,6 +421,7 @@ export const RxInspectorGame = () => {
             setFlagged({});
             setIsRevealed(false);
         } else {
+            localStorage.setItem('rib_completed_rx-inspector', 'true');
             setGameState('end');
         }
     };
