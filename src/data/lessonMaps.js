@@ -18,22 +18,22 @@ export const W3Data = {
         {
             prefix: "①",
             title: "萬用急救心法",
-            subtitle: "大→小 ／ 空→實 ／ 遠→近 ／ 難→易",
-            desc: "建立人類的基礎判斷力",
+            subtitle: "大 → 小 ／ 空 → 實 ／ 遠 → 近 ／ 難 → 易",
+            desc: "建立人類自己的基礎判斷力",
             colorConfig: "r"
         },
         {
             prefix: "②",
             title: "人機協作框架",
             subtitle: "AI 給選項，人做選擇與判斷",
-            desc: "學會駕馭 AI 而不是被取代",
+            desc: "學會駕馭 AI，而不是被 AI 取代",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "診斷 · 心法 · 人的練習",
+            title: "診斷・心法・人的練習",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -43,8 +43,8 @@ export const W3Data = {
                     duration: "4 min",
                     colorClass: "c3",
                     icon: "🧱",
-                    title: "階段 0｜碰壁體驗 — 你真的做得到嗎？",
-                    desc: "不說前言直接投影 A、B 兩題，問學生「下單第一步要做什麼？」。追問細節讓學生感受「卡住」的感覺。",
+                    title: "階段 0｜碰壁體驗：你真的做得到嗎？",
+                    desc: "不先講道理，直接投影兩個看似合理但其實做不動的題目，追問學生第一步要怎麼做，讓他們親身感受『題目生病』的卡住感。",
                     tags: ["直接對決", "碰壁體驗"]
                 },
                 {
@@ -53,9 +53,9 @@ export const W3Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🌉",
-                    title: "階段 1｜暖身：W2 → W3 的橋樑",
-                    desc: "回顧 W2 探究意圖。老師說明：原石可能也生病了。今天三任務：診斷、學心法、人機協作。",
-                    tags: ["個人回顧", "回扣 W2"]
+                    title: "階段 1｜暖身：從 W2 走到 W3",
+                    desc: "回顧上週的探究意圖，說明 W2 產出的只是『原石』，今天要做的是題目健檢、急救與修正。",
+                    tags: ["回扣 W2", "課程定位"]
                 },
                 {
                     timeStart: "0:09",
@@ -63,8 +63,8 @@ export const W3Data = {
                     duration: "12 min",
                     colorClass: "c1",
                     icon: "🏥",
-                    title: "階段 2a-b｜題目健檢大作戰：小組會診",
-                    desc: "4-5 人一組，討論投影幕上 8 個生病的題目，填入 Part 1 診斷代號。",
+                    title: "階段 2a-b｜Part 1 題目健檢大作戰：小組會診",
+                    desc: "4–5 人一組，討論投影幕上的 8 個病題目，依據病例選單判斷各題生了什麼病，填入學習單 Part 1。",
                     tags: ["小組討論", "學習單 Part 1"]
                 },
                 {
@@ -73,10 +73,10 @@ export const W3Data = {
                     duration: "8 min",
                     colorClass: "c1",
                     icon: "🩺",
-                    title: "階段 2c｜總醫師巡房：揭曉答案",
-                    desc: "逐題揭曉診斷結果，說明「為什麼生病」。重點：暫不講治法。",
-                    tags: ["老師解說"],
-                    additionalNotes: "📌 題1→H 2→A 3→F 4→D 5→E 6→C 7→G 8→B"
+                    title: "階段 2c｜總醫師巡房：揭曉 8 題答案",
+                    desc: "逐題揭曉診斷結果，重點說明『為什麼這題生病』，先建立病感，不急著教怎麼改。",
+                    tags: ["老師解說", "建立病感"],
+                    additionalNotes: "📌 題1→H　題2→A　題3→F　題4→D　題5→E　題6→C　題7→G　題8→B"
                 },
                 {
                     timeStart: "0:29",
@@ -84,113 +84,116 @@ export const W3Data = {
                     duration: "5 min",
                     colorClass: "c2",
                     icon: "💊",
-                    title: "階段 3｜萬用急救心法 (大空遠難)",
-                    desc: "發放「題目急救寶典」。講解核心口訣：大、空、遠、難 → 小、實、近、易。",
-                    tags: ["講述＋示範", "發放寶典"]
+                    title: "階段 3｜萬用急救心法：大空遠難 → 小實近易",
+                    desc: "發放急救寶典，講解四大轉換。讓學生知道 8 種病不用死背，核心其實都回到四個轉換方向。",
+                    tags: ["核心心法", "急救寶典"]
                 },
                 {
                     timeStart: "0:34",
                     timeEnd: "0:44",
                     duration: "10 min",
-                    colorClass: "c3",
+                    colorClass: "c4",
                     icon: "💪",
-                    title: "階段 4｜人的診斷練習（🚫 禁用 AI）",
-                    desc: "選 2 題自行診斷修改，建立自己的斤兩與判斷力。填入 Part 2。",
-                    tags: ["個人練習", "學習單 Part 2"]
+                    title: "階段 4｜Part 2 個人診斷練習（禁用 AI）",
+                    desc: "學生從 30 題爛題目中自行選 2 題，不准用 AI，先靠自己診斷、套用心法、寫出修正版題目。",
+                    tags: ["個人練習", "學習單 Part 2", "🚫 禁用 AI"]
                 },
                 {
                     timeStart: "0:44",
                     timeEnd: "0:50",
                     duration: "6 min",
-                    colorClass: "c4",
-                    icon: "🔪",
-                    title: "階段 5｜導入 5W1H 規格化手術刀",
-                    desc: "介紹 5W1H 框架（Who/Where/What/When/How），說明這是把題目「切開」的工具。",
-                    tags: ["概念導入"]
+                    colorClass: "c5",
+                    icon: "🧠",
+                    title: "階段 5｜Part 2 小組討論：黃卡／紅卡會診",
+                    desc: "每組從黃卡或紅卡中選 1 題，不准用 AI，一起診斷、一起急救，練習把個人判斷說出來並與組員協商。",
+                    tags: ["小組共作", "高階挑戰", "學習單 Part 2 第二表格"],
+                    keyPoint: "🎯 第一節收在『人的判斷力』，先練自己會看病，再進入第二節的人機協作。"
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "AI 協作 · 快篩 · 最終定案",
+            title: "AI 協作・規格化・最終定案",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:20",
-                    duration: "20 min",
+                    timeEnd: "0:18",
+                    duration: "18 min",
                     colorClass: "c2",
                     icon: "🤖",
-                    title: "階段 6｜AI 協作工作坊",
-                    desc: "從剩下的題目選 1 題，依學習單 Part 3 的 6 步驟操作。",
-                    additionalNotes: "<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;\"><div style=\"background:#fff;border:1px solid var(--lm-c2);padding:6px 8px;font-size:11px;\"><strong>Step 1</strong><br>人先自行診斷</div><div style=\"background:#fff;border:1px solid var(--lm-c2);padding:6px 8px;font-size:11px;\"><strong>Step 2</strong><br>問 AI → 貼提示詞</div><div style=\"background:#fff;border:1px solid var(--lm-c2);padding:6px 8px;font-size:11px;\"><strong>Step 3</strong><br>比對差異，誰對？</div><div style=\"background:#fff;border:1px solid var(--lm-c2);padding:6px 8px;font-size:11px;\"><strong>Step 4</strong><br>請 AI 給 3 個方案</div><div style=\"background:var(--lm-c2);color:#fff;border:1px solid var(--lm-c2);padding:6px 8px;font-size:11px;\"><strong>Step 5 ⭐</strong><br>我做選擇（核心！）</div><div style=\"background:#fff;border:1px solid var(--lm-c2);padding:6px 8px;font-size:11px;\"><strong>Step 6</strong><br>記錄 AI-RED</div></div>",
-                    keyPoint: "⚠️ 老師重點糾正：叫 AI 直接改 ≠ 協作。你是老闆，AI 是員工！"
+                    title: "階段 6｜Part 3 AI 協作工作坊：先用別人的題目練兵",
+                    desc: "學生從剛才個人練習的題目中選 1 題，依照學習單流程操作：先自己診斷，再問 AI，接著比較差異、請 AI 提出三個版本，最後由自己做選擇。",
+                    tags: ["AI 協作", "學習單 Part 3", "人機協作"],
+                    additionalNotes: "Step 1 人先診斷 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 個方案 → Step 5 自己選並說明理由",
+                    keyPoint: "⚠️ 教學重點：不是『叫 AI 幫我改』，長度不是重點，重點是『我判斷 AI 給的哪個版本比較值得選』。"
                 },
                 {
-                    timeStart: "0:20",
-                    timeEnd: "0:28",
-                    duration: "8 min",
-                    colorClass: "c5",
-                    icon: "🤝",
-                    title: "階段 7｜同儕驗證 ＆ 全班分享 AI 盲點",
-                    desc: "交換學習單，填寫 Part 4 同儕回饋（5 分鐘）。<br>老師抽 2-3 人分享：AI 給了什麼奇怪的建議？人的判斷如何反駁？",
-                    tags: ["學習單 Part 4", "同儕互評", "全班分享"],
-                    keyPoint: "🎯 教學目標：讓學生看到 AI 不完美，強化人要判斷的意識"
-                },
-                {
-                    timeStart: "0:28",
-                    timeEnd: "0:43",
-                    duration: "15 min",
+                    timeStart: "0:18",
+                    timeEnd: "0:30",
+                    duration: "12 min",
                     colorClass: "c4",
-                    icon: "🔬",
-                    title: "階段 8｜5W1H 規格化 ＋ 可行性快篩",
-                    desc: "拿出 W2 探究意圖填寫 Part 5（5W1H），並填 Part 6（重點快篩）。任何一項「否」，立刻用心法修改自身題目。",
-                    tags: ["學習單 Part 5-6", "個人填寫"],
-                    additionalNotes: "🔴 快篩問題（依方法選一組）：<br>📋問卷→樣本數夠？發得回收嗎？<br>🎤訪談→約得到嗎？<br>🧪實驗→有設備？能控制變因？"
+                    icon: "🔪",
+                    title: "階段 7｜Part 4 回到自己的題目：5W1H 規格化",
+                    desc: "回到自己 W2 的最終探究意圖，先不靠 AI，利用 5W1H 把題目切開，確認對象、場域、變項、方法與條件是否足夠清楚。",
+                    tags: ["學習單 Part 4", "5W1H", "規格化"],
+                    additionalNotes: "必備四格：Who／Where／What／How；若寫不出來，表示題目仍然不夠小、不夠實、不夠近、或不夠易。"
                 },
                 {
-                    timeStart: "0:43",
-                    timeEnd: "0:50",
-                    duration: "7 min",
+                    timeStart: "0:30",
+                    timeEnd: "0:48",
+                    duration: "18 min",
                     colorClass: "c1",
                     icon: "✨",
-                    title: "階段 9｜AI 句型優化器 ＆ 最終定案",
-                    desc: "自填自己的初稿，再貼提示詞請 AI 給 3 個優化版本，最後由學生選出專屬的最終定案題。填寫 Part 7。",
-                    tags: ["學習單 Part 7", "最終產出"],
-                    additionalNotes: "Prompt 要求：加學術關鍵字 ／ Who+What 更具體 ／ 30字以內 ／ 給 3 個版本"
+                    title: "階段 8｜Part 5 AI 協作自己的題目：從初稿磨到定案",
+                    desc: "先根據 Part 4 自己寫出專屬初稿，再請 AI 進行診斷、提供三個修改方向、在做優化。學生最後必須自己選出最終定案版本，並完成 AI-RED 記錄。",
+                    tags: ["學習單 Part 5", "最終定案", "AI-RED"],
+                    additionalNotes: "Step 1 自寫初稿 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 方案 → Step 5 自己選 → Step 6 問 AI 優化 → Step 7 最終定案 + AI-RED",
+                    keyPoint: "🎯 最重要的不是 AI 生出幾句漂亮話，而是學生能不能說出：『我為什麼選這個版本，因為它做得到。』"
+                },
+                {
+                    timeStart: "0:48",
+                    timeEnd: "0:50",
+                    duration: "2 min",
+                    colorClass: "c3",
+                    icon: "🏁",
+                    title: "階段 9｜總結：急救出院標準確認",
+                    desc: "總結今天從碰壁、診斷、急救、協作，到題目定案的流程。確認學生手上的 W3 題目已能帶往 W4 題目博覽會。",
+                    tags: ["總結收束", "W4 預告"],
+                    additionalNotes: "出院標準：5W1H 至少能填 4 格、符合小實近易至少 2 項、兩週內能蒐集到資料。"
                 }
             ]
         }
     ],
     summaries: [
         {
-            icon: "📝",
+            icon: "🩺",
             label: "課堂產出 1",
-            text: "題目診斷紀錄<br><small style=\"font-size:11px;color:#888;\">8題診斷 + 3題急救</small>"
+            text: "8 題診斷紀錄＋急救練習<br><small style=\"font-size:11px;color:#888;\">建立人的判斷力</small>"
         },
         {
             icon: "🤖",
             label: "課堂產出 2",
-            text: "AI-RED 使用紀錄<br><small style=\"font-size:11px;color:#888;\">人機協作歷程</small>"
+            text: "AI 協作紀錄<br><small style=\"font-size:11px;color:#888;\">含比對差異與選擇理由</small>"
         },
         {
             icon: "🔪",
             label: "課堂產出 3",
-            text: "5W1H 規格確認<br><small style=\"font-size:11px;color:#888;\">通過可行性快篩</small>"
+            text: "5W1H 規格化表<br><small style=\"font-size:11px;color:#888;\">回到自己的題目動刀</small>"
         },
         {
-            icon: "🏆",
+            icon: "🎯",
             label: "最終產出",
-            text: "定案研究題目<br><small style=\"font-size:11px;color:#ccc;\">W4 博覽會使用</small>"
+            text: "W3 最終定案題目<br><small style=\"font-size:11px;color:#ccc;\">帶去 W4 題目博覽會</small>"
         }
     ],
     legends: [
-        { colorClass: "lm-c1", label: "診斷 / 病因" },
+        { colorClass: "lm-c1", label: "診斷 / 定案" },
         { colorClass: "lm-c2", label: "心法 / AI 協作" },
-        { colorClass: "lm-c3", label: "過渡 / 導入" },
-        { colorClass: "lm-c4", label: "規格化 / 快篩" },
-        { colorClass: "lm-c5", label: "互動 / 分享" }
+        { colorClass: "lm-c3", label: "導入 / 總結" },
+        { colorClass: "lm-c4", label: "個人練習 / 規格化" },
+        { colorClass: "lm-c5", label: "小組共作 / 互動" }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
         ...item,
