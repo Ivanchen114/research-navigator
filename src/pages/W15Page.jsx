@@ -452,7 +452,7 @@ export const W15Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-4 bg-white">
-                <div className="p-[14px_20px] bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[14px] text-[#1a1a2e]">✅ 今天結束，你應該有</div>
+                <div className="p-[14px_20px] bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[14px] text-[#1a1a2e]">✅ 本週結束，你應該要會</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
                     {[
                         '七章報告初稿（含摘要），各章字數達標',

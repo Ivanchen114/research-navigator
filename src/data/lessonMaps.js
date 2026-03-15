@@ -649,10 +649,10 @@ export const W4Data = {
         analysisNote: "核心對比：手寫海報偏向白話且具備視覺亮點，右方文字則是 W3 定案後的專業轉換，兩者相輔相成。"
     },
     galleryWalkRounds: [
-        { n: 'Round 1', d: '第 1-8 號報告，其餘走位', r: 'present' },
-        { n: 'Round 2', d: '第 1-8 號走位，9-16 號報告', r: 'walk' },
-        { n: 'Round 3', d: '第 17-24 號報告，其餘走位', r: 'present' },
-        { n: 'Round 4', d: '第 17-24 號走位，25-32 號報告', r: 'walk' }
+        { n: '第 1 場', time: '00:18–00:23', who: 'A 坐鎮', d: 'A 回到自己的桌子報告，B、C、D 順時針移到下一組聆聽', r: 'present' },
+        { n: '第 2 場', time: '00:23–00:28', who: 'B 坐鎮', d: 'B 回來坐鎮報告，C、D 繼續移，A 也追過去', r: 'present' },
+        { n: '第 3 場', time: '00:28–00:33', who: 'C 坐鎮', d: 'C 回來坐鎮報告，D 繼續移，A、B 也追過去', r: 'present' },
+        { n: '第 4 場', time: '00:33–00:38', who: 'D 坐鎮', d: 'D 回來坐鎮報告，A、B、C 繼續往下走', r: 'present' }
     ],
     commentRules: [
         { type: 'positive', label: '粉紅色：我認可的地方', desc: '覺得標題下得很好、預期發現很驚艷、或是題目本身非常有社會意義。' },

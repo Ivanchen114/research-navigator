@@ -418,7 +418,7 @@ export const ToolRefinementPage = () => {
                 </div>
 
                 <div className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden mb-6">
-                    <div className="bg-[#f0ede6] px-5 py-3 border-b border-[#dddbd5] font-bold text-[14px]">✅ 今天結束，你應該有</div>
+                    <div className="bg-[#f0ede6] px-5 py-3 border-b border-[#dddbd5] font-bold text-[14px]">✅ 本週結束，你應該要會</div>
                     <div className="grid grid-cols-2 bg-[#dddbd5] gap-[1px]">
                         {[
                             '完整的 AI 建議判斷表（至少 3 條紀錄）',

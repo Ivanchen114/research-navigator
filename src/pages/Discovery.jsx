@@ -15,9 +15,12 @@ import {
     MessageCircle,
     Layout,
     Clock,
-    ArrowRight
+    ArrowRight,
+    Map
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LessonMap from '../components/ui/LessonMap';
+import { W0Data } from '../data/lessonMaps';
 
 export const Discovery = () => {
     // Interaction states
@@ -26,6 +29,7 @@ export const Discovery = () => {
         turtle1: false,
         turtle2: false
     });
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     const toggleReveal = (key) => {
         setRevealed(prev => ({ ...prev, [key]: !prev[key] }));
@@ -33,6 +37,28 @@ export const Discovery = () => {
 
     return (
         <div className="page-container animate-in-fade-slide">
+
+            {/* TOP BAR */}
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
+                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
+                    研究方法與專題 / <span className="text-[#1a1a2e] font-bold">前導課程 W0</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
+                    <button
+                        onClick={() => setShowLessonMap(!showLessonMap)}
+                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
+                    >
+                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                    </button>
+                </div>
+            </div>
+
+            {showLessonMap && (
+                <div className="mb-12">
+                    <LessonMap data={W0Data} />
+                </div>
+            )}
 
             {/* HEADER */}
             <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-wider">🕵️ W0 · 前導課程</div>

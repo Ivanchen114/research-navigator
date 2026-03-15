@@ -497,7 +497,7 @@ export const W13Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-4">
-                <div className="p-[14px_20px] bg-[#f0ede6] border-b border-[#dddbd5] text-[14px] font-bold text-[#1a1a2e]">✅ 今天結束，你應該有</div>
+                <div className="p-[14px_20px] bg-[#f0ede6] border-b border-[#dddbd5] text-[14px] font-bold text-[#1a1a2e]">✅ 本週結束，你應該要會</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 bg-[#dddbd5] gap-[1px]">
                     <div className="bg-white p-[14px_20px] flex items-start gap-2.5">
                         <CheckCircle2 size={16} className="text-[#2e7d5a] shrink-0 mt-0.5" />

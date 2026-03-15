@@ -53,6 +53,19 @@ export const W4Page = () => {
                     W3 的定案是入場券，W4 才是壓力測試。你的題目要在三十幾個同學面前站得住腳——過了，才算真正的定案。
                 </p>
 
+                {/* COURSE ARC */}
+                <div className="mb-10">
+                    <div className="text-[11px] font-mono text-[#8888aa] mb-4 uppercase tracking-wider">課程弧線 · 你在哪裡</div>
+                    <div className="arc-grid">
+                        {W4Data.courseArc.map((item, idx) => (
+                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
+                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
+                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {/* META STRIP */}
                 <div className="meta-strip">
                     {W4Data.metaCards.map((item, idx) => (
@@ -73,19 +86,6 @@ export const W4Page = () => {
                     >
                         📊 本週簡報 ↗
                     </a>
-                </div>
-
-                {/* COURSE ARC */}
-                <div className="mb-14">
-                    <div className="text-[11px] font-mono text-[#8888aa] mb-4 uppercase tracking-wider">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {W4Data.courseArc.map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                            </div>
-                        ))}
-                    </div>
                 </div>
             </header>
 
@@ -197,14 +197,55 @@ export const W4Page = () => {
                 <div className="line"></div>
                 <span className="mono">GALLERY WALK</span>
             </div>
-            <p className="section-desc">帶著你的 A4 海報（W3 定案題目），在教室內進行走讀健檢。每個人既是「報告者」也是「評論者」。</p>
+            <p className="section-desc">帶著你的 A4 海報（W3 定案題目），在教室內進行走讀健檢。每組4人輪流坐鎮報告，其他人順時針移動聆聽。</p>
 
+            {/* 前置作業：分配場次 */}
+            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-6">
+                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
+                    <Users2 size={15} className="text-[#1a1a2e]" />
+                    <span className="font-bold text-[13px] text-[#1a1a2e]">前置作業：分配場次</span>
+                    <span className="ml-auto font-mono text-[10px] text-[#8888aa]">00:15–00:18 · 3 分鐘</span>
+                </div>
+                <div className="p-5 space-y-4">
+                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed">
+                        Gallery Walk 開始前，每組 4 人先分配報告場次：
+                        <span className="font-bold text-[#1a1a2e]"> 誰是第 1 場、第 2 場、第 3 場、第 4 場的報告者。</span>
+                        每人只報告 1 次，但會聆聽 3 次。
+                    </p>
+                    <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden">
+                        <div className="grid grid-cols-3 bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
+                            <div className="px-4 py-2">場次</div>
+                            <div className="px-4 py-2 border-l border-white/10">第一組桌（誰坐鎮）</div>
+                            <div className="px-4 py-2 border-l border-white/10">B C D 去哪裡</div>
+                        </div>
+                        {[
+                            { round: '第 1 場', stay: 'A 坐鎮報告', move: 'B、C、D → 第二組聆聽' },
+                            { round: '第 2 場', stay: 'B 回來坐鎮', move: 'C、D → 第三組，A 也追過去' },
+                            { round: '第 3 場', stay: 'C 回來坐鎮', move: 'D → 第四組，A、B 也追過去' },
+                            { round: '第 4 場', stay: 'D 回來坐鎮', move: 'A、B、C → 繼續往下走' },
+                        ].map((row, i) => (
+                            <div key={i} className={`grid grid-cols-3 text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
+                                <div className="px-4 py-2.5 font-mono font-bold text-[#2d5be3]">{row.round}</div>
+                                <div className="px-4 py-2.5 border-l border-[#dddbd5] text-[#1a1a2e] font-bold">{row.stay}</div>
+                                <div className="px-4 py-2.5 border-l border-[#dddbd5] text-[#4a4a6a]">{row.move}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex flex-col gap-1.5 text-[12px] text-[#4a4a6a]">
+                        <p><span className="font-bold text-[#1a1a2e]">報告者：</span>輪到你的場次 → 回到自己的桌子坐鎮，向來訪的聆聽者報告（3 分鐘說明題目）</p>
+                        <p><span className="font-bold text-[#1a1a2e]">聆聽者：</span>認真聽，把建議直接寫在對方海報上 → 🔔 鈴聲響，繼續往下一組移動</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* 四場輪次卡片 */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 {W4Data.galleryWalkRounds.map(item => (
                     <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-xl p-5" key={item.n}>
-                        <div className="font-mono text-xl font-bold text-[#2d5be3] mb-1">{item.n}</div>
-                        <div className={`inline-block font-mono text-[9px] px-1.5 py-0.5 rounded mb-2 ${item.r === 'present' ? 'bg-[#fdecea] text-[#c0392b]' : 'bg-[#e8eeff] text-[#2d5be3]'}`}>
-                            {item.r === 'present' ? 'PRESENTING' : 'WALKING'}
+                        <div className="font-mono text-[11px] text-[#8888aa] mb-1">{item.time}</div>
+                        <div className="font-mono text-lg font-bold text-[#2d5be3] mb-1">{item.n}</div>
+                        <div className="inline-block font-mono text-[9px] px-1.5 py-0.5 rounded mb-2 bg-[#fdecea] text-[#c0392b]">
+                            {item.who}
                         </div>
                         <div className="text-[12px] text-[#4a4a6a] leading-relaxed">{item.d}</div>
                     </div>
@@ -212,7 +253,7 @@ export const W4Page = () => {
             </div>
 
             <div className="notice notice-accent mb-12">
-                🕙 <strong>計時提醒</strong>：每一輪報告時間為 6 分鐘，中間有 1 分鐘走位換位。請把握時間 Pitch！
+                🔔 <strong>計時提醒</strong>：每一場 5 分鐘，鈴聲響立刻移動。輪到你報告時回到自己的桌子坐鎮。
             </div>
 
             {/* STICKY NOTES RULES */}
@@ -399,9 +440,55 @@ export const W4Page = () => {
                 </div>
             </div>
 
-            <div className="p-4 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl flex items-center justify-between mb-16">
+            <div className="p-4 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl flex items-center justify-between mb-12">
                 <div className="text-[11px] font-mono text-[#8888aa] uppercase tracking-wider">APA Thesis Format</div>
                 <div className="text-sm font-bold text-[#1a1a2e]">作者（年份）。論文題目（碩士論文）。學校名稱。</div>
+            </div>
+
+            {/* AI GEMS */}
+            <div className="mb-16">
+                <div className="flex items-center gap-3 mb-4">
+                    <span className="section-label !mb-0">AI 教練</span>
+                    <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider">Gemini Gems · 對話式輔助工具</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a
+                        href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group p-5 border border-[#dddbd5] rounded-xl hover:border-[#2d5be3] hover:shadow-lg hover:shadow-[#2d5be3]/5 transition-all bg-white"
+                    >
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg bg-[#f0ede6] flex items-center justify-center text-xl shrink-0 group-hover:bg-[#2d5be3] transition-colors">
+                                🤖
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="font-bold text-[#1a1a2e] text-[13px] mb-0.5">研究動機教練</div>
+                                <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider mb-2">W1–W3 回顧整理</div>
+                                <div className="text-[12px] text-[#4a4a6a] leading-relaxed">從你的定案題目出發，幫你把三週的觀察與好奇心串連起來，整理成一段你說得出口的研究動機。</div>
+                                <div className="mt-3 text-[11px] font-mono font-bold text-[#2d5be3]">開啟 Gemini Gem ↗</div>
+                            </div>
+                        </div>
+                    </a>
+                    <a
+                        href="https://gemini.google.com/gem/1yF7FqRoQWUQGBtFLrGvbuul61OMGbgAv?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group p-5 border border-[#dddbd5] rounded-xl hover:border-[#2d5be3] hover:shadow-lg hover:shadow-[#2d5be3]/5 transition-all bg-white"
+                    >
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-lg bg-[#f0ede6] flex items-center justify-center text-xl shrink-0 group-hover:bg-[#2d5be3] transition-colors">
+                                💬
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="font-bold text-[#1a1a2e] text-[13px] mb-0.5">Q-Coach 問題意識教練</div>
+                                <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider mb-2">問題聚焦 × 題目優化</div>
+                                <div className="text-[12px] text-[#4a4a6a] leading-relaxed">幫助你從生活觀察中發展出具體可行的研究題目，透過對話式提問與檢核，引導聚焦問題意識、並優化研究方向。</div>
+                                <div className="mt-3 text-[11px] font-mono font-bold text-[#2d5be3]">開啟 Gemini Gem ↗</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
 
             {/* IN-CLASS TASKS */}

@@ -297,7 +297,7 @@ export const W10Page = () => {
                 </div>
 
                 <div className="w10-summary-box">
-                    <div className="w10-summary-hd">✅ 今天結束，你應該有</div>
+                    <div className="w10-summary-hd">✅ 本週結束，你應該要會</div>
                     <div className="w10-summary-grid">
                         <div className="w10-summary-item"><CheckCircle2 size={16} className="text-[#2e7d5a] mt-0.5 shrink-0" /> 倫理四問自查完成，教師蓋章通過</div>
                         <div className="w10-summary-item border-l border-[#dddbd5]"><CheckCircle2 size={16} className="text-[#2e7d5a] mt-0.5 shrink-0" /> 知情同意書最終版（AI 審查後修改）</div>

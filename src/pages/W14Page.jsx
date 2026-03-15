@@ -400,7 +400,7 @@ export const W14Page = () => {
             </div>
 
             <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-4">
-                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">✅ 今天結束，你應該有</div>
+                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">✅ 本週結束，你應該要會</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#dddbd5]">
                     {[
                         '學習單 Part 3 四層草稿全部填完',
