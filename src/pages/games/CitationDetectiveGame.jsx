@@ -2,16 +2,106 @@ import React, { useState, useEffect } from 'react';
 import { Search, CheckCircle2, XCircle, AlertTriangle, ArrowRight, ChevronRight, Bug, Award, RefreshCw } from 'lucide-react';
 
 const QUESTIONS_DATA = [
-    { id: 1, title: "基礎判斷", prompt: "睡眠不足會導致前額葉功能下降，影響學生專注力（陳醫師，2023）。", correctOX: "O", correctType: null, explanation: "引用格式正確，且有將資訊消化為自己的語句。", fixExample: "無須修正，這是一個標準的括號引用範例。", highlightHints: [] },
-    { id: 2, title: "比對原文", prompt: "原文：「睡眠不足會導致前額葉皮質功能下降，進而削弱學生的專注力與情緒控管能力。」（陳醫師，2023）\n\n學生寫：睡眠不夠會造成前額葉皮質運作降低，進而減弱同學的專心度和情緒管理。（陳醫師，2023）", correctOX: "X", correctType: "patchwriting", explanation: "這是「換字抄襲」。句型結構、邏輯順序與原文幾乎一模一樣，只是替換了同義詞。", fixExample: "修正版：陳醫師（2023）指出，睡眠不足不僅影響大腦前額葉功能，更會同時削弱學生的專注力與情緒調節能力。\n（建議：讀懂後蓋上書本，用自己的話重講一遍）", highlightHints: ["睡眠不夠會造成", "前額葉皮質運作降低", "減弱同學的專心度"] },
-    { id: 3, title: "孤兒引用 ⭐", prompt: "AI很好用。(Wang, 2023) 所以我們要多用。", correctOX: "X", correctType: "orphan", explanation: "這是「孤兒引用」。引號像孤兒一樣被丟在句中，沒有導讀（前情提要）也沒有解釋（這句話這明了什麼）。", fixExample: "修正版（三明治法）：\n近年來科技融入教學已成趨勢（上片麵包）。Wang (2023) 指出 AI 工具能顯著提升學習效率（肉片）。因此，教師應適度引導學生使用工具（下片麵包）。", highlightHints: ["(Wang, 2023)"] },
-    { id: 4, title: "常見疏漏", prompt: "研究顯示，適度飲用咖啡能提升大腦警覺性。", correctOX: "X", correctType: "missing_citation", explanation: "提到「研究顯示」卻沒有附上來源，讀者無法驗證是哪一份研究。", fixExample: "修正版：\n研究顯示，適度飲用咖啡能提升大腦警覺性（Lin, 2020）。\n或：Lin (2020) 的研究指出，適度飲用咖啡能提升大腦警覺性。", highlightHints: ["研究顯示"] },
-    { id: 5, title: "改寫練習", prompt: "原文：「研究顯示，適度飲用咖啡因能短暫提升大腦的警覺性。」（林教授，2020）\n\n學生寫：根據林教授（2020）的研究，青少年若飲用適量咖啡，可能在短時間內較為清醒。", correctOX: "O", correctType: null, explanation: "正確改寫。語意保留但句構已改變，且清楚標示來源。", fixExample: "表現很好！這就是用自己的話重述（Paraphrasing）。", highlightHints: [] },
-    { id: 6, title: "引用格式", prompt: "原文：「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」（Sirois, 2018）\n\n學生寫：根據Sirois（2018）的研究，拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。", correctOX: "X", correctType: "missing_quotes", explanation: "這是「直接引用但沒引號」。後半句完全照抄原文，必須加上引號，否則會被視為抄襲。", fixExample: "修正版1（加引號）：Sirois (2018) 強調：「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」\n修正版2（改寫）：Sirois (2018) 認為拖延症的主因其實是情緒調節失靈，而非時間管理不當。", highlightHints: ["拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗"] },
-    { id: 7, title: "孤兒引用 ⭐", prompt: "根據研究，手機使用會影響睡眠（Chen, 2023; Wang, 2022）。", correctOX: "X", correctType: "orphan", explanation: "典型的「孤兒引用」。括號內的文獻無法支撐這句話的具體內容（怎麼影響？正向還是負向？）。", fixExample: "修正版：\n多項研究證實，睡前使用手機的藍光會抑制褪黑激素分泌，導致入睡困難（Chen, 2023; Wang, 2022）。", highlightHints: ["根據研究，手機使用會影響睡眠"] },
-    { id: 8, title: "三明治法", prompt: "許多學生認為拖延只是時間管理問題。然而，Sirois (2018) 指出：「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」這提醒我們，制定讀書計畫時也要考慮情緒管理。", correctOX: "O", correctType: null, explanation: "完美的「三明治法」！\n上層麵包（背景）→ 肉片（引用文獻+引號）→ 下層麵包（個人觀點/總結）。", fixExample: "優秀的示範！引用文獻是為了支持你的觀點，而不是取代你的觀點。", highlightHints: [] },
-    { id: 9, title: "串燒引用 ⭐", prompt: "研究指出手機影響睡眠（A, 2020）。另一研究發現運動有益健康（B, 2021）。還有研究說壓力影響學習（C, 2022）。", correctOX: "X", correctType: "orphan", explanation: "這是「孤兒串燒」。只是把一堆文獻堆疊在一起，缺乏邏輯連結與作者的主張。", fixExample: "修正版：\n影響學生身心健康的因素眾多。A (2020) 與 C (2022) 分別指出手機成癮與學業壓力是主因，而 B (2021) 則建議透過規律運動來緩解上述問題。", highlightHints: ["研究指出", "另一研究發現", "還有研究說"] },
-    { id: 10, title: "綜合應用", prompt: "關於高中生睡眠問題，研究顯示睡眠不足會影響學業成績（陳醫師，2023）、情緒穩定（林教授，2022）以及人際關係（王研究，2021），顯示睡眠品質對青少年發展具有多面向影響。", correctOX: "O", correctType: null, explanation: "正確引用多篇文獻來支持一個綜合性的論點（Synthesis）。", fixExample: "這是進階技巧！將不同來源的資訊整合成一個完整的論述。", highlightHints: [] }
+    {
+        id: 1,
+        title: "基礎判斷",
+        prompt: "前提：以下句子視為學生整理文獻後的寫法，而非逐字照抄原文。\n\n睡眠不足會導致前額葉功能下降，影響學生專注力（陳醫師，2023）。",
+        correctOX: "O",
+        correctType: null,
+        explanation: "引用格式正確，且有將資訊整理成自己的敘述方式。這題的重點是：文獻有被納入句子中，而不是孤立地掛在後面。",
+        fixExample: "無須修正，這是一個標準的括號引用範例。",
+        highlightHints: []
+    },
+    {
+        id: 2,
+        title: "比對原文",
+        prompt: "原文：「睡眠不足會導致前額葉皮質功能下降，進而削弱學生的專注力與情緒控管能力。」（陳醫師，2023）\n\n學生寫：睡眠不夠會造成前額葉皮質運作降低，進而減弱同學的專心度和情緒管理。（陳醫師，2023）",
+        correctOX: "X",
+        correctType: "patchwriting",
+        explanation: "這是「換字抄襲」。句型結構、邏輯順序與原文幾乎一模一樣，只是替換了同義詞。",
+        fixExample: "修正版：陳醫師（2023）指出，睡眠不足不僅影響大腦前額葉功能，更會同時削弱學生的專注力與情緒調節能力。\n（建議：讀懂後蓋上書本，用自己的話重講一遍）",
+        highlightHints: ["睡眠不夠會造成", "前額葉皮質運作降低", "減弱同學的專心度"]
+    },
+    {
+        id: 3,
+        title: "孤兒引用 ⭐",
+        prompt: "AI很好用。(Wang, 2023) 所以我們要多用。",
+        correctOX: "X",
+        correctType: "orphan",
+        explanation: "這是「孤兒引用」。引文像孤兒一樣被丟在句中，沒有前面鋪陳，也沒有後面解釋這則文獻到底支持了什麼觀點。",
+        fixExample: "修正版（三明治法）：\n近年來科技融入教學已成趨勢（上片麵包）。Wang (2023) 指出 AI 工具能顯著提升學習效率（肉片）。因此，教師應適度引導學生使用工具（下片麵包）。",
+        highlightHints: ["(Wang, 2023)"]
+    },
+    {
+        id: 4,
+        title: "常見疏漏",
+        prompt: "研究顯示，適度飲用咖啡能提升大腦警覺性。",
+        correctOX: "X",
+        correctType: "missing_citation",
+        explanation: "提到「研究顯示」卻沒有附上來源，讀者無法驗證是哪一份研究。",
+        fixExample: "修正版：\n研究顯示，適度飲用咖啡能提升大腦警覺性（Lin, 2020）。\n或：Lin (2020) 的研究指出，適度飲用咖啡能提升大腦警覺性。",
+        highlightHints: ["研究顯示"]
+    },
+    {
+        id: 5,
+        title: "改寫練習",
+        prompt: "原文：「研究顯示，適度飲用咖啡因能短暫提升大腦的警覺性。」（林教授，2020）\n\n學生寫：根據林教授（2020）的研究，青少年若飲用適量咖啡，可能在短時間內較為清醒。",
+        correctOX: "O",
+        correctType: null,
+        explanation: "這是一個可接受的改寫。語意大致保留、句構也有改變，且清楚標示來源。不過若要更精確，『咖啡因』與『咖啡』並不完全等同，學術寫作中仍要注意概念精準度。",
+        fixExample: "表現很好！這就是用自己的話重述（Paraphrasing）。若想更精確，可把『咖啡』改回『含咖啡因飲品』或直接保留『咖啡因』。",
+        highlightHints: []
+    },
+    {
+        id: 6,
+        title: "引用格式",
+        prompt: "原文：「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」（Sirois, 2018）\n\n學生寫：根據Sirois（2018）的研究，拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。",
+        correctOX: "X",
+        correctType: "missing_quotes",
+        explanation: "這是「直接引用但沒引號」。後半句完全照抄原文，必須加上引號，否則會被視為抄襲。",
+        fixExample: "修正版1（加引號）：Sirois (2018) 強調：「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」\n修正版2（改寫）：Sirois (2018) 認為拖延症的主因其實是情緒調節失靈，而非時間管理不當。",
+        highlightHints: ["拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗"]
+    },
+    {
+        id: 7,
+        title: "孤兒引用 ⭐",
+        prompt: "根據研究，手機使用會影響睡眠（Chen, 2023; Wang, 2022）。",
+        correctOX: "X",
+        correctType: "orphan",
+        explanation: "這也是「孤兒引用」，但屬於進階型。它不是沒有文獻，而是文獻沒有被清楚整合進論點裡：『影響睡眠』太籠統，讀者不知道是如何影響、影響什麼面向。",
+        fixExample: "修正版：\n多項研究證實，睡前使用手機的藍光會抑制褪黑激素分泌，導致入睡困難（Chen, 2023; Wang, 2022）。",
+        highlightHints: ["根據研究，手機使用會影響睡眠"]
+    },
+    {
+        id: 8,
+        title: "三明治法",
+        prompt: "許多學生認為拖延只是時間管理問題。然而，Sirois (2018) 指出：「拖延症並非單純的時間管理失敗，而是一種情緒調節的失敗。」這提醒我們，制定讀書計畫時也要考慮情緒管理。",
+        correctOX: "O",
+        correctType: null,
+        explanation: "完美的「三明治法」！\n上層麵包（背景）→ 肉片（引用文獻+引號）→ 下層麵包（個人觀點/總結）。",
+        fixExample: "優秀的示範！引用文獻是為了支持你的觀點，而不是取代你的觀點。",
+        highlightHints: []
+    },
+    {
+        id: 9,
+        title: "串燒引用 ⭐",
+        prompt: "研究指出手機影響睡眠（A, 2020）。另一研究發現運動有益健康（B, 2021）。還有研究說壓力影響學習（C, 2022）。",
+        correctOX: "X",
+        correctType: "orphan",
+        explanation: "這是「孤兒串燒」。只是把一堆文獻堆疊在一起，缺乏邏輯連結與作者的主張。",
+        fixExample: "修正版：\n影響學生身心健康的因素眾多。A (2020) 與 C (2022) 分別指出手機成癮與學業壓力是主因，而 B (2021) 則建議透過規律運動來緩解上述問題。",
+        highlightHints: ["研究指出", "另一研究發現", "還有研究說"]
+    },
+    {
+        id: 10,
+        title: "綜合應用",
+        prompt: "前提：以下句子視為學生整合多篇文獻後的寫法。\n\n多篇研究指出，睡眠不足與高中生的學業表現、情緒穩定及人際互動皆有關聯（陳醫師，2023；林教授，2022；王研究，2021），顯示睡眠品質可能對青少年發展具有多面向影響。",
+        correctOX: "O",
+        correctType: null,
+        explanation: "這是正確的綜合引用（Synthesis）。作者不是把文獻一條條排開，而是把多個來源整合成一個較高層次的論點。",
+        fixExample: "這是進階技巧！將不同來源的資訊整合成一個完整論述，而不是單純堆疊引用。",
+        highlightHints: []
+    }
 ];
 
 const ERROR_TYPES = [
@@ -19,7 +109,6 @@ const ERROR_TYPES = [
     { id: 'patchwriting', label: '換字抄襲（句構幾乎不變）' },
     { id: 'missing_citation', label: '忘記標註來源' },
     { id: 'missing_quotes', label: '直接引用但沒引號' },
-    { id: 'uncertain', label: '不確定 / 其他' }
 ];
 
 const REVIEW_TIPS = {
@@ -92,7 +181,7 @@ export const CitationDetectiveGame = () => {
         }
     }, []);
 
-    const MAX_SCORE = 16;
+    const MAX_SCORE = QUESTIONS_DATA.reduce((sum, q) => sum + (q.correctOX === 'X' ? 2 : 1), 0);
 
     const initQuestions = () => {
         let q = [...QUESTIONS_DATA];
@@ -419,18 +508,56 @@ export const CitationDetectiveGame = () => {
                         <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-300 to-amber-600 tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">
                             {score} <span className="text-4xl text-slate-600/80 font-medium tracking-normal">/ {MAX_SCORE}</span>
                         </div>
-                        <h2 className={`text-2xl md:text-3xl font-black px-8 py-3 rounded-sm ${titleColor} ${titleBg} border shadow-inner mb-6 drop-shadow-[0_0_10px_currentColor] tracking-widest`}>
+                        <h2 className={`text-2xl md:text-3xl font-black px-8 py-3 rounded-sm ${titleColor} ${titleBg} border shadow-inner mb-2 drop-shadow-[0_0_10px_currentColor] tracking-widest`}>
                             {level}
                         </h2>
-                        <p className="text-xs text-slate-300 font-bold uppercase tracking-[0.2em] bg-slate-900/80 py-2.5 px-6 rounded-sm border border-white/10 inline-flex items-center gap-2  shadow-inner group-hover:border-amber-500/30 transition-colors">
-                            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_5px_rgba(244,63,94,0.8)]"></span>
-                            請截圖此頁面作為紀錄
-                        </p>
                     </div>
 
+                    {/* 任務完成回報 */}
+                    <div className="bg-slate-900/60 p-6 rounded-sm border border-cyan-500/30 shadow-inner text-left mb-4 relative z-10 overflow-hidden">
+                        <div className="absolute top-0 right-0 opacity-[0.04] text-7xl -mt-2 -mr-2 text-cyan-400 pointer-events-none">📸</div>
+                        <h3 className="font-black text-cyan-400 flex items-center gap-2 mb-4 border-b border-slate-700/50 pb-3 text-lg drop-shadow-[0_0_5px_currentColor] relative z-10">
+                            📸 任務完成回報
+                        </h3>
+                        <div className="space-y-3 text-sm text-slate-300 relative z-10">
+                            <p className="leading-relaxed">
+                                請截圖本次「獵狐結案報告」，上傳至 Google Classroom。<br />
+                                經指揮官驗證後，可依本次稱號獲得任務加分。
+                            </p>
+                            <div className="bg-slate-950/60 p-4 rounded-sm border border-slate-700/50">
+                                <p className="font-bold text-slate-400 mb-2 text-xs uppercase tracking-widest">加分標準：</p>
+                                <ul className="space-y-1.5">
+                                    <li className="flex items-center gap-2"><span className="text-emerald-400 font-bold">🔍 鑑識探員</span><span className="text-slate-500">：+1 分</span></li>
+                                    <li className="flex items-center gap-2"><span className="text-cyan-400 font-bold">⭐ 資深探長</span><span className="text-slate-500">：+2 分</span></li>
+                                    <li className="flex items-center gap-2"><span className="text-amber-400 font-bold">👑 福爾摩斯</span><span className="text-slate-500">：+3 分</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 指揮官提醒 */}
+                    <div className="bg-slate-900/70 p-6 rounded-sm border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 shadow-inner text-left mb-4 relative z-10 overflow-hidden">
+                        <div className="absolute top-0 right-0 opacity-[0.03] text-8xl -mt-4 -mr-4 text-rose-400 pointer-events-none">⚠️</div>
+                        <h3 className="font-black text-rose-400 flex items-center gap-2 mb-4 border-b border-slate-700/50 pb-3 text-lg drop-shadow-[0_0_5px_currentColor] relative z-10">
+                            ⚠️ 指揮官提醒
+                        </h3>
+                        <div className="space-y-3 text-sm text-slate-300 leading-relaxed relative z-10">
+                            <p>
+                                本系統提供的是「<span className="text-rose-400 font-bold">文獻引用的初步鑑識訓練</span>」，幫助你快速辨識常見的格式錯誤、孤兒引用與換字抄襲。
+                            </p>
+                            <p>
+                                但真實的學術寫作比本次任務更複雜：一段文字是否妥當，不只看格式是否正確，還要看你是否真正理解文獻、是否合理整合證據，以及是否清楚表達自己的觀點。
+                            </p>
+                            <p className="text-rose-200/90 font-bold mt-2 pt-2 border-t border-rose-900/50">
+                                所以，遊戲破關不代表文獻使用已經完全合格；真正的寫作，仍要回到你的論點、證據與學術誠信來判斷。
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* 指揮官行動建議 */}
                     <div className="bg-slate-900/60 p-6 rounded-sm border-l-[6px] border-l-amber-500 border-t border-r border-b border-white/5 shadow-inner text-left mb-10 relative z-10 ">
                         <h3 className="font-black text-amber-400 flex items-center gap-2 mb-4 border-b border-slate-700/50 pb-3 text-lg drop-shadow-[0_0_5px_currentColor]">
-                            <AlertTriangle size={22} className="text-amber-500" /> 局長給你的精進建議
+                            <AlertTriangle size={22} className="text-amber-500" /> 🧭 指揮官行動建議
                         </h3>
                         <p className="text-slate-200 font-medium leading-relaxed text-lg">{getWeakestPoint()}</p>
                     </div>
@@ -438,7 +565,7 @@ export const CitationDetectiveGame = () => {
                     <div className="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
                         <button
                             onClick={() => setGameState('intro')}
-                            className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-base transition-all border border-slate-600 hover:border-amber-500/50 inline-flex items-center justify-center gap-2"
+                            className="group bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-3 px-8 rounded-sm text-base transition-all border border-slate-600 hover:border-amber-500/50 inline-flex items-center justify-center gap-2"
                         >
                             <RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-500" /> 重新接受特訓
                         </button>
