@@ -116,6 +116,18 @@ export const W1Page = () => {
                 ))}
             </div>
 
+            {/* 本週簡報 */}
+            <div className="flex justify-end mb-8 -mt-2">
+                <a
+                    href="https://www.canva.com/design/DAG_UaPfL_A/ngSypCYmBU9L2xoOrtM2ew/watch?utm_content=DAG_UaPfL_A&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h308172ce6f"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                >
+                    📊 本週簡報 ↗
+                </a>
+            </div>
+
             {/* PART 1: 學什麼 (CONCEPT) */}
             <section>
                 <div className="section-head">

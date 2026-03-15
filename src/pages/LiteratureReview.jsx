@@ -131,6 +131,18 @@ export const LiteratureReview = () => {
                 ))}
             </div>
 
+            {/* 本週簡報 */}
+            <div className="flex justify-end mb-8 -mt-2">
+                <a
+                    href="https://www.canva.com/design/DAG_f14IjbY/iWLvMNbCMHHOFZqmWO9E7g/view?utm_content=DAG_f14IjbY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h877ac8ce3a"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                >
+                    📊 本週簡報 ↗
+                </a>
+            </div>
+
             {/* ═══ 學什麼 ═══ */}
             <section className="space-y-10">
                 <div className="w5-section-head">

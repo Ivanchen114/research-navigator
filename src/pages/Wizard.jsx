@@ -91,6 +91,18 @@ export const Wizard = () => {
                 ))}
             </div>
 
+            {/* 本週簡報 */}
+            <div className="flex justify-end mb-8 -mt-2">
+                <a
+                    href="https://www.canva.com/design/DAHBD3GXOss/Jk1LDcgqNxhfnOwGSZfRZw/view?utm_content=DAHBD3GXOss&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha0e9516172"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                >
+                    📊 本週簡報 ↗
+                </a>
+            </div>
+
             {/* PHASE 0: OBSTACLE EXPERIENCE */}
             <div className="w3-section-head"><h2>碰壁體驗</h2><div className="line"></div><div className="mono">PHASE 0</div></div>
             <p className="w3-section-desc">在進入診斷之前，我們先透過兩組情境感受一下：為什麼有些題目看起來沒問題，實作起來卻會處處碰壁？</p>
