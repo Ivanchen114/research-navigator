@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://research-navigator.vercel.app/sitemap.xml
+Sitemap: https://research-navigator-nu.vercel.app/sitemap.xml

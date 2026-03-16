@@ -403,7 +403,7 @@ export const Home = () => {
         <div className="hero-inner">
           <div className="hero-left">
             <div className="hero-kicker">SSSH &nbsp;·&nbsp; 研究方法與專題 &nbsp;·&nbsp; 高一必修</div>
-            <h1>從發現問題<br />到解讀結論，<br /><span className="hl">AI 陪你做研究</span></h1>
+            <h1>松山高中<br /><span className="hl">研究方法與專題</span><br />AI 陪你做研究</h1>
             <p className="hero-sub">這不是幫你寫作業的工具，而是你的研究教練。透過人機協作，把複雜的研究方法變得像通關遊戲一樣有跡可循。</p>
           </div>
           <div className="hero-stats">
