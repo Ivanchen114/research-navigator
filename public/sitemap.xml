@@ -1,45 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- 首頁 -->
   <url>
     <loc>https://research-navigator-nu.vercel.app/</loc>
     <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <url>
-    <loc>https://research-navigator-nu.vercel.app/w0</loc>
-    <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://research-navigator-nu.vercel.app/w1</loc>
-    <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://research-navigator-nu.vercel.app/w2</loc>
-    <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://research-navigator-nu.vercel.app/w3</loc>
-    <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://research-navigator-nu.vercel.app/w4</loc>
-    <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://research-navigator-nu.vercel.app/games</loc>
-    <lastmod>2026-03-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+
+  <!-- 課程週次 W0–W16 -->
+  <url><loc>https://research-navigator-nu.vercel.app/w0</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w1</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w2</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w3</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w4</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w5</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w6</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w7</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/tool-design</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w9</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w10</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w11</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w12</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w13</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w14</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w15</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/w16</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- 互動工具 -->
+  <url><loc>https://research-navigator-nu.vercel.app/games</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/game/question-er</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/game/citation-detective</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/game/data-detective</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/game/chart-matcher</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/game/rx-inspector</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/game/tool-quiz</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/analysis</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://research-navigator-nu.vercel.app/chart-selection</loc><lastmod>2026-03-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
 </urlset>
