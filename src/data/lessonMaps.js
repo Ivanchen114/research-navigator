@@ -601,90 +601,100 @@ export const W2Data = {
 
 export const W4Data = {
     id: "W4",
-    title: "題目博覽會與資料搜集入門",
+    title: "題目博覽會與研究動機定案",
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
-        { label: '第一節', value: '海報 Pitch + 同儕互審健檢' },
-        { label: '第二節', value: '題目定案 + 關鍵文獻搜尋' },
-        { label: '課後產出', value: '最終題目 + 第一篇 APA 文獻' },
-        { label: '帶去 W5', value: '關鍵文獻內容 + 偵探心態' }
+        { label: '第一節', value: '研究動機整理 + 海報製作' },
+        { label: '第二節', value: 'Gallery Walk + 題目最終定案' },
+        { label: '課後產出', value: 'W4 最終定案題目 + 研究動機' },
+        { label: '帶去 W5', value: '定案題目與研究動機' }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
         ...item,
-        past: idx < 1, // W1-W2 (idx 0), W3-W4 is idx 1
+        past: idx < 1,
         now: idx === 1
     })),
     coreConcepts: [
         {
             prefix: "①",
-            title: "先人後 AI",
-            subtitle: "你的頭腦先行，AI 只是幫手",
-            desc: "自主構思海報，再用 AI 優化文案",
+            title: "研究動機",
+            subtitle: "說得出來才算真的懂",
+            desc: "把三週的好奇心整理成一段說得出口的話",
             colorConfig: "r"
         },
         {
             prefix: "②",
+            title: "先人後 AI",
+            subtitle: "自己先寫，再讓 AI 審核",
+            desc: "動機整理與標題優化的核心原則",
+            colorConfig: "g"
+        },
+        {
+            prefix: "③",
             title: "同儕驗證",
             subtitle: "Gallery Walk 走讀驗收",
             desc: "透過報告與聆聽確認題目可行性",
-            colorConfig: "g"
+            colorConfig: "c"
         }
     ],
-    posterElements: [
-        { n: '①', l: '吸引人的標題', d: '大字，讓人一眼停下來的那種' },
-        { n: '②', l: '正式研究題目', d: '比標題小一點，W3 的定案版本' },
-        { n: '③', l: '研究對象 Who', d: '具體的人或群體' },
-        { n: '④', l: '研究方法 How', d: '問卷 / 訪談 / 實驗 / 觀察 / 文獻' },
-        { n: '⑤', l: '預期發現', d: '2–3 點大膽猜測，讓人有話聊', h: true }
-    ],
-    examplePoster: {
-        title: "為什麼你的大腦停不下來？",
-        formalTitle: "高中生睡前手機使用時數與課堂專注度之相關性探討",
-        expectations: [
-            { title: "推測一", desc: "睡前使用手機超過 1 小時的同學，其大腦灰質活動可能持續處於興奮狀態，導致隔天專注度明顯下降。" },
-            { title: "推測二", desc: "參與社群媒體互動（如 IG/TikTok）的視覺與心理刺激，可能比單純觀看影片更容易延後褪黑激素的分泌。" }
-        ],
-        image: "/images/user_research_poster.png",
-        analysisNote: "核心對比：手寫海報偏向白話且具備視覺亮點，右方文字則是 W3 定案後的專業轉換，兩者相輔相成。"
-    },
     galleryWalkRounds: [
-        { n: '第 1 場', time: '00:18–00:23', who: 'A 坐鎮', d: 'A 回到自己的桌子報告，B、C、D 順時針移到下一組聆聽', r: 'present' },
-        { n: '第 2 場', time: '00:23–00:28', who: 'B 坐鎮', d: 'B 回來坐鎮報告，C、D 繼續移，A 也追過去', r: 'present' },
-        { n: '第 3 場', time: '00:28–00:33', who: 'C 坐鎮', d: 'C 回來坐鎮報告，D 繼續移，A、B 也追過去', r: 'present' },
-        { n: '第 4 場', time: '00:33–00:38', who: 'D 坐鎮', d: 'D 回來坐鎮報告，A、B、C 繼續往下走', r: 'present' }
+        { n: '第 1 場', time: '00:03–00:08', who: 'A 坐鎮', d: 'A 回到自己的桌子報告，B、C、D 順時針移到下一組聆聽', r: 'present' },
+        { n: '第 2 場', time: '00:08–00:13', who: 'B 坐鎮', d: 'B 回來坐鎮報告，C、D 繼續移，A 也追過去', r: 'present' },
+        { n: '第 3 場', time: '00:13–00:18', who: 'C 坐鎮', d: 'C 回來坐鎮報告，D 繼續移，A、B 也追過去', r: 'present' },
+        { n: '第 4 場', time: '00:18–00:23', who: 'D 坐鎮', d: 'D 回來坐鎮報告，A、B、C 繼續往下走', r: 'present' }
     ],
     commentRules: [
-        { type: 'positive', label: '粉紅色：我認可的地方', desc: '覺得標題下得很好、預期發現很驚艷、或是題目本身非常有社會意義。' },
-        { type: 'suggestion', label: '黃色：具體建議 / 點子', desc: '「我覺得你可以去查某篇文獻」、「這個對象可能太難找」、「標題建議改為...」。' },
-        { type: 'question', label: 'question', label: '藍色：我想問的問題', desc: '「你為什麼會想做這個？」、「你的專注度要怎麼測量？」、「樣本人數夠多嗎？」。' }
-    ],
-    methodSelection: [
-        { i: '📋', n: '問卷研究', e: 'SURVEY' },
-        { i: '🎤', n: '訪談研究', e: 'INTERVIEW' },
-        { i: '🧪', n: '實驗研究', e: 'EXPERIMENT' },
-        { i: '👀', n: '觀察研究', e: 'OBSERVATION' },
-        { i: '📚', n: '文獻分析', e: 'LITERATURE' }
+        { type: 'positive', label: '粉紅色：我認可的地方', desc: '動機有畫面、標題吸引人、題目本身有社會意義——說具體是哪裡打動你。' },
+        { type: 'suggestion', label: '黃色：具體建議 / 點子', desc: '「研究對象可以縮小」、「動機這句話可以再補一個畫面」、「標題建議改為...」。' },
+        { type: 'question', label: '藍色：我想問的問題', desc: '「你為什麼會想做這個？」、「你的專注度要怎麼測量？」——讓報告者感受到哪裡還說不清楚。' }
     ],
     tasks: [
-        { badge: 'TASK 1', title: '製作手寫海報 (20 MINS)', steps: ['抄下 W3 定案題目', '寫標題草稿 + 預期發現', '用 AI 優化文案', '在 A4 紙上手寫海報'], note: '💡 標題是給同學看的，題目是給評審看的。' },
-        { badge: 'TASK 2', title: 'Gallery Walk 順轉走讀 (30 MINS)', steps: ['海報貼桌上，四人一組（ABCD 座位）', '每場 5 分鐘，聽鈴聲移動位置', '給予至少 3 個具體建議（✅ 好的回饋）'] },
-        { badge: 'TASK 3', title: '文獻檢索與最終定案 (30 MINS)', steps: ['整理便利貼，做決策分析', '寫下 W4 最終定案題目', '到 Scholar 或華藝找一篇論文摘要'], note: '🏆 今天結束你手上有三個成果：W4 最終定案題目 + 論文摘要筆記 + 第一份 APA。', noteColor: 'success' }
+        {
+            badge: 'PART 0',
+            title: '研究動機整理（先人後 AI）',
+            steps: [
+                'Step 0：翻出 W3 定案題目，自己回答三個問題（限時 3 分鐘，不准開 AI）',
+                'Step 1：根據三個問題，用白話文寫出研究動機 3–5 句（限時 5 分鐘，不准開 AI）',
+                'Step 2：打開「研究動機教練」，把定案題目和白話版動機一起貼給它，收到回饋後自己決定要不要修改',
+                '確認：把定案版動機填進靶心框，唸給旁邊同學聽，30 秒內能理解就完成'
+            ],
+            note: '⚠️ 順序不能顛倒：先自己寫，再開 AI。'
+        },
+        {
+            badge: 'PART 1',
+            title: '海報製作（先人後 AI）',
+            steps: [
+                'Step 0：自己先想一個口語標題（3 分鐘，不用完美）',
+                'Step 2：把標題草稿和正式題目貼給 AI 優化，選一個版本或自己改',
+                'Step 3：在 A4 紙上手寫四格海報（標題 / 副標 / 研究動機 / 製作人）'
+            ],
+            note: '💡 研究動機那格：把靶心框裡的定案版本直接抄過去。'
+        },
+        {
+            badge: 'PART 2',
+            title: '題目最終定案',
+            steps: [
+                '看海報上同學給的建議，決定要不要採納',
+                '在學習單 Part 2 填入 W4 最終題目與研究動機',
+                '舉手確認：「我的題目和研究動機都定案了」'
+            ],
+            note: '🏆 從 W1 到 W4，你完成了問題形成的完整旅程。這個題目和動機是真正屬於你的。',
+            noteColor: 'success'
+        }
     ],
     homework: {
-        deadline: '今晚 11 點',
+        deadline: '下次上課前',
         items: [
-            { p: '📷 照片', n: '海報拍照（便利貼貼在上面一起拍）' },
-            { p: '文字 1', n: '你的 W4 最終定案題目' },
-            { p: '文字 2', n: '你接受了哪一條同學建議、改了什麼' },
-            { p: '文字 3', n: '今天找到的那篇論文書目（試寫 APA）' }
+            { p: '學習單', n: 'W4 學習單（Part 0–Part Z 全部完成）上傳 Google Classroom' },
+            { p: '定案確認', n: 'W4 最終研究題目與研究動機（已填入 Part 2 定案框）' }
         ],
-        footer: 'Google Classroom 繳交照片＋三行文字'
+        footer: '學習單在 Google Classroom 下載'
     },
     periods: [
         {
             badge: "第一節",
-            title: "Gallery Walk 個人題目博覽會",
+            title: "研究動機整理與海報製作",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -693,119 +703,225 @@ export const W4Data = {
                     timeEnd: "0:05",
                     duration: "5 min",
                     colorClass: "c3",
-                    icon: "🎪",
-                    title: "一、 暖身與博覽會說明",
-                    desc: "說明三項目的：驗證題目、學習別人、為組隊做準備。",
-                    tags: ["開場引導", "目標說明"]
+                    icon: "🔁",
+                    title: "一、 回扣與定位",
+                    desc: "回顧 W3 定案題目，引導學生感受「說不出動機」的問題。",
+                    tags: ["回扣", "問題意識"]
                 },
                 {
                     timeStart: "0:05",
-                    timeEnd: "0:15",
-                    duration: "10 min",
+                    timeEnd: "0:35",
+                    duration: "30 min",
+                    colorClass: "c1",
+                    icon: "💡",
+                    title: "二、 Part 0：研究動機整理",
+                    desc: "三步走：自己回答三問題（3 min）→ 自己寫白話版（5 min）→ 研究動機教練審核（14 min）→ 確認定案（5 min）",
+                    tags: ["先人後 AI", "動機整理", "Gemini Gem"],
+                    keyPoint: "⚠️ 先自己寫，再開 AI。順序不能顛倒。"
+                },
+                {
+                    timeStart: "0:35",
+                    timeEnd: "0:50",
+                    duration: "15 min",
                     colorClass: "c2",
                     icon: "🎨",
-                    title: "二、 AI 協作：海報快速製作",
-                    desc: "先自主構思預期發現，再用 AI 優化文案。最終在 A4 紙上手寫海報。",
-                    tags: ["AI 實作", "手繪海報", "先人後 AI"],
-                    keyPoint: "⚠️ 原則：AI 給文案建議，你決定要不要用。"
-                },
-                {
-                    timeStart: "0:15",
-                    timeEnd: "0:40",
-                    duration: "25 min",
-                    colorClass: "c1",
-                    icon: "🗣️",
-                    title: "三、 四輪 Gallery Walk",
-                    desc: "順轉模式：1 報告 + 3 聆聽，每場 5 分鐘。聽眾在海報上給予具體建議。",
-                    tags: ["同儕互評", "發表練習"]
-                },
-                {
-                    timeStart: "0:40",
-                    timeEnd: "0:50",
-                    duration: "10 min",
-                    colorClass: "c5",
-                    icon: "💬",
-                    title: "四、 教師點評與快速分享",
-                    desc: "老師挑選 2-3 個題目進行點評，學生回座位閱讀建議並評估是否採納。",
-                    tags: ["老師回饋", "反思收斂"]
+                    title: "三、 Part 1：海報製作",
+                    desc: "草稿標題（3 min）→ AI 優化標題（5 min）→ 手寫 A4 海報四格（5 min）",
+                    tags: ["海報製作", "先人後 AI"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "題目定案與資料搜集入門",
+            title: "Gallery Walk 與題目最終定案",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:15",
-                    duration: "15 min",
-                    colorClass: "c4",
-                    icon: "🎯",
-                    title: "五、 題目最終定案",
-                    desc: "根據同學建議修改，並寫下 W4 最終定案題目，宣告「問題形成階段」結束。",
-                    tags: ["問題定案", "階段總結"]
-                },
-                {
-                    timeStart: "0:15",
-                    timeEnd: "0:32",
-                    duration: "17 min",
-                    colorClass: "c2",
-                    icon: "📚",
-                    title: "六、 華藝資料庫查找實作",
-                    desc: "介紹進階搜尋與限制條件（台灣/近五年/碩博士論文），學生實作找回 1 篇研究。",
-                    tags: ["資料搜尋", "工具實作"]
-                },
-                {
-                    timeStart: "0:32",
-                    timeEnd: "0:42",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "🤖",
-                    title: "七、 AI 智慧資料搜集助手",
-                    desc: "用 AI 生成更多中/英文關鍵字，評估 AI 的建議，並用新關鍵字再搜一次資料庫。",
-                    tags: ["AI 實作", "策略優化"],
-                    keyPoint: "🎯 AI 給建議，你要判斷適不適合你的題目！"
-                },
-                {
-                    timeStart: "0:42",
-                    timeEnd: "0:50",
-                    duration: "8 min",
+                    timeEnd: "0:03",
+                    duration: "3 min",
                     colorClass: "c3",
-                    icon: "📝",
-                    title: "八、 APA 格式與下週預告",
-                    desc: "學習碩士論文與期刊的 APA 基本格式，將找到的研究寫成格式。預告 W5 與 W7 分組。",
-                    tags: ["學術格式", "課程預告"]
+                    icon: "📋",
+                    title: "一、 Gallery Walk 規則說明",
+                    desc: "說明四輪走讀規則（ABCD 輪流坐鎮、順時針移動），分配場次。",
+                    tags: ["同儕互評", "規則說明"]
+                },
+                {
+                    timeStart: "0:03",
+                    timeEnd: "0:23",
+                    duration: "20 min",
+                    colorClass: "c1",
+                    icon: "🗣️",
+                    title: "二、 四輪走讀",
+                    desc: "每場 5 分鐘，報告者說研究動機與題目，聆聽者在海報上留下建議。",
+                    tags: ["走讀", "發表練習"],
+                    keyPoint: "⚠️ 重點：說出「你為什麼要研究這個」。"
+                },
+                {
+                    timeStart: "0:23",
+                    timeEnd: "0:33",
+                    duration: "10 min",
+                    colorClass: "c4",
+                    icon: "💬",
+                    title: "三、 回座位 + 教師點評",
+                    desc: "挑 2–3 個海報點評研究動機品質，示範「有畫面的動機」vs「只說結論的動機」。",
+                    tags: ["教師示範", "動機品質"]
+                },
+                {
+                    timeStart: "0:33",
+                    timeEnd: "0:48",
+                    duration: "15 min",
+                    colorClass: "c2",
+                    icon: "🎯",
+                    title: "四、 Part 2：題目最終定案",
+                    desc: "根據同學建議，決定修改或保留，填入 W4 最終定案框。",
+                    tags: ["最終定案", "批判思考"]
+                },
+                {
+                    timeStart: "0:48",
+                    timeEnd: "0:50",
+                    duration: "2 min",
+                    colorClass: "c5",
+                    icon: "📢",
+                    title: "五、 總結與預告",
+                    desc: "W1→W4 旅程總結，預告 W5 文獻搜尋入門。",
+                    tags: ["總結", "預告"]
                 }
             ]
         }
     ],
-    summaries: [
-        {
-            icon: "🎨",
-            label: "課堂產出",
-            text: "研究海報<br><small style=\"font-size:11px;color:#888;\">含預期發現</small>"
-        },
-        {
-            icon: "🎯",
-            label: "階段里程碑",
-            text: "W4 最終定案題目<br><small style=\"font-size:11px;color:#888;\">通過同儕驗證</small>"
-        },
-        {
-            icon: "📚",
-            label: "工具練習",
-            text: "資料庫搜尋與 APA<br><small style=\"font-size:11px;color:#ccc;\">帶入後續研究中使用</small>"
-        }
-    ],
-    legends: [
-        { colorClass: "lm-c1", label: "互動 / 發表" },
-        { colorClass: "lm-c2", label: "AI 實作 / 工具" },
-        { colorClass: "lm-c4", label: "定案 / 收斂" },
-        { colorClass: "lm-c3", label: "說明 / 規範" },
-        { colorClass: "lm-c5", label: "點評 / 回饋" }
+    legendColors: [
+        { colorClass: "lm-c1", label: "主要活動" },
+        { colorClass: "lm-c2", label: "AI 輔助實作" },
+        { colorClass: "lm-c3", label: "開場 / 說明" },
+        { colorClass: "lm-c4", label: "評量 / 點評" },
+        { colorClass: "lm-c5", label: "總結 / 預告" }
     ]
 };
+
+
+export const W50Data = {
+    id: "W50",
+    title: "文獻搜尋入門",
+    duration: 100,
+    durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '為什麼要找文獻 + 華藝實作' },
+        { label: '第二節', value: 'AI關鍵字協作 + APA格式' },
+        { label: '課後產出', value: '3篇已查證文獻 + APA清單' },
+        { label: '帶去 W5', value: '3篇文獻（準備接受同學查核）' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 2,
+        now: idx === 2
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "找對地方",
+            subtitle: "華藝資料庫 vs. Google",
+            desc: "學術資料庫找 A/B 級文獻，AI 只能幫你生成關鍵字",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "人的判斷",
+            subtitle: "AI 給選項，你來篩選",
+            desc: "AI 關鍵字是工具，相關性由你決定",
+            colorConfig: "g"
+        },
+        {
+            prefix: "③",
+            title: "APA格式",
+            subtitle: "讓別人找得到你的來源",
+            desc: "正確記錄文獻，整學期都會用到",
+            colorConfig: "c"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "為什麼要找文獻 + 華藝資料庫實作",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00", timeEnd: "0:05", duration: "5 min",
+                    colorClass: "c3", icon: "🔗",
+                    title: "回扣與定位",
+                    desc: "回顧 W4 定案的題目與研究動機，說明 W5.0 的任務：找到 3 篇真實可信的相關研究。",
+                    tags: ["回扣 W4", "課程定位"]
+                },
+                {
+                    timeStart: "0:05", timeEnd: "0:12", duration: "7 min",
+                    colorClass: "c1", icon: "📚",
+                    title: "為什麼要找文獻",
+                    desc: "三個理由：避免重複、學方法、支持論點。文獻等級快速說明（A–D），今天目標 A/B 級。",
+                    tags: ["概念講解", "等級說明"]
+                },
+                {
+                    timeStart: "0:12", timeEnd: "0:25", duration: "13 min",
+                    colorClass: "c1", icon: "🖥️",
+                    title: "華藝資料庫操作示範",
+                    desc: "登入 → 列關鍵字 → 搜尋 → 加限制條件（台灣/近5年/碩博士論文）→ 看標題和摘要。提醒 AI 幻覺陷阱。",
+                    tags: ["教師示範", "操作演練", "🚫 AI假文獻警告"]
+                },
+                {
+                    timeStart: "0:25", timeEnd: "0:50", duration: "25 min",
+                    colorClass: "c4", icon: "🔍",
+                    title: "Part 1 學生實作：華藝找文獻",
+                    desc: "帶著 W4 定案題目，在華藝自行搜尋並找到至少 1 篇相關研究。教師巡視並提示關鍵字策略。",
+                    tags: ["獨立實作", "學生操作"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "AI關鍵字協作 + APA格式教學",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00", timeEnd: "0:20", duration: "20 min",
+                    colorClass: "c2", icon: "🤖",
+                    title: "Part 2 AI關鍵字協作",
+                    desc: "用 AI 生成關鍵字表格，回到華藝再搜一次，比較差異，補充文獻清單到 3 篇。",
+                    tags: ["AI協作", "人來判斷"]
+                },
+                {
+                    timeStart: "0:20", timeEnd: "0:35", duration: "15 min",
+                    colorClass: "c3", icon: "📝",
+                    title: "Part 3 APA格式教學與實作",
+                    desc: "說明 APA 格式的目的，介紹碩博士論文與期刊論文兩種模板，學生實作 3 篇文獻格式。",
+                    tags: ["格式教學", "實作練習"]
+                },
+                {
+                    timeStart: "0:35", timeEnd: "0:50", duration: "15 min",
+                    colorClass: "c2", icon: "✅",
+                    title: "整理確認與總結",
+                    desc: "確認每人有 3 篇 A/B 級文獻並已查證。2–3 位學生分享，教師點評關聯性。預告 W5 文獻偵探社。",
+                    tags: ["確認產出", "預告下週"]
+                }
+            ]
+        }
+    ],
+    tasks: [
+        { id: 1, title: "PART 1 華藝文獻搜尋", desc: "帶著題目關鍵字，在華藝資料庫找到至少 1 篇相關研究" },
+        { id: 2, title: "PART 2 AI 關鍵字協作", desc: "問 AI 生成關鍵字，篩選後回到資料庫補充文獻到 3 篇" },
+        { id: 3, title: "PART 3 APA 格式清單", desc: "3 篇文獻都完成 APA 格式，並親自查證作者和摘要存在" }
+    ],
+    homework: {
+        deadline: '下次上課前',
+        items: [
+            { p: '學習單', n: '完成 Part 1–4，上傳至 Google Classroom' },
+            { p: '查證確認', n: '3 篇文獻都在華藝或 Google Scholar 親自看過摘要' }
+        ],
+        footer: '學習單在 Google Classroom 下載'
+    }
+};
+
 
 export const W5Data = {
     id: "W5",

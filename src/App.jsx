@@ -18,6 +18,7 @@ import { W14Page } from './pages/W14Page';
 import { W15Page } from './pages/W15Page';
 import { W16Page } from './pages/W16Page';
 import { W4Page } from './pages/W4Page';
+import { W50Page } from './pages/W50Page';
 import { GameHub } from './pages/games/GameHub';
 import { ToolQuizGame } from './pages/games/ToolQuizGame';
 import { CitationDetectiveGame } from './pages/games/CitationDetectiveGame';
@@ -43,6 +44,7 @@ function App() {
           <Route path="wizard" element={<Wizard />} />
           <Route path="w3" element={<Wizard />} />
           <Route path="w4" element={<W4Page />} />
+          <Route path="w5-0" element={<W50Page />} />
 
           <Route path="clinic" element={<ClinicPage />} />
           <Route path="w6" element={<ClinicPage />} />
