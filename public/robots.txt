@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://research-navigator-nu.vercel.app/sitemap.xml
+
