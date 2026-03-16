@@ -288,10 +288,47 @@ export const ToolQuizGame = () => {
                         {title}
                     </h2>
 
-                    <p className="text-xs text-slate-300 font-bold uppercase tracking-[0.2em] bg-slate-900/80 py-2.5 px-6 rounded-sm border border-white/10 mb-8 inline-flex items-center gap-2 relative z-10 backdrop-blur-none shadow-inner group-hover:border-amber-500/30 transition-colors">
-                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_5px_rgba(244,63,94,0.8)]"></span>
-                        請截圖此頁面作為紀錄
-                    </p>
+                    {/* ── 📸 任務完成回報 ── */}
+                    <div className="relative z-10 text-left bg-slate-900/60 border border-cyan-500/30 rounded-sm p-5 mb-5 backdrop-blur-sm shadow-inner">
+                        <h3 className="text-base font-black text-cyan-400 mb-3 flex items-center gap-2 tracking-wider">
+                            📸 任務完成回報
+                        </h3>
+                        <p className="text-sm text-slate-300 leading-relaxed mb-3">
+                            請截圖本次「裝備檢定報告」，上傳至 Google Classroom。<br />
+                            經指揮官驗證後，可依本次稱號獲得任務加分。
+                        </p>
+                        <div className="bg-slate-800/80 border border-slate-700/50 rounded-sm p-4 space-y-2 shadow-inner">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">加分標準</div>
+                            {[
+                                { icon: '🕵️‍♂️', label: '福爾摩斯級神探', pts: '+3' },
+                                { icon: '🚔', label: '菁英調查員', pts: '+2' },
+                                { icon: '🔍', label: '菜鳥見習生', pts: '+1' },
+                            ].map(row => (
+                                <div key={row.label} className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-300">{row.icon} {row.label}</span>
+                                    <span className="font-black text-cyan-400 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/20">{row.pts}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── ⚠️ 指揮官提醒 ── */}
+                    <div className="relative z-10 text-left bg-rose-900/10 border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 rounded-sm p-5 mb-5 backdrop-blur-sm shadow-inner">
+                        <h3 className="text-base font-black text-rose-400 mb-3 flex items-center gap-2 tracking-wider">
+                            ⚠️ 指揮官提醒
+                        </h3>
+                        <div className="space-y-2 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                本系統提供的是「研究工具辨識的初步訓練」，幫助你快速判斷不同委託情境下，問卷調查、深度訪談、實驗設計、觀察記錄、文獻分析等工具各自的適用條件。
+                            </p>
+                            <p>
+                                但真實的工具選擇比本次任務更複雜：你的研究問題性質、研究對象的可及性、時間與資源限制，甚至倫理考量，都會影響最終的工具決策。很多情況下，沒有唯一正確答案，只有更合適的判斷。
+                            </p>
+                            <p className="text-rose-200/90 font-bold">
+                                因此，遊戲破關不代表你的工具選擇已完全正確；真正的研究設計，還要回到你的研究問題與現場條件來驗證。
+                            </p>
+                        </div>
+                    </div>
 
                     <div className="relative z-10 flex flex-col sm:flex-row justify-center gap-3 mb-10 w-full">
                         <button
