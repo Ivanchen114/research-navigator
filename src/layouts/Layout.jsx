@@ -37,6 +37,7 @@ export const Layout = () => {
             items: [
                 { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
                 { name: '題目博覽會', path: '/w4', week: 'W4', status: 'done' },
+                { name: '文獻搜尋入門', path: '/w5-0', week: 'W5.0', status: 'done' },
                 { name: '文獻偵探社', path: '/w5', week: 'W5', status: 'done' },
                 { name: '研究診所', path: '/w6', week: 'W6', status: 'done' },
                 { name: '組隊決策週', path: '/w7', week: 'W7', status: 'active' },
@@ -72,6 +73,7 @@ export const Layout = () => {
         if (path === '/problem-focus' || path === '/w2') return 2;
         if (path === '/wizard' || path === '/w3') return 3;
         if (path === '/w4') return 4;
+        if (path === '/w5-0') return 4.5;
         if (path === '/literature-review' || path === '/w5') return 5;
         if (path === '/clinic' || path === '/w6') return 6;
         if (path === '/team-formation' || path === '/w7') return 7;
