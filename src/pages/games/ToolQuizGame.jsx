@@ -217,6 +217,31 @@ export const ToolQuizGame = () => {
                         面對 11 個越來越困難的研究委託，<br />身為首席調查員的你，<br />該從工具箱拔出哪一項<span className="text-amber-400 font-bold ml-1 drop-shadow-[0_0_5px_rgba(251,191,36,0.6)]">「辦案道具」</span>？
                     </p>
 
+                    {/* 任務簡報 */}
+                    <div className="bg-slate-950/60 rounded-sm p-5 mb-6 text-left border border-slate-700/50 shadow-inner">
+                        <h3 className="text-xs font-bold text-slate-400 mb-3 tracking-widest uppercase border-b border-slate-700/50 pb-2">📋 任務簡報</h3>
+                        <div className="space-y-2.5 text-sm text-slate-300">
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-amber-400 shrink-0 mt-0.5">📁</span>
+                                <span>指揮部收到 <strong className="text-amber-300">11 份研究委託</strong>，每份描述一個真實研究情境</span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-amber-400 shrink-0 mt-0.5">🧰</span>
+                                <span>從工具箱的 <strong className="text-amber-300">6 種辦案道具</strong>中，選出最適合的一種：<br />
+                                    <span className="text-slate-400 text-xs leading-relaxed">問卷調查 · 深度訪談 · 實驗設計 · 觀察記錄 · 文獻／內容分析 · 混合方法</span>
+                                </span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-rose-400 shrink-0 mt-0.5">🔥</span>
+                                <span><strong className="text-rose-300">魔王委託</strong>需要「<strong className="text-rose-300">組合道具</strong>」，同時動用兩種工具才能結案</span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-emerald-400 shrink-0 mt-0.5">💡</span>
+                                <span>每題作答後會出現 <strong className="text-emerald-300">破案線索</strong>，說明正確道具的判斷理由</span>
+                            </p>
+                        </div>
+                    </div>
+
                     <div className="bg-slate-800/60 rounded-sm p-6 mb-8 text-center border border-slate-700/50 shadow-inner block backdrop-blur-none relative group-hover:border-amber-500/30 transition-colors">
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 px-3 py-1 rounded-sm border border-slate-700 text-xs font-bold text-slate-400 tracking-wider shadow-sm z-10">
                             🕵️‍♂️ 目前登入身分
@@ -228,6 +253,9 @@ export const ToolQuizGame = () => {
                                 <div className="text-rose-400 font-bold animate-pulse flex items-center justify-center gap-2">
                                     <span>🚨</span> 無法辨識身分！請返回總部大廳完成報到手續。
                                 </div>
+                            )}
+                            {!playerName && (
+                                <p className="text-xs text-slate-500 mt-2">（訪客模式將無法參與最終排行榜排名）</p>
                             )}
                         </div>
                     </div>
