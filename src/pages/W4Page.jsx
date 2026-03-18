@@ -9,8 +9,9 @@ export const W4Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [w3Topic, setW3Topic] = useState('');
     const [titleDraft, setTitleDraft] = useState('');
+    const [myMotivation, setMyMotivation] = useState('');
 
-    const titlePrompt = `我的研究題目是：${w3Topic || '【填入你的 W3 定案題目】'}\n我自己想的標題草稿是：${titleDraft || '【填入你的直覺標題】'}\n\n請幫我優化這個標題，讓它更吸引人，用問句，20字以內，不要完全取代我的想法。給我3個版本。`;
+    const titlePrompt = `我的研究題目是：${w3Topic || '【填入你的 W3 定案題目】'}\n我自己想的標題草稿是：${titleDraft || '【填入你的直覺標題】'}\n我的研究動機：${myMotivation || '【填入你的研究動機】'}\n\n請幫我優化這個標題，讓它更吸引人，用問句，20字以內，不要完全取代我的想法。給我3個版本。`;
 
     return (
         <div className="page-container animate-in-fade-slide">
@@ -27,7 +28,7 @@ export const W4Page = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-AIRED · D</span>
                 </div>
             </div>
 
@@ -193,6 +194,30 @@ export const W4Page = () => {
                         </div>
                     </div>
 
+                    {/* Step 3: 我的選擇 */}
+                    <div className="p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 3</span>
+                            <span className="font-bold text-[13px] text-[#1a1a2e]">我的選擇</span>
+                        </div>
+                        <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden">
+                            <div className="grid grid-cols-2 bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
+                                <div className="px-4 py-2">選擇選項</div>
+                                <div className="px-4 py-2 border-l border-white/10">說明與理由（學習單填寫）</div>
+                            </div>
+                            {[
+                                { opt: '✅ 我的版本不用改，直接用', desc: '直接用 Step 1 的白話版——說得出口就夠了' },
+                                { opt: '🔀 我參考教練的融合一版', desc: '根據回饋自己修改，取中間版本' },
+                                { opt: '🤖 選教練給的動機版本', desc: '我選這個的理由：（在學習單填寫）' },
+                            ].map((row, i) => (
+                                <div key={i} className={`grid grid-cols-2 text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
+                                    <div className="px-4 py-3 text-[#1a1a2e] font-medium">{row.opt}</div>
+                                    <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">{row.desc}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* 確認定案 */}
                     <div className="p-6 bg-[#f8f7f4]">
                         <div className="flex items-center gap-3 mb-3">
@@ -282,6 +307,16 @@ export const W4Page = () => {
                                         className="w-full p-3 bg-[#f8f7f4] border border-[#dddbd5] rounded-lg text-sm focus:outline-none focus:border-[#2d5be3]"
                                     />
                                 </div>
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-[11px] font-mono text-[#8888aa] mb-2 uppercase">研究動機（Part 0 定案版本）</label>
+                                <textarea
+                                    value={myMotivation}
+                                    onChange={(e) => setMyMotivation(e.target.value)}
+                                    placeholder="貼上你的研究動機定案版本..."
+                                    rows={3}
+                                    className="w-full p-3 bg-[#f8f7f4] border border-[#dddbd5] rounded-lg text-sm focus:outline-none focus:border-[#2d5be3] resize-none"
+                                />
                             </div>
                             <div className="p-4 bg-[#f8f7f4] rounded-lg border border-dashed border-[#dddbd5] font-mono text-[11px] text-[#4a4a6a] whitespace-pre-wrap">
                                 {titlePrompt}
@@ -396,22 +431,28 @@ export const W4Page = () => {
                     <p className="text-[13px] text-[#4a4a6a] leading-relaxed">
                         看看海報上同學給你的建議，花 2 分鐘想想要不要採納。然後在學習單 Part 2 填入你的 W4 最終版——<strong>這個題目和研究動機，會跟著你到學期末。</strong>
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-5 bg-[#f8f7f4] rounded-xl border border-[#dddbd5]">
-                            <div className="text-[11px] font-mono text-[#8888aa] uppercase mb-3">收到的建議 → 我的決定</div>
-                            <div className="space-y-2 text-[12px] text-[#4a4a6a]">
-                                <p>✓ 哪條建議合理？為什麼？</p>
-                                <p>✓ 哪條建議不適用？為什麼？</p>
-                                <p>✓ 根據建議，題目或動機要修改嗎？</p>
-                            </div>
+                    {/* Gallery Walk 建議紀錄表 */}
+                    <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden mb-4">
+                        <div className="grid grid-cols-[2rem_1fr_5rem_1fr] bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
+                            <div className="px-3 py-2">#</div>
+                            <div className="px-4 py-2 border-l border-white/10">同學或老師給的建議內容</div>
+                            <div className="px-3 py-2 border-l border-white/10 text-center">是否採納</div>
+                            <div className="px-4 py-2 border-l border-white/10">理由</div>
                         </div>
-                        <div className="p-5 bg-[#f8f7f4] rounded-xl border-2 border-dashed border-[#2e7d5a]/40">
-                            <div className="text-[11px] font-mono text-[#2e7d5a] uppercase mb-3">🎯 W4 個人最終定案</div>
-                            <div className="space-y-2 text-[12px] text-[#8888aa] italic">
-                                <p>最終研究題目：＿＿＿＿＿＿＿＿＿</p>
-                                <p>最終研究動機：＿＿＿＿＿＿＿＿＿</p>
-                                <p>研究方法：□問卷 □訪談 □實驗 □觀察 □文獻</p>
+                        {[1, 2, 3].map((n) => (
+                            <div key={n} className={`grid grid-cols-[2rem_1fr_5rem_1fr] text-[12px] border-t border-[#dddbd5] ${n % 2 === 0 ? 'bg-[#f8f7f4]' : 'bg-white'}`}>
+                                <div className="px-3 py-3 font-mono font-bold text-[#2d5be3]">{n}</div>
+                                <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">（在學習單填寫）</div>
+                                <div className="px-3 py-3 border-l border-[#dddbd5] text-[#8888aa] text-[10px] text-center">是 ／ 否</div>
+                                <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">（在學習單填寫）</div>
                             </div>
+                        ))}
+                    </div>
+                    <div className="p-5 bg-[#f8f7f4] rounded-xl border-2 border-dashed border-[#2e7d5a]/40">
+                        <div className="text-[11px] font-mono text-[#2e7d5a] uppercase mb-3">🎯 W4 個人最終定案</div>
+                        <div className="space-y-2 text-[12px] text-[#8888aa] italic">
+                            <p>最終研究題目：＿＿＿＿＿＿＿＿＿</p>
+                            <p>最終研究動機：＿＿＿＿＿＿＿＿＿</p>
                         </div>
                     </div>
                     <div className="notice notice-success text-[12px]">
@@ -459,6 +500,33 @@ export const W4Page = () => {
                             </div>
                         </div>
                     </a>
+                </div>
+            </div>
+
+            {/* PART 3: AI-RED 記錄 */}
+            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-16">
+                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
+                    <span className="text-base">🤖</span>
+                    <span className="font-bold text-[13px] text-[#1a1a2e]">Part 3｜AI-RED 記錄</span>
+                    <span className="ml-auto font-mono text-[10px] text-[#8888aa]">完成後填寫</span>
+                </div>
+                <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden m-5">
+                    <div className="grid grid-cols-[6rem_1fr] bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
+                        <div className="px-4 py-2">項目</div>
+                        <div className="px-4 py-2 border-l border-white/10">內容記錄（請在學習單填寫具體資訊）</div>
+                    </div>
+                    {[
+                        { key: 'A · Agent', val: '我使用了 ChatGPT / Claude / Gemini / 其他' },
+                        { key: 'I · Interaction', val: '我問了 AI：（填入具體提問）' },
+                        { key: 'R · Review', val: '我的評估：合理 ／ 有問題 ／ 部分合理' },
+                        { key: 'E · Evaluation', val: '原因說明：（為什麼這樣評估）' },
+                        { key: 'D · Dialogue', val: '對話名稱：（截圖或記錄對話）' },
+                    ].map((row, i) => (
+                        <div key={i} className={`grid grid-cols-[6rem_1fr] text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
+                            <div className="px-4 py-3 font-mono font-bold text-[#2d5be3] text-[10px]">{row.key}</div>
+                            <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">{row.val}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
