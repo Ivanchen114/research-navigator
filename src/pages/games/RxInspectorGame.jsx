@@ -505,7 +505,48 @@ export const RxInspectorGame = () => {
                         <p className="text-blue-200 mb-6 font-bold bg-slate-800/60 px-4 py-1 rounded-sm border border-slate-600/50 shadow-inner">病徵命中率：<span className="text-cyan-400">{accuracy}%</span></p>
                         <h2 className={`text-2xl md:text-3xl font-black px-6 py-2 rounded-sm ${color} ${bg} border ${borderColor} mb-4 shadow-lg drop-shadow-md`}>{title}</h2>
 
-                        <p className="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-800/80 py-2 px-6 rounded-sm border border-slate-700 shadow-inner">請截圖此畫面回報長官</p>
+                    </div>
+
+                    {/* ── 📸 任務完成回報 ── */}
+                    <div className="relative z-10 text-left bg-slate-900/60 border border-cyan-500/30 rounded-sm p-5 mb-5 backdrop-blur-sm shadow-inner">
+                        <h3 className="text-base font-black text-cyan-400 mb-3 flex items-center gap-2 tracking-wider">
+                            📸 任務完成回報
+                        </h3>
+                        <p className="text-sm text-slate-300 leading-relaxed mb-3">
+                            請截圖本次「防線測試報告」，上傳至 Google Classroom。<br />
+                            經指揮官驗證後，可依本次稱號獲得任務加分。
+                        </p>
+                        <div className="bg-slate-800/80 border border-slate-700/50 rounded-sm p-4 space-y-2 shadow-inner">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">加分標準</div>
+                            {[
+                                { icon: '🏆', label: '神醫', pts: '+3' },
+                                { icon: '👨‍⚕️', label: '主治醫師', pts: '+2' },
+                                { icon: '🩺', label: '住院醫師', pts: '+1' },
+                            ].map(row => (
+                                <div key={row.label} className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-300">{row.icon} {row.label}</span>
+                                    <span className="font-black text-cyan-400 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/20">{row.pts}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── ⚠️ 指揮官提醒 ── */}
+                    <div className="relative z-10 text-left bg-rose-900/10 border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 rounded-sm p-5 mb-5 backdrop-blur-sm shadow-inner">
+                        <h3 className="text-base font-black text-rose-400 mb-3 flex items-center gap-2 tracking-wider">
+                            ⚠️ 指揮官提醒
+                        </h3>
+                        <div className="space-y-2 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                本系統提供的是「研究設計病徵辨識的初步訓練」，幫助你快速辨識問卷、訪談、實驗等工具設計中常見的缺陷——如雙管問題、誘導性措辭、缺乏對照組等。
+                            </p>
+                            <p>
+                                但真實的研究設計評估遠比本次任務更複雜：同一份工具在不同研究情境下可能有不同的判斷標準，研究目的、樣本特性與實務限制都會影響設計的取捨。
+                            </p>
+                            <p className="text-rose-200/90 font-bold">
+                                因此，遊戲破關不代表你的研究工具設計已完全無誤；真正的品質把關，還要回到你的研究問題與實際情境來檢驗。
+                            </p>
+                        </div>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8 relative z-10">

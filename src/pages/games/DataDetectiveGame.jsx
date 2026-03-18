@@ -937,9 +937,49 @@ export const DataDetectiveGame = () => {
                     <div className="text-6xl font-black mb-2 text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)]">{score} <span className="text-3xl text-amber-300 opacity-60">/ {maxScore}</span></div>
                     {pct >= 70 && <div className="case-closed-stamp my-3 opacity-90 rotate-[-5deg] scale-110 drop-shadow-[0_0_10px_rgba(244,63,94,0.4)] border-rose-500 text-rose-500">CASE CLOSED</div>}
                     <div className="text-6xl my-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] animate-bounce">{emoji}</div>
-                    <h2 className={`text-4xl font-black mb-8 ${color} drop-shadow-[0_0_10px_currentColor] tracking-wide`}>{title}</h2>
+                    <h2 className={`text-4xl font-black mb-6 ${color} drop-shadow-[0_0_10px_currentColor] tracking-wide`}>{title}</h2>
 
-                    <p className="text-xs text-amber-400/80 font-black mb-6 uppercase tracking-[0.2em] bg-amber-950/40 py-2.5 rounded-sm border border-amber-500/30 mx-12 shadow-inner">請截圖此頁面作為紀錄</p>
+                    {/* ── 📸 任務完成回報 ── */}
+                    <div className="text-left bg-slate-900/60 border border-amber-500/30 rounded-sm p-5 mb-5 shadow-inner">
+                        <h3 className="text-base font-black text-amber-400 mb-3 flex items-center gap-2 tracking-wider">
+                            📸 任務完成回報
+                        </h3>
+                        <p className="text-sm text-slate-300 leading-relaxed mb-3">
+                            請截圖本次「INVESTIGATION REPORT」，上傳至 Google Classroom。<br />
+                            經指揮官驗證後，可依本次稱號獲得任務加分。
+                        </p>
+                        <div className="bg-slate-800/80 border border-slate-700/50 rounded-sm p-4 space-y-2 shadow-inner">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono">加分標準</div>
+                            {[
+                                { icon: '🏆', label: '首席情報解碼員', pts: '+3' },
+                                { icon: '🕵️', label: '資深數據分析師', pts: '+2' },
+                                { icon: '📋', label: '實習分析師', pts: '+1' },
+                            ].map(row => (
+                                <div key={row.label} className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-300">{row.icon} {row.label}</span>
+                                    <span className="font-black text-amber-400 bg-amber-900/40 px-2 py-0.5 rounded border border-amber-500/20 font-mono">{row.pts}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── ⚠️ 指揮官提醒 ── */}
+                    <div className="text-left bg-rose-900/10 border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 rounded-sm p-5 mb-5 shadow-inner">
+                        <h3 className="text-base font-black text-rose-400 mb-3 flex items-center gap-2 tracking-wider">
+                            ⚠️ 指揮官提醒
+                        </h3>
+                        <div className="space-y-2 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                本系統提供的是「數據批判性解讀的初步訓練」，幫助你辨識分析報告中常見的偏誤——過度詮釋、孤立數據、忽略反例，以及把描述混淆成因果。
+                            </p>
+                            <p>
+                                但真實的數據分析遠比本次任務複雜：同一份數據可能有多種合理詮釋，判斷「對不對」往往需要回到研究設計、樣本代表性，以及你想回答的問題本身。
+                            </p>
+                            <p className="text-rose-200/90 font-bold">
+                                因此，遊戲破關不代表你的數據解讀能力已完全合格；真正的分析判斷，還要在你自己的研究情境中持續磨練。
+                            </p>
+                        </div>
+                    </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
                         <button onClick={() => setGameState('start')}

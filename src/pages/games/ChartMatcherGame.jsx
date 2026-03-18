@@ -654,9 +654,49 @@ export const ChartMatcherGame = () => {
                     {maxCombo >= 3 && (
                         <p className="text-amber-500 font-bold mb-4 bg-amber-950/30 inline-block px-4 py-1 rounded-sm border border-amber-500/30">🔥 最高連續答對：{maxCombo} 連擊！</p>
                     )}
-                    <h2 className={`text-3xl font-black mb-8 ${color}`}>{title}</h2>
+                    <h2 className={`text-3xl font-black mb-6 ${color}`}>{title}</h2>
 
-                    <p className="text-xs text-slate-400 font-bold mb-6 uppercase tracking-[0.2em] bg-slate-800/80 py-2 rounded-sm border border-slate-700 mx-auto max-w-xs shadow-inner">請截圖此頁面作為紀錄</p>
+                    {/* ── 📸 任務完成回報 ── */}
+                    <div className="text-left bg-slate-900/60 border border-cyan-500/30 rounded-sm p-5 mb-5 shadow-inner">
+                        <h3 className="text-base font-black text-cyan-400 mb-3 flex items-center gap-2 tracking-wider">
+                            📸 任務完成回報
+                        </h3>
+                        <p className="text-sm text-slate-300 leading-relaxed mb-3">
+                            請截圖本次「MISSION REPORT」，上傳至 Google Classroom。<br />
+                            經指揮官驗證後，可依本次稱號獲得任務加分。
+                        </p>
+                        <div className="bg-slate-800/80 border border-slate-700/50 rounded-sm p-4 space-y-2 shadow-inner">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono">加分標準</div>
+                            {[
+                                { icon: '🏆', label: '圖表大師', pts: '+3' },
+                                { icon: '📊', label: '資深配對師', pts: '+2' },
+                                { icon: '🎨', label: '實習探員', pts: '+1' },
+                            ].map(row => (
+                                <div key={row.label} className="flex items-center justify-between text-sm">
+                                    <span className="text-slate-300">{row.icon} {row.label}</span>
+                                    <span className="font-black text-cyan-400 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/20 font-mono">{row.pts}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── ⚠️ 指揮官提醒 ── */}
+                    <div className="text-left bg-rose-900/10 border-l-[6px] border-l-rose-500 border-t border-r border-b border-white/5 rounded-sm p-5 mb-5 shadow-inner">
+                        <h3 className="text-base font-black text-rose-400 mb-3 flex items-center gap-2 tracking-wider">
+                            ⚠️ 指揮官提醒
+                        </h3>
+                        <div className="space-y-2 text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                本系統提供的是「圖表選擇的初步訓練」，幫助你建立基本的資料視覺化直覺——什麼數據類型適合什麼圖表、如何避免常見的呈現錯誤。
+                            </p>
+                            <p>
+                                但真實的圖表決策更複雜：你的受眾是誰、溝通目的是什麼、數據的分佈與規模，都會影響最終的選擇。同一份數據在不同情境下，可能有不同的「最佳解」。
+                            </p>
+                            <p className="text-rose-200/90 font-bold">
+                                因此，遊戲破關不代表你的圖表選擇已完全正確；真正的資料呈現，還要回到你的研究問題與溝通對象來判斷。
+                            </p>
+                        </div>
+                    </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
                         <button
