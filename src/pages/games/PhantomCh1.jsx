@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FileText, AlertTriangle, CheckCircle,
@@ -55,6 +55,65 @@ export const PhantomCh1 = () => {
     const [failKey, setFailKey] = useState(null);
     const [foundC1Clue, setFoundC1Clue] = useState(false);
     const [agentName, setAgentName] = useState('探員');
+
+    // ── 音效設定 ──
+    const bgmRef = useRef(null);
+    const heartbeatRef = useRef(null);
+    const glitchRef = useRef(null);
+
+    useEffect(() => {
+        bgmRef.current = new Audio('/assets/phantom/audio/dragon-studio-creepy-industrial-hum-482882.mp3');
+        bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.2;
+
+        heartbeatRef.current = new Audio('/assets/phantom/audio/dragon-studio-heartbeat-sound-372448.mp3');
+        heartbeatRef.current.volume = 0.8;
+
+        glitchRef.current = new Audio('/assets/phantom/audio/virtual_vibes-glitch-sound-effect-hd-379466.mp3');
+        glitchRef.current.volume = 0.5;
+
+        return () => {
+            if (bgmRef.current) bgmRef.current.pause();
+            if (heartbeatRef.current) heartbeatRef.current.pause();
+            if (glitchRef.current) glitchRef.current.pause();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!bgmRef.current || !heartbeatRef.current || !glitchRef.current) return;
+
+        if (phase === 'scene1' || phase === 'scene2' || phase === 'choice1' || phase === 'choice2') {
+            bgmRef.current.play().catch(e => console.log('BGM blocked by browser', e));
+        }
+
+        if (phase === 'scene3') {
+            heartbeatRef.current.currentTime = 0;
+            heartbeatRef.current.play().catch(e => console.log('Heartbeat blocked', e));
+        }
+        
+        if (phase === 'fail') {
+            bgmRef.current.pause();
+            heartbeatRef.current.pause();
+            glitchRef.current.volume = 0.6;
+            glitchRef.current.currentTime = 0;
+            glitchRef.current.play().catch(e => console.log('Glitch blocked', e));
+        }
+
+        if (phase === 'complete') {
+            bgmRef.current.pause();
+            heartbeatRef.current.pause();
+            glitchRef.current.volume = 0.2;
+            glitchRef.current.currentTime = 0;
+            glitchRef.current.play().catch(e => console.log('Glitch blocked', e));
+        }
+
+        if (phase === 'briefing') {
+            bgmRef.current.pause();
+            bgmRef.current.currentTime = 0;
+            heartbeatRef.current.pause();
+            heartbeatRef.current.currentTime = 0;
+        }
+    }, [phase]);
 
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);

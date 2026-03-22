@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FileText, AlertTriangle, CheckCircle,
@@ -55,6 +55,62 @@ export const PhantomCh2 = () => {
     const [foundContradiction, setFoundContradiction] = useState(false);
     const [agentName, setAgentName] = useState('探員');
     const [hadCh1Optimal, setHadCh1Optimal] = useState(false);
+
+    // ── 音效設定 ──
+    const bgmRef = useRef(null);
+    const tensionRef = useRef(null);
+    const glitchRef = useRef(null);
+
+    useEffect(() => {
+        bgmRef.current = new Audio('/assets/phantom/audio/dragon-studio-creepy-industrial-hum-482882.mp3');
+        bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.15; // Milder for Ch2
+
+        tensionRef.current = new Audio('/assets/phantom/audio/dragon-studio-heartbeat-sound-372448.mp3');
+        tensionRef.current.volume = 0.6;
+
+        glitchRef.current = new Audio('/assets/phantom/audio/virtual_vibes-glitch-sound-effect-hd-379466.mp3');
+        glitchRef.current.volume = 0.3;
+
+        return () => {
+            if (bgmRef.current) bgmRef.current.pause();
+            if (tensionRef.current) tensionRef.current.pause();
+            if (glitchRef.current) glitchRef.current.pause();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!bgmRef.current || !tensionRef.current || !glitchRef.current) return;
+
+        if (phase === 'scene1' || phase === 'scene2' || phase === 'choice1' || phase === 'choice2') {
+            bgmRef.current.play().catch(e => console.log('BGM blocked by browser', e));
+        }
+
+        if (phase === 'scene3') {
+            tensionRef.current.currentTime = 0;
+            tensionRef.current.play().catch(e => console.log('Tension blocked', e));
+        }
+        
+        if (phase === 'fail') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+            glitchRef.current.volume = 0.6;
+            glitchRef.current.currentTime = 0;
+            glitchRef.current.play().catch(e => console.log('Glitch blocked', e));
+        }
+
+        if (phase === 'complete') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+        }
+
+        if (phase === 'briefing') {
+            bgmRef.current.pause();
+            bgmRef.current.currentTime = 0;
+            tensionRef.current.pause();
+            tensionRef.current.currentTime = 0;
+        }
+    }, [phase]);
 
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
@@ -117,8 +173,19 @@ export const PhantomCh2 = () => {
                 {/* ══ 任務簡報 ══════════════════════════════════════════════ */}
                 {phase === 'briefing' && (
                     <div>
-                        <ChapterLabel num="02" method="訪談法" />
-                        <h1 className="text-3xl font-black text-white mb-6">線人接觸</h1>
+                        {/* 封面橫幅 */}
+                        <div className="relative w-full h-48 sm:h-64 rounded-lg overflow-hidden mb-8 border border-slate-700 shadow-2xl">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/covers/phantom_cover_ch2_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                            {/* Scanlines & Noise */}
+                            <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20"></div>
+                            
+                            <div className="absolute bottom-6 left-6 right-6">
+                                <ChapterLabel num="02" method="訪談法" />
+                                <h1 className="text-3xl sm:text-4xl font-black text-white mt-2 drop-shadow-md">線人接觸</h1>
+                            </div>
+                        </div>
 
                         {/* 前章線索繼承 */}
                         <div className="bg-slate-900/60 border border-slate-700/50 rounded p-4 mb-5 space-y-1.5">
@@ -157,6 +224,7 @@ export const PhantomCh2 = () => {
                 {phase === 'scene1' && (
                     <SceneBlock
                         time="放學後，走廊"
+                        mediaUrl="/assets/phantom/backgrounds/ch2/phantom_ch2_meeting_spot_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -203,6 +271,7 @@ export const PhantomCh2 = () => {
                 {phase === 'scene2' && (
                     <SceneBlock
                         time="訪談進行中"
+                        mediaUrl="/assets/phantom/backgrounds/ch2/phantom_ch2_interview_table_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -252,6 +321,7 @@ export const PhantomCh2 = () => {
                 {phase === 'scene3' && (
                     <SceneBlock
                         time="訪談接近尾聲"
+                        mediaUrl="/assets/phantom/backgrounds/ch2/phantom_ch2_identity_doubt_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -302,6 +372,12 @@ export const PhantomCh2 = () => {
                     const r = FAIL_REASONS[failKey];
                     return (
                         <div>
+                            <div className="relative w-full h-40 rounded-sm overflow-hidden border border-red-900/50 mb-5 shadow-2xl">
+                                <div className="absolute inset-0 bg-cover bg-center grayscale opacity-60" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch2/phantom_ch2_silence_tension_bg_v1.png')" }}></div>
+                                <div className="absolute inset-0 bg-red-950/40 mix-blend-color-burn"></div>
+                                <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')] mix-blend-overlay animate-pulse pointer-events-none"></div>
+                                <div className="absolute bottom-4 left-4 text-red-500 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Trust Broken // Link Terminated</div>
+                            </div>
                             <div className="bg-red-950/30 border border-red-700/40 rounded p-6 mb-5">
                                 <SectionLabel icon={<AlertTriangle size={13} />} text="任務中止報告" color="text-red-400" />
                                 <h2 className="text-lg font-black text-red-300 mt-3 mb-4">{r.type}</h2>
@@ -323,6 +399,12 @@ export const PhantomCh2 = () => {
                 {/* ══ 任務完成 ══════════════════════════════════════════════ */}
                 {phase === 'complete' && (
                     <div>
+                        <div className="relative w-full h-48 rounded-sm overflow-hidden border border-emerald-900/50 mb-5 shadow-2xl">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch2/phantom_ch2_post_interview_notes_bg_v1..png')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                            <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute bottom-4 left-4 text-emerald-400 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Interview Concluded</div>
+                        </div>
                         <div className="bg-emerald-950/20 border border-emerald-700/30 rounded p-6 mb-5">
                             <SectionLabel icon={<CheckCircle size={13} />} text="任務完成" color="text-emerald-400" />
                             <h2 className="text-xl font-black text-emerald-300 mt-3 mb-4">訪談任務成功</h2>
@@ -336,9 +418,20 @@ export const PhantomCh2 = () => {
                                     <EvidenceItem text="林志遠知悉某個讓研究「更有效率」的工具，刻意以模糊語言迴避直接說明" />
                                     <EvidenceItem text="林志遠確認班上「有些人」在使用該工具，並非孤立案例" />
                                     {foundContradiction
-                                        ? <EvidenceItem text="追問後確認工具具備「圖表直接輸出」功能——與第一章 C1 操作介面的功能描述吻合" highlight />
+                                        ? (
+                                            <div className="mt-4 border border-emerald-500/20 rounded-sm overflow-hidden content-start">
+                                                <div className="relative h-16 w-full">
+                                                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch2/phantom_ch2_contradiction_bg_v1.png')" }}></div>
+                                                    <div className="absolute inset-0 bg-emerald-950/60"></div>
+                                                    <div className="absolute inset-0 flex items-center px-4 font-mono text-xs text-emerald-400 tracking-widest">CRITICAL FRACTURE DETECTED</div>
+                                                </div>
+                                                <div className="p-3 bg-emerald-950/40">
+                                                    <EvidenceItem text="追問後確認工具具備「圖表直接輸出」功能——與第一章 C1 操作介面的功能描述吻合" highlight />
+                                                </div>
+                                            </div>
+                                        )
                                         : (
-                                            <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3">
+                                            <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3 mt-2">
                                                 <Lock size={12} />
                                                 <span>工具功能細節未追問（重試可解鎖完整線索）</span>
                                             </div>
@@ -393,18 +486,38 @@ const PrimaryButton = ({ onClick, label }) => (
     </button>
 );
 
-const SceneBlock = ({ time, content, actionLabel, onAction }) => (
-    <div>
-        <div className="font-mono text-violet-600/60 text-xs tracking-widest mb-4">{time}</div>
-        <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-8">
-            {content}
+const SceneBlock = ({ time, content, actionLabel, onAction, mediaUrl }) => (
+    <div className="overflow-hidden bg-slate-900 border border-slate-700 rounded-lg mb-8 shadow-2xl">
+        {mediaUrl && (
+            <div className="relative w-full aspect-[21/9] bg-slate-950">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] hover:scale-[1.03] origin-bottom"
+                    style={{ backgroundImage: `url('${mediaUrl}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] mix-blend-overlay"></div>
+                
+                <div className="absolute top-4 left-4 font-mono text-violet-400 font-bold text-[10px] tracking-widest bg-slate-950/80 px-2 py-1 rounded backdrop-blur-md border border-violet-900/50 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                    REC • {time}
+                </div>
+            </div>
+        )}
+
+        <div className={`p-6 ${mediaUrl ? 'pt-4' : ''}`}>
+            {!mediaUrl && <div className="font-mono text-violet-600/60 text-xs tracking-widest mb-4">{time}</div>}
+            
+            <div className="text-slate-300 text-sm leading-relaxed mb-6 space-y-4">
+                {content}
+            </div>
+            
+            <button
+                onClick={onAction}
+                className="w-full bg-slate-800 hover:bg-slate-700 border border-transparent hover:border-violet-500/50 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm"
+            >
+                {actionLabel} <ChevronRight size={16} />
+            </button>
         </div>
-        <button
-            onClick={onAction}
-            className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm"
-        >
-            {actionLabel} <ChevronRight size={16} />
-        </button>
     </div>
 );
 
