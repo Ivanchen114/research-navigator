@@ -150,6 +150,17 @@ export const PhantomCh1 = () => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
         if (name) setAgentName(name);
         window.scrollTo(0, 0);
+
+        // Preload WebP images for performance
+        const pImages = [
+            '/assets/phantom/covers/phantom_cover_ch1_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch1/phantom_ch1_library_peek_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch1/phantom_ch1_computer_closeup_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch1/phantom_ch1_targeted_view_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch1/phantom_ch1_library_empty_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch1/phantom_ch1_library_glitch_bg_v1.webp'
+        ];
+        pImages.forEach(src => { const img = new Image(); img.src = src; });
     }, [phase]);
 
     const fail = (key) => { setFailKey(key); setPhase('fail'); };
@@ -220,7 +231,7 @@ export const PhantomCh1 = () => {
                     <div>
                         {/* 封面橫幅 */}
                         <div className="relative w-full h-48 sm:h-64 rounded-lg overflow-hidden mb-8 border border-slate-700 shadow-2xl">
-                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/covers/phantom_cover_ch1_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/covers/phantom_cover_ch1_bg_v1.webp')" }}></div>
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
                             {/* Scanlines & Noise */}
                             <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
@@ -256,7 +267,7 @@ export const PhantomCh1 = () => {
                 {phase === 'scene1' && (
                     <SceneBlock
                         time="15:22"
-                        mediaUrl="/assets/phantom/backgrounds/ch1/phantom_ch1_library_peek_bg_v1.png"
+                        mediaUrl="/assets/phantom/backgrounds/ch1/phantom_ch1_library_peek_bg_v1.webp"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -303,7 +314,7 @@ export const PhantomCh1 = () => {
                 {phase === 'scene2' && (
                     <SceneBlock
                         time="15:41"
-                        mediaUrl="/assets/phantom/backgrounds/ch1/phantom_ch1_computer_closeup_bg_v1.png"
+                        mediaUrl="/assets/phantom/backgrounds/ch1/phantom_ch1_computer_closeup_bg_v1.webp"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -350,7 +361,7 @@ export const PhantomCh1 = () => {
                 {phase === 'scene3' && (
                     <SceneBlock
                         time="16:07"
-                        mediaUrl="/assets/phantom/backgrounds/ch1/phantom_ch1_targeted_view_bg_v1.png"
+                        mediaUrl="/assets/phantom/backgrounds/ch1/phantom_ch1_targeted_view_bg_v1.webp"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -399,7 +410,7 @@ export const PhantomCh1 = () => {
                     return (
                         <div>
                             <div className="relative w-full h-40 rounded-sm overflow-hidden border border-red-900/50 mb-5 shadow-2xl">
-                                <div className="absolute inset-0 bg-cover bg-center grayscale opacity-60" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch1/phantom_ch1_library_empty_bg_v1.png')" }}></div>
+                                <div className="absolute inset-0 bg-cover bg-center grayscale opacity-60" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch1/phantom_ch1_library_empty_bg_v1.webp')" }}></div>
                                 <div className="absolute inset-0 bg-red-950/40 mix-blend-color-burn"></div>
                                 <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')] mix-blend-overlay animate-pulse pointer-events-none"></div>
                                 <div className="absolute bottom-4 left-4 text-red-500 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">System Warning // Task Aborted</div>
@@ -431,7 +442,7 @@ export const PhantomCh1 = () => {
                 {phase === 'complete' && (
                     <div>
                         <div className="relative w-full h-48 rounded-sm overflow-hidden border border-emerald-900/50 mb-5 shadow-2xl">
-                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch1/phantom_ch1_library_glitch_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch1/phantom_ch1_library_glitch_bg_v1.webp')" }}></div>
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
                             <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
                             <div className="absolute bottom-4 left-4 text-emerald-400 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Data Fragment Captured</div>

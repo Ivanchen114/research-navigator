@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FileText, AlertTriangle, CheckCircle,
-    RotateCcw, ChevronRight, Lock
+    RotateCcw, ChevronRight, Lock, Volume2, VolumeX
 } from 'lucide-react';
 
 const STORAGE_KEYS = {
@@ -52,12 +52,103 @@ export const PhantomCh4 = () => {
     const [foundOptimal, setFoundOptimal] = useState(false);
     const [agentName, setAgentName] = useState('探員');
     const [hadCh3Optimal, setHadCh3Optimal] = useState(false);
+    const [isMuted, setIsMuted] = useState(() => localStorage.getItem('phantom_muted') === 'true');
+
+    // ── 音效設定 ──
+    const bgmRef = useRef(null);
+    const tensionRef = useRef(null);
+    const glitchRef = useRef(null);
+
+    useEffect(() => {
+        bgmRef.current = new Audio('/assets/phantom/audio/dragon-studio-creepy-industrial-hum-482882.mp3');
+        bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.2;
+        bgmRef.current.muted = isMuted;
+
+        tensionRef.current = new Audio('/assets/phantom/audio/dragon-studio-heartbeat-sound-372448.mp3');
+        tensionRef.current.volume = 0.8;
+        tensionRef.current.muted = isMuted;
+
+        glitchRef.current = new Audio('/assets/phantom/audio/virtual_vibes-glitch-sound-effect-hd-379466.mp3');
+        glitchRef.current.volume = 0.4;
+        glitchRef.current.muted = isMuted;
+
+        return () => {
+            if (bgmRef.current) bgmRef.current.pause();
+            if (tensionRef.current) tensionRef.current.pause();
+            if (glitchRef.current) glitchRef.current.pause();
+        };
+    }, []);
+
+    // ── 靜音同步 ──
+    useEffect(() => {
+        if (bgmRef.current) bgmRef.current.muted = isMuted;
+        if (tensionRef.current) tensionRef.current.muted = isMuted;
+        if (glitchRef.current) glitchRef.current.muted = isMuted;
+    }, [isMuted]);
+
+    const toggleMute = () => {
+        const newMuted = !isMuted;
+        setIsMuted(newMuted);
+        localStorage.setItem('phantom_muted', String(newMuted));
+    };
+
+    const unlockAudio = () => {
+        if (bgmRef.current) bgmRef.current.play().catch(() => {});
+        if (tensionRef.current) tensionRef.current.play().then(() => tensionRef.current.pause()).catch(() => {});
+        if (glitchRef.current) glitchRef.current.play().then(() => glitchRef.current.pause()).catch(() => {});
+    };
+
+    useEffect(() => {
+        if (!bgmRef.current || !tensionRef.current || !glitchRef.current) return;
+
+        if (phase === 'scene1' || phase === 'scene2' || phase === 'choice1' || phase === 'choice2') {
+            bgmRef.current.play().catch(e => console.log('BGM blocked by browser', e));
+        }
+
+        if (phase === 'scene3') {
+            tensionRef.current.currentTime = 0;
+            tensionRef.current.play().catch(e => console.log('Tension blocked', e));
+        }
+        
+        if (phase === 'fail') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+            glitchRef.current.volume = 0.6;
+            glitchRef.current.currentTime = 0;
+            glitchRef.current.play().catch(e => console.log('Glitch blocked', e));
+        }
+
+        if (phase === 'complete') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+        }
+
+        if (phase === 'briefing') {
+            bgmRef.current.pause();
+            bgmRef.current.currentTime = 0;
+            tensionRef.current.pause();
+            tensionRef.current.currentTime = 0;
+        }
+    }, [phase]);
 
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
         if (name) setAgentName(name);
         setHadCh3Optimal(!!localStorage.getItem(STORAGE_KEYS.ch3Optimal));
         window.scrollTo(0, 0);
+
+        // Preload images for performance
+        const pImages = [
+            '/assets/phantom/covers/phantom_cover_ch4_bg_v1.png',
+            '/assets/phantom/backgrounds/ch4/phantom_ch4_archive_room_bg_v1.png',
+            '/assets/phantom/backgrounds/ch4/phantom_ch4_document_comparison_bg_v1.png',
+            '/assets/phantom/backgrounds/ch4/phantom_ch4_citation_verification_bg_v1.png',
+            '/assets/phantom/backgrounds/ch4/phantom_ch4_metadata_timestamp_bg_v1.png',
+            '/assets/phantom/backgrounds/ch4/phantom_ch4_crosscheck_dataset_bg_v1.png',
+            '/assets/phantom/backgrounds/ch4/phantom_ch4_distribution_anomaly_bg_v1.png'
+        ];
+        pImages.forEach(src => { const img = new Image(); img.src = src; });
     }, [phase]);
 
     const fail = (key) => { setFailKey(key); setPhase('fail'); };
@@ -104,15 +195,35 @@ export const PhantomCh4 = () => {
                 <span className="text-emerald-400/70">幽靈數據</span>
                 <span className="text-slate-700">/</span>
                 <span className="text-slate-300">第四章｜檔案比對</span>
-                <span className="ml-auto text-slate-600">{agentName}</span>
+                <div className="ml-auto flex items-center gap-3">
+                    <button
+                        onClick={toggleMute}
+                        title={isMuted ? '開啟音效' : '靜音'}
+                        className="text-slate-500 hover:text-emerald-400 transition-colors"
+                    >
+                        {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    </button>
+                    {agentName && <span className="text-slate-600 font-mono text-xs">{agentName}</span>}
+                </div>
             </div>
 
             <div className="max-w-2xl mx-auto px-6 py-12">
 
                 {phase === 'briefing' && (
                     <div>
-                        <ChapterLabel num="04" method="文獻分析" />
-                        <h1 className="text-3xl font-black text-white mb-6">檔案比對</h1>
+                        {/* 封面橫幅 */}
+                        <div className="relative w-full h-48 sm:h-64 rounded-lg overflow-hidden mb-8 border border-slate-700 shadow-2xl">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/covers/phantom_cover_ch4_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                            {/* Scanlines & Noise */}
+                            <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(0,255,200,0.06),rgba(0,200,255,0.02),rgba(0,100,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20"></div>
+                            
+                            <div className="absolute bottom-6 left-6 right-6">
+                                <ChapterLabel num="04" method="文獻分析" />
+                                <h1 className="text-3xl sm:text-4xl font-black text-white mt-2 drop-shadow-md">檔案比對</h1>
+                            </div>
+                        </div>
 
                         <div className="bg-slate-900/60 border border-slate-700/50 rounded p-4 mb-5 space-y-1.5">
                             <div className="font-mono text-xs text-slate-500 tracking-widest mb-2">◈ 來自前章的線索</div>
@@ -125,6 +236,12 @@ export const PhantomCh4 = () => {
 
                         <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-5 space-y-4">
                             <SectionLabel icon={<FileText size={13} />} text="任務簡報" />
+                            <div className="relative w-full h-32 rounded-sm overflow-hidden border border-slate-700 mb-4 shadow-inner">
+                                <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch4/phantom_ch4_archive_room_bg_v1.png')" }}></div>
+                                <div className="absolute inset-0 bg-emerald-950/20 mix-blend-color"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                                <div className="absolute bottom-2 left-2 text-[10px] text-emerald-500 font-mono uppercase tracking-[0.2em] opacity-80 decoration-emerald-800/50 underline underline-offset-4">Location: National Archive // Database Access Authorized</div>
+                            </div>
                             <p className="text-slate-300 leading-relaxed text-sm">
                                 總部批准你調閱三年前那份得獎研究的完整電子檔。你取得了兩個版本：競賽投稿版與校內存檔版，以及報告的完整引用清單。你的任務是交叉比對這些文件，找出造假的時間節點與手法。
                             </p>
@@ -139,17 +256,18 @@ export const PhantomCh4 = () => {
                             <strong className="text-emerald-400">文獻分析的核心規則：</strong>每一筆引用都必須可追溯；元數據是數位文件的隱藏記錄；所有發現，無論支持或反對你的假設，都必須完整記錄。
                         </div>
 
-                        <PrimaryButton onClick={() => setPhase('scene1')} label="開始比對" />
+                        <PrimaryButton onClick={() => { unlockAudio(); setPhase('scene1'); }} label="開始比對" />
                     </div>
                 )}
 
                 {phase === 'scene1' && (
                     <SceneBlock
                         time="引用清單審查"
+                        mediaUrl="/assets/phantom/backgrounds/ch4/phantom_ch4_document_comparison_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    你打開報告的參考文獻頁。引用清單共 22 筆，格式規整。你開始逐一進資料庫核查。
+                                    你打開報告的參考文獻頁。引用清單共 22 筆，格式規整。你將兩種版本的報告分開陳列在桌面上，開始逐一進資料庫核查。
                                 </p>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
                                     讀到第 14 筆時，你停下來：
@@ -172,11 +290,12 @@ export const PhantomCh4 = () => {
                     <ChoiceBlock
                         nodeNum="01"
                         directive="文獻核實的唯一標準是能否在資料庫中查到，格式完整不等於文獻存在"
-                        question="你在三個資料庫中都查不到這筆引用。你怎麼處理？"
+                        mediaUrl="/assets/phantom/backgrounds/ch4/phantom_ch4_citation_verification_bg_v1.png"
+                        question="你在三個主要資料庫中都無法查證這筆引用的存在。你怎麼處理？"
                         choices={[
-                            { id: 'A', text: '引用格式完整，作者、期刊、頁碼都有，應該沒問題，繼續核查其他文獻。' },
-                            { id: 'B', text: '查不到就是查不到。在分析報告中標記為「無法核實」，記錄所有查詢過的資料庫與結果。' },
-                            { id: 'C', text: '有可能是小型期刊資料庫收錄延遲。暫時標記為「待確認」，繼續後續分析。' },
+                            { id: 'A', text: '引用格式完整，作者、期刊、頁碼都有，應該只是沒被數位化，繼續核查其他文獻。' },
+                            { id: 'B', text: '查不到就是查不到。在分析報告中明確標記為「無法核實」，記錄所有查詢過的資料庫與結果。' },
+                            { id: 'C', text: '有可能是小型期刊資料庫庫存延遲。暫時標記為「待確認」，繼續後續分析。' },
                         ]}
                         onChoice={handleChoice1}
                     />
@@ -185,10 +304,11 @@ export const PhantomCh4 = () => {
                 {phase === 'scene2' && (
                     <SceneBlock
                         time="檔案元數據檢查"
+                        mediaUrl="/assets/phantom/backgrounds/ch4/phantom_ch4_metadata_timestamp_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    你向學校存檔系統申請調閱當年競賽提交的電子檔原始版本。系統批准後，你下載了檔案，右鍵查看屬性。
+                                    你向學校存檔系統申請調閱當年競賽提交的電子檔原始版本。這份數位文件的元數據(Metadata)將揭露它背後的故事。你打開了檔案屬性。
                                 </p>
                                 <div className="bg-slate-800/60 border border-slate-700 rounded p-4 text-sm text-slate-200 mb-4 space-y-2">
                                     <div className="flex justify-between text-xs">
@@ -205,7 +325,7 @@ export const PhantomCh4 = () => {
                                     </div>
                                 </div>
                                 <p className="text-slate-400 text-xs italic leading-relaxed">
-                                    最後修改時間比競賽截止晚了整整 72 小時。
+                                    最後修改時間，竟然比系統表定的競賽截止時間，晚了整整 72 小時。這意味著提交後檔案仍被竄改過。
                                 </p>
                             </>
                         }
@@ -231,16 +351,17 @@ export const PhantomCh4 = () => {
                 {phase === 'scene3' && (
                     <SceneBlock
                         time="數據分佈交叉比對"
+                        mediaUrl="/assets/phantom/backgrounds/ch4/phantom_ch4_crosscheck_dataset_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    你把報告中的問卷數據拉出來，和你在第三章取得的真實問卷回覆做比對。
+                                    你把報告中的調查數據拉出來，和你在第三章親自參與與取得的真實問卷回覆做「交叉比對」。
                                 </p>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    發現令你皺眉：報告的數據呈現出高度對稱的常態分佈——所有組別的標準差幾乎相同，均值之間的差距精準到小數點後兩位。
+                                    比對結果令你背脊發涼：這份得獎報告的數據，呈現出了異乎尋常、高度完美的對稱常態分佈。所有控制組與實驗組的標準差差異幾乎被抹平，均值之間的推移精準到不可思議的地步。
                                 </p>
                                 <p className="text-slate-400 text-xs italic leading-relaxed border-l-2 border-emerald-700/40 pl-3">
-                                    真實的問卷調查資料，通常會有自然的不規則性——有人跳題、有人極端值、有人填中間值。這份數據太整齊了。
+                                    真實世界的人類行為調查資料，永遠帶有自然的不規則性與噪點（有人跳題、有人填極端值）。這份數據太乾淨了，乾淨到像是由系統演算法「依照預期結論反向生成」的產物。
                                 </p>
                             </>
                         }
@@ -267,16 +388,23 @@ export const PhantomCh4 = () => {
                     const r = FAIL_REASONS[failKey];
                     return (
                         <div>
+                            <div className="relative w-full h-40 rounded-sm overflow-hidden border border-red-900/50 mb-5 shadow-2xl">
+                                <div className="absolute inset-0 bg-cover bg-center grayscale opacity-60" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch4/phantom_ch4_archive_room_bg_v1.png')" }}></div>
+                                <div className="absolute inset-0 bg-red-950/40 mix-blend-color-burn"></div>
+                                <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')] mix-blend-overlay animate-pulse pointer-events-none"></div>
+                                <div className="absolute bottom-4 left-4 text-red-500 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Archive Corrupted // Analysis Void</div>
+                            </div>
+
                             <div className="bg-red-950/30 border border-red-700/40 rounded p-6 mb-5">
-                                <SectionLabel icon={<AlertTriangle size={13} />} text="任務中止報告" color="text-red-400" />
+                                <SectionLabel icon={<AlertTriangle size={13} />} text="分析偏誤報告" color="text-red-400" />
                                 <h2 className="text-lg font-black text-red-300 mt-3 mb-4">{r.type}</h2>
                                 <p className="text-slate-300 text-sm leading-relaxed mb-5">{r.detail}</p>
                                 <div className="border-t border-red-700/20 pt-4">
                                     <span className="font-mono text-xs text-red-400/60">{r.concept}</span>
                                 </div>
                             </div>
-                            <button onClick={retry} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
-                                <RotateCcw size={15} /> 重新執行任務
+                            <button onClick={() => { unlockAudio(); retry(); }} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm border border-slate-600">
+                                <RotateCcw size={15} /> 重新比對檔案
                             </button>
                         </div>
                     );
@@ -284,27 +412,37 @@ export const PhantomCh4 = () => {
 
                 {phase === 'complete' && (
                     <div>
-                        <div className="bg-emerald-950/20 border border-emerald-700/30 rounded p-6 mb-5">
-                            <SectionLabel icon={<CheckCircle size={13} />} text="任務完成" color="text-emerald-400" />
-                            <h2 className="text-xl font-black text-emerald-300 mt-3 mb-4">文獻比對任務成功</h2>
+                        <div className="relative w-full h-48 sm:h-56 rounded-sm overflow-hidden border border-cyan-800/60 mb-6 shadow-[0_0_30px_rgba(6,182,212,0.15)]">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch4/phantom_ch4_distribution_anomaly_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                            <div className="absolute inset-0 opacity-40 mix-blend-color" style={{ backgroundImage: "linear-gradient(rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.1))" }}></div>
+                            <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute bottom-4 left-5 text-cyan-400 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]">Document Analysis Finalized</div>
+                        </div>
+
+                        <div className="bg-slate-900/80 border border-slate-700/50 rounded-lg p-6 mb-6">
+                            <SectionLabel icon={<CheckCircle size={13} />} text="分析完成" color="text-cyan-400" />
+                            <h2 className="text-xl font-black text-cyan-300 mt-3 mb-4">拼圖成形</h2>
                             <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                                你完成了一份嚴謹的文獻分析報告：核實了所有引用來源，記錄了元數據異常，並完整呈現所有發現。這份報告為第五章的實驗驗證提供了明確的調查方向。
+                                你完成了一份嚴密且無法反駁的文獻分析報告：你核實指出了不存在的引用來源、記錄了不可能的時間戳異常，並將報告原始設定的異常完美分佈完整呈現。這份冰冷的證據鏈，已經為最終章的實證重現舖好決戰舞台。
                             </p>
-                            <div className="border-t border-emerald-700/20 pt-5">
-                                <div className="font-mono text-xs text-emerald-500/70 tracking-widest mb-3">證據碎片已入庫</div>
+                            <div className="border-t border-slate-700/50 pt-5">
+                                <div className="font-mono text-[10px] text-cyan-500/70 tracking-widest mb-3 uppercase">Fragments Compiled</div>
                                 <div className="space-y-2">
-                                    <EvidenceItem text="引用文獻「陳等人（2021）教育科學期刊」在三個主要資料庫中均無法查到" />
-                                    <EvidenceItem text="競賽提交版本的最後修改時間戳記晚於截止日 72 小時" />
+                                    <EvidenceItem text="引用文獻 #14（陳等人, 2021, 教育科學期刊）在各大核心庫中完全查無紀錄" />
+                                    <EvidenceItem text="競賽提交版本的最後修改時間(Metadata)，比系統載明的截止時間晚了 72 小時" />
                                     {foundOptimal
-                                        ? <EvidenceItem text="報告數據呈現異常完美的常態分佈，標準差與均值比例過於規整，與真實問卷資料的自然分佈有顯著差異" highlight />
-                                        : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3"><Lock size={12} /><span>數據分佈異常發現未詳細記錄（重試可解鎖完整分析）</span></div>
+                                        ? <EvidenceItem text="原始報告數據呈現人工感極強的完美分布(對稱且標準差無異)，與自然世界的抽樣結果產生統計學上的嚴重背離" highlight />
+                                        : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3 border border-slate-800 rounded-sm bg-slate-900/50"><Lock size={12} /><span>最高分析洞見：數據的隱匿瑕疵仍未徹底揭發（重試可解鎖完美分析）</span></div>
                                     }
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-slate-900/60 border border-slate-800 rounded p-4 mb-5 text-xs text-slate-500 font-mono">
-                            第五章｜實驗法：重現測試 — 已解鎖
+                        <div className="bg-cyan-950/20 border border-cyan-800/40 rounded p-4 mb-6 shadow-sm flex items-center justify-between">
+                            <span className="text-xs text-slate-400 font-mono">系統提示：</span>
+                            <span className="text-xs text-cyan-300 font-mono font-bold">第五章｜實驗法：重現測試 — ✅ 解鎖條件達成</span>
                         </div>
+
                         <PrimaryButton onClick={() => navigate('/phantom')} label="返回調查檔案" />
                     </div>
                 )}
@@ -341,29 +479,61 @@ const PrimaryButton = ({ onClick, label }) => (
     </button>
 );
 
-const SceneBlock = ({ time, content, actionLabel, onAction }) => (
-    <div>
-        <div className="font-mono text-emerald-600/60 text-xs tracking-widest mb-4">{time}</div>
-        <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-8">{content}</div>
-        <button onClick={onAction} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
-            {actionLabel} <ChevronRight size={16} />
-        </button>
+const SceneBlock = ({ time, content, actionLabel, onAction, mediaUrl }) => (
+    <div className="overflow-hidden bg-slate-900 border border-slate-700 rounded-lg mb-8 shadow-2xl">
+        {mediaUrl && (
+            <div className="relative w-full aspect-[21/9] bg-slate-950">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] hover:scale-[1.03] origin-bottom"
+                    style={{ backgroundImage: `url('${mediaUrl}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(0,255,200,0.06),rgba(0,200,255,0.02),rgba(0,100,255,0.06))] bg-[length:100%_4px,3px_100%] mix-blend-overlay"></div>
+                
+                <div className="absolute top-4 left-4 font-mono text-emerald-400 font-bold text-[10px] tracking-widest bg-slate-950/80 px-2 py-1 rounded backdrop-blur-md border border-emerald-900/50 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    REC • {time}
+                </div>
+            </div>
+        )}
+
+        <div className={`p-6 ${mediaUrl ? 'pt-4' : ''}`}>
+            {!mediaUrl && <div className="font-mono text-emerald-600/60 text-xs tracking-widest mb-4">{time}</div>}
+            
+            <div className="text-slate-300 text-sm leading-relaxed mb-6 space-y-4">
+                {content}
+            </div>
+            
+            <button
+                onClick={onAction}
+                className="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-emerald-500/50 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm"
+            >
+                {actionLabel} <ChevronRight size={16} />
+            </button>
+        </div>
     </div>
 );
 
-const ChoiceBlock = ({ nodeNum, question, choices, onChoice, directive }) => (
+const ChoiceBlock = ({ nodeNum, question, choices, onChoice, directive, mediaUrl }) => (
     <div>
         <div className="font-mono text-emerald-600/60 text-xs tracking-widest mb-2">決策節點 {nodeNum}</div>
         {directive && (
-            <div className="text-[10px] font-mono text-slate-600 tracking-widest mb-4 flex items-center gap-2">
-                <span className="text-slate-700">◈</span> 行動守則：{directive}
+            <div className="text-[10px] font-mono text-emerald-600/80 tracking-widest mb-4 flex items-center gap-2 bg-emerald-950/30 py-1.5 px-3 rounded border border-emerald-900/30">
+                <span className="text-emerald-500">◈</span> 行動守則：{directive}
             </div>
         )}
-        <h2 className="text-base font-black text-white mb-6">{question}</h2>
+        {mediaUrl && (
+            <div className="relative w-full h-40 sm:h-48 rounded-lg overflow-hidden border border-slate-700 mb-6 shadow-xl">
+                <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: `url('${mediaUrl}')` }}></div>
+                <div className="absolute inset-0 bg-slate-900/50 mix-blend-multiply"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent"></div>
+            </div>
+        )}
+        <h2 className="text-base font-black text-white mb-6 leading-relaxed">{question}</h2>
         <div className="space-y-3">
             {choices.map(c => (
                 <button key={c.id} onClick={() => onChoice(c.id)}
-                    className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-600/40 rounded p-5 transition-all group">
+                    className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-600/40 rounded p-5 transition-all group shadow-sm hover:shadow-emerald-900/20">
                     <div className="flex items-start gap-3">
                         <span className="font-mono text-emerald-400 font-bold text-sm flex-shrink-0 mt-0.5 w-4">{c.id}</span>
                         <span className="text-slate-300 text-sm leading-relaxed group-hover:text-white transition-colors">{c.text}</span>

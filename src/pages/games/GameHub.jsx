@@ -353,7 +353,7 @@ export const GameHub = () => {
                         {/* 1. 主視覺背景圖 (Keyart) */}
                         <div 
                             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
-                            style={{ backgroundImage: "url('/assets/phantom/keyart/phantom_keyart_hub_v1.png')" }}
+                            style={{ backgroundImage: "url('/assets/phantom/keyart/phantom_keyart_hub_v1.webp')" }}
                         ></div>
 
                         {/* 2. 深色漸層 Overlay (增加可讀性) */}
