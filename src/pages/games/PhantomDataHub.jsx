@@ -41,10 +41,15 @@ export const PhantomDataHub = () => {
     const completedCount = Object.values(chapterStates).filter(s => s.complete).length;
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
+        <div className="min-h-screen bg-slate-950 text-slate-100 font-sans relative">
+            {/* 滿版背景與雜訊特效 */}
+            <div className="absolute inset-0 bg-cover bg-center bg-fixed pointer-events-none" style={{ backgroundImage: "url('/assets/phantom/keyart/phantom_keyart_hub_v1.webp')" }}></div>
+            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-[2px] pointer-events-none z-0"></div>
+            <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay z-0" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20 z-0"></div>
 
             {/* Top bar */}
-            <div className="border-b border-slate-800 bg-slate-900/80 px-6 py-3 flex items-center gap-3">
+            <div className="relative z-10 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md px-6 py-3 flex items-center gap-3 shadow-md">
                 <button onClick={() => navigate('/games')} className="text-slate-600 hover:text-slate-400 transition-colors font-mono text-xs tracking-widest">← 任務中心</button>
                 <span className="text-slate-700 mx-1">|</span>
                 <span className="text-amber-500 font-mono text-xs tracking-widest">R.I.B. 調查檔案</span>
@@ -53,7 +58,7 @@ export const PhantomDataHub = () => {
                 {agentName && <span className="ml-auto text-slate-500 font-mono text-xs">{agentName}</span>}
             </div>
 
-            <div className="max-w-3xl mx-auto px-6 py-12">
+            <div className="max-w-3xl mx-auto px-6 py-12 relative z-10">
 
                 {/* Case Header */}
                 <div className="mb-10">
