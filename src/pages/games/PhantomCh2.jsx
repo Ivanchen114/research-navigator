@@ -149,7 +149,7 @@ export const PhantomCh2 = () => {
             '/assets/phantom/backgrounds/ch2/phantom_ch2_interview_table_bg_v1.webp',
             '/assets/phantom/backgrounds/ch2/phantom_ch2_identity_doubt_bg_v1.webp',
             '/assets/phantom/backgrounds/ch2/phantom_ch2_silence_tension_bg_v1.webp',
-            '/assets/phantom/backgrounds/ch2/phantom_ch2_post_interview_notes_bg_v1..webp',
+            '/assets/phantom/backgrounds/ch2/phantom_ch2_post_interview_notes_bg_v1.webp',
             '/assets/phantom/backgrounds/ch2/phantom_ch2_contradiction_bg_v1.webp'
         ];
         pImages.forEach(src => { const img = new Image(); img.src = src; });
@@ -445,7 +445,7 @@ export const PhantomCh2 = () => {
                 {phase === 'complete' && (
                     <div>
                         <div className="relative w-full h-48 rounded-sm overflow-hidden border border-emerald-900/50 mb-5 shadow-2xl">
-                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch2/phantom_ch2_post_interview_notes_bg_v1..webp')" }}></div>
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch2/phantom_ch2_post_interview_notes_bg_v1.webp')" }}></div>
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
                             <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
                             <div className="absolute bottom-4 left-4 text-emerald-400 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Interview Concluded</div>

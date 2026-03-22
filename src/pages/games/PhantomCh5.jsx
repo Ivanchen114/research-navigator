@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FileText, AlertTriangle, CheckCircle,
-    RotateCcw, ChevronRight, Lock, ShieldCheck
+    RotateCcw, ChevronRight, Lock, ShieldCheck, Volume2, VolumeX
 } from 'lucide-react';
 
 const STORAGE_KEYS = {
@@ -58,12 +58,98 @@ export const PhantomCh5 = () => {
     const [foundOptimal, setFoundOptimal] = useState(false);
     const [agentName, setAgentName] = useState('探員');
     const [hadCh4Optimal, setHadCh4Optimal] = useState(false);
+    const [isMuted, setIsMuted] = useState(() => localStorage.getItem('phantom_muted') === 'true');
+
+    // ── 音效設定 ──
+    const bgmRef = useRef(null);
+    const tensionRef = useRef(null);
+    const glitchRef = useRef(null);
+
+    useEffect(() => {
+        bgmRef.current = new Audio('/assets/phantom/audio/dragon-studio-creepy-industrial-hum-482882.mp3');
+        bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.2;
+        bgmRef.current.muted = isMuted;
+
+        tensionRef.current = new Audio('/assets/phantom/audio/dragon-studio-heartbeat-sound-372448.mp3');
+        tensionRef.current.volume = 0.8;
+        tensionRef.current.muted = isMuted;
+
+        glitchRef.current = new Audio('/assets/phantom/audio/virtual_vibes-glitch-sound-effect-hd-379466.mp3');
+        glitchRef.current.volume = 0.4;
+        glitchRef.current.muted = isMuted;
+
+        return () => {
+            if (bgmRef.current) bgmRef.current.pause();
+            if (tensionRef.current) tensionRef.current.pause();
+            if (glitchRef.current) glitchRef.current.pause();
+        };
+    }, []);
+
+    // ── 靜音同步 ──
+    useEffect(() => {
+        if (bgmRef.current) bgmRef.current.muted = isMuted;
+        if (tensionRef.current) tensionRef.current.muted = isMuted;
+        if (glitchRef.current) glitchRef.current.muted = isMuted;
+    }, [isMuted]);
+
+    const toggleMute = () => {
+        const newMuted = !isMuted;
+        setIsMuted(newMuted);
+        localStorage.setItem('phantom_muted', String(newMuted));
+    };
+
+    const unlockAudio = () => {
+        if (bgmRef.current) bgmRef.current.play().catch(() => {});
+        if (tensionRef.current) tensionRef.current.play().then(() => tensionRef.current.pause()).catch(() => {});
+        if (glitchRef.current) glitchRef.current.play().then(() => glitchRef.current.pause()).catch(() => {});
+    };
+
+    useEffect(() => {
+        if (!bgmRef.current || !tensionRef.current || !glitchRef.current) return;
+
+        if (phase === 'scene1' || phase === 'scene2' || phase === 'scene3' || phase === 'choice1' || phase === 'choice2' || phase === 'choice3') {
+            bgmRef.current.play().catch(e => console.log('BGM blocked by browser', e));
+        }
+        
+        if (phase === 'fail') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+            glitchRef.current.volume = 0.6;
+            glitchRef.current.currentTime = 0;
+            glitchRef.current.play().catch(e => console.log('Glitch blocked', e));
+        }
+
+        if (phase === 'complete') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+        }
+
+        if (phase === 'briefing') {
+            bgmRef.current.pause();
+            bgmRef.current.currentTime = 0;
+            tensionRef.current.pause();
+            tensionRef.current.currentTime = 0;
+        }
+    }, [phase]);
 
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
         if (name) setAgentName(name);
         setHadCh4Optimal(!!localStorage.getItem(STORAGE_KEYS.ch4Optimal));
         window.scrollTo(0, 0);
+
+        // Preload images
+        const pImages = [
+            '/assets/phantom/covers/phantom_cover_ch5_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch5/phantom_ch5_lab_setup_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch5/phantom_ch5_control_design_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch5/phantom_ch5_unexpected_result_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch5/phantom_ch5_ethics_consent_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch5/phantom_ch5_signature_match_bg_v1.webp',
+            '/assets/phantom/backgrounds/ch5/phantom_ch5_case_closed_bg_v1.webp'
+        ];
+        pImages.forEach(src => { const img = new Image(); img.src = src; });
     }, [phase]);
 
     const fail = (key) => { setFailKey(key); setPhase('fail'); };
@@ -104,22 +190,42 @@ export const PhantomCh5 = () => {
         <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
 
             <div className="sticky top-0 z-10 border-b border-slate-800 bg-slate-900/90 backdrop-blur px-6 py-3 flex items-center gap-2 text-xs font-mono">
-                <button onClick={() => navigate('/phantom')} className="text-slate-500 hover:text-rose-400 transition-colors">
+                <button onClick={() => navigate('/phantom')} className="text-slate-500 hover:text-violet-400 transition-colors">
                     R.I.B. 調查檔案
                 </button>
                 <span className="text-slate-700">/</span>
-                <span className="text-rose-400/70">幽靈數據</span>
+                <span className="text-violet-400/70">幽靈數據</span>
                 <span className="text-slate-700">/</span>
                 <span className="text-slate-300">第五章｜重現測試</span>
-                <span className="ml-auto text-slate-600">{agentName}</span>
+                <div className="ml-auto flex items-center gap-3">
+                    <button
+                        onClick={toggleMute}
+                        title={isMuted ? '開啟音效' : '靜音'}
+                        className="text-slate-500 hover:text-violet-400 transition-colors"
+                    >
+                        {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    </button>
+                    {agentName && <span className="text-slate-600 font-mono text-xs">{agentName}</span>}
+                </div>
             </div>
 
             <div className="max-w-2xl mx-auto px-6 py-12">
 
                 {phase === 'briefing' && (
                     <div>
-                        <ChapterLabel num="05" method="實驗法" />
-                        <h1 className="text-3xl font-black text-white mb-6">重現測試</h1>
+                        {/* 封面橫幅 */}
+                        <div className="relative w-full h-48 sm:h-64 rounded-lg overflow-hidden mb-8 border border-slate-700 shadow-2xl">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/covers/phantom_cover_ch5_bg_v1.webp')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                            {/* Scanlines & Noise */}
+                            <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(100,0,255,0.06),rgba(0,100,255,0.02),rgba(50,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20"></div>
+                            
+                            <div className="absolute bottom-6 left-6 right-6">
+                                <ChapterLabel num="05" method="實驗法" />
+                                <h1 className="text-3xl sm:text-4xl font-black text-white mt-2 drop-shadow-md">重現測試</h1>
+                            </div>
+                        </div>
 
                         <div className="bg-slate-900/60 border border-slate-700/50 rounded p-4 mb-5 space-y-1.5">
                             <div className="font-mono text-xs text-slate-500 tracking-widest mb-2">◈ 來自前章的線索</div>
@@ -132,6 +238,12 @@ export const PhantomCh5 = () => {
 
                         <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-5 space-y-4">
                             <SectionLabel icon={<FileText size={13} />} text="任務簡報" />
+                            <div className="relative w-full h-32 rounded-sm overflow-hidden border border-slate-700 mb-4 shadow-inner">
+                                <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch5/phantom_ch5_lab_setup_bg_v1.webp')" }}></div>
+                                <div className="absolute inset-0 bg-violet-950/20 mix-blend-color"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                                <div className="absolute bottom-2 left-2 text-[10px] text-violet-500 font-mono uppercase tracking-[0.2em] opacity-80 decoration-violet-800/50 underline underline-offset-4">Location: Data Lab // Isolated Environment</div>
+                            </div>
                             <p className="text-slate-300 leading-relaxed text-sm">
                                 你已經從四個不同角度蒐集了大量間接證據。現在，你需要最後一塊：直接在實驗室中重現「幽靈數據工具」的運作，確認它能做到報告裡的事。這將是整個調查的最終驗證。
                             </p>
@@ -142,27 +254,28 @@ export const PhantomCh5 = () => {
                             </div>
                         </div>
 
-                        <div className="bg-rose-950/20 border border-rose-700/30 rounded p-4 mb-8 text-xs text-rose-300/80 leading-relaxed">
-                            <strong className="text-rose-400">實驗法的核心規則：</strong>必須設計對照組；結果如實記錄，不得為符合假設而調整；研究對象的資料必須以符合倫理的方式呈現。
+                        <div className="bg-violet-950/20 border border-violet-700/30 rounded p-4 mb-8 text-xs text-violet-300/80 leading-relaxed">
+                            <strong className="text-violet-400">實驗法的核心規則：</strong>必須設計對照組；結果如實記錄，不得為符合假設而調整；研究對象的資料必須以符合倫理的方式呈現。
                         </div>
 
-                        <PrimaryButton onClick={() => setPhase('scene1')} label="進入實驗室" />
+                        <PrimaryButton onClick={() => { unlockAudio(); setPhase('scene1'); }} label="進入實驗室" />
                     </div>
                 )}
 
                 {phase === 'scene1' && (
                     <SceneBlock
-                        time="實驗設計階段"
+                        time="階段一：實驗設計"
+                        mediaUrl="/assets/phantom/backgrounds/ch5/phantom_ch5_control_design_bg_v1.webp"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
                                     你取得了那套「幽靈數據工具」的副本。它的介面正如第一章觀察到的那樣——有「研究問題」、「資料整理」、「圖表輸出」、「結論草稿」四個模組。
                                 </p>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    在實際執行之前，你需要先確定實驗設計。你想比較工具生成的數據和真實問卷數據有什麼不同，但「怎麼比」本身就是一個方法學決定。
+                                    在實際執行測試之前，你需要先確定<span className="text-violet-300">實驗設計</span>。你的目標是驗證這項工具是否可以自動憑空生成與原報告極為相似的虛假資料。但「怎麼比」本身就是一個嚴肅的方法學決定。
                                 </p>
-                                <p className="text-slate-400 text-xs italic leading-relaxed">
-                                    你的第三章還留著 23 份真實問卷回覆。
+                                <p className="text-slate-400 text-xs italic leading-relaxed border-l-2 border-slate-700 pl-3">
+                                    你的第三章還留著 23 份真實問卷回覆的原始檔案。
                                 </p>
                             </>
                         }
@@ -174,12 +287,13 @@ export const PhantomCh5 = () => {
                 {phase === 'choice1' && (
                     <ChoiceBlock
                         nodeNum="01"
-                        directive="實驗必須有明確的對照基準，才能確認觀察到的差異是真實的"
+                        directive="實驗必須有明確的對照基準，才能排除替代解釋，確認變因的影響"
+                        mediaUrl="/assets/phantom/backgrounds/ch5/phantom_ch5_control_design_bg_v1.webp"
                         question="你要怎麼設計這個重現實驗？"
                         choices={[
                             { id: 'A', text: '讓工具生成一組數據，直接和第四章取得的報告數據做比對——目標明確：確認工具能否生成這種特徵的數據。' },
-                            { id: 'B', text: '設計兩組：實驗組使用工具生成數據，對照組從第三章的 23 份真實問卷隨機抽樣。比較兩組的分佈特徵。' },
-                            { id: 'C', text: '自己手動輸入一組「一般正常問卷應有的數據」作為對照，看工具生成的數據和手動輸入的是否有差異。' },
+                            { id: 'B', text: '設計兩組：實驗組使用工具生成數據，對照組從第三章的 23 份真實問卷抽樣。比較工具生成是否與真實數據有顯著特徵異常。' },
+                            { id: 'C', text: '自己手動隨便輸入一組「一般正常問卷應有的數據」作為對照，看工具生成的數據和手動編造的是否有明顯差異。' },
                         ]}
                         onChoice={handleChoice1}
                     />
@@ -187,17 +301,18 @@ export const PhantomCh5 = () => {
 
                 {phase === 'scene2' && (
                     <SceneBlock
-                        time="實驗執行，第一輪結果"
+                        time="階段二：首輪測試結果"
+                        mediaUrl="/assets/phantom/backgrounds/ch5/phantom_ch5_unexpected_result_bg_v1.webp"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    實驗進行完畢。工具確實能夠生成符合指定常態分佈參數的數據，這一點得到了確認。
+                                    第一輪實驗進行完畢。這款大語言模型輔助工具確實能夠生成符合指定常態分佈參數的虛假數據，這一點得到了確認。
                                 </p>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    但對照比較顯示了一個你沒預期到的細節：工具生成的數據，標準差比報告中的數據<strong className="text-rose-300">小了約 15%</strong>。均值接近，但離散程度有系統性差異。
+                                    但系統卻亮起了黃燈，因為對照比較顯示了一個你沒預期到的細節：工具生成的數據，標準差比原報告中的數據<strong className="text-amber-500">小了約 15%</strong>。雖然均值極為接近，但離散程度發生了系統性偏移。
                                 </p>
-                                <p className="text-slate-400 text-xs italic leading-relaxed border-l-2 border-rose-700/40 pl-3">
-                                    這可能代表工具有不同版本，或當年的使用者調整過參數。也可能是其他原因。
+                                <p className="text-slate-400 text-xs italic leading-relaxed border-l-2 border-violet-700/40 pl-3">
+                                    這可能代表當下使用的工具版本不同、或是當年學生手動調整過參數。面對這不完美的再現，你必須做出應對。
                                 </p>
                             </>
                         }
@@ -210,11 +325,12 @@ export const PhantomCh5 = () => {
                     <ChoiceBlock
                         nodeNum="02"
                         directive="意料之外的結果是發現，不是失敗——如實記錄比強迫吻合更有科學價值"
-                        question="工具生成的數據和報告的數據有 15% 的標準差差異。你怎麼處理？"
+                        mediaUrl="/assets/phantom/backgrounds/ch5/phantom_ch5_unexpected_result_bg_v1.webp"
+                        question="工具生成的初版數據和報告有 15% 的標準差偏差。你該怎麼辦？"
                         choices={[
-                            { id: 'A', text: '調整工具的參數設定，重新生成，讓輸出結果更接近報告中的分佈，再記錄這個版本的結果。' },
-                            { id: 'B', text: '如實記錄這個差異，分析可能的原因（工具版本差異、使用者設定不同），並在報告中完整呈現兩組的所有數值。' },
-                            { id: 'C', text: '15% 的差異超過了合理誤差範圍，宣告本次實驗未能成功重現，重新設計實驗方案。' },
+                            { id: 'A', text: '調整工具的微調參數，重新生成，確保輸出結果完美貼合報告中的分佈，證明工具可以100%仿製。' },
+                            { id: 'B', text: '如實記錄了這個 15% 的標準差減少，推論可能存在工具版本迭代或使用者參與因素，不刪改任何原始測試數據。' },
+                            { id: 'C', text: '這 15% 的差異代表實驗徹底失敗。無法100%重現就不算鐵證，刪除本次紀錄並重新規劃。' },
                         ]}
                         onChoice={handleChoice2}
                     />
@@ -222,21 +338,22 @@ export const PhantomCh5 = () => {
 
                 {phase === 'scene3' && (
                     <SceneBlock
-                        time="最終報告撰寫"
+                        time="階段三：報告與倫理審查"
+                        mediaUrl="/assets/phantom/backgrounds/ch5/phantom_ch5_ethics_consent_bg_v1.webp"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    五週的調查即將收尾。你整理好了所有章節的發現，準備提交最終報告給 R.I.B. 總部。
+                                    五週的調查即將收尾。你已經整理好了所有章節的發現，正準備編譯成結案報告，提交給 R.I.B. 總部。
                                 </p>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
-                                    報告中涉及了多個具體的調查對象：圖書館電腦區的 C1、C3，受訪者林志遠，以及問卷填答者。這些人的資訊如何呈現，是最後一個必須決定的問題。
+                                    報告中詳細涉及了這些日子的實證：圖書館電腦區的 C1、C3，受訪者林志遠，以及被當作真實對照組的問卷填答者。作為一份要正式歸檔的研究報告，這些證人的資料該如何呈現，是送出前的最後一道門檻。
                                 </p>
-                                <p className="text-slate-400 text-xs italic leading-relaxed">
-                                    這份報告的讀者只有 R.I.B. 總部，但它仍然必須符合研究倫理的基本標準。
+                                <p className="text-slate-400 text-xs italic leading-relaxed border-l-2 border-violet-700/30 pl-3">
+                                    這份調查雖然只有少數管理層會閱讀，但它在法律與研究界裡，仍必須死守基本的研究倫理與保護原則。
                                 </p>
                             </>
                         }
-                        actionLabel="決定如何呈現調查對象"
+                        actionLabel="決定如何處理實證資料"
                         onAction={() => setPhase('choice3')}
                     />
                 )}
@@ -244,12 +361,13 @@ export const PhantomCh5 = () => {
                 {phase === 'choice3' && (
                     <ChoiceBlock
                         nodeNum="03"
-                        directive="保護當事人隱私的方式是匿名化，而不是刪除所有相關記錄"
-                        question="報告中的調查對象資訊，你要如何呈現？"
+                        directive="保護當事人隱私的方式是匿名化，而不是刪除所有相關紀錄，保留論證基礎"
+                        mediaUrl="/assets/phantom/backgrounds/ch5/phantom_ch5_ethics_consent_bg_v1.webp"
+                        question="面對含有個人細節的調查對象資料，你決定在最終報告中怎麼呈現？"
                         choices={[
-                            { id: 'A', text: '全程使用代號（C1、C3、受訪者 L）和抽象化描述，不透露任何可識別的個人資訊，但保留所有案例細節。' },
-                            { id: 'B', text: '在附錄中列出每位調查對象的班級與學號，讓報告結論更具說服力和可追溯性。' },
-                            { id: 'C', text: '為了確保萬無一失，把所有提到具體觀察對象的段落全部刪除，只保留統計數字。' },
+                            { id: 'A', text: '全程使用代號（如：對象 C1，受訪者 L）與去識別化描述，剝除可辨識個資，但完整保留其供述與觀察細節。' },
+                            { id: 'B', text: '於機密附錄中如實建立對照清冊，列出具體班級與學號等姓名資料，確保本案可以隨時追溯其證據力。' },
+                            { id: 'C', text: '安全第一，為避免任何洩密風險，將報告中所有涉及實地觀察人物的段落全部抽掉，僅呈現冷僻的程式與數據分析。' },
                         ]}
                         onChoice={handleChoice3}
                     />
@@ -259,6 +377,13 @@ export const PhantomCh5 = () => {
                     const r = FAIL_REASONS[failKey];
                     return (
                         <div>
+                            <div className="relative w-full h-40 rounded-sm overflow-hidden border border-red-900/50 mb-5 shadow-2xl">
+                                <div className="absolute inset-0 bg-cover bg-center grayscale opacity-60" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch5/phantom_ch5_lab_setup_bg_v1.webp')" }}></div>
+                                <div className="absolute inset-0 bg-red-950/40 mix-blend-color-burn"></div>
+                                <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')] mix-blend-overlay animate-pulse pointer-events-none"></div>
+                                <div className="absolute bottom-4 left-4 text-red-500 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">EXPERIMENT COMPROMISED // ERROR 199</div>
+                            </div>
+
                             <div className="bg-red-950/30 border border-red-700/40 rounded p-6 mb-5">
                                 <SectionLabel icon={<AlertTriangle size={13} />} text="任務中止報告" color="text-red-400" />
                                 <h2 className="text-lg font-black text-red-300 mt-3 mb-4">{r.type}</h2>
@@ -267,8 +392,8 @@ export const PhantomCh5 = () => {
                                     <span className="font-mono text-xs text-red-400/60">{r.concept}</span>
                                 </div>
                             </div>
-                            <button onClick={retry} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
-                                <RotateCcw size={15} /> 重新執行任務
+                            <button onClick={() => { unlockAudio(); retry(); }} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm border border-slate-600">
+                                <RotateCcw size={15} /> 重新執行驗證
                             </button>
                         </div>
                     );
@@ -277,32 +402,41 @@ export const PhantomCh5 = () => {
                 {phase === 'complete' && (
                     <div>
                         {/* 全案告破 */}
-                        <div className="bg-amber-950/20 border border-amber-600/40 rounded p-6 mb-5 text-center">
-                            <div className="flex justify-center mb-3">
-                                <ShieldCheck size={40} className="text-amber-400" />
+                        <div className="relative w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-violet-800/60 mb-6 shadow-[0_0_30px_rgba(139,92,246,0.15)]">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch5/phantom_ch5_case_closed_bg_v1.webp')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
+                            <div className="absolute inset-0 opacity-40 mix-blend-color" style={{ backgroundImage: "linear-gradient(rgba(139, 92, 246, 0.2), rgba(16, 185, 129, 0.1))" }}></div>
+                            
+                            <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none pb-4">
+                                <ShieldCheck size={48} className="text-violet-400 drop-shadow-[0_0_10px_rgba(139,92,246,0.8)] mb-3" />
+                                <div className="font-mono text-xs text-violet-300 tracking-[0.6em] mb-1">R.I.B. FINALIZED</div>
+                                <h2 className="text-3xl font-black text-white drop-shadow-md">結案報告提交</h2>
                             </div>
-                            <div className="font-mono text-xs text-amber-600/80 tracking-[0.4em] mb-2">CASE CLOSED</div>
-                            <h2 className="text-2xl font-black text-amber-300 mb-3">全案告破</h2>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                五個章節、五種研究方法、五週時間。你從觀察到訪談，從問卷到文獻，最後在實驗室完成了最終驗證。幽靈數據工具的真相，已經有了完整的調查記錄。
-                            </p>
                         </div>
 
-                        <div className="bg-emerald-950/20 border border-emerald-700/30 rounded p-6 mb-5">
-                            <SectionLabel icon={<CheckCircle size={13} />} text="第五章任務完成" color="text-emerald-400" />
-                            <h2 className="text-xl font-black text-emerald-300 mt-3 mb-4">實驗驗證成功</h2>
-                            <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                                你設計了嚴謹的對照實驗，如實記錄了預期之外的差異，並以符合倫理的方式呈現所有調查對象。這份報告可以提交。
+                        <div className="bg-slate-900 border border-slate-700/30 rounded p-6 mb-5">
+                            <SectionLabel icon={<CheckCircle size={13} />} text="第五章任務完成" color="text-violet-400" />
+                            <p className="text-slate-300 text-sm leading-relaxed my-5">
+                                五個章節、五種研究方法、五週時間。你從觀察到訪談，從問卷到文獻，最後在實驗室完成了這場實證的最後一哩路。幽靈數據工具的使用軌跡與底層邏輯，已經被你嚴密鎖定。這份無可挑剔的報告會成為 R.I.B. 的典範調查樣本。
                             </p>
 
-                            <div className="border-t border-emerald-700/20 pt-5">
-                                <div className="font-mono text-xs text-emerald-500/70 tracking-widest mb-3">最終證據清單</div>
+                            <div className="border-t border-slate-700/20 pt-5">
+                                <div className="font-mono text-xs text-violet-400/70 tracking-widest mb-3 uppercase">Final Evidence Output</div>
                                 <div className="space-y-2">
-                                    <EvidenceItem text="實驗確認工具能夠生成符合指定常態分佈參數的數據，功能與報告數據特徵吻合" />
-                                    <EvidenceItem text="工具生成數據的標準差系統性偏小（約 15%），與真實問卷資料的自然離散程度有顯著差異" />
+                                    <EvidenceItem text="實驗成功重現！實驗組與控制組的嚴控設計排除了任何工具外的干擾因素。" />
+                                    <EvidenceItem text="所有測試皆完全匿名處理，合乎高等研究倫理，未侵犯受測者權益。" />
                                     {foundOptimal
-                                        ? <EvidenceItem text="此標準差差異可作為技術特徵，用於鑑別「工具生成數據」與「真實調查數據」——提供未來核查的技術依據" highlight />
-                                        : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3"><Lock size={12} /><span>嚴謹對照組設計下的完整技術特徵分析（重試可解鎖）</span></div>
+                                        ? (
+                                            <div className="relative mt-4">
+                                            <div className="relative w-full h-24 mb-3 rounded-sm overflow-hidden border border-emerald-900/30">
+                                                <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch5/phantom_ch5_signature_match_bg_v1.webp')" }}></div>
+                                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/80 to-transparent"></div>
+                                                <div className="absolute inset-0 mix-blend-color bg-emerald-900/40"></div>
+                                            </div>
+                                            <EvidenceItem text="終極洞見：抓死工具 15% 標準差流失的指紋特徵！此項技術特徵被成功留檔，成為鑑定 AI 偽造數據的系統性判準證物！" highlight />
+                                            </div>
+                                          )
+                                        : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3 bg-slate-950 rounded-sm border border-slate-800"><Lock size={12} /><span>最高驗證成就：工具瑕疵技術特徵鑑識（重試可解鎖完美查核）</span></div>
                                     }
                                 </div>
                             </div>
@@ -333,11 +467,11 @@ const ChapterLabel = ({ num, method }) => (
     <div className="flex items-center gap-3 mb-3">
         <span className="text-slate-600 font-mono text-xs">第 {num} 章</span>
         <span className="text-slate-700 text-xs">·</span>
-        <span className="text-rose-400 font-mono text-xs">{method}</span>
+        <span className="text-violet-400 font-mono text-xs">{method}</span>
     </div>
 );
 
-const SectionLabel = ({ icon, text, color = 'text-amber-500' }) => (
+const SectionLabel = ({ icon, text, color = 'text-violet-400' }) => (
     <div className={`flex items-center gap-2 font-mono text-xs tracking-widest ${color}`}>
         {icon} {text}
     </div>
@@ -351,36 +485,68 @@ const MiniStat = ({ label, value }) => (
 );
 
 const PrimaryButton = ({ onClick, label }) => (
-    <button onClick={onClick} className="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
+    <button onClick={onClick} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm border border-slate-600 hover:border-violet-500/50 shadow-lg">
         {label} <ChevronRight size={16} />
     </button>
 );
 
-const SceneBlock = ({ time, content, actionLabel, onAction }) => (
-    <div>
-        <div className="font-mono text-rose-600/60 text-xs tracking-widest mb-4">{time}</div>
-        <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-8">{content}</div>
-        <button onClick={onAction} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
-            {actionLabel} <ChevronRight size={16} />
-        </button>
+const SceneBlock = ({ time, content, actionLabel, onAction, mediaUrl }) => (
+    <div className="overflow-hidden bg-slate-900 border border-slate-700 rounded-lg mb-8 shadow-2xl">
+        {mediaUrl && (
+            <div className="relative w-full aspect-[21/9] bg-slate-950">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] hover:scale-[1.03] origin-bottom"
+                    style={{ backgroundImage: `url('${mediaUrl}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                <div className="absolute inset-0 opacity-15 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(100,50,255,0.06),rgba(0,200,255,0.02),rgba(50,0,255,0.06))] bg-[length:100%_4px,3px_100%] mix-blend-overlay"></div>
+                
+                <div className="absolute top-4 left-4 font-mono text-violet-300 font-bold text-[10px] tracking-widest bg-slate-950/80 px-2 py-1 rounded backdrop-blur-md border border-violet-900/50 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-[pulse_2s_infinite]"></span>
+                    SYS.LOG • {time}
+                </div>
+            </div>
+        )}
+
+        <div className={`p-6 ${mediaUrl ? 'pt-4' : ''}`}>
+            {!mediaUrl && <div className="font-mono text-violet-400/60 text-xs tracking-widest mb-4">{time}</div>}
+            
+            <div className="text-slate-300 text-sm leading-relaxed mb-6 space-y-4">
+                {content}
+            </div>
+            
+            <button
+                onClick={onAction}
+                className="w-full bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-violet-500/50 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm"
+            >
+                {actionLabel} <ChevronRight size={16} />
+            </button>
+        </div>
     </div>
 );
 
-const ChoiceBlock = ({ nodeNum, question, choices, onChoice, directive }) => (
+const ChoiceBlock = ({ nodeNum, question, choices, onChoice, directive, mediaUrl }) => (
     <div>
-        <div className="font-mono text-rose-600/60 text-xs tracking-widest mb-2">決策節點 {nodeNum}</div>
+        <div className="font-mono text-violet-400/60 text-xs tracking-widest mb-2 border-l-2 border-violet-500/50 pl-2">決策節點 {nodeNum}</div>
         {directive && (
-            <div className="text-[10px] font-mono text-slate-600 tracking-widest mb-4 flex items-center gap-2">
-                <span className="text-slate-700">◈</span> 行動守則：{directive}
+            <div className="text-[10px] font-mono text-violet-300/80 tracking-widest mb-4 flex items-center gap-2 bg-violet-950/20 py-1.5 px-3 rounded border border-violet-900/30">
+                <span className="text-violet-400">◈</span> 高限控制：{directive}
             </div>
         )}
-        <h2 className="text-base font-black text-white mb-6">{question}</h2>
+        {mediaUrl && (
+            <div className="relative w-full h-40 sm:h-48 rounded-lg overflow-hidden border border-slate-700 mb-6 shadow-xl">
+                <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{ backgroundImage: `url('${mediaUrl}')` }}></div>
+                <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent"></div>
+            </div>
+        )}
+        <h2 className="text-base font-black text-white mb-6 leading-relaxed">{question}</h2>
         <div className="space-y-3">
             {choices.map(c => (
                 <button key={c.id} onClick={() => onChoice(c.id)}
-                    className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-rose-600/40 rounded p-5 transition-all group">
+                    className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-violet-600/40 rounded p-5 transition-all group shadow-sm hover:shadow-violet-900/20">
                     <div className="flex items-start gap-3">
-                        <span className="font-mono text-rose-400 font-bold text-sm flex-shrink-0 mt-0.5 w-4">{c.id}</span>
+                        <span className="font-mono text-violet-400 font-bold text-sm flex-shrink-0 mt-0.5 w-4">{c.id}</span>
                         <span className="text-slate-300 text-sm leading-relaxed group-hover:text-white transition-colors">{c.text}</span>
                     </div>
                 </button>
