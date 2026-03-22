@@ -249,6 +249,73 @@ export const W4Page = () => {
                         海報是你研究的廣告——目的是讓等一下走讀的同學 <strong>30 秒內</strong>看懂你在研究什麼、為什麼研究。海報四格：<strong>標題 / 副標（正式題目）/ 研究動機 / 製作人姓名班級座號</strong>。
                     </p>
 
+                    {/* 範例海報 */}
+                    <div className="mb-7">
+                        <div className="text-[11px] font-mono text-[#8888aa] uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <span className="inline-block w-3 h-px bg-[#dddbd5]"></span>
+                            範例海報（同學真實作品）
+                            <span className="inline-block flex-1 h-px bg-[#dddbd5]"></span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-2">
+                            {/* 左：實體手寫照片 */}
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="border-2 border-[#dddbd5] rounded-xl overflow-hidden shadow-sm w-full">
+                                    <img
+                                        src="/images/user_research_poster.png"
+                                        alt="同學手寫海報範例"
+                                        className="w-full object-cover"
+                                    />
+                                </div>
+                                <div className="text-[10px] font-mono text-[#8888aa]">▲ 實體手寫版</div>
+                            </div>
+                            {/* 右：數位卡片版 */}
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="border-2 border-[#dddbd5] rounded-xl overflow-hidden bg-white w-full shadow-sm">
+                                    {/* 海報主體 */}
+                                    <div className="p-6 space-y-4">
+                                        {/* 標題 */}
+                                        <div>
+                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-1.5">① 吸引人的標題</div>
+                                            <div className="font-bold text-[20px] leading-tight text-[#1a1a2e]">
+                                                「機」不可失眠——<br />滑手機真的讓你睡更差嗎？
+                                            </div>
+                                        </div>
+                                        {/* 副標 */}
+                                        <div>
+                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-1">② 副標 · 正式研究題目</div>
+                                            <div className="text-[12px] text-[#4a4a6a] leading-relaxed">
+                                                本校高一生睡前手機使用內容類型與睡眠品質之差異研究
+                                            </div>
+                                        </div>
+                                        {/* 研究動機 */}
+                                        <div>
+                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-1">③ 研究動機</div>
+                                            <div className="text-[12px] text-[#4a4a6a] leading-relaxed">
+                                                每次說好「滑一下就睡」，結果一抬頭已經快12點。隔天上課眼皮超重，但我不確定是睡太晚的問題，還是「滑手機這件事本身」讓大腦沒辦法關機。我還發現自己看影片比看限動更難停下來——所以我想知道：睡前滑不同類型的內容，對隔天的狀態影響一樣嗎？
+                                            </div>
+                                        </div>
+                                        {/* 製作人 */}
+                                        <div className="flex items-center justify-between pt-2 border-t border-[#dddbd5]">
+                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase">④ 製作人</div>
+                                            <div className="text-[12px] font-bold text-[#1a1a2e]">王小明 101-15</div>
+                                        </div>
+                                    </div>
+                                    {/* 同學回饋區 */}
+                                    <div className="border-t-2 border-dashed border-[#dddbd5] px-6 py-3 bg-[#f8f7f4]">
+                                        <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-2">同學回饋區</div>
+                                        <div className="space-y-2">
+                                            {[1,2,3].map(n => (
+                                                <div key={n} className="h-5 border-b border-dotted border-[#dddbd5]" />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] font-mono text-[#8888aa]">▲ 數位對照版</div>
+                            </div>
+                        </div>
+                        <div className="text-center text-[10px] font-mono text-[#8888aa] mt-1">好的海報讓人 30 秒看懂「你研究什麼」和「為什麼研究」</div>
+                    </div>
+
                     {/* Poster fields */}
                     <div className="content-grid grid-cols-2 md:grid-cols-4 mb-6">
                         {[

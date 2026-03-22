@@ -29,6 +29,14 @@ import { ChartMatcherGame } from './pages/games/ChartMatcherGame';
 import { LiteratureReview } from './pages/LiteratureReview';
 import { TeamFormation } from './pages/TeamFormation';
 import { ChartSelection } from './pages/ChartSelection';
+import { PromptLab } from './pages/PromptLab';
+import { Dossier } from './pages/Dossier';
+import { PhantomDataHub } from './pages/games/PhantomDataHub';
+import { PhantomCh1 } from './pages/games/PhantomCh1';
+import { PhantomCh2 } from './pages/games/PhantomCh2';
+import { PhantomCh3 } from './pages/games/PhantomCh3';
+import { PhantomCh4 } from './pages/games/PhantomCh4';
+import { PhantomCh5 } from './pages/games/PhantomCh5';
 
 function App() {
   return (
@@ -72,6 +80,14 @@ function App() {
           <Route path="game/citation-detective" element={<CitationDetectiveGame />} />
           <Route path="game/data-detective" element={<DataDetectiveGame />} />
           <Route path="game/chart-matcher" element={<ChartMatcherGame />} />
+          <Route path="prompt-lab" element={<PromptLab />} />
+          <Route path="dossier" element={<Dossier />} />
+          <Route path="phantom" element={<PhantomDataHub />} />
+          <Route path="phantom/ch1" element={<PhantomCh1 />} />
+          <Route path="phantom/ch2" element={<PhantomCh2 />} />
+          <Route path="phantom/ch3" element={<PhantomCh3 />} />
+          <Route path="phantom/ch4" element={<PhantomCh4 />} />
+          <Route path="phantom/ch5" element={<PhantomCh5 />} />
         </Route>
       </Routes>
     </BrowserRouter>

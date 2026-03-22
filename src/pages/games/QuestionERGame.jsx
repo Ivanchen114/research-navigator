@@ -192,6 +192,7 @@ export const QuestionERGame = () => {
             setCurrentIdx(i => i + 1);
             resetQuestionState();
         } else {
+            localStorage.setItem('rib_score_question-er', JSON.stringify({score: score, maxScore: patients.length * 10, date: new Date().toISOString().split('T')[0]}));
             localStorage.setItem('rib_completed_question-er', 'true');
             setGameState('end');
         }

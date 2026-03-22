@@ -185,7 +185,7 @@ export const Home = () => {
 
                 /* ═══ QUICK JUMP ═══ */
                 .jump-grid {
-                  display: grid; grid-template-columns: repeat(3, 1fr);
+                  display: grid; grid-template-columns: repeat(4, 1fr);
                   gap: 1px; background: var(--border);
                   border: 1px solid var(--border);
                   border-radius: 10px; overflow: hidden;
@@ -408,9 +408,9 @@ export const Home = () => {
           </div>
           <div className="hero-stats">
             <div className="stat"><div className="stat-n">W0–W16</div><div className="stat-label">課程週次</div></div>
-            <div className="stat"><div className="stat-n">4</div><div class="stat-label">學習階段</div></div>
-            <div className="stat"><div className="stat-n">6</div><div class="stat-label">互動任務</div></div>
-            <div className="stat"><div className="stat-n">5</div><div class="stat-label">AI-RED 原則</div></div>
+            <div className="stat"><div className="stat-n">4</div><div className="stat-label">學習階段</div></div>
+            <div className="stat"><div className="stat-n">6</div><div className="stat-label">互動任務</div></div>
+            <div className="stat"><div className="stat-n">5</div><div className="stat-label">AI-RED 原則</div></div>
           </div>
         </div>
       </div>
@@ -436,11 +436,17 @@ export const Home = () => {
             <div className="j-desc">8 種病例速查，三問法找到對的研究方法，工具設計、AI 審稿一站搞定。</div>
             <div className="j-cta">題目健檢 <ArrowRight size={14} /></div>
           </Link>
-          <Link className="jump-card primary" to="/w13">
+          <Link className="jump-card" to="/w13">
             <div className="j-eyebrow"><span className="j-step">Step 03</span><span className="j-range">W13 – W16</span></div>
             <div className="j-title">我有資料，但不知道怎麼分析</div>
             <div className="j-desc">數據轉譯、圖表選擇、四層結論寫作、海報設計全流程。</div>
             <div className="j-cta">前往 W13 <ArrowRight size={14} /></div>
+          </Link>
+          <Link className="jump-card primary" style={{ background: '#4f46e5' }} to="/prompt-lab">
+            <div className="j-eyebrow"><span className="j-step text-[#c7d2fe]">NEW Tool</span><span className="j-range bg-[#4338ca] text-[#a5b4fc] border-none">V2.0</span></div>
+            <div className="j-title text-white">AI-RED Prompt 實驗室</div>
+            <div className="j-desc text-indigo-100">人機協作專用的提問產生器，幫你寫出高品質的研究指令。</div>
+            <div className="j-cta text-[#fbbf24]">進入實驗室 <Zap size={14} /></div>
           </Link>
         </div>
 

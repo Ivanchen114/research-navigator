@@ -256,6 +256,8 @@ export const CitationDetectiveGame = () => {
             setGameState('playing');
             resetRound();
         } else {
+            localStorage.setItem('rib_score_citation-detective', JSON.stringify({score: score, maxScore: MAX_SCORE, date: new Date().toISOString().split('T')[0]}));
+            localStorage.setItem('rib_completed_citation-detective', 'true');
             setGameState('result');
         }
     };

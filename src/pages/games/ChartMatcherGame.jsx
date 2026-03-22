@@ -561,6 +561,7 @@ export const ChartMatcherGame = () => {
             setAnswerResult(null);
             setShakeCard(false);
         } else {
+            localStorage.setItem('rib_score_chart-matcher', JSON.stringify({score: score, maxScore: questions.length * 3, date: new Date().toISOString().split('T')[0]}));
             localStorage.setItem('rib_completed_chart-matcher', 'true');
             setGameState('end');
         }

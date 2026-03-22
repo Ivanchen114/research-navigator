@@ -421,6 +421,7 @@ export const RxInspectorGame = () => {
             setFlagged({});
             setIsRevealed(false);
         } else {
+            localStorage.setItem('rib_score_rx-inspector', JSON.stringify({score: totalCorrect, maxScore: totalBugs, date: new Date().toISOString().split('T')[0]}));
             localStorage.setItem('rib_completed_rx-inspector', 'true');
             setGameState('end');
         }

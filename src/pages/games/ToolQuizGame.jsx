@@ -186,6 +186,7 @@ export const ToolQuizGame = () => {
             setSelectedAnswer(null);
             setIsAnswered(false);
         } else {
+            localStorage.setItem('rib_score_tool-quiz', JSON.stringify({score: score, maxScore: 11, date: new Date().toISOString().split('T')[0]}));
             localStorage.setItem('rib_completed_tool-quiz', 'true');
             setGameState('end');
         }

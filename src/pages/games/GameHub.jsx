@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
     ShieldAlert, Search, Stethoscope, BriefcaseMedical,
     BarChart3, PieChart, UserCircle2, LogIn, LogOut,
-    Activity, ArrowRight, BookOpen, Bug, Star, StarHalf
+    Activity, ArrowRight, BookOpen, Bug, Star, StarHalf,
+    ChevronRight, FolderOpen, Lock
 } from 'lucide-react';
 
 // 定義六大任務卡片資料
@@ -130,10 +131,12 @@ export const GameHub = () => {
     const [agentName, setAgentName] = useState('');
     const [inputName, setInputName] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    
+
     // 儲存已通過的案件ID
     const [completedGames, setCompletedGames] = useState({});
-    
+    // 儲存各遊戲分數記錄
+    const [gameScores, setGameScores] = useState({});
+
     // 隱藏解鎖彩蛋狀態
     const [unlockClicks, setUnlockClicks] = useState(0);
     const [isMasterUnlocked, setIsMasterUnlocked] = useState(false);
@@ -158,15 +161,25 @@ export const GameHub = () => {
             });
             setCompletedGames(completed);
 
+            // 讀取各遊戲分數記錄
+            const scores = {};
+            RIB_MISSIONS.forEach(mission => {
+                const raw = localStorage.getItem(`rib_score_${mission.id}`);
+                if (raw) {
+                    try { scores[mission.id] = JSON.parse(raw); } catch { }
+                }
+            });
+            setGameScores(scores);
+
             // 讀取隱藏解鎖狀態
             const masterUnlocked = localStorage.getItem('rib_master_unlocked');
             if (masterUnlocked === 'true') {
                 setIsMasterUnlocked(true);
             }
         };
-        
+
         checkSavedData();
-        
+
         // 為了讓返回此頁面時能即時更新，監聽 focus 事件
         window.addEventListener('focus', checkSavedData);
         return () => window.removeEventListener('focus', checkSavedData);
@@ -198,10 +211,10 @@ export const GameHub = () => {
 
     const handleSecretUnlock = () => {
         if (isMasterUnlocked) return;
-        
+
         const newClicks = unlockClicks + 1;
         setUnlockClicks(newClicks);
-        
+
         if (newClicks >= 10) {
             setIsMasterUnlocked(true);
             localStorage.setItem('rib_master_unlocked', 'true');
@@ -219,14 +232,14 @@ export const GameHub = () => {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <ShieldAlert size={40} className="text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-                            <h1 
+                            <h1
                                 onClick={handleSecretUnlock}
                                 className={`text-4xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold mb-4 tracking-tight drop-shadow-md select-none cursor-pointer touch-manipulation transition-colors duration-500 ${isMasterUnlocked ? 'text-amber-300 drop-shadow-[0_0_15px_rgba(252,211,77,0.8)]' : 'text-slate-100'}`}
                             >
                                 R.I.B. 特務指揮中心
                             </h1>
                             <p className="text-amber-400 font-mono text-sm md:text-base tracking-[0.2em] uppercase font-bold text-shadow-sm">
-                                Research Investigation Bureau / 機密任務總覽 
+                                Research Investigation Bureau / 機密任務總覽
                                 {isMasterUnlocked && <span className="ml-2 text-amber-300 text-xs bg-amber-900/40 px-2 py-0.5 rounded border border-amber-500/30">MASTER BYPASS ACTIVE</span>}
                             </p>
                         </div>
@@ -272,15 +285,23 @@ export const GameHub = () => {
                                 <div className="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1 font-mono">
                                     <Activity size={14} className="animate-pulse" /> 安全連線已建立
                                 </div>
-                                <div className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-sm border border-slate-700/80 shadow-inner">
-                                    <div className="bg-emerald-950/50 p-2.5 rounded-sm text-emerald-400 border border-emerald-500/20">
+                                <button 
+                                    onClick={() => navigate('/dossier')}
+                                    className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-sm border border-emerald-500/30 shadow-inner group transition-all hover:bg-emerald-950/30 hover:border-emerald-500/60 w-full text-left"
+                                >
+                                    <div className="bg-emerald-950/50 p-2.5 rounded-sm text-emerald-400 border border-emerald-500/20 group-hover:scale-110 transition-transform">
                                         <UserCircle2 size={24} />
                                     </div>
-                                    <div>
-                                        <div className="text-[10px] text-slate-500 font-black tracking-widest mb-0.5">目前登入身分</div>
+                                    <div className="flex-1">
+                                        <div className="text-[10px] text-slate-500 font-black tracking-widest mb-0.5 flex items-center justify-between">
+                                            <span>目前登入身分</span>
+                                            <span className="text-emerald-500 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                檔案 <ChevronRight size={12} />
+                                            </span>
+                                        </div>
                                         <div className="text-xl font-black text-emerald-400 drop-shadow-[0_0_5px_currentColor]">{agentName} <span className="text-sm text-emerald-600">探員</span></div>
                                     </div>
-                                </div>
+                                </button>
                                 <button
                                     onClick={handleLogout}
                                     className="text-slate-500 hover:text-rose-400 text-xs font-bold flex items-center justify-center gap-1 mt-2 transition-colors uppercase tracking-widest"
@@ -316,12 +337,80 @@ export const GameHub = () => {
                     </div>
                 )}
 
+                {/* R.I.B. 調查檔案 — 連貫故事線入口 */}
+                <div className="mb-10 relative">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="h-px flex-1 bg-slate-700/50"></div>
+                        <span className="text-[10px] font-mono font-black text-slate-500 tracking-[0.3em] uppercase">R.I.B. 調查檔案</span>
+                        <div className="h-px flex-1 bg-slate-700/50"></div>
+                    </div>
+                    <div
+                        onClick={() => navigateToMission('/phantom')}
+                        className={`group relative rounded-lg border overflow-hidden transition-all duration-500 cursor-pointer
+                            border-slate-700 hover:border-amber-500/80
+                            hover:shadow-[0_0_50px_rgba(245,158,11,0.2)] min-h-[160px] flex flex-col justify-end`}
+                    >
+                        {/* 1. 主視覺背景圖 (Keyart) */}
+                        <div 
+                            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
+                            style={{ backgroundImage: "url('/assets/phantom/keyart/phantom_keyart_hub_v1.png')" }}
+                        ></div>
+
+                        {/* 2. 深色漸層 Overlay (增加可讀性) */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/30"></div>
+                        
+                        {/* 3. Scanline & Noise 微動態特效 */}
+                        <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+
+                        {/* Top accent */}
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-500/80 to-transparent opacity-60"></div>
+
+                        {/* 內容區：放在左下方的安全區，避免擋到中央標題圖案 */}
+                        <div className="relative z-10 p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-6 pt-24">
+                            <div className="flex items-center gap-5">
+                                <div className="flex-shrink-0 w-14 h-14 rounded bg-slate-950/80 border border-slate-700/80 flex items-center justify-center backdrop-blur-md shadow-lg group-hover:border-amber-500/50 transition-colors relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-amber-500/10 group-hover:bg-amber-500/20 transition-colors"></div>
+                                    <FolderOpen size={26} className="text-amber-400 relative z-10 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
+                                </div>
+                                <div className="min-w-0">
+                                    <div className="text-[10px] font-mono text-amber-500 tracking-[0.3em] uppercase mb-1 drop-shadow-md">R.I.B. 調查檔案 / 完整故事線</div>
+                                    <div className="text-2xl font-black text-white group-hover:text-amber-300 transition-colors mb-1 drop-shadow-lg">
+                                        檔案一：幽靈數據
+                                    </div>
+                                    <div className="text-slate-300 text-sm font-medium drop-shadow-md">
+                                        5章連貫劇情 · 5種研究方法 · 只有完成與失敗
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="flex-shrink-0 flex flex-col sm:items-end gap-3 pb-1">
+                                <div className="flex gap-1.5 flex-wrap">
+                                    {['觀察', '訪談', '問卷', '文獻', '實驗'].map((m, i) => (
+                                        <span key={i} className="text-[10px] font-mono font-black px-2 py-1 rounded-sm bg-slate-900/80 backdrop-blur-md text-slate-300 border border-slate-700/80 group-hover:border-slate-500/80 transition-colors">{m}</span>
+                                    ))}
+                                </div>
+                                <div className="flex items-center gap-1.5 text-amber-400 group-hover:translate-x-1 transition-transform relative">
+                                    <div className="absolute -inset-2 bg-amber-500/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <span className="text-sm font-black tracking-widest relative z-10">進入調查</span>
+                                    <ArrowRight size={16} className="relative z-10" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 mt-4 mb-1">
+                        <div className="h-px flex-1 bg-slate-700/50"></div>
+                        <span className="text-[10px] font-mono font-black text-slate-500 tracking-[0.3em] uppercase">單一任務</span>
+                        <div className="h-px flex-1 bg-slate-700/50"></div>
+                    </div>
+                </div>
+
                 {/* 任務檔案庫 Grid */}
                 <div className="relative max-w-6xl mx-auto py-10 mt-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 relative z-10 w-full">
                         {RIB_MISSIONS.map((mission, index) => {
                             const missionNumber = String(index + 1).padStart(2, '0');
-                            
+
                             // 判斷該關卡是否解鎖
                             // 1. 第一關永遠解鎖 (index === 0)
                             // 2. 如果前一關已經完成，則解鎖目前關卡
@@ -339,11 +428,10 @@ export const GameHub = () => {
                                                     navigateToMission(mission.path);
                                                 }
                                             }}
-                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-sm p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${
-                                                isLoggedIn && isUnlocked
-                                                ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
-                                                : 'border-slate-800/50 opacity-50 grayscale cursor-not-allowed pointer-events-none'
-                                            }`}
+                                            className={`w-full group relative bg-gradient-to-br from-slate-900 to-slate-950 rounded-sm p-6 border transition-all duration-300 flex flex-col h-full overflow-hidden shadow-xl ${isLoggedIn && isUnlocked
+                                                    ? 'border-slate-800 hover:border-amber-500/40 cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(245,158,11,0.2)]'
+                                                    : 'border-slate-800/50 opacity-50 grayscale cursor-not-allowed pointer-events-none'
+                                                }`}
                                         >
                                             {/* Top Accent Line */}
                                             {isLoggedIn && (
@@ -357,11 +445,10 @@ export const GameHub = () => {
 
                                             {/* ACTIVE / COMPLETED / LOCKED Stamp */}
                                             {isLoggedIn && isUnlocked ? (
-                                                <div className={`absolute top-20 right-8 sm:top-20 sm:right-28 border-2 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none scale-90 sm:scale-100 ${
-                                                    isCompeted 
-                                                    ? 'border-emerald-500/50 text-emerald-500/70 opacity-100 shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
-                                                    : 'border-amber-500/30 text-amber-500/40 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] opacity-60 group-hover:opacity-100'
-                                                }`}>
+                                                <div className={`absolute top-20 right-8 sm:top-20 sm:right-28 border-2 font-mono text-[10px] sm:text-xs font-black tracking-[4px] px-2 py-0.5 -rotate-[15deg] z-0 pointer-events-none scale-90 sm:scale-100 ${isCompeted
+                                                        ? 'border-emerald-500/50 text-emerald-500/70 opacity-100 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                                                        : 'border-amber-500/30 text-amber-500/40 group-hover:border-amber-500 group-hover:text-amber-500 transition-colors shadow-[0_0_10px_rgba(245,158,11,0)] group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] opacity-60 group-hover:opacity-100'
+                                                    }`}>
                                                     {isCompeted ? 'CLEARED' : 'ACTIVE'}
                                                 </div>
                                             ) : (
@@ -414,14 +501,25 @@ export const GameHub = () => {
                                                     ))}
                                                 </div>
 
+                                                {/* 上次得分記錄 */}
+                                                {isCompeted && gameScores[mission.id] && (
+                                                    <div className="flex items-center gap-2 mb-3">
+                                                        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">LAST SCORE</span>
+                                                        <span className="text-[11px] font-black text-emerald-400 font-mono">
+                                                            {gameScores[mission.id].score}
+                                                            <span className="text-slate-600 font-normal"> / {gameScores[mission.id].maxScore}</span>
+                                                        </span>
+                                                        <span className="text-[9px] font-mono text-slate-700 ml-auto">{gameScores[mission.id].date}</span>
+                                                    </div>
+                                                )}
+
                                                 <div className="flex items-center justify-between w-full">
                                                     <span className="text-[10px] font-mono text-slate-600 tracking-wider">FILE: {mission.id.split('-').join('_').toUpperCase()}</span>
                                                     {isLoggedIn && isUnlocked ? (
-                                                        <div className={`flex items-center gap-2 text-sm font-black transition-transform tracking-widest px-3 py-1.5 rounded-sm border backdrop-blur-sm ${
-                                                            isCompeted 
-                                                            ? 'text-emerald-400 bg-emerald-950/20 border-emerald-500/20 group-hover:bg-emerald-900/40' 
-                                                            : 'text-amber-500 bg-amber-950/20 border-amber-500/20 group-hover:bg-amber-900/40 group-hover:translate-x-2'
-                                                        }`}>
+                                                        <div className={`flex items-center gap-2 text-sm font-black transition-transform tracking-widest px-3 py-1.5 rounded-sm border backdrop-blur-sm ${isCompeted
+                                                                ? 'text-emerald-400 bg-emerald-950/20 border-emerald-500/20 group-hover:bg-emerald-900/40'
+                                                                : 'text-amber-500 bg-amber-950/20 border-amber-500/20 group-hover:bg-amber-900/40 group-hover:translate-x-2'
+                                                            }`}>
                                                             {isCompeted ? '重新調查' : '解密檔案'} <ArrowRight size={16} />
                                                         </div>
                                                     ) : (

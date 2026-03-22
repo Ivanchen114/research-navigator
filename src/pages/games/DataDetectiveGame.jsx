@@ -839,6 +839,7 @@ export const DataDetectiveGame = () => {
             setClickedParts([]); setFeedbackMsg(null);
             setShakeCard(false); setWrongLayers([]);
         } else {
+            localStorage.setItem('rib_score_data-detective', JSON.stringify({score: score, maxScore: shuffledCases.length * 3, date: new Date().toISOString().split('T')[0]}));
             localStorage.setItem('rib_completed_data-detective', 'true');
             setGameState('end');
         }
