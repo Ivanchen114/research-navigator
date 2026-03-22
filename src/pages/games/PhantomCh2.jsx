@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FileText, AlertTriangle, CheckCircle,
-    RotateCcw, ChevronRight, Lock
+    RotateCcw, ChevronRight, Lock, Volume2, VolumeX
 } from 'lucide-react';
 
 // ─── localStorage key 常數 ───────────────────────────────────────────────────
@@ -55,6 +55,7 @@ export const PhantomCh2 = () => {
     const [foundContradiction, setFoundContradiction] = useState(false);
     const [agentName, setAgentName] = useState('探員');
     const [hadCh1Optimal, setHadCh1Optimal] = useState(false);
+    const [isMuted, setIsMuted] = useState(() => localStorage.getItem('phantom_muted') === 'true');
 
     // ── 音效設定 ──
     const bgmRef = useRef(null);
@@ -65,12 +66,15 @@ export const PhantomCh2 = () => {
         bgmRef.current = new Audio('/assets/phantom/audio/dragon-studio-creepy-industrial-hum-482882.mp3');
         bgmRef.current.loop = true;
         bgmRef.current.volume = 0.15; // Milder for Ch2
+        bgmRef.current.muted = isMuted;
 
         tensionRef.current = new Audio('/assets/phantom/audio/dragon-studio-heartbeat-sound-372448.mp3');
         tensionRef.current.volume = 0.6;
+        tensionRef.current.muted = isMuted;
 
         glitchRef.current = new Audio('/assets/phantom/audio/virtual_vibes-glitch-sound-effect-hd-379466.mp3');
         glitchRef.current.volume = 0.3;
+        glitchRef.current.muted = isMuted;
 
         return () => {
             if (bgmRef.current) bgmRef.current.pause();
@@ -78,6 +82,19 @@ export const PhantomCh2 = () => {
             if (glitchRef.current) glitchRef.current.pause();
         };
     }, []);
+
+    // ── 靜音同步 ──
+    useEffect(() => {
+        if (bgmRef.current) bgmRef.current.muted = isMuted;
+        if (tensionRef.current) tensionRef.current.muted = isMuted;
+        if (glitchRef.current) glitchRef.current.muted = isMuted;
+    }, [isMuted]);
+
+    const toggleMute = () => {
+        const newMuted = !isMuted;
+        setIsMuted(newMuted);
+        localStorage.setItem('phantom_muted', String(newMuted));
+    };
 
     useEffect(() => {
         if (!bgmRef.current || !tensionRef.current || !glitchRef.current) return;
@@ -172,7 +189,16 @@ export const PhantomCh2 = () => {
                 <span className="text-violet-400/70">幽靈數據</span>
                 <span className="text-slate-700">/</span>
                 <span className="text-slate-300">第二章｜線人接觸</span>
-                <span className="ml-auto text-slate-600">{agentName}</span>
+                <div className="ml-auto flex items-center gap-3">
+                    <button
+                        onClick={toggleMute}
+                        title={isMuted ? '開啟音效' : '靜音'}
+                        className="text-slate-500 hover:text-violet-400 transition-colors"
+                    >
+                        {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    </button>
+                    {agentName && <span className="text-slate-600 font-mono text-xs">{agentName}</span>}
+                </div>
             </div>
 
             <div className="max-w-2xl mx-auto px-6 py-12">

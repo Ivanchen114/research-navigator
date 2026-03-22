@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FileText, AlertTriangle, CheckCircle,
-    RotateCcw, ChevronRight, Lock
+    RotateCcw, ChevronRight, Lock, Volume2, VolumeX
 } from 'lucide-react';
 
 const STORAGE_KEYS = {
@@ -52,6 +52,85 @@ export const PhantomCh3 = () => {
     const [foundOptimal, setFoundOptimal] = useState(false);
     const [agentName, setAgentName] = useState('探員');
     const [hadCh2Optimal, setHadCh2Optimal] = useState(false);
+    const [isMuted, setIsMuted] = useState(() => localStorage.getItem('phantom_muted') === 'true');
+
+    // ── 音效設定 ──
+    const bgmRef = useRef(null);
+    const tensionRef = useRef(null);
+    const glitchRef = useRef(null);
+
+    useEffect(() => {
+        bgmRef.current = new Audio('/assets/phantom/audio/dragon-studio-creepy-industrial-hum-482882.mp3');
+        bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.2;
+        bgmRef.current.muted = isMuted;
+
+        tensionRef.current = new Audio('/assets/phantom/audio/dragon-studio-heartbeat-sound-372448.mp3');
+        tensionRef.current.volume = 0.8;
+        tensionRef.current.muted = isMuted;
+
+        glitchRef.current = new Audio('/assets/phantom/audio/virtual_vibes-glitch-sound-effect-hd-379466.mp3');
+        glitchRef.current.volume = 0.4;
+        glitchRef.current.muted = isMuted;
+
+        return () => {
+            if (bgmRef.current) bgmRef.current.pause();
+            if (tensionRef.current) tensionRef.current.pause();
+            if (glitchRef.current) glitchRef.current.pause();
+        };
+    }, []);
+
+    // ── 靜音同步 ──
+    useEffect(() => {
+        if (bgmRef.current) bgmRef.current.muted = isMuted;
+        if (tensionRef.current) tensionRef.current.muted = isMuted;
+        if (glitchRef.current) glitchRef.current.muted = isMuted;
+    }, [isMuted]);
+
+    const toggleMute = () => {
+        const newMuted = !isMuted;
+        setIsMuted(newMuted);
+        localStorage.setItem('phantom_muted', String(newMuted));
+    };
+
+    const unlockAudio = () => {
+        if (bgmRef.current) bgmRef.current.play().catch(() => {});
+        if (tensionRef.current) tensionRef.current.play().then(() => tensionRef.current.pause()).catch(() => {});
+        if (glitchRef.current) glitchRef.current.play().then(() => glitchRef.current.pause()).catch(() => {});
+    };
+
+    useEffect(() => {
+        if (!bgmRef.current || !tensionRef.current || !glitchRef.current) return;
+
+        if (phase === 'scene1' || phase === 'scene2' || phase === 'choice1' || phase === 'choice2') {
+            bgmRef.current.play().catch(e => console.log('BGM blocked by browser', e));
+        }
+
+        if (phase === 'scene3') {
+            tensionRef.current.currentTime = 0;
+            tensionRef.current.play().catch(e => console.log('Tension blocked', e));
+        }
+        
+        if (phase === 'fail') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+            glitchRef.current.volume = 0.6;
+            glitchRef.current.currentTime = 0;
+            glitchRef.current.play().catch(e => console.log('Glitch blocked', e));
+        }
+
+        if (phase === 'complete') {
+            bgmRef.current.pause();
+            tensionRef.current.pause();
+        }
+
+        if (phase === 'briefing') {
+            bgmRef.current.pause();
+            bgmRef.current.currentTime = 0;
+            tensionRef.current.pause();
+            tensionRef.current.currentTime = 0;
+        }
+    }, [phase]);
 
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
@@ -104,15 +183,35 @@ export const PhantomCh3 = () => {
                 <span className="text-amber-400/70">幽靈數據</span>
                 <span className="text-slate-700">/</span>
                 <span className="text-slate-300">第三章｜擴散追查</span>
-                <span className="ml-auto text-slate-600">{agentName}</span>
+                <div className="ml-auto flex items-center gap-3">
+                    <button
+                        onClick={toggleMute}
+                        title={isMuted ? '開啟音效' : '靜音'}
+                        className="text-slate-500 hover:text-amber-400 transition-colors"
+                    >
+                        {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    </button>
+                    {agentName && <span className="text-slate-600 font-mono text-xs">{agentName}</span>}
+                </div>
             </div>
 
             <div className="max-w-2xl mx-auto px-6 py-12">
 
                 {phase === 'briefing' && (
                     <div>
-                        <ChapterLabel num="03" method="問卷法" />
-                        <h1 className="text-3xl font-black text-white mb-6">擴散追查</h1>
+                        {/* 封面橫幅 */}
+                        <div className="relative w-full h-48 sm:h-64 rounded-lg overflow-hidden mb-8 border border-slate-700 shadow-2xl">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/covers/phantom_cover_ch3_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                            {/* Scanlines & Noise */}
+                            <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] opacity-20"></div>
+                            
+                            <div className="absolute bottom-6 left-6 right-6">
+                                <ChapterLabel num="03" method="問卷法" />
+                                <h1 className="text-3xl sm:text-4xl font-black text-white mt-2 drop-shadow-md">擴散追查</h1>
+                            </div>
+                        </div>
 
                         <div className="bg-slate-900/60 border border-slate-700/50 rounded p-4 mb-5 space-y-1.5">
                             <div className="font-mono text-xs text-slate-500 tracking-widest mb-2">◈ 來自前章的線索</div>
@@ -139,13 +238,14 @@ export const PhantomCh3 = () => {
                             <strong className="text-amber-400">問卷法的核心規則：</strong>題目設計必須中立、不引導；抽樣必須具有代表性；填答必須完全出於自願。每一個環節的疏漏，都會讓整份資料的可信度打折扣。
                         </div>
 
-                        <PrimaryButton onClick={() => setPhase('scene1')} label="開始設計問卷" />
+                        <PrimaryButton onClick={() => { unlockAudio(); setPhase('scene1'); }} label="開始設計問卷" />
                     </div>
                 )}
 
                 {phase === 'scene1' && (
                     <SceneBlock
                         time="問卷草稿審查"
+                        mediaUrl="/assets/phantom/backgrounds/ch3/phantom_ch3_question_design_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -181,6 +281,7 @@ export const PhantomCh3 = () => {
                 {phase === 'scene2' && (
                     <SceneBlock
                         time="抽樣策略決定"
+                        mediaUrl="/assets/phantom/backgrounds/ch3/phantom_ch3_sampling_strategy_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -216,6 +317,7 @@ export const PhantomCh3 = () => {
                 {phase === 'scene3' && (
                     <SceneBlock
                         time="三天後，回收結果"
+                        mediaUrl="/assets/phantom/backgrounds/ch3/phantom_ch3_response_rate_bg_v1.png"
                         content={
                             <>
                                 <p className="text-slate-300 leading-relaxed text-sm mb-4">
@@ -254,6 +356,12 @@ export const PhantomCh3 = () => {
                     const r = FAIL_REASONS[failKey];
                     return (
                         <div>
+                            <div className="relative w-full h-40 rounded-sm overflow-hidden border border-red-900/50 mb-5 shadow-2xl">
+                                <div className="absolute inset-0 bg-cover bg-center grayscale opacity-60" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch3/phantom_ch3_classroom_distribution_bg_v1.png')" }}></div>
+                                <div className="absolute inset-0 bg-red-950/40 mix-blend-color-burn"></div>
+                                <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')] mix-blend-overlay animate-pulse pointer-events-none"></div>
+                                <div className="absolute bottom-4 left-4 text-red-500 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Survey Compromised // Aborted</div>
+                            </div>
                             <div className="bg-red-950/30 border border-red-700/40 rounded p-6 mb-5">
                                 <SectionLabel icon={<AlertTriangle size={13} />} text="任務中止報告" color="text-red-400" />
                                 <h2 className="text-lg font-black text-red-300 mt-3 mb-4">{r.type}</h2>
@@ -262,7 +370,7 @@ export const PhantomCh3 = () => {
                                     <span className="font-mono text-xs text-red-400/60">{r.concept}</span>
                                 </div>
                             </div>
-                            <button onClick={retry} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
+                            <button onClick={() => { unlockAudio(); retry(); }} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
                                 <RotateCcw size={15} /> 重新執行任務
                             </button>
                         </div>
@@ -271,6 +379,12 @@ export const PhantomCh3 = () => {
 
                 {phase === 'complete' && (
                     <div>
+                        <div className="relative w-full h-48 rounded-sm overflow-hidden border border-emerald-900/50 mb-5 shadow-2xl">
+                            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[15s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch3/phantom_ch3_data_review_bg_v1.png')" }}></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                            <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute bottom-4 left-4 text-emerald-400 font-mono text-xs tracking-[0.3em] font-black uppercase drop-shadow">Data Aggregation Complete</div>
+                        </div>
                         <div className="bg-emerald-950/20 border border-emerald-700/30 rounded p-6 mb-5">
                             <SectionLabel icon={<CheckCircle size={13} />} text="任務完成" color="text-emerald-400" />
                             <h2 className="text-xl font-black text-emerald-300 mt-3 mb-4">問卷調查任務成功</h2>
@@ -283,8 +397,19 @@ export const PhantomCh3 = () => {
                                     <EvidenceItem text="23 份有效回覆中，26% 表示曾使用「非 Excel / Word 的研究輔助工具」" />
                                     <EvidenceItem text="43% 表示知道班上同學在使用此類工具——使用者遠不止觀察到的 C1、C3" />
                                     {foundOptimal
-                                        ? <EvidenceItem text="中性題目設計下，自由填寫欄顯示受訪者描述的工具功能集中在「圖表輸出」與「結論整理」，與訪談線索高度吻合" highlight />
-                                        : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3"><Lock size={12} /><span>題目已刪除，工具功能細節未能從問卷取得（重試可解鎖）</span></div>
+                                        ? (
+                                            <div className="mt-4 border border-emerald-500/20 rounded-sm overflow-hidden content-start">
+                                                <div className="relative h-16 w-full">
+                                                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch3/phantom_ch3_spread_pattern_bg_v1.png')" }}></div>
+                                                    <div className="absolute inset-0 bg-emerald-950/60"></div>
+                                                    <div className="absolute inset-0 flex items-center px-4 font-mono text-xs text-emerald-400 tracking-widest">SPREAD PATTERN CONFIRMED</div>
+                                                </div>
+                                                <div className="p-3 bg-emerald-950/40">
+                                                    <EvidenceItem text="中性題目設計下，自由填寫欄顯示受訪者描述的工具功能集中在「圖表輸出」與「結論整理」，與訪談線索高度吻合" highlight />
+                                                </div>
+                                            </div>
+                                        )
+                                        : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3 mt-2"><Lock size={12} /><span>題目已刪除，工具功能細節未能從問卷取得（重試可解鎖）</span></div>
                                     }
                                 </div>
                             </div>
@@ -328,13 +453,38 @@ const PrimaryButton = ({ onClick, label }) => (
     </button>
 );
 
-const SceneBlock = ({ time, content, actionLabel, onAction }) => (
-    <div>
-        <div className="font-mono text-amber-600/60 text-xs tracking-widest mb-4">{time}</div>
-        <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-8">{content}</div>
-        <button onClick={onAction} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm">
-            {actionLabel} <ChevronRight size={16} />
-        </button>
+const SceneBlock = ({ time, content, actionLabel, onAction, mediaUrl }) => (
+    <div className="overflow-hidden bg-slate-900 border border-slate-700 rounded-lg mb-8 shadow-2xl">
+        {mediaUrl && (
+            <div className="relative w-full aspect-[21/9] bg-slate-950">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] hover:scale-[1.03] origin-bottom"
+                    style={{ backgroundImage: `url('${mediaUrl}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] mix-blend-overlay"></div>
+                
+                <div className="absolute top-4 left-4 font-mono text-amber-400 font-bold text-[10px] tracking-widest bg-slate-950/80 px-2 py-1 rounded backdrop-blur-md border border-amber-900/50 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    REC • {time}
+                </div>
+            </div>
+        )}
+
+        <div className={`p-6 ${mediaUrl ? 'pt-4' : ''}`}>
+            {!mediaUrl && <div className="font-mono text-amber-600/60 text-xs tracking-widest mb-4">{time}</div>}
+            
+            <div className="text-slate-300 text-sm leading-relaxed mb-6 space-y-4">
+                {content}
+            </div>
+            
+            <button
+                onClick={onAction}
+                className="w-full bg-slate-800 hover:bg-slate-700 border border-transparent hover:border-amber-500/50 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm"
+            >
+                {actionLabel} <ChevronRight size={16} />
+            </button>
+        </div>
     </div>
 );
 
