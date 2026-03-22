@@ -112,6 +112,13 @@ export const PhantomCh2 = () => {
         }
     }, [phase]);
 
+    // ── 手機版音效解鎖 ──
+    const unlockAudio = () => {
+        if (bgmRef.current) bgmRef.current.play().catch(() => {});
+        if (tensionRef.current) tensionRef.current.play().then(() => tensionRef.current.pause()).catch(() => {});
+        if (glitchRef.current) glitchRef.current.play().then(() => glitchRef.current.pause()).catch(() => {});
+    };
+
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
         if (name) setAgentName(name);
@@ -216,7 +223,7 @@ export const PhantomCh2 = () => {
                             <strong className="text-violet-400">訪談法的核心規則：</strong>用開放式問題讓對方自由陳述，追問時保持中立語氣，不引導、不對質。你的角色是傾聽者，不是審訊者。
                         </div>
 
-                        <PrimaryButton onClick={() => setPhase('scene1')} label="開始接觸" />
+                        <PrimaryButton onClick={() => { unlockAudio(); setPhase('scene1'); }} label="開始接觸" />
                     </div>
                 )}
 
@@ -387,7 +394,7 @@ export const PhantomCh2 = () => {
                                 </div>
                             </div>
                             <button
-                                onClick={retry}
+                                onClick={() => { unlockAudio(); retry(); }}
                                 className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded transition-all flex items-center justify-center gap-2 text-sm"
                             >
                                 <RotateCcw size={15} /> 重新執行任務

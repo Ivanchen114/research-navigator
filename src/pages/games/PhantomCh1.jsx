@@ -115,6 +115,20 @@ export const PhantomCh1 = () => {
         }
     }, [phase]);
 
+    // ── 手機版音效解鎖 ──
+    const unlockAudio = () => {
+        // 這些調用必須在 onClick 的同步執行路徑中
+        if (bgmRef.current) {
+            bgmRef.current.play().catch(() => {});
+        }
+        if (heartbeatRef.current) {
+            heartbeatRef.current.play().then(() => heartbeatRef.current.pause()).catch(() => {});
+        }
+        if (glitchRef.current) {
+            glitchRef.current.play().then(() => glitchRef.current.pause()).catch(() => {});
+        }
+    };
+
     useEffect(() => {
         const name = localStorage.getItem(STORAGE_KEYS.agentName);
         if (name) setAgentName(name);
@@ -208,7 +222,7 @@ export const PhantomCh1 = () => {
                             <strong className="text-amber-400">觀察法的核心規則：</strong>只記錄你真正看到的行為，不加入推測或情緒判斷。你的筆記必須客觀到「換任何人來看，都能寫出同樣的東西」。
                         </div>
 
-                        <PrimaryButton onClick={() => setPhase('scene1')} label="開始任務" />
+                        <PrimaryButton onClick={() => { unlockAudio(); setPhase('scene1'); }} label="開始任務" />
                     </div>
                 )}
 
@@ -378,7 +392,7 @@ export const PhantomCh1 = () => {
                                 </div>
                             </div>
                             <button
-                                onClick={retry}
+                                onClick={() => { unlockAudio(); retry(); }}
                                 className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-4 rounded-sm transition-all flex items-center justify-center gap-2 text-sm"
                             >
                                 <RotateCcw size={15} /> 重新執行任務
