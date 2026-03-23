@@ -44,17 +44,45 @@ const arraysEqual = (a, b) => {
     return sortedA.every((val, index) => val === sortedB[index]);
 };
 
+// ─── 示範題資料 ───────────────────────────────────────────
+const DEMO_STEPS = [
+    {
+        phase: 'question',
+        content: '2030 年最熱門的工作會是什麼？',
+        note: '這是一道生病的研究題目。先不急著選答案，我們一起走一遍診斷流程。'
+    },
+    {
+        phase: 'think1',
+        content: '🔍 第一步：先看「能不能研究」',
+        note: '這題在問「未來」——現在根本還沒發生，也沒有資料可以驗證。\n不管你用什麼方法，都碰不到2030年的資料。'
+    },
+    {
+        phase: 'think2',
+        content: '💡 所以優先病灶是？',
+        note: '「2030年最熱門的工作」是在猜未來，現在無法驗證。\n→ 優先病灶：B｜算命占卜病\n\n你也可以說它「範圍太大（C）」，但那是共病。\n如果不先處理B，題目根本連資料都蒐集不到——所以先救B。'
+    },
+    {
+        phase: 'think3',
+        content: '💊 下藥：把它救活',
+        note: '處方一：近（拉回現在，換成「目前」或「最近幾年」）\n\n治癒範例：\n「近五年台灣薪資成長最快的職業類別是哪些？」\n→ 有資料、找得到、高中生做得到 ✅'
+    },
+    {
+        phase: 'key',
+        content: '🎯 這關最重要的一句話',
+        note: '你不是在找「也有道理的病」，\n而是在找「如果不先處理，整題就做不下去」的那個病。\n\n這就是優先搶救點。'
+    }
+];
+
 export const QuestionERGame = () => {
     const [gameState, setGameState] = useState('start');
+    const [demoStep, setDemoStep] = useState(0);
     const [playingPhase, setPlayingPhase] = useState('diagnosis');
     const [playerName, setPlayerName] = useState('');
     const [patients, setPatients] = useState([]);
     const [currentIdx, setCurrentIdx] = useState(0);
     const [score, setScore] = useState(0);
 
-    // 第一階段改為單選主診斷
     const [selectedDiagnosis, setSelectedDiagnosis] = useState(null);
-    // 第二階段維持多選處方
     const [selectedCures, setSelectedCures] = useState([]);
 
     const [wrongCases, setWrongCases] = useState([]);
@@ -62,6 +90,8 @@ export const QuestionERGame = () => {
 
     const [currentQuestionPts, setCurrentQuestionPts] = useState(10);
     const [hintUsed, setHintUsed] = useState(false);
+    const [showLightHint, setShowLightHint] = useState(false);
+    const [showRxHint, setShowRxHint] = useState(false);
     const [partialFeedback, setPartialFeedback] = useState(null);
     const [selectedHealedOption, setSelectedHealedOption] = useState(null);
 
@@ -108,6 +138,8 @@ export const QuestionERGame = () => {
         setSelectedCures([]);
         setCurrentQuestionPts(10);
         setHintUsed(false);
+        setShowLightHint(false);
+        setShowRxHint(false);
         setPartialFeedback(null);
         setSelectedHealedOption(null);
         setPlayingPhase('diagnosis');
@@ -240,37 +272,207 @@ export const QuestionERGame = () => {
                     <div className="absolute top-0 right-0 opacity-[0.03] text-9xl -mt-4 -mr-4 text-teal-400">🏥</div>
                     <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]">🩺</div>
                     <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-500 mb-2 tracking-wide">行動代號：靶心</h1>
-                    <div className="text-sm md:text-base font-bold text-teal-300/80 mb-4 bg-teal-950/40 inline-block px-4 py-1.5 rounded-sm border border-teal-500/20 tracking-widest">
+                    <div className="text-sm md:text-base font-bold text-teal-300/80 mb-6 bg-teal-950/40 inline-block px-4 py-1.5 rounded-sm border border-teal-500/20 tracking-widest">
                         賽博法醫診斷室
                     </div>
 
-                    <div className="bg-slate-800/50 rounded-sm p-6 mb-8 text-center border border-slate-600/50 shadow-inner">
+                    {/* 核心概念區 */}
+                    <div className="bg-teal-950/40 border border-teal-500/30 rounded-sm p-5 mb-4 text-left">
+                        <div className="text-xs font-black tracking-widest text-teal-400 mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 inline-block"></span>
+                            進場前須知：三件事
+                        </div>
+                        <div className="space-y-2.5 text-sm">
+                            <p className="text-teal-100 font-bold leading-snug">
+                                ① 一題可能多病，但先抓<span className="text-teal-300">優先搶救點</span>
+                            </p>
+                            <p className="text-teal-100 font-bold leading-snug">
+                                ② 先看能不能研究，再看有沒有落地，再看問法有沒有偏
+                            </p>
+                            <p className="text-teal-100 font-bold leading-snug">
+                                ③ 不要選看起來最厲害的題目，要選<span className="text-cyan-300">真的做得到的</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* 判斷順序小抄 */}
+                    <div className="bg-slate-800/60 border border-slate-600/50 rounded-sm p-4 mb-4 text-left">
+                        <div className="text-xs font-black tracking-widest text-slate-400 mb-3">⚡ 優先判斷順序</div>
+                        <div className="space-y-1.5 text-xs font-semibold">
+                            <div className="flex items-center gap-2">
+                                <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第一關</span>
+                                <span className="text-slate-300">先看能不能研究：B算命、F觀落陰、G方法無效</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第二關</span>
+                                <span className="text-slate-300">再看有沒有落地：C百科全書、A抽象哲學</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第三關</span>
+                                <span className="text-slate-300">再看問法有沒有偏：E是非廢話、D主觀偏見</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">最後才</span>
+                                <span className="text-slate-300">H變因失控（高階重症，先把前三關排除）</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 身分 + 按鈕 */}
+                    <div className="bg-slate-800/50 rounded-sm p-4 mb-6 text-center border border-slate-600/50 shadow-inner">
                         <label className="block text-sm font-bold text-teal-300 mb-2 tracking-wider">👨‍⚕️ 目前登入身分</label>
                         {playerName ? (
                             <div className="text-2xl font-black text-teal-400 border-b-2 border-teal-500/50 inline-block pb-1 px-4">
                                 {playerName} 醫師
                             </div>
                         ) : (
-                            <div className="text-rose-400 font-bold mb-2">無法辨識身分！請返回總部大廳完成報到手續。</div>
+                            <div className="text-rose-400 font-bold text-sm">無法辨識身分！請返回總部大廳完成報到手續。</div>
                         )}
-
-                        <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700 pt-6 mt-6">📋 看診須知</h3>
-                        <div className="space-y-3 text-sm text-slate-300 text-left md:px-4">
-                            <p className="flex items-start gap-2">🩺 <span>急診室湧入了 5 個<strong className="text-rose-400 font-bold bg-rose-900/40 px-1 rounded">「生病的研究問題」</strong></span></p>
-                            <p className="flex items-start gap-2">🔎 <span>第一步，請先從 <strong className="text-teal-300">8 個病</strong> 裡找出這題<strong className="text-teal-200">最優先需要處理的病灶</strong></span></p>
-                            <p className="flex items-start gap-2">💊 <span>第二步，再從 <strong className="text-cyan-300">4 個處方</strong> 裡選出所有需要的急救方式。很多題目都需要 <strong className="text-teal-400">Combo 處方</strong>！</span></p>
-                            <p className="flex items-start gap-2">🧠 <span>真實研究裡，一個題目常常不只一種問題。這個遊戲會先請你找出<strong className="text-teal-200">最優先需要處理的病灶</strong>，也就是：如果不先處理它，題目就很難往前走的那個卡點。找到之後，再用組合處方把題目救活。</span></p>
-                            <p className="flex items-start gap-2">⚠️ <span>若答錯將被扣分並 <strong className="text-amber-400">強制重答</strong>，直到正確為止</span></p>
-                        </div>
                     </div>
 
-                    <button
-                        onClick={startGame}
-                        disabled={!playerName}
-                        className={`font-black py-4 px-10 rounded-sm text-lg tracking-widest transition-all duration-300 transform flex items-center justify-center gap-2 mx-auto ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white hover:scale-105 active:scale-95 border border-teal-400/50'}`}
-                    >
-                        <span>穿上白袍，開始值班</span>
-                    </button>
+                    <div className="flex flex-col gap-3">
+                        <button
+                            onClick={() => { setDemoStep(0); setGameState('demo'); }}
+                            className="font-bold py-3 px-8 rounded-sm text-sm tracking-widest transition-all duration-300 border border-teal-500/40 bg-teal-950/50 text-teal-300 hover:bg-teal-900/60 hover:text-teal-100 flex items-center justify-center gap-2"
+                        >
+                            🔬 先看示範題（建議新手）
+                        </button>
+                        <button
+                            onClick={startGame}
+                            disabled={!playerName}
+                            className={`font-black py-4 px-10 rounded-sm text-lg tracking-widest transition-all duration-300 transform flex items-center justify-center gap-2 mx-auto ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white hover:scale-105 active:scale-95 border border-teal-400/50'}`}
+                        >
+                            <span>穿上白袍，開始值班</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ================= DEMO SCREEN =================
+    if (gameState === 'demo') {
+        const step = DEMO_STEPS[demoStep];
+        const isLast = demoStep === DEMO_STEPS.length - 1;
+
+        return (
+            <div className="relative rounded-sm overflow-hidden flex flex-col items-center justify-center p-6 md:py-16 font-sans text-rose-50 min-h-[700px] bg-cover bg-fixed bg-center shadow-2xl"
+                style={{ backgroundImage: "url('/images/question_er_bg.png')" }}>
+                <div className="absolute inset-0 bg-[#0f172a]/90 z-0"></div>
+
+                <div className="bg-[#1e293b]/80 backdrop-blur-lg p-8 md:p-12 rounded-sm shadow-[0_0_40px_rgba(45,212,191,0.15)] max-w-xl w-full border border-white/5 border-t-[8px] border-t-amber-500 relative z-10">
+                    <div className="text-xs font-black tracking-widest text-amber-400 mb-2 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block animate-pulse"></span>
+                        示範題演練 — {demoStep + 1} / {DEMO_STEPS.length}
+                    </div>
+
+                    {/* 進度條 */}
+                    <div className="w-full bg-slate-700/50 rounded-full h-1.5 mb-8">
+                        <div
+                            className="bg-amber-400 h-1.5 rounded-full transition-all duration-500"
+                            style={{ width: `${((demoStep + 1) / DEMO_STEPS.length) * 100}%` }}
+                        ></div>
+                    </div>
+
+                    {step.phase === 'question' && (
+                        <div className="text-center">
+                            <div className="text-3xl mb-4">🤔</div>
+                            <div className="bg-rose-950/40 border border-rose-500/30 rounded-sm p-6 mb-6">
+                                <div className="text-xs font-bold text-rose-400 tracking-widest mb-2">這道題目生病了</div>
+                                <p className="text-2xl font-black text-rose-100 leading-snug">{step.content}</p>
+                            </div>
+                            <p className="text-slate-300 text-sm leading-relaxed">{step.note}</p>
+                        </div>
+                    )}
+
+                    {step.phase === 'think1' && (
+                        <div>
+                            <div className="text-2xl font-black text-amber-300 mb-4">{step.content}</div>
+                            <div className="bg-slate-800/60 border border-amber-500/20 rounded-sm p-5">
+                                <p className="text-slate-200 text-base leading-relaxed whitespace-pre-line">{step.note}</p>
+                            </div>
+                            <div className="mt-4 bg-rose-950/30 border border-rose-500/20 rounded-sm p-4">
+                                <div className="text-xs font-bold text-rose-400 mb-2 tracking-wider">順序提醒</div>
+                                <p className="text-sm text-slate-300">先問：<span className="text-rose-300 font-bold">這題現在能不能研究？</span><br/>不能研究的病要先處理，才能繼續討論「題目夠不夠具體」。</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {step.phase === 'think2' && (
+                        <div>
+                            <div className="text-2xl font-black text-amber-300 mb-4">{step.content}</div>
+                            <div className="bg-teal-950/40 border border-teal-500/30 rounded-sm p-5">
+                                <p className="text-teal-100 text-sm leading-relaxed whitespace-pre-line font-medium">{step.note}</p>
+                            </div>
+                            <div className="mt-4 bg-amber-950/30 border border-amber-500/20 rounded-sm p-4">
+                                <p className="text-xs text-amber-200/80 font-bold">💡 關鍵句</p>
+                                <p className="text-sm text-amber-100 mt-1 leading-relaxed">你不是在找「也有道理的病」，而是找「如果不先處理，題目就做不下去」的那個。</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {step.phase === 'think3' && (
+                        <div>
+                            <div className="text-2xl font-black text-cyan-300 mb-4">{step.content}</div>
+                            <div className="bg-cyan-950/40 border border-cyan-500/30 rounded-sm p-5 space-y-3">
+                                <p className="text-cyan-100 text-sm leading-relaxed whitespace-pre-line font-medium">{step.note}</p>
+                            </div>
+                            <div className="mt-4 bg-slate-800/60 border border-slate-600/50 rounded-sm p-4">
+                                <p className="text-xs text-slate-400 font-bold tracking-wider mb-2">出院標準（選改題版本時用）</p>
+                                <div className="flex gap-3 flex-wrap">
+                                    <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1 rounded text-slate-200 font-bold">📦 小：有縮小嗎？</span>
+                                    <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1 rounded text-slate-200 font-bold">🔬 實：能測量嗎？</span>
+                                    <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1 rounded text-slate-200 font-bold">🚪 近：碰得到嗎？</span>
+                                    <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1 rounded text-slate-200 font-bold">✂️ 易：兩週做得到嗎？</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {step.phase === 'key' && (
+                        <div className="text-center">
+                            <div className="text-5xl mb-4">🎯</div>
+                            <div className="text-2xl font-black text-teal-300 mb-6">{step.content}</div>
+                            <div className="bg-teal-950/50 border border-teal-400/40 rounded-sm p-6">
+                                <p className="text-teal-100 text-base leading-relaxed whitespace-pre-line font-bold">{step.note}</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex gap-3 mt-8">
+                        {demoStep > 0 && (
+                            <button
+                                onClick={() => setDemoStep(s => s - 1)}
+                                className="flex-1 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-bold py-3 px-4 rounded-sm transition-all border border-slate-600 text-sm"
+                            >
+                                ← 上一步
+                            </button>
+                        )}
+                        {demoStep === 0 && (
+                            <button
+                                onClick={() => setGameState('start')}
+                                className="bg-slate-800/80 hover:bg-slate-700 text-slate-400 font-bold py-3 px-4 rounded-sm transition-all border border-slate-600 text-sm"
+                            >
+                                返回
+                            </button>
+                        )}
+                        {!isLast ? (
+                            <button
+                                onClick={() => setDemoStep(s => s + 1)}
+                                className="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-black py-3 px-6 rounded-sm transition-all text-sm tracking-wider"
+                            >
+                                下一步 →
+                            </button>
+                        ) : (
+                            <button
+                                onClick={startGame}
+                                disabled={!playerName}
+                                className={`flex-1 font-black py-3 px-6 rounded-sm text-sm tracking-wider transition-all ${!playerName ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white'}`}
+                            >
+                                🩺 我懂了，開始值班！
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         );
@@ -493,13 +695,43 @@ export const QuestionERGame = () => {
                     </div>
                 </div>
 
+                {/* ── 免費分層提示（diagnosis 關） ── */}
+                {playingPhase === 'diagnosis' && (
+                    <div className="w-full max-w-2xl mb-4">
+                        <button
+                            onClick={() => setShowLightHint(v => !v)}
+                            className="w-full bg-slate-800/40 hover:bg-slate-800/70 border border-dashed border-slate-600/70 text-slate-300 hover:text-teal-300 font-bold py-2.5 px-5 rounded-sm transition-all flex items-center justify-center gap-2 text-sm"
+                        >
+                            <span>💡</span>
+                            {showLightHint ? '收起判斷方向提示' : '不確定怎麼判斷？點我看提示方向（免費）'}
+                        </button>
+                        {showLightHint && (
+                            <div className="bg-slate-800/70 border border-slate-600/50 border-t-0 rounded-b-sm p-5 animate-in fade-in slide-in-from-top-2 duration-200 text-left space-y-3">
+                                <div className="flex items-start gap-3">
+                                    <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">提示 1</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed">先問自己：這題現在是「<span className="text-rose-300 font-bold">根本不能研究</span>」，還是「<span className="text-amber-300 font-bold">可以研究但還沒落地</span>」？</p>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">提示 2</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed">如果題目在<span className="text-rose-300 font-bold">問未來、碰不到對象、無法驗證</span> → 優先病灶通常不是 C、A、D、E。</p>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">提示 3</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed">如果題目只是<span className="text-amber-300 font-bold">太大太抽象</span>，先別急著選 <span className="text-purple-300 font-bold">H（變因失控）</span>。H 通常是排除前三類後才用的高階重症。</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* ── 申請完整病歷（-3分） ── */}
                 {(!hintUsed && playingPhase === 'diagnosis') && (
-                    <div className="bg-slate-800/40 border border-slate-600/50 border-dashed rounded-sm p-4 flex flex-col items-center justify-center gap-2 mb-6 relative z-10 mx-auto max-w-md shadow-inner">
+                    <div className="bg-slate-800/40 border border-slate-600/50 border-dashed rounded-sm p-4 flex flex-col items-center justify-center gap-2 mb-6 relative z-10 mx-auto max-w-md shadow-inner w-full">
                         <button
                             onClick={useHint}
                             className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-2 px-6 rounded-sm transition-all flex items-center justify-center gap-2 border border-slate-600 hover:border-amber-400/50 text-sm"
                         >
-                            <span>🔍</span> 申請醫療顧問檢查報告 (-3 分)
+                            <span>🔍</span> 申請醫療顧問完整病歷 (-3 分)
                         </button>
                     </div>
                 )}
@@ -528,11 +760,12 @@ export const QuestionERGame = () => {
 
                 {playingPhase === 'diagnosis' && (
                     <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
-                        <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
+                        <h3 className="text-slate-300 font-bold tracking-widest mb-2 flex items-center justify-center gap-2">
                             <span className="text-xl">1.</span> 第一階段：優先病灶判讀
                         </h3>
-                        <p className="text-slate-400 text-sm mb-5">
-                            請選出這題最優先需要處理的病灶。真實研究裡一題常常不只一種問題，這一關先找出：如果不先處理它，題目就很難往前走的那個卡點。
+                        {/* 常駐一行提示 */}
+                        <p className="text-teal-400/80 text-xs font-bold mb-5 tracking-wider">
+                            ⚡ 先找優先搶救點，不是找唯一真相——如果不先處理它，整題就做不下去
                         </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
@@ -567,13 +800,44 @@ export const QuestionERGame = () => {
 
                 {playingPhase === 'prescription' && (
                     <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
-                        <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
+                        <h3 className="text-slate-300 font-bold tracking-widest mb-2 flex items-center justify-center gap-2">
                             <span className="text-xl">2.</span> 第二階段：組合處方
                         </h3>
-
-                        <p className="text-slate-400 text-sm mb-5">
-                            這一關的<strong className="text-cyan-300">優先病灶</strong>只有一個，但真實題目常常同時有共病。請選出所有需要的處方，把題目一步步救回來。
+                        {/* 常駐一行提示 */}
+                        <p className="text-cyan-400/80 text-xs font-bold mb-4 tracking-wider">
+                            ⚡ 一個題目常常不只下一味藥——想想要把它救活，除了主病灶，還需要哪幾步？
                         </p>
+
+                        {/* 可展開的處方指南 */}
+                        <button
+                            onClick={() => setShowRxHint(v => !v)}
+                            className="w-full bg-slate-800/40 hover:bg-slate-800/70 border border-dashed border-cyan-700/50 text-slate-300 hover:text-cyan-300 font-bold py-2 px-5 rounded-sm transition-all flex items-center justify-center gap-2 text-sm mb-4"
+                        >
+                            <span>💊</span>
+                            {showRxHint ? '收起處方指南' : '不確定下哪幾味藥？點我看處方指南（免費）'}
+                        </button>
+                        {showRxHint && (
+                            <div className="bg-slate-800/70 border border-cyan-700/40 rounded-sm p-5 animate-in fade-in duration-200 text-left space-y-2.5 mb-5">
+                                <div className="text-xs font-black text-cyan-400 tracking-widest mb-3">常見病症對應處方</div>
+                                <div className="flex items-start gap-2">
+                                    <span className="text-cyan-400 mt-0.5 text-base">💊</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">題目太大：</span>先縮對象、縮場域、縮情境 → 通常用「小」</p>
+                                </div>
+                                <div className="flex items-start gap-2">
+                                    <span className="text-cyan-400 mt-0.5 text-base">💉</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">題目太空：</span>把抽象詞換成可觀察的變項 → 通常用「實」</p>
+                                </div>
+                                <div className="flex items-start gap-2">
+                                    <span className="text-cyan-400 mt-0.5 text-base">🚪</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">題目碰不到：</span>換對象、換場域、換資料來源 → 通常用「近」</p>
+                                </div>
+                                <div className="flex items-start gap-2">
+                                    <span className="text-cyan-400 mt-0.5 text-base">🔪</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">是非問法/太難操作：</span>改為差異、關聯、頻率、情境 → 通常用「易」</p>
+                                </div>
+                                <div className="mt-1 pt-3 border-t border-cyan-900/50 text-xs text-cyan-200/60 font-bold">多數題目需要 Combo，選到對的組合就算對！</div>
+                            </div>
+                        )}
 
                         <div className="flex flex-wrap items-center justify-center gap-2 mb-6 opacity-80">
                             <span className="text-xs text-slate-400">已確認優先病灶：</span>
@@ -614,12 +878,24 @@ export const QuestionERGame = () => {
 
                 {playingPhase === 'healedSelection' && (
                     <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
-                        <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
+                        <h3 className="text-slate-300 font-bold tracking-widest mb-2 flex items-center justify-center gap-2">
                             <span className="text-xl">3.</span> 最終階段：驗收治癒結果
                         </h3>
-                        <p className="text-slate-400 text-sm mb-6">
-                            處方已生效！請根據你開立的處方，選出真正治癒後的好題目。某些題目可能不只一條路能救活，選到任一可行路徑都算正確。
+                        <p className="text-slate-400 text-sm mb-4">
+                            處方已生效！選出真正治癒後的好題目。某些題目不只一條路能救活，選到任一可行路徑都算正確。
                         </p>
+
+                        {/* 出院標準小抄 */}
+                        <div className="bg-slate-800/50 border border-slate-600/50 rounded-sm p-3 mb-5">
+                            <div className="text-xs font-black text-slate-400 tracking-widest mb-2">📋 出院標準——不要選「最厲害」的，要選「真的做得到」的</div>
+                            <div className="flex gap-2 flex-wrap">
+                                <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1.5 rounded text-slate-200 font-bold flex items-center gap-1">📦 小<span className="text-slate-400 font-normal">範圍縮小了嗎？</span></span>
+                                <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1.5 rounded text-slate-200 font-bold flex items-center gap-1">🔬 實<span className="text-slate-400 font-normal">能觀察測量嗎？</span></span>
+                                <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1.5 rounded text-slate-200 font-bold flex items-center gap-1">🚪 近<span className="text-slate-400 font-normal">對象碰得到嗎？</span></span>
+                                <span className="text-xs bg-slate-700/60 border border-slate-600 px-3 py-1.5 rounded text-slate-200 font-bold flex items-center gap-1">✂️ 易<span className="text-slate-400 font-normal">兩週內做得到嗎？</span></span>
+                            </div>
+                            <p className="text-xs text-amber-300/70 mt-2 font-bold">⚠️ 如果一題只是看起來比較學術，但更難做，還不算真正治好。</p>
+                        </div>
 
                         <div className="flex flex-col gap-4 mb-6">
                             {current.shuffledHealedOptions.map((opt, i) => (
