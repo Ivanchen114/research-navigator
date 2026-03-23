@@ -112,10 +112,10 @@ export const patientData = [
     cures: ["小"],
     healedOptions: [
       {
-        text: "本校教室冷氣使用時間與同學節能意識的現況調查",
+        text: "本校教室冷氣使用行為與學生對節能減碳政策之看法",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正確！你把全球議題縮到校園現場，終於變成能做的研究了。"
+        feedback: "精準！保留了探討暖化氣候行動的初衷，但將範圍縮小到校園與學生能實際調查的層級。"
       },
       {
         text: "全台灣各縣市的碳排放量與減碳政策總整理",
@@ -178,10 +178,10 @@ export const patientData = [
     cures: ["實"],
     healedOptions: [
       {
-        text: "本校高一各班在下午第一節課學生分心使用手機的頻率與時段觀察",
+        text: "本校高一學生在不同課堂情境中自評使用手機頻率之調查",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正確！你把問題改成可觀察的頻率與時段，這樣才有辦法記錄。"
+        feedback: "沒錯！用自評量表取代直接觀察，解決了偷滑手機難以精確測量且涉及隱私倫理的困難，更符合研究可行性。"
       },
       {
         text: "上課偷滑手機的同學是不是通常成績較差？",
@@ -214,13 +214,13 @@ export const patientData = [
         text: "本班同學在不同學科課堂上的發言次數與私下交談頻率觀察紀錄",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正解！你把主觀的「吵」改成可觀察的發言次數與交談頻率。另一條路也走得通：也可以改用訪談，直接研究同學如何感受課堂氛圍。"
+        feedback: "【主治版】正解！你把主觀的「吵」改成可觀察的發言次數與交談頻率，解決了主觀偏見病。"
       },
       {
         text: "訪談本班5位同學對上課氛圍的主觀感受與改善期望",
         isCorrect: true,
         researchType: "質性",
-        feedback: "正確！這題原本就在問「為什麼」，改用訪談蒐集同學對課堂氛圍的經驗很合理。另一條路也走得通：也可以改成發言次數與交談頻率的觀察紀錄。"
+        feedback: "【進階處方】正確！這題原本就在問「為什麼」，除了量化觀察，改用訪談蒐集同學對課堂氛圍的經驗也很合理。"
       },
       {
         text: "探討本班同學缺乏自律與公德心的根本原因",
@@ -351,10 +351,10 @@ export const patientData = [
     cures: ["小", "實"],
     healedOptions: [
       {
-        text: "本校住宿生在期中考週的休閒習慣與主觀壓力指數之關聯",
+        text: "本校住宿生在考試週的休閒活動頻率與情緒狀態之關聯",
         isCorrect: true,
         researchType: "量化",
-        feedback: "漂亮！你把範圍縮小，也把抽象的快樂改成壓力指數。"
+        feedback: "正確！把「越來越不快樂」這個抽象的大問題，轉譯成「考試週的情緒狀態」並探討休閒活動的關聯，保留原意又具體可行。"
       },
       {
         text: "探討現代社會帶來物質豐裕卻導致心靈空虛的哲學原因",
@@ -417,10 +417,10 @@ export const patientData = [
     cures: ["小", "易"],
     healedOptions: [
       {
-        text: "本校學生週末課業複習與電玩娛樂的時間分配對週一小考表現之影響",
+        text: "本校學生對讀書與娛樂時間安排的自我滿意度與壓力感受",
         isCorrect: true,
         researchType: "量化",
-        feedback: "很好！你把道德判斷拿掉，改成可比較的時間分配與表現。"
+        feedback: "精準！拿掉「比較高尚/更有用」的預設價值，轉為探討時間安排與主觀感受，讓題目回歸中立的科學探究。"
       },
       {
         text: "探討打電動使人墮落而讀書使人高尚的社會證據",
@@ -432,7 +432,7 @@ export const patientData = [
     explanation: [
       { icon: "👁️", label: "觀察", text: "「更好」是價值判斷，題目一開始就偏向某種道德答案。" },
       { icon: "🧠", label: "診斷", text: "這是主觀偏見病，也有範圍過大的問題。研究不應先宣判誰比較高尚。" },
-      { icon: "💡", label: "處方", text: "用「難→易」和「大→小」，改成比較課業複習與娛樂時間分配和某項學習表現的關聯。" }
+      { icon: "💡", label: "處方", text: "用「難→易」和「大→小」，改成探討讀書與娛樂時間安排的滿意度或相關的主觀感受。" }
     ],
     severity: "moderate",
     tags: ["主觀評價", "價值預設"]
@@ -542,7 +542,7 @@ export const patientData = [
     priorityDiagnosisKey: "A",
     acceptableDiagnosisKeys: ["D"],
     coDiagnosisKeys: ["D"],
-    priorityReason: "這題也有情緒色彩，但最核心是「壓力」太抽象，不先轉成症狀、量表或經驗，就無法研究。",
+    priorityReason: "題目隱含「壓力特別大」這種比較基準不清的偏見，但最核心還是「壓力」太抽象，不先轉成具體指標或經驗，就無法研究。",
     question: "為什麼段考週壓力特別大？",
     diagnosis: "抽象哲學病 + 主觀偏見病",
     causes: ["空", "難"],
@@ -701,10 +701,10 @@ export const patientData = [
     cures: ["易", "近"],
     healedOptions: [
       {
-        text: "有吃早餐與否對本班同學第一節課專注力量表分數之短期影響",
+        text: "本班同學早餐習慣與第一節課專注力量表分數之關聯",
         isCorrect: true,
         researchType: "量化",
-        feedback: "成功急救！你把長期又遙遠的人生成就，改成短期可觀察的專注力。"
+        feedback: "成功急救！你把長期又遙遠的影響，改成短期可觀察的專注力關聯，避免了過度推論因果。"
       },
       {
         text: "追蹤三十名成功企業家早年是否天天吃早餐",
@@ -785,7 +785,7 @@ export const patientData = [
       { icon: "💡", label: "處方", text: "用「大→小」和「空→實」，把手機使用限縮到睡前、短影音、遊戲等情境，把成績限縮到某次小考或某科表現。" }
     ],
     severity: "boss",
-    tags: ["缺乏新意", "定義模糊"]
+    tags: ["範圍太大", "定義模糊"]
   },
   {
     id: 24,
@@ -833,16 +833,16 @@ export const patientData = [
     cures: ["小", "實"],
     healedOptions: [
       {
-        text: "本校高二理組學生參與數學補習的時數與校內段考成績進步幅度的關聯",
+        text: "本校高二學生補習參與時數與自評數學學習信心之關聯",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正確！你把補習具體化，也把『有沒有用』改成可觀察的進步幅度。"
+        feedback: "正確！把『有沒有用』具體化為可測量的『學習信心』，讓『有用』不再狹隘地只等於成績。"
       },
       {
-        text: "台灣補習文化氾濫對整體教育素質的負面衝擊",
+        text: "高中生補習文化之探討",
         isCorrect: false,
         researchType: null,
-        feedback: "錯誤！這又回到國家級大哉問與價值評論了。"
+        feedback: "錯誤！這變成範圍太大的社會評論，缺乏具體可以測量或訪談的變數。"
       }
     ],
     explanation: [
@@ -1010,10 +1010,10 @@ export const patientData = [
     cures: ["小", "易"],
     healedOptions: [
       {
-        text: "本校學生家長教育參與程度與學生學習動機量表得分之相關性研究",
+        text: "本校高分群學生的讀書習慣、作息與自評學習策略之差異",
         isCorrect: true,
         researchType: "量化",
-        feedback: "很好！你放棄研究先天智力，改成可觀察的後天因素。"
+        feedback: "很順！把無法驗證的「天生智力」，轉化成可以實際調查的「高分群作息與學習策略」，保留了想探究『為何表現好』的初衷。"
       },
       {
         text: "解析微積分滿分學生腦部神經元的活躍度差異",
