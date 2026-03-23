@@ -37,6 +37,8 @@ import { PhantomCh2 } from './pages/games/PhantomCh2';
 import { PhantomCh3 } from './pages/games/PhantomCh3';
 import { PhantomCh4 } from './pages/games/PhantomCh4';
 import { PhantomCh5 } from './pages/games/PhantomCh5';
+import { EchoHub } from './pages/games/EchoHub';
+import { EchoCh1 } from './pages/games/EchoCh1';
 
 function App() {
   return (
@@ -88,6 +90,8 @@ function App() {
           <Route path="phantom/ch3" element={<PhantomCh3 />} />
           <Route path="phantom/ch4" element={<PhantomCh4 />} />
           <Route path="phantom/ch5" element={<PhantomCh5 />} />
+          <Route path="echo" element={<EchoHub />} />
+          <Route path="echo/ch1" element={<EchoCh1 />} />
         </Route>
       </Routes>
     </BrowserRouter>

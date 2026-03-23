@@ -536,14 +536,14 @@ export const Home = () => {
         <div className="ai-red">
           <div className="ar-head">
             <span className="ar-badge">AI-RED V2.0.4</span>
-            <span className="ar-title">每次使用 AI，你都應該走過這五步</span>
+            <span className="ar-title">AI 時代的五項使用準則</span>
           </div>
           <div className="ar-grid">
-            <AIRedCell letter="A" en="Ascribe" zh="指定角色" desc="告訴 AI 它在這個任務中是誰，設定正確的協作框架。" />
-            <AIRedCell letter="I" en="Inquire" zh="精準提問" desc="用具體、有脈絡的問題取代模糊指令，才能得到有用的回應。" />
-            <AIRedCell letter="R" en="Reference" zh="提供素材" desc="把你的原始資料、數據、草稿餵給 AI，讓它有東西可以工作。" />
-            <AIRedCell letter="E" en="Evaluate" zh="批判評估" desc="AI 給的每一行都要過你的腦，對的留、錯的改、沒有的補。" />
-            <AIRedCell letter="D" en="Document" zh="記錄裁奪" desc="把你「接受了什麼、拒絕了什麼、為什麼」寫下來。這才是學習的痕跡。" />
+            <AIRedCell letter="A" en="Ascribe" zh="歸屬" desc="誠實說明哪裡用了 AI。" />
+            <AIRedCell letter="I" en="Inquire" zh="提問" desc="精準提問，不依賴模糊指令。" />
+            <AIRedCell letter="R" en="Reference" zh="引用" desc="查證 AI 給的資料來源。" />
+            <AIRedCell letter="E" en="Evaluate" zh="評估" desc="判斷內容是否合理，不照單全收。" />
+            <AIRedCell letter="D" en="Document" zh="紀錄" desc="保留與 AI 的對話紀錄。" />
           </div>
         </div>
 

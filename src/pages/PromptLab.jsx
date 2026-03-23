@@ -101,7 +101,7 @@ ${template}
             
             {/* A: Ascribe Role */}
             <div className="prompt-card" style={{ borderTop: '4px solid #6366f1' }}>
-              <label className="input-label"><ShieldCheck size={14} /> Step 1: Ascribe (指定 AI 角色)</label>
+              <label className="input-label"><ShieldCheck size={14} /> Step 1: Ascribe (歸屬)</label>
               <div className="grid grid-cols-1 gap-3">
                 {AI_ROLES.map(role => (
                   <button
@@ -121,7 +121,7 @@ ${template}
 
             {/* I: Inquire Stage */}
             <div className="prompt-card" style={{ borderTop: '4px solid #06b6d4' }}>
-              <label className="input-label"><BrainCircuit size={14} /> Step 2: Inquire (確定研究階段)</label>
+              <label className="input-label"><BrainCircuit size={14} /> Step 2: Inquire (提問)</label>
               <div className="space-y-3">
                 {RESEARCH_STAGES.map(stage => (
                   <button
@@ -138,7 +138,7 @@ ${template}
 
             {/* R: Reference Materials */}
             <div className="prompt-card" style={{ borderTop: '4px solid #10b981' }}>
-              <label className="input-label"><Database size={14} /> Step 3: Reference (餵入素材)</label>
+              <label className="input-label"><Database size={14} /> Step 3: Reference (引用)</label>
               <div className="space-y-4">
                 {(selectedStage.id === 'topic' || selectedStage.id === 'lit_review') && (
                   <div className="input-group">
@@ -244,11 +244,11 @@ ${template}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="text-sm">
                         <span className="font-black text-amber-500 mr-1 italic">E (Evaluate):</span> 
-                        <p className="text-slate-600 mt-1">檢查 AI 給你的建議。它是根據事實嗎？這在你的學校場域可行嗎？不要照單全收。</p>
+                        <p className="text-slate-600 mt-1">判斷內容是否合理，不照單全收。</p>
                       </div>
                       <div className="text-sm">
                         <span className="font-black text-amber-500 mr-1 italic">D (Document):</span> 
-                        <p className="text-slate-600 mt-1">記錄你採用了哪些建議、拒絕了哪些。這才是你研究成長的證明。</p>
+                        <p className="text-slate-600 mt-1">保留與 AI 的對話紀錄。</p>
                       </div>
                     </div>
                   </div>

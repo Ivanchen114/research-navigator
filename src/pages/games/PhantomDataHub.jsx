@@ -155,6 +155,26 @@ export const PhantomDataHub = () => {
                     </p>
                 </div>
 
+                {/* Reset Progress */}
+                {completedCount > 0 && (
+                    <div className="mt-8 text-center pt-6">
+                        <button 
+                            onClick={() => {
+                                if(window.confirm('確定要清除所有「幽靈數據」的調查紀錄嗎？這將會重置所有章節進度。')) {
+                                    [1,2,3,4,5].forEach(num => {
+                                        localStorage.removeItem(`phantom_ch${num}_complete`);
+                                        localStorage.removeItem(`phantom_ch${num}_optimal`);
+                                    });
+                                    window.location.reload();
+                                }
+                            }}
+                            className="inline-flex items-center gap-2 text-[10px] text-slate-500/50 hover:text-rose-400 font-mono tracking-widest transition-colors uppercase border border-slate-800 hover:border-rose-900/50 px-3 py-1.5 rounded-sm bg-slate-900/30 backdrop-blur-sm"
+                        >
+                            <AlertCircle size={12} /> 清除本案調查紀錄
+                        </button>
+                    </div>
+                )}
+
             </div>
         </div>
     );

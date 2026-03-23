@@ -3,6 +3,10 @@ export const patientData = [
   {
     id: 1,
     primaryDiagnosisKey: "A",
+    priorityDiagnosisKey: "A",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "這題最大問題是「美的本質」太抽象，就算縮小範圍也還是無法直接操作化，所以先救「空」。",
     question: "探究美的本質",
     diagnosis: "抽象哲學病",
     causes: ["空"],
@@ -32,16 +36,20 @@ export const patientData = [
   {
     id: 2,
     primaryDiagnosisKey: "E",
+    priorityDiagnosisKey: "E",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "這題最大的卡點是「有沒有」讓問題停在封閉式問法，研究推不下去，所以先救問法。",
     question: "本校學生有沒有在用社群媒體？",
     diagnosis: "是非廢話病",
     causes: ["空"],
     cures: ["實"],
     healedOptions: [
       {
-        text: "本校高一生每日使用社群媒體的平均時間與主要用途調查",
+        text: "本校高一生每日使用社群媒體的平均時間與睡眠時數之關聯",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正確！把「有沒有」改成時間與用途，研究才會有深度。"
+        feedback: "精準！你把單純的「有沒有」變成兩個具體變數（社群使用時間與睡眠時數）的關聯，這才是有深度的研究問題。"
       },
       {
         text: "本校學生最喜歡哪一個社群媒體？",
@@ -53,7 +61,7 @@ export const patientData = [
     explanation: [
       { icon: "👁️", label: "觀察", text: "題目只是在問「有沒有」，答案幾乎顯而易見，探究很快就會結束。" },
       { icon: "🧠", label: "診斷", text: "這是是非廢話病。因為它不能帶出程度、差異或關聯，只會得到一個很薄的答案。" },
-      { icon: "💡", label: "處方", text: "用「空→實」把有無改成可描述的時數、頻率、平台或用途，讓題目變成立體。" }
+      { icon: "💡", label: "處方", text: "用「空→實」把有無改成可描述的變數（如使用時數），並和其他變數（如睡眠）連結，讓題目變深。" }
     ],
     severity: "mild",
     tags: ["只有是非", "答案顯然"]
@@ -61,6 +69,10 @@ export const patientData = [
   {
     id: 3,
     primaryDiagnosisKey: "B",
+    priorityDiagnosisKey: "B",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "題目在問尚未發生的未來，現在無法驗證，因此先判算命占卜病。",
     question: "2030年最熱門的工作會是什麼？",
     diagnosis: "算命占卜病",
     causes: ["遠"],
@@ -90,6 +102,10 @@ export const patientData = [
   {
     id: 4,
     primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "題目範圍大到全球層級，若不先縮小範圍，後面根本無法落地。",
     question: "全球暖化的成因與解決方法",
     diagnosis: "百科全書病",
     causes: ["大"],
@@ -119,6 +135,10 @@ export const patientData = [
   {
     id: 5,
     primaryDiagnosisKey: "E",
+    priorityDiagnosisKey: "E",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "仍是「有沒有」的封閉式問法，研究只能得到薄答案，所以先救問法。",
     question: "本校學生有沒有在段考前熬夜？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -148,6 +168,10 @@ export const patientData = [
   {
     id: 6,
     primaryDiagnosisKey: "E",
+    priorityDiagnosisKey: "E",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "問題停留在有無判斷，還沒進入頻率、時段、情境等研究焦點，所以先救問法。",
     question: "本校學生有沒有在上課偷滑手機？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -177,6 +201,10 @@ export const patientData = [
   {
     id: 7,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "「那麼吵」是強烈主觀感受，最大問題是語句先帶情緒與價值判斷，所以先救偏見。",
     question: "為什麼我們班那麼吵？",
     diagnosis: "主觀偏見病",
     causes: ["難"],
@@ -212,6 +240,10 @@ export const patientData = [
   {
     id: 8,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "這題也有點大，但更核心的是先假定「很常遲到」，帶有預設立場，所以先救偏見。",
     question: "高中生為什麼很常遲到？",
     diagnosis: "主觀偏見病",
     causes: ["難"],
@@ -241,6 +273,10 @@ export const patientData = [
   {
     id: 9,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: [],
+    coDiagnosisKeys: [],
+    priorityReason: "「都很難吃」是情緒化評價，最大卡點是先入為主的貶抑語言。",
     question: "高中福利社為什麼都很難吃？",
     diagnosis: "主觀偏見病",
     causes: ["難"],
@@ -270,6 +306,10 @@ export const patientData = [
   {
     id: 10,
     primaryDiagnosisKey: "E",
+    priorityDiagnosisKey: "E",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "這題也帶偏見，但最大的問題是「是不是都會」讓研究停在是非問法，因此本關先救問法。",
     question: "高中生是不是都會熬夜？",
     diagnosis: "是非廢話病",
     causes: ["空"],
@@ -301,6 +341,10 @@ export const patientData = [
   {
     id: 11,
     primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["A"],
+    coDiagnosisKeys: ["A"],
+    priorityReason: "這題同時大又空，但如果不先縮小「現代人」範圍，後面連對象都定不下來，所以本關先救「大」。",
     question: "為什麼現代人越來越不快樂？",
     diagnosis: "百科全書病 + 抽象哲學病",
     causes: ["大", "空"],
@@ -330,6 +374,10 @@ export const patientData = [
   {
     id: 12,
     primaryDiagnosisKey: "A",
+    priorityDiagnosisKey: "A",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "即使縮小範圍，「存在的意義」仍然過於抽象，無法直接操作化，所以先救「空」。",
     question: "人類存在的意義是什麼？",
     diagnosis: "抽象哲學病 + 百科全書病",
     causes: ["空", "大"],
@@ -359,6 +407,10 @@ export const patientData = [
   {
     id: 13,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "這題也有範圍問題，但最大卡點是「更好」本身就是價值判斷，所以先救偏見。",
     question: "為什麼讀書比打電動更好？",
     diagnosis: "主觀偏見病 + 範圍膨脹",
     causes: ["大", "難"],
@@ -388,6 +440,10 @@ export const patientData = [
   {
     id: 14,
     primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "題目又大又主觀，但若不先把「台灣的教育制度」縮到一小塊，後面無法研究，所以先救「大」。",
     question: "台灣的教育制度好不好？",
     diagnosis: "百科全書病 + 主觀偏見病",
     causes: ["大", "難"],
@@ -417,6 +473,10 @@ export const patientData = [
   {
     id: 15,
     primaryDiagnosisKey: "F",
+    priorityDiagnosisKey: "F",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "創新可以研究，但賈伯斯根本無法訪談；對象不可接觸是最先要處理的問題。",
     question: "訪談賈伯斯的創新理念",
     diagnosis: "觀落陰病 + 百科全書病",
     causes: ["遠", "大"],
@@ -446,6 +506,10 @@ export const patientData = [
   {
     id: 16,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "這題也有範圍膨脹，但「都不專心」先下判斷且帶誇大，是更先卡住研究中立性的病灶。",
     question: "為什麼高中生上課都不專心？",
     diagnosis: "範圍膨脹 + 主觀偏見病",
     causes: ["大", "難"],
@@ -475,6 +539,10 @@ export const patientData = [
   {
     id: 17,
     primaryDiagnosisKey: "A",
+    priorityDiagnosisKey: "A",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "這題也有情緒色彩，但最核心是「壓力」太抽象，不先轉成症狀、量表或經驗，就無法研究。",
     question: "為什麼段考週壓力特別大？",
     diagnosis: "抽象哲學病 + 主觀偏見病",
     causes: ["空", "難"],
@@ -510,6 +578,10 @@ export const patientData = [
   {
     id: 18,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "這題不是先處理範圍，而是先把「很無聊」這種情緒性評語轉掉，否則研究一開始就偏掉。",
     question: "為什麼有些老師上課很無聊？",
     diagnosis: "主觀偏見病 + 範圍膨脹",
     causes: ["難", "大"],
@@ -545,6 +617,10 @@ export const patientData = [
   {
     id: 19,
     primaryDiagnosisKey: "D",
+    priorityDiagnosisKey: "D",
+    acceptableDiagnosisKeys: ["A"],
+    coDiagnosisKeys: ["A"],
+    priorityReason: "「不愛」是心理推測，比抽象更先卡住，因為你先替同學下了動機判斷，所以先救偏見。",
     question: "為什麼班上同學不愛運動？",
     diagnosis: "主觀偏見病 + 抽象哲學",
     causes: ["難", "空"],
@@ -580,6 +656,10 @@ export const patientData = [
   {
     id: 20,
     primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["A"],
+    coDiagnosisKeys: ["A"],
+    priorityReason: "「成效」很抽象，但若不先把社團、活動、情境縮到單一場域，題目根本無法落地，所以先救「大」。",
     question: "為什麼社團活動常常辦不出成效？",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -611,6 +691,10 @@ export const patientData = [
   {
     id: 21,
     primaryDiagnosisKey: "H",
+    priorityDiagnosisKey: "H",
+    acceptableDiagnosisKeys: ["B"],
+    coDiagnosisKeys: ["B"],
+    priorityReason: "這題也帶未來／遠距時間跨度，但最大問題是因果鏈太長、干擾變項太多，先救變因失控。",
     question: "早餐對人生成就的影響",
     diagnosis: "變因失控 + 算命占卜病",
     causes: ["難", "遠"],
@@ -640,6 +724,10 @@ export const patientData = [
   {
     id: 22,
     primaryDiagnosisKey: "G",
+    priorityDiagnosisKey: "G",
+    acceptableDiagnosisKeys: ["A"],
+    coDiagnosisKeys: ["A"],
+    priorityReason: "核心不是範圍或語氣，而是目前研究方法根本無法直接驗證「靈魂是否存在」，所以先判方法無效。",
     question: "靈魂到底存不存在？",
     diagnosis: "方法無效病 + 算命占卜病(形而上)",
     causes: ["難", "遠"],
@@ -669,6 +757,10 @@ export const patientData = [
   {
     id: 23,
     primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["A"],
+    coDiagnosisKeys: ["A"],
+    priorityReason: "這題同時大又空，但若不先限縮手機使用情境與成績種類，後面無法操作，所以本關先救「大」。",
     question: "手機使用對學業成績的影響",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -698,6 +790,10 @@ export const patientData = [
   {
     id: 24,
     primaryDiagnosisKey: "A",
+    priorityDiagnosisKey: "A",
+    acceptableDiagnosisKeys: ["C", "H"],
+    coDiagnosisKeys: ["C", "H"],
+    priorityReason: "這題也大、也難，但「變笨」本身過於模糊且帶價值判斷，不先把它轉成可測量表現，後面根本沒法研究。",
     question: "滑手機會不會讓人變笨？",
     diagnosis: "多重器官衰竭：大 + 空 + 難",
     causes: ["大", "空", "難"],
@@ -727,6 +823,10 @@ export const patientData = [
   {
     id: 25,
     primaryDiagnosisKey: "E",
+    priorityDiagnosisKey: "E",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "這題同時範圍大，但最大的教學卡點是「有沒有用」讓它停在是非問法，所以本關先救問法。",
     question: "補習到底有沒有用？",
     diagnosis: "百科全書病 + 是非廢話病",
     causes: ["大", "空"],
@@ -756,6 +856,10 @@ export const patientData = [
   {
     id: 26,
     primaryDiagnosisKey: "H",
+    priorityDiagnosisKey: "H",
+    acceptableDiagnosisKeys: ["E"],
+    coDiagnosisKeys: ["E"],
+    priorityReason: "題目也有是非問法，但更核心的是試圖直接證明戀愛造成成績變化，變因太多，高中生難以處理。",
     question: "高中生談戀愛會不會影響成績？",
     diagnosis: "變因失控 + 是非廢話",
     causes: ["大", "空", "難"],
@@ -791,6 +895,10 @@ export const patientData = [
   {
     id: 27,
     primaryDiagnosisKey: "A",
+    priorityDiagnosisKey: "A",
+    acceptableDiagnosisKeys: ["C"],
+    coDiagnosisKeys: ["C"],
+    priorityReason: "平台範圍也大，但更核心的是「焦慮」若不先轉成具體量表或指標，就無法操作，因此本關先救「空」。",
     question: "IG / 抖音讓高中生焦慮嗎？",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -820,6 +928,10 @@ export const patientData = [
   {
     id: 28,
     primaryDiagnosisKey: "G",
+    priorityDiagnosisKey: "G",
+    acceptableDiagnosisKeys: ["F"],
+    coDiagnosisKeys: ["F"],
+    priorityReason: "「天生」預設原因在先天機制，而這種原因目前無法直接驗證；與其追先天，不如研究可觀察行為。",
     question: "為什麼有些同學天生就比較會讀書？",
     diagnosis: "方法無效病 + 觀落陰病",
     causes: ["遠", "難"],
@@ -855,6 +967,10 @@ export const patientData = [
   {
     id: 29,
     primaryDiagnosisKey: "F",
+    priorityDiagnosisKey: "F",
+    acceptableDiagnosisKeys: ["G"],
+    coDiagnosisKeys: ["G"],
+    priorityReason: "最大問題是研究對象根本碰不到，所以先判觀落陰；方法可行性差是共病。",
     question: "訪談現任總統對教育改革的看法",
     diagnosis: "觀落陰病 + 方法無效",
     causes: ["遠", "難"],
@@ -884,6 +1000,10 @@ export const patientData = [
   {
     id: 30,
     primaryDiagnosisKey: "G",
+    priorityDiagnosisKey: "G",
+    acceptableDiagnosisKeys: ["H"],
+    coDiagnosisKeys: ["H"],
+    priorityReason: "題目也有變因失控，但更根本的是你無法直接研究先天智力來源，所以先判方法無效。",
     question: "為什麼有些人天生就比較聰明？",
     diagnosis: "變因失控 + 方法無效病",
     causes: ["大", "難"],

@@ -399,14 +399,17 @@ export const PhantomCh5 = () => {
                     );
                 })()}
 
-                {phase === 'complete' && (
+                {phase === 'complete' && (() => {
+                    const allOptimal = ['ch1','ch2','ch3','ch4','ch5']
+                        .every(n => localStorage.getItem(`phantom_ch${n}_optimal`) === 'true');
+                    return (
                     <div>
                         {/* 全案告破 */}
                         <div className="relative w-full h-56 sm:h-64 rounded-lg overflow-hidden border border-violet-800/60 mb-6 shadow-[0_0_30px_rgba(139,92,246,0.15)]">
                             <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] hover:scale-105" style={{ backgroundImage: "url('/assets/phantom/backgrounds/ch5/phantom_ch5_case_closed_bg_v1.webp')" }}></div>
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
                             <div className="absolute inset-0 opacity-40 mix-blend-color" style={{ backgroundImage: "linear-gradient(rgba(139, 92, 246, 0.2), rgba(16, 185, 129, 0.1))" }}></div>
-                            
+
                             <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none pb-4">
                                 <ShieldCheck size={48} className="text-violet-400 drop-shadow-[0_0_10px_rgba(139,92,246,0.8)] mb-3" />
                                 <div className="font-mono text-xs text-violet-300 tracking-[0.6em] mb-1">R.I.B. FINALIZED</div>
@@ -454,9 +457,34 @@ export const PhantomCh5 = () => {
                             </div>
                         </div>
 
-                        <PrimaryButton onClick={() => navigate('/phantom')} label="返回調查檔案" />
+                        {/* 完美通關 vs 一般通關結語 */}
+                        {allOptimal ? (
+                            <div className="bg-emerald-950/30 border border-emerald-700/40 rounded p-5 mb-5">
+                                <div className="font-mono text-xs text-emerald-400 tracking-widest mb-3">◈ 完整調查紀錄解鎖</div>
+                                <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                                    你不只完成了五章調查，你還拼出了幽靈數據工具的完整犯罪地圖——第一章識別出不規則操作的行為特徵，第二章從線人口中取得核心功能的第一手確認，第三章問卷定位了擴散的真實規模，第四章文獻比對鎖定了偽造指紋，第五章實驗重現標定了那個只有工具才會留下的 15% 標準差流失特徵。五個最優線索，構成一條無法辯駁的完整證據鏈。
+                                </p>
+                                <p className="text-slate-400 text-xs leading-relaxed font-mono">
+                                    R.I.B. 將此調查歸入典範案例資料庫。<br />
+                                    檔案標題：<span className="text-emerald-400">PHANTOM DATA — 一個 AI 工具如何在學術系統的盲點裡生長。</span>
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="bg-slate-900/40 border border-slate-700/30 rounded p-5 mb-5">
+                                <div className="font-mono text-xs text-slate-500 tracking-widest mb-3">◈ 調查員備忘</div>
+                                <p className="text-slate-400 text-sm leading-relaxed">
+                                    案件結案。不過，R.I.B. 的紀錄裡，有幾個細節仍標著「待確認」的黃色標籤——你完成了調查，但幽靈數據的完整技術特徵還沒有被全部記錄下來。如果你願意，可以重新進入各章，試著在每個決策點都多走一步。
+                                </p>
+                            </div>
+                        )}
+
+                        <PrimaryButton
+                            onClick={() => navigate('/phantom')}
+                            label={allOptimal ? '案件完結，查閱完整檔案' : '再次挑戰，找出所有線索'}
+                        />
                     </div>
-                )}
+                    );
+                })()}
 
             </div>
         </div>

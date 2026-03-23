@@ -140,12 +140,30 @@ export const QuestionERGame = () => {
 
     const submitDiagnosis = () => {
         const current = patients[currentIdx];
-        if (selectedDiagnosis === current.primaryDiagnosisKey) {
+
+        if (selectedDiagnosis === current.priorityDiagnosisKey) {
             setPlayingPhase('prescription');
             setPartialFeedback(null);
-        } else {
-            handleMistake("主病灶判讀有誤！先找出這題最主要卡住的地方。真實研究常常不只一種問題，但這一關請先抓出最核心的病灶。");
+            return;
         }
+
+        if (current.acceptableDiagnosisKeys?.includes(selectedDiagnosis)) {
+            const selectedMeta = DIAGNOSIS_OPTIONS.find(d => d.id === selectedDiagnosis);
+            const priorityMeta = DIAGNOSIS_OPTIONS.find(d => d.id === current.priorityDiagnosisKey);
+            setPartialFeedback({
+                type: 'warning',
+                title: '🩺 抓到共病，但還不是優先搶救點',
+                message:
+                    `你抓到的「${selectedMeta?.title || selectedDiagnosis}」也是這題常見的共病之一，` +
+                    `但本關更優先需要處理的是「${priorityMeta?.title || current.priorityDiagnosisKey}」。\n` +
+                    `再想想：如果只能先救一刀，哪個問題不先處理，題目就根本做不下去？`,
+                reason: current.priorityReason
+            });
+            setCurrentQuestionPts(pts => Math.max(0, pts - 2));
+            return;
+        }
+
+        handleMistake("這個病灶和題目的核心卡點不太一致。先回頭想：這題現在最大的問題，是不能研究、範圍太大、概念太抽象，還是問法本身有偏？");
     };
 
     const submitPrescription = () => {
@@ -208,7 +226,7 @@ export const QuestionERGame = () => {
     const scoreRatio = maxScore > 0 ? (score / maxScore) : 0;
 
     const currentDiagnosisMeta = current
-        ? DIAGNOSIS_OPTIONS.find(opt => opt.id === current.primaryDiagnosisKey)
+        ? DIAGNOSIS_OPTIONS.find(opt => opt.id === current.priorityDiagnosisKey)
         : null;
 
     // ================= START SCREEN =================
@@ -239,9 +257,9 @@ export const QuestionERGame = () => {
                         <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700 pt-6 mt-6">📋 看診須知</h3>
                         <div className="space-y-3 text-sm text-slate-300 text-left md:px-4">
                             <p className="flex items-start gap-2">🩺 <span>急診室湧入了 5 個<strong className="text-rose-400 font-bold bg-rose-900/40 px-1 rounded">「生病的研究問題」</strong></span></p>
-                            <p className="flex items-start gap-2">🔎 <span>第一步，請先從 <strong className="text-teal-300">8 個病</strong> 裡找出這題最主要的病灶</span></p>
+                            <p className="flex items-start gap-2">🔎 <span>第一步，請先從 <strong className="text-teal-300">8 個病</strong> 裡找出這題<strong className="text-teal-200">最優先需要處理的病灶</strong></span></p>
                             <p className="flex items-start gap-2">💊 <span>第二步，再從 <strong className="text-cyan-300">4 個處方</strong> 裡選出所有需要的急救方式。很多題目都需要 <strong className="text-teal-400">Combo 處方</strong>！</span></p>
-                            <p className="flex items-start gap-2">🧠 <span>真實研究裡，一個題目常常不只一種問題。這個遊戲會先請你找出最主要的病灶，再用組合處方把題目救活。</span></p>
+                            <p className="flex items-start gap-2">🧠 <span>真實研究裡，一個題目常常不只一種問題。這個遊戲會先請你找出<strong className="text-teal-200">最優先需要處理的病灶</strong>，也就是：如果不先處理它，題目就很難往前走的那個卡點。找到之後，再用組合處方把題目救活。</span></p>
                             <p className="flex items-start gap-2">⚠️ <span>若答錯將被扣分並 <strong className="text-amber-400">強制重答</strong>，直到正確為止</span></p>
                         </div>
                     </div>
@@ -324,20 +342,34 @@ export const QuestionERGame = () => {
                             </h3>
                             <div className="space-y-5">
                                 {wrongCases.map((wc, i) => {
-                                    const wcDiagnosis = DIAGNOSIS_OPTIONS.find(d => d.id === wc.primaryDiagnosisKey);
+                                    const wcDiagnosis = DIAGNOSIS_OPTIONS.find(d => d.id === (wc.priorityDiagnosisKey || wc.primaryDiagnosisKey));
                                     return (
                                         <div key={i} className="bg-slate-800/80 p-5 rounded-sm shadow-lg border border-slate-700 relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 opacity-60"></div>
                                             <p className="font-bold text-rose-100 text-lg mb-2">🤕「{wc.question}」</p>
                                             <div className="mb-3 space-y-2 mt-4 text-sm">
                                                 <p className="font-bold text-slate-400">
-                                                    ✅ 主診斷：
+                                                    ✅ 優先病灶：
                                                     <span className="text-rose-300 ml-1">{wcDiagnosis?.title || wc.diagnosis}</span>
                                                 </p>
+                                                {wc.coDiagnosisKeys?.length > 0 && (
+                                                    <p className="font-bold text-slate-400">
+                                                        🧩 常見共病：
+                                                        <span className="text-amber-300 ml-1">
+                                                            {wc.coDiagnosisKeys.map(id => DIAGNOSIS_OPTIONS.find(d => d.id === id)?.title || id).join('、')}
+                                                        </span>
+                                                    </p>
+                                                )}
                                                 <p className="font-bold text-slate-400">
                                                     ✅ 需要處方：
                                                     <span className="text-teal-300 ml-1">{wc.cures.join("、")}</span>
                                                 </p>
+                                                {wc.priorityReason && (
+                                                    <div className="mt-2 bg-amber-950/20 p-3 rounded border-l-2 border-amber-500/40">
+                                                        <span className="text-xs font-bold text-amber-300">💡 本關優先搶救點：</span>
+                                                        <p className="text-xs text-slate-400 mt-1 leading-relaxed">{wc.priorityReason}</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -373,7 +405,10 @@ export const QuestionERGame = () => {
                         </h3>
                         <div className="space-y-3 text-sm text-slate-300 leading-relaxed relative z-10">
                             <p>
-                                本系統提供的是「<span className="text-rose-400 font-bold">初步診斷</span>」，幫助你先看出題目最主要的病灶。
+                                遊戲裡的「<span className="text-amber-400 font-bold">優先病灶</span>」不是唯一真相，而是這一關設定的<span className="text-amber-400 font-bold">優先搶救點</span>。
+                            </p>
+                            <p>
+                                本系統提供的是「<span className="text-rose-400 font-bold">初步診斷</span>」，幫助你先看出題目最需要優先處理的卡點。
                             </p>
                             <p>
                                 但真實研究世界比急診室複雜：一個題目可能同時有多種問題，也可能有不只一條可行的修題路線。
@@ -494,10 +529,10 @@ export const QuestionERGame = () => {
                 {playingPhase === 'diagnosis' && (
                     <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4">
                         <h3 className="text-slate-300 font-bold tracking-widest mb-4 flex items-center justify-center gap-2">
-                            <span className="text-xl">1.</span> 第一階段：主病灶判讀
+                            <span className="text-xl">1.</span> 第一階段：優先病灶判讀
                         </h3>
                         <p className="text-slate-400 text-sm mb-5">
-                            請選出這題最主要的病灶。真實研究常常不只一種問題，但這一關先抓最核心的那一個。
+                            請選出這題最優先需要處理的病灶。真實研究裡一題常常不只一種問題，這一關先找出：如果不先處理它，題目就很難往前走的那個卡點。
                         </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
@@ -525,7 +560,7 @@ export const QuestionERGame = () => {
                             disabled={!selectedDiagnosis}
                             className={`w-full py-4 rounded-sm font-black tracking-widest text-lg transition-all ${selectedDiagnosis ? 'bg-slate-100 text-slate-900 hover:bg-teal-400 hover:text-slate-900 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)]' : 'bg-slate-800/50 text-slate-500 cursor-not-allowed'}`}
                         >
-                            確定主診斷
+                            確認優先病灶
                         </button>
                     </div>
                 )}
@@ -537,11 +572,11 @@ export const QuestionERGame = () => {
                         </h3>
 
                         <p className="text-slate-400 text-sm mb-5">
-                            主病灶只有一個，但急救方式常常不只一種。請選出所有需要的處方。
+                            這一關的<strong className="text-cyan-300">優先病灶</strong>只有一個，但真實題目常常同時有共病。請選出所有需要的處方，把題目一步步救回來。
                         </p>
 
                         <div className="flex flex-wrap items-center justify-center gap-2 mb-6 opacity-80">
-                            <span className="text-xs text-slate-400">已確認主病灶：</span>
+                            <span className="text-xs text-slate-400">已確認優先病灶：</span>
                             <span className="text-xs font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-rose-300">
                                 {currentDiagnosisMeta?.title || current.diagnosis}
                             </span>
@@ -607,13 +642,29 @@ export const QuestionERGame = () => {
 
                 {partialFeedback && playingPhase !== 'healed' && (
                     <div className="w-full max-w-2xl mt-6">
-                        <div className="bg-rose-950/80 border border-rose-500/50 p-5 rounded-sm flex items-start gap-4 animate-[shake_0.5s] shadow-[0_0_20px_rgba(244,63,94,0.3)]">
-                            <div className="text-3xl shrink-0">🚨</div>
-                            <div className="text-left">
-                                <h4 className="font-bold text-rose-400 text-lg mb-1">{partialFeedback.title}</h4>
-                                <p className="text-sm text-rose-200 font-medium leading-loose">{partialFeedback.message}</p>
+                        {partialFeedback.type === 'warning' ? (
+                            <div className="bg-amber-950/80 border border-amber-500/50 p-5 rounded-sm flex items-start gap-4 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+                                <div className="text-3xl shrink-0">🩺</div>
+                                <div className="text-left space-y-2">
+                                    <h4 className="font-bold text-amber-400 text-lg">{partialFeedback.title}</h4>
+                                    <p className="text-sm text-amber-200 font-medium leading-relaxed whitespace-pre-line">{partialFeedback.message}</p>
+                                    {partialFeedback.reason && (
+                                        <div className="mt-2 pt-2 border-t border-amber-500/30">
+                                            <span className="text-xs font-bold text-amber-300">💡 本關優先搶救點：</span>
+                                            <p className="text-xs text-amber-200/80 mt-1 leading-relaxed">{partialFeedback.reason}</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="bg-rose-950/80 border border-rose-500/50 p-5 rounded-sm flex items-start gap-4 animate-[shake_0.5s] shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+                                <div className="text-3xl shrink-0">🚨</div>
+                                <div className="text-left">
+                                    <h4 className="font-bold text-rose-400 text-lg mb-1">{partialFeedback.title}</h4>
+                                    <p className="text-sm text-rose-200 font-medium leading-loose">{partialFeedback.message}</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -649,11 +700,22 @@ export const QuestionERGame = () => {
                                         </div>
 
                                         <div className="flex flex-wrap gap-2 items-center">
-                                            <span className="text-xs text-slate-500">主診斷：</span>
+                                            <span className="text-xs text-slate-500">優先病灶：</span>
                                             <span className="text-xs font-bold bg-rose-950/40 border border-rose-500/30 text-rose-300 px-2 py-0.5 rounded">
                                                 {currentDiagnosisMeta?.title || current.diagnosis}
                                             </span>
                                         </div>
+
+                                        {current.coDiagnosisKeys?.length > 0 && (
+                                            <div className="flex flex-wrap gap-2 items-center mt-2">
+                                                <span className="text-xs text-slate-500">常見共病：</span>
+                                                {current.coDiagnosisKeys.map(id => (
+                                                    <span key={id} className="text-xs font-bold bg-amber-950/40 border border-amber-500/30 text-amber-300 px-2 py-0.5 rounded">
+                                                        {DIAGNOSIS_OPTIONS.find(d => d.id === id)?.title || id}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
 
                                         <div className="flex flex-wrap gap-2 items-center mt-3">
                                             <span className="text-xs text-slate-500">處方組合：</span>
@@ -663,6 +725,13 @@ export const QuestionERGame = () => {
                                                 </span>
                                             ))}
                                         </div>
+
+                                        {current.priorityReason && (
+                                            <div className="mt-3 bg-amber-950/20 p-3 rounded border-l-2 border-amber-500/50">
+                                                <div className="text-xs font-bold text-amber-300 mb-1">🎯 本關優先搶救點</div>
+                                                <div className="text-xs text-slate-300 leading-relaxed">{current.priorityReason}</div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
