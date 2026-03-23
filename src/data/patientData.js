@@ -239,36 +239,38 @@ export const patientData = [
   },
   {
     id: 8,
-    primaryDiagnosisKey: "D",
-    priorityDiagnosisKey: "D",
-    acceptableDiagnosisKeys: ["C"],
-    coDiagnosisKeys: ["C"],
-    priorityReason: "這題也有點大，但更核心的是先假定「很常遲到」，帶有預設立場，所以先救偏見。",
+    primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "「很常遲到」確實帶有預設立場（D），但更優先的是「高中生」這個範圍太大——是哪所學校？哪個年級？不先縮小，連研究對象都定不下來。先救 C，D 是共病。",
+    focusTerms: ["高中生", "很常遲到"],
+    focusCue: "這題有兩個可疑點：「高中生」（範圍）和「很常遲到」（預設判斷）。先想：哪個問題不先處理，題目連研究對象都定不下來？",
     question: "高中生為什麼很常遲到？",
-    diagnosis: "主觀偏見病",
-    causes: ["難"],
-    cures: ["易"],
+    diagnosis: "百科全書病 + 主觀偏見病",
+    causes: ["大", "難"],
+    cures: ["小", "易"],
     healedOptions: [
       {
         text: "本校高一學生在一週內的遲到頻率與前一晚入睡時間的關聯性探討",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正確！你去掉了預設指責，改用遲到頻率與睡眠因素來研究。"
+        feedback: "正確！你縮小到本校高一（小），也把「很常」改成可量化的遲到頻率與睡眠關聯（易）。"
       },
       {
         text: "高中生是不是因為太懶散所以常遲到？",
         isCorrect: false,
         researchType: null,
-        feedback: "錯誤！這仍然把原因直接貼標籤，沒有把題目變客觀。"
+        feedback: "這仍然把原因直接貼標籤，範圍也沒有縮小，題目還是救不活。"
       }
     ],
     explanation: [
-      { icon: "👁️", label: "觀察", text: "「很常遲到」帶有預設立場，沒有清楚標準，也把高中生一概而論。" },
-      { icon: "🧠", label: "診斷", text: "這是主觀偏見病。你先假定高中生常遲到，會讓題目一開始就失去中立。" },
-      { icon: "💡", label: "處方", text: "用「難→易」改成一週遲到次數、睡眠時間、交通方式等可比較因素。" }
+      { icon: "👁️", label: "觀察", text: "「高中生」沒有指定學校或年級，範圍太廣；「很常遲到」則先下了誇大的預設判斷。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是百科全書病（C）——不先縮小範圍，連研究對象都定不下來。「很常遲到」的偏見（D）是共病，縮完再一起修。" },
+      { icon: "💡", label: "處方", text: "用「大→小」縮到本校、特定年級，再用「難→易」把「很常」改成一週遲到次數等可記錄的指標。" }
     ],
     severity: "mild",
-    tags: ["主觀預設", "缺乏客觀"]
+    tags: ["範圍太大", "主觀預設"]
   },
   {
     id: 9,
@@ -505,13 +507,15 @@ export const patientData = [
   },
   {
     id: 16,
-    primaryDiagnosisKey: "D",
-    priorityDiagnosisKey: "D",
-    acceptableDiagnosisKeys: ["C"],
-    coDiagnosisKeys: ["C"],
-    priorityReason: "這題也有範圍膨脹，但「都不專心」先下判斷且帶誇大，是更先卡住研究中立性的病灶。",
+    primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "這題同時有兩個問題：「高中生上課」範圍太大（C），加上「都不專心」先下判斷（D）。但根據優先處理順序，C 比 D 更先需要搶救——因為就算你把「都不專心」改成中性說法，「高中生上課」仍然太大：是哪個科目？什麼類型的課？哪個學校？不先縮小範圍，連研究對象都定不下來。所以先救 C，D 是共病。",
+    focusTerms: ["高中生", "上課", "都不專心"],
+    focusCue: "這題有三個可疑點：「高中生」、「上課」、「都不專心」。先想：哪一段不先處理，題目連研究對象與情境都定不下來？",
     question: "為什麼高中生上課都不專心？",
-    diagnosis: "範圍膨脹 + 主觀偏見病",
+    diagnosis: "百科全書病 + 主觀偏見病",
     causes: ["大", "難"],
     cures: ["小", "易"],
     healedOptions: [
@@ -519,22 +523,22 @@ export const patientData = [
         text: "本校高一生在下午第一節課的專注力自評分數與前晚睡眠時數之關聯",
         isCorrect: true,
         researchType: "量化",
-        feedback: "很好！你把範圍縮小，也把偏見改成可量化的專注力自評。"
+        feedback: "很好！你把範圍縮到本校、特定時段，也把偏見改成可量化的專注力自評。"
       },
       {
         text: "探討智慧型手機普及如何摧毀高中生的專注力",
         isCorrect: false,
         researchType: null,
-        feedback: "錯誤！這仍然帶有強烈預設與情緒字眼。"
+        feedback: "這仍然帶有強烈預設與情緒字眼，而且範圍還是太大。"
       }
     ],
     explanation: [
-      { icon: "👁️", label: "觀察", text: "「都不專心」過度誇大，而且把全體高中生一概而論。" },
-      { icon: "🧠", label: "診斷", text: "這是主觀偏見病和百科全書病。範圍太大又先下判斷，研究很容易失焦。" },
-      { icon: "💡", label: "處方", text: "用「大→小」和「難→易」，縮到本校、某時段或某節課，再改成專注力自評或可觀察表現。" }
+      { icon: "👁️", label: "觀察", text: "「高中生上課」涵蓋所有科目、所有課型、所有學校，裝太多東西；「都不專心」則先下了誇大的判斷。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是百科全書病（C）——範圍不縮，連研究的對象與情境都定不下來。「都不專心」是共病（D），縮完範圍後再一起修。" },
+      { icon: "💡", label: "處方", text: "用「大→小」縮到本校、某時段或某節課，再用「難→易」把「不專心」改成可觀察的具體行為或自評分數。" }
     ],
     severity: "moderate",
-    tags: ["預設立場", "過度誇大"]
+    tags: ["範圍太大", "預設立場"]
   },
   {
     id: 17,
@@ -577,54 +581,58 @@ export const patientData = [
   },
   {
     id: 18,
-    primaryDiagnosisKey: "D",
-    priorityDiagnosisKey: "D",
-    acceptableDiagnosisKeys: ["C"],
-    coDiagnosisKeys: ["C"],
-    priorityReason: "這題不是先處理範圍，而是先把「很無聊」這種情緒性評語轉掉，否則研究一開始就偏掉。",
+    primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "「很無聊」是主觀情緒評語（D），但更先要處理的是「有些老師上課」太模糊——是哪個科目？哪個年段？哪種課型？不先縮小情境，「無聊」要怎麼測都定不下來。先救 C，D 是共病。",
+    focusTerms: ["有些老師", "上課", "很無聊"],
+    focusCue: "這題有兩個可疑點：「有些老師上課」（範圍模糊）和「很無聊」（主觀評語）。先想：哪個問題不先處理，連研究的情境都定不下來？",
     question: "為什麼有些老師上課很無聊？",
-    diagnosis: "主觀偏見病 + 範圍膨脹",
-    causes: ["難", "大"],
-    cures: ["易", "小"],
+    diagnosis: "百科全書病 + 主觀偏見病",
+    causes: ["大", "難"],
+    cures: ["小", "易"],
     healedOptions: [
       {
         text: "本校學生對不同教學法（如講述法、分組討論）的主觀專注度評分與偏好",
         isCorrect: true,
         researchType: "量化",
-        feedback: "正確！你把「無聊」改成對不同教學法的專注度與偏好。另一條路也走得通：也可以改做學生課堂投入經驗的訪談。"
+        feedback: "正確！你把情境縮到本校特定教學法（小），也把「無聊」改成可評分的專注度（易）。另一條路也走得通：也可以改做學生課堂投入經驗的訪談。"
       },
       {
         text: "訪談10位學生對「最投入課堂」與「最難專心課堂」的具體描述比較",
         isCorrect: true,
         researchType: "質性",
-        feedback: "正確！這題原本就在問原因，改做訪談可以直接看見學生如何描述投入與分心。另一條路也走得通：也可以量化不同教學法的專注度評分。"
+        feedback: "正確！這題原本就在問原因，改做訪談可以直接蒐集學生對課堂投入與分心的具體描述。另一條路也走得通：也可以量化不同教學法的專注度評分。"
       },
       {
         text: "探討資深教師不願更新教學簡報的心理原因",
         isCorrect: false,
         researchType: null,
-        feedback: "錯誤！這不只帶偏見，還對老師貼標籤。"
+        feedback: "這對老師貼標籤，偏見更嚴重，而且範圍也縮錯方向了。"
       }
     ],
     explanation: [
-      { icon: "👁️", label: "觀察", text: "「很無聊」是情緒性評語，而且研究對象也很模糊。" },
-      { icon: "🧠", label: "診斷", text: "這是主觀偏見病，也帶有範圍過大的問題。你不是在做抱怨板，而是在做研究。" },
-      { icon: "💡", label: "處方", text: "用「難→易」和「大→小」，改研究學生對不同教學活動的專注度、投入感或偏好。" }
+      { icon: "👁️", label: "觀察", text: "「有些老師上課」沒有限定科目、年段或課型；「很無聊」是情緒性主觀評語。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是百科全書病（C）——情境不縮小，連「無聊」要怎麼測都定不下來。「很無聊」的主觀偏見（D）是共病，縮完範圍再一起轉成可測量的指標。" },
+      { icon: "💡", label: "處方", text: "用「大→小」縮到本校、特定科目或教學法，再用「難→易」把「很無聊」改成學生的專注度評分或課堂投入描述。" }
     ],
     severity: "moderate",
-    tags: ["主觀評論", "情緒攻擊"]
+    tags: ["範圍模糊", "主觀評論"]
   },
   {
     id: 19,
-    primaryDiagnosisKey: "D",
-    priorityDiagnosisKey: "D",
-    acceptableDiagnosisKeys: ["A"],
-    coDiagnosisKeys: ["A"],
-    priorityReason: "「不愛」是心理推測，比抽象更先卡住，因為你先替同學下了動機判斷，所以先救偏見。",
+    primaryDiagnosisKey: "A",
+    priorityDiagnosisKey: "A",
+    acceptableDiagnosisKeys: ["D"],
+    coDiagnosisKeys: ["D"],
+    priorityReason: "「不愛運動」同時有兩個問題：「不愛」是抽象的心理狀態，沒有辦法直接觀察或測量（A）；而且也預設同學確實不愛運動（D）。根據優先順序，A 比 D 更先需要搶救——因為「愛不愛」這個概念本身就抓不住，不先轉成可測量的行為指標，連開始研究的入口都找不到。先救 A，D 是共病。",
+    focusTerms: ["班上同學", "不愛運動"],
+    focusCue: "這題最大的問題是：「不愛」這個詞測得到嗎？先想清楚這個概念能不能觀察，再判斷還有沒有其他問題。",
     question: "為什麼班上同學不愛運動？",
-    diagnosis: "主觀偏見病 + 抽象哲學",
-    causes: ["難", "空"],
-    cures: ["易", "實"],
+    diagnosis: "抽象哲學病 + 主觀偏見病",
+    causes: ["空", "難"],
+    cures: ["實", "易"],
     healedOptions: [
       {
         text: "本班同學每週課後參與體育活動的總時數與阻礙因素調查",
@@ -646,12 +654,12 @@ export const patientData = [
       }
     ],
     explanation: [
-      { icon: "👁️", label: "觀察", text: "「不愛運動」是心理推測，沒有清楚行為指標。" },
-      { icon: "🧠", label: "診斷", text: "這是主觀偏見病加抽象哲學病。你不能直接讀心，只能研究可觀察的行為與可描述的經驗。" },
-      { icon: "💡", label: "處方", text: "用「空→實」和「難→易」，改成每週運動時數、參與頻率、阻礙因素，或訪談學生的實際運動經驗。" }
+      { icon: "👁️", label: "觀察", text: "「不愛運動」是一種心理狀態——「愛不愛」沒有辦法直接觀察，也沒有清楚的測量方式。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是抽象哲學病（A）——「愛」是內在感受，抓不住、測不到，不先轉成具體行為指標，連研究入口都找不到。「預設同學不愛」的偏見（D）是共病，一起修。" },
+      { icon: "💡", label: "處方", text: "用「空→實」把「不愛」轉成可測量的行為（每週運動時數、參與頻率、阻礙因素），再用「難→易」縮到本班可訪談的具體經驗。" }
     ],
     severity: "moderate",
-    tags: ["心理推斷", "缺乏客觀"]
+    tags: ["抽象測不到", "心理推斷"]
   },
   {
     id: 20,
@@ -822,11 +830,13 @@ export const patientData = [
   },
   {
     id: 25,
-    primaryDiagnosisKey: "E",
-    priorityDiagnosisKey: "E",
-    acceptableDiagnosisKeys: ["C"],
-    coDiagnosisKeys: ["C"],
-    priorityReason: "這題同時範圍大，但最大的教學卡點是「有沒有用」讓它停在是非問法，所以本關先救問法。",
+    primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["E"],
+    coDiagnosisKeys: ["E"],
+    priorityReason: "「有沒有用」是是非問法（E），但更先要處理的是「補習」這個詞太雜——是一對一？小班？哪個科目？多久？不先縮小，就算改掉「有沒有用」，還是不知道在研究什麼。先救 C，E 是共病。",
+    focusTerms: ["補習", "有沒有用"],
+    focusCue: "這題有兩個可疑點：「補習」（種類太雜）和「有沒有用」（是非問法）。先想：哪個問題不先處理，題目連在研究什麼都定不下來？",
     question: "補習到底有沒有用？",
     diagnosis: "百科全書病 + 是非廢話病",
     causes: ["大", "空"],
@@ -846,12 +856,12 @@ export const patientData = [
       }
     ],
     explanation: [
-      { icon: "👁️", label: "觀察", text: "「有沒有用」是模糊的是非題，而且補習形式也很多。" },
-      { icon: "🧠", label: "診斷", text: "這是百科全書病加是非廢話病。你若不先縮小對象與指標，最後很難得出有研究價值的結果。" },
-      { icon: "💡", label: "處方", text: "用「大→小」和「空→實」，改成某年級、某科補習時數與成績變化或自我感受之間的關聯。" }
+      { icon: "👁️", label: "觀察", text: "「補習」涵蓋太多形式（一對一、小班、線上、哪個科目）；「有沒有用」讓研究只能停在是或否。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是百科全書病（C）——「補習」的種類不縮小，研究什麼都還沒定義清楚。「有沒有用」的是非問法（E）是共病，縮完範圍再改成可量化的指標。" },
+      { icon: "💡", label: "處方", text: "用「大→小」縮到特定科目、補習形式或年級，再用「空→實」把「有沒有用」改成成績變化、學習信心或自評理解度的關聯。" }
     ],
     severity: "boss",
-    tags: ["封閉是否", "無效大哉問"]
+    tags: ["範圍太雜", "封閉是否"]
   },
   {
     id: 26,

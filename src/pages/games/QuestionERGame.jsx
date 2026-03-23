@@ -89,9 +89,9 @@ export const QuestionERGame = () => {
     const [timer, setTimer] = useState(0);
 
     const [currentQuestionPts, setCurrentQuestionPts] = useState(10);
-    const [hintUsed, setHintUsed] = useState(false);
     const [showLightHint, setShowLightHint] = useState(false);
     const [showRxHint, setShowRxHint] = useState(false);
+    const [expandedStartHint, setExpandedStartHint] = useState(null);
     const [partialFeedback, setPartialFeedback] = useState(null);
     const [selectedHealedOption, setSelectedHealedOption] = useState(null);
 
@@ -137,7 +137,6 @@ export const QuestionERGame = () => {
         setSelectedDiagnosis(null);
         setSelectedCures([]);
         setCurrentQuestionPts(10);
-        setHintUsed(false);
         setShowLightHint(false);
         setShowRxHint(false);
         setPartialFeedback(null);
@@ -248,11 +247,6 @@ export const QuestionERGame = () => {
         }
     };
 
-    const useHint = () => {
-        setHintUsed(true);
-        setCurrentQuestionPts(Math.max(0, currentQuestionPts - 3));
-    };
-
     const current = patients[currentIdx];
     const maxScore = patients.length * 10;
     const scoreRatio = maxScore > 0 ? (score / maxScore) : 0;
@@ -295,26 +289,78 @@ export const QuestionERGame = () => {
                         </div>
                     </div>
 
-                    {/* 判斷順序小抄 */}
+                    {/* 判斷順序小抄（可展開） */}
                     <div className="bg-slate-800/60 border border-slate-600/50 rounded-sm p-4 mb-4 text-left">
-                        <div className="text-xs font-black tracking-widest text-slate-400 mb-3">⚡ 優先判斷順序</div>
+                        <div className="text-xs font-black tracking-widest text-slate-400 mb-3">⚡ 優先判斷順序 <span className="font-normal text-slate-500 tracking-normal">（點任一關查看說明）</span></div>
                         <div className="space-y-1.5 text-xs font-semibold">
-                            <div className="flex items-center gap-2">
-                                <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第一關</span>
-                                <span className="text-slate-300">先看能不能研究：B算命、F觀落陰、G方法無效</span>
+
+                            {/* 第一關 */}
+                            <div>
+                                <button onClick={() => setExpandedStartHint(expandedStartHint === 1 ? null : 1)}
+                                    className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+                                    <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第一關</span>
+                                    <span className="text-slate-300 flex-1">先看能不能研究：B算命、F觀落陰、G方法無效</span>
+                                    <span className="text-slate-500 text-[10px]">{expandedStartHint === 1 ? '▲' : '▶'}</span>
+                                </button>
+                                {expandedStartHint === 1 && (
+                                    <div className="mt-2 ml-2 pl-3 border-l-2 border-rose-500/40 space-y-1.5 animate-in fade-in duration-150">
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">B 算命占卜病：</span>題目在問未來還沒發生的事，現在根本找不到資料驗證。例：「2040年最熱門的職業是什麼？」</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">F 觀落陰病：</span>研究對象存在，但你碰不到——可能已過世、在外國、或根本不可能接觸。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">G 方法無效病：</span>不管你想怎麼做，都沒有任何合理方法可以蒐集資料或驗證這題。</p>
+                                    </div>
+                                )}
                             </div>
-                            <div className="flex items-center gap-2">
-                                <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第二關</span>
-                                <span className="text-slate-300">再看有沒有落地：C百科全書、A抽象哲學</span>
+
+                            {/* 第二關 */}
+                            <div>
+                                <button onClick={() => setExpandedStartHint(expandedStartHint === 2 ? null : 2)}
+                                    className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+                                    <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第二關</span>
+                                    <span className="text-slate-300 flex-1">再看有沒有落地：C百科全書、A抽象哲學</span>
+                                    <span className="text-slate-500 text-[10px]">{expandedStartHint === 2 ? '▲' : '▶'}</span>
+                                </button>
+                                {expandedStartHint === 2 && (
+                                    <div className="mt-2 ml-2 pl-3 border-l-2 border-amber-500/40 space-y-1.5 animate-in fade-in duration-150">
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">「落地」是什麼意思？</span>就是「能不能踩到地上、找到起點動手做」。一個沒落地的題目，你站在那裡不知道該從哪裡開始。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">C 百科全書病：</span>題目太大、裝太多東西，像在寫百科全書而不是做研究。例：「手機使用對學業成績的影響」——「手機使用」涵蓋太多種行為，範圍太廣。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">A 抽象哲學病：</span>核心概念本身就抓不住、測不到。例：「幸福感是什麼？」——幸福感沒辦法直接觀察或量化。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-amber-300/60">分辨口訣：C 是「太多」，A 是「太空」。</p>
+                                    </div>
+                                )}
                             </div>
-                            <div className="flex items-center gap-2">
-                                <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第三關</span>
-                                <span className="text-slate-300">再看問法有沒有偏：E是非廢話、D主觀偏見</span>
+
+                            {/* 第三關 */}
+                            <div>
+                                <button onClick={() => setExpandedStartHint(expandedStartHint === 3 ? null : 3)}
+                                    className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+                                    <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第三關</span>
+                                    <span className="text-slate-300 flex-1">再看問法有沒有偏：E是非廢話、D主觀偏見</span>
+                                    <span className="text-slate-500 text-[10px]">{expandedStartHint === 3 ? '▲' : '▶'}</span>
+                                </button>
+                                {expandedStartHint === 3 && (
+                                    <div className="mt-2 ml-2 pl-3 border-l-2 border-cyan-500/40 space-y-1.5 animate-in fade-in duration-150">
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">「問法有沒有偏」是什麼意思？</span>內容沒問題，但你「問問題的方式」本身出了毛病——換個問法就能救活。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">E 是非廢話病：</span>只能回答「有」或「沒有」，研究到此結束。例：「手機使用對學業有沒有影響？」——做完只能說「有」，然後呢？</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">D 主觀偏見病：</span>題目裡偷藏了你的立場或假設。例：「為什麼現在學生都不認真讀書？」——「都不認真」是你的偏見，不是問題。</p>
+                                    </div>
+                                )}
                             </div>
-                            <div className="flex items-center gap-2">
-                                <span className="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">最後才</span>
-                                <span className="text-slate-300">H變因失控（高階重症，先把前三關排除）</span>
+
+                            {/* 最後才 */}
+                            <div>
+                                <button onClick={() => setExpandedStartHint(expandedStartHint === 4 ? null : 4)}
+                                    className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
+                                    <span className="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">最後才</span>
+                                    <span className="text-slate-300 flex-1">H 變因失控（高階重症，先把前三關排除）</span>
+                                    <span className="text-slate-500 text-[10px]">{expandedStartHint === 4 ? '▲' : '▶'}</span>
+                                </button>
+                                {expandedStartHint === 4 && (
+                                    <div className="mt-2 ml-2 pl-3 border-l-2 border-purple-500/40 animate-in fade-in duration-150">
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-purple-300 font-bold">H 變因失控病：</span>題目本身可以研究、也夠具體、問法也沒問題——但影響結果的因素太多，根本控制不了。這是排除前三關之後，才需要面對的高階問題。例：「手機使用對學業成績的影響」——如果你已經縮成「睡前使用 IG 時數 vs 週考成績」，這時才需要想：家庭背景、補習、睡眠這些變因要怎麼處理？</p>
+                                    </div>
+                                )}
                             </div>
+
                         </div>
                     </div>
 
@@ -665,12 +711,6 @@ export const QuestionERGame = () => {
                             {sv.icon} {sv.label}
                         </span>
 
-                        {hintUsed && (
-                            <span className="text-amber-400 bg-amber-900/30 px-3 py-1 text-xs font-bold rounded-sm border border-amber-500/30 ml-2 flex items-center gap-1 shadow-inner">
-                                <span className="opacity-80 animate-ping h-2 w-2 rounded-full bg-amber-400"></span>
-                                已啟用檢查報告
-                            </span>
-                        )}
                     </div>
 
                     <svg className="absolute bottom-0 left-0 w-full h-16 opacity-10 text-teal-400 pointer-events-none" viewBox="0 0 100 20" preserveAspectRatio="none">
@@ -708,53 +748,23 @@ export const QuestionERGame = () => {
                         {showLightHint && (
                             <div className="bg-slate-800/70 border border-slate-600/50 border-t-0 rounded-b-sm p-5 animate-in fade-in slide-in-from-top-2 duration-200 text-left space-y-3">
                                 <div className="flex items-start gap-3">
-                                    <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">提示 1</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed">先問自己：這題現在是「<span className="text-rose-300 font-bold">根本不能研究</span>」，還是「<span className="text-amber-300 font-bold">可以研究但還沒落地</span>」？</p>
+                                    <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第一關</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-rose-300 font-bold">先看能不能研究</span>：題目在問未來嗎（B）？研究對象碰不到嗎（F）？根本沒有方法可以蒐集資料嗎（G）？如果是，優先處理這裡。</p>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">提示 2</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed">如果題目在<span className="text-rose-300 font-bold">問未來、碰不到對象、無法驗證</span> → 優先病灶通常不是 C、A、D、E。</p>
+                                    <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第二關</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-amber-300 font-bold">再看有沒有落地</span>：題目的範圍太大、裝太多東西嗎（C）？還是核心概念本身抓不住、測不到嗎（A）？</p>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">提示 3</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed">如果題目只是<span className="text-amber-300 font-bold">太大太抽象</span>，先別急著選 <span className="text-purple-300 font-bold">H（變因失控）</span>。H 通常是排除前三類後才用的高階重症。</p>
+                                    <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第三關</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">再看問法有沒有偏</span>：只能回答有或沒有嗎（E）？題目裡偷藏了立場嗎（D）？</p>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <span className="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">最後才</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-purple-300 font-bold">H 變因失控</span>：前三關都排除之後，如果影響因素還是多到控制不了，才考慮 H。</p>
                                 </div>
                             </div>
                         )}
-                    </div>
-                )}
-
-                {/* ── 申請完整病歷（-3分） ── */}
-                {(!hintUsed && playingPhase === 'diagnosis') && (
-                    <div className="bg-slate-800/40 border border-slate-600/50 border-dashed rounded-sm p-4 flex flex-col items-center justify-center gap-2 mb-6 relative z-10 mx-auto max-w-md shadow-inner w-full">
-                        <button
-                            onClick={useHint}
-                            className="bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-bold py-2 px-6 rounded-sm transition-all flex items-center justify-center gap-2 border border-slate-600 hover:border-amber-400/50 text-sm"
-                        >
-                            <span>🔍</span> 申請醫療顧問完整病歷 (-3 分)
-                        </button>
-                    </div>
-                )}
-
-                {hintUsed && playingPhase !== 'healed' && (
-                    <div className="bg-slate-800/60 border-x border-b border-t-0 border-white/5 rounded-b-xl p-5 md:p-6 flex flex-col md:flex-row md:items-start justify-between gap-4 relative z-10 animate-in fade-in slide-in-from-top-4 duration-300 w-full max-w-2xl mb-6 shadow-inner -mt-10">
-                        <div className="flex-1 space-y-2">
-                            <span className="text-xs font-black tracking-widest text-slate-400 bg-slate-900/80 border border-slate-700 px-2 py-1 rounded inline-block">病徵標籤</span>
-                            <div className="flex flex-wrap gap-2 text-left">
-                                {current.tags.map(tag => (
-                                    <span key={tag} className="bg-slate-700/50 text-rose-200 font-semibold px-3 py-1.5 rounded-sm text-sm border border-slate-600">
-                                        <span className="opacity-50 text-rose-400">#</span>{tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="flex-1 space-y-2">
-                            <span className="text-xs font-black tracking-widest text-rose-400 bg-rose-900/40 border border-rose-500/30 px-2 py-1 rounded inline-block">醫療團隊初步評估</span>
-                            <div className="bg-rose-900/20 text-rose-300 px-4 py-3 rounded-sm border border-rose-500/30 text-left">
-                                <span className="font-bold text-base leading-snug">{current.diagnosis}</span>
-                            </div>
-                        </div>
                     </div>
                 )}
 
@@ -921,7 +931,7 @@ export const QuestionERGame = () => {
                         {partialFeedback.type === 'warning' ? (
                             <div className="bg-amber-950/80 border border-amber-500/50 p-5 rounded-sm flex items-start gap-4 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
                                 <div className="text-3xl shrink-0">🩺</div>
-                                <div className="text-left space-y-2">
+                                <div className="text-left space-y-2 w-full">
                                     <h4 className="font-bold text-amber-400 text-lg">{partialFeedback.title}</h4>
                                     <p className="text-sm text-amber-200 font-medium leading-relaxed whitespace-pre-line">{partialFeedback.message}</p>
                                     {partialFeedback.reason && (
@@ -930,14 +940,36 @@ export const QuestionERGame = () => {
                                             <p className="text-xs text-amber-200/80 mt-1 leading-relaxed">{partialFeedback.reason}</p>
                                         </div>
                                     )}
+                                    {playingPhase === 'diagnosis' && current.focusCue && (
+                                        <div className="mt-2 pt-2 border-t border-amber-500/30">
+                                            <span className="text-xs font-bold text-amber-300">🎯 這題的觀察焦點：</span>
+                                            <div className="mt-1.5 flex flex-wrap gap-1.5 mb-1.5">
+                                                {current.focusTerms?.map(term => (
+                                                    <span key={term} className="text-xs bg-amber-900/50 border border-amber-500/40 text-amber-200 px-2 py-0.5 rounded font-bold">「{term}」</span>
+                                                ))}
+                                            </div>
+                                            <p className="text-xs text-amber-200/80 leading-relaxed">{current.focusCue}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : (
                             <div className="bg-rose-950/80 border border-rose-500/50 p-5 rounded-sm flex items-start gap-4 animate-[shake_0.5s] shadow-[0_0_20px_rgba(244,63,94,0.3)]">
                                 <div className="text-3xl shrink-0">🚨</div>
-                                <div className="text-left">
+                                <div className="text-left w-full">
                                     <h4 className="font-bold text-rose-400 text-lg mb-1">{partialFeedback.title}</h4>
                                     <p className="text-sm text-rose-200 font-medium leading-loose">{partialFeedback.message}</p>
+                                    {playingPhase === 'diagnosis' && current.focusCue && (
+                                        <div className="mt-3 pt-3 border-t border-rose-500/30">
+                                            <span className="text-xs font-bold text-rose-300">🎯 這題的觀察焦點：</span>
+                                            <div className="mt-1.5 flex flex-wrap gap-1.5 mb-1.5">
+                                                {current.focusTerms?.map(term => (
+                                                    <span key={term} className="text-xs bg-rose-900/50 border border-rose-500/40 text-rose-200 px-2 py-0.5 rounded font-bold">「{term}」</span>
+                                                ))}
+                                            </div>
+                                            <p className="text-xs text-rose-200/80 leading-relaxed">{current.focusCue}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
