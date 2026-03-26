@@ -267,6 +267,7 @@ export const Home = () => {
                 .week-grid { display: grid; gap: 1px; background: var(--border-light); }
                 .wg-3 { grid-template-columns: repeat(3, 1fr); }
                 .wg-4 { grid-template-columns: repeat(4, 1fr); }
+                .wg-5 { grid-template-columns: repeat(5, 1fr); }
                 .wg-6 { grid-template-columns: repeat(6, 1fr); }
 
                 /* Week card — normal */
@@ -459,47 +460,48 @@ export const Home = () => {
 
         <div className="roadmap">
 
-          {/* Phase 1 問題意識 W0–W2 */}
+          {/* Phase 1 問題意識 W0–W4 */}
           <div className="phase">
             <div className="phase-head">
               <span className="ph-num">Phase 01</span>
               <span className="ph-divider"></span>
               <span className="ph-title">問題意識</span>
-              <span className="ph-range">W0 – W2</span>
+              <span className="ph-range">W0 – W4</span>
             </div>
-            <div className="week-grid wg-3">
+            <div className="week-grid wg-5">
               <WeekCard num="W0" icon={<Search size={18} className="text-[#9090b0]" />} title="偵探特訓班" desc="研究思維入門，培養觀察力與問題意識。" path="/w0" />
               <WeekCard num="W1" icon={<BookOpen size={18} className="text-[#9090b0]" />} title="模仿遊戲" desc="認識 AI-RED 人機協作法則，建立協作倫理。" path="/w1" />
               <WeekCard num="W2" icon={<Target size={18} className="text-[#9090b0]" />} title="問題意識的覺醒" desc="把觀察到的現象轉化成可以研究的問題。" path="/w2" />
+              <WeekCard num="W3" icon={<Compass size={18} className="text-[#9090b0]" />} title="題目健檢" desc="8 種病例速查，用三問法找到對的研究方法。" path="/w3" mission={{ tag: 'BULLSEYE', name: '行動代號：靶心', path: '/game/question-er' }} />
+              <WeekCard num="W4" icon={<Palette size={18} className="text-[#9090b0]" />} title="題目博覽會" desc="辦一場個人展覽，讓同學幫你把關研究方向。" path="/w4" />
             </div>
           </div>
 
-          {/* Phase 2 研究規劃 W3–W6 */}
+          {/* Phase 2 研究規劃 W5.0–W7 */}
           <div className="phase">
             <div className="phase-head">
               <span className="ph-num">Phase 02</span>
               <span className="ph-divider"></span>
               <span className="ph-title">研究規劃</span>
-              <span className="ph-range">W3 – W6</span>
+              <span className="ph-range">W5.0 – W7</span>
             </div>
             <div className="week-grid wg-4">
-              <WeekCard num="W3" icon={<Compass size={18} className="text-[#9090b0]" />} title="題目健檢" desc="8 種病例速查，用三問法找到對的研究方法。" path="/w3" mission={{ tag: 'BULLSEYE', name: '行動代號：靶心', path: '/game/question-er' }} />
-              <WeekCard num="W4" icon={<Palette size={18} className="text-[#9090b0]" />} title="題目博覽會" desc="辦一場個人展覽，讓同學幫你把關研究方向。" path="/w4" />
-              <WeekCard num="W5" icon={<BookOpen size={18} className="text-[#9090b0]" />} title="文獻偵探社" desc="辨別文獻可信度，建立正確引用規範。" path="/w5" mission={{ tag: 'MISSION', name: '行動代號：獵狐', path: '/game/citation-detective' }} />
+              <WeekCard num="W5.0" icon={<Search size={18} className="text-[#9090b0]" />} title="文獻搜尋入門" desc="掌握資料庫搜尋技巧，找到高品質的研究文獻。" path="/w5-0" />
+              <WeekCard num="W5.1" icon={<BookOpen size={18} className="text-[#9090b0]" />} title="文獻偵探社" desc="辨別文獻可信度，建立正確引用規範。" path="/w5" mission={{ tag: 'MISSION', name: '行動代號：獵狐', path: '/game/citation-detective' }} />
               <WeekCard num="W6" icon={<Stethoscope size={18} className="text-[#9090b0]" />} title="研究診所" desc="依研究方法分流，深入學習各方法特性。" path="/w6" mission={{ tag: 'GEAR', name: '行動代號：裝備', path: '/game/tool-quiz' }} />
+              <WeekCard num="W7" icon={<Users size={18} className="text-[#9090b0]" />} title="組隊決策週" desc="找能力互補的夥伴，或宣告 Solo 研究。" path="/w7" />
             </div>
           </div>
 
-          {/* Phase 3 裝備執行 W7–W12 */}
+          {/* Phase 3 裝備執行 W8–W12 */}
           <div className="phase">
             <div className="phase-head">
               <span className="ph-num">Phase 03</span>
               <span className="ph-divider"></span>
               <span className="ph-title">裝備執行</span>
-              <span className="ph-range">W7 – W12</span>
+              <span className="ph-range">W8 – W12</span>
             </div>
-            <div className="week-grid wg-6">
-              <WeekCard num="W7" icon={<Users size={18} className="text-[#9090b0]" />} title="組隊決策週" desc="找能力互補的夥伴，或宣告 Solo 研究。" path="/w7" />
+            <div className="week-grid wg-5">
               <WeekCard num="W8" icon={<Wrench size={18} className="text-[#9090b0]" />} title="工具設計" desc="問卷、訪談、實驗各組深化工具設計。" path="/tool-design" mission={{ tag: 'MISSION', name: '行動代號：防線', path: '/game/rx-inspector' }} />
               <WeekCard num="W9" icon={<Microscope size={18} className="text-[#9090b0]" />} title="工具精進" desc="AI 審稿 + 人工預試雙重把關，工具定稿。" path="/w9" />
               <WeekCard num="W10" icon={<FlaskConical size={18} className="text-[#9090b0]" />} title="倫理審查" desc="四問自查、知情同意書 AI 審查、蓋章出發。" path="/w10" />

@@ -30,15 +30,15 @@ export const Layout = () => {
                 { name: '偵探特訓班', path: '/w0', week: 'W0', status: 'done' },
                 { name: '模仿遊戲', path: '/w1', week: 'W1', status: 'done' },
                 { name: '問題意識', path: '/w2', week: 'W2', status: 'done' },
+                { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
+                { name: '題目博覽會', path: '/w4', week: 'W4', status: 'done' },
             ]
         },
         {
             sublabel: '研究規劃',
             items: [
-                { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
-                { name: '題目博覽會', path: '/w4', week: 'W4', status: 'done' },
                 { name: '文獻搜尋入門', path: '/w5-0', week: 'W5.0', status: 'done' },
-                { name: '文獻偵探社', path: '/w5', week: 'W5', status: 'done' },
+                { name: '文獻偵探社', path: '/w5', week: 'W5.1', status: 'done' },
                 { name: '研究診所', path: '/w6', week: 'W6', status: 'done' },
                 { name: '組隊決策週', path: '/w7', week: 'W7', status: 'active' },
             ]
@@ -46,7 +46,6 @@ export const Layout = () => {
         {
             sublabel: '裝備與執行',
             items: [
-                { name: '工具準備', path: '#', status: 'locked' },
                 { name: '工具設計', path: '/tool-design', week: 'W8', status: 'locked' },
                 { name: '工具精進', path: '/tool-refinement', week: 'W9', status: 'locked' },
                 { name: '倫理與定案', path: '/w10', week: 'W10', status: 'locked' }
