@@ -37,27 +37,29 @@ export const Layout = () => {
         {
             sublabel: '研究規劃',
             items: [
-                { name: '文獻搜尋入門', path: '/w5-0', week: 'W5.0', status: 'done' },
-                { name: '文獻偵探社', path: '/w5', week: 'W5.1', status: 'done' },
-                { name: '研究診所', path: '/w6', week: 'W6', status: 'done' },
-                { name: '組隊決策週', path: '/w7', week: 'W7', status: 'active' },
+                { name: '文獻搜尋入門', path: '/w5', week: 'W5', status: 'done' },
+                { name: '文獻偵探社', path: '/w6', week: 'W6', status: 'done' },
+                { name: '研究診所', path: '/w7', week: 'W7', status: 'done' },
+                { name: '組隊決策週', path: '/w8', week: 'W8', status: 'active' },
             ]
         },
         {
             sublabel: '裝備與執行',
             items: [
-                { name: '工具設計', path: '/tool-design', week: 'W8', status: 'locked' },
-                { name: '工具精進', path: '/tool-refinement', week: 'W9', status: 'locked' },
-                { name: '倫理與定案', path: '/w10', week: 'W10', status: 'locked' }
+                { name: '工具設計', path: '/w9', week: 'W9', status: 'locked' },
+                { name: '工具精進', path: '/w10', week: 'W10', status: 'locked' },
+                { name: '倫理與定案', path: '/w11', week: 'W11', status: 'locked' }
             ]
         },
         {
             sublabel: '分析與報告',
             items: [
-                { name: '數據轉譯', path: '/w13', week: 'W13', status: 'locked' },
-                { name: '研究結論', path: '/w14', week: 'W14', status: 'locked' },
-                { name: '簡報與海報', path: '/w15', week: 'W15', status: 'locked' },
-                { name: 'Gallery Walk', path: '/w16', week: 'W16', status: 'locked' }
+                { name: '研究執行 I', path: '/w12', week: 'W12', status: 'locked' },
+                { name: '研究執行 II', path: '/w13', week: 'W13', status: 'locked' },
+                { name: '數據轉譯', path: '/w14', week: 'W14', status: 'locked' },
+                { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
+                { name: '簡報與海報', path: '/w16', week: 'W16', status: 'locked' },
+                { name: '成果發表', path: '/w17', week: 'W17', status: 'locked' }
             ]
         }
     ];
@@ -66,26 +68,25 @@ export const Layout = () => {
     // We dynamically override "active", "done", and "locked" based on the current route.
     const getWeekNumber = (path) => {
         if (!path) return -1;
-        // Support both descriptive and week-based paths for robustness during migration
+        // Clean up path - handle both descriptive and week-based routes
         if (path === '/discovery' || path === '/w0') return 0;
         if (path === '/w1') return 1;
         if (path === '/problem-focus' || path === '/w2') return 2;
         if (path === '/wizard' || path === '/w3') return 3;
         if (path === '/w4') return 4;
-        if (path === '/w5-0') return 4.5;
-        if (path === '/literature-review' || path === '/w5') return 5;
-        if (path === '/clinic' || path === '/w6') return 6;
-        if (path === '/team-formation' || path === '/w7') return 7;
-        if (path === '/tool-design') return 8;
-        if (path === '/tool-refinement' || path === '/w9') return 9;
-        if (path === '/w10') return 10;
+        if (path === '/w5') return 5;
+        if (path === '/w6') return 6;
+        if (path === '/w7') return 7;
+        if (path === '/w8') return 8;
+        if (path === '/w9' || path === '/tool-design') return 9;
+        if (path === '/w10' || path === '/tool-refinement') return 10;
         if (path === '/w11') return 11;
         if (path === '/w12') return 12;
         if (path === '/w13') return 13;
         if (path === '/w14') return 14;
         if (path === '/w15') return 15;
         if (path === '/w16') return 16;
-        if (path === '/analysis') return 14;
+        if (path === '/w17') return 17;
         return -1;
     }
 

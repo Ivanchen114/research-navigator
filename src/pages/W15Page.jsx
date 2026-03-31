@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, FlaskConical, FileText, Layout as LayoutIcon, MessageSquare, AlertTriangle, Monitor, PenTool } from 'lucide-react';
+import CourseArc from '../components/ui/CourseArc';
+import { ArrowLeft, ArrowRight, CheckCircle2, FlaskConical, FileText, Layout as LayoutIcon, MessageSquare, AlertTriangle, Monitor, PenTool, Map } from 'lucide-react';
 import CopyButton from '../components/ui/CopyButton';
 
 export const W15Page = () => {
+    const [showLessonMap, setShowLessonMap] = useState(false);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -47,17 +50,31 @@ export const W15Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">報告撰寫 W15</span>
+                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">報告撰寫 W16</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <button
+                        onClick={() => setShowLessonMap(!showLessonMap)}
+                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
+                    >
+                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                    </button>
                     <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
+            {showLessonMap && (
+                <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="p-8 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl text-center text-[#8888aa]">
+                        W16 為報告撰寫週，主要進行 AI 輔助潤稿、段落銜接與摘要撰寫練習。
+                    </div>
+                </div>
+            )}
+
             {/* PAGE HEADER */}
             <div className="font-mono text-[11px] text-[#2d5be3] mb-3 tracking-[0.06em] uppercase flex items-center gap-2">
-                <FileText size={14} /> W15 · 分析與撰寫
+                <FileText size={14} /> W16 · 分析與撰寫
             </div>
             <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[#1a1a2e] mb-2 tracking-[-0.02em]">
                 報告撰寫與海報製作：<em className="not-italic text-[#2d5be3]">從數據到故事</em>
@@ -72,7 +89,7 @@ export const W15Page = () => {
                     { label: '第一節', value: '文字工廠：報告組裝' },
                     { label: '第二節', value: '視覺工廠：海報設計' },
                     { label: '課課產出', value: '報告初稿 + 海報草稿' },
-                    { label: '帶去 W16', value: '定稿海報、2 分鐘話術' }
+                    { label: '帶去 W17', value: '定稿海報、2 分鐘話術' }
                 ].map((item, idx) => (
                     <div key={idx} className="meta-item">
                         <div className="meta-label">{item.label}</div>
@@ -82,28 +99,14 @@ export const W15Page = () => {
             </div>
 
             {/* COURSE ARC */}
-            <div className="text-[11px] text-[#8888aa] mb-3 flex items-center gap-2">
-                <LayoutIcon size={14} /> 課程弧線 · 你在哪裡
-            </div>
-            <div className="arc-grid" style={{ '--arc-cols': 6 }}>
-                {[
-                    { wk: 'W1–W4', name: '問題意識\n題目定案', status: 'past' },
-                    { wk: 'W5–W7', name: '研究規劃\n文獻鑑識', status: 'past' },
-                    { wk: 'W8–W10', name: '工具設計\n倫理審查', status: 'past' },
-                    { wk: 'W13–W14', name: '圖表製作\n四層結論', status: 'past' },
-                    { wk: 'W15', name: '報告組裝\n海報設計', status: 'now' },
-                    { wk: 'W16', name: '成果發表\nGallery Walk', status: 'future' }
-                ].map((item, idx) => (
-                    <div key={idx} className={`arc-item ${item.status === 'past' ? 'past' : item.status === 'now' ? 'now' : ''}`}>
-                        <div className="arc-wk">
-                            {item.wk}{item.status === 'now' && ' ← 現在'}
-                        </div>
-                        <div className="arc-name">
-                            {item.name}
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <CourseArc items={[
+                { wk: 'W1–W4', name: '問題意識\n題目定案', status: 'past' },
+                { wk: 'W5–W7', name: '研究規劃\n文獻鑑識', status: 'past' },
+                { wk: 'W8–W10', name: '工具設計\n倫理審查', status: 'past' },
+                { wk: 'W13–W14', name: '圖表製作\n四層結論', status: 'past' },
+                { wk: 'W16', name: '報告組裝\n海報設計', status: 'now' },
+                { wk: 'W17', name: '成果發表\nGallery Walk', status: 'future' }
+            ]} />
 
             {/* CONCEPT SECTION */}
             <div className="section-head">
@@ -477,7 +480,7 @@ export const W15Page = () => {
                     {[
                         { part: '報告定稿', name: '完成報告最終版，確認格式（APA、圖表標注、摘要）後上傳' },
                         { part: '海報定稿', name: '完成海報最終版，確認印製或電子展示方式，依老師規定準備' },
-                        { part: '帶去 W16', name: '海報（紙本或電子）＋ 2 分鐘口頭說明話術，準備好 Gallery Walk' }
+                        { part: '帶去 W17', name: '海報（紙本或電子）＋ 2 分鐘口頭說明話術，準備好 Gallery Walk' }
                     ].map((item, idx) => (
                         <div key={idx} className="bg-white p-[11px_20px] flex items-start gap-4">
                             <span className="font-mono text-[11px] text-[#2d5be3] font-bold w-[72px] shrink-0 pt-[1px] uppercase">{item.part}</span>
@@ -495,11 +498,11 @@ export const W15Page = () => {
             <div className="bg-[#1a1a2e] rounded-[10px] overflow-hidden mb-12 shadow-md">
                 <div className="p-[16px_24px] border-b border-white opacity-5 flex items-center gap-2.5">
                     <span className="font-mono text-[10px] bg-white opacity-10 text-white px-2 py-0.5 rounded-[3px] font-bold uppercase tracking-wider">NEXT WEEK</span>
-                    <span className="text-[14px] font-bold text-white uppercase tracking-wide">W16 Gallery Walk：你是報告者，也是聆聽者</span>
+                    <span className="text-[14px] font-bold text-white uppercase tracking-wide">W17 Gallery Walk：你是報告者，也是聆聽者</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-white/5">
                     <div className="p-[20px_24px]">
-                        <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.08em] mb-2">W16 的規則</div>
+                        <div className="text-[10px] font-mono text-white/30 uppercase tracking-[0.08em] mb-2">W17 的規則</div>
                         <div className="text-[13px] text-white/75 leading-[1.75]">
                             A/B 兩組輪替，每個人都有兩個身分。<br /><br />
                             <strong className="text-[#c9a84c]">報告者</strong>：站在海報旁，2 分鐘說明你的研究，回答 4 場以上的問題。<br /><br />
@@ -518,11 +521,11 @@ export const W15Page = () => {
 
             {/* PAGINATION */}
             <div className="flex justify-between items-center py-10 border-t border-[#dddbd5]">
-                <Link to="/w14" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
-                    <ArrowLeft size={16} /> 回 W14 研究結論
+                <Link to="/w15" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
+                    <ArrowLeft size={16} /> 回 W15 研究結論
                 </Link>
-                <Link to="/w16" className="bg-[#1a1a2e] text-white px-8 py-2.5 rounded-[6px] text-[14px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
-                    前往 W16 Gallery Walk <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <Link to="/w17" className="bg-[#1a1a2e] text-white px-8 py-2.5 rounded-[6px] text-[14px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
+                    前往 W17 成果發表 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
         </div>

@@ -341,15 +341,18 @@ export const GameHub = () => {
                 <div className="mb-10 relative">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="h-px flex-1 bg-slate-700/50"></div>
-                        <span className="text-[10px] font-mono font-black text-slate-500 tracking-[0.3em] uppercase">R.I.B. 調查檔案</span>
+                        <span className="text-[10px] font-mono font-black text-slate-500 tracking-[0.3em] uppercase">R.I.B. 調查檔案 / 核心任務</span>
                         <div className="h-px flex-1 bg-slate-700/50"></div>
                     </div>
-                    <div
-                        onClick={() => navigateToMission('/phantom')}
-                        className={`group relative rounded-lg border overflow-hidden transition-all duration-500 cursor-pointer
-                            border-slate-700 hover:border-amber-500/80
-                            hover:shadow-[0_0_50px_rgba(245,158,11,0.2)] min-h-[160px] flex flex-col justify-end`}
-                    >
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* 檔案一：幽靈數據 */}
+                        <div
+                            onClick={() => navigateToMission('/phantom')}
+                            className={`group relative rounded-lg border overflow-hidden transition-all duration-500 cursor-pointer
+                                border-slate-700 hover:border-amber-500/80
+                                hover:shadow-[0_0_50px_rgba(245,158,11,0.2)] min-h-[160px] flex flex-col justify-end`}
+                        >
                         {/* 1. 主視覺背景圖 (Keyart) */}
                         <div 
                             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
@@ -394,6 +397,63 @@ export const GameHub = () => {
                                     <div className="absolute -inset-2 bg-amber-500/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                     <span className="text-sm font-black tracking-widest relative z-10">進入調查</span>
                                     <ArrowRight size={16} className="relative z-10" />
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        {/* 檔案二：回聲 */}
+                        <div
+                            onClick={() => navigateToMission('/echo')}
+                            className={`group relative rounded-lg border overflow-hidden transition-all duration-500 cursor-pointer
+                                border-slate-700 hover:border-indigo-500/80
+                                hover:shadow-[0_0_50px_rgba(99,102,241,0.2)] min-h-[160px] flex flex-col justify-end`}
+                        >
+                            {/* 1. 主視覺背景圖 (Keyart) */}
+                            <div 
+                                className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
+                                style={{ backgroundImage: "url('/assets/echo/keyart/echo_keyart_hub_v1.webp')" }}
+                            ></div>
+
+                            {/* 2. 深色漸層 Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/30"></div>
+                            
+                            {/* 3. Scanline & Noise */}
+                            <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(79,70,229,0.06),rgba(0,0,255,0.02),rgba(99,102,241,0.06))] bg-[length:100%_4px,3px_100%] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+
+                            {/* Top accent */}
+                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/80 to-transparent opacity-60"></div>
+
+                            {/* 內容區 */}
+                            <div className="relative z-10 p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-6 pt-24">
+                                <div className="flex items-center gap-5">
+                                    <div className="flex-shrink-0 w-14 h-14 rounded bg-slate-950/80 border border-slate-700/80 flex items-center justify-center backdrop-blur-md shadow-lg group-hover:border-indigo-500/50 transition-colors relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors"></div>
+                                        <FolderOpen size={26} className="text-indigo-400 relative z-10 drop-shadow-[0_0_8px_rgba(129,140,248,0.5)]" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <div className="text-[10px] font-mono text-indigo-500 tracking-[0.3em] uppercase mb-1 drop-shadow-md">R.I.B. 調查檔案 / 檔案二</div>
+                                        <div className="text-2xl font-black text-white group-hover:text-indigo-300 transition-colors mb-1 drop-shadow-lg">
+                                            檔案二：回聲
+                                        </div>
+                                        <div className="text-slate-300 text-sm font-medium drop-shadow-md">
+                                            5章連貫劇情 · 5種研究方法 · 只有完成與失敗
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex-shrink-0 flex flex-col sm:items-end gap-3 pb-1">
+                                    <div className="flex gap-1.5 flex-wrap">
+                                        {['觀察', '訪談', '問卷', '文獻', '實驗'].map((m, i) => (
+                                            <span key={i} className="text-[10px] font-mono font-black px-2 py-1 rounded-sm bg-slate-900/80 backdrop-blur-md text-slate-300 border border-slate-700/80 group-hover:border-slate-500/80 transition-colors">{m}</span>
+                                        ))}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-indigo-400 group-hover:translate-x-1 transition-transform relative">
+                                        <div className="absolute -inset-2 bg-indigo-500/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <span className="text-sm font-black tracking-widest relative z-10">進入調查</span>
+                                        <ArrowRight size={16} className="relative z-10" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

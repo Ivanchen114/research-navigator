@@ -48,9 +48,9 @@ const CHAPTERS = [
 const METHOD_COLORS = {
     '觀察法':   { dot: 'bg-indigo-400',  text: 'text-indigo-400',  border: 'border-indigo-700/40'  },
     '訪談法':   { dot: 'bg-violet-400',  text: 'text-violet-400',  border: 'border-violet-700/40'  },
-    '問卷法':   { dot: 'bg-slate-400',   text: 'text-slate-400',   border: 'border-slate-600/40'   },
+    '問卷法':   { dot: 'bg-sky-400',     text: 'text-sky-400',     border: 'border-sky-700/40'     },
     '文獻分析': { dot: 'bg-cyan-400',    text: 'text-cyan-400',    border: 'border-cyan-700/40'    },
-    '實驗法':   { dot: 'bg-amber-300',   text: 'text-amber-300',   border: 'border-amber-700/40'   },
+    '實驗法':   { dot: 'bg-amber-400',   text: 'text-amber-400',   border: 'border-amber-700/40'   },
 };
 
 export const EchoHub = () => {
@@ -86,8 +86,6 @@ export const EchoHub = () => {
                 className="absolute inset-0 bg-cover bg-center bg-fixed pointer-events-none"
                 style={{ backgroundImage: "url('/assets/echo/keyart/echo_keyart_hub_v1.webp')" }}
             />
-            {/* keyart 尚未生成時的漸層底圖 */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-slate-950 to-slate-950 pointer-events-none" />
             <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px] pointer-events-none z-0" />
             <div
                 className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay z-0"
@@ -163,15 +161,24 @@ export const EchoHub = () => {
                                 key={ch.num}
                                 onClick={() => isUnlocked && navigate(ch.path)}
                                 disabled={!isUnlocked}
-                                className={`w-full text-left rounded border p-5 transition-all group
+                                className={`w-full text-left rounded-lg p-5 transition-all duration-300 group
+                                    relative overflow-hidden border
                                     ${isComplete
                                         ? 'bg-indigo-950/20 border-indigo-700/30 hover:bg-indigo-950/30'
                                         : isUnlocked
-                                            ? 'bg-slate-900 border-slate-700 hover:border-indigo-600/50 hover:bg-slate-800'
-                                            : 'bg-slate-900/40 border-slate-800 opacity-50 cursor-not-allowed'
+                                            ? 'bg-slate-900/40 border-slate-700/80 hover:border-indigo-500/50 hover:bg-slate-800/60'
+                                            : 'bg-slate-950/20 border-slate-900 opacity-40 grayscale pointer-events-none'
                                     }`}
                             >
-                                <div className="flex items-center gap-4">
+                                {/* 按鈕背景圖 */}
+                                {isUnlocked && (
+                                    <div 
+                                        className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity bg-cover bg-center"
+                                        style={{ backgroundImage: `url('/assets/echo/covers/echo_cover_ch${ch.num}_bg_v1.webp')` }}
+                                    />
+                                )}
+
+                                <div className="relative z-10 flex items-center gap-4">
                                     {/* Chapter number */}
                                     <div className="font-mono text-2xl font-black text-slate-700 w-8 flex-shrink-0">
                                         {String(ch.num).padStart(2, '0')}
@@ -195,7 +202,7 @@ export const EchoHub = () => {
                                             <span className={`font-mono text-xs ${color.text}`}>{ch.method}</span>
                                         </div>
                                         {isUnlocked && (
-                                            <div className="text-slate-500 text-xs leading-relaxed">{ch.desc}</div>
+                                            <div className="text-slate-400 text-xs leading-relaxed drop-shadow-sm">{ch.desc}</div>
                                         )}
                                     </div>
 

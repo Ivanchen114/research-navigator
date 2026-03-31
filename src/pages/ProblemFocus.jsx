@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import { Map, ArrowRight } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import CopyButton from '../components/ui/CopyButton';
@@ -48,17 +49,7 @@ export const ProblemFocus = () => {
                 </p>
 
                 {/* COURSE ARC */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {W2Data.courseArc.map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <CourseArc items={W2Data.courseArc} />
             </header>
             {/* META STRIP */}
             <div className="meta-strip">

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import {
     ChevronRight, ArrowLeft, ArrowRight, ClipboardCheck,
     Zap, Sparkles, MessageSquare, BookOpen, Search,
-    ShieldCheck, CheckCircle2, AlertCircle, Map
+    ShieldCheck, CheckCircle2, AlertCircle, Map, ShieldAlert
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import CopyButton from '../components/ui/CopyButton';
@@ -49,7 +50,7 @@ export const W14Page = () => {
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">研究結論 W14</span>
+                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">研究結論 W15</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -72,13 +73,27 @@ export const W14Page = () => {
             {/* PAGE HEADER */}
             <div className="section-head mb-8">
                 <div className="flex flex-col">
-                    <span className="text-[11px] font-mono text-[#2d5be3] tracking-widest uppercase mb-2">✍️ W14 · 分析與撰寫</span>
+                    <span className="text-[11px] font-mono text-[#2d5be3] tracking-widest uppercase mb-2">✍️ W15 · 分析與撰寫</span>
                     <h1 className="text-3xl font-bold text-[#1a1a2e] font-serif">研究結論：<em className="text-[#2d5be3] not-italic">四層寫作法</em></h1>
                 </div>
             </div>
             <p className="section-desc mb-12">
                 W13 學了描述和詮釋，那只是局部說明。今天要升級：把所有發現整合成一份研究的完整結論。四層寫下來，就是你這學期研究最有價值的那幾段話。
             </p>
+
+            {/* GAME BANNER */}
+            <div className="bg-[#1a1a2e] border-l-4 border-[#10b981] p-6 rounded-r-lg mb-10 text-white shadow-xl mt-6">
+                <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                    <ShieldAlert className="text-[#10b981]" size={20} />
+                    即刻報到：行動代號濾鏡
+                </h3>
+                <p className="text-[#8888aa] text-sm mb-4">
+                    數字會說話，但有時候會說謊。戴上真相濾鏡，識破數據陷阱，學習從客觀數據中得出穩健結論。
+                </p>
+                <Link to="/game/data-detective" className="inline-flex items-center gap-2 bg-[#10b981] text-white px-4 py-2 rounded font-bold text-sm hover:bg-[#0d9467] transition-colors">
+                    進入遊戲系統 <ArrowRight size={14} />
+                </Link>
+            </div>
 
             {/* META STRIP */}
             <div className="meta-strip">
@@ -90,16 +105,10 @@ export const W14Page = () => {
                 ))}
             </div>
 
+
+
             {/* COURSE ARC */}
-            <div className="text-[11px] text-[#8888aa] mb-4 font-mono uppercase tracking-wider">課程弧線 · 你在哪裡</div>
-            <div className="arc-grid">
-                {W14Data.courseArc.map((item, idx) => (
-                    <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                        <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                        <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                    </div>
-                ))}
-            </div>
+            <CourseArc items={W14Data.courseArc} />
 
             {/* 學什麼 SECTION */}
             <div className="section-head">
@@ -424,7 +433,7 @@ export const W14Page = () => {
                 <div className="divide-y divide-[#dddbd5]">
                     {[
                         { part: '定稿上傳', name: '四層結論最終版（含 AI 紀錄）上傳 Google Classroom' },
-                        { part: '帶去 W15', name: '四層結論定稿 + 所有圖表，是 W15 簡報製作的直接素材' }
+                        { part: '帶去 W16', name: '四層結論定稿 + 所有圖表，是 W15 簡報製作的直接素材' }
                     ].map((hw, i) => (
                         <div key={i} className="p-4 px-6 flex items-start gap-6 text-[13px]">
                             <span className="font-mono font-bold text-[#2d5be3] w-20 shrink-0 uppercase tracking-wider text-[11px]">{hw.part}</span>
@@ -442,12 +451,12 @@ export const W14Page = () => {
             <div className="next-week-preview">
                 <div className="next-week-header">
                     <span className="next-week-badge">NEXT WEEK</span>
-                    <h3 className="next-week-title">W15 簡報設計：把四層結論變成一張投影片</h3>
+                    <h3 className="next-week-title">W16 簡報設計：把四層結論變成一張投影片</h3>
                 </div>
                 <div className="next-week-content">
                     <div className="next-week-col">
                         <div className="next-week-label">今天完成了</div>
-                        <p className="next-week-text">四層結論——整份研究最核心的文字產出。W15 的任務是把這些話「翻譯」成觀眾看得懂、印象深刻的視覺化呈現。</p>
+                        <p className="next-week-text">四層結論——整份研究最核心的文字產出。W16 的任務是把這些話「翻譯」成觀眾看得懂、印象深刻的視覺化呈現。</p>
                     </div>
                     <div className="next-week-col">
                         <div className="next-week-label">下週學什麼</div>
@@ -462,11 +471,11 @@ export const W14Page = () => {
 
             {/* NAVIGATION */}
             <div className="flex justify-between items-center py-12 border-t border-[#dddbd5] mt-12">
-                <Link to="/w13" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
-                    <ArrowLeft size={18} /> ← 回 W13 數據轉譯
+                <Link to="/w14" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
+                    <ArrowLeft size={18} /> ← 回 W14 數據轉譯
                 </Link>
-                <Link to="/w15" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-8 py-3 rounded-lg hover:bg-[#2a2a4a] transition-all text-[13px] font-bold no-underline group shadow-lg shadow-[#1a1a2e]/10">
-                    前往 W15 簡報設計 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <Link to="/w16" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-8 py-3 rounded-lg hover:bg-[#2a2a4a] transition-all text-[13px] font-bold no-underline group shadow-lg shadow-[#1a1a2e]/10">
+                    前往 W16 簡報設計 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
         </div>

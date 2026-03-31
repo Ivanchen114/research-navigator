@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import {
     Map, ArrowRight, ArrowLeft, CheckCircle2,
     BookOpen, Search, Bot, FileText, AlertTriangle, Info
@@ -34,7 +35,7 @@ const gradeLevels = [
     {
         grade: 'D', color: 'bg-[#c0392b]', label: 'D 級｜不採用',
         examples: 'AI 生成的假文獻、內容農場',
-        note: 'W5.1 會教你辨識'
+        note: 'W6 會教你辨識'
     },
 ];
 
@@ -56,6 +57,15 @@ export const W50Page = () => {
     const [apa2, setApa2] = useState('');
     const [apa3, setApa3] = useState('');
 
+    /* Part 4 證物鑑識 */
+    const [forensics, setForensics] = useState({
+        A: { grade: '', reason: '', path: '' },
+        B: { grade: '', reason: '', path: '' },
+        C: { grade: '', reason: '', path: '' },
+        D: { grade: '', reason: '', path: '' },
+        E: { grade: '', reason: '', path: '' },
+    });
+
     /* AI 關鍵字 prompt */
     const keywordPrompt =
         `我的研究題目是：${myTopic || '【填入你的 W4 定案題目】'}
@@ -73,7 +83,7 @@ export const W50Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">文獻搜尋入門 W5.0</span>
+                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">文獻搜尋入門 W5</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -95,27 +105,17 @@ export const W50Page = () => {
 
             {/* PAGE HEADER */}
             <header className="mb-16">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em] uppercase">📚 W5.0 · 研究規劃</div>
+                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em] uppercase">📚 W5 · 研究規劃</div>
                 <h1 className="font-serif text-4xl font-bold leading-tight text-[#1a1a2e] mb-4 tracking-tight">
                     文獻搜尋入門：<span className="text-[#2d5be3] italic">找對資料，打好地基</span>
                 </h1>
                 <p className="text-base text-[#4a4a6a] max-w-[680px] leading-relaxed mb-10">
-                    W4 完成了題目與研究動機的定案。W5.0 的任務是往前走一步：為自己的研究找到文獻基礎。
-                    這週只做一件事——<strong>找到 3 篇真實可信的相關研究</strong>。真偽鑑識和引用倫理留到 W5.1，這週先建立「找文獻」的基本操作能力。
+                    W4 完成了題目與研究動機的定案。W5 的任務是往前走一步：為自己的研究找到文獻基礎。
+                    這週只做一件事——<strong>找到 3 篇真實可信的相關研究</strong>。真偽鑑識和引用倫理留到 W6，這週先建立「找文獻」的基本操作能力。
                 </p>
 
                 {/* COURSE ARC */}
-                <div className="mb-10">
-                    <div className="text-[11px] font-mono text-[#8888aa] mb-4 uppercase tracking-wider">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {W50Data.courseArc.map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <CourseArc items={W50Data.courseArc} />
 
                 {/* META STRIP */}
                 <div className="meta-strip">
@@ -254,7 +254,7 @@ export const W50Page = () => {
                             AI 會給你格式完美、看起來真實、但<strong>根本不存在</strong>的假論文——作者是假的、標題是假的、期刊是假的。這叫做 <strong>AI 幻覺</strong>。
                             今天找到的文獻，都要親自在華藝或 Google Scholar 查證，確認作者存在、摘要存在，才算數。
                         </p>
-                        <div className="text-[11px] font-mono text-[#c0392b] mt-2">W5.1 會專門練習辨識假文獻。今天先記住：AI 找到的一定要查證。</div>
+                        <div className="text-[11px] font-mono text-[#c0392b] mt-2">W6 會專門練習辨識假文獻。今天先記住：AI 找到的一定要查證。</div>
                     </div>
                 </div>
             </section>
@@ -366,9 +366,8 @@ export const W50Page = () => {
                     </div>
                 </div>
             </section>
-
             {/* ── PART 3：APA 格式 ── */}
-            <section className="mb-12">
+            <section className="mb-16">
                 <div className="flex items-center gap-3 mb-6">
                     <span className="bg-[#c0392b] text-white text-[11px] font-bold px-3 py-1 rounded-full font-mono">PART 3</span>
                     <h2 className="text-[18px] font-bold text-[#1a1a2e]">APA 格式 · 3 篇文獻清單</h2>
@@ -436,6 +435,101 @@ export const W50Page = () => {
                 </div>
             </section>
 
+            {/* ── PART 4：證物鑑識大賽 ── */}
+            <section className="mb-16">
+                <div className="flex items-center gap-3 mb-6">
+                    <span className="bg-[#1a1a2e] text-white text-[11px] font-bold px-3 py-1 rounded-full font-mono">PART 4</span>
+                    <h2 className="text-[18px] font-bold text-[#1a1a2e]">證物鑑識大賽：等級判定</h2>
+                    <span className="text-[11px] font-mono text-[#8888aa]">0:00–0:30 (第二節)</span>
+                </div>
+
+                <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-xl p-6 mb-8">
+                    <div className="flex items-center gap-2 mb-4 text-[#1a1a2e] font-bold">
+                        <AlertTriangle size={18} className="text-[#c9a84c]" />
+                        鑑識任務說明
+                    </div>
+                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed mb-4">
+                        你的小組會拿到五張證物卡（A–E）。請根據剛剛學過的等級定義，判定每張證物的等級，並寫下理由。
+                        <strong>注意：</strong> 有些證物看起來很正式，但其實是 AI 捏造或來源不明的「偽證」。
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {gradeLevels.map(g => (
+                            <div key={g.grade} className="bg-white border border-[#dddbd5] p-3 rounded-lg text-center">
+                                <div className={`${g.color} text-white font-bold w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-2 text-[11px]`}>{g.grade}</div>
+                                <div className="text-[11px] font-bold text-[#1a1a2e]">{g.grade} 級</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 證物展示與紀錄區 */}
+                <div className="space-y-6">
+                    {[
+                        { id: 'A', title: '台中市高中職學生數學焦慮...', desc: '作者：鄭淑米。碩士論文。探討高中職一年級學生數學焦慮與數學自我效能之關係。', link: 'https://www.airitilibrary.com/Article/Detail/U0021-2304200714313183' },
+                        { id: 'B', title: 'Smartphone Usage and Sleep Quality...', desc: 'Authors: Michael Chen, Sarah Wang. 2023 Journal Release. Longitudinal study tracking Taiwanese adolescents for 3 years.', link: 'DOI: 10.1177/0272989X241231721' },
+                        { id: 'C', title: '我的不正經人生觀', desc: '作者：黃益中。出版社：寶瓶文化。討論青少年成長、學習動機、人際互動等社會觀察。' },
+                        { id: 'D', title: '生活小竅門 教你如何治療燒傷...', desc: '來源：每日頭條。整理燒燙傷民間處理法：蔥葉貼敷、蛋清加糖等。網址：www.health-info-farm.com' },
+                        { id: 'E', title: '【FB 貼文】國家教育研究院', desc: '平台：Facebook。討論學校限制手機使用的現況。連結：https://is.gd/xDIT6f' },
+                    ].map((item) => (
+                        <div key={item.id} className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                            <div className="bg-[#1a1a2e] px-6 py-3 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-[#c9a84c] font-mono font-bold text-[14px]">證物 {item.id}</span>
+                                    <span className="text-white text-[13px] font-medium truncate max-w-[400px]">{item.title}</span>
+                                </div>
+                                {item.link && (
+                                    <span className="text-[10px] font-mono text-[#8888aa] truncate max-w-[200px]">{item.link}</span>
+                                )}
+                            </div>
+                            <div className="p-6">
+                                <div className="mb-6 pb-6 border-b border-[#f0ede6]">
+                                    <p className="text-[12px] text-[#4a4a6a] italic leading-relaxed">「{item.desc}」</p>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* 等級選擇 */}
+                                    <div>
+                                        <div className="text-[11px] font-bold text-[#8888aa] mb-3 uppercase tracking-wider">判定等級</div>
+                                        <div className="flex gap-2">
+                                            {['A', 'B', 'C', 'D'].map(level => (
+                                                <button
+                                                    key={level}
+                                                    onClick={() => setForensics(prev => ({ ...prev, [item.id]: { ...prev[item.id], grade: level } }))}
+                                                    className={`w-10 h-10 rounded-full font-bold text-[13px] border-2 transition-all flex items-center justify-center
+                                                        ${forensics[item.id].grade === level 
+                                                            ? `${gradeLevels.find(g => g.grade === level).color} border-transparent text-white scale-110 shadow-lg` 
+                                                            : 'border-[#f0ede6] text-[#8888aa] hover:border-[#dddbd5]'}`}
+                                                >
+                                                    {level}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {/* 理由填寫 */}
+                                    <div>
+                                        <div className="text-[11px] font-bold text-[#8888aa] mb-2 uppercase tracking-wider">判定理由 / 查核路徑</div>
+                                        <input
+                                            type="text"
+                                            value={forensics[item.id].reason}
+                                            onChange={e => setForensics(prev => ({ ...prev, [item.id]: { ...prev[item.id], reason: e.target.value } }))}
+                                            placeholder="為什麼是這個等級？你是在哪裡查證的？"
+                                            className="w-full bg-[#f8f7f4] border border-[#dddbd5] rounded px-3 py-2 text-[12px] text-[#1a1a2e] focus:outline-none focus:ring-1 focus:ring-[#2d5be3]/30"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mt-8 bg-[#fdecea] border-l-4 border-[#c0392b] p-5 rounded-r-lg">
+                    <div className="text-[13px] font-bold text-[#c0392b] mb-2">📢 小組討論總結</div>
+                    <p className="text-[12px] text-[#4a4a6a] leading-relaxed">
+                        完成判定後，請小組討論：<strong>哪一張證物最難判斷？</strong> 為什麼？
+                        （例如：雖然有網址，但連過去發現是內容農場；或者雖然是英文期刊，但查不到作者資訊等）。
+                    </p>
+                </div>
+            </section>
+
             {/* ── WRAP-UP ── */}
             <section className="mb-12">
                 <div className="bg-[#f0ede6] rounded-lg overflow-hidden border border-[#dddbd5]">
@@ -486,12 +580,12 @@ export const W50Page = () => {
             <div className="next-week-preview">
                 <div className="next-week-header">
                     <span className="next-week-badge">NEXT WEEK</span>
-                    <h3 className="next-week-title">W5.1 預告</h3>
+                    <h3 className="next-week-title">W6 預告</h3>
                 </div>
                 <div className="next-week-content">
                     <div className="next-week-col">
-                        <div className="next-week-label">W5.1 主題</div>
-                        <p className="next-week-text">文獻偵探社——你的 3 篇文獻，能通過同學的查核嗎？</p>
+                        <div className="next-week-label">W6 主題</div>
+                        <p className="next-week-text">文獻偵探社（福爾摩斯版）——識破假改寫，寫出真文獻探討。</p>
                     </div>
                     <div className="next-week-col border-l border-white/5">
                         <div className="next-week-label">你會學到</div>
@@ -505,8 +599,8 @@ export const W50Page = () => {
                 <Link to="/w4" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
                     <ArrowLeft size={16} /> 回 W4 題目博覽會
                 </Link>
-                <Link to="/w5" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-lg text-[13px] font-bold hover:bg-[#2d5be3] transition-all flex items-center gap-2 group shadow-lg shadow-[#1a1a2e]/10">
-                    前往 W5.1 文獻偵探社 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <Link to="/w6" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-lg text-[13px] font-bold hover:bg-[#2d5be3] transition-all flex items-center gap-2 group shadow-lg shadow-[#1a1a2e]/10">
+                    前往 W6 文獻偵探社 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
 

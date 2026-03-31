@@ -39,6 +39,9 @@ export const PhantomDataHub = () => {
     }, []);
 
     const completedCount = Object.values(chapterStates).filter(s => s.complete).length;
+    const allComplete   = completedCount === 5;
+    const allOptimal    = allComplete && [1,2,3,4,5]
+        .every(n => localStorage.getItem(`phantom_ch${n}_optimal`) === 'true');
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 font-sans relative">
@@ -82,6 +85,13 @@ export const PhantomDataHub = () => {
                             style={{ width: `${(completedCount / 5) * 100}%` }}
                         />
                     </div>
+                    {allComplete && (
+                        <div className={`mt-3 text-xs font-mono text-center ${allOptimal ? 'text-amber-400' : 'text-amber-500/70'}`}>
+                            {allOptimal
+                                ? '★ 完整調查紀錄解鎖 — 所有幽靈線索已記錄在案'
+                                : '✓ 案件結案 — 仍有部分細節標著「待確認」'}
+                        </div>
+                    )}
                 </div>
 
                 {/* Chapters */}
@@ -98,15 +108,24 @@ export const PhantomDataHub = () => {
                                 key={ch.num}
                                 onClick={() => isUnlocked && navigate(ch.path)}
                                 disabled={!isUnlocked}
-                                className={`w-full text-left rounded border p-5 transition-all group
+                                className={`w-full text-left rounded-lg p-5 transition-all duration-300 group
+                                    relative overflow-hidden border
                                     ${isComplete
                                         ? 'bg-emerald-950/20 border-emerald-700/30 hover:bg-emerald-950/30'
                                         : isUnlocked
-                                            ? 'bg-slate-900 border-slate-700 hover:border-amber-600/50 hover:bg-slate-800'
-                                            : 'bg-slate-900/40 border-slate-800 opacity-50 cursor-not-allowed'
+                                            ? 'bg-slate-900/40 border-slate-700/80 hover:border-amber-500/50 hover:bg-slate-800/60'
+                                            : 'bg-slate-950/20 border-slate-900 opacity-40 grayscale pointer-events-none'
                                     }`}
                             >
-                                <div className="flex items-center gap-4">
+                                {/* 按鈕背景圖 */}
+                                {isUnlocked && (
+                                    <div 
+                                        className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity bg-cover bg-center"
+                                        style={{ backgroundImage: `url('/assets/phantom/covers/phantom_cover_ch${ch.num}_bg_v1.webp')` }}
+                                    />
+                                )}
+
+                                <div className="relative z-10 flex items-center gap-4">
                                     {/* Chapter number */}
                                     <div className="font-mono text-2xl font-black text-slate-700 w-8 flex-shrink-0">
                                         {String(ch.num).padStart(2, '0')}
@@ -126,7 +145,7 @@ export const PhantomDataHub = () => {
                                             <span className={`font-mono text-xs ${color.text}`}>{ch.method}</span>
                                         </div>
                                         {isUnlocked && (
-                                            <div className="text-slate-500 text-xs leading-relaxed">{ch.desc}</div>
+                                            <div className="text-slate-400 text-xs leading-relaxed drop-shadow-sm">{ch.desc}</div>
                                         )}
                                     </div>
 

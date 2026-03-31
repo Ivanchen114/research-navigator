@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import './TeamFormation.css';
 import { Users, User, ArrowRight, CheckCircle2, Search, Map, Zap, Music, Camera, Mic, Info } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
@@ -15,7 +16,7 @@ export const TeamFormation = () => {
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">組隊決策週 W7</span>
+                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">組隊決策週 W8</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -39,7 +40,7 @@ export const TeamFormation = () => {
 
             <div className="w7-content">
                 <div className="w7-top-breadcrumb">
-                    <span>🤝 W7</span>
+                    <span>🤝 W8</span>
                     <span className="w7-breadcrumb-sep">·</span>
                     <span>研究規劃</span>
                     <span className="w7-breadcrumb-sep">→</span>
@@ -73,15 +74,7 @@ export const TeamFormation = () => {
                     <span className="w7-section-tag">CONCEPT</span>
                 </div>
 
-                <div className="w7-sub-label">課程弧線 · 你在哪裡</div>
-                <div className="arc-grid mb-14">
-                    {W7Data.courseArc.map((item, idx) => (
-                        <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                            <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                            <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                        </div>
-                    ))}
-                </div>
+                <CourseArc items={W7Data.courseArc} />
 
                 <div className="w7-sub-label">今天的決定 · 兩條都是好路</div>
                 <div className="w7-decision-grid">
@@ -95,7 +88,7 @@ export const TeamFormation = () => {
                             <li className="w7-decision-li">可以分工，題目可以更大</li>
                             <li className="w7-decision-li">互相支持，互相檢視</li>
                             <li className="w7-decision-li">需要協調溝通</li>
-                            <li className="w7-decision-li">整合各人的 W5/W6 文獻</li>
+                            <li className="w7-decision-li">整合各人的 W6/W7 文獻與方法</li>
                         </ul>
                     </div>
                     <div className="w7-decision-card" style={{ borderLeft: '4px solid var(--gold)' }}>
@@ -199,9 +192,9 @@ export const TeamFormation = () => {
                     </div>
                     <div className="w7-task-content">
                         <ul className="w7-task-ul">
-                            <li className="w7-task-li">登入酷AI學習系統，找到「W7 研究判斷力測驗」</li>
+                            <li className="w7-task-li">登入酷AI學習系統，找到「W8 研究判斷力測驗」</li>
                             <li className="w7-task-li">個人測驗，不可討論，25 分鐘內完成送出</li>
-                            <li className="w7-task-li">測驗涵蓋三個部分：問題意識（W1–W4）、文獻鑑識（W5）、研究診所（W6）</li>
+                            <li className="w7-task-li">測驗涵蓋三個部分：問題意識（W1–W4）、文獻搜尋（W5）、文獻偵探（W6）、研究診所（W7）</li>
                         </ul>
                         <div className="w7-notice w7-notice-danger">
                             ⚠️ 測驗期間老師不回答題目內容問題，操作有困難才舉手。
@@ -239,7 +232,7 @@ export const TeamFormation = () => {
                             <li className="w7-task-li">決定：小組研究（2–4 人）或個人研究（Solo）</li>
                             <li className="w7-task-li">小組：確認組員、建立群組、推選組長</li>
                             <li className="w7-task-li">Solo：移動到 Solo Zone，認識其他獨立工作者</li>
-                            <li className="w7-task-li">掃描 QR Code 填寫「W7 組隊登記表」</li>
+                            <li className="w7-task-li">掃描 QR Code 填寫「W8 組隊登記表」</li>
                         </ul>
                         <div className="w7-notice w7-notice-success">
                             ✅ W8 前都可以調整。Solo 的人之後想加入小組也沒關係，先填表登記再說。
@@ -257,7 +250,7 @@ export const TeamFormation = () => {
                             <li className="w7-task-li"><strong>小組：</strong>每人輪流 Pitch 自己的題目（2–3 分鐘），重點強調王牌文獻支持</li>
                             <li className="w7-task-li"><strong>小組：</strong>討論合併可能，共識決或投票決，確定小組題目</li>
                             <li className="w7-task-li"><strong>Solo：</strong>老師個別指導，確認題目縮小到個人可完成的規模（問卷建議 100–150 份，訪談建議 5–8 人）</li>
-                            <li className="w7-task-li">掃描 QR Code 填寫「W7 題目登記表」</li>
+                            <li className="w7-task-li">掃描 QR Code 填寫「W8 題目登記表」</li>
                         </ul>
                         <div className="w7-notice w7-notice-accent">
                             💡 題目要考慮：你們有幾週執行（W11–W14 共 4 週）？做得完嗎？寧可小而精，不要大而空。
@@ -297,7 +290,7 @@ export const TeamFormation = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
                         {[
                             '做出組隊決策，說得出選擇獨研或組隊的理由',
-                            '完成 W7 題目登記，確認研究題目與研究方法',
+                            '完成 W8 題目登記，確認研究題目與研究方法',
                             '建立或加入研究社群（小組群組 or Solo Zone）',
                             '拿到已簽名的研究企劃書，準備下週開工'
                         ].map((item, i) => (
@@ -372,11 +365,11 @@ export const TeamFormation = () => {
                 </div>
 
                 <div style={{ padding: '32px 0 64px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Link to="/w6" className="text-[14px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
-                        ← 回 W6 研究診所
+                    <Link to="/w7" className="text-[14px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
+                        ← 回 W7 研究診所
                     </Link>
-                    <Link to="/tool-design" className="bg-[#1a1a2e] text-white px-6 py-3 rounded-lg font-bold text-[14px] hover:bg-slate-800 transition-colors flex items-center gap-2">
-                        前往 W8 工具設計 →
+                    <Link to="/w9" className="bg-[#1a1a2e] text-white px-6 py-3 rounded-lg font-bold text-[14px] hover:bg-slate-800 transition-colors flex items-center gap-2">
+                        前往 W9 工具設計 →
                     </Link>
                 </div>
             </div>

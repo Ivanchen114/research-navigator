@@ -802,15 +802,15 @@ export const W4Data = {
 
 
 export const W50Data = {
-    id: "W50",
-    title: "文獻搜尋入門",
+    id: "W5",
+    title: "文獻偵探的入門訓練",
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
-        { label: '第一節', value: '為什麼要找文獻 + 華藝實作' },
-        { label: '第二節', value: 'AI關鍵字協作 + APA格式' },
-        { label: '課後產出', value: '3篇已查證文獻 + APA清單' },
-        { label: '帶去 W5', value: '3篇文獻（準備接受同學查核）' }
+        { label: '第一節', value: '檔案室的純手工調查' },
+        { label: '第二節', value: '證物鑑識與 APA 格式' },
+        { label: '小組任務', value: '證物 A–E 鑑識與查核' },
+        { label: '最終產出', value: '1 篇真實證物文獻' }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
         ...item,
@@ -820,255 +820,226 @@ export const W50Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "找對地方",
-            subtitle: "華藝資料庫 vs. Google",
-            desc: "學術資料庫找 A/B 級文獻，AI 只能幫你生成關鍵字",
+            title: "手動搜索",
+            subtitle: "不准用 AI",
+            desc: "學習如何下關鍵字，在華藝資料庫中找到真實文獻",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "人的判斷",
-            subtitle: "AI 給選項，你來篩選",
-            desc: "AI 關鍵字是工具，相關性由你決定",
+            title: "APA格式",
+            subtitle: "標準證物標籤",
+            desc: "正確紀錄作者與年份，學會法庭標準格式",
             colorConfig: "g"
         },
         {
             prefix: "③",
-            title: "APA格式",
-            subtitle: "讓別人找得到你的來源",
-            desc: "正確記錄文獻，整學期都會用到",
+            title: "文獻等級",
+            subtitle: "A到D的鑑識",
+            desc: "識別哪些是主要證據，哪些是不能用在報告的廢料",
             colorConfig: "c"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "為什麼要找文獻 + 華藝資料庫實作",
+            title: "檔案室的手動搜索",
             duration: 50,
             hasBreakAfter: true,
             stages: [
                 {
                     timeStart: "0:00", timeEnd: "0:05", duration: "5 min",
-                    colorClass: "c3", icon: "🔗",
-                    title: "回扣與定位",
-                    desc: "回顧 W4 定案的題目與研究動機，說明 W5.0 的任務：找到 3 篇真實可信的相關研究。",
-                    tags: ["回扣 W4", "課程定位"]
+                    colorClass: "c3", icon: "🏛️",
+                    title: "階段 0｜開場與定位",
+                    desc: "帶上前一週定案題目，進入資料庫檔案室，不依賴 AI 靠自己搜尋。",
+                    tags: ["純手工", "題目延續"]
                 },
                 {
-                    timeStart: "0:05", timeEnd: "0:12", duration: "7 min",
-                    colorClass: "c1", icon: "📚",
-                    title: "為什麼要找文獻",
-                    desc: "三個理由：避免重複、學方法、支持論點。文獻等級快速說明（A–D），今天目標 A/B 級。",
-                    tags: ["概念講解", "等級說明"]
+                    timeStart: "0:05", timeEnd: "0:15", duration: "10 min",
+                    colorClass: "c4", icon: "🗺️",
+                    title: "階段 1｜擬定搜索策略",
+                    desc: "填寫搜尋計畫書，列出3組關鍵字，設定年份與範圍限制。",
+                    tags: ["規劃策略", "關鍵字"]
                 },
                 {
-                    timeStart: "0:12", timeEnd: "0:25", duration: "13 min",
-                    colorClass: "c1", icon: "🖥️",
-                    title: "華藝資料庫操作示範",
-                    desc: "登入 → 列關鍵字 → 搜尋 → 加限制條件（台灣/近5年/碩博士論文）→ 看標題和摘要。提醒 AI 幻覺陷阱。",
-                    tags: ["教師示範", "操作演練", "🚫 AI假文獻警告"]
+                    timeStart: "0:15", timeEnd: "0:40", duration: "25 min",
+                    colorClass: "c1", icon: "👀",
+                    title: "階段 2｜實戰搜尋找到第一件證物",
+                    desc: "登入碩博系統找到 1 篇符合的文獻，說明它與自己題目的關聯。",
+                    tags: ["華藝實戰", "獨立找尋"]
                 },
                 {
-                    timeStart: "0:25", timeEnd: "0:50", duration: "25 min",
-                    colorClass: "c4", icon: "🔍",
-                    title: "Part 1 學生實作：華藝找文獻",
-                    desc: "帶著 W4 定案題目，在華藝自行搜尋並找到至少 1 篇相關研究。教師巡視並提示關鍵字策略。",
-                    tags: ["獨立實作", "學生操作"]
+                    timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
+                    colorClass: "c2", icon: "🏷️",
+                    title: "階段 3｜APA 標籤製作練習",
+                    desc: "對照 APA 規範清單，幫找到的文獻貼上標準格式標籤。",
+                    tags: ["APA 格式", "細節檢視"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "AI關鍵字協作 + APA格式教學",
+            title: "證物鑑識大賽——等級判定",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
-                    timeStart: "0:00", timeEnd: "0:20", duration: "20 min",
-                    colorClass: "c2", icon: "🤖",
-                    title: "Part 2 AI關鍵字協作",
-                    desc: "用 AI 生成關鍵字表格，回到華藝再搜一次，比較差異，補充文獻清單到 3 篇。",
-                    tags: ["AI協作", "人來判斷"]
+                    timeStart: "0:00", timeEnd: "0:10", duration: "10 min",
+                    colorClass: "c1", icon: "⚖️",
+                    title: "階段 4｜文獻等級定義(A-D)",
+                    desc: "說明 A 級到 D 級差別，並介紹 AI 捏造的學術文獻陷阱。",
+                    tags: ["證據等級", "防禦偽證"]
                 },
                 {
-                    timeStart: "0:20", timeEnd: "0:35", duration: "15 min",
-                    colorClass: "c3", icon: "📝",
-                    title: "Part 3 APA格式教學與實作",
-                    desc: "說明 APA 格式的目的，介紹碩博士論文與期刊論文兩種模板，學生實作 3 篇文獻格式。",
-                    tags: ["格式教學", "實作練習"]
+                    timeStart: "0:10", timeEnd: "0:40", duration: "30 min",
+                    colorClass: "c2", icon: "🔬",
+                    title: "階段 5｜小組鑑識任務",
+                    desc: "發放 A–E 神秘證物卡，調查是名校碩論還是內容農場，寫下查核路徑。",
+                    tags: ["小組合作", "查核實戰"]
                 },
                 {
-                    timeStart: "0:35", timeEnd: "0:50", duration: "15 min",
-                    colorClass: "c2", icon: "✅",
-                    title: "整理確認與總結",
-                    desc: "確認每人有 3 篇 A/B 級文獻並已查證。2–3 位學生分享，教師點評關聯性。預告 W5 文獻偵探社。",
-                    tags: ["確認產出", "預告下週"]
+                    timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
+                    colorClass: "c3", icon: "🏁",
+                    title: "階段 6｜總結與下週預告",
+                    desc: "總結偽證判定，預告下週學習如何將 A 級文獻「寫入」報告中。",
+                    tags: ["總結", "下週預告"]
                 }
             ]
         }
     ],
-    tasks: [
-        { id: 1, title: "PART 1 華藝文獻搜尋", desc: "帶著題目關鍵字，在華藝資料庫找到至少 1 篇相關研究" },
-        { id: 2, title: "PART 2 AI 關鍵字協作", desc: "問 AI 生成關鍵字，篩選後回到資料庫補充文獻到 3 篇" },
-        { id: 3, title: "PART 3 APA 格式清單", desc: "3 篇文獻都完成 APA 格式，並親自查證作者和摘要存在" }
-    ],
-    homework: {
-        deadline: '下次上課前',
-        items: [
-            { p: '學習單', n: '完成 Part 1–4，上傳至 Google Classroom' },
-            { p: '查證確認', n: '3 篇文獻都在華藝或 Google Scholar 親自看過摘要' }
-        ],
-        footer: '學習單在 Google Classroom 下載'
+    tasks: [],
+    homework: { 
+        deadline: '下次上課前', 
+        items: [ 
+            { p: 'Part 0', n: '確認 W4 定案題目' },
+            { p: 'Part 1', n: '資料庫搜尋紀錄 (關鍵字、搜尋策略與首篇文獻)' },
+            { p: 'APA 格式', n: '第 1 篇文獻之標準引註練習' },
+            { p: '證物鑑識', n: '證物 A–E 等級判斷、理由與查核路徑 (小組共作)' },
+            { p: '小組總結', n: '記錄組內最難判斷之證物與原因' }
+        ], 
+        footer: '學習單完成後請上傳至 Google Classroom' 
     }
 };
 
-
 export const W5Data = {
-    id: "W5",
-    title: "文獻偵探社與學術寫作倫理",
+    id: "W6",
+    title: "文獻偵探社 (Sherlock Edition)",
     duration: 100,
     durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '識破換字抄襲與三明治引用' },
+        { label: '第二節', value: '多文獻整合與同儕會診' },
+        { label: '小組任務', value: '互相驗屍 (同儕審查)' },
+        { label: '最終產出', value: '五句話結案報告' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 2,
+        now: idx === 2
+    })),
     coreConcepts: [
         {
             prefix: "①",
-            title: "判讀真偽",
-            subtitle: "找對證據：A-D 級鑑識",
-            desc: "AI 會造假，你必須學會查證",
+            title: "遮蓋測試",
+            subtitle: "識破換字抄襲",
+            desc: "遮住原文自己寫，確認結構是否自己掌握",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "合法使用",
-            subtitle: "寫對引用：防範抄襲",
-            desc: "正確改寫與三明治寫作法",
+            title: "三明治法",
+            subtitle: "觀點＋引用＋分析",
+            desc: "頭中尾三層結構，讓讀者知道引用目的",
             colorConfig: "g"
+        },
+        {
+            prefix: "③",
+            title: "整合文獻",
+            subtitle: "提煉故事",
+            desc: "拒絕堆砌列點，將三篇文章寫成有方向的故事",
+            colorConfig: "c"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "證物鑑識與防範抄襲",
+            title: "犯罪鑑識與工具訓練",
             duration: 50,
             hasBreakAfter: true,
             stages: [
                 {
-                    timeStart: "0:00",
-                    timeEnd: "0:05",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "🕵️",
-                    title: "一、 開場與兩大任務",
-                    desc: "說明真實世界充滿『假論文』與『無意抄襲』陷阱。任務：Level 1 證物鑑識，Level 2 合法引用。",
-                    tags: ["情境營造", "目標建立"]
+                    timeStart: "0:00", timeEnd: "0:10", duration: "10 min",
+                    colorClass: "c3", icon: "🕵️",
+                    title: "入社儀式",
+                    desc: "認識兩種常見報告犯罪：換字抄襲與文獻堆砌。",
+                    tags: ["情境導入", "釐清盲點"]
                 },
                 {
-                    timeStart: "0:05",
-                    timeEnd: "0:15",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "⚖️",
-                    title: "二、 說明 A-D 證物等級",
-                    desc: "介紹主證據(A)、輔助證據(B)、背景線索(C)、不採用(D)。教師示範用 Google Scholar 與華藝查證。",
-                    tags: ["概念講解", "教師示範"]
+                    timeStart: "0:10", timeEnd: "0:25", duration: "15 min",
+                    colorClass: "c1", icon: "🚫",
+                    title: "犯罪現場一：換字抄襲",
+                    desc: "比較兩個版本差異，推廣「遮蓋測試」偵查工具。",
+                    tags: ["遮蓋測試", "結構破解"]
                 },
                 {
-                    timeStart: "0:15",
-                    timeEnd: "0:35",
-                    duration: "20 min",
-                    colorClass: "c4",
-                    icon: "🔍",
-                    title: "三、 小組鑑識實戰 (禁 AI)",
-                    desc: "分發 5 份證物，小組動手查證 A-E 的真偽與等級。隨後投票與教師解答。",
-                    tags: ["小組挑戰", "實機操作", "🚫 禁用 AI"]
+                    timeStart: "0:25", timeEnd: "0:40", duration: "15 min",
+                    colorClass: "c4", icon: "🍔",
+                    title: "偵探工具：三明治引用法",
+                    desc: "學習將文獻夾在觀點與分析之間，使引用具有結論。",
+                    tags: ["三層結構", "寫作格式"]
                 },
                 {
-                    timeStart: "0:35",
-                    timeEnd: "0:50",
-                    duration: "15 min",
-                    colorClass: "c2",
-                    icon: "✍️",
-                    title: "四、 寫作倫理 I：正確改寫",
-                    desc: "認識『無意抄襲』與『換字抄襲』。全班實戰演練：改寫一段醫學文獻，並由教師點評。",
-                    tags: ["改寫實戰", "防範抄襲"]
+                    timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
+                    colorClass: "c2", icon: "📚",
+                    title: "偵探工具：多文獻整合",
+                    desc: "教導如何將三篇不同的文獻用邏輯串連而非條列堆砌。",
+                    tags: ["多文獻", "串連語感"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "三明治法與 NotebookLM 實戰",
+            title: "實地偵辦與互相驗屍",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
-                    timeStart: "0:00",
-                    timeEnd: "0:15",
-                    duration: "15 min",
-                    colorClass: "c2",
-                    icon: "🥪",
-                    title: "五、 寫作倫理 II：三明治法",
-                    desc: "避免孤兒引用！學習直接引用的三層結構：引入 → 引用 → 解釋。學生動筆進行 50 字寫作練習。",
-                    tags: ["直接引用", "實戰練習"]
+                    timeStart: "0:00", timeEnd: "0:15", duration: "15 min",
+                    colorClass: "c1", icon: "🔍",
+                    title: "演練一：改寫偵錯",
+                    desc: "找出甲乙學生的犯罪手法並自己實作正確的改寫。",
+                    tags: ["實地演練", "糾錯"]
                 },
                 {
-                    timeStart: "0:15",
-                    timeEnd: "0:25",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "🗣️",
-                    title: "六、 多重文獻對話",
-                    desc: "介紹如何在一段話中綜合不同觀點。預告課後的線上闖關作業『引用偵錯遊戲』。",
-                    tags: ["綜合分析", "遊戲首發"]
+                    timeStart: "0:15", timeEnd: "0:25", duration: "10 min",
+                    colorClass: "c2", icon: "🍔",
+                    title: "演練二：三明治實戰",
+                    desc: "使用 W5 找尋的文獻，實地撰寫一個三層完整引用。",
+                    tags: ["自有文獻應用", "實戰"]
                 },
                 {
-                    timeStart: "0:25",
-                    timeEnd: "0:43",
-                    duration: "18 min",
-                    colorClass: "c5",
-                    icon: "🔬",
-                    title: "七、 自己的文獻與同儕互審",
-                    desc: "回到個人 W4 題目，找齊 3 篇文獻。交換任務單，由旁邊同學檢查作者真偽與等級。",
-                    tags: ["個人任務", "同儕查核"]
+                    timeStart: "0:25", timeEnd: "0:40", duration: "15 min",
+                    colorClass: "c4", icon: "📑",
+                    title: "演練三：結案報告",
+                    desc: "小組選材包撰寫多文獻整合，最後一句一定要呼應自身題目。",
+                    tags: ["整合實作", "連回題目"]
                 },
                 {
-                    timeStart: "0:43",
-                    timeEnd: "0:50",
-                    duration: "7 min",
-                    colorClass: "c4",
-                    icon: "🤖",
-                    title: "八、 NotebookLM 整理與結案",
-                    desc: "丟入 3 篇文獻讓 NotebookLM 找『研究缺口』。用剛學的引用技巧，寫下題目值得研究的辯護結案。",
-                    tags: ["AI 總結", "最終產出"]
+                    timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
+                    colorClass: "c3", icon: "⚖️",
+                    title: "同儕審查：互相驗屍",
+                    desc: "交換文字作品，使用檢核表提供具體修改建議，不接受含糊評論。",
+                    tags: ["同儕審查", "具體建議"]
                 }
             ]
         }
     ],
-    summaries: [
-        {
-            icon: "📝",
-            label: "課堂產出",
-            text: "兩種寫作實戰<br><small style=\"font-size:11px;color:#888;\">正確改寫與三明治法</small>"
-        },
-        {
-            icon: "🔍",
-            label: "鑑識紀錄",
-            text: "3 篇真實文獻<br><small style=\"font-size:11px;color:#888;\">通過同學互審確認</small>"
-        },
-        {
-            icon: "🎮",
-            label: "課後驗收",
-            text: "引用偵錯遊戲過關<br><small style=\"font-size:11px;color:#ccc;\">防範抄襲 10 連測</small>"
-        }
-    ],
-    legends: [
-        { colorClass: "lm-c1", label: "概念 / 說明" },
-        { colorClass: "lm-c4", label: "小組挑戰 / 實作" },
-        { colorClass: "lm-c2", label: "寫作演練" },
-        { colorClass: "lm-c3", label: "情境 / 結尾" }
-    ]
+    tasks: [],
+    homework: { deadline: '下次上課前', items: [ { p: '繳交', n: '修改演練報告並上傳' } ], footer: '' }
 };
 
 export const W6Data = {
-    id: "W6",
+    id: "W7",
     title: "研究診所：掛號判斷工作坊",
     duration: 100,
     durationDesc: "2 節課",
@@ -1223,7 +1194,7 @@ export const W6Data = {
 };
 
 export const W7Data = {
-    id: "W7",
+    id: "W8",
     title: "組隊決策週：從個人到團隊",
     duration: 100,
     durationDesc: "2 節課",
@@ -1372,7 +1343,7 @@ export const W7Data = {
 };
 
 export const W8Data = {
-    id: "W8",
+    id: "W9",
     title: "工具設計：處方診斷與三大標準",
     duration: 100,
     durationDesc: "2 節課",
@@ -1522,7 +1493,7 @@ export const W8Data = {
 };
 
 export const W9Data = {
-    id: "W9",
+    id: "W10",
     title: "工具精進與預試：AI 審稿與人工驗證",
     duration: 100,
     durationDesc: "2 節課",
@@ -1687,7 +1658,7 @@ export const W10Data = {
 };
 
 export const W13Data = {
-    id: "W13",
+    id: "W14",
     title: "讓數據自己說話：圖表選擇與圖說寫作",
     duration: 100,
     durationDesc: "2 節課",
@@ -1837,7 +1808,7 @@ export const W13Data = {
     ]
 };
 export const W14Data = {
-    id: "W14",
+    id: "W15",
     title: "研究結論：四層寫作法",
     duration: 100,
     durationDesc: "2 節課",

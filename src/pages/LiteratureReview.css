@@ -94,3 +94,26 @@
     .w5-rule-grid,
     .w5-next-week-content { grid-template-columns: 1fr; }
 }
+
+/* Sherlock Edition Theme Enhancements */
+.sherlock-theme {
+    background-color: #faf9f6;
+}
+.sherlock-theme .meta-card {
+    background-color: #fff;
+    border: 1px solid #d4c8b8;
+}
+.sherlock-theme header h1 {
+    color: #2c3e50;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+.sherlock-theme .bg-\[\#c0392b\] {
+    background-color: #8b0000;
+}
+.sherlock-theme .text-\[\#c0392b\] {
+    color: #8b0000;
+}
+.sherlock-theme .border-\[\#c0392b\] {
+    border-color: #8b0000;
+}
+

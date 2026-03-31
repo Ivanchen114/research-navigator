@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Map, ArrowRight } from 'lucide-react';
+import CourseArc from '../components/ui/CourseArc';
+import { Map, ArrowRight, ShieldAlert } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import CopyButton from '../components/ui/CopyButton';
 import { W3Data } from '../data/lessonMaps';
@@ -63,18 +64,22 @@ export const Wizard = () => {
                     好的研究不是「想出來」的，是「磨出來」的。今天我們先感受「碰壁」的真實感，再學會用一個心法診斷並救活你的原石題目。
                 </p>
 
-                {/* COURSE ARC */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {W3Data.courseArc.map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                            </div>
-                        ))}
-                    </div>
+                {/* GAME BANNER */}
+                <div className="bg-[#1a1a2e] border-l-4 border-[#c0392b] p-6 rounded-r-lg mb-10 text-white shadow-xl">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                        <ShieldAlert className="text-[#c0392b]" size={20} />
+                        即刻報到：行動代號靶心
+                    </h3>
+                    <p className="text-[#8888aa] text-sm mb-4">
+                        幫助你在混亂的文獻海中找對方向，鍛鍊從「現象」提煉出「研究問題」的精確度。
+                    </p>
+                    <Link to="/game/question-er" className="inline-flex items-center gap-2 bg-[#c0392b] text-white px-4 py-2 rounded font-bold text-sm hover:bg-[#a02c21] transition-colors">
+                        進入遊戲系統 <ArrowRight size={14} />
+                    </Link>
                 </div>
+
+                {/* COURSE ARC */}
+                <CourseArc items={W3Data.courseArc} />
             </header>
 
             {/* META STRIP */}
@@ -90,6 +95,8 @@ export const Wizard = () => {
                     </div>
                 ))}
             </div>
+            
+
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">

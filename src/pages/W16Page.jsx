@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import {
     ArrowLeft,
     CheckCircle2,
@@ -34,7 +35,7 @@ export const W16Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 成果發表 / <span className="text-[#1a1a2e] font-bold">Gallery Walk W16</span>
+                    研究方法與專題 / 成果發表 / <span className="text-[#1a1a2e] font-bold">Gallery Walk W17</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -45,7 +46,7 @@ export const W16Page = () => {
 
             {/* PAGE HEADER */}
             <div className="max-w-[800px] mb-16">
-                <div className="text-[#c9a84c] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">🏆 W16 · 成果發表</div>
+                <div className="text-[#c9a84c] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">🏆 W17 · 成果發表</div>
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
                     Gallery Walk：<span className="text-[#c9a84c]">策展人上場</span>
                 </h1>
@@ -53,30 +54,19 @@ export const W16Page = () => {
                     終點線。今天你是策展人，也是觀眾。站在自己的海報旁說清楚你的研究；走到別人面前，用一個好問題深化你的理解。16 週的旅程，今天收尾。
                 </p>
 
-                {/* Course Arc - Completion Version */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 全部完成</div>
-                    <div className="arc-grid">
-                        {[
-                            { wk: 'W1-W4', name: '問題意識\n題目定案' },
-                            { wk: 'W5-W7', name: '研究規劃\n文獻鑑識' },
-                            { wk: 'W8-W10', name: '工具設計\n倫理審查' },
-                            { wk: 'W11-W12', name: '執行研究\n資料蒐集' },
-                            { wk: 'W13-W14', name: '圖表製作\n四層結論' },
-                            { wk: 'W15', name: '報告組裝\n海報設計' },
-                            { wk: 'W16', name: 'Gallery Walk\n🏁', now: true }
-                        ].map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">
-                                    {item.wk} {item.now && '← 現在'}
-                                </div>
-                                <div className="arc-name">
-                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* Course Arc */}
+                <CourseArc
+                    label="課程弧線 · 全部完成"
+                    items={[
+                        { wk: 'W1-W4', name: '問題意識\n題目定案' },
+                        { wk: 'W5-W7', name: '研究規劃\n文獻鑑識' },
+                        { wk: 'W8-W10', name: '工具設計\n倫理審查' },
+                        { wk: 'W11-W12', name: '執行研究\n資料蒐集' },
+                        { wk: 'W13-W14', name: '圖表製作\n四層結論' },
+                        { wk: 'W15', name: '報告組裝\n海報設計' },
+                        { wk: 'W16', name: 'Gallery Walk\n🏁', now: true }
+                    ]}
+                />
             </div>
 
             <div className="meta-strip">
@@ -392,7 +382,7 @@ export const W16Page = () => {
 
                 <div className="w16-closing-banner">
                     <div className="w16-closing-hd">
-                        <div className="w16-closing-eyebrow">W0 → W16 · 全程完賽</div>
+                        <div className="w16-closing-eyebrow">W0 → W17 · 全程完賽</div>
                         <div className="w16-closing-title">你學到的最重要的東西，<br />不是任何一個研究技術。</div>
                         <div className="w16-closing-sub">
                             是——遇到問題，你知道怎麼找下一步。<br />
@@ -424,8 +414,8 @@ export const W16Page = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-16 pt-8 border-t border-[#dddbd5]">
-                    <Link to="/w15" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
-                        ← 回 W15 簡報設計
+                    <Link to="/w16" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
+                        ← 回 W16 簡報與海報
                     </Link>
                     <div className="flex items-center gap-2 bg-[#c9a84c] text-[#1a1a2e] px-8 py-3 rounded-[6px] text-[14px] font-bold">
                         🎉 課程完成！ <GraduationCap size={20} />

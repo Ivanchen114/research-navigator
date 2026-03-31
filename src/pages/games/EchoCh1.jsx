@@ -97,6 +97,9 @@ export const EchoCh1 = () => {
 
     // ── 音效 phase 控制 ──
     useEffect(() => {
+        // 切換階段時自動回到最上方
+        window.scrollTo(0, 0);
+
         if (!bgmRef.current || !heartbeatRef.current || !glitchRef.current) return;
 
         if (phase === 'scene1' || phase === 'scene2' || phase === 'choice1' || phase === 'choice2') {
@@ -232,6 +235,9 @@ export const EchoCh1 = () => {
                             <SectionLabel icon={<FileText size={13} />} text="任務簡報" />
                             <p className="text-slate-300 leading-relaxed text-sm">
                                 班聯會長選舉結束三天後，一張截圖在班群和 IG 限時動態裡流傳，指控現任會長陳宇佳買票。48 小時內沒有人停下來確認截圖的真實性——謠言已經開始改變她在學校的處境。
+                            </p>
+                            <p className="text-slate-300 leading-relaxed text-sm">
+                                昨天她還在班聯會教室整理選後資料。今天一走進教室，原本吵雜的角落安靜了兩秒，然後有人故意把話題岔開。沒有人直接說了什麼，但某種東西已經先一步抵達了。
                             </p>
                             <p className="text-slate-300 leading-relaxed text-sm">
                                 你的第一步任務是以「期末研究項目」為由，系統性觀察謠言在三個平台（班群 LINE、IG 限時動態、走廊口頭傳播）的擴散模式。目標是建立一份可追溯的擴散地圖——不是替她申辯，而是先搞清楚「這件事是怎麼變大的」。
@@ -472,8 +478,9 @@ export const EchoCh1 = () => {
                             </div>
                         </div>
 
-                        <div className="bg-slate-900/60 border border-slate-800 rounded p-4 mb-5 text-xs text-slate-500 font-mono">
-                            第二章｜訪談法：目擊者 — 已解鎖
+                        <div className="bg-slate-900/60 border border-slate-800 rounded p-5 mb-5">
+                            <p className="text-slate-400 text-xs leading-relaxed mb-3">觀察只能告訴你謠言怎麼擴散，不能告訴你是誰在第 17 小時推了那兩個帳號上場。下一步，你得去找最早看見、最早轉傳的人，讓細節從人口中說出來。</p>
+                            <div className="font-mono text-xs text-slate-600">第二章｜訪談法：目擊者 — 已解鎖</div>
                         </div>
 
                         <PrimaryButton onClick={() => navigate('/echo')} label="返回調查檔案" />

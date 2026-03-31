@@ -39,6 +39,10 @@ import { PhantomCh4 } from './pages/games/PhantomCh4';
 import { PhantomCh5 } from './pages/games/PhantomCh5';
 import { EchoHub } from './pages/games/EchoHub';
 import { EchoCh1 } from './pages/games/EchoCh1';
+import { EchoCh2 } from './pages/games/EchoCh2';
+import { EchoCh3 } from './pages/games/EchoCh3';
+import { EchoCh4 } from './pages/games/EchoCh4';
+import { EchoCh5 } from './pages/games/EchoCh5';
 
 function App() {
   return (
@@ -54,24 +58,21 @@ function App() {
           <Route path="wizard" element={<Wizard />} />
           <Route path="w3" element={<Wizard />} />
           <Route path="w4" element={<W4Page />} />
-          <Route path="w5-0" element={<W50Page />} />
-
-          <Route path="clinic" element={<ClinicPage />} />
-          <Route path="w6" element={<ClinicPage />} />
-          <Route path="literature-review" element={<LiteratureReview />} />
-          <Route path="w5" element={<LiteratureReview />} />
-          <Route path="team-formation" element={<TeamFormation />} />
-          <Route path="w7" element={<TeamFormation />} />
+          <Route path="w5" element={<W50Page />} />
+          <Route path="w6" element={<LiteratureReview />} />
+          <Route path="w7" element={<ClinicPage />} />
+          <Route path="w8" element={<TeamFormation />} />
           <Route path="tool-design" element={<ToolDesignPage />} />
+          <Route path="w9" element={<ToolDesignPage />} />
           <Route path="tool-refinement" element={<ToolRefinementPage />} />
-          <Route path="w9" element={<ToolRefinementPage />} />
-          <Route path="w10" element={<W10Page />} />
-          <Route path="w11" element={<W11Page />} />
-          <Route path="w12" element={<W12Page />} />
-          <Route path="w13" element={<W13Page />} />
-          <Route path="w14" element={<W14Page />} />
-          <Route path="w15" element={<W15Page />} />
-          <Route path="w16" element={<W16Page />} />
+          <Route path="w10" element={<ToolRefinementPage />} />
+          <Route path="w11" element={<W10Page />} />
+          <Route path="w12" element={<W11Page />} />
+          <Route path="w13" element={<W12Page />} />
+          <Route path="w14" element={<W13Page />} />
+          <Route path="w15" element={<W14Page />} />
+          <Route path="w16" element={<W15Page />} />
+          <Route path="w17" element={<W16Page />} />
           <Route path="analysis" element={<AnalysisHub />} />
           <Route path="chart-selection" element={<ChartSelection />} />
 
@@ -92,6 +93,10 @@ function App() {
           <Route path="phantom/ch5" element={<PhantomCh5 />} />
           <Route path="echo" element={<EchoHub />} />
           <Route path="echo/ch1" element={<EchoCh1 />} />
+          <Route path="echo/ch2" element={<EchoCh2 />} />
+          <Route path="echo/ch3" element={<EchoCh3 />} />
+          <Route path="echo/ch4" element={<EchoCh4 />} />
+          <Route path="echo/ch5" element={<EchoCh5 />} />
         </Route>
       </Routes>
     </BrowserRouter>

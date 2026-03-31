@@ -207,23 +207,33 @@ h3,
   color: var(--ink);
 }
 
-/* Course Arc (Grid Style) */
+/* Course Arc — 單列橫向捲動 */
 .arc-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--arc-cols, 7), 1fr);
-  gap: 1px;
-  background: var(--border);
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
   border: 1px solid var(--border);
   border-radius: var(--radius-unified);
-  overflow: hidden;
   margin-bottom: 48px;
 }
 
+.arc-grid::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+
 .arc-item {
+  flex: 1 0 108px;
   padding: 16px 12px;
   text-align: center;
   background: #fff;
   transition: all 0.2s;
+  border-right: 1px solid var(--border);
+}
+
+.arc-item:last-child {
+  border-right: none;
 }
 
 .arc-item.past {
@@ -261,11 +271,10 @@ h3,
 }
 
 @media (max-width: 768px) {
-
-  .meta-strip,
-  .arc-grid {
+  .meta-strip {
     grid-template-columns: repeat(2, 1fr);
   }
+  /* arc-grid 手機維持橫向捲動，不改 grid-cols */
 }
 
 .content-grid {

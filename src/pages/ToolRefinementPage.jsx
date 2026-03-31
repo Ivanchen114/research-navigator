@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ToolRefinementPage.css';
+import CourseArc from '../components/ui/CourseArc';
 import {
     Bot, Map, ChevronRight, CheckCircle2, AlertCircle,
     ArrowRight, Sparkles, MessageSquare, ClipboardCheck,
@@ -63,30 +64,16 @@ export const ToolRefinementPage = () => {
                     今天你要讓 AI 幫你審一輪初稿，但不是照單全收——你要評估 AI 的建議，決定哪些值得採納、哪些不適合你的研究。然後再用真實的人來預試，看看 AI 抓不到的問題是什麼。
                 </p>
 
-                {/* Course Arc - Standard Version A */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {[
-                            { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                            { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
-                            { wk: 'W5', name: '企劃撰寫\n研究藍圖', past: true },
-                            { wk: 'W6', name: '診所分流\n方法處方', past: true },
-                            { wk: 'W7', name: '組隊決策\n企劃定案', past: true },
-                            { wk: 'W8-W10', name: '工具設計\n倫理審查', now: true },
-                            { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
-                        ].map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">
-                                    {item.wk} {item.now && '← 現在'}
-                                </div>
-                                <div className="arc-name">
-                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* Course Arc */}
+                <CourseArc items={[
+                    { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
+                    { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
+                    { wk: 'W5', name: '企劃撰寫\n研究藍圖', past: true },
+                    { wk: 'W6', name: '診所分流\n方法處方', past: true },
+                    { wk: 'W7', name: '組隊決策\n企劃定案', past: true },
+                    { wk: 'W8-W10', name: '工具設計\n倫理審查', now: true },
+                    { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
+                ]} />
             </div>
 
             <div className="meta-strip">
@@ -453,11 +440,11 @@ export const ToolRefinementPage = () => {
 
             {/* Pagination */}
             <div className="flex justify-between items-center py-12 border-t border-[#dddbd5] mt-12">
-                <Link to="/tool-design" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
-                    <ChevronRight size={16} className="rotate-180" /> ← 回 W8 工具設計
+                <Link to="/w9" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
+                    <ChevronRight size={16} className="rotate-180" /> ← 回 W9 工具設計
                 </Link>
-                <Link to="/w10" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-6 py-3 rounded-lg hover:bg-[#2a2a4a] transition-colors text-[13px] font-bold no-underline">
-                    前往 W10 倫理審查 →
+                <Link to="/w11" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-6 py-3 rounded-lg hover:bg-[#2a2a4a] transition-colors text-[13px] font-bold no-underline">
+                    前往 W11 倫理審查 →
                 </Link>
             </div>
         </div>

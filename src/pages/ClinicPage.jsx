@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './ClinicPage.css';
+import CourseArc from '../components/ui/CourseArc';
 import {
     Stethoscope,
     ArrowRight,
@@ -18,6 +19,8 @@ import {
     Activity,
     Lock,
     Unlock,
+    ShieldAlert,
+    Search,
     Download
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
@@ -110,7 +113,7 @@ export const ClinicPage = () => {
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">研究診所 W6</span>
+                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">研究診所 W7</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -132,7 +135,7 @@ export const ClinicPage = () => {
 
             {/* PAGE HEADER */}
             <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🩺 W6 · 研究規劃</div>
+                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🩺 W7 · 研究規劃</div>
                 <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
                     研究診所：<span className="text-[#2d5be3] italic">分流建議與方法處方</span>
                 </h1>
@@ -140,38 +143,41 @@ export const ClinicPage = () => {
                     你的題目適合用什麼方法？問卷、訪談、還是實驗？今天進入診所分流，讓老師和 AI 幫你開出最適合的「方法處方」。
                 </p>
 
-                {/* Course Arc - Standard Version A */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {[
-                            { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
-                            { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
-                            { wk: 'W5', name: '企劃撰寫\n研究藍圖', status: 'past' },
-                            { wk: 'W6', name: '診所分流\n方法處方', status: 'now' },
-                            { wk: 'W7', name: '組隊決策\n企劃定案' },
-                            { wk: 'W8-W10', name: '工具設計\n倫理審查' },
-                            { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
-                        ].map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.status === 'past' ? 'past' : item.status === 'now' ? 'now' : ''}`}>
-                                <div className="arc-wk">
-                                    {item.wk} {item.status === 'now' && '← 現在'}
-                                </div>
-                                <div className="arc-name">
-                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                {/* GAME BANNER */}
+                <div className="bg-[#1a1a2e] border-l-4 border-[#f59e0b] p-6 rounded-r-lg mb-10 text-white shadow-xl">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                        <ShieldAlert className="text-[#f59e0b]" size={20} />
+                        即刻報到：行動代號裝備
+                    </h3>
+                    <p className="text-[#8888aa] text-sm mb-4">
+                        研究現場千變萬化，裝備拿錯全盤皆輸。測試你對研究工具與方法辨識的直覺！
+                    </p>
+                    <Link to="/game/tool-quiz" className="inline-flex items-center gap-2 bg-[#f59e0b] text-white px-4 py-2 rounded font-bold text-sm hover:bg-[#d98509] transition-colors">
+                        進入遊戲系統 <ArrowRight size={14} />
+                    </Link>
                 </div>
+
+                {/* Course Arc */}
+                <CourseArc items={[
+                    { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
+                    { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
+                    { wk: 'W1-W4', name: '問題意識\n題目定案', status: 'past' },
+                    { wk: 'W5', name: '文獻搜尋\n入門', status: 'past' },
+                    { wk: 'W6', name: '文獻偵探\n引用寫作', status: 'past' },
+                    { wk: 'W7', name: '診所分流\n方法處方', status: 'now' },
+                    { wk: 'W8', name: '組隊決策\n企劃定案' },
+                    { wk: 'W8-W10', name: '工具設計\n倫理審查' },
+                    { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
+                ]} />
 
                 {/* META CARDS */}
                 <div className="meta-grid">
                     {[
                         { label: '第一節', value: '五科分流實戰 + 複合案例挑戰' },
                         { label: '第二節', value: '方法掛號診斷 + 救活研究原石' },
-                        { label: '課課產出', value: 'W6 最終定案方法與路徑' },
-                        { label: '帶去 W7', value: '確定題目與方法 + 組隊企劃' }
+                        { label: '本週任務', value: '研究方法分流 + 方法處方' },
+                        { label: '課課產出', value: 'W7 最終定案方法與路徑' },
+                        { label: '帶去 W8', value: '確定題目與方法 + 組隊企劃' }
                     ].map((item, idx) => (
                         <div key={idx} className="meta-item">
                             <div className="meta-label">{item.label}</div>
@@ -490,26 +496,26 @@ export const ClinicPage = () => {
                     <div className="w6-next-week-preview">
                         <div className="w6-next-week-header">
                             <span className="w6-next-week-badge">NEXT WEEK</span>
-                            <h3 className="w6-next-week-title">W7 預告</h3>
+                            <h3 className="w6-next-week-title">W8 預告</h3>
                         </div>
                         <div className="w6-next-week-content">
                             <div className="w6-next-week-col">
-                                <div className="w6-next-week-label">W7 上半節</div>
-                                <p className="w6-next-week-text">文獻偵探社——學會判斷一篇論文可不可信，排除假資料。</p>
+                                <div className="w6-next-week-label">W8 主題</div>
+                                <p className="w6-next-week-text">組隊決策週——找能力互補的夥伴，或宣告 Solo 研究。</p>
                             </div>
                             <div className="w6-next-week-col">
-                                <div className="w6-next-week-label">W7 下半節</div>
-                                <p className="w6-next-week-text"><strong className="text-white">分科三問小考</strong> + 正式組隊。記得帶 W4 定案題目來！</p>
+                                <div className="w6-next-week-label">帶去 W8</div>
+                                <p className="w6-next-week-text"><strong className="text-white">定案的研究方法 + W4 定案題目</strong>——W8 組隊會直接使用。</p>
                             </div>
                         </div>
                     </div>
 
                     <div className="flex justify-between items-center py-12 border-t border-[#dddbd5]">
-                        <Link to="/w5" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
-                            ← 回 W5 文獻偵探社
+                        <Link to="/w6" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
+                            ← 回 W6 文獻偵探社
                         </Link>
-                        <Link to="/team-formation" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
-                            前往 W7 組隊決策 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        <Link to="/w8" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
+                            前往 W8 組隊決策 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
                 </section>

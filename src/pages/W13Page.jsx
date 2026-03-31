@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import {
     BarChart2,
     TrendingUp,
@@ -14,7 +15,8 @@ import {
     AlertTriangle,
     FileText,
     MousePointer2,
-    Map
+    Map,
+    ShieldAlert
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W13Data } from '../data/lessonMaps';
@@ -147,7 +149,7 @@ export const W13Page = () => {
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">讓數據自己說話 W13</span>
+                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">讓數據自己說話 W14</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -169,13 +171,27 @@ export const W13Page = () => {
 
             {/* PAGE HEADER */}
             <div className="max-w-[800px] mb-16">
-                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">📊 W13 · 分析與撰寫</div>
+                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">📊 W14 · 分析與撰寫</div>
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
                     讓數據自己說話：<span className="text-[#2d5be3]">圖表選擇與圖說寫作</span>
                 </h1>
                 <p className="text-[16px] text-[#4a4a6a] leading-relaxed">
                     數據是食材，圖表是盤子。今天要學兩件事：選對盤子（圖表類型），以及幫圖表寫一段說明——哪裡是客觀描述、哪裡是主觀推論。
                 </p>
+
+                {/* GAME BANNER */}
+                <div className="bg-[#1a1a2e] border-l-4 border-[#0891b2] p-6 rounded-r-lg mb-10 text-white shadow-xl mt-6">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                        <ShieldAlert className="text-[#0891b2]" size={20} />
+                        即刻報到：行動代號解碼
+                    </h3>
+                    <p className="text-[#8888aa] text-sm mb-4">
+                        將雜亂情報解碼，配對成最高效的視覺化圖表！挑戰你的圖表選擇直覺。
+                    </p>
+                    <Link to="/game/chart-matcher" className="inline-flex items-center gap-2 bg-[#0891b2] text-white px-4 py-2 rounded font-bold text-sm hover:bg-[#06738c] transition-colors">
+                        進入遊戲系統 <ArrowRight size={14} />
+                    </Link>
+                </div>
             </div>
 
             {/* META STRIP */}
@@ -188,16 +204,10 @@ export const W13Page = () => {
                 ))}
             </div>
 
+
+
             {/* COURSE ARC */}
-            <div className="text-[11px] text-[#8888aa] mb-4 font-mono uppercase tracking-wider">課程弧線 · 你在哪裡</div>
-            <div className="arc-grid">
-                {W13Data.courseArc.map((item, idx) => (
-                    <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                        <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                        <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                    </div>
-                ))}
-            </div>
+            <CourseArc items={W13Data.courseArc} />
 
             {/* Concept Section */}
             <div className="flex items-center gap-3 mb-6 mt-12 text-[#1a1a2e]">
@@ -529,7 +539,7 @@ export const W13Page = () => {
                         <span className="text-[13px] text-[#4a4a6a] flex-1 leading-[1.65]">完成所有圖表圖說段落，上傳 Classroom</span>
                     </div>
                     <div className="bg-white p-[11px_20px] flex items-start gap-4">
-                        <span className="font-['DM_Mono',monospace] text-[11px] font-bold text-[#2d5be3] w-[72px] shrink-0 mt-0.5">帶去 W14</span>
+                        <span className="font-['DM_Mono',monospace] text-[11px] font-bold text-[#2d5be3] w-[72px] shrink-0 mt-0.5">帶去 W15</span>
                         <span className="text-[13px] text-[#4a4a6a] flex-1 leading-[1.65]">攜帶所有圖表、圖說段落與研究問題</span>
                     </div>
                 </div>
@@ -543,7 +553,7 @@ export const W13Page = () => {
             <div className="bg-[#1a1a2e] rounded-[10px] overflow-hidden mb-8">
                 <div className="p-[16px_24px] border-b border-white border-opacity-5 flex items-center gap-2.5">
                     <span className="font-['DM_Mono',monospace] text-[10px] bg-white bg-opacity-10 text-white text-opacity-50 px-2 py-0.5 rounded-[3px]">NEXT WEEK</span>
-                    <span className="text-[14px] font-bold text-white">W14 研究結論：四層寫作法</span>
+                    <span className="text-[14px] font-bold text-white">W15 研究結論：四層寫作法</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 bg-white bg-opacity-5 gap-[1px]">
                     <div className="bg-[#1a1a2e] p-[20px_24px]">
@@ -557,7 +567,7 @@ export const W13Page = () => {
                         <div className="text-[13px] text-white text-opacity-75 leading-[1.75]">
                             第三層：<strong className="text-white">___________</strong>（回頭看研究問題）<br />
                             第四層：<strong className="text-white">___________</strong>（你的結論有哪些不完美？）<br />
-                            <span className="text-[11px] opacity-50 mt-1 block">答案 W14 揭曉！</span>
+                            <span className="text-[11px] opacity-50 mt-1 block">答案 W15 揭曉！</span>
                         </div>
                     </div>
                 </div>
@@ -565,11 +575,11 @@ export const W13Page = () => {
 
             {/* Navigation */}
             <div className="flex justify-between items-center py-8 border-t border-[#dddbd5]">
-                <Link to="/w10" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
-                    <ArrowLeft size={16} /> 回 W10 倫理審查
+                <Link to="/w13" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
+                    <ArrowLeft size={16} /> 回 W13 研究執行 II
                 </Link>
-                <Link to="/w14" className="bg-[#1a1a2e] hover:bg-[#2a2a4a] text-white px-6 py-2.5 rounded-[6px] text-[14px] font-bold transition-colors flex items-center gap-2">
-                    前往 W14 研究結論 <ArrowRight size={16} />
+                <Link to="/w15" className="bg-[#1a1a2e] hover:bg-[#2a2a4a] text-white px-6 py-2.5 rounded-[6px] text-[14px] font-bold transition-colors flex items-center gap-2">
+                    前往 W15 研究結論 <ArrowRight size={16} />
                 </Link>
             </div>
 

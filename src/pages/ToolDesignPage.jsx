@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import './ToolDesignPage.css';
-import { Wrench, ArrowRight, AlertTriangle, ShieldCheck, Heart, ClipboardList, Mic, TestTube2, Camera, Target, Zap, FileSearch, Scale, Map, Gamepad2 } from 'lucide-react';
+import { Wrench, ArrowRight, AlertTriangle, ShieldCheck, Heart, ClipboardList, Mic, TestTube2, Camera, Target, Zap, FileSearch, Scale, Map, Gamepad2, ShieldAlert } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W8Data } from '../data/lessonMaps';
 
@@ -108,18 +109,22 @@ export const ToolDesignPage = () => {
                     你在 W6 學會「選方法」。今天要升級到 Level 2——學會設計出好的工具，知道壞工具長什麼樣，然後動手寫出初稿。
                 </p>
 
-                {/* Course Arc - Standard Version A */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {W8Data.courseArc.map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                            </div>
-                        ))}
-                    </div>
+                {/* GAME BANNER */}
+                <div className="bg-[#1a1a2e] border-l-4 border-[#e11d48] p-6 rounded-r-lg mb-10 text-white shadow-xl">
+                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                        <ShieldAlert className="text-[#e11d48]" size={20} />
+                        即刻報到：行動代號防線
+                    </h3>
+                    <p className="text-[#8888aa] text-sm mb-4">
+                        這是一場防禦戰！深入 10 個充滿致命設計缺陷的研究病例。揪出錯誤並開立正確處方，確保研究方法無懈可擊。
+                    </p>
+                    <Link to="/game/rx-inspector" className="inline-flex items-center gap-2 bg-[#e11d48] text-white px-4 py-2 rounded font-bold text-sm hover:bg-[#c4163c] transition-colors">
+                        進入遊戲系統 <ArrowRight size={14} />
+                    </Link>
                 </div>
+
+                {/* Course Arc - Standard Version A */}
+                <CourseArc items={W8Data.courseArc} />
             </div>
 
             <div className="w8-meta-strip">
@@ -363,29 +368,11 @@ export const ToolDesignPage = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-16 pt-8 border-t border-[#dddbd5]">
-                    <Link to="/w7" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
-                        ← 回 W7 組隊決策週
+                    <Link to="/w8" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
+                        ← 回 W8 組隊決策週
                     </Link>
-                    <Link to="/w9" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
-                        前往 W9 工具精進 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                </div>
-
-                {/* 進入遊戲 CTA */}
-                <div className="mt-20 bg-[#fdecea] border-2 border-[#c0392b] rounded-[10px] p-10 text-center relative overflow-hidden group">
-                    <div className="absolute -top-10 -right-10 opacity-5 group-hover:rotate-12 transition-transform duration-700">
-                        <Gamepad2 size={200} />
-                    </div>
-                    <h3 className="text-[22px] font-bold text-[#1a1a2e] mb-4 font-['Noto_Serif_TC',serif]">準備好接受挑戰了嗎？</h3>
-                    <p className="text-[#4a4a6a] text-[15px] max-w-[600px] mx-auto leading-relaxed mb-8">
-                        進入「Rx 偵探：處方診斷」，考驗你在各類工具設計中找出病灶的眼力。
-                    </p>
-                    <Link
-                        to="/game/rx-inspector"
-                        className="inline-flex items-center gap-3 bg-[#c0392b] text-white px-10 py-4 rounded-[6px] text-[16px] font-bold hover:bg-[#1a1a2e] transition-all shadow-lg hover:translate-y-[-2px]"
-                    >
-                        <Gamepad2 size={22} />
-                        進入遊戲：Rx 偵探：處方診斷 <ArrowRight size={20} />
+                    <Link to="/w10" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
+                        前往 W10 工具精進 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
             </section>

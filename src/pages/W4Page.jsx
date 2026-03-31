@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CourseArc from '../components/ui/CourseArc';
 import { Map, ArrowRight, ArrowLeft, CheckCircle2, Users2, Target, Lightbulb, Zap, MessageSquare, Brain } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import CopyButton from '../components/ui/CopyButton';
@@ -28,7 +29,7 @@ export const W4Page = () => {
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-AIRED · D</span>
+                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -49,17 +50,7 @@ export const W4Page = () => {
                 </p>
 
                 {/* COURSE ARC */}
-                <div className="mb-10">
-                    <div className="text-[11px] font-mono text-[#8888aa] mb-4 uppercase tracking-wider">課程弧線 · 你在哪裡</div>
-                    <div className="arc-grid">
-                        {W4Data.courseArc.map((item, idx) => (
-                            <div key={idx} className={`arc-item ${item.past ? 'past' : item.now ? 'now' : ''}`}>
-                                <div className="arc-wk">{item.wk} {item.now && '← 現在'}</div>
-                                <div className="arc-name">{item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <CourseArc items={W4Data.courseArc} />
 
                 {/* META STRIP */}
                 <div className="meta-strip">
@@ -642,11 +633,11 @@ export const W4Page = () => {
             <div className="next-week-preview">
                 <div className="next-week-header">
                     <span className="next-week-badge">NEXT WEEK</span>
-                    <h3 className="next-week-title">W5.0 預告</h3>
+                    <h3 className="next-week-title">W5 預告</h3>
                 </div>
                 <div className="next-week-content">
                     <div className="next-week-col">
-                        <div className="next-week-label">W5.0 主題</div>
+                        <div className="next-week-label">W5 主題</div>
                         <p className="next-week-text">文獻搜尋入門——為你的研究找到 3 篇真實可信的相關研究。</p>
                     </div>
                     <div className="next-week-col border-l border-white/5">
@@ -661,8 +652,8 @@ export const W4Page = () => {
                 <Link to="/w3" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
                     <ArrowLeft size={16} /> 回 W3 題目健檢
                 </Link>
-                <Link to="/w5-0" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-lg text-[13px] font-bold hover:bg-[#2d5be3] transition-all flex items-center gap-2 group shadow-lg shadow-[#1a1a2e]/10">
-                    前往 W5.0 文獻搜尋入門 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <Link to="/w5" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-lg text-[13px] font-bold hover:bg-[#2d5be3] transition-all flex items-center gap-2 group shadow-lg shadow-[#1a1a2e]/10">
+                    前往 W5 文獻搜尋入門 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Target, ArrowRight, Play, Presentation, CheckSquare, Award, AlertCircle, BarChart3, Database, MessageSquare, Bot, Map } from 'lucide-react';
+import CourseArc from '../components/ui/CourseArc';
 
 const closingBooks = [
     {
@@ -46,7 +47,7 @@ export const W12Page = () => {
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">研究診所 W12</span>
+                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">研究診所 W13</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -63,14 +64,14 @@ export const W12Page = () => {
             {showLessonMap && (
                 <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
                     <div className="p-8 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl text-center text-[#8888aa]">
-                        W12 為中期盤點週，主要進行電梯簡報與資料收網檢核。
+                        W13 為中期盤點週，主要進行電梯簡報與資料收網檢核。
                     </div>
                 </div>
             )}
 
             {/* PAGE HEADER */}
             <header className="mb-14">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🎯 W12 · 研究診所 II</div>
+                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🎯 W13 · 研究診所 II</div>
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
                     結案倒數：<span className="text-[#2d5be3]">中期盤點與資料收網</span>
                 </h1>
@@ -84,7 +85,7 @@ export const W12Page = () => {
                         { label: '第一節', value: '期中盤點 Elevator Pitch' },
                         { label: '第二節', value: '資料收齊檢核與收網' },
                         { label: '課課產出', value: '中期盤點精華紀錄' },
-                        { label: '帶去 W13', value: '原始數據與初步發現' }
+                        { label: '帶去 W14', value: '原始數據與初步發現' }
                     ].map((item, idx) => (
                         <div key={idx} className="bg-white border border-[#dddbd5] rounded-[12px] p-5">
                             <div className="text-[11px] text-[#8888aa] mb-2 font-medium">{item.label}</div>
@@ -93,30 +94,16 @@ export const W12Page = () => {
                     ))}
                 </div>
 
-                {/* COURSE ARC - Standard Version A */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="grid grid-cols-7 border border-[#dddbd5] rounded-[12px] overflow-hidden">
-                        {[
-                            { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
-                            { wk: 'W5-W7', name: '研究規劃\n文獻鑑識', past: true },
-                            { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
-                            { wk: 'W11', name: '研究診所 I\nOpen Office', past: true },
-                            { wk: 'W12', name: '研究診所 II\n中期盤點', now: true },
-                            { wk: 'W13-W15', name: '分析撰寫\n研究結論' },
-                            { wk: 'W16', name: '成果展示\nGallery Walk' }
-                        ].map((item, idx) => (
-                            <div key={idx} className={`p-4 text-center border-r border-[#dddbd5] last:border-r-0 ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-[#f8f7f4]'}`}>
-                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
-                                    {item.wk} {item.now && '← 現在'}
-                                </div>
-                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
-                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* COURSE ARC */}
+                <CourseArc items={[
+                    { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
+                    { wk: 'W5-W7', name: '研究規劃\n文獻鑑識', past: true },
+                    { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
+                    { wk: 'W11', name: '研究診所 I\nOpen Office', past: true },
+                    { wk: 'W13', name: '研究診所 II\n中期盤點', now: true },
+                    { wk: 'W14-W16', name: '分析撰寫\n研究結論' },
+                    { wk: 'W16', name: '成果展示\nGallery Walk' }
+                ]} />
             </header>
 
             <div className="space-y-12">
@@ -169,7 +156,7 @@ export const W12Page = () => {
                         </div>
 
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                            <span className="shrink-0 text-slate-600 font-medium">4. 下週 W13（分析週）前，我們還需要完成：</span>
+                            <span className="shrink-0 text-slate-600 font-medium">4. 下週 W14（分析週）前，我們還需要完成：</span>
                             <input
                                 type="text"
                                 placeholder="例如：整理最後的受訪者逐字稿..."
@@ -251,11 +238,11 @@ export const W12Page = () => {
 
                 {/* Navigation */}
                 <div className="flex justify-between items-center pt-8 border-t border-slate-100">
-                    <Link to="/w11" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-bold">
-                        ← 回 W11 研究診所
+                    <Link to="/w12" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-bold">
+                        ← 回 W12 研究執行 I
                     </Link>
-                    <Link to="/w13" className="flex items-center gap-2 text-sm bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-500 transition-colors font-bold shadow-md">
-                        前往 W13 數據分析 <ArrowRight size={16} />
+                    <Link to="/w14" className="flex items-center gap-2 text-sm bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-500 transition-colors font-bold shadow-md">
+                        前往 W14 數據轉譯 <ArrowRight size={16} />
                     </Link>
                 </div>
             </div>

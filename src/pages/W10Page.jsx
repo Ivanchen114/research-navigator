@@ -19,7 +19,7 @@ export const W10Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">倫理審查 W10</span>
+                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">倫理審查 W11</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -41,7 +41,7 @@ export const W10Page = () => {
 
             {/* PAGE HEADER */}
             <div className="max-w-[800px] mb-16">
-                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">🛡️ W10 · 資料蒐集</div>
+                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">🛡️ W11 · 資料蒐集</div>
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
                     倫理審查：<span className="text-[#2d5be3]">確認、授權、出發</span>
                 </h1>
@@ -142,7 +142,7 @@ export const W10Page = () => {
                         <div className="w10-auth-status-dot"></div>
                         <span className="w10-auth-label">ETHICS CLEARANCE STATUS</span>
                         <span className="w10-auth-title">審查待通過</span>
-                        <div className="ml-auto text-[10px] font-mono text-white/30 tracking-tight uppercase">W10 · SSSH RESEARCH</div>
+                        <div className="ml-auto text-[10px] font-mono text-white/30 tracking-tight uppercase">W11 · SSSH RESEARCH</div>
                     </div>
                     <div className="w10-auth-body">
                         <div className="w10-auth-grid">
@@ -344,11 +344,11 @@ export const W10Page = () => {
 
             {/* Pagination */}
             <div className="flex justify-between items-center py-12 border-t border-[#dddbd5] mt-12">
-                <Link to="/tool-refinement" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
-                    <ChevronRight size={16} className="rotate-180" /> ← 回 W9 工具精進
+                <Link to="/w10" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
+                    <ChevronRight size={16} className="rotate-180" /> ← 回 W10 工具精進
                 </Link>
-                <Link to="/w13" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-6 py-3 rounded-lg hover:bg-[#2a2a4a] transition-colors text-[13px] font-bold no-underline">
-                    前往 W13 數據轉譯 →
+                <Link to="/w12" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-6 py-3 rounded-lg hover:bg-[#2a2a4a] transition-colors text-[13px] font-bold no-underline">
+                    前往 W12 研究執行 →
                 </Link>
             </div>
         </div>

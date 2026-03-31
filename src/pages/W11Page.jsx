@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Stethoscope, ArrowRight, ClipboardList, Mic, Camera, FileSearch, TestTube2, AlertCircle, Clock, CheckCircle2, HeartPulse, ShieldAlert, FileText, Wrench, Map } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
+import CourseArc from '../components/ui/CourseArc';
 
 const triageTiers = [
     {
@@ -81,7 +82,7 @@ export const W11Page = () => {
             {/* TOP BAR / NAVIGATION PATH */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">研究診所 W11</span>
+                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">研究診所 W12</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -98,14 +99,14 @@ export const W11Page = () => {
             {showLessonMap && (
                 <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
                     <div className="p-8 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl text-center text-[#8888aa]">
-                        W11 為 Open Office 診所週，主要進行個別指導與進度盤點。
+                        W12 為 Open Office 診所週，主要進行個別指導與進度盤點。
                     </div>
                 </div>
             )}
 
             {/* PAGE HEADER */}
             <header className="mb-14">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🏥 W11 · 研究診所 I</div>
+                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🏥 W12 · 研究診所 I</div>
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
                     研究診所：<span className="text-[#2d5be3]">Open Office 與個別指導</span>
                 </h1>
@@ -119,7 +120,7 @@ export const W11Page = () => {
                         { label: '第一節', value: '掛號分流與現況診斷' },
                         { label: '第二節', value: 'Open Office 個別指導' },
                         { label: '課課產出', value: '施測日誌與關鍵事件' },
-                        { label: '帶去 W12', value: '中期盤點報告資料' }
+                        { label: '帶去 W13', value: '中期盤點報告資料' }
                     ].map((item, idx) => (
                         <div key={idx} className="bg-white border border-[#dddbd5] rounded-[12px] p-5">
                             <div className="text-[11px] text-[#8888aa] mb-2 font-medium">{item.label}</div>
@@ -128,30 +129,16 @@ export const W11Page = () => {
                     ))}
                 </div>
 
-                {/* COURSE ARC - Standard Version A */}
-                <div className="mb-14">
-                    <div className="text-[11px] text-[#8888aa] mb-4">課程弧線 · 你在哪裡</div>
-                    <div className="grid grid-cols-7 border border-[#dddbd5] rounded-[12px] overflow-hidden">
-                        {[
-                            { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
-                            { wk: 'W5-W7', name: '研究規劃\n文獻鑑識', past: true },
-                            { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
-                            { wk: 'W11', name: '研究診所 I\nOpen Office', now: true },
-                            { wk: 'W12', name: '研究診所 II\n中期盤點' },
-                            { wk: 'W13-W15', name: '分析撰寫\n研究結論' },
-                            { wk: 'W16', name: '成果展示\nGallery Walk' }
-                        ].map((item, idx) => (
-                            <div key={idx} className={`p-4 text-center border-r border-[#dddbd5] last:border-r-0 ${item.past ? 'bg-[#f0f7f4]' : item.now ? 'bg-[#1a1a2e]' : 'bg-[#f8f7f4]'}`}>
-                                <div className={`text-[10px] font-mono mb-2 ${item.past ? 'text-[#2e7d5a]' : item.now ? 'text-white/40' : 'text-[#8888aa]'}`}>
-                                    {item.wk} {item.now && '← 現在'}
-                                </div>
-                                <div className={`text-[11px] font-bold leading-tight ${item.past ? 'text-[#1a1a2e]' : item.now ? 'text-[#c9a84c]' : 'text-[#8888aa]'}`}>
-                                    {item.name.split('\n').map((line, i) => <div key={i}>{line}</div>)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* COURSE ARC */}
+                <CourseArc items={[
+                    { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
+                    { wk: 'W5-W7', name: '研究規劃\n文獻鑑識', past: true },
+                    { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
+                    { wk: 'W12', name: '研究診所 I\nOpen Office', now: true },
+                    { wk: 'W13', name: '研究診所 II\n中期盤點' },
+                    { wk: 'W13-W15', name: '分析撰寫\n研究結論' },
+                    { wk: 'W16', name: '成果展示\nGallery Walk' }
+                ]} />
             </header>
 
             <div className="space-y-12">
@@ -253,7 +240,7 @@ export const W11Page = () => {
                         <div className="flex-1 bg-slate-50 rounded-xl border border-dashed border-slate-300 p-4 flex flex-col justify-center items-center text-center">
                             <AlertCircle className="text-slate-400 mb-2" size={24} />
                             <p className="text-sm text-slate-600 font-medium tracking-wide mb-3">
-                                W11 結束前，請至 Google Classroom<br />
+                                W12 結束前，請至 Google Classroom<br />
                                 填寫本週的「關鍵事件日誌」
                             </p>
                             <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-500 transition-colors flex items-center gap-2">
@@ -265,11 +252,11 @@ export const W11Page = () => {
 
                 {/* Navigation */}
                 <div className="flex justify-between items-center pt-8 border-t border-slate-100">
-                    <Link to="/w10" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-bold">
-                        ← 回 W10 最終定案
+                    <Link to="/w11" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-bold">
+                        ← 回 W11 倫理審查
                     </Link>
-                    <Link to="/w12" className="flex items-center gap-2 text-sm bg-orange-600 text-white px-5 py-2 rounded-full hover:bg-orange-500 transition-colors font-bold shadow-md">
-                        前往 W12 中期盤點 <ArrowRight size={16} />
+                    <Link to="/w13" className="flex items-center gap-2 text-sm bg-orange-600 text-white px-5 py-2 rounded-full hover:bg-orange-500 transition-colors font-bold shadow-md">
+                        前往 W13 研究執行 II <ArrowRight size={16} />
                     </Link>
                 </div>
             </div>
