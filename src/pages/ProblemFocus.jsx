@@ -68,7 +68,7 @@ export const ProblemFocus = () => {
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">
                 <a
-                    href="https://www.canva.com/design/DAG_ZAVKNyo/MDGmA7iiSIff8_BH4nwipQ/watch?utm_content=DAG_ZAVKNyo&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=he6ae38d458"
+                    href="https://canva.link/ag9uchyk20tau82"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"

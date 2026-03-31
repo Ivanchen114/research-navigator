@@ -65,7 +65,7 @@ export const W4Page = () => {
                 {/* 本週簡報 */}
                 <div className="flex justify-end mb-8 -mt-2">
                     <a
-                        href="https://www.canva.com/design/DAG_fvz_ltA/9mk0-f069kZftd9CAscZwg/view?utm_content=DAG_fvz_ltA&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hcc21326267"
+                        href="https://canva.link/hdvnkubddcklm56"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
@@ -638,7 +638,7 @@ export const W4Page = () => {
                 <div className="next-week-content">
                     <div className="next-week-col">
                         <div className="next-week-label">W5 主題</div>
-                        <p className="next-week-text">文獻搜尋入門——為你的研究找到 3 篇真實可信的相關研究。</p>
+                        <p className="next-week-text">文獻搜尋入門——為你的研究找到 1 篇真實可信的相關研究。</p>
                     </div>
                     <div className="next-week-col border-l border-white/5">
                         <div className="next-week-label">你會學到</div>

@@ -47,15 +47,24 @@ export const W50Page = () => {
     const [kw2, setKw2] = useState('');
     const [kw3, setKw3] = useState('');
 
+    /* Part 1 搜尋策略 */
+    const [searchStrategy, setSearchStrategy] = useState({
+        type: { full: false, title: false, abstract: false },
+        limit: { taiwan: false, years: false, thesis: false },
+        db: { airiti: false, ncl: false }
+    });
+
     /* Part 1 找到的第一篇文獻 */
-    const [lit1Title, setLit1Title] = useState('');
-    const [lit1Author, setLit1Author] = useState('');
-    const [lit1Year, setLit1Year] = useState('');
+    const [lit1, setLit1] = useState({
+        title: '', author: '', year: '', source: '', relation: ''
+    });
 
     /* Part 3 APA 格式 */
     const [apa1, setApa1] = useState('');
-    const [apa2, setApa2] = useState('');
-    const [apa3, setApa3] = useState('');
+    const [apaCheck, setApaCheck] = useState({
+        name: false, year: false, title: false,
+        db: false, type: false, location: false
+    });
 
     /* Part 4 證物鑑識 */
     const [forensics, setForensics] = useState({
@@ -111,7 +120,7 @@ export const W50Page = () => {
                 </h1>
                 <p className="text-base text-[#4a4a6a] max-w-[680px] leading-relaxed mb-10">
                     W4 完成了題目與研究動機的定案。W5 的任務是往前走一步：為自己的研究找到文獻基礎。
-                    這週只做一件事——<strong>找到 3 篇真實可信的相關研究</strong>。真偽鑑識和引用倫理留到 W6，這週先建立「找文獻」的基本操作能力。
+                    這週只做一件事——<strong>找到 1 篇真實可信的相關研究</strong>。真偽鑑識和引用倫理留到 W6，這週先建立「找文獻」的基本操作能力。
                 </p>
 
                 {/* COURSE ARC */}
@@ -125,6 +134,18 @@ export const W50Page = () => {
                             <div className="meta-value">{card.value}</div>
                         </div>
                     ))}
+                </div>
+
+                {/* 本週簡報 */}
+                <div className="flex justify-end mb-8 -mt-2">
+                    <a
+                        href="https://canva.link/uxnn3h5uxwzloy7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                    >
+                        📊 本週簡報 ↗
+                    </a>
                 </div>
 
                 {/* CORE CONCEPTS */}
@@ -263,62 +284,117 @@ export const W50Page = () => {
             <section className="mb-16">
                 <div className="flex items-center gap-3 mb-6">
                     <span className="bg-[#2d5be3] text-white text-[11px] font-bold px-3 py-1 rounded-full font-mono">PART 1</span>
-                    <h2 className="text-[18px] font-bold text-[#1a1a2e]">華藝資料庫查找練習</h2>
+                    <h2 className="text-[18px] font-bold text-[#1a1a2e]">資料庫查找練習（不准用 AI！）</h2>
                     <span className="text-[11px] font-mono text-[#8888aa]">0:25–0:50</span>
                 </div>
-                <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden">
-                    <div className="bg-[#f0ede6] px-6 py-3 border-b border-[#dddbd5]">
-                        <span className="text-[12px] font-bold text-[#1a1a2e]">我的關鍵字</span>
-                        <span className="text-[11px] text-[#8888aa] ml-3">從定案題目提取 3 個核心概念</span>
+
+                {/* 搜尋策略 */}
+                <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden mb-6">
+                    <div className="bg-[#f0ede6] px-6 py-3 border-b border-[#dddbd5] flex items-center justify-between">
+                        <span className="text-[12px] font-bold text-[#1a1a2e]">我的搜尋策略</span>
+                        <span className="text-[10px] font-mono text-[#bf4040] font-bold">🚫 限時內不准用 AI</span>
                     </div>
                     <div className="p-6">
-                        <div className="grid grid-cols-3 gap-4 mb-6">
-                            {[
-                                { label: '關鍵字 1', val: kw1, set: setKw1 },
-                                { label: '關鍵字 2', val: kw2, set: setKw2 },
-                                { label: '關鍵字 3', val: kw3, set: setKw3 },
-                            ].map((kw, i) => (
-                                <div key={i}>
-                                    <div className="text-[11px] font-mono text-[#8888aa] mb-1">{kw.label}</div>
-                                    <input
-                                        type="text"
-                                        value={kw.val}
-                                        onChange={e => kw.set(e.target.value)}
-                                        placeholder={['手機使用', '睡眠品質', '高中生'][i]}
-                                        className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] placeholder-[#c0c0d0] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30"
-                                    />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <div className="text-[11px] font-mono text-[#8888aa] mb-3 uppercase tracking-wider">關鍵字組合</div>
+                                <div className="flex gap-3">
+                                    <input type="text" value={kw1} onChange={e => setKw1(e.target.value)} placeholder="關鍵字 1" className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                                    <input type="text" value={kw2} onChange={e => setKw2(e.target.value)} placeholder="關鍵字 2" className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                                    <input type="text" value={kw3} onChange={e => setKw3(e.target.value)} placeholder="關鍵字 3" className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
                                 </div>
-                            ))}
+                            </div>
+                            <div className="grid grid-cols-2 gap-6">
+                                <div>
+                                    <div className="text-[11px] font-mono text-[#8888aa] mb-3 uppercase tracking-wider">搜尋位置</div>
+                                    <div className="space-y-2">
+                                        {Object.entries({ full: '全文搜尋', title: '標題搜尋', abstract: '摘要搜尋' }).map(([key, label]) => (
+                                            <label key={key} className="flex items-center gap-2 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={searchStrategy.type[key]}
+                                                    onChange={() => setSearchStrategy(prev => ({ ...prev, type: { ...prev.type, [key]: !prev.type[key] } }))}
+                                                    className="w-3.5 h-3.5 border-[#dddbd5] rounded text-[#2d5be3] focus:ring-0"
+                                                />
+                                                <span className="text-[12px] text-[#4a4a6a] group-hover:text-[#1a1a2e] transition-colors">{label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11px] font-mono text-[#8888aa] mb-3 uppercase tracking-wider">限制條件</div>
+                                    <div className="space-y-2">
+                                        {Object.entries({ taiwan: '臺灣研究', years: '近 5 年', thesis: '碩博士論文' }).map(([key, label]) => (
+                                            <label key={key} className="flex items-center gap-2 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={searchStrategy.limit[key]}
+                                                    onChange={() => setSearchStrategy(prev => ({ ...prev, limit: { ...prev.limit, [key]: !prev.limit[key] } }))}
+                                                    className="w-3.5 h-3.5 border-[#dddbd5] rounded text-[#2d5be3] focus:ring-0"
+                                                />
+                                                <span className="text-[12px] text-[#4a4a6a] group-hover:text-[#1a1a2e] transition-colors">{label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <div>
+                            <div className="text-[11px] font-mono text-[#8888aa] mb-3 uppercase tracking-wider">使用的資料庫</div>
+                            <div className="flex gap-6">
+                                {Object.entries({ airiti: '華藝線上圖書館', ncl: '國家圖書館碩博士論文系統' }).map(([key, label]) => (
+                                    <label key={key} className="flex items-center gap-2 cursor-pointer group">
+                                        <input
+                                            type="checkbox"
+                                            checked={searchStrategy.db[key]}
+                                            onChange={() => setSearchStrategy(prev => ({ ...prev, db: { ...prev.db, [key]: !prev.db[key] } }))}
+                                            className="w-3.5 h-3.5 border-[#dddbd5] rounded text-[#2d5be3] focus:ring-0"
+                                        />
+                                        <span className="text-[12px] text-[#4a4a6a] group-hover:text-[#1a1a2e] transition-colors">{label}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                        <div className="text-[11px] font-mono text-[#8888aa] mb-2">找到的第一篇研究（稍後補到 3 篇）</div>
-                        <div className="grid grid-cols-3 gap-4">
-                            <div>
-                                <div className="text-[11px] font-mono text-[#8888aa] mb-1">標題</div>
-                                <input type="text" value={lit1Title} onChange={e => setLit1Title(e.target.value)}
-                                    placeholder="論文或期刊標題"
-                                    className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] placeholder-[#c0c0d0] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                {/* 找到的研究 */}
+                <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden">
+                    <div className="bg-[#1a1a2e] px-6 py-3 flex items-center justify-between">
+                        <span className="text-white text-[12px] font-bold">我找到的研究（先填 1 篇）</span>
+                    </div>
+                    <div className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-[11px] font-mono text-[#8888aa] mb-1.5 uppercase tracking-wider">文獻標題</label>
+                                    <input type="text" value={lit1.title} onChange={e => setLit1(prev => ({ ...prev, title: e.target.value }))} placeholder="例如：高中職學生數學焦慮之研究..." className="w-full border border-[#dddbd5] rounded px-3 py-2.5 text-[14px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-[11px] font-mono text-[#8888aa] mb-1.5 uppercase tracking-wider">作者</label>
+                                        <input type="text" value={lit1.author} onChange={e => setLit1(prev => ({ ...prev, author: e.target.value }))} placeholder="作者姓名" className="w-full border border-[#dddbd5] rounded px-3 py-2.5 text-[13px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[11px] font-mono text-[#8888aa] mb-1.5 uppercase tracking-wider">年份</label>
+                                        <input type="text" value={lit1.year} onChange={e => setLit1(prev => ({ ...prev, year: e.target.value }))} placeholder="2024" className="w-full border border-[#dddbd5] rounded px-3 py-2.5 text-[13px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] font-mono text-[#8888aa] mb-1.5 uppercase tracking-wider">期刊名稱／學校研究所</label>
+                                    <input type="text" value={lit1.source} onChange={e => setLit1(prev => ({ ...prev, source: e.target.value }))} placeholder="例如：教育學刊..." className="w-full border border-[#dddbd5] rounded px-3 py-2.5 text-[13px] text-[#1a1a2e] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                                </div>
                             </div>
-                            <div>
-                                <div className="text-[11px] font-mono text-[#8888aa] mb-1">作者</div>
-                                <input type="text" value={lit1Author} onChange={e => setLit1Author(e.target.value)}
-                                    placeholder="王小華"
-                                    className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] placeholder-[#c0c0d0] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
-                            </div>
-                            <div>
-                                <div className="text-[11px] font-mono text-[#8888aa] mb-1">年份</div>
-                                <input type="text" value={lit1Year} onChange={e => setLit1Year(e.target.value)}
-                                    placeholder="2022"
-                                    className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] placeholder-[#c0c0d0] focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
+                            <div className="flex flex-col h-full">
+                                <label className="block text-[11px] font-mono text-[#8888aa] mb-1.5 uppercase tracking-wider">這篇跟我的題目有什麼關係？</label>
+                                <textarea value={lit1.relation} onChange={e => setLit1(prev => ({ ...prev, relation: e.target.value }))} placeholder="它是支持你的觀點？提供了調查數據？..." className="flex-1 w-full border border-[#dddbd5] rounded px-4 py-3 text-[13px] text-[#4a4a6a] leading-relaxed resize-none focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30" />
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* ═══════════════════════════════════
-                第二節：AI 協作 + APA
-            ═══════════════════════════════════ */}
+            {/* ── 第二節 ── */}
             <div className="flex items-center gap-3 mb-8">
                 <div className="h-px flex-1 bg-[#dddbd5]" />
                 <span className="text-[11px] font-mono font-bold text-[#8888aa] px-4 py-1.5 bg-[#f0ede6] rounded-full border border-[#dddbd5] tracking-wider">第二節 · 50 分鐘</span>
@@ -332,14 +408,6 @@ export const W50Page = () => {
                     <h2 className="text-[18px] font-bold text-[#1a1a2e]">AI 關鍵字生成協作</h2>
                     <span className="text-[11px] font-mono text-[#8888aa]">0:00–0:20</span>
                 </div>
-
-                <div className="bg-[#eafaf1] border border-[#b2dfcc] rounded-lg p-5 mb-6 flex items-start gap-3">
-                    <Info size={15} className="text-[#1e7e4c] shrink-0 mt-0.5" />
-                    <p className="text-[12px] text-[#4a4a6a] leading-relaxed">
-                        AI 可以幫你<strong>生成更多關鍵字</strong>，讓你找到更多相關研究。但 AI 可能給你太專業的詞、太廣泛的詞，或根本不對的詞——<strong>你要篩選</strong>。
-                    </p>
-                </div>
-
                 <div className="border border-[#dddbd5] rounded-lg overflow-hidden mb-6">
                     <div className="bg-[#1a1a2e] px-5 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -351,87 +419,43 @@ export const W50Page = () => {
                     <div className="bg-[#f8f7f4] p-5">
                         <pre className="text-[12px] text-[#4a4a6a] font-mono whitespace-pre-wrap leading-relaxed">{keywordPrompt}</pre>
                     </div>
-                    <div className="bg-[#f0ede6] border-t border-[#dddbd5] px-5 py-3 text-[11px] text-[#8888aa]">
-                        先填入上方「Part 0 定案題目」，prompt 就會自動帶入你的題目。
-                    </div>
-                </div>
-
-                <div className="bg-white border border-[#dddbd5] rounded-lg p-5">
-                    <div className="text-[12px] font-bold text-[#1a1a2e] mb-3">Step 2 · 我的選擇</div>
-                    <p className="text-[12px] text-[#4a4a6a] mb-4 leading-relaxed">
-                        AI 給你一張關鍵字表格後：篩選哪些適合你的題目 → 回到華藝用這些關鍵字再搜一次 → 把新找到的文獻補進清單。
-                    </p>
-                    <div className="bg-[#fdecea] border border-[#f5c6c0] rounded p-4 text-[12px] text-[#4a4a6a] leading-relaxed">
-                        <strong className="text-[#c0392b]">不用的關鍵字也要記下來，並說明為什麼不用</strong>——這是培養你對自己研究的判斷力。
-                    </div>
                 </div>
             </section>
+
             {/* ── PART 3：APA 格式 ── */}
             <section className="mb-16">
                 <div className="flex items-center gap-3 mb-6">
                     <span className="bg-[#c0392b] text-white text-[11px] font-bold px-3 py-1 rounded-full font-mono">PART 3</span>
-                    <h2 className="text-[18px] font-bold text-[#1a1a2e]">APA 格式 · 3 篇文獻清單</h2>
+                    <h2 className="text-[18px] font-bold text-[#1a1a2e]">APA 格式與查核清單</h2>
                     <span className="text-[11px] font-mono text-[#8888aa]">0:20–0:35</span>
                 </div>
-
-                {/* 為什麼要 APA */}
-                <div className="bg-[#f0ede6] rounded-lg p-5 border border-[#dddbd5] mb-6">
-                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed">
-                        你寫報告時說「有研究發現手機會影響睡眠」，有人問：哪個研究？誰做的？你要能回答。這就是<strong>引用</strong>。
-                        APA 格式讓每個人都能用同一套規則找到你引用的那篇研究。
-                    </p>
-                </div>
-
-                {/* 格式模板 */}
-                <div className="border border-[#dddbd5] rounded-lg overflow-hidden mb-8">
-                    <div className="bg-[#1a1a2e] px-5 py-3">
-                        <span className="text-white text-[12px] font-bold">APA 格式模板 · 收好，整學期都會用</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="border border-[#dddbd5] rounded-lg p-5">
+                        <div className="text-[12px] font-bold text-[#1a1a2e] mb-4">APA 格式填寫（第一篇）</div>
+                        <textarea
+                            value={apa1}
+                            onChange={e => setApa1(e.target.value)}
+                            placeholder="作者（年份）。論文名稱。學校名稱碩士／博士論文，地點。"
+                            rows={4}
+                            className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] font-mono focus:ring-2 focus:ring-[#2d5be3]/30 resize-none"
+                        />
                     </div>
-                    <div className="divide-y divide-[#dddbd5]">
-                        <div className="p-5">
-                            <div className="text-[11px] font-mono text-[#2d5be3] font-bold mb-2">碩博士論文</div>
-                            <div className="font-mono text-[12px] text-[#1a1a2e] bg-[#f8f7f4] rounded p-3 mb-2">
-                                作者（年份）。論文名稱。學校名稱碩士／博士論文，地點。
-                            </div>
-                            <div className="text-[11px] text-[#8888aa]">
-                                範例：王小華（2022）。高中生學習動機與學業成就之研究。國立政治大學碩士論文，台北市。
-                            </div>
-                        </div>
-                        <div className="p-5">
-                            <div className="text-[11px] font-mono text-[#2d5be3] font-bold mb-2">期刊論文</div>
-                            <div className="font-mono text-[12px] text-[#1a1a2e] bg-[#f8f7f4] rounded p-3 mb-2">
-                                作者（年份）。文章名稱。期刊名稱，卷（期），頁碼。
-                            </div>
-                            <div className="text-[11px] text-[#8888aa]">
-                                範例：李大明（2021）。青少年社群媒體使用行為分析。教育研究月刊，25（3），45–67。
-                            </div>
+                    <div className="bg-[#f0ede6] rounded-lg p-5 border border-[#dddbd5]">
+                        <div className="text-[12px] font-bold text-[#1a1a2e] mb-4">格式查核清單</div>
+                        <div className="grid grid-cols-2 gap-3">
+                            {Object.entries({ name: '作者全名', year: '括弧年份', title: '文章/論文標題', db: '資料庫/期刊名', type: '論文種類/卷期', location: '出版地(論文)' }).map(([key, label]) => (
+                                <label key={key} className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={apaCheck[key]}
+                                        onChange={() => setApaCheck(prev => ({ ...prev, [key]: !prev[key] }))}
+                                        className="w-3.5 h-3.5 rounded text-[#c0392b] focus:ring-0"
+                                    />
+                                    <span className="text-[11px] text-[#4a4a6a]">{label}</span>
+                                </label>
+                            ))}
                         </div>
                     </div>
-                </div>
-
-                {/* 3 篇填寫區 */}
-                <div className="space-y-4">
-                    {[
-                        { n: '文獻 1', val: apa1, set: setApa1 },
-                        { n: '文獻 2', val: apa2, set: setApa2 },
-                        { n: '文獻 3', val: apa3, set: setApa3 },
-                    ].map((item, i) => (
-                        <div key={i} className="border border-[#dddbd5] rounded-lg overflow-hidden">
-                            <div className="bg-[#f0ede6] px-5 py-2 border-b border-[#dddbd5] flex items-center justify-between">
-                                <span className="text-[12px] font-bold text-[#1a1a2e]">{item.n}</span>
-                                <span className="text-[10px] font-mono text-[#8888aa]">⚠️ 親自在華藝或 Google Scholar 查證後才填</span>
-                            </div>
-                            <div className="p-5">
-                                <textarea
-                                    value={item.val}
-                                    onChange={e => item.set(e.target.value)}
-                                    placeholder={`${item.n} 的 APA 格式：作者（年份）。論文名稱。…`}
-                                    rows={3}
-                                    className="w-full border border-[#dddbd5] rounded px-3 py-2 text-[13px] text-[#1a1a2e] placeholder-[#c0c0d0] font-mono focus:outline-none focus:ring-2 focus:ring-[#2d5be3]/30 resize-none"
-                                />
-                            </div>
-                        </div>
-                    ))}
                 </div>
             </section>
 
@@ -442,27 +466,6 @@ export const W50Page = () => {
                     <h2 className="text-[18px] font-bold text-[#1a1a2e]">證物鑑識大賽：等級判定</h2>
                     <span className="text-[11px] font-mono text-[#8888aa]">0:00–0:30 (第二節)</span>
                 </div>
-
-                <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-xl p-6 mb-8">
-                    <div className="flex items-center gap-2 mb-4 text-[#1a1a2e] font-bold">
-                        <AlertTriangle size={18} className="text-[#c9a84c]" />
-                        鑑識任務說明
-                    </div>
-                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed mb-4">
-                        你的小組會拿到五張證物卡（A–E）。請根據剛剛學過的等級定義，判定每張證物的等級，並寫下理由。
-                        <strong>注意：</strong> 有些證物看起來很正式，但其實是 AI 捏造或來源不明的「偽證」。
-                    </p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {gradeLevels.map(g => (
-                            <div key={g.grade} className="bg-white border border-[#dddbd5] p-3 rounded-lg text-center">
-                                <div className={`${g.color} text-white font-bold w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-2 text-[11px]`}>{g.grade}</div>
-                                <div className="text-[11px] font-bold text-[#1a1a2e]">{g.grade} 級</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* 證物展示與紀錄區 */}
                 <div className="space-y-6">
                     {[
                         { id: 'A', title: '台中市高中職學生數學焦慮...', desc: '作者：鄭淑米。碩士論文。探討高中職一年級學生數學焦慮與數學自我效能之關係。', link: 'https://www.airitilibrary.com/Article/Detail/U0021-2304200714313183' },
@@ -471,62 +474,49 @@ export const W50Page = () => {
                         { id: 'D', title: '生活小竅門 教你如何治療燒傷...', desc: '來源：每日頭條。整理燒燙傷民間處理法：蔥葉貼敷、蛋清加糖等。網址：www.health-info-farm.com' },
                         { id: 'E', title: '【FB 貼文】國家教育研究院', desc: '平台：Facebook。討論學校限制手機使用的現況。連結：https://is.gd/xDIT6f' },
                     ].map((item) => (
-                        <div key={item.id} className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                        <div key={item.id} className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden shadow-sm">
                             <div className="bg-[#1a1a2e] px-6 py-3 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <span className="text-[#c9a84c] font-mono font-bold text-[14px]">證物 {item.id}</span>
                                     <span className="text-white text-[13px] font-medium truncate max-w-[400px]">{item.title}</span>
                                 </div>
-                                {item.link && (
-                                    <span className="text-[10px] font-mono text-[#8888aa] truncate max-w-[200px]">{item.link}</span>
-                                )}
                             </div>
                             <div className="p-6">
-                                <div className="mb-6 pb-6 border-b border-[#f0ede6]">
+                                <div className="mb-4">
                                     <p className="text-[12px] text-[#4a4a6a] italic leading-relaxed">「{item.desc}」</p>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {/* 等級選擇 */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
-                                        <div className="text-[11px] font-bold text-[#8888aa] mb-3 uppercase tracking-wider">判定等級</div>
+                                        <div className="text-[11px] font-bold text-[#8888aa] mb-2 uppercase tracking-wider">判定等級</div>
                                         <div className="flex gap-2">
                                             {['A', 'B', 'C', 'D'].map(level => (
                                                 <button
                                                     key={level}
                                                     onClick={() => setForensics(prev => ({ ...prev, [item.id]: { ...prev[item.id], grade: level } }))}
-                                                    className={`w-10 h-10 rounded-full font-bold text-[13px] border-2 transition-all flex items-center justify-center
+                                                    className={`w-8 h-8 rounded-full font-bold text-[11px] border-2 flex items-center justify-center
                                                         ${forensics[item.id].grade === level 
-                                                            ? `${gradeLevels.find(g => g.grade === level).color} border-transparent text-white scale-110 shadow-lg` 
-                                                            : 'border-[#f0ede6] text-[#8888aa] hover:border-[#dddbd5]'}`}
+                                                            ? `${gradeLevels.find(g => g.grade === level).color} border-transparent text-white` 
+                                                            : 'border-[#f0ede6] text-[#8888aa]'}`}
                                                 >
                                                     {level}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
-                                    {/* 理由填寫 */}
-                                    <div>
-                                        <div className="text-[11px] font-bold text-[#8888aa] mb-2 uppercase tracking-wider">判定理由 / 查核路徑</div>
-                                        <input
-                                            type="text"
-                                            value={forensics[item.id].reason}
-                                            onChange={e => setForensics(prev => ({ ...prev, [item.id]: { ...prev[item.id], reason: e.target.value } }))}
-                                            placeholder="為什麼是這個等級？你是在哪裡查證的？"
-                                            className="w-full bg-[#f8f7f4] border border-[#dddbd5] rounded px-3 py-2 text-[12px] text-[#1a1a2e] focus:outline-none focus:ring-1 focus:ring-[#2d5be3]/30"
-                                        />
+                                    <div className="md:col-span-2 space-y-4">
+                                        <div>
+                                            <div className="text-[11px] font-bold text-[#8888aa] mb-1 uppercase tracking-wider">判定理由</div>
+                                            <input type="text" value={forensics[item.id].reason} onChange={e => setForensics(prev => ({ ...prev, [item.id]: { ...prev[item.id], reason: e.target.value } }))} placeholder="為什麼是這個等級？" className="w-full bg-[#f8f7f4] border border-[#dddbd5] rounded px-3 py-1.5 text-[12px]" />
+                                        </div>
+                                        <div>
+                                            <div className="text-[11px] font-bold text-[#8888aa] mb-1 uppercase tracking-wider">查核路徑 (如：華藝搜尋/Google查作者/DOI查證)</div>
+                                            <input type="text" value={forensics[item.id].path} onChange={e => setForensics(prev => ({ ...prev, [item.id]: { ...prev[item.id], path: e.target.value } }))} placeholder="你是怎麼查證這份證物的真實性的？" className="w-full bg-[#f8f7f4] border border-[#dddbd5] rounded px-3 py-1.5 text-[12px]" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ))}
-                </div>
-
-                <div className="mt-8 bg-[#fdecea] border-l-4 border-[#c0392b] p-5 rounded-r-lg">
-                    <div className="text-[13px] font-bold text-[#c0392b] mb-2">📢 小組討論總結</div>
-                    <p className="text-[12px] text-[#4a4a6a] leading-relaxed">
-                        完成判定後，請小組討論：<strong>哪一張證物最難判斷？</strong> 為什麼？
-                        （例如：雖然有網址，但連過去發現是內容農場；或者雖然是英文期刊，但查不到作者資訊等）。
-                    </p>
                 </div>
             </section>
 
@@ -540,7 +530,7 @@ export const W50Page = () => {
                         {[
                             '用華藝資料庫找文獻——知道怎麼縮小搜尋範圍，找到相關的研究',
                             '用 AI 生成關鍵字——AI 給選項，你來判斷',
-                            '親自查證 3 篇 A/B 級文獻——確認作者存在、摘要存在',
+                            '親自查證 1 篇 A/B 級文獻——確認作者存在、摘要存在',
                             'APA 格式——怎麼正確記錄你的來源',
                         ].map((item, i) => (
                             <div key={i} className="px-6 py-4 flex items-start gap-3">
@@ -568,31 +558,8 @@ export const W50Page = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between text-[12px]">
-                        <span className="text-[#8888aa]">{W50Data.homework.footer}</span>
-                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer"
-                            className="text-[#2d5be3] font-bold hover:underline">→ Google Classroom</a>
-                    </div>
                 </div>
             </section>
-
-            {/* ── NEXT WEEK PREVIEW ── */}
-            <div className="next-week-preview">
-                <div className="next-week-header">
-                    <span className="next-week-badge">NEXT WEEK</span>
-                    <h3 className="next-week-title">W6 預告</h3>
-                </div>
-                <div className="next-week-content">
-                    <div className="next-week-col">
-                        <div className="next-week-label">W6 主題</div>
-                        <p className="next-week-text">文獻偵探社（福爾摩斯版）——識破假改寫，寫出真文獻探討。</p>
-                    </div>
-                    <div className="next-week-col border-l border-white/5">
-                        <div className="next-week-label">你會學到</div>
-                        <p className="next-week-text">辨識 <strong className="text-white underline decoration-[#c9a84c] underline-offset-4">AI 假文獻</strong>、合法引用、不踩抄襲的地雷。</p>
-                    </div>
-                </div>
-            </div>
 
             {/* ── NAVIGATION ── */}
             <div className="flex justify-between items-center py-12 border-t border-[#dddbd5]">
