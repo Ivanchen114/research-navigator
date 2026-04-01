@@ -481,7 +481,7 @@ export const GameHub = () => {
                             return (
                                 <div key={mission.id} className="w-full flex">
                                     {/* 卡片容器 */}
-                                    <div className="w-full flex h-full">
+                                    <div className="w-full flex h-full relative">
                                         <div
                                             onClick={() => {
                                                 if (isUnlocked && isLoggedIn) {
@@ -590,6 +590,13 @@ export const GameHub = () => {
                                                 </div>
                                             </div>
                                         </div>
+                                        {/* 解鎖提示 — 在 opacity 卡片外，不受灰階影響 */}
+                                        {!(isLoggedIn && isUnlocked) && index > 0 && (
+                                            <div className="absolute bottom-0 left-0 right-0 bg-slate-950/95 border-t border-amber-500/20 px-4 py-2.5 flex items-center gap-2 z-20 rounded-b-sm">
+                                                <span className="text-amber-500 text-sm shrink-0">🔒</span>
+                                                <span className="text-amber-200/80 text-xs font-bold">先完成「{RIB_MISSIONS[index - 1].title}」即可解鎖</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );

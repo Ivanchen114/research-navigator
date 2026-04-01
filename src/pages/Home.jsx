@@ -16,6 +16,7 @@ import {
   Palette,
   Trophy,
   Zap,
+  Rocket,
   ChevronRight,
   ArrowRight
 } from 'lucide-react';
@@ -505,8 +506,8 @@ export const Home = () => {
               <WeekCard num="W9" icon={<Wrench size={18} className="text-[#9090b0]" />} title="工具設計" desc="問卷、訪談、實驗各組深化工具設計。" path="/tool-design" mission={{ tag: 'MISSION', name: '行動代號：防線', path: '/game/rx-inspector' }} />
               <WeekCard num="W10" icon={<Microscope size={18} className="text-[#9090b0]" />} title="工具精進" desc="AI 審稿 + 人工預試雙重把關，工具定稿。" path="/tool-refinement" />
               <WeekCard num="W11" icon={<FlaskConical size={18} className="text-[#9090b0]" />} title="倫理審查" desc="四問自查、知情同意書 AI 審查、蓋章出發。" path="/w11" />
-              <ImplWeek num="W12" title="研究執行 I" desc="Open Office 執行週，資料蒐集第一週。" />
-              <ImplWeek num="W13" title="研究執行 II" desc="中期進度盤點，最後衝刺，資料收齊。" />
+              <WeekCard num="W12" icon={<Rocket size={18} className="text-[#9090b0]" />} title="研究執行 I" desc="Open Office 執行週，資料蒐集第一週。" path="/w12" />
+              <WeekCard num="W13" icon={<Rocket size={18} className="text-[#9090b0]" />} title="研究執行 II" desc="中期進度盤點，最後衝刺，資料收齊。" path="/w13" />
             </div>
           </div>
 

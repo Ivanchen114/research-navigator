@@ -99,10 +99,10 @@ export const W12Page = () => {
                     { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
                     { wk: 'W5-W7', name: '研究規劃\n文獻鑑識', past: true },
                     { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
-                    { wk: 'W11', name: '研究診所 I\nOpen Office', past: true },
+                    { wk: 'W12', name: '研究診所 I\nOpen Office', past: true },
                     { wk: 'W13', name: '研究診所 II\n中期盤點', now: true },
                     { wk: 'W14-W16', name: '分析撰寫\n研究結論' },
-                    { wk: 'W16', name: '成果展示\nGallery Walk' }
+                    { wk: 'W17', name: '成果展示\nGallery Walk' }
                 ]} />
             </header>
 

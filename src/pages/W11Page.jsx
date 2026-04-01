@@ -136,8 +136,8 @@ export const W11Page = () => {
                     { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
                     { wk: 'W12', name: '研究診所 I\nOpen Office', now: true },
                     { wk: 'W13', name: '研究診所 II\n中期盤點' },
-                    { wk: 'W13-W15', name: '分析撰寫\n研究結論' },
-                    { wk: 'W16', name: '成果展示\nGallery Walk' }
+                    { wk: 'W14-W16', name: '分析撰寫\n研究結論' },
+                    { wk: 'W17', name: '成果展示\nGallery Walk' }
                 ]} />
             </header>
 

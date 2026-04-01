@@ -124,18 +124,18 @@ const renderQuestionCard = (prompt) => {
         const parts = prompt.split(/原文：|學生寫：/);
         return (
             <div className="space-y-4 w-full text-left font-sans">
-                <div className="bg-slate-50 p-4 rounded-sm border-l-[6px] border-slate-300 shadow-sm relative">
-                    <div className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">📄 原文 (Original)</div>
-                    <div className="text-slate-700 leading-relaxed font-medium">{parts[1]?.trim()}</div>
+                <div className="bg-slate-800/60 p-4 rounded-sm border-l-[6px] border-slate-500 shadow-sm relative">
+                    <div className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest">📄 原文 (Original)</div>
+                    <div className="text-slate-200 leading-relaxed font-medium">{parts[1]?.trim()}</div>
                 </div>
-                <div className="bg-red-50 p-4 rounded-sm border-l-[6px] border-red-400 shadow-sm relative">
-                    <div className="text-xs font-bold text-red-500 mb-2 uppercase tracking-widest">✍️ 學生寫法 (Suspect)</div>
-                    <div className="text-stone-800 leading-relaxed font-semibold">{parts[2]?.trim()}</div>
+                <div className="bg-red-900/20 p-4 rounded-sm border-l-[6px] border-red-500 shadow-sm relative">
+                    <div className="text-xs font-bold text-red-400 mb-2 uppercase tracking-widest">✍️ 學生寫法 (Suspect)</div>
+                    <div className="text-red-100 leading-relaxed font-semibold">{parts[2]?.trim()}</div>
                 </div>
             </div>
         );
     }
-    return <div className="bg-white p-6 shadow-sm rounded-sm border border-slate-200 text-lg md:text-xl text-slate-800 font-medium whitespace-pre-line leading-relaxed min-h-[150px]">{prompt}</div>;
+    return <div className="bg-slate-800/40 p-6 shadow-sm rounded-sm border border-slate-600 text-lg md:text-xl text-slate-200 font-medium whitespace-pre-line leading-relaxed min-h-[150px]">{prompt}</div>;
 };
 
 const renderHighlight = (text, highlights) => {
@@ -148,18 +148,18 @@ const renderHighlight = (text, highlights) => {
         const parts = text.split(/原文：|學生寫：/);
         return (
             <div className="space-y-4 text-sm md:text-base font-sans mt-3">
-                <div className="bg-white p-4 rounded-sm border border-slate-200">
+                <div className="bg-slate-800/60 p-4 rounded-sm border border-slate-600">
                     <div className="text-xs font-bold text-slate-400 mb-1 uppercase">📄 原文</div>
-                    <div className="text-slate-600">{processHighlights(parts[1]?.trim() || "")}</div>
+                    <div className="text-slate-300">{processHighlights(parts[1]?.trim() || "")}</div>
                 </div>
-                <div className="bg-red-50 p-4 rounded-sm border border-red-100">
+                <div className="bg-red-900/20 p-4 rounded-sm border border-red-800/50">
                     <div className="text-xs font-bold text-red-400 mb-1 uppercase">✍️ 學生寫法</div>
-                    <div className="text-stone-800">{processHighlights(parts[2]?.trim() || "")}</div>
+                    <div className="text-red-100">{processHighlights(parts[2]?.trim() || "")}</div>
                 </div>
             </div>
         )
     }
-    return <div className="bg-slate-50 p-4 rounded-sm border border-slate-200 whitespace-pre-line text-slate-700 font-medium">{processHighlights(text)}</div>;
+    return <div className="bg-slate-800/60 p-4 rounded-sm border border-slate-600 whitespace-pre-line text-slate-200 font-medium">{processHighlights(text)}</div>;
 };
 
 export const CitationDetectiveGame = () => {
@@ -361,9 +361,27 @@ export const CitationDetectiveGame = () => {
                             <p className="text-xs text-slate-500 mt-2">（訪客模式將無法參與最終排行榜排名）</p>
                         )}
                         <h3 className="text-sm font-bold text-slate-400 mb-3 tracking-wider border-t border-slate-700/50 pt-4 mt-6">📋 任務簡報</h3>
-                        <div className="space-y-3 text-sm text-slate-300 text-left bg-slate-900/50 p-4 rounded-sm border border-slate-700/30">
-                            <p className="flex items-start gap-2"><span className="text-emerald-400 drop-shadow-[0_0_5px_currentColor]">✅</span> <span><strong className="text-emerald-300">合法引用</strong>：判斷完全正確且無抄襲。</span></p>
-                            <p className="flex items-start gap-2"><span className="text-rose-400 drop-shadow-[0_0_5px_currentColor]">❌</span> <span><strong className="text-rose-300">引用錯誤</strong>：有抄襲嫌疑或格式錯誤，需進一步指認違規罪名。</span></p>
+                        <div className="space-y-2.5 text-sm text-slate-300 text-left bg-slate-900/50 p-4 rounded-sm border border-slate-700/30">
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-amber-400 shrink-0 mt-0.5">📁</span>
+                                <span>指揮部攔截了 <strong className="text-amber-300">10 份可疑學術引用</strong>，等待特工逐一鑑識</span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-emerald-400 shrink-0 mt-0.5">🔍</span>
+                                <span>判斷每份是 <strong className="text-emerald-300">合法（PASS）</strong> 還是 <strong className="text-rose-300">違規（REJECT）</strong>；若為違規，需進一步指認錯誤罪名</span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-amber-400 shrink-0 mt-0.5">🏆</span>
+                                <span><strong className="text-amber-300">計分</strong>：PASS 判斷正確 <span className="text-emerald-300 font-bold">+1 分</span>；REJECT 判斷＋指認均正確 <span className="text-emerald-300 font-bold">+2 分</span></span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-rose-400 shrink-0 mt-0.5">⚠️</span>
+                                <span>4 種違規罪名：<span className="text-slate-400 text-xs leading-relaxed">孤兒引用 · 換字抄襲 · 忘記標註來源 · 直接引用未加引號</span></span>
+                            </p>
+                            <p className="flex items-start gap-2.5">
+                                <span className="text-cyan-400 shrink-0 mt-0.5">📖</span>
+                                <span>點擊下方按鈕將先進入 <strong className="text-cyan-300">引用規範圖鑑</strong>，熟讀後再正式開案</span>
+                            </p>
                         </div>
                     </div>
 
@@ -592,59 +610,82 @@ export const CitationDetectiveGame = () => {
             <div className="max-w-4xl w-full flex flex-col h-full">
 
                 {/* Header */}
-                <div className="flex flex-wrap justify-between items-center gap-3 mb-6 px-1 shrink-0">
-                    <div className="bg-white text-slate-500 font-bold px-5 py-2 rounded-sm shadow-sm text-lg border border-slate-200 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-4 px-1 shrink-0">
+                    <div className="bg-slate-900/80 text-slate-300 font-bold px-5 py-2 rounded-sm shadow-sm text-lg border border-slate-700/60 flex items-center gap-2 backdrop-blur-sm">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse drop-shadow-[0_0_4px_rgba(251,191,36,0.8)]"></span>
                         案件 {currentQIndex + 1} <span className="opacity-40 font-normal">/ {shuffledQuestions.length}</span>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <div className="text-right">
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block leading-tight">任務積分</span>
-                            <span className="text-xl font-black text-amber-600 leading-tight">{score}</span>
+                    <div className="flex items-center gap-3">
+                        {/* 進度點 */}
+                        <div className="hidden sm:flex items-center gap-1">
+                            {shuffledQuestions.map((_, i) => (
+                                <div key={i} className={`rounded-full transition-all duration-300 ${i < currentQIndex ? 'w-2 h-2 bg-amber-500' : i === currentQIndex ? 'w-3 h-3 bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]' : 'w-1.5 h-1.5 bg-slate-700'}`}></div>
+                            ))}
+                        </div>
+                        <div className="text-right bg-slate-900/80 px-4 py-2 rounded-sm border border-slate-700/60 backdrop-blur-sm">
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block leading-tight">任務積分</span>
+                            <span className="text-xl font-black text-amber-400 leading-tight drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]">{score}</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-white p-6 md:p-8 rounded-sm shadow-[0_8px_30px_rgb(0,0,0,0.06)] border-t-[8px] border-amber-400 relative flex-1 flex flex-col">
-                    <div className="absolute top-0 right-6 bg-amber-400 text-white text-xs font-black px-4 py-1.5 rounded-b-lg tracking-widest shadow-sm">
+                <div className="bg-slate-900/80 p-6 md:p-8 rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.5)] border-t-[8px] border-amber-500 border-x border-b border-white/10 relative flex-1 flex flex-col backdrop-blur-sm overflow-hidden">
+                    {/* 角落裝飾線 */}
+                    <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-amber-500/30 pointer-events-none"></div>
+                    <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-amber-500/30 pointer-events-none"></div>
+                    {/* CASE FILE 浮水印 */}
+                    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-600/[0.07] text-6xl font-black uppercase tracking-[0.3em] pointer-events-none select-none rotate-[-12deg] whitespace-nowrap">CASE FILE</div>
+
+                    <div className="absolute top-0 right-6 bg-amber-500/20 text-amber-300 text-xs font-black px-4 py-1.5 rounded-b-lg tracking-widest border border-amber-500/30 border-t-0 shadow-[0_0_10px_rgba(251,191,36,0.2)]">
                         {currentQ.title}
                     </div>
 
                     {gameState === 'playing' ? (
                         <>
-                            <div className="flex-1 flex flex-col justify-center min-h-0 py-6">
+                            {/* EXHIBIT 標題 */}
+                            <div className="flex items-center gap-2 mt-4 mb-2">
+                                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500/20"></div>
+                                <span className="text-[10px] font-black text-amber-500/50 tracking-[0.25em] uppercase">📎 Exhibit #{currentQIndex + 1}</span>
+                                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500/20"></div>
+                            </div>
+
+                            <div className="flex-1 flex flex-col justify-center min-h-0 pb-4">
                                 {renderQuestionCard(currentQ.prompt)}
                             </div>
 
-                            <div className="shrink-0 pt-6 mt-4 border-t-2 border-dashed border-slate-200">
-                                <div className="flex gap-4 md:gap-8 justify-center mb-6">
+                            <div className="shrink-0 pt-4 mt-2 border-t border-dashed border-slate-700/50">
+                                {/* VERDICT 標題 */}
+                                <div className="text-center mb-3">
+                                    <span className="text-[10px] font-black text-slate-600 tracking-[0.3em] uppercase">⚖ Verdict</span>
+                                </div>
+                                <div className="flex gap-4 md:gap-6 justify-center mb-6">
                                     <button
                                         onClick={() => handleOXSelect('O')}
-                                        className={`group flex-1 max-w-[200px] aspect-square rounded-sm md:rounded-[2rem] border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'O' ? 'border-emerald-500 bg-emerald-50 text-emerald-600 shadow-md' : 'border-slate-200 text-slate-400 hover:border-emerald-300 hover:bg-emerald-50/50 bg-white'}`}
+                                        className={`group flex-1 max-w-[150px] py-5 rounded-xl border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'O' ? 'border-emerald-500 bg-emerald-900/30 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'border-slate-600 text-slate-500 hover:border-emerald-600 hover:bg-emerald-900/20 bg-slate-800/50'}`}
                                     >
-                                        <CheckCircle2 size={48} className="mb-3" />
-                                        <span className="font-black text-lg md:text-xl">合法引用</span>
-                                        <span className="text-xs font-bold opacity-70 mt-1 uppercase tracking-widest">Pass</span>
+                                        <CheckCircle2 size={36} className="mb-2" />
+                                        <span className="font-black text-base">合法引用</span>
+                                        <span className="text-xs font-bold opacity-60 mt-0.5 uppercase tracking-widest">Pass</span>
                                     </button>
                                     <button
                                         onClick={() => handleOXSelect('X')}
-                                        className={`group flex-1 max-w-[200px] aspect-square rounded-sm md:rounded-[2rem] border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'X' ? 'border-red-500 bg-red-50 text-red-600 shadow-md' : 'border-slate-200 text-slate-400 hover:border-red-300 hover:bg-red-50/50 bg-white'}`}
+                                        className={`group flex-1 max-w-[150px] py-5 rounded-xl border-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 active:scale-95 ${selectedOX === 'X' ? 'border-red-500 bg-red-900/30 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.3)]' : 'border-slate-600 text-slate-500 hover:border-red-600 hover:bg-red-900/20 bg-slate-800/50'}`}
                                     >
-                                        <XCircle size={48} className="mb-3" />
-                                        <span className="font-black text-lg md:text-xl">引用錯誤</span>
-                                        <span className="text-xs font-bold opacity-70 mt-1 uppercase tracking-widest">Reject</span>
+                                        <XCircle size={36} className="mb-2" />
+                                        <span className="font-black text-base">引用錯誤</span>
+                                        <span className="text-xs font-bold opacity-60 mt-0.5 uppercase tracking-widest">Reject</span>
                                     </button>
                                 </div>
 
                                 {selectedOX === 'X' && (
-                                    <div className="bg-slate-50 p-5 md:p-6 rounded-sm border border-slate-200 mb-6 animate-in fade-in slide-in-from-bottom-2">
-                                        <h4 className="text-sm font-black text-slate-700 mb-3 border-b border-slate-200 pb-2">請指認錯誤類型 (必填)：</h4>
+                                    <div className="bg-slate-800/60 p-5 md:p-6 rounded-sm border border-slate-600 mb-6 animate-in fade-in slide-in-from-bottom-2">
+                                        <h4 className="text-sm font-black text-slate-300 mb-3 border-b border-slate-700 pb-2">請指認錯誤類型 (必填)：</h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                                             {ERROR_TYPES.map((type) => (
-                                                <label key={type.id} className={`flex items-center p-3 rounded-sm cursor-pointer transition-colors border-2 ${selectedType === type.id ? 'bg-white border-red-500 shadow-sm' : 'border-slate-200 bg-white hover:border-red-300'}`}>
-                                                    <input type="radio" name="errorType" value={type.id} checked={selectedType === type.id} onChange={() => setSelectedType(type.id)} className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500" />
-                                                    <span className={`ml-3 font-bold text-sm md:text-base ${selectedType === type.id ? 'text-red-700' : 'text-slate-600'}`}>{type.label}</span>
+                                                <label key={type.id} className={`flex items-center p-3 rounded-sm cursor-pointer transition-colors border-2 ${selectedType === type.id ? 'bg-red-900/30 border-red-500 shadow-sm' : 'border-slate-600 bg-slate-800/40 hover:border-red-600/50'}`}>
+                                                    <input type="radio" name="errorType" value={type.id} checked={selectedType === type.id} onChange={() => setSelectedType(type.id)} className="w-4 h-4 text-red-600 border-gray-600 focus:ring-red-500 bg-slate-700" />
+                                                    <span className={`ml-3 font-bold text-sm md:text-base ${selectedType === type.id ? 'text-red-300' : 'text-slate-300'}`}>{type.label}</span>
                                                 </label>
                                             ))}
                                         </div>
@@ -653,7 +694,7 @@ export const CitationDetectiveGame = () => {
                                 <button
                                     onClick={() => handleSubmit()}
                                     disabled={!selectedOX || (selectedOX === 'X' && !selectedType)}
-                                    className={`w-full py-4 rounded-sm font-black text-lg md:text-xl tracking-widest transition-all ${(!selectedOX || (selectedOX === 'X' && !selectedType)) ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-800 text-white hover:bg-slate-900 shadow-[0_8px_20px_rgba(15,23,42,0.2)] hover:shadow-[0_12px_25px_rgba(15,23,42,0.3)] hover:-translate-y-1 active:translate-y-0'}`}
+                                    className={`w-full py-4 rounded-sm font-black text-lg md:text-xl tracking-widest transition-all ${(!selectedOX || (selectedOX === 'X' && !selectedType)) ? 'bg-slate-700/50 text-slate-500 cursor-not-allowed border border-slate-600' : 'bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-900 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:-translate-y-1 active:translate-y-0'}`}
                                 >
                                     提交證據 SUBMIT
                                 </button>
@@ -661,7 +702,7 @@ export const CitationDetectiveGame = () => {
                         </>
                     ) : (
                         <div className="flex-1 flex flex-col animate-in fade-in slide-in-from-bottom-4 py-2">
-                            <div className={`shrink-0 p-4 md:p-6 mb-6 rounded-sm border-2 text-center shadow-sm ${getLastAnswerStatus() === 'full' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : getLastAnswerStatus() === 'partial' ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-800'}`}>
+                            <div className={`shrink-0 p-4 md:p-6 mb-6 rounded-sm border-2 text-center shadow-sm ${getLastAnswerStatus() === 'full' ? 'bg-emerald-900/40 border-emerald-500/60 text-emerald-300' : getLastAnswerStatus() === 'partial' ? 'bg-amber-900/40 border-amber-500/60 text-amber-300' : 'bg-red-900/40 border-red-500/60 text-red-300'}`}>
                                 <div className="text-2xl md:text-3xl font-black mb-2 flex items-center justify-center gap-3">
                                     {getLastAnswerStatus() === 'full' ? <><CheckCircle2 size={32} /> 完美破案！</> : getLastAnswerStatus() === 'partial' ? <><AlertTriangle size={32} /> 部分正確</> : <><XCircle size={32} /> 判斷錯誤</>}
                                 </div>
@@ -669,27 +710,27 @@ export const CitationDetectiveGame = () => {
                             </div>
 
                             {getLastAnswerStatus() === 'partial' && (
-                                <div className="text-center text-sm mb-6 bg-red-50 p-4 rounded-sm border-2 border-red-100 shadow-inner">
-                                    <span className="font-black text-red-700 text-base mb-2 block">罪名指認錯誤！</span>
+                                <div className="text-center text-sm mb-6 bg-red-900/30 p-4 rounded-sm border-2 border-red-700/50 shadow-inner">
+                                    <span className="font-black text-red-400 text-base mb-2 block">罪名指認錯誤！</span>
                                     你選擇了：<span className="text-slate-500 line-through font-bold inline-block mx-2">{ERROR_TYPES.find(t => t.id === userAnswers[userAnswers.length - 1].userType)?.label}</span><br />
-                                    正解應為：<span className="text-emerald-600 font-black text-lg inline-block mt-2 bg-emerald-100 px-3 py-1 rounded">{ERROR_TYPES.find(t => t.id === currentQ.correctType)?.label}</span>
+                                    正解應為：<span className="text-emerald-400 font-black text-lg inline-block mt-2 bg-emerald-900/50 px-3 py-1 rounded border border-emerald-700/50">{ERROR_TYPES.find(t => t.id === currentQ.correctType)?.label}</span>
                                 </div>
                             )}
 
                             <div className="space-y-6 flex-1 overflow-y-auto">
-                                <div className="bg-slate-50 p-5 rounded-sm border border-slate-200">
-                                    <h4 className="text-sm font-black text-slate-500 mb-3 flex items-center gap-2"><Search size={18} className="text-blue-500" /> 偵探分析報告</h4>
-                                    <p className="text-slate-800 font-medium leading-relaxed">{currentQ.explanation}</p>
+                                <div className="bg-slate-800/60 p-5 rounded-sm border border-slate-700">
+                                    <h4 className="text-sm font-black text-cyan-400 mb-3 flex items-center gap-2 drop-shadow-[0_0_5px_currentColor]"><Search size={18} /> 偵探分析報告</h4>
+                                    <p className="text-slate-200 font-medium leading-relaxed">{currentQ.explanation}</p>
                                     {renderHighlight(currentQ.prompt, currentQ.highlightHints)}
                                 </div>
-                                <div className="bg-emerald-50 p-5 rounded-sm border border-emerald-100 relative shadow-sm">
-                                    <h4 className="text-sm font-black text-emerald-700 mb-2 flex items-center gap-2"><CheckCircle2 size={18} /> 典範修正示範</h4>
-                                    <div className="text-stone-800 whitespace-pre-line font-medium leading-relaxed">{currentQ.fixExample}</div>
+                                <div className="bg-emerald-900/25 p-5 rounded-sm border border-emerald-700/50 relative shadow-sm">
+                                    <h4 className="text-sm font-black text-emerald-400 mb-2 flex items-center gap-2 drop-shadow-[0_0_5px_currentColor]"><CheckCircle2 size={18} /> 典範修正示範</h4>
+                                    <div className="text-slate-200 whitespace-pre-line font-medium leading-relaxed">{currentQ.fixExample}</div>
                                 </div>
                             </div>
 
-                            <div className="pt-6 mt-4 border-t-2 border-slate-100 shrink-0">
-                                <button onClick={nextQuestion} className="w-full bg-slate-800 hover:bg-slate-900 text-white font-black py-4 rounded-sm flex items-center justify-center gap-2 text-lg shadow-lg hover:-translate-y-1 transition-all">
+                            <div className="pt-6 mt-4 border-t-2 border-slate-700/50 shrink-0">
+                                <button onClick={nextQuestion} className="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-900 font-black py-4 rounded-sm flex items-center justify-center gap-2 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:-translate-y-1 transition-all">
                                     {currentQIndex < shuffledQuestions.length - 1 ? '處理下一個案件' : '查看結案報告'} <ChevronRight size={24} />
                                 </button>
                             </div>
