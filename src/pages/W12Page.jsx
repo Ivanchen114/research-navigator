@@ -236,6 +236,27 @@ export const W12Page = () => {
                     </div>
                 </div>
 
+                {/* Analysis Station CTA */}
+                <div className="my-8 border border-[#2d5be3]/20 rounded-[8px] overflow-hidden bg-[#f0f4ff]">
+                    <div className="px-5 py-4 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-[#2d5be3] p-2 rounded-[6px]">
+                                <Database size={18} className="text-white" />
+                            </div>
+                            <div>
+                                <div className="text-[13px] font-bold text-[#1a1a2e]">資料收齊了？先去資料分析站</div>
+                                <div className="text-[12px] text-[#4a4a6a]">選你的研究方法，取得逐步分析指南與 AI Prompt，準備好再進 W14</div>
+                            </div>
+                        </div>
+                        <Link
+                            to="/analysis-station"
+                            className="shrink-0 flex items-center gap-2 px-4 py-2 bg-[#2d5be3] text-white text-[12px] font-bold rounded-[6px] hover:bg-[#1a3fc0] transition-colors whitespace-nowrap"
+                        >
+                            前往分析站 <ArrowRight size={14} />
+                        </Link>
+                    </div>
+                </div>
+
                 {/* Navigation */}
                 <div className="flex justify-between items-center pt-8 border-t border-slate-100">
                     <Link to="/w12" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-bold">

@@ -21,6 +21,7 @@ export const Layout = () => {
             items: [
                 { name: '首頁', path: '/', status: 'active' },
                 { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
+                { name: '資料分析站', path: '/analysis-station', status: 'none' },
             ]
         },
         {
@@ -121,6 +122,9 @@ export const Layout = () => {
                 else finalStatus = 'none';
             } else if (item.path === '/games') {
                 if (location.pathname.startsWith('/game')) finalStatus = 'active';
+                else finalStatus = 'none';
+            } else if (item.path === '/analysis-station') {
+                if (location.pathname === '/analysis-station') finalStatus = 'active';
                 else finalStatus = 'none';
             } else {
                 const itemWeekNum = getWeekNumber(item.path);

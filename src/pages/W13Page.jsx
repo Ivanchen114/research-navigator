@@ -16,7 +16,8 @@ import {
     FileText,
     MousePointer2,
     Map,
-    ShieldAlert
+    ShieldAlert,
+    Database
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W13Data } from '../data/lessonMaps';
@@ -168,6 +169,25 @@ export const W13Page = () => {
                     <LessonMap data={W13Data} />
                 </div>
             )}
+
+            {/* ANALYSIS STATION BANNER */}
+            <div className="mb-8 border border-amber-200 rounded-[8px] overflow-hidden bg-amber-50">
+                <div className="px-5 py-3.5 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <Database size={16} className="text-amber-700 shrink-0" />
+                        <span className="text-[13px] text-amber-900">
+                            <span className="font-bold">還沒分析過資料？</span>
+                            <span className="text-amber-800"> 先去資料分析站，按方法取得逐步指南與 AI Prompt，再回來選圖表。</span>
+                        </span>
+                    </div>
+                    <Link
+                        to="/analysis-station"
+                        className="shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-700 text-white text-[12px] font-bold rounded-[5px] hover:bg-amber-800 transition-colors whitespace-nowrap"
+                    >
+                        前往分析站 <ArrowRight size={13} />
+                    </Link>
+                </div>
+            </div>
 
             {/* PAGE HEADER */}
             <div className="max-w-[800px] mb-16">
