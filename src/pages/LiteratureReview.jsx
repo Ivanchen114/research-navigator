@@ -91,6 +91,18 @@ export const LiteratureReview = () => {
                         );
                     })}
                 </div>
+
+                {/* 本週簡報 */}
+                <div className="flex justify-end mt-8 mb-2">
+                    <a
+                        href="https://canva.link/hb3pdip2k9kvmca"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                    >
+                        📊 本週簡報 ↗
+                    </a>
+                </div>
             </header>
 
             {/* SECTIONS */}

@@ -242,6 +242,18 @@ export const ClinicPage = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* 本週簡報 */}
+                <div className="flex justify-end mt-8 mb-2">
+                    <a
+                        href="https://canva.link/y2kbukwzlntkci4"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                    >
+                        📊 本週簡報 ↗
+                    </a>
+                </div>
             </header>
 
             {/* ── PART 1: 學什麼 ──────────────────────────────── */}
