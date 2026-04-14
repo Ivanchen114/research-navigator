@@ -265,6 +265,50 @@ export const ClinicPage = () => {
                 </div>
                 <p className="clinic-section-desc">認識五種研究方法的目的與限制，再用「兩層判斷架構」決定你的題目該用哪種。</p>
 
+                {/* 樹幹：量化 vs 質性 */}
+                <div className="mb-8 rounded-[10px] overflow-hidden border border-[#dddbd5]">
+                    <div className="bg-[#1a1a2e] px-5 py-3 flex items-center gap-2">
+                        <span className="text-[16px]">🌳</span>
+                        <span className="text-white font-bold text-[13px]">所有方法的兩條根</span>
+                        <span className="ml-auto text-[10px] font-mono text-[#8888aa]">先有這個，再看五種方法</span>
+                    </div>
+                    <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#dddbd5]">
+                        <div className="p-5 bg-[#e8eeff]">
+                            <div className="text-[11px] font-mono font-bold text-[#2d5be3] uppercase tracking-wider mb-2">📊 量化研究</div>
+                            <p className="text-[13px] text-[#1a1a2e] font-medium mb-3">把世界轉換成數字，找規律、比較差異</p>
+                            <div className="space-y-1.5">
+                                {[
+                                    '想知道「有多少人」「什麼比例」「哪個高」',
+                                    '結果可以統計、可以圖表呈現',
+                                    '對應方法：📋 問卷、🧪 實驗、📚 內容分析',
+                                ].map((t, i) => (
+                                    <div key={i} className="flex items-start gap-2 text-[12px] text-[#4a4a6a]">
+                                        <span className="text-[#2d5be3] mt-0.5 shrink-0">→</span>{t}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="p-5 bg-[#f5f3ff]">
+                            <div className="text-[11px] font-mono font-bold text-[#7c3aed] uppercase tracking-wider mb-2">📖 質性研究</div>
+                            <p className="text-[13px] text-[#1a1a2e] font-medium mb-3">理解人的意義、經驗與脈絡，挖深層原因</p>
+                            <div className="space-y-1.5">
+                                {[
+                                    '想知道「為什麼」「怎麼想的」「背後故事」',
+                                    '結果是文字描述、主題、洞察',
+                                    '對應方法：🎤 訪談、👀 觀察、📚 歷史文獻分析',
+                                ].map((t, i) => (
+                                    <div key={i} className="flex items-start gap-2 text-[12px] text-[#4a4a6a]">
+                                        <span className="text-[#7c3aed] mt-0.5 shrink-0">→</span>{t}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="px-5 py-3 bg-[#fef3c7] border-t border-[#dddbd5] text-[12px] text-[#92400e]">
+                        💡 <strong>混合方法</strong>：一個研究可以兩條路都走。例如：用問卷收集比例（量化），再用訪談挖原因（質性）。分科三問 ❶ 其實就是在問你想走哪條根。
+                    </div>
+                </div>
+
                 {/* 五種方法卡 */}
                 <div className="space-y-3 mb-10">
                     {METHODS.map((m) => {
