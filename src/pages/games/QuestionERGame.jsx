@@ -322,9 +322,9 @@ export const QuestionERGame = () => {
                                 {expandedStartHint === 2 && (
                                     <div className="mt-2 ml-2 pl-3 border-l-2 border-amber-500/40 space-y-1.5 animate-in fade-in duration-150">
                                         <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">「落地」是什麼意思？</span>就是「能不能踩到地上、找到起點動手做」。一個沒落地的題目，你站在那裡不知道該從哪裡開始。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">C 百科全書病：</span>題目太大、裝太多東西，像在寫百科全書而不是做研究。例：「手機使用對學業成績的影響」——「手機使用」涵蓋太多種行為，範圍太廣。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">A 抽象哲學病：</span>核心概念本身就抓不住、測不到。例：「幸福感是什麼？」——幸福感沒辦法直接觀察或量化。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-amber-300/60">分辨口訣：C 是「太多」，A 是「太空」。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">C 百科全書病（先救）：</span>題目太大、裝太多東西，像在寫百科全書而不是做研究。例：「手機使用對學業成績的影響」——「手機使用」涵蓋太多種行為，範圍太廣。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">A 抽象哲學病（後處理）：</span>核心概念本身就抓不住、測不到。例：「幸福感是什麼？」——幸福感沒辦法直接觀察或量化。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-amber-300/60">⚡ 兩病同時出現時，先救 C——情境不先定，A 的量表根本無從設計。口訣：C 是「太多」，A 是「太空」；先縮範圍，再填內容。</p>
                                     </div>
                                 )}
                             </div>

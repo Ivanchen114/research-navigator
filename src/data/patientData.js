@@ -773,7 +773,7 @@ export const patientData = [
     focusTerms: ["靈魂","存不存在"],
     focusCue: "「靈魂存不存在」——先想最根本的：有任何科學方法可以蒐集資料或驗證這件事嗎？",
     question: "靈魂到底存不存在？",
-    diagnosis: "方法無效病 + 算命占卜病(形而上)",
+    diagnosis: "方法無效病 + 抽象哲學病(形而上)",
     causes: ["難", "遠"],
     cures: ["易", "近"],
     healedOptions: [
@@ -914,8 +914,8 @@ export const patientData = [
     focusCue: "除了「談戀愛」以外，還有多少其他因素可能影響成績？先想：如果要研究這題，你能控制多少變項？",
     question: "高中生談戀愛會不會影響成績？",
     diagnosis: "變因失控 + 是非廢話",
-    causes: ["大", "空", "難"],
-    cures: ["小", "實", "易"],
+    causes: ["空", "難"],
+    cures: ["實", "易"],
     healedOptions: [
       {
         text: "本校高二生對班對現象的接受度與對班級讀書風氣的主觀感受差異",
@@ -946,13 +946,13 @@ export const patientData = [
   },
   {
     id: 27,
-    primaryDiagnosisKey: "A",
-    priorityDiagnosisKey: "A",
-    acceptableDiagnosisKeys: ["C"],
-    coDiagnosisKeys: ["C"],
-    priorityReason: "平台範圍也大，但更核心的是「焦慮」若不先轉成具體量表或指標，就無法操作，因此本關先救「空」。",
-    focusTerms: ["焦慮"],
-    focusCue: "「焦慮」——這個概念有辦法直接觀察或測量嗎？先判斷這個詞能不能轉成具體可研究的指標。",
+    primaryDiagnosisKey: "C",
+    priorityDiagnosisKey: "C",
+    acceptableDiagnosisKeys: ["A"],
+    coDiagnosisKeys: ["A"],
+    priorityReason: "「焦慮」也很抽象，但情境不先定，測量就無從設計——IG 與抖音是完全不同的平台和使用方式，不先選定其中一個，焦慮量表要怎麼設計？所以先救「大」，確定研究情境，再來操作化焦慮。",
+    focusTerms: ["IG", "抖音"],
+    focusCue: "「IG / 抖音」同時出現——這兩個平台的使用方式和內容完全不同，你打算同時研究兩個嗎？先想：研究情境確定前，焦慮指標要怎麼設計？",
     question: "IG / 抖音讓高中生焦慮嗎？",
     diagnosis: "百科全書病 + 抽象哲學",
     causes: ["大", "空"],
@@ -972,9 +972,9 @@ export const patientData = [
       }
     ],
     explanation: [
-      { icon: "👁️", label: "觀察", text: "「IG / 抖音」範圍太廣，「焦慮」也太抽象。" },
-      { icon: "🧠", label: "診斷", text: "這是百科全書病加抽象哲學病。你若不先限縮平台使用方式與焦慮指標，就很難操作。" },
-      { icon: "💡", label: "處方", text: "用「大→小」和「空→實」，聚焦到探索頁面、短影音使用時數，再搭配明確量表，如外貌焦慮或社交焦慮。" }
+      { icon: "👁️", label: "觀察", text: "「IG / 抖音」同時出現——這是兩個完全不同的平台。「焦慮」也很模糊，沒有指定是哪種焦慮。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是百科全書病（C）——IG 的使用方式（按讚、限動、追蹤）和抖音（短影音刷流）根本不同，不先選定平台與使用情境，焦慮量表從何設計？縮小範圍是第一步，「焦慮」的抽象哲學病（A）是共病，留在確定情境後再處理。" },
+      { icon: "💡", label: "處方", text: "用「大→小」先選定一個平台和特定使用方式（如IG探索頁面），再用「空→實」把焦慮改成外貌焦慮量表或社交焦慮分數。" }
     ],
     severity: "boss",
     tags: ["範圍太大", "概念模糊"]
@@ -1065,7 +1065,7 @@ export const patientData = [
     focusTerms: ["天生","比較聰明"],
     focusCue: "要研究「天生比較聰明」——先想：用什麼方法才能驗證這件事？高中生兩週內有這樣的方法嗎？",
     question: "為什麼有些人天生就比較聰明？",
-    diagnosis: "變因失控 + 方法無效病",
+    diagnosis: "方法無效病 + 變因失控",
     causes: ["大", "難"],
     cures: ["小", "易"],
     healedOptions: [
@@ -1084,7 +1084,7 @@ export const patientData = [
     ],
     explanation: [
       { icon: "👁️", label: "觀察", text: "「天生」預設答案在先天因素，而「聰明」本身也很模糊，可能指成績、理解力、記憶力或解題速度。" },
-      { icon: "🧠", label: "診斷", text: "這是變因失控病加方法無效病。高中生無法研究基因如何決定聰明，也很難控制家庭、環境與努力程度等眾多變因。" },
+      { icon: "🧠", label: "診斷", text: "優先病灶是方法無效病（G）——高中生根本沒有任何科學方法可以研究「先天智力」的來源（需要基因組學或長期追蹤實驗）。變因失控（H）是共病，即便換個方法也很難控制家庭、環境、努力程度等眾多干擾因素。" },
       { icon: "💡", label: "處方", text: "用「難→易」和「大→小」，不要研究先天智力，而改研究可觀察的後天因素，例如讀書習慣、家庭教育參與或學習動機。" }
     ],
     severity: "boss",

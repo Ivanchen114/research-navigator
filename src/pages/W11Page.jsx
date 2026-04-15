@@ -97,9 +97,87 @@ export const W11Page = () => {
             </div>
 
             {showLessonMap && (
-                <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
-                    <div className="p-8 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl text-center text-[#8888aa]">
-                        W12 為 Open Office 診所週，主要進行個別指導與進度盤點。
+                <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300 space-y-6">
+                    {/* 時間軸 */}
+                    <div className="p-6 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl">
+                        <h3 className="text-[14px] font-bold text-[#1a1a2e] mb-4">⏱ 時間軸</h3>
+                        <div className="grid grid-cols-2 gap-4 text-[12px] text-[#4a4a6a]">
+                            <div>
+                                <p className="font-bold text-[#1a1a2e] mb-2">第一節（50 分鐘）</p>
+                                <p>0:00–0:10 開場 + 診所掛號說明</p>
+                                <p>0:10–0:15 黑板掛號 + 教師快速盤點</p>
+                                <p>0:15–0:50 全班自由執行 + 老師個別診所</p>
+                            </div>
+                            <div>
+                                <p className="font-bold text-[#1a1a2e] mb-2">第二節（50 分鐘）</p>
+                                <p>0:00–0:35 繼續執行 + 診所全開</p>
+                                <p>0:35–0:45 研究日誌書寫</p>
+                                <p>0:45–0:50 收束 + W13 中期報告預告</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 診療指南 */}
+                    <div className="p-6 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl">
+                        <h3 className="text-[14px] font-bold text-[#1a1a2e] mb-4">📋 各方法組診療指南（巡迴參考）</h3>
+
+                        {/* 問卷組 */}
+                        <div className="mb-5">
+                            <div className="bg-teal-600 text-white text-[12px] font-bold px-3 py-1.5 rounded-t-lg">📋 問卷組</div>
+                            <div className="border border-t-0 border-[#dddbd5] rounded-b-lg divide-y divide-[#eee]">
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">回收率很低</span>
+                                    <span className="text-[#4a4a6a]">只是「丟連結」還是「有問他/她？」——人不喜歡填莫名其妙的問卷。要用人的方式問：「嗨！我在做一個關於○○的研究，3 分鐘就填完，可以幫我嗎？」等回覆 OK 再貼連結。</span>
+                                </div>
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">填答品質差</span>
+                                    <span className="text-[#4a4a6a]">「社會期許偏誤＋應付作答」——確認佔比多少，若 50 份中 6 份（12%）還OK。標記出來，分析時說明並剔除或保留，這是研究限制，誠實說清楚就好。</span>
+                                </div>
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">不敢開口</span>
+                                    <span className="text-[#4a4a6a]">用 AI 當話術教練！Prompt：「我要邀請班上或學弟妹填一份關於○○的問卷，我是高中生，請幫我寫一段 LINE 邀請訊息，語氣要有禮貌、真誠，說明填答只需 3 分鐘，請給我 2 種不同語氣的版本。」</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 訪談組 */}
+                        <div className="mb-5">
+                            <div className="bg-purple-600 text-white text-[12px] font-bold px-3 py-1.5 rounded-t-lg">🎤 訪談組</div>
+                            <div className="border border-t-0 border-[#dddbd5] rounded-b-lg divide-y divide-[#eee]">
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">受訪者話很少</span>
+                                    <span className="text-[#4a4a6a]">問了封閉式問題！換成開放式：「最近讀書的過程中，有什麼時刻讓你特別有壓力？可以舉個例子嗎？」讓他說一個「故事」，不是說一個「答案」。</span>
+                                </div>
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">錄音品質很差</span>
+                                    <span className="text-[#4a4a6a]">在哪裡錄的？走廊太吵！選安靜地方：圖書館角落、小教室。錄音可用 AI 自動轉錄（NotebookLM 或 Whisper），或放慢播放速度仔細聽。</span>
+                                </div>
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">受訪者臨時爽約</span>
+                                    <span className="text-[#4a4a6a]">雙軌並行——① 繼續等他，給 2–3 天排其他時段；② 啟動 W10 備案，換一個受訪者。先傳訊息問下週哪天有空，同時聯絡備用受訪者，不要只等一個人！</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 實驗觀察組 */}
+                        <div>
+                            <div className="bg-emerald-600 text-white text-[12px] font-bold px-3 py-1.5 rounded-t-lg">🧪 實驗組 ／ 👀 觀察組</div>
+                            <div className="border border-t-0 border-[#dddbd5] rounded-b-lg divide-y divide-[#eee]">
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">實驗：人數不均</span>
+                                    <span className="text-[#4a4a6a]">若時間允許，繼續招募對照組；若無法，分析時說明樣本數不均等是研究限制，結論要保守，不能強調因果。</span>
+                                </div>
+                                <div className="p-3 flex gap-3 text-[12px]">
+                                    <span className="bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded whitespace-nowrap h-fit">觀察：觀察者效應</span>
+                                    <span className="text-[#4a4a6a]">① 讓學生習慣你的存在（多去幾次）；② 用不明顯的記錄方式；③ 報告中說明這是研究限制。</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* W13 預告 */}
+                    <div className="p-5 bg-[#fdf6e3] border border-amber-200 rounded-xl text-[12px] text-[#7a6020]">
+                        <span className="font-bold">📌 W13 中期報告三要素：</span> ① 我目前做到哪了？（現況）② 還差什麼沒做完？（缺口）③ 我打算怎麼補？（計畫）—— 下週每組要用 2 分鐘講完這三件事。
                     </div>
                 </div>
             )}
