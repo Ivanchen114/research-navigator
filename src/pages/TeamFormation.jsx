@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './TeamFormation.css';
-import { Users, User, ArrowRight, CheckCircle2, Search, Map, Zap, Music, Camera, Mic, Info } from 'lucide-react';
+import { Users, ArrowRight, CheckCircle2, Search, Map, Zap, Target, Telescope, BookOpen } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W7Data } from '../data/lessonMaps';
 
@@ -11,12 +11,11 @@ export const TeamFormation = () => {
 
     return (
         <div className="page-container animate-in-fade-slide">
-            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
 
-            {/* TOP BAR / NAVIGATION PATH */}
+            {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">組隊決策週 W8</span>
+                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">研究博覽會 W8</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -40,26 +39,27 @@ export const TeamFormation = () => {
 
             <div className="w7-content">
                 <div className="w7-top-breadcrumb">
-                    <span>🤝 W8</span>
+                    <span>🔭 W8</span>
                     <span className="w7-breadcrumb-sep">·</span>
                     <span>研究規劃</span>
                     <span className="w7-breadcrumb-sep">→</span>
-                    <span>資料蒐集</span>
+                    <span>裝備執行</span>
                 </div>
 
                 <h1 className="w7-page-title">
-                    組隊決策週：<span className="text-[#2d5be3]">從個人到團隊</span>
+                    研究博覽會：<span className="text-[#2d5be3]">組隊 × 合題 × 企劃書</span>
                 </h1>
                 <p className="w7-page-subtitle">
-                    今天是課程的轉折點。你要決定：找隊友，還是獨自研究？不管哪條路，今天都會建立你在這門課的「研究網絡」。
+                    今天是課程的轉折點——從一個人的研究，變成一個團隊的研究。
+                    找到隊友、把題目合併、寫出一份研究企劃書，然後預寫 3 題工具草稿帶去 W9 診所。
                 </p>
 
                 <div className="w7-meta-grid">
                     {[
-                        { label: '第一節', value: '線上測驗 + 研究博覽會' },
-                        { label: '第二節', value: '確定組隊 + 題目決策 + 企劃書' },
-                        { label: '課堂產出', value: '研究企劃書（小組版 or Solo 版）' },
-                        { label: '帶去 W8', value: '確定題目 + 研究方法' }
+                        { label: '第一節', value: '博覽會展示 + 合題規則 + 組隊確認' },
+                        { label: '第二節', value: '企劃書撰寫 + 3 題工具草稿' },
+                        { label: '課堂產出', value: '分組名單 + 企劃書初稿 + 3 題草稿' },
+                        { label: '帶去 W9', value: '3 題草稿問題（你的掛號單）' }
                     ].map((item, idx) => (
                         <div key={idx} className="w7-meta-card">
                             <div className="w7-meta-label">{item.label}</div>
@@ -76,207 +76,212 @@ export const TeamFormation = () => {
 
                 <CourseArc items={W7Data.courseArc} />
 
-                <div className="w7-sub-label">今天的決定 · 兩條都是好路</div>
-                <div className="w7-decision-grid">
-                    <div className="w7-decision-card">
-                        <div className="w7-decision-hd">
-                            <span className="w7-decision-icon">👥</span>
-                            <span className="w7-decision-title">小組研究</span>
-                            <span className="w7-decision-meta">2-4 人</span>
-                        </div>
-                        <ul className="w7-decision-ul">
-                            <li className="w7-decision-li">可以分工，題目可以更大</li>
-                            <li className="w7-decision-li">互相支持，互相檢視</li>
-                            <li className="w7-decision-li">需要協調溝通</li>
-                            <li className="w7-decision-li">整合各人的 W6/W7 文獻與方法</li>
-                        </ul>
-                    </div>
-                    <div className="w7-decision-card" style={{ borderLeft: '4px solid var(--gold)' }}>
-                        <div className="w7-decision-hd">
-                            <span className="w7-decision-icon">🧑‍💻</span>
-                            <span className="w7-decision-title">個人研究 (Solo)</span>
-                            <span className="w7-decision-meta" style={{ background: 'var(--gold-light)', color: 'var(--gold)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>Solo Zone</span>
-                        </div>
-                        <ul className="w7-decision-ul">
-                            <li className="w7-decision-li">進度完全自己掌控</li>
-                            <li className="w7-decision-li">題目聚焦，不需要協調</li>
-                            <li className="w7-decision-li">培養獨立研究能力</li>
-                            <li className="w7-decision-li">有 Solo Zone 夥伴 + 老師特別照顧</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div className="w7-solo-hub">
-                    <div className="w7-hub-hd">
-                        <span className="w7-hub-badge">SOLO ZONE</span>
-                        <span className="w7-hub-title">獨立工作者共享空間</span>
-                    </div>
-                    <div className="w7-hub-body">
-                        <div className="w7-hub-col">
-                            <div className="w7-hub-label">SOLO ZONE 是什麼</div>
-                            <div className="w7-hub-text">
-                                就像咖啡廳的共享工作空間——你們題目不同，但可以互相看企劃書、給建議、共享資源、互相打氣。<br /><br />
-                                選擇個人研究，不代表孤單。
-                            </div>
-                        </div>
-                        <div className="w7-hub-col">
-                            <div className="w7-hub-label">SOLO ZONE 有什麼</div>
-                            <ul className="w7-hub-ul">
-                                <li className="w7-hub-li">· 老師特別照顧個人研究者</li>
-                                <li className="w7-hub-li">· Solo Zone 群組（老師會建立）</li>
-                                <li className="w7-hub-li">· 每週 Solo Zone 互助討論</li>
-                                <li className="w7-hub-li">· W8 前都可以調整（加入小組也行）</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="w7-sub-label">研究博覽會 · 三輪走讀規則</div>
+                {/* ═══ 合題三情境 ═══ */}
+                <div className="w7-sub-label">合題規則 · 三種情境判斷</div>
                 <div className="w7-expo-grid">
                     {[
-                        { n: '1', t: '同類聚集', d: '依研究方法走到對應區域，跟用同樣方法的人交流——看看同一個方法可以研究多少不同題目。' },
-                        { n: '2', t: '跨界交流', d: '換到不同方法的區域，比較你的方法和對方的方法各有什麼優缺點，學習不同的思考方式。' },
-                        { n: '3', t: '自由交流', d: '自由走動：找隊友、建立研究網絡、或確認自己要 Solo。不一定要找朋友，要找題目相近或能力互補的人。' }
+                        { n: '✅', t: '同一現象，不同角度', d: '「高中生每天睡幾小時？」＋「睡眠不足對考試的影響？」→ 合成「睡眠時數與高中生學業表現的關係」', color: '#059669' },
+                        { n: '✅', t: '因果鏈相連，互為變項', d: '「高中生每天用社群媒體幾小時？」＋「高中生的焦慮感有多強？」→ 合成「社群媒體使用時間是否影響青少年焦慮感」', color: '#059669' },
+                        { n: '⚠️', t: '主題差距過大 → 重新搭配', d: '「學校午餐滿意度」＋「高中生職業志向」→ 幾乎無交集，強行合題會讓研究失焦。建議重新找隊友。', color: '#D97706' }
                     ].map((item, idx) => (
                         <div key={idx} className="w7-expo-card">
-                            <span className="w7-expo-num">{item.n}</span>
+                            <span className="w7-expo-num" style={{ color: item.color }}>{item.n}</span>
                             <span className="w7-expo-title">{item.t}</span>
                             <p className="w7-expo-desc">{item.d}</p>
                         </div>
                     ))}
                 </div>
 
-                <div className="w7-music-bar">
-                    <div className="w7-mbar" style={{ background: 'var(--success-light)', color: 'var(--success)' }}>
-                        <div className="mt-1"><Music size={16} /></div>
-                        <div>
-                            <div className="w7-mbar-hd">音樂播放 = 可以交流</div>
-                            <div className="w7-mbar-desc">自由走動，互相拍照研究交流卡</div>
-                        </div>
-                    </div>
-                    <div className="w7-mbar" style={{ background: 'var(--danger-light)', color: 'var(--danger)' }}>
-                        <div className="mt-1"><Zap size={16} /></div>
-                        <div>
-                            <div className="w7-mbar-hd">音樂停止 = 立刻換人</div>
-                            <div className="w7-mbar-desc">不能繼續跟同一個人聊，馬上移動</div>
-                        </div>
+                <div className="w7-notice w7-notice-gold" style={{ marginBottom: '48px' }}>
+                    ⚠️ 合題禁忌：不要讓同一份問卷同時問兩個完全不同方向的問題——受訪者會一頭霧水。
+                    方法不同不代表不能合作：可以各自負責不同子研究問題，只要整體主題一致即可。
+                </div>
+
+                {/* ═══ 主題 vs 問題 ═══ */}
+                <div className="w7-sub-label">「研究主題」vs「研究問題」· 範例對照</div>
+                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
+                    <div className="grid grid-cols-[80px_1fr_1fr] gap-[1px] bg-[#dddbd5]">
+                        <div className="bg-[#1a1a2e] p-3 px-4 text-[11px] font-bold text-white font-mono"></div>
+                        <div className="bg-[#1a1a2e] p-3 px-4 text-[11px] font-bold text-white">① 研究主題（像書名）</div>
+                        <div className="bg-[#1a1a2e] p-3 px-4 text-[11px] font-bold text-white">② 研究問題（要回答的核心題目）</div>
+
+                        <div className="bg-[#e8eeff] p-3 px-4 text-[11px] font-bold text-[#2d5be3] font-mono">因果型</div>
+                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">社群媒體使用與青少年焦慮感</div>
+                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">每日 IG 使用時間<strong>是否影響</strong>高中生的焦慮程度？</div>
+
+                        <div className="bg-[#e8f5ee] p-3 px-4 text-[11px] font-bold text-[#2e7d5a] font-mono">相關型</div>
+                        <div className="bg-[#fafaf8] p-3 px-4 text-[13px] text-[#4a4a6a]">高中生睡眠品質與學業表現</div>
+                        <div className="bg-[#fafaf8] p-3 px-4 text-[13px] text-[#4a4a6a]">就寢時間與段考成績之間<strong>有什麼關係</strong>？</div>
+
+                        <div className="bg-[#faf5e4] p-3 px-4 text-[11px] font-bold text-[#c9a84c] font-mono">描述型</div>
+                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">校園午餐滿意度調查</div>
+                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">松山高中學生對午餐菜色、份量、價格的<strong>滿意程度如何</strong>？</div>
                     </div>
                 </div>
 
-                <div className="w7-notice w7-notice-accent" style={{ marginBottom: '48px' }}>
-                    📸 拍照存檔不只是找隊友——你在拍的是「全班研究網絡」。未來跨組請教、尋求協助，那些照片就是你的聯絡簿。
-                </div>
-
-                <div className="w7-sub-label" style={{ fontFamily: "'DM Mono', monospace", letterSpacing: '0.1em' }}>PITCH 自己的研究 · 30 秒結構</div>
-                {[
-                    { i: '1', t: <><strong>我在研究什麼：</strong>「嗨！我是 ＿＿，我想研究 ＿＿。」</> },
-                    { i: '2', t: <><strong>王牌文獻撐腰：</strong>「我有一篇文獻是 ＿＿（作者、年份），發現 ＿＿，所以我覺得這個題目值得做。」</> },
-                    { i: '3', t: <><strong>互相認識：</strong>「你在研究什麼？」→ 有興趣就拍照存檔。</> }
-                ].map((row, idx) => (
-                    <div key={idx} className="w7-pitch-row">
-                        <div className="w7-pitch-idx">{row.i}</div>
-                        <div className="w7-pitch-content">{row.t}</div>
-                    </div>
-                ))}
-
-                <div className="w7-section-divider" style={{ marginTop: '72px' }}>
+                {/* ═══ 課堂任務 ═══ */}
+                <div className="w7-section-divider">
                     <h2 className="w7-section-title">課堂任務</h2>
                     <div className="w7-section-line"></div>
                     <span className="w7-section-tag">IN-CLASS</span>
                 </div>
 
+                {/* TASK 1: 開場 */}
                 <div className="w7-task-box">
                     <div className="w7-task-header">
                         <span className="w7-task-badge">TASK 1</span>
-                        <span className="w7-task-title">線上測驗（第一節，25 分鐘）</span>
+                        <span className="w7-task-title">開場回顧（第一節 0:00–0:05，5 分鐘）</span>
                     </div>
                     <div className="w7-task-content">
                         <ul className="w7-task-ul">
-                            <li className="w7-task-li">登入酷AI學習系統，找到「W8 研究判斷力測驗」</li>
-                            <li className="w7-task-li">個人測驗，不可討論，25 分鐘內完成送出</li>
-                            <li className="w7-task-li">測驗涵蓋三個部分：問題意識（W1–W4）、文獻搜尋（W5）、文獻偵探（W6）、研究診所（W7）</li>
+                            <li className="w7-task-li">回顧 W7 研究診所：你已經有了個人題目和方法判斷</li>
+                            <li className="w7-task-li">本節任務：找到隊友、把題目合併、寫出研究企劃書</li>
+                            <li className="w7-task-li">確認 W7 學習單已帶來（個人研究題目 + 判斷的研究方法）</li>
                         </ul>
-                        <div className="w7-notice w7-notice-danger">
-                            ⚠️ 測驗期間老師不回答題目內容問題，操作有困難才舉手。
-                        </div>
                     </div>
                 </div>
 
+                {/* TASK 2: 博覽會 */}
                 <div className="w7-task-box">
                     <div className="w7-task-header">
                         <span className="w7-task-badge">TASK 2</span>
-                        <span className="w7-task-title">填寫研究交流卡 + 三輪博覽會（第一節後半）</span>
+                        <span className="w7-task-title">研究博覽會（第一節 0:05–0:25，20 分鐘）</span>
                     </div>
                     <div className="w7-task-content">
                         <ul className="w7-task-ul">
-                            <li className="w7-task-li">領取研究交流卡（A5 橫式），填寫你的題目、<strong>王牌文獻（W5 成果）</strong>、研究方法、技能</li>
-                            <li className="w7-task-li">填好後拿在胸前（像研討會掛牌）</li>
-                            <li className="w7-task-li">第 1 輪：走到對應方法區域，跟同方法的人交流</li>
-                            <li className="w7-task-li">第 2 輪：換到不同方法區域，比較方法優缺點</li>
-                            <li className="w7-task-li">第 3 輪：自由走動，找隊友或建立研究網絡</li>
-                            <li className="w7-task-li">每遇到有興趣的研究，就拍照存檔</li>
+                            <li className="w7-task-li">每人 1 分鐘介紹三件事：① 我想研究什麼 ② 我的研究問題 ③ 我打算用什麼方法</li>
+                            <li className="w7-task-li">全班輪流（按座位順序），班級人數多時可改為 4 人小組輪流</li>
+                            <li className="w7-task-li">邊聽邊記：在學習單 Part A 記下 2–3 位讓你心動的潛在隊友姓名與題目</li>
                         </ul>
-                        <div className="w7-notice w7-notice-gold">
-                            💡 王牌文獻填寫提示：寫 W5 找到的文獻，格式：「Chen (2023) 發現手機影響睡眠，所以我的題目有研究必要！」有文獻支持，Pitch 說服力大幅提升。
+                        <div className="w7-notice w7-notice-accent">
+                            💡 聆聽重點：有沒有人的題目和你很像，或者可以互補？
                         </div>
                     </div>
                 </div>
 
+                {/* TASK 3: 合題規則 */}
                 <div className="w7-task-box">
                     <div className="w7-task-header">
                         <span className="w7-task-badge">TASK 3</span>
-                        <span className="w7-task-title">確定組隊 + 登記表單（第二節前半）</span>
+                        <span className="w7-task-title">合題規則講解 + 試配對（第一節 0:25–0:35，10 分鐘）</span>
                     </div>
                     <div className="w7-task-content">
                         <ul className="w7-task-ul">
-                            <li className="w7-task-li">決定：小組研究（2–4 人）或個人研究（Solo）</li>
-                            <li className="w7-task-li">小組：確認組員、建立群組、推選組長</li>
-                            <li className="w7-task-li">Solo：移動到 Solo Zone，認識其他獨立工作者</li>
-                            <li className="w7-task-li">掃描 QR Code 填寫「W8 組隊登記表」</li>
+                            <li className="w7-task-li">學習三種合題情境（見上方「合題規則」），判斷自己屬於哪種</li>
+                            <li className="w7-task-li">合題的關鍵：找到兩個題目的<strong>共同核心</strong>，不是硬湊</li>
+                            <li className="w7-task-li">合題後的研究問題用三種句型寫：「是否影響」（因果）/「有什麼關係」（相關）/「現況為何」（描述）</li>
                         </ul>
-                        <div className="w7-notice w7-notice-success">
-                            ✅ W8 前都可以調整。Solo 的人之後想加入小組也沒關係，先填表登記再說。
-                        </div>
                     </div>
                 </div>
 
+                {/* TASK 4: 組隊確認 */}
                 <div className="w7-task-box">
                     <div className="w7-task-header">
                         <span className="w7-task-badge">TASK 4</span>
-                        <span className="w7-task-title">Pitch 題目 + 確認最終題目（第二節中段）</span>
+                        <span className="w7-task-title">組隊確認 + 初步合題（第一節 0:35–0:50，15 分鐘）</span>
                     </div>
                     <div className="w7-task-content">
                         <ul className="w7-task-ul">
-                            <li className="w7-task-li"><strong>小組：</strong>每人輪流 Pitch 自己的題目（2–3 分鐘），重點強調王牌文獻支持</li>
-                            <li className="w7-task-li"><strong>小組：</strong>討論合併可能，共識決或投票決，確定小組題目</li>
-                            <li className="w7-task-li"><strong>Solo：</strong>老師個別指導，確認題目縮小到個人可完成的規模（問卷建議 100–150 份，訪談建議 5–8 人）</li>
-                            <li className="w7-task-li">掃描 QR Code 填寫「W8 題目登記表」</li>
+                            <li className="w7-task-li">每組 2–4 人，根據博覽會記下的名單找隊友</li>
+                            <li className="w7-task-li">在學習單 Part B 記錄：你們的題目能不能合？合成什麼？</li>
+                            <li className="w7-task-li">還沒找到隊友的同學舉手，老師協助媒合</li>
                         </ul>
-                        <div className="w7-notice w7-notice-accent">
-                            💡 題目要考慮：你們有幾週執行（W11–W14 共 4 週）？做得完嗎？寧可小而精，不要大而空。
+                        <div className="w7-notice w7-notice-success">
+                            ✅ 分組確認後，填寫 Part B「合題結果」，教師統一記錄分組名單。
                         </div>
                     </div>
                 </div>
 
-                <div className="w7-task-box" style={{ marginBottom: '64px' }}>
+                {/* TASK 5: 企劃書 */}
+                <div className="w7-task-box">
                     <div className="w7-task-header">
                         <span className="w7-task-badge">TASK 5</span>
-                        <span className="w7-task-title">填寫研究企劃書（第二節後半，18 分鐘）</span>
+                        <span className="w7-task-title">企劃書撰寫（第二節 0:00–0:35，35 分鐘）</span>
                     </div>
                     <div className="w7-task-content">
-                        <ul className="w7-task-ul">
-                            <li className="w7-task-li">領取企劃書：小組版（含分工表 + 組員簽名）或 Solo 版（含支援網絡 + 備案欄）</li>
-                            <li className="w7-task-li">填寫題目、研究方法、分工（小組）或時程（Solo）</li>
-                            <li className="w7-task-li">整合各人的 W5 文獻，至少 3 篇填入文獻支持欄</li>
-                            <li className="w7-task-li">所有組員簽名（小組）或個人簽名（Solo）</li>
-                            <li className="w7-task-li">企劃書拍照上傳 Google Classroom</li>
-                        </ul>
-                        <div className="w7-notice w7-notice-gold">
-                            ⚠️ 企劃書不只是作業——W8–W15 老師會用這份追蹤你們的進度，請認真填。
+                        <p className="text-[13px] text-[#4a4a6a] mb-3 leading-relaxed">
+                            企劃書是你們研究的地圖——讓你和隊友知道：我們要去哪裡、怎麼去、誰負責什麼。
+                        </p>
+                        <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden mb-4">
+                            <div className="grid grid-cols-[40px_1fr_2fr] gap-[1px] bg-[#dddbd5] text-[12px]">
+                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white text-center">#</div>
+                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">欄位</div>
+                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">說明</div>
+                                {[
+                                    ['1', '組名 & 成員', '組名自訂；列出所有成員'],
+                                    ['2', '分工表', '每人負責哪個子問題 or 任務'],
+                                    ['3', '研究主題', '合題後的大主題（10–20 字）'],
+                                    ['4', '研究問題', '因果型 / 相關型 / 描述型句型'],
+                                    ['5', '研究方法', '方法名稱 + 理由（參考 W7）'],
+                                    ['6', '研究對象', '對誰？多少人/案例？'],
+                                    ['7', '時程規劃', 'W9–W14 各做什麼？']
+                                ].map(([no, field, note], i) => (
+                                    <React.Fragment key={i}>
+                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 font-bold text-[#0D7377] text-center`}>{no}</div>
+                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 font-bold text-[#1a1a2e]`}>{field}</div>
+                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 text-[#4a4a6a]`}>{note}</div>
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="w7-notice w7-notice-accent">
+                            💡 欄位 4 是核心：如果問題太廣（如「學生壓力」），要縮小範疇（如「期中考週的睡眠壓力」）。
                         </div>
                     </div>
                 </div>
 
+                {/* TASK 6: 工具草稿 */}
+                <div className="w7-task-box">
+                    <div className="w7-task-header">
+                        <span className="w7-task-badge">TASK 6</span>
+                        <span className="w7-task-title">預寫 3 題工具草稿（第二節 0:35–0:45，10 分鐘）</span>
+                    </div>
+                    <div className="w7-task-content">
+                        <p className="text-[13px] text-[#4a4a6a] mb-3 leading-relaxed">
+                            對照你在企劃書選定的方法，寫出 3 題草稿。W9 的診所會幫你們把關品質——草稿就是你的掛號單。
+                        </p>
+                        <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden mb-4">
+                            <div className="grid grid-cols-[80px_1fr_2fr] gap-[1px] bg-[#dddbd5] text-[12px]">
+                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">方法</div>
+                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">草稿長什麼樣</div>
+                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">範例</div>
+                                {[
+                                    ['問卷法', '封閉式問題（含選項）', '你每天使用 IG 的時間大約多長？ □不到30分 □30-60分 □1-2小時 □超過2小時'],
+                                    ['訪談法', '開放式問題', '可以描述一下你通常在什麼情境下會打開 IG 嗎？'],
+                                    ['觀察法', '觀察指標（誰＋情境＋行為）', '午休時間，觀察教室內有多少人在滑手機（每5分鐘記錄一次）'],
+                                    ['實驗法', '操作步驟（操弄＋測量）', '實驗組用番茄鐘25分鐘讀書，對照組自由讀書，測量記憶測驗分數'],
+                                    ['文獻分析', '搜尋策略（關鍵字＋篩選）', '關鍵字「青少年+社群媒體+焦慮」，篩選近5年、中英文期刊']
+                                ].map(([method, shape, example], i) => (
+                                    <React.Fragment key={i}>
+                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 font-bold text-[#0D7377]`}>{method}</div>
+                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 text-[#4a4a6a]`}>{shape}</div>
+                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 text-[#4a4a6a]`}>{example}</div>
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="w7-notice w7-notice-danger">
+                            ⚠️ 這 3 題草稿不計分，但 W9 要帶來診所——沒有草稿就沒辦法診斷！
+                        </div>
+                    </div>
+                </div>
+
+                {/* TASK 7: 收束 */}
+                <div className="w7-task-box" style={{ marginBottom: '64px' }}>
+                    <div className="w7-task-header">
+                        <span className="w7-task-badge">TASK 7</span>
+                        <span className="w7-task-title">各組簡報 + 收束（第二節 0:45–0:50，5 分鐘）</span>
+                    </div>
+                    <div className="w7-task-content">
+                        <ul className="w7-task-ul">
+                            <li className="w7-task-li">每組 30 秒電梯簡報：你們的研究主題是什麼，打算問誰</li>
+                            <li className="w7-task-li">今天完成了重要一步：從個人題目，變成團隊研究計畫</li>
+                            <li className="w7-task-li">下週 W9，帶著 3 題草稿問題，一起來診斷品質</li>
+                        </ul>
+                    </div>
+                </div>
+
+                {/* ═══ 總結 ═══ */}
                 <div className="w7-section-divider">
                     <h2 className="w7-section-title">本週總結</h2>
                     <div className="w7-section-line"></div>
@@ -289,10 +294,10 @@ export const TeamFormation = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
                         {[
-                            '做出組隊決策，說得出選擇獨研或組隊的理由',
-                            '完成 W8 題目登記，確認研究題目與研究方法',
-                            '建立或加入研究社群（小組群組 or Solo Zone）',
-                            '拿到已簽名的研究企劃書，準備下週開工'
+                            '完成分組，確認組員名單',
+                            '把個人題目合併為團隊研究主題',
+                            '完成研究企劃書初稿（含分工表）',
+                            '寫好 3 題工具草稿，準備帶到 W9 診所'
                         ].map((item, i) => (
                             <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                 <span className="text-[#2e7d5a] mt-0.5">✓</span>
@@ -302,64 +307,20 @@ export const TeamFormation = () => {
                     </div>
                 </div>
 
-                <div className="w7-hw-card">
-                    <div className="w7-hw-hd">
-                        <span className="w7-hw-tag" style={{ background: '#1a1a2e', color: '#fff' }}>全體</span>
-                        <span className="w7-hw-name">個人作業</span>
-                    </div>
-                    <div className="w7-hw-row">
-                        <div className="w7-hw-label">測驗檢視</div>
-                        <div className="w7-hw-desc">登入酷AI系統查看測驗結果，訂正錯誤題目</div>
-                    </div>
-                    <div className="w7-hw-row">
-                        <div className="w7-hw-label">網絡整理</div>
-                        <div className="w7-hw-desc">整理研究博覽會拍的照片，分類：可能合作 / 可請教 / 有趣題目，上傳 Google Classroom</div>
-                    </div>
-                </div>
-
-                <div className="w7-hw-card">
-                    <div className="w7-hw-hd">
-                        <span className="w7-hw-tag" style={{ background: 'var(--accent)', color: '#fff' }}>小組</span>
-                        <span className="w7-hw-name">小組追加作業</span>
-                    </div>
-                    <div className="w7-hw-row">
-                        <div className="w7-hw-label">建立群組</div>
-                        <div className="w7-hw-desc">建立 Line / Discord 群組，截圖上傳 Google Classroom</div>
-                    </div>
-                    <div className="w7-hw-row">
-                        <div className="w7-hw-label">分享文獻</div>
-                        <div className="w7-hw-desc">每人分享 W5 找到的文獻，整合到共用資料夾（至少 3 篇）</div>
-                    </div>
-                </div>
-
-                <div className="w7-hw-card">
-                    <div className="w7-hw-hd">
-                        <span className="w7-hw-tag" style={{ background: 'var(--gold)', color: '#1a1a2e' }}>Solo</span>
-                        <span className="w7-hw-name">Solo 研究者追加作業</span>
-                    </div>
-                    <div className="w7-hw-row">
-                        <div className="w7-hw-label">可行性檢核</div>
-                        <div className="w7-hw-desc">確認題目規模合理：樣本數 OK？時間夠？方法熟悉？如有問題請在 W8 前調整</div>
-                    </div>
-                    <div className="w7-hw-row">
-                        <div className="w7-hw-label">加入群組</div>
-                        <div className="w7-hw-desc">加入老師建立的 Solo Zone 群組，自我介紹並分享你的研究題目</div>
-                    </div>
-                </div>
-
+                {/* 下週預告 */}
                 <div className="next-week-preview">
                     <div className="next-week-header">
                         <span className="next-week-badge">NEXT WEEK</span>
-                        <h3 className="next-week-title">W8 工具設計 預告</h3>
+                        <h3 className="next-week-title">W9 工具設計 預告</h3>
                     </div>
                     <div className="next-week-content">
                         <div className="next-week-col">
-                            <div className="next-week-label">W8 上半節</div>
-                            <p className="next-week-text">各科工具核心邏輯：問卷、訪談、實驗樣樣通。</p>
+                            <div className="next-week-label">帶什麼來</div>
+                            <p className="next-week-text">你的 3 題草稿問題——這是你的「掛號單」，沒有草稿就沒辦法進診所。</p>
                         </div>
                         <div className="next-week-col">
-                            <div className="next-week-label">W8 下半節</div>
-                            <p className="next-week-text">設計你的研究工具 1.0 版本，避開常見的設計大坑。</p>
+                            <div className="next-week-label">做什麼</div>
+                            <p className="next-week-text">老師用「診所模式」逐題診斷你的問卷/訪綱/觀察指標品質，升級為 2.0 版。</p>
                         </div>
                     </div>
                 </div>

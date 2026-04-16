@@ -17,11 +17,12 @@ export const Layout = () => {
 
     const navSections = [
         {
-            label: '首頁',
+            label: '任務大廳',
             items: [
-                { name: '首頁', path: '/', status: 'active' },
+                { name: '任務總覽', path: '/', status: 'active' },
                 { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
                 { name: '資料分析站', path: '/analysis-station', status: 'none' },
+                { name: '關於本站', path: '/about', status: 'none' },
             ]
         },
         {
@@ -41,15 +42,15 @@ export const Layout = () => {
                 { name: '文獻搜尋入門', path: '/w5', week: 'W5', status: 'done' },
                 { name: '文獻偵探社', path: '/w6', week: 'W6', status: 'done' },
                 { name: '研究診所', path: '/w7', week: 'W7', status: 'done' },
-                { name: '組隊決策週', path: '/w8', week: 'W8', status: 'active' },
+                { name: '研究博覽會', path: '/w8', week: 'W8', status: 'active' },
             ]
         },
         {
             sublabel: '裝備與執行',
             items: [
-                { name: '工具設計', path: '/w9', week: 'W9', status: 'locked' },
-                { name: '工具精進', path: '/w10', week: 'W10', status: 'locked' },
-                { name: '倫理與定案', path: '/w11', week: 'W11', status: 'locked' }
+                { name: '品質診斷', path: '/w9', week: 'W9', status: 'locked' },
+                { name: '倫理審查', path: '/w10', week: 'W10', status: 'locked' },
+                { name: '資料收集', path: '/w11', week: 'W11', status: 'locked' }
             ]
         },
         {
@@ -125,6 +126,9 @@ export const Layout = () => {
                 else finalStatus = 'none';
             } else if (item.path === '/analysis-station') {
                 if (location.pathname === '/analysis-station') finalStatus = 'active';
+                else finalStatus = 'none';
+            } else if (item.path === '/about') {
+                if (location.pathname === '/about') finalStatus = 'active';
                 else finalStatus = 'none';
             } else {
                 const itemWeekNum = getWeekNumber(item.path);

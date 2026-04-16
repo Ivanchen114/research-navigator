@@ -2,11 +2,56 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './ToolDesignPage.css';
-import { Wrench, ArrowRight, AlertTriangle, ShieldCheck, Heart, ClipboardList, Mic, TestTube2, Camera, Target, Zap, FileSearch, Scale, Map, Gamepad2, ShieldAlert } from 'lucide-react';
+import { ArrowRight, ClipboardList, Mic, TestTube2, Camera, FileSearch, Map, ShieldAlert, Stethoscope, Users, PenLine, Presentation, CheckCircle2 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W8Data } from '../data/lessonMaps';
 
-// 五大工具的錯誤類型與解藥 (5 Methods Pitfalls Data)
+/* ─── 示範壞題資料 ─── */
+const demoBadQuestions = [
+    {
+        method: '📋 問卷',
+        bad: '你是否覺得睡眠品質很差，而且這讓你在學校很難集中注意力？',
+        diagnosis: '一題問了兩件事（睡眠品質 + 注意力），受訪者無法只回答一個'
+    },
+    {
+        method: '🎤 訪談',
+        bad: '你壓力大嗎？為什麼？你怎麼解決？解決後有效嗎？',
+        diagnosis: '四個問題塞在一起，受訪者不知道回答哪個、訪談無法深入'
+    },
+    {
+        method: '👁 觀察',
+        bad: '觀察學生是否在思考',
+        diagnosis: '「思考」是內在狀態，無法直接觀察；應改為外顯行為（視線停留 10 秒、用筆書寫）'
+    },
+    {
+        method: '🧪 實驗',
+        bad: '全班都聽音樂讀書，一個月後發現成績進步',
+        diagnosis: '沒有對照組，無法排除「練習效應」等其他原因'
+    },
+    {
+        method: '📚 文獻',
+        bad: '根據某部落格文章，熬夜會讓記憶力下降 50%',
+        diagnosis: '來源不可信（非學術來源），數據無法查證'
+    }
+];
+
+/* ─── 診斷規準速查 ─── */
+const diagCriteriaA = [
+    { no: '1', q: '每題只問一件事', iv: '使用開放式問題', ob: '觀察外顯可見的行為' },
+    { no: '2', q: '選項完整且互不重疊', iv: '一次只問一件事', ob: '有操作型定義' },
+    { no: '3', q: '無引導性語氣', iv: '不預設答案', ob: '時段與地點明確' },
+    { no: '4', q: '量尺前後一致', iv: '設計追問問題', ob: '不干擾被觀察者' },
+    { no: '5', q: '受訪者能回答', iv: '問具體情境', ob: '記錄方式清楚（畫記/計數）' },
+];
+const diagCriteriaB = [
+    { no: '1', ex: '有操作型定義（變項可測量）', lit: '來源可信（學術期刊、政府報告）' },
+    { no: '2', ex: '有對照組', lit: '有篩選標準（關鍵字、年份、來源類型）' },
+    { no: '3', ex: '控制干擾變項（時間、環境一致）', lit: '涵蓋正反觀點（避免確認偏誤）' },
+    { no: '4', ex: '測量方式客觀（數據而非感覺）', lit: '時效性合理（近 5–10 年）' },
+    { no: '5', ex: '可重複執行（足夠樣本數）', lit: '忠實呈現原意（不斷章取義）' },
+];
+
+/* ─── 五大工具的錯誤類型與解藥 (保留原有互動地雷卡) ─── */
 const methodPitfalls = {
     questionnaire: {
         id: 'questionnaire',
@@ -73,13 +118,11 @@ export const ToolDesignPage = () => {
 
     return (
         <div className="page-container animate-in-fade-slide">
-            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
-
 
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">工具設計 W8</span>
+                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">研究工具診所 W9</span>
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -101,12 +144,12 @@ export const ToolDesignPage = () => {
 
             {/* PAGE HEADER */}
             <div className="max-w-[800px] mb-16">
-                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">🔧 W8 · 資料蒐集</div>
+                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">🩺 W9 · 資料蒐集</div>
                 <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
-                    工具設計：<span className="text-[#2d5be3]">處方診斷與三大標準</span>
+                    研究工具診所 Level 2：<span className="text-[#2d5be3]">品質診斷與修改</span>
                 </h1>
                 <p className="text-[16px] text-[#4a4a6a] leading-relaxed mb-8">
-                    你在 W6 學會「選方法」。今天要升級到 Level 2——學會設計出好的工具，知道壞工具長什麼樣，然後動手寫出初稿。
+                    帶著 W8 的 3 題草稿走進診所。今天你要學會用診斷規準發現自己哪裡「錯」，互相診斷對方的草稿，然後修改擴充成 5–10 題的完整研究工具。
                 </p>
 
                 {/* GAME BANNER */}
@@ -123,114 +166,251 @@ export const ToolDesignPage = () => {
                     </Link>
                 </div>
 
-                {/* Course Arc - Standard Version A */}
+                {/* Course Arc */}
                 <CourseArc items={W8Data.courseArc} />
             </div>
 
+            {/* META STRIP */}
             <div className="w8-meta-strip">
                 <div className="w8-meta-item">
                     <div className="w8-meta-label">第一節</div>
-                    <div className="w8-meta-value">Level 2 診斷 + 三大標準</div>
+                    <div className="w8-meta-value">示範診斷 × 互相診斷</div>
                 </div>
                 <div className="w8-meta-item">
                     <div className="w8-meta-label">第二節</div>
-                    <div className="w8-meta-value">分流工作坊：工具實作初稿</div>
+                    <div className="w8-meta-value">精修 × 完成初版工具</div>
+                </div>
+                <div className="w8-meta-item">
+                    <div className="w8-meta-label">前置要求</div>
+                    <div className="w8-meta-value">W8 Part D 的 3 題草稿</div>
                 </div>
                 <div className="w8-meta-item">
                     <div className="w8-meta-label">課堂產出</div>
-                    <div className="w8-meta-value">工具初稿 (問卷/訪談大綱...)</div>
-                </div>
-                <div className="w8-meta-item">
-                    <div className="w8-meta-label">帶去 W9</div>
-                    <div className="w8-meta-value">初稿 → 上機 + 真實預試</div>
+                    <div className="w8-meta-value">修改後 5–10 題初版工具</div>
                 </div>
             </div>
 
-
-
-            {/* 學什麼 SECTION */}
+            {/* ═══════ TASK 1：開場 ═══════ */}
             <section>
                 <div className="w8-section-head">
-                    <h2 className="w8-section-title">學什麼</h2>
+                    <h2 className="w8-section-title">課堂流程</h2>
                     <div className="w8-section-line"></div>
-                    <span className="w8-section-tag">CONCEPT</span>
+                    <span className="w8-section-tag">IN-CLASS</span>
                 </div>
 
-                <div className="text-[11px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-4">診斷等級升級</div>
-                <div className="w8-level-banner">
-                    <div className="w8-level-card">
-                        <span className="w8-level-tag text-[#2e7d5a] bg-[#e8f5ee]">W6 · LEVEL 1 ✓</span>
-                        <div className="w8-level-title">掛號判斷</div>
-                        <div className="w8-level-desc">你的研究問題適合什麼方法？<br />→ 問卷 / 訪談 / 實驗 / 觀察 / 文獻</div>
-                    </div>
-                    <div className="w8-level-card now">
-                        <span className="w8-level-tag text-[#1a1a2e] bg-[#c9a84c]">W8 · LEVEL 2 ← 現在</span>
-                        <div className="w8-level-title">處方診斷</div>
-                        <div className="w8-level-desc">你設計的工具有沒有毛病？<br />→ 抓雷、修正、確保工具有效可靠</div>
-                    </div>
-                </div>
+                <div className="grid gap-6">
 
-                <div className="text-[11px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-4">好工具三大標準</div>
-                <div className="w8-standards-grid">
-                    <div className="w8-std-card">
-                        <div className="w8-std-icon">🎯</div>
-                        <div className="w8-std-title">有效性</div>
-                        <div className="w8-std-en">Validity</div>
-                        <div className="w8-std-bad">❌ 「你覺得睡眠重要嗎？」<br />（問不出時間）</div>
-                        <div className="w8-std-good">✓ 「你平日幾點睡覺？」<br />（直接測到目標）</div>
+                    {/* TASK 1 — 開場 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 1</span>
+                            <span className="w8-task-title">開場：確認草稿到位</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">5 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a] mb-3">確認每位學生帶著 W8 Part D 的 3 題草稿進教室。沒帶的先用 5 分鐘默寫一題。</p>
+                            <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-lg p-4 text-[13px] text-[#4a4a6a]">
+                                <strong className="text-[#1a1a2e]">📢 本節三步驟：</strong>
+                                <span className="ml-2">① 老師示範怎麼診斷 → ② 你們互相診斷 → ③ 第二節自己修改</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="w8-std-card">
-                        <div className="w8-std-icon">📏</div>
-                        <div className="w8-std-title">可靠性</div>
-                        <div className="w8-std-en">Reliability</div>
-                        <div className="w8-std-bad">❌ 「你常常熬夜嗎？」<br />（各人理解不同）</div>
-                        <div className="w8-std-good">✓ 「上週有幾天過 12 點睡？」<br />（數值客觀穩定）</div>
-                    </div>
-                    <div className="w8-std-card">
-                        <div className="w8-std-icon">✅</div>
-                        <div className="w8-std-title">可行性</div>
-                        <div className="w8-std-en">Feasibility</div>
-                        <div className="w8-std-bad">❌ 問卷 100 題 / 訪談 5 小時<br />（對方會中途放棄）</div>
-                        <div className="w8-std-good">✓ 問卷 15題 / 訪談 30分鐘<br />（時間規劃合理）</div>
-                    </div>
-                </div>
 
-                <div className="text-[11px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-4">常見錯誤速查 · 防雷卡</div>
-                <div className="w8-errors-grid">
-                    <div className="w8-err-item">
-                        <span className="w8-err-tag">ERROR 01</span>
-                        <div className="w8-err-name">誘導性提問</div>
-                        <div className="w8-err-bad">❌ 「你同意手機會嚴重傷害睡眠嗎？」</div>
-                        <div className="w8-err-good">✓ 「你認為手機對睡眠的影響是？」</div>
+                    {/* TASK 2 — 教師示範診斷 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 2</span>
+                            <span className="w8-task-title">教師示範診斷：三個典型壞題</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">15 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a] mb-4">每種方法各示範 1 個典型壞題，帶全班走一遍「哪裡有問題？哪條規準？怎麼修？」</p>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-[13px] border-collapse">
+                                    <thead>
+                                        <tr className="bg-[#1a1a2e] text-white">
+                                            <th className="p-3 text-left font-bold rounded-tl-lg">方法</th>
+                                            <th className="p-3 text-left font-bold">壞題示範</th>
+                                            <th className="p-3 text-left font-bold rounded-tr-lg">診斷出的問題</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {demoBadQuestions.map((item, idx) => (
+                                            <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f8f7f4]' : 'bg-white'}>
+                                                <td className="p-3 font-bold text-[#0d7377] whitespace-nowrap">{item.method}</td>
+                                                <td className="p-3 text-[#b91c1c]">{item.bad}</td>
+                                                <td className="p-3 text-[#4a4a6a]">{item.diagnosis}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div className="w8-err-item">
-                        <span className="w8-err-tag">ERROR 02</span>
-                        <div className="w8-err-name">選項重疊</div>
-                        <div className="w8-err-bad">❌ 0–10 分鐘、10–20 分鐘</div>
-                        <div className="w8-err-good">✓ 10 分鐘以下、11–20 分鐘</div>
+
+                    {/* TASK 3 — 互相診斷 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 3</span>
+                            <span className="w8-task-title">各組互相診斷</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">18 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a] mb-3">和隔壁組交換 3 題草稿，對照診斷規準圈出問題。</p>
+                            <div className="bg-[#fef3c7] border border-[#d97706]/30 rounded-lg p-4 text-[13px] mb-4">
+                                <strong className="text-[#d97706]">🎯 診斷目標：</strong>
+                                <span className="text-[#4a4a6a] ml-1">每題至少找出 1 個可以改進的地方，並寫上是哪條規準出了問題。</span>
+                            </div>
+
+                            {/* 診斷規準速查表 */}
+                            <div className="text-[11px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-3">▸ 問卷 / 訪談 / 觀察法速查</div>
+                            <div className="overflow-x-auto mb-4">
+                                <table className="w-full text-[13px] border-collapse">
+                                    <thead>
+                                        <tr className="bg-[#0d7377] text-white">
+                                            <th className="p-2.5 text-left font-bold w-8 rounded-tl-lg">#</th>
+                                            <th className="p-2.5 text-left font-bold">問卷法</th>
+                                            <th className="p-2.5 text-left font-bold">訪談法</th>
+                                            <th className="p-2.5 text-left font-bold rounded-tr-lg">觀察法</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {diagCriteriaA.map((row, idx) => (
+                                            <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'}>
+                                                <td className="p-2.5 font-bold text-[#0d7377]">{row.no}</td>
+                                                <td className="p-2.5">{row.q}</td>
+                                                <td className="p-2.5 text-[#4a4a6a]">{row.iv}</td>
+                                                <td className="p-2.5 text-[#4a4a6a]">{row.ob}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="text-[11px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-3">▸ 實驗 / 文獻分析法速查</div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-[13px] border-collapse">
+                                    <thead>
+                                        <tr className="bg-[#0d7377] text-white">
+                                            <th className="p-2.5 text-left font-bold w-8 rounded-tl-lg">#</th>
+                                            <th className="p-2.5 text-left font-bold">實驗法</th>
+                                            <th className="p-2.5 text-left font-bold rounded-tr-lg">文獻分析法</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {diagCriteriaB.map((row, idx) => (
+                                            <tr key={idx} className={idx % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'}>
+                                                <td className="p-2.5 font-bold text-[#0d7377]">{row.no}</td>
+                                                <td className="p-2.5">{row.ex}</td>
+                                                <td className="p-2.5 text-[#4a4a6a]">{row.lit}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div className="w8-err-item">
-                        <span className="w8-err-tag">ERROR 03</span>
-                        <div className="w8-err-name">選項不完整</div>
-                        <div className="w8-err-bad">❌ 只有 A 或 B</div>
-                        <div className="w8-err-good">✓ 包含「其他」或極端值選項</div>
+
+                    {/* TASK 4 — 教師統整 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 4</span>
+                            <span className="w8-task-title">教師統整常見問題</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">12 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a] mb-3">各組分享在對方草稿裡發現的常見問題。</p>
+                            <div className="bg-[#ede9fe] border border-[#7c3aed]/20 rounded-lg p-4 text-[13px]">
+                                <strong className="text-[#7c3aed]">📊 三大常見錯誤：</strong>
+                                <span className="text-[#4a4a6a] ml-1">一題問兩件事、引導性語氣、問了受訪者無法回答的事。</span>
+                                <br />
+                                <span className="text-[#4a4a6a] mt-1 inline-block">💡 養成一個問自己的習慣：「受訪者看到這題，會不會搞不清楚要回答什麼？」</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="w8-err-item">
-                        <span className="w8-err-tag">ERROR 04</span>
-                        <div className="w8-err-name">雙重問題</div>
-                        <div className="w8-err-bad">❌ 「餐廳便宜又好吃嗎？」</div>
-                        <div className="w8-err-good">✓ 拆成兩個獨立問題</div>
+
+                    {/* ─── 第二節分隔 ─── */}
+                    <div className="flex items-center gap-4 my-4">
+                        <div className="h-px flex-1 bg-[#dddbd5]"></div>
+                        <span className="text-[11px] font-mono text-[#8888aa] tracking-widest">第二節</span>
+                        <div className="h-px flex-1 bg-[#dddbd5]"></div>
                     </div>
+
+                    {/* TASK 5 — 精修草稿 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 5</span>
+                            <span className="w8-task-title">精修草稿：從 3 題到 5–10 題</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">35 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a] mb-4">
+                                根據第一節的診斷結果修改草稿，並補充到 5–10 題完整版本。用學習單 Part C 逐題填寫修改過程。
+                            </p>
+
+                            <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-lg p-4 text-[13px] text-[#4a4a6a] mb-4">
+                                <strong className="text-[#1a1a2e]">✍️ 修改時問自己三件事：</strong>
+                                <ol className="mt-2 ml-4 space-y-1 list-decimal">
+                                    <li>這題對應我的研究問題嗎？</li>
+                                    <li>受訪者看得懂嗎？</li>
+                                    <li>答案會幫我回答研究問題嗎？</li>
+                                </ol>
+                            </div>
+
+                            <div className="bg-[#ede9fe] border border-[#7c3aed]/20 rounded-lg p-4 text-[13px]">
+                                <strong className="text-[#7c3aed]">💡 各方法設計提示</strong>
+                                <div className="mt-2 space-y-1.5 text-[#4a4a6a]">
+                                    <p><strong>問卷法：</strong>通常 10–20 題；前幾題基本資料，中間核心問題，最後可有開放填答。</p>
+                                    <p><strong>訪談法：</strong>訪綱 5–8 個主問題 + 每題下方 2–3 個追問；不要超過 15 個主問題。</p>
+                                    <p><strong>觀察法：</strong>需要標題（地點、時間、對象）+ 觀察指標 + 記錄方式（畫記/計數/文字描述）。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* TASK 6 — 展示 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 6</span>
+                            <span className="w8-task-title">修前修後展示</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">10 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a]">
+                                每組選出改得最滿意的 1 題：展示修改前 vs 修改後，說明改了什麼、為什麼改。不需要解釋研究主題，直接講題目本身。
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* TASK 7 — 收束 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 7</span>
+                            <span className="w8-task-title">收束 + 預告 W10</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">5 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a]">
+                                下週 W10 做兩件事：① 進行研究倫理審查 ② 正式啟動資料收集。回家前請把初版工具再自己讀一遍。
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
-            {/* 練什麼 SECTION */}
+            {/* ═══════ 地雷速查卡（保留互動元件）═══════ */}
             <section className="mt-20">
                 <div className="w8-section-head">
-                    <h2 className="w8-section-title">練什麼</h2>
+                    <h2 className="w8-section-title">地雷速查卡</h2>
                     <div className="w8-section-line"></div>
-                    <span className="w8-section-tag">PRACTICE</span>
+                    <span className="w8-section-tag">REFERENCE</span>
                 </div>
+
+                <p className="text-[14px] text-[#4a4a6a] mb-6">
+                    五種研究方法各有典型地雷。點選下方切換查看你的方法需要注意什麼。
+                </p>
 
                 <div className="w8-method-tabs">
                     {[
@@ -256,7 +436,7 @@ export const ToolDesignPage = () => {
                         <span className="text-[14px] font-bold">{currentMethod.name.split(' ')[0]}設計避險</span>
                     </div>
                     <div className="w8-panel-body">
-                        <div className="w8-panel-section-title">核心地雷（今天務必避開）</div>
+                        <div className="w8-panel-section-title">核心地雷（務必避開）</div>
                         <div className="w8-pitfall-list">
                             {currentMethod.errors.map((err, idx) => (
                                 <div key={idx} className="w8-pitfall-item">
@@ -268,34 +448,11 @@ export const ToolDesignPage = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="w8-notice w8-notice-success mb-0">
-                            ✅ <strong>目標：</strong>今天完成初稿。W9 將進行真實預試。
-                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* 課堂任務 SECTION */}
-            <section className="mt-20">
-                <div className="w8-section-head">
-                    <h2 className="w8-section-title">課堂任務</h2>
-                    <div className="w8-section-line"></div>
-                    <span className="w8-section-tag">IN-CLASS</span>
-                </div>
-
-                <div className="grid gap-6">
-                    <div className="w8-task-block">
-                        <div className="w8-task-hd"><span className="w8-task-badge">TASK 1</span><span className="w8-task-title">X 型病例診斷</span></div>
-                        <div className="w8-task-body"><ol className="w8-task-ol"><li>診斷病例 XQ1 問卷</li><li>指出踩到的地雷並修改</li></ol></div>
-                    </div>
-                    <div className="w8-task-block">
-                        <div className="w8-task-hd"><span className="w8-task-badge">TASK 2</span><span className="w8-task-title">實作工具初稿</span></div>
-                        <div className="w8-task-body"><p className="text-[14px] text-[#4a4a6a]">完成三欄對應表並設計出工具初稿內容。</p></div>
-                    </div>
-                </div>
-            </section>
-
-            {/* WRAP UP SECTION */}
+            {/* ═══════ WRAP UP ═══════ */}
             <section className="mt-20">
                 <div className="w8-section-head">
                     <h2 className="w8-section-title">本週總結</h2>
@@ -309,10 +466,10 @@ export const ToolDesignPage = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
                         {[
-                            '說出三大設計標準：能測到、能分析、高中生能做',
-                            '看到一份工具稿，能指出至少 2 個設計地雷',
-                            '完成 1.0 版研究工具初稿（三欄對應表填完）',
-                            '說出你的方法有哪些獨特地雷需要注意'
+                            '用診斷規準找出草稿中的問題（不只憑感覺）',
+                            '說出你的方法（問卷/訪談/觀察）的關鍵規準',
+                            '完成 5–10 題的初版研究工具',
+                            '記錄每題修改前後的差異與原因'
                         ].map((item, i) => (
                             <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                 <span className="text-[#2e7d5a] mt-0.5">✓</span>
@@ -324,19 +481,19 @@ export const ToolDesignPage = () => {
 
                 <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-8">
                     <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
-                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
-                        <span className="font-bold text-[13px]">本週作業</span>
+                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">DELIVERABLES</span>
+                        <span className="font-bold text-[13px]">本週產出</span>
                     </div>
                     <div className="divide-y divide-[#dddbd5]">
                         {[
-                            { part: 'Part 1', text: '工具初稿完整版（三欄對應表 + 所有題目）' },
-                            { part: 'Part 2', text: 'AI 審稿記錄（至少 3 條 AI-RED 記錄）', badge: '最重要' },
-                            { part: 'Part Z', text: '自我檢核（攜帶初稿準備 W9 真人預試）', light: true },
+                            { part: 'Part A', text: '診斷規準速查（課堂對照使用）' },
+                            { part: 'Part B', text: '同儕診斷記錄（幫對方組診斷 3 題草稿）', badge: '課堂完成' },
+                            { part: 'Part C', text: '修改記錄（修前 / 修後 / 原因，至少 3 題）', badge: '最重要' },
                         ].map((hw, idx) => (
                             <div key={idx} className="p-4 px-6 flex items-center justify-between text-[13px]">
                                 <div className="flex items-center gap-6">
-                                    <span className={`font-bold font-mono w-12 shrink-0 ${hw.light ? 'text-[#8888aa]' : 'text-[#2d5be3]'}`}>{hw.part}</span>
-                                    <span className={hw.light ? 'text-[#8888aa]' : 'text-[#4a4a6a]'}>{hw.text}</span>
+                                    <span className="font-bold font-mono w-12 shrink-0 text-[#2d5be3]">{hw.part}</span>
+                                    <span className="text-[#4a4a6a]">{hw.text}</span>
                                 </div>
                                 {hw.badge && <span className="bg-[#fdecea] text-[#c0392b] text-[10px] px-2 py-0.5 rounded border border-[#c0392b]/20 font-bold">{hw.badge}</span>}
                             </div>
@@ -353,26 +510,26 @@ export const ToolDesignPage = () => {
                 <div className="next-week-preview">
                     <div className="next-week-header">
                         <span className="next-week-badge">NEXT WEEK</span>
-                        <h2 className="next-week-title">W9 預告：工具精進與預試</h2>
+                        <h2 className="next-week-title">W10 預告：倫理審查 + 啟動資料收集</h2>
                     </div>
                     <div className="next-week-content">
                         <div className="next-week-col">
-                            <div className="next-week-label">真實反饋</div>
-                            <p className="next-week-text">W9 會找真實的人進行測試並進行數位化上機實作。</p>
+                            <div className="next-week-label">倫理審查</div>
+                            <p className="next-week-text">W10 會進行研究倫理審查，確認你們的研究符合倫理規範。</p>
                         </div>
                         <div className="next-week-col">
                             <div className="next-week-label">準備工作</div>
-                            <p className="next-week-text">⚠️ 下週請務必攜帶筆電。問卷組需完成數位化。</p>
+                            <p className="next-week-text">⚠️ 把今天的初版工具再讀一遍：每題都能對應到你的研究問題嗎？</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center mt-16 pt-8 border-t border-[#dddbd5]">
                     <Link to="/w8" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
-                        ← 回 W8 組隊決策週
+                        ← 回 W8 研究博覽會
                     </Link>
                     <Link to="/w10" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-[6px] text-[13px] font-bold hover:bg-[#4a4a6a] transition-all flex items-center gap-2 group">
-                        前往 W10 工具精進 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                        前往 W10 倫理審查 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
             </section>
