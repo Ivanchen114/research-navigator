@@ -32,6 +32,7 @@ import { ChartSelection } from './pages/ChartSelection';
 import { PromptLab } from './pages/PromptLab';
 import { DataAnalysisStation } from './pages/DataAnalysisStation';
 import { Dossier } from './pages/Dossier';
+import { AboutPage } from './pages/AboutPage';
 import { PhantomDataHub } from './pages/games/PhantomDataHub';
 import { PhantomCh1 } from './pages/games/PhantomCh1';
 import { PhantomCh2 } from './pages/games/PhantomCh2';
@@ -87,6 +88,7 @@ function App() {
           <Route path="prompt-lab" element={<PromptLab />} />
           <Route path="analysis-station" element={<DataAnalysisStation />} />
           <Route path="dossier" element={<Dossier />} />
+          <Route path="about" element={<AboutPage />} />
           <Route path="phantom" element={<PhantomDataHub />} />
           <Route path="phantom/ch1" element={<PhantomCh1 />} />
           <Route path="phantom/ch2" element={<PhantomCh2 />} />

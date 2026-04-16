@@ -553,7 +553,10 @@ export const Home = () => {
         {/* FOOTER */}
         <div className="site-footer">
           <div className="footer-brand">SSSH · 研究方法與專題 · 松山高中</div>
-          <div className="footer-version">AI-RED V2.0.4</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Link to="/about" style={{ fontFamily: "'DM Mono', monospace", fontSize: '11px', color: '#9090b0', textDecoration: 'none', letterSpacing: '0.06em', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#2d5be3'} onMouseLeave={e => e.target.style.color = '#9090b0'}>關於本站</Link>
+            <div className="footer-version">AI-RED V2.0.4</div>
+          </div>
         </div>
 
       </div>
