@@ -178,7 +178,7 @@ export const ToolDesignPage = () => {
                 </div>
                 <div className="w8-meta-item">
                     <div className="w8-meta-label">第二節</div>
-                    <div className="w8-meta-value">精修 × 完成初版工具</div>
+                    <div className="w8-meta-value">精修 × 同儕試填 × 完成初版</div>
                 </div>
                 <div className="w8-meta-item">
                     <div className="w8-meta-label">前置要求</div>
@@ -342,7 +342,7 @@ export const ToolDesignPage = () => {
                         <div className="w8-task-hd">
                             <span className="w8-task-badge">TASK 5</span>
                             <span className="w8-task-title">精修草稿：從 3 題到 5–10 題</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">35 min</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">20 min</span>
                         </div>
                         <div className="w8-task-body">
                             <p className="text-[14px] text-[#4a4a6a] mb-4">
@@ -369,30 +369,151 @@ export const ToolDesignPage = () => {
                         </div>
                     </div>
 
-                    {/* TASK 6 — 展示 */}
+                    {/* TASK 6 — 同儕試填 */}
                     <div className="w8-task-block">
                         <div className="w8-task-hd">
                             <span className="w8-task-badge">TASK 6</span>
-                            <span className="w8-task-title">修前修後展示</span>
+                            <span className="w8-task-title">同儕試填：讓別人真的填一次</span>
+                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">15 min</span>
+                        </div>
+                        <div className="w8-task-body">
+                            <p className="text-[14px] text-[#4a4a6a] mb-4">
+                                修完草稿後，不要急著交——先讓別組同學<strong>真的使用</strong>你的工具。自己設計的題目自己一定看得懂；但別人看不看得懂，只有試了才知道。
+                            </p>
+
+                            {/* 配對規則 */}
+                            <div className="bg-[#1a1a2e] rounded-lg p-4 text-[13px] mb-4">
+                                <strong className="text-white">🔀 配對規則（教師指派）：</strong>
+                                <div className="mt-2 text-[#c8c5bc] space-y-1">
+                                    <p>A 組 → 填 B 組的工具、B 組 → 填 C 組的⋯⋯<strong className="text-white">單向輪轉，不互相交換</strong>。</p>
+                                    <p className="text-[#8888aa]">為什麼？互相交換容易礙於面子不敢說真話。單向配對讓試填者更放心指出問題。</p>
+                                </div>
+                            </div>
+
+                            {/* 分鐘級拆分 */}
+                            <div className="bg-[#fef3c7] border border-[#d97706]/30 rounded-lg p-4 text-[13px] mb-4">
+                                <strong className="text-[#d97706]">⏱ 分鐘級流程：</strong>
+                                <div className="mt-2 space-y-2 text-[#4a4a6a]">
+                                    <div className="flex gap-3 items-start">
+                                        <span className="font-mono font-bold text-[#d97706] shrink-0 w-20">0–2 min</span>
+                                        <span><strong>交接：</strong>把工具交給對方，<strong>只說一句研究問題</strong>，不解釋題目。（試填者要像真正的受訪者一樣獨立閱讀）</span>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="font-mono font-bold text-[#d97706] shrink-0 w-20">2–9 min</span>
+                                        <span><strong>試填：</strong>試填者填答，遇到卡住的地方先打個「？」繼續往下填，不要當場問設計者。</span>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="font-mono font-bold text-[#d97706] shrink-0 w-20">9–13 min</span>
+                                        <span><strong>填回饋：</strong>試填者翻到學習單 Part D，填寫回饋清單（三個問題 + 一句話建議）。</span>
+                                    </div>
+                                    <div className="flex gap-3 items-start">
+                                        <span className="font-mono font-bold text-[#d97706] shrink-0 w-20">13–15 min</span>
+                                        <span><strong>歸還 + 口頭回報：</strong>把回饋交還給設計者，<strong>當面講一個最大的問題</strong>。</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 方法分流 */}
+                            <div className="bg-[#e8eeff] border border-[#2d5be3]/20 rounded-lg p-4 text-[13px] mb-4">
+                                <strong className="text-[#2d5be3]">📋 不同方法怎麼「試填」？</strong>
+                                <div className="mt-3 space-y-3 text-[#4a4a6a]">
+                                    <div className="flex items-start gap-2">
+                                        <span className="shrink-0">📋</span>
+                                        <div><strong>問卷法：</strong>試填者直接填答問卷，勾選或寫下答案。最接近「真人受訪」的狀態。</div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="shrink-0">🎤</span>
+                                        <div><strong>訪談法：</strong>組內一人扮訪談者唸訪綱，試填者扮受訪者回答。<strong>訪談者不可補充解釋</strong>——如果受訪者聽不懂問題，就是問題本身要改。</div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="shrink-0">👁</span>
+                                        <div><strong>觀察法：</strong>試填者閱讀觀察記錄表，檢查「看到這張表，我知不知道要觀察什麼、怎麼記錄」。不需要實際觀察。</div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="shrink-0">🧪</span>
+                                        <div><strong>實驗法：</strong>試填者閱讀實驗流程，檢查「如果我是受試者，我知不知道要做什麼、測量什麼」。</div>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="shrink-0">📚</span>
+                                        <div><strong>文獻法：</strong>試填者閱讀文獻搜尋策略，檢查「關鍵字是否精準、篩選標準是否明確」。</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 試填者回答的問題 */}
+                            <div className="bg-white border border-[#dddbd5] rounded-[8px] overflow-hidden mb-4">
+                                <div className="bg-[#f0ede6] p-[10px_16px] text-[13px] font-bold text-[#1a1a2e]">📝 Part D：試填者回饋清單</div>
+                                <div className="p-4 text-[13px] text-[#4a4a6a] space-y-2">
+                                    <p>❶ 有沒有哪一題<strong>看不懂在問什麼</strong>？（寫出題號和原因）</p>
+                                    <p>❷ 有沒有哪一題讓你<strong>不知道怎麼選 / 怎麼回答</strong>？（選項不完整？量尺混亂？）</p>
+                                    <p>❸ 填完之後，你覺得這份工具<strong>能回答他們的研究問題</strong>嗎？</p>
+                                    <p>❹ 整體填答花了多久？（太短可能題目太少，太長可能受訪者會放棄）</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-[#ede9fe] border border-[#7c3aed]/20 rounded-lg p-4 text-[13px]">
+                                <strong className="text-[#7c3aed]">💡 為什麼要試填？</strong>
+                                <span className="text-[#4a4a6a] ml-1">
+                                    正式的研究叫「預試」(Pilot Test)。專業研究者在正式發放前，一定會先找小樣本試填，
+                                    找出題意不清、選項缺漏、或意想不到的理解差異——這些問題在 AI 診斷和同儕診斷中很難被發現，
+                                    因為<strong>只有真正在填的人才知道自己卡在哪裡</strong>。
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* TASK 7 — 展示 */}
+                    <div className="w8-task-block">
+                        <div className="w8-task-hd">
+                            <span className="w8-task-badge">TASK 7</span>
+                            <span className="w8-task-title">修前修後展示 + 試填發現</span>
                             <span className="text-[11px] text-[#8888aa] font-mono ml-auto">10 min</span>
                         </div>
                         <div className="w8-task-body">
                             <p className="text-[14px] text-[#4a4a6a]">
-                                每組選出改得最滿意的 1 題：展示修改前 vs 修改後，說明改了什麼、為什麼改。不需要解釋研究主題，直接講題目本身。
+                                每組選出改得最滿意的 1 題：展示修改前 vs 修改後，說明改了什麼、為什麼改。同時分享一個試填時發現的意外問題——「我以為很清楚，結果同學完全看不懂」的那種。
                             </p>
+                            <p className="text-[13px] text-[#4a4a6a] mt-2">
+                                <strong>一問一答：</strong>每組報告完，台下必須問一個問題。不知道問什麼？用下面的句型卡。
+                            </p>
+
+                            {/* 提問句型卡 */}
+                            <div className="mt-4 border border-[#c9a84c] rounded-[10px] overflow-hidden">
+                                <div className="bg-[#fdf6e3] p-[10px_16px] text-[13px] font-bold text-[#7a6020] flex items-center gap-2">
+                                    💬 提問句型卡 <span className="text-[10px] font-normal opacity-70">— 挑一句改成你的版本</span>
+                                </div>
+                                <div className="p-4 space-y-2 text-[12px] text-[#4a4a6a] bg-white">
+                                    <div className="flex items-start gap-2">
+                                        <span className="bg-[#fdf6e3] text-[#7a6020] text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 mt-0.5">填答困惑</span>
+                                        <span>「你這題的選項，受訪者會不會都選同一個？」</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="bg-[#e8eeff] text-[#2d5be3] text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 mt-0.5">模擬受訪</span>
+                                        <span>「如果我是受訪者，我看到這題會先問 ___」</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="bg-[#e6f4ea] text-[#2e7d5a] text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 mt-0.5">連結目的</span>
+                                        <span>「這題收到的答案，能回答你的研究問題嗎？」</span>
+                                    </div>
+                                    <div className="flex items-start gap-2">
+                                        <span className="bg-[#fce4ec] text-[#c62828] text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 mt-0.5">偷學一招</span>
+                                        <span>「你那題的追問設計很聰明，可以教我怎麼想到的嗎？」</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    {/* TASK 7 — 收束 */}
+                    {/* TASK 8 — 收束 */}
                     <div className="w8-task-block">
                         <div className="w8-task-hd">
-                            <span className="w8-task-badge">TASK 7</span>
+                            <span className="w8-task-badge">TASK 8</span>
                             <span className="w8-task-title">收束 + 預告 W10</span>
                             <span className="text-[11px] text-[#8888aa] font-mono ml-auto">5 min</span>
                         </div>
                         <div className="w8-task-body">
                             <p className="text-[14px] text-[#4a4a6a]">
-                                下週 W10 做兩件事：① 進行研究倫理審查 ② 正式啟動資料收集。回家前請把初版工具再自己讀一遍。
+                                下週 W10 做兩件事：① 進行研究倫理審查 ② 正式啟動資料收集。回家前請把初版工具再自己讀一遍——尤其是試填時同學反映看不懂的那幾題。
                             </p>
                         </div>
                     </div>
@@ -469,7 +590,9 @@ export const ToolDesignPage = () => {
                             '用診斷規準找出草稿中的問題（不只憑感覺）',
                             '說出你的方法（問卷/訪談/觀察）的關鍵規準',
                             '完成 5–10 題的初版研究工具',
-                            '記錄每題修改前後的差異與原因'
+                            '記錄每題修改前後的差異與原因',
+                            '讓真人試填，收集「看不懂 / 卡住」的回饋',
+                            '在展示環節提出或回答一個問題'
                         ].map((item, i) => (
                             <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                 <span className="text-[#2e7d5a] mt-0.5">✓</span>
@@ -489,6 +612,8 @@ export const ToolDesignPage = () => {
                             { part: 'Part A', text: '診斷規準速查（課堂對照使用）' },
                             { part: 'Part B', text: '同儕診斷記錄（幫對方組診斷 3 題草稿）', badge: '課堂完成' },
                             { part: 'Part C', text: '修改記錄（修前 / 修後 / 原因，至少 3 題）', badge: '最重要' },
+                            { part: 'Part D', text: '同儕試填回饋（試填者填寫：題意是否清楚、哪題卡住）', badge: '新增' },
+                            { part: 'Part E', text: '展示提問紀錄（我問別組 + 別組問我）', badge: '新增' },
                         ].map((hw, idx) => (
                             <div key={idx} className="p-4 px-6 flex items-center justify-between text-[13px]">
                                 <div className="flex items-center gap-6">

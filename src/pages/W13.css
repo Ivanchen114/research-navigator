@@ -1,0 +1,116 @@
+/* W13 — 執行週 II：中期盤點與資料收齊 */
+
+/* 填空模板卡 */
+.w13-pitch-template {
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+    background: #fff;
+}
+.w13-pitch-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+}
+.w13-pitch-body {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 2;
+    color: var(--ink);
+}
+.w13-pitch-blank {
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+    text-align: center;
+    padding: 0 4px;
+    margin: 0 2px;
+}
+
+/* 關帳入場券表 */
+.w13-ticket-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+}
+.w13-ticket-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.5;
+}
+.w13-ticket-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.w13-ticket-method {
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 48px;
+}
+
+/* 資料確認卡 */
+.w13-confirm-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+}
+.w13-confirm-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    font-size: 13px;
+    color: var(--ink-mid);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.w13-confirm-item:hover {
+    background: var(--paper-warm);
+}
+.w13-confirm-item.checked {
+    background: #F0FDF4;
+}
+.w13-confirm-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+}
+.w13-confirm-item.checked .w13-confirm-box {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .w13-pitch-body {
+        font-size: 13px;
+    }
+}

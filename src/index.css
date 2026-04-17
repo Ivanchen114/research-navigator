@@ -287,6 +287,12 @@ h3,
   overflow: hidden;
 }
 
+@media (max-width: 640px) {
+  .content-grid {
+    grid-template-columns: repeat(min(var(--cols, 1), 2), 1fr);
+  }
+}
+
 .content-item {
   background: #fff;
   padding: 20px;

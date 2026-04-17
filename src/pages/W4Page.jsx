@@ -1,661 +1,697 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
-import { Map, ArrowRight, ArrowLeft, CheckCircle2, Users2, Target, Lightbulb, Zap, MessageSquare, Brain } from 'lucide-react';
-import LessonMap from '../components/ui/LessonMap';
+import ThinkRecord from '../components/ui/ThinkRecord';
+import ThinkChoice from '../components/ui/ThinkChoice';
+import StepEngine from '../components/ui/StepEngine';
+import ExportButton from '../components/ui/ExportButton';
 import CopyButton from '../components/ui/CopyButton';
+import { readRecords } from '../components/ui/ThinkRecord';
+import {
+    Map,
+    ArrowRight,
+    CheckCircle2,
+    Users2,
+    Lightbulb,
+    MessageSquare,
+    Brain,
+} from 'lucide-react';
+import LessonMap from '../components/ui/LessonMap';
 import { W4Data } from '../data/lessonMaps';
+
+/* ── 資料常數 ── */
+
+const W5H1_ITEMS = [
+    { w: 'Who', l: '對象', q: '研究的是誰？要具體到一個可接觸的群體。' },
+    { w: 'Where', l: '場域', q: '在哪個地點或範圍內進行？' },
+    { w: 'What', l: '變項', q: '核心概念是什麼？要能測量。' },
+    { w: 'When', l: '時間', q: '有特定的時間點或情境嗎？' },
+    { w: 'How', l: '方法', q: '用問卷？訪談？觀察？文獻？實驗？' },
+];
+
+const COLLAB_STEPS_OWN = [
+    { n: '1', t: '修改初稿', d: '寫出你 5W1H 修改後的題目。', s: 'step-human' },
+    { n: '2', t: '問 AI 診斷', d: '讓 AI 幫你做最後掃描。', s: 'step-ai' },
+    { n: '3', t: '確認心意', d: '聽聽看就好，還是你做主。', s: 'step-you' },
+    { n: '4', t: '要 3 個建議', d: '請 AI 給三個方向的修改建議。', s: 'step-ai' },
+    { n: '5', t: '你來選', d: '選出一個方向。', s: 'step-you' },
+    { n: '6', t: '機器包裝', d: '使用下方【句型優化器】產生專業標題。', s: 'step-ai' },
+    { n: '7', t: '定案！', d: '產出你的【W4 專題定案題目】，帶進海報。', s: 'step-you step-green', badge: '帶入海報' },
+];
+
+const TITLE_PROMPT = `我的研究題目初稿是：【請貼上你的初稿】
+
+請幫我優化成更專業的版本：
+1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）
+2. 讓 Who(研究對象) / What(研究變數) 描述更精確
+3. 確保高中生可以執行，字數不要過長
+
+請給我 3 個優化版本。`;
+
+const POSTER_PROMPT = `我的研究海報需要以下元素：
+- 研究題目：【貼上 W3 定案題目】
+- 吸引人的標題草稿：【貼上你的草稿】
+- 預期發現草稿：【貼上你的預測】
+
+請幫我：
+1. 優化標題，讓它更吸引高中生，保持白話但加一點懸疑感
+2. 把預期發現改寫得更有研究感（加入「可能」「推測」等詞）
+3. 給我 2 個版本讓我選
+
+請保持在我原本的研究範圍內，不要幫我改題目方向。`;
+
+const POSTER_FIELDS = [
+    { n: '①', l: '吸引人的標題', d: '口語問句，讓人一眼停下來' },
+    { n: '②', l: '正式研究題目', d: 'W3 定案版本（副標）' },
+    { n: '③', l: '研究動機', d: '為什麼想研究這個？' },
+    { n: '④', l: '製作人資訊', d: '姓名 / 班級 / 座號' },
+];
+
+const EXPORT_FIELDS = [
+    { key: 'w4-5w1h-who', label: '5W1H — Who（對象）', question: '研究的是誰？要具體到一個可接觸的群體。' },
+    { key: 'w4-5w1h-where', label: '5W1H — Where（場域）', question: '在哪個地點或範圍內進行？' },
+    { key: 'w4-5w1h-what', label: '5W1H — What（變項）', question: '核心概念是什麼？要能測量。' },
+    { key: 'w4-5w1h-when', label: '5W1H — When（時間）', question: '有特定的時間點或情境嗎？' },
+    { key: 'w4-5w1h-how', label: '5W1H — How（方法）', question: '用問卷？訪談？觀察？文獻？實驗？' },
+    { key: 'w4-initial-topic', label: 'AI 包裝後的定案題目', question: '經過 AI 句型優化後，你帶進海報的題目是什麼？' },
+    { key: 'w4-aired-record', label: 'AI-RED 記錄', question: '這次 AI 協作中，你的 AI-RED 五欄分別記了什麼？' },
+    { key: 'w4-motivation-raw', label: '白話版動機（自己寫的）', question: '用跟朋友聊天的方式，說說你為什麼想研究這個題目？' },
+    { key: 'w4-title-draft', label: '標題草稿', question: '用口語問句寫一個吸引人的標題' },
+    { key: 'w4-prediction', label: '預期發現', question: '你預測這個研究可能發現什麼？大膽猜 2-3 個' },
+    { key: 'w4-feedback-accept', label: 'Gallery Walk：我接受的建議', question: '同學給的建議中，你接受了哪些？怎麼改？' },
+    { key: 'w4-feedback-reject', label: 'Gallery Walk：我不接受的建議', question: '你不採納哪些建議？理由是？' },
+    { key: 'w4-final-topic', label: 'W4 最終定案題目', question: '經過壓力測試後，你的最終定案題目是什麼？' },
+    { key: 'w4-final-motivation', label: 'W4 最終研究動機', question: '你的最終研究動機是什麼？' },
+];
+
+/* ── 主組件 ── */
 
 export const W4Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
-    const [w3Topic, setW3Topic] = useState('');
-    const [titleDraft, setTitleDraft] = useState('');
-    const [myMotivation, setMyMotivation] = useState('');
+    const [choiceResults, setChoiceResults] = useState([]);
 
-    const titlePrompt = `我的研究題目是：${w3Topic || '【填入你的 W3 定案題目】'}\n我自己想的標題草稿是：${titleDraft || '【填入你的直覺標題】'}\n我的研究動機：${myMotivation || '【填入你的研究動機】'}\n\n請幫我優化這個標題，讓它更吸引人，用問句，20字以內，不要完全取代我的想法。給我3個版本。`;
+    /* W2 探究意圖帶入 */
+    const [w2Intent, setW2Intent] = useState('');
+    useEffect(() => {
+        const records = readRecords();
+        setW2Intent(records['w2-final-intent'] || '');
+    }, []);
+
+    const trackChoice = useCallback((question, selected, correct) => {
+        setChoiceResults(prev => {
+            const idx = prev.findIndex(c => c.question === question);
+            const entry = { question, selected, correct };
+            if (idx >= 0) { const next = [...prev]; next[idx] = entry; return next; }
+            return [...prev, entry];
+        });
+    }, []);
+
+    /* ── 五個步驟 ── */
+
+    const steps = [
+        /* ──────────────────────────────────────
+         * STEP 1: 5W1H 規格化 + AI 包裝
+         * ────────────────────────────────────── */
+        {
+            title: '5W1H 規格化',
+            icon: '🔪',
+            content: (
+                <div className="space-y-10">
+                    {/* W1-W4 旅程回顧 */}
+                    <div>
+                        <div className="section-head"><h2>從 W3 到 W4</h2><div className="line"></div><span className="mono">WARM-UP</span></div>
+                        <p className="section-desc">
+                            W3 你學會了診斷 8 種爛題型。但光會挑毛病不夠——今天要把你自己的題目切開、規格化、讓 AI 包裝，再做成海報接受同學的壓力測試。
+                        </p>
+
+                        <div className="content-grid mb-8" style={{ '--cols': 4 }}>
+                            {[
+                                { wk: 'W1', icon: '👀', title: '找到畫面', desc: '什麼讓你好奇？', past: true },
+                                { wk: 'W2', icon: '❓', title: '形成問題', desc: '把畫面轉成問題', past: true },
+                                { wk: 'W3', icon: '🏥', title: '題目健檢', desc: '診斷病症 + AI 練手', past: true },
+                                { wk: 'W4', icon: '🎯', title: '定案 + 壓測', desc: '5W1H → 海報 → Gallery Walk', now: true },
+                            ].map(item => (
+                                <div key={item.wk} className={`p-5 flex flex-col gap-2 ${item.now ? 'bg-[var(--ink)] text-white' : 'bg-white'}`}>
+                                    <div className={`font-mono text-xl font-bold ${item.now ? 'text-[var(--gold)]' : 'text-[var(--accent)]'}`}>{item.wk}</div>
+                                    <div className="text-xl">{item.icon}</div>
+                                    <div className={`font-bold text-[13px] ${item.now ? 'text-white' : 'text-[var(--ink)]'}`}>{item.title}</div>
+                                    <div className={`text-[11px] leading-relaxed ${item.now ? 'text-white/60' : 'text-[var(--ink-light)]'}`}>{item.desc}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 5W1H 規格化 */}
+                    <div>
+                        <div className="section-head"><h2>5W1H 規格化</h2><div className="line"></div><span className="mono">不准用 AI · 15 分鐘</span></div>
+                        <p className="section-desc">
+                            拿出 W2 你的「最終探究意圖」，用 5W1H 切開它。只要有一格寫不出來或做不到，就用 W3 學的心法立刻修改！
+                        </p>
+
+                        {w2Intent && (
+                            <div className="bg-[var(--accent-light)] border border-[var(--accent)]/20 rounded-lg p-4 flex items-start gap-3 mb-6">
+                                <span className="text-[16px]">📎</span>
+                                <div>
+                                    <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">W2 最終探究意圖</div>
+                                    <p className="text-[13px] text-[var(--ink)] leading-relaxed font-medium">{w2Intent}</p>
+                                    <p className="text-[11px] text-[var(--ink-light)] mt-1">把這句話切成下面的 5W1H 五格。</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6">
+                            {W5H1_ITEMS.map(item => (
+                                <div className="bg-white border border-[var(--border)] rounded-xl p-4 flex flex-col gap-2" key={item.w}>
+                                    <div className="font-mono font-bold text-[var(--accent)] text-[16px]">{item.w}</div>
+                                    <div className="font-bold text-[13px] text-[var(--ink)]">{item.l}</div>
+                                    <div className="text-[11px] text-[var(--ink-light)] leading-relaxed">{item.q}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="p-4 bg-[var(--danger-light)] rounded-[6px] border border-[var(--danger)]/20 mb-6">
+                            <strong className="text-[var(--danger)] text-[13px] block mb-2">⚡ 殘酷的可行性快篩</strong>
+                            <p className="text-[12px] text-[var(--ink-mid)]">檢查你選的方法做不做得到：發得完問卷嗎？約得到人訪談嗎？有設備做實驗嗎？只要一項不行，馬上退件重修。</p>
+                        </div>
+
+                        <div className="space-y-3">
+                            <div className="text-[12px] font-bold font-mono text-[var(--ink-light)] tracking-wider mb-1">✏️ 把你的題目切開填入</div>
+                            {W5H1_ITEMS.map(item => (
+                                <ThinkRecord
+                                    key={item.w}
+                                    dataKey={`w4-5w1h-${item.w.toLowerCase()}`}
+                                    prompt={`${item.w}（${item.l}）${item.w === 'When' ? '　⸺ 選填' : ''}`}
+                                    placeholder={item.q}
+                                    rows={1}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* AI 最終協作 */}
+                    <div>
+                        <div className="section-head"><h2>AI 句型包裝</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                        <p className="section-desc">
+                            你的題目通過快篩了！現在請 AI 把粗糙的初稿包裝成專業學術標題，帶進下一步的海報。
+                        </p>
+
+                        <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white mb-6">
+                            <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-3">
+                                <Brain size={15} className="text-[var(--ink)]" />
+                                <span className="font-bold text-[13px] text-[var(--ink)]">AI 協作 7 步驟</span>
+                            </div>
+                            <div className="p-5 space-y-3">
+                                {COLLAB_STEPS_OWN.map(step => (
+                                    <div className="flex gap-4" key={step.n}>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono font-bold text-[13px] flex-shrink-0 ${step.s.includes('step-green') ? 'bg-[var(--success)] text-white' : step.s.includes('step-ai') ? 'bg-[var(--accent-light)] text-[var(--accent)]' : 'bg-[var(--paper-warm)] text-[var(--ink)]'}`}>{step.n}</div>
+                                        <div>
+                                            <div className="font-bold text-[13px] text-[var(--ink)] mb-0.5 flex items-center gap-2">
+                                                {step.t} {step.badge && <span className="inline-block text-[10px] font-mono font-bold bg-[var(--success)] text-white px-2 py-0.5 rounded-full">{step.badge}</span>}
+                                            </div>
+                                            <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{step.d}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Prompt 句型優化器 */}
+                        <div className="prompt-box mb-6">
+                            <div className="prompt-hd">
+                                <span>PROMPT · 句型優化器 (Step 6 用)</span>
+                                <CopyButton text={TITLE_PROMPT} label="複製" />
+                            </div>
+                            <div className="prompt-body">
+                                我的研究題目初稿是：【請貼上你的初稿】<br /><br />
+                                請幫我優化成更專業的版本：<br />
+                                1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）<br />
+                                2. 讓 Who(研究對象) / What(研究變數) 描述更精確<br />
+                                3. 確保高中生可以執行，字數不要過長<br /><br />
+                                請給我 3 個優化版本。
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <ThinkRecord
+                                dataKey="w4-initial-topic"
+                                prompt="經過 AI 句型優化後，你帶進海報的定案題目是什麼？"
+                                scaffold={['我的定案題目是：…', '這個題目符合小實近易的…項']}
+                                rows={3}
+                            />
+                            <ThinkRecord
+                                dataKey="w4-aired-record"
+                                prompt="這次 AI 協作中，你的 AI-RED 五欄分別記了什麼？"
+                                scaffold={['A (歸屬)：我用了哪個 AI、做什麼…', 'I (提問)：我問了什麼、為什麼這樣問…', 'R (引用)：AI 給的來源是什麼？我有去查嗎？可信嗎？', 'E (評估)：AI 的回答合理嗎？有沒有錯或偏見？', 'D (記錄)：我做了什麼決策？AI 扮演什麼角色？']}
+                                rows={6}
+                            />
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ──────────────────────────────────────
+         * STEP 2: 海報製作
+         * ────────────────────────────────────── */
+        {
+            title: '海報製作',
+            icon: '🎨',
+            content: (
+                <div className="space-y-10">
+                    {/* 自主草稿：研究動機 + 標題草稿 */}
+                    <div>
+                        <div className="section-head"><h2>自主草稿</h2><div className="line"></div><span className="mono">不准用 AI · 10 分鐘</span></div>
+                        <p className="section-desc">
+                            拿著剛才定案的題目，靠自己寫出白話版動機和吸引人的海報標題草稿。
+                        </p>
+
+                        <ThinkRecord
+                            dataKey="w4-motivation-raw"
+                            prompt="用跟朋友聊天的方式，說說你為什麼想研究這個題目？"
+                            scaffold={['我最早是從…注意到這件事', '讓我覺得奇怪的是…', '我最想知道的答案是…']}
+                            rows={4}
+                        />
+
+                        <div className="mt-4">
+                            <ThinkRecord
+                                dataKey="w4-title-draft"
+                                prompt="用口語問句寫一個吸引人的標題（讓路過的同學想停下來問你）"
+                                placeholder="例如：滑手機真的讓你睡更差嗎？"
+                                scaffold={['…真的會…嗎？', '為什麼…？', '你有沒有發現…']}
+                                rows={2}
+                            />
+                        </div>
+
+                        <div className="mt-4">
+                            <ThinkRecord
+                                dataKey="w4-prediction"
+                                prompt="你預測這個研究可能發現什麼？大膽猜 2-3 個（猜錯不扣分）"
+                                scaffold={['我猜最可能的結果是…', '如果出乎意料的話…', '另一個可能是…']}
+                                rows={3}
+                            />
+                        </div>
+                    </div>
+
+                    {/* AI 優化 + 海報製作 */}
+                    <div>
+                        <div className="section-head"><h2>AI 優化 + 手寫海報</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+
+                        {/* 研究動機教練 */}
+                        <a
+                            href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-start gap-4 p-5 border border-[var(--border)] rounded-xl hover:border-[var(--accent)] hover:shadow-lg transition-all bg-white mb-4"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-[var(--paper-warm)] flex items-center justify-center text-xl shrink-0 group-hover:bg-[var(--accent)] transition-colors">🤖</div>
+                            <div className="flex-1 min-w-0">
+                                <div className="font-bold text-[var(--ink)] text-[13px] mb-0.5">研究動機教練</div>
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">Gemini Gem · 對話式審核</div>
+                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">幫你審核動機三要素（有畫面、有困惑、說得清楚想知道什麼），告訴你哪裡可以更強。</div>
+                                <div className="mt-2 text-[11px] font-mono font-bold text-[var(--accent)]">開啟 Gemini Gem ↗</div>
+                            </div>
+                        </a>
+
+                        {/* Prompt：海報文案優化 */}
+                        <div className="prompt-box mb-6">
+                            <div className="prompt-hd">
+                                <span>PROMPT · 海報文案優化</span>
+                                <CopyButton text={POSTER_PROMPT} label="複製" />
+                            </div>
+                            <div className="prompt-body">
+                                我的研究海報需要以下元素：<br />
+                                - 研究題目：【貼上 W3 定案題目】<br />
+                                - 吸引人的標題草稿：【貼上你的草稿】<br />
+                                - 預期發現草稿：【貼上你的預測】<br /><br />
+                                請幫我：<br />
+                                1. 優化標題，讓它更吸引高中生，保持白話但加一點懸疑感<br />
+                                2. 把預期發現改寫得更有研究感（加入「可能」「推測」等詞）<br />
+                                3. 給我 2 個版本讓我選<br /><br />
+                                請保持在我原本的研究範圍內，不要幫我改題目方向。
+                            </div>
+                        </div>
+
+                        <div className="notice notice-accent text-[12px] mb-6">
+                            ⚠️ AI 的角色是幫你把已經想好的東西<strong>說得更好聽</strong>，不是幫你重新想。如果 AI 改了你的研究方向，告訴它：「請不要改我的範圍，只優化表達方式。」
+                        </div>
+
+                        {/* 海報四格 */}
+                        <div className="text-[12px] font-bold font-mono text-[var(--ink-light)] mb-2 tracking-wider">海報必備四格</div>
+                        <div className="content-grid mb-4" style={{ '--cols': 4 }}>
+                            {POSTER_FIELDS.map((item, i) => (
+                                <div key={item.n} className={`p-5 flex flex-col gap-2 ${i === 3 ? 'bg-[var(--ink)] text-white' : 'bg-[var(--paper)]'}`}>
+                                    <div className={`font-mono text-xl font-bold ${i === 3 ? 'text-[var(--gold)]' : 'text-[var(--accent)]'}`}>{item.n}</div>
+                                    <div className={`font-bold text-[13px] ${i === 3 ? 'text-white' : 'text-[var(--ink)]'}`}>{item.l}</div>
+                                    <div className={`text-[11px] leading-relaxed ${i === 3 ? 'text-white/50' : 'text-[var(--ink-light)]'}`}>{item.d}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* 範例海報 */}
+                        <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white">
+                            <div className="p-3 px-4 bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono text-[var(--ink-light)] tracking-wider">
+                                範例海報（同學真實作品）
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="border border-[var(--border)] rounded-xl overflow-hidden w-full">
+                                        <img src="/images/user_research_poster.png" alt="同學手寫海報範例" className="w-full object-cover" />
+                                    </div>
+                                    <div className="text-[10px] font-mono text-[var(--ink-light)]">▲ 實體手寫版</div>
+                                </div>
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white w-full">
+                                        <div className="p-5 space-y-3">
+                                            <div>
+                                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-1">① 標題</div>
+                                                <div className="font-bold text-[18px] leading-tight text-[var(--ink)]">「機」不可失眠——<br />滑手機真的讓你睡更差嗎？</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-1">② 正式題目</div>
+                                                <div className="text-[12px] text-[var(--ink-mid)]">本校高一生睡前手機使用內容類型與睡眠品質之差異研究</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-1">③ 研究動機</div>
+                                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">每次說好「滑一下就睡」，結果一抬頭已經快12點。我不確定是睡太晚的問題，還是滑手機本身讓大腦沒辦法關機。</div>
+                                            </div>
+                                            <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]">
+                                                <div className="text-[10px] font-mono text-[var(--ink-light)]">④ 製作人</div>
+                                                <div className="text-[12px] font-bold text-[var(--ink)]">王小明 101-15</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="text-[10px] font-mono text-[var(--ink-light)]">▲ 數位對照版</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="notice notice-success text-[12px] mt-4">
+                            ✏️ <strong>手寫海報（5 分鐘）</strong>——在 A4 紙上完成四格。不用美工，字跡清楚就好。
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ──────────────────────────────────────
+         * STEP 3: Gallery Walk
+         * ────────────────────────────────────── */
+        {
+            title: 'Gallery Walk',
+            icon: '🚶',
+            content: (
+                <div className="space-y-8">
+                    <div className="section-head"><h2>Gallery Walk 四輪走讀</h2><div className="line"></div><span className="mono">23 分鐘</span></div>
+                    <p className="section-desc">
+                        每組 4 人。一個人留在海報旁報告，另外三個人去逛別人的。聽完給具體建議，不能只寫「很好」。
+                    </p>
+
+                    {/* 分組規則 */}
+                    <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white mb-4">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-3">
+                            <Users2 size={15} className="text-[var(--ink)]" />
+                            <span className="font-bold text-[13px] text-[var(--ink)]">分配場次</span>
+                        </div>
+                        <div className="p-5">
+                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
+                                每組 4 人先分配報告場次。每人只報告 1 次，但會聆聽 3 次。
+                            </p>
+                            <div className="bg-[var(--paper)] rounded-lg border border-[var(--border)] overflow-hidden">
+                                <div className="grid grid-cols-3 bg-[var(--ink)] text-white text-[10px] font-mono uppercase tracking-wider">
+                                    <div className="px-4 py-2">場次</div>
+                                    <div className="px-4 py-2 border-l border-white/10">誰坐鎮報告</div>
+                                    <div className="px-4 py-2 border-l border-white/10">其他人</div>
+                                </div>
+                                {[
+                                    { round: '第 1 場', stay: 'A 坐鎮報告', move: 'B、C、D 聆聽' },
+                                    { round: '第 2 場', stay: 'B 坐鎮報告', move: 'A、C、D 聆聽' },
+                                    { round: '第 3 場', stay: 'C 坐鎮報告', move: 'A、B、D 聆聽' },
+                                    { round: '第 4 場', stay: 'D 坐鎮報告', move: 'A、B、C 聆聽' },
+                                ].map((row, i) => (
+                                    <div key={i} className={`grid grid-cols-3 text-[12px] border-t border-[var(--border)] ${i % 2 === 0 ? 'bg-white' : 'bg-[var(--paper)]'}`}>
+                                        <div className="px-4 py-2.5 font-mono font-bold text-[var(--accent)]">{row.round}</div>
+                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink)] font-bold">{row.stay}</div>
+                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)]">{row.move}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 評論規則 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        {[
+                            { icon: <CheckCircle2 size={16} className="text-[var(--success)]" />, label: '具體肯定', desc: '說出哪裡好，例如「研究動機有畫面，讓人想繼續聽」' },
+                            { icon: <Lightbulb size={16} className="text-[var(--gold)]" />, label: '具體建議', desc: '例如「Who 太大，縮到本校比較可行」「問卷樣本建議至少 50 人」' },
+                            { icon: <MessageSquare size={16} className="text-[var(--accent)]" />, label: '好奇提問', desc: '例如「你預測的結果如果反過來呢？」「你打算怎麼找受試者？」' },
+                        ].map((rule, idx) => (
+                            <div key={idx} className="bg-white border border-[var(--border)] rounded-xl p-5 flex flex-col gap-3">
+                                <div className="flex items-center gap-2 font-bold text-[var(--ink)]">{rule.icon}<span>{rule.label}</span></div>
+                                <p className="text-[11px] text-[var(--ink-light)] leading-relaxed">{rule.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="notice notice-gold text-[12px] mb-4">
+                        💡 <strong>建議怎麼寫：說具體的。</strong>不要只寫「很好」或「加油」——這種不算，會被請你重寫。
+                    </div>
+
+                    <div className="notice notice-accent text-[12px]">
+                        🔔 <strong>計時提醒</strong>：每一場 5 分鐘，鈴聲響立刻移動。四輪結束，你會收到大概 12 張建議，這是你今天最重要的資產。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ──────────────────────────────────────
+         * STEP 4: 題目最終定案
+         * ────────────────────────────────────── */
+        {
+            title: '題目最終定案',
+            icon: '🎯',
+            content: (
+                <div className="space-y-8">
+                    <div className="section-head"><h2>整理建議 → 最終定案</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                    <p className="section-desc">
+                        看看同學給你的建議，分成三類。不是所有建議都要採納——有判斷力地接受，比什麼都接受更重要。
+                    </p>
+
+                    {/* 三類分法 */}
+                    <div className="content-grid grid-cols-1 md:grid-cols-3 mb-6">
+                        {[
+                            { tag: '✅ 我接受，我要改', desc: '同學說得對，我的題目需要調整', color: 'bg-[var(--success-light)]' },
+                            { tag: '❌ 我不接受，有理由', desc: '我考慮過了，有充分理由維持原設計', color: 'bg-[var(--danger-light)]' },
+                            { tag: '❓ 我不確定', desc: '需要再想想，或者問老師', color: 'bg-[var(--gold-light)]' },
+                        ].map((cat, i) => (
+                            <div key={i} className={`p-5 rounded-xl ${cat.color}`}>
+                                <div className="font-bold text-[13px] text-[var(--ink)] mb-2">{cat.tag}</div>
+                                <p className="text-[12px] text-[var(--ink-mid)]">{cat.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <ThinkRecord
+                        dataKey="w4-feedback-accept"
+                        prompt="你接受了哪些建議？打算怎麼改？"
+                        scaffold={['同學說…', '我覺得他說得對，因為…', '我打算把…改成…']}
+                        rows={4}
+                    />
+
+                    <div className="mt-4">
+                        <ThinkRecord
+                            dataKey="w4-feedback-reject"
+                            prompt="你不採納哪些建議？理由是？"
+                            scaffold={['有人說…', '但我不改，因為…', '我的考量是…']}
+                            rows={3}
+                        />
+                    </div>
+
+                    {/* 最終定案框 */}
+                    <div className="mt-6 p-5 bg-[var(--paper)] rounded-xl border-2 border-dashed border-[var(--success)]/40">
+                        <div className="text-[11px] font-mono text-[var(--success)] uppercase mb-4 tracking-wider">🎯 W4 個人最終定案</div>
+                        <div className="space-y-4">
+                            <ThinkRecord
+                                dataKey="w4-final-topic"
+                                prompt="你的 W4 最終定案題目（這個跟著你走一整個學期）"
+                                scaffold={['我的最終題目是：…']}
+                                rows={2}
+                            />
+                            <ThinkRecord
+                                dataKey="w4-final-motivation"
+                                prompt="你的最終研究動機"
+                                scaffold={['我想研究這個是因為…', '我最想知道的是…']}
+                                rows={3}
+                            />
+                        </div>
+                    </div>
+
+                    <ThinkChoice
+                        prompt="你的 W4 定案跟 W3 比，有改變嗎？"
+                        options={[
+                            { label: 'A', text: '有改，根據同學建議調整了' },
+                            { label: 'B', text: '微調，小地方修一修' },
+                            { label: 'C', text: '維持 W3 原版，同學的建議不夠有說服力' },
+                        ]}
+                        answer="A"
+                        feedback="不管選哪個都沒有對錯！重要的是你有理由。能清楚說出「為什麼改」或「為什麼不改」，才是這堂課的核心。"
+                        onAnswer={(sel, ok) => trackChoice('你的 W4 定案跟 W3 比，有改變嗎？', sel, ok)}
+                    />
+                </div>
+            ),
+        },
+
+        /* ──────────────────────────────────────
+         * STEP 5: 回顧與繳交
+         * ────────────────────────────────────── */
+        {
+            title: '回顧與繳交',
+            icon: '📋',
+            content: (
+                <div className="space-y-8">
+                    {/* 檢核清單 */}
+                    <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                '用 5W1H 把模糊題目切成可執行的規格',
+                                '通過可行性快篩，確認研究方法做得到',
+                                '用 AI 包裝出專業學術標題，並記錄 AI-RED',
+                                '完成手寫海報（四格）並接受 Gallery Walk 壓力測試',
+                                '分類同學建議（接受 / 不接受 / 不確定）',
+                                '確認 W4 最終定案題目與研究動機',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
+                                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
+                                    <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 一鍵複製 */}
+                    <ExportButton
+                        weekLabel="W4 題目博覽會"
+                        fields={EXPORT_FIELDS}
+                        choices={choiceResults}
+                    />
+
+                    {/* AI 教練連結 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing" target="_blank" rel="noopener noreferrer"
+                            className="group p-5 border border-[var(--border)] rounded-xl hover:border-[var(--accent)] transition-all bg-white">
+                            <div className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-lg bg-[var(--paper-warm)] flex items-center justify-center text-xl shrink-0 group-hover:bg-[var(--accent)] transition-colors">🤖</div>
+                                <div>
+                                    <div className="font-bold text-[var(--ink)] text-[13px]">研究動機教練</div>
+                                    <div className="text-[11px] font-mono text-[var(--accent)] mt-1">開啟 Gemini Gem ↗</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://gemini.google.com/gem/1yF7FqRoQWUQGBtFLrGvbuul61OMGbgAv?usp=sharing" target="_blank" rel="noopener noreferrer"
+                            className="group p-5 border border-[var(--border)] rounded-xl hover:border-[var(--accent)] transition-all bg-white">
+                            <div className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-lg bg-[var(--paper-warm)] flex items-center justify-center text-xl shrink-0 group-hover:bg-[var(--accent)] transition-colors">💬</div>
+                                <div>
+                                    <div className="font-bold text-[var(--ink)] text-[13px]">Q-Coach 問題意識教練</div>
+                                    <div className="text-[11px] font-mono text-[var(--accent)] mt-1">開啟 Gemini Gem ↗</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    {/* 下週預告 */}
+                    <div className="next-week-preview">
+                        <div className="next-week-header">
+                            <span className="next-week-badge">NEXT WEEK</span>
+                            <h3 className="next-week-title">W5 預告</h3>
+                        </div>
+                        <div className="next-week-content">
+                            <div className="next-week-col">
+                                <div className="next-week-label">W5 主題</div>
+                                <p className="next-week-text">文獻搜尋——學會用華藝資料庫找論文、辨別文獻等級、練習 APA 格式。</p>
+                            </div>
+                            <div className="next-week-col">
+                                <div className="next-week-label">你要確認</div>
+                                <p className="next-week-text">帶著你的<strong>最終定案題目</strong>來，下週要用它拆關鍵字搜尋文獻。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">題目博覽會 W4</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
+                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">題目博覽會 W4</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
-                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
+                        className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
             {showLessonMap && (
-                <div className="mb-12">
+                <div className="animate-in slide-in-from-top-4 duration-300">
                     <LessonMap data={W4Data} />
                 </div>
             )}
 
             {/* PAGE HEADER */}
-            <header className="mb-16">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em] uppercase">🖼 W4 · 研究規劃</div>
-                <h1 className="font-serif text-4xl font-bold leading-tight text-[#1a1a2e] mb-4 tracking-tight">
-                    題目博覽會：<span className="text-[#2d5be3] italic">找回動機 → 真正定案</span>
+            <header>
+                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🎯 W4 · 研究規劃</div>
+                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
+                    題目定案：<span className="text-[var(--accent)] italic">規格化 → 海報 → 壓力測試</span>
                 </h1>
-                <p className="text-base text-[#4a4a6a] max-w-[680px] leading-relaxed mb-10">
-                    W3 的定案是題目，W4 的任務是補上「為什麼」。先把研究動機整理清楚，再帶著動機做海報、走 Gallery Walk——讓別人 30 秒內懂你在研究什麼、為什麼要研究。
+                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-10">
+                    先用 5W1H 把模糊的題目切成可執行的規格，讓 AI 包裝成學術標題，做海報公開展示，再接受同學的 Gallery Walk 壓力測試。撐過去了才是真正定案。
                 </p>
-
-                {/* COURSE ARC */}
                 <CourseArc items={W4Data.courseArc} />
-
-                {/* META STRIP */}
-                <div className="meta-strip">
-                    {W4Data.metaCards.map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* 本週簡報 */}
-                <div className="flex justify-end mb-8 -mt-2">
-                    <a
-                        href="https://canva.link/hdvnkubddcklm56"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                    >
-                        📊 本週簡報 ↗
-                    </a>
-                </div>
             </header>
 
-            {/* CONCEPT */}
-            <div className="section-head">
-                <h2>學什麼</h2>
-                <div className="line"></div>
-                <span className="mono">CONCEPT</span>
-            </div>
-            <p className="section-desc">W1–W3 你找到了題目，W4 要補上「為什麼」——把三週的好奇心整理成一段說得出口的研究動機，然後公開驗證。</p>
-
-            {/* W1-W4 Journey */}
-            <div className="content-grid grid-cols-2 md:grid-cols-4 mb-14">
-                {[
-                    { wk: 'W1', icon: '👀', title: '找到畫面', desc: '什麼讓你好奇？找到那個讓你停下來的畫面。', past: true },
-                    { wk: 'W2', icon: '❓', title: '形成問題', desc: '把畫面轉成問題，問出 Why / How / What。', past: true },
-                    { wk: 'W3', icon: '🎯', title: '定案題目', desc: '把問題磨成可以做的研究題目，通過 5W1H 快篩。', past: true },
-                    { wk: 'W4', icon: '💡', title: '找回動機', desc: '把題目連回你的好奇心，整理成說得出口的研究動機。', now: true },
-                ].map((item) => (
-                    <div key={item.wk} className={`p-5 flex flex-col gap-2 ${item.now ? 'bg-[#1a1a2e] text-white' : 'bg-white'}`}>
-                        <div className={`font-mono text-xl font-bold ${item.now ? 'text-[#c9a84c]' : 'text-[#2d5be3]'}`}>{item.wk}</div>
-                        <div className="text-xl">{item.icon}</div>
-                        <div className={`font-bold text-[13px] ${item.now ? 'text-white' : 'text-[#1a1a2e]'}`}>{item.title}</div>
-                        <div className={`text-[11px] leading-relaxed ${item.now ? 'text-white/60' : 'text-[#8888aa]'}`}>{item.desc}</div>
+            {/* META STRIP */}
+            <div className="meta-strip">
+                {(W4Data.metaCards || [
+                    { label: '本週任務', value: '5W1H 規格化 + 海報 + Gallery Walk' },
+                    { label: '課堂產出', value: 'W4 最終定案題目 + 研究動機' },
+                    { label: '下週預告', value: 'W5 文獻搜尋' },
+                ]).map((item, idx) => (
+                    <div key={idx} className="meta-item">
+                        <div className="meta-label">{item.label}</div>
+                        <div className="meta-value">{item.value}</div>
                     </div>
                 ))}
             </div>
 
-            {/* ─────────────── 第一節課 ─────────────── */}
-            <div className="section-head">
-                <h2>第一節課</h2>
-                <div className="line"></div>
-                <span className="mono">PERIOD 1 · 50 MINS</span>
+            {/* 本週簡報 */}
+            <div className="flex justify-end mb-8 -mt-2">
+                <a
+                    href="https://canva.link/hdvnkubddcklm56"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[var(--ink-light)] hover:text-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--paper-warm)] border border-[var(--border)] hover:border-[var(--ink)]/20 px-3 py-1.5 rounded-[5px] transition-all"
+                >
+                    📊 本週簡報 ↗
+                </a>
             </div>
 
-            {/* PART 0: 研究動機整理 */}
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-8">
-                <div className="p-4 px-5 bg-[#1a1a2e] flex items-center gap-3">
-                    <Brain size={16} className="text-[#c9a84c]" />
-                    <span className="font-bold text-sm text-white">Part 0｜研究動機整理</span>
-                    <span className="ml-auto font-mono text-[10px] text-white/50">0:05–0:35 · 30 分鐘</span>
-                </div>
-
-                <div className="divide-y divide-[#dddbd5]">
-                    {/* Step 0 */}
-                    <div className="p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 0</span>
-                            <span className="font-bold text-[13px] text-[#1a1a2e]">自己回答三個問題</span>
-                            <span className="ml-auto font-mono text-[10px] text-[#8888aa]">3 分鐘 · 不准用 AI</span>
-                        </div>
-                        <p className="text-[12px] text-[#4a4a6a] mb-4 leading-relaxed">翻出 W3 學習單，看你的最終定案題目。然後靠自己回答以下三個問題——不管格式，用跟朋友聊天的方式說。</p>
-                        <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden">
-                            <div className="grid grid-cols-2 bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
-                                <div className="px-4 py-2">問題</div>
-                                <div className="px-4 py-2 border-l border-white/10">我的回答（在學習單上寫）</div>
-                            </div>
-                            {[
-                                '我最早是從什麼畫面或生活經歷來的？',
-                                '哪裡讓我覺得奇怪或困惑？',
-                                '我最想知道的答案是什麼？',
-                            ].map((q, i) => (
-                                <div key={i} className={`grid grid-cols-2 text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
-                                    <div className="px-4 py-3 text-[#1a1a2e] font-medium">{q}</div>
-                                    <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">（學習單 Step 0 填寫）</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Step 1 */}
-                    <div className="p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 1</span>
-                            <span className="font-bold text-[13px] text-[#1a1a2e]">自己先寫白話版動機</span>
-                            <span className="ml-auto font-mono text-[10px] text-[#8888aa]">5 分鐘 · 不准用 AI</span>
-                        </div>
-                        <p className="text-[12px] text-[#4a4a6a] mb-4 leading-relaxed">根據剛才三個問題，用自己的話把研究動機寫出來。<strong>3 到 5 句話就好</strong>，不用管學術格式，就像跟朋友解釋一樣。</p>
-                        <div className="notice notice-gold text-[12px]">
-                            💡 <strong>好的研究動機三要素：</strong>有具體畫面、有說出困惑、說得清楚你想知道什麼。三個都有，這段動機就夠用了。
-                        </div>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div className="p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="bg-[#2d5be3] text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 2</span>
-                            <span className="font-bold text-[13px] text-[#1a1a2e]">送給研究動機教練審核</span>
-                            <span className="ml-auto font-mono text-[10px] text-[#8888aa]">14 分鐘</span>
-                        </div>
-                        <p className="text-[12px] text-[#4a4a6a] mb-5 leading-relaxed">
-                            打開「研究動機教練」，告訴它<strong>「我已經寫好了」</strong>，然後把你的 W3 定案題目和 Step 1 的白話版動機一起貼給它。
-                            它會幫你審核，告訴你哪裡可以更強。根據回饋，決定要不要修改。
-                        </p>
-                        <a
-                            href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-start gap-4 p-5 border border-[#dddbd5] rounded-xl hover:border-[#2d5be3] hover:shadow-lg hover:shadow-[#2d5be3]/5 transition-all bg-[#f8f7f4] hover:bg-white mb-4"
-                        >
-                            <div className="w-10 h-10 rounded-lg bg-[#f0ede6] flex items-center justify-center text-xl shrink-0 group-hover:bg-[#2d5be3] transition-colors">🤖</div>
-                            <div className="flex-1 min-w-0">
-                                <div className="font-bold text-[#1a1a2e] text-[13px] mb-0.5">研究動機教練</div>
-                                <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider mb-2">Gemini Gem · 對話式審核</div>
-                                <div className="text-[12px] text-[#4a4a6a] leading-relaxed">從你的定案題目出發，幫你審核動機的三個要素，整理成一段你說得出口的研究動機。</div>
-                                <div className="mt-2 text-[11px] font-mono font-bold text-[#2d5be3]">開啟 Gemini Gem ↗</div>
-                            </div>
-                        </a>
-                        <div className="notice notice-accent text-[12px]">
-                            ⚠️ 教練給你回饋，<strong>選擇還是你來做</strong>。你自己的版本如果說得出口，直接用就好——AI 的版本是備用，不是標準答案。
-                        </div>
-                    </div>
-
-                    {/* Step 3: 我的選擇 */}
-                    <div className="p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 3</span>
-                            <span className="font-bold text-[13px] text-[#1a1a2e]">我的選擇</span>
-                        </div>
-                        <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden">
-                            <div className="grid grid-cols-2 bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
-                                <div className="px-4 py-2">選擇選項</div>
-                                <div className="px-4 py-2 border-l border-white/10">說明與理由（學習單填寫）</div>
-                            </div>
-                            {[
-                                { opt: '✅ 我的版本不用改，直接用', desc: '直接用 Step 1 的白話版——說得出口就夠了' },
-                                { opt: '🔀 我參考教練的融合一版', desc: '根據回饋自己修改，取中間版本' },
-                                { opt: '🤖 選教練給的動機版本', desc: '我選這個的理由：（在學習單填寫）' },
-                            ].map((row, i) => (
-                                <div key={i} className={`grid grid-cols-2 text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
-                                    <div className="px-4 py-3 text-[#1a1a2e] font-medium">{row.opt}</div>
-                                    <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">{row.desc}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 確認定案 */}
-                    <div className="p-6 bg-[#f8f7f4]">
-                        <div className="flex items-center gap-3 mb-3">
-                            <Target size={15} className="text-[#2e7d5a]" />
-                            <span className="font-bold text-[13px] text-[#1a1a2e]">確認定案</span>
-                            <span className="ml-auto font-mono text-[10px] text-[#8888aa]">0:30–0:35 · 5 分鐘</span>
-                        </div>
-                        <p className="text-[12px] text-[#4a4a6a] leading-relaxed mb-3">
-                            靶心框填好了嗎？<strong>把你的研究動機唸一遍給旁邊同學聽</strong>——不是背，是說給他聽。
-                            他能不能在 <strong>30 秒內</strong>理解你為什麼要研究這個？能的話，這段動機完成了。
-                        </p>
-                        <div className="border-2 border-dashed border-[#2e7d5a]/40 rounded-xl p-4 bg-white">
-                            <div className="text-[11px] font-mono text-[#2e7d5a] uppercase tracking-wider mb-2">🎯 我的 W4 研究動機定案（在學習單上填寫）</div>
-                            <div className="text-[12px] text-[#8888aa] italic">研究動機有具體畫面、有困惑、說得出想知道什麼……</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* PART 1: 海報製作 */}
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-16">
-                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
-                    <Zap size={15} className="text-[#1a1a2e]" />
-                    <span className="font-bold text-[13px] text-[#1a1a2e]">Part 1｜海報製作</span>
-                    <span className="ml-auto font-mono text-[10px] text-[#8888aa]">0:35–0:50 · 15 分鐘</span>
-                </div>
-                <div className="p-6">
-                    <p className="text-[13px] text-[#4a4a6a] mb-6 leading-relaxed">
-                        海報是你研究的廣告——目的是讓等一下走讀的同學 <strong>30 秒內</strong>看懂你在研究什麼、為什麼研究。海報四格：<strong>標題 / 副標（正式題目）/ 研究動機 / 製作人姓名班級座號</strong>。
-                    </p>
-
-                    {/* 範例海報 */}
-                    <div className="mb-7">
-                        <div className="text-[11px] font-mono text-[#8888aa] uppercase tracking-wider mb-3 flex items-center gap-2">
-                            <span className="inline-block w-3 h-px bg-[#dddbd5]"></span>
-                            範例海報（同學真實作品）
-                            <span className="inline-block flex-1 h-px bg-[#dddbd5]"></span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-2">
-                            {/* 左：實體手寫照片 */}
-                            <div className="flex flex-col items-center gap-2">
-                                <div className="border-2 border-[#dddbd5] rounded-xl overflow-hidden shadow-sm w-full">
-                                    <img
-                                        src="/images/user_research_poster.png"
-                                        alt="同學手寫海報範例"
-                                        className="w-full object-cover"
-                                    />
-                                </div>
-                                <div className="text-[10px] font-mono text-[#8888aa]">▲ 實體手寫版</div>
-                            </div>
-                            {/* 右：數位卡片版 */}
-                            <div className="flex flex-col items-center gap-2">
-                                <div className="border-2 border-[#dddbd5] rounded-xl overflow-hidden bg-white w-full shadow-sm">
-                                    {/* 海報主體 */}
-                                    <div className="p-6 space-y-4">
-                                        {/* 標題 */}
-                                        <div>
-                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-1.5">① 吸引人的標題</div>
-                                            <div className="font-bold text-[20px] leading-tight text-[#1a1a2e]">
-                                                「機」不可失眠——<br />滑手機真的讓你睡更差嗎？
-                                            </div>
-                                        </div>
-                                        {/* 副標 */}
-                                        <div>
-                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-1">② 副標 · 正式研究題目</div>
-                                            <div className="text-[12px] text-[#4a4a6a] leading-relaxed">
-                                                本校高一生睡前手機使用內容類型與睡眠品質之差異研究
-                                            </div>
-                                        </div>
-                                        {/* 研究動機 */}
-                                        <div>
-                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-1">③ 研究動機</div>
-                                            <div className="text-[12px] text-[#4a4a6a] leading-relaxed">
-                                                每次說好「滑一下就睡」，結果一抬頭已經快12點。隔天上課眼皮超重，但我不確定是睡太晚的問題，還是「滑手機這件事本身」讓大腦沒辦法關機。我還發現自己看影片比看限動更難停下來——所以我想知道：睡前滑不同類型的內容，對隔天的狀態影響一樣嗎？
-                                            </div>
-                                        </div>
-                                        {/* 製作人 */}
-                                        <div className="flex items-center justify-between pt-2 border-t border-[#dddbd5]">
-                                            <div className="text-[10px] font-mono text-[#8888aa] uppercase">④ 製作人</div>
-                                            <div className="text-[12px] font-bold text-[#1a1a2e]">王小明 101-15</div>
-                                        </div>
-                                    </div>
-                                    {/* 同學回饋區 */}
-                                    <div className="border-t-2 border-dashed border-[#dddbd5] px-6 py-3 bg-[#f8f7f4]">
-                                        <div className="text-[10px] font-mono text-[#8888aa] uppercase mb-2">同學回饋區</div>
-                                        <div className="space-y-2">
-                                            {[1,2,3].map(n => (
-                                                <div key={n} className="h-5 border-b border-dotted border-[#dddbd5]" />
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="text-[10px] font-mono text-[#8888aa]">▲ 數位對照版</div>
-                            </div>
-                        </div>
-                        <div className="text-center text-[10px] font-mono text-[#8888aa] mt-1">好的海報讓人 30 秒看懂「你研究什麼」和「為什麼研究」</div>
-                    </div>
-
-                    {/* Poster fields */}
-                    <div className="content-grid grid-cols-2 md:grid-cols-4 mb-6">
-                        {[
-                            { n: '①', l: '吸引人的標題', d: '口語問句，讓人一眼停下來' },
-                            { n: '②', l: '正式研究題目', d: 'W3 定案版本（副標）' },
-                            { n: '③', l: '研究動機', d: '靶心框的定案版本直接抄' },
-                            { n: '④', l: '製作人資訊', d: '姓名 / 班級 / 座號', h: true },
-                        ].map(item => (
-                            <div key={item.n} className={`p-5 flex flex-col gap-2 ${item.h ? 'bg-[#1a1a2e] text-white' : 'bg-[#f8f7f4]'}`}>
-                                <div className={`font-mono text-xl font-bold ${item.h ? 'text-[#c9a84c]' : 'text-[#2d5be3]'}`}>{item.n}</div>
-                                <div className={`font-bold text-[13px] ${item.h ? 'text-white' : 'text-[#1a1a2e]'}`}>{item.l}</div>
-                                <div className={`text-[11px] leading-relaxed ${item.h ? 'text-white/50' : 'text-[#8888aa]'}`}>{item.d}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Step 0: Draft */}
-                    <div className="mb-5">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 0</span>
-                            <span className="font-bold text-[13px] text-[#1a1a2e]">自主草稿</span>
-                            <span className="ml-auto font-mono text-[10px] text-[#8888aa]">3 分鐘 · 不准用 AI</span>
-                        </div>
-                        <p className="text-[12px] text-[#4a4a6a]">先靠自己想一個口語標題，不用完美，就是你對這個研究的直覺說法。</p>
-                    </div>
-
-                    {/* Step 2: AI Title Optimization */}
-                    <div className="border border-[#dddbd5] rounded-xl overflow-hidden mb-5">
-                        <div className="p-4 px-5 bg-[#f8f7f4] border-b border-[#dddbd5] flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <span className="bg-[#2d5be3] text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded">STEP 2</span>
-                                <span className="font-bold text-[13px] text-[#1a1a2e]">問 AI 優化標題</span>
-                                <span className="font-mono text-[10px] text-[#8888aa]">5 分鐘</span>
-                            </div>
-                            <CopyButton text={titlePrompt} label="複製 Prompt" />
-                        </div>
-                        <div className="p-5">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label className="block text-[11px] font-mono text-[#8888aa] mb-2 uppercase">W3 定案題目</label>
-                                    <input
-                                        type="text"
-                                        value={w3Topic}
-                                        onChange={(e) => setW3Topic(e.target.value)}
-                                        placeholder="貼上你的正式研究題目..."
-                                        className="w-full p-3 bg-[#f8f7f4] border border-[#dddbd5] rounded-lg text-sm focus:outline-none focus:border-[#2d5be3]"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-[11px] font-mono text-[#8888aa] mb-2 uppercase">Step 0 標題草稿</label>
-                                    <input
-                                        type="text"
-                                        value={titleDraft}
-                                        onChange={(e) => setTitleDraft(e.target.value)}
-                                        placeholder="貼上你的直覺標題..."
-                                        className="w-full p-3 bg-[#f8f7f4] border border-[#dddbd5] rounded-lg text-sm focus:outline-none focus:border-[#2d5be3]"
-                                    />
-                                </div>
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-[11px] font-mono text-[#8888aa] mb-2 uppercase">研究動機（Part 0 定案版本）</label>
-                                <textarea
-                                    value={myMotivation}
-                                    onChange={(e) => setMyMotivation(e.target.value)}
-                                    placeholder="貼上你的研究動機定案版本..."
-                                    rows={3}
-                                    className="w-full p-3 bg-[#f8f7f4] border border-[#dddbd5] rounded-lg text-sm focus:outline-none focus:border-[#2d5be3] resize-none"
-                                />
-                            </div>
-                            <div className="p-4 bg-[#f8f7f4] rounded-lg border border-dashed border-[#dddbd5] font-mono text-[11px] text-[#4a4a6a] whitespace-pre-wrap">
-                                {titlePrompt}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Step 3 */}
-                    <div className="notice notice-success text-[12px]">
-                        ✏️ <strong>Step 3：手寫海報（5 分鐘）</strong>——在 A4 紙上完成四格。研究動機那格，把靶心框裡的定案版本直接抄過去，不用重寫。
-                    </div>
-                </div>
-            </div>
-
-            {/* ─────────────── 第二節課 ─────────────── */}
-            <div className="section-head">
-                <h2>第二節課</h2>
-                <div className="line"></div>
-                <span className="mono">PERIOD 2 · 50 MINS</span>
-            </div>
-            <p className="section-desc">帶著你的海報，在教室內進行走讀驗證。每組 4 人輪流坐鎮報告，其他人順時針移動聆聽。重點是說出「你為什麼要研究這個」。</p>
-
-            {/* 前置作業：分配場次 */}
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-6">
-                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
-                    <Users2 size={15} className="text-[#1a1a2e]" />
-                    <span className="font-bold text-[13px] text-[#1a1a2e]">前置作業：分配場次</span>
-                    <span className="ml-auto font-mono text-[10px] text-[#8888aa]">0:00–0:03 · 3 分鐘</span>
-                </div>
-                <div className="p-5 space-y-4">
-                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed">
-                        Gallery Walk 開始前，每組 4 人先分配報告場次：
-                        <span className="font-bold text-[#1a1a2e]"> 誰是第 1 場、第 2 場、第 3 場、第 4 場的報告者。</span>
-                        每人只報告 1 次，但會聆聽 3 次。
-                    </p>
-                    <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden">
-                        <div className="grid grid-cols-3 bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
-                            <div className="px-4 py-2">場次</div>
-                            <div className="px-4 py-2 border-l border-white/10">誰坐鎮報告</div>
-                            <div className="px-4 py-2 border-l border-white/10">其他人去哪裡</div>
-                        </div>
-                        {[
-                            { round: '第 1 場', stay: 'A 坐鎮報告', move: 'B、C、D → 第二組聆聽' },
-                            { round: '第 2 場', stay: 'B 回來坐鎮', move: 'C、D → 第三組，A 也追過去' },
-                            { round: '第 3 場', stay: 'C 回來坐鎮', move: 'D → 第四組，A、B 也追過去' },
-                            { round: '第 4 場', stay: 'D 回來坐鎮', move: 'A、B、C → 繼續往下走' },
-                        ].map((row, i) => (
-                            <div key={i} className={`grid grid-cols-3 text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
-                                <div className="px-4 py-2.5 font-mono font-bold text-[#2d5be3]">{row.round}</div>
-                                <div className="px-4 py-2.5 border-l border-[#dddbd5] text-[#1a1a2e] font-bold">{row.stay}</div>
-                                <div className="px-4 py-2.5 border-l border-[#dddbd5] text-[#4a4a6a]">{row.move}</div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex flex-col gap-1.5 text-[12px] text-[#4a4a6a]">
-                        <p><span className="font-bold text-[#1a1a2e]">報告者：</span>輪到你的場次 → 回到自己的桌子坐鎮，說你的<strong>研究動機與題目</strong>（重點是「為什麼」）</p>
-                        <p><span className="font-bold text-[#1a1a2e]">聆聽者：</span>認真聽，把建議直接寫在對方海報上 → 🔔 鈴聲響，繼續往下一組移動</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* 四場輪次卡片 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                {W4Data.galleryWalkRounds.map(item => (
-                    <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-xl p-5" key={item.n}>
-                        <div className="font-mono text-[11px] text-[#8888aa] mb-1">{item.time}</div>
-                        <div className="font-mono text-lg font-bold text-[#2d5be3] mb-1">{item.n}</div>
-                        <div className="inline-block font-mono text-[9px] px-1.5 py-0.5 rounded mb-2 bg-[#fdecea] text-[#c0392b]">
-                            {item.who}
-                        </div>
-                        <div className="text-[12px] text-[#4a4a6a] leading-relaxed">{item.d}</div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="notice notice-accent mb-8">
-                🔔 <strong>計時提醒</strong>：每一場 5 分鐘，鈴聲響立刻移動。輪到你報告時回到自己的桌子坐鎮。
-            </div>
-
-            {/* 評論規則 */}
-            <div className="flex items-center gap-3 mb-4">
-                <span className="section-label !mb-0">留下建議</span>
-                <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider">Gallery Walk 的評論規則</span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {W4Data.commentRules.map((rule, idx) => (
-                    <div key={idx} className="bg-white border border-[#dddbd5] rounded-xl p-5 flex flex-col gap-3">
-                        <div className="flex items-center gap-2 font-bold text-[#1a1a2e]">
-                            {rule.type === 'positive' && <CheckCircle2 size={16} className="text-[#2e7d5a]" />}
-                            {rule.type === 'suggestion' && <Lightbulb size={16} className="text-[#c9a84c]" />}
-                            {rule.type === 'question' && <MessageSquare size={16} className="text-[#2d5be3]" />}
-                            <span>{rule.label}</span>
-                        </div>
-                        <p className="text-[11px] text-[#8888aa] leading-relaxed">{rule.desc}</p>
-                    </div>
-                ))}
-            </div>
-
-            <div className="notice notice-gold mb-16 text-[12px]">
-                💡 <strong>建議怎麼寫：說具體的。</strong>例如「研究動機有畫面，讚」或「Who 可以再縮小」。<strong>不要只寫「很好」或「加油」。</strong>
-            </div>
-
-            {/* PART 2: 題目最終定案 */}
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-16">
-                <div className="p-4 px-5 bg-[#1a1a2e] flex items-center gap-3">
-                    <Target size={16} className="text-[#c9a84c]" />
-                    <span className="font-bold text-sm text-white">Part 2｜題目最終定案</span>
-                    <span className="ml-auto font-mono text-[10px] text-white/50">0:33–0:48 · 15 分鐘</span>
-                </div>
-                <div className="p-6 space-y-6">
-                    <p className="text-[13px] text-[#4a4a6a] leading-relaxed">
-                        看看海報上同學給你的建議，花 2 分鐘想想要不要採納。然後在學習單 Part 2 填入你的 W4 最終版——<strong>這個題目和研究動機，會跟著你到學期末。</strong>
-                    </p>
-                    {/* Gallery Walk 建議紀錄表 */}
-                    <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden mb-4">
-                        <div className="grid grid-cols-[2rem_1fr_5rem_1fr] bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
-                            <div className="px-3 py-2">#</div>
-                            <div className="px-4 py-2 border-l border-white/10">同學或老師給的建議內容</div>
-                            <div className="px-3 py-2 border-l border-white/10 text-center">是否採納</div>
-                            <div className="px-4 py-2 border-l border-white/10">理由</div>
-                        </div>
-                        {[1, 2, 3].map((n) => (
-                            <div key={n} className={`grid grid-cols-[2rem_1fr_5rem_1fr] text-[12px] border-t border-[#dddbd5] ${n % 2 === 0 ? 'bg-[#f8f7f4]' : 'bg-white'}`}>
-                                <div className="px-3 py-3 font-mono font-bold text-[#2d5be3]">{n}</div>
-                                <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">（在學習單填寫）</div>
-                                <div className="px-3 py-3 border-l border-[#dddbd5] text-[#8888aa] text-[10px] text-center">是 ／ 否</div>
-                                <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">（在學習單填寫）</div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="p-5 bg-[#f8f7f4] rounded-xl border-2 border-dashed border-[#2e7d5a]/40">
-                        <div className="text-[11px] font-mono text-[#2e7d5a] uppercase mb-3">🎯 W4 個人最終定案</div>
-                        <div className="space-y-2 text-[12px] text-[#8888aa] italic">
-                            <p>最終研究題目：＿＿＿＿＿＿＿＿＿</p>
-                            <p>最終研究動機：＿＿＿＿＿＿＿＿＿</p>
-                        </div>
-                    </div>
-                    <div className="notice notice-success text-[12px]">
-                        🏆 <strong>從 W1 到 W4，你完成了問題形成的完整旅程：</strong>W1 找畫面 → W2 形成問題 → W3 定案題目 → W4 連回動機。你手上這個題目和動機，是真正屬於你的。
-                    </div>
-                </div>
-            </div>
-
-            {/* AI 教練 */}
-            <div className="mb-16">
-                <div className="flex items-center gap-3 mb-4">
-                    <span className="section-label !mb-0">AI 教練</span>
-                    <span className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider">Gemini Gems · 對話式輔助工具</span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <a
-                        href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group p-5 border border-[#dddbd5] rounded-xl hover:border-[#2d5be3] hover:shadow-lg hover:shadow-[#2d5be3]/5 transition-all bg-white"
-                    >
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-lg bg-[#f0ede6] flex items-center justify-center text-xl shrink-0 group-hover:bg-[#2d5be3] transition-colors">🤖</div>
-                            <div className="flex-1 min-w-0">
-                                <div className="font-bold text-[#1a1a2e] text-[13px] mb-0.5">研究動機教練</div>
-                                <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider mb-2">W1–W3 回顧整理 · Part 0 Step 2 使用</div>
-                                <div className="text-[12px] text-[#4a4a6a] leading-relaxed">從你的定案題目出發，幫你把三週的觀察與好奇心串連起來，整理成一段你說得出口的研究動機。</div>
-                                <div className="mt-3 text-[11px] font-mono font-bold text-[#2d5be3]">開啟 Gemini Gem ↗</div>
-                            </div>
-                        </div>
-                    </a>
-                    <a
-                        href="https://gemini.google.com/gem/1yF7FqRoQWUQGBtFLrGvbuul61OMGbgAv?usp=sharing"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group p-5 border border-[#dddbd5] rounded-xl hover:border-[#2d5be3] hover:shadow-lg hover:shadow-[#2d5be3]/5 transition-all bg-white"
-                    >
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-lg bg-[#f0ede6] flex items-center justify-center text-xl shrink-0 group-hover:bg-[#2d5be3] transition-colors">💬</div>
-                            <div className="flex-1 min-w-0">
-                                <div className="font-bold text-[#1a1a2e] text-[13px] mb-0.5">Q-Coach 問題意識教練</div>
-                                <div className="text-[10px] font-mono text-[#8888aa] uppercase tracking-wider mb-2">問題聚焦 × 題目優化</div>
-                                <div className="text-[12px] text-[#4a4a6a] leading-relaxed">幫助你從生活觀察中發展出具體可行的研究題目，透過對話式提問與檢核，引導聚焦問題意識、並優化研究方向。</div>
-                                <div className="mt-3 text-[11px] font-mono font-bold text-[#2d5be3]">開啟 Gemini Gem ↗</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            {/* PART 3: AI-RED 記錄 */}
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-16">
-                <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-3">
-                    <span className="text-base">🤖</span>
-                    <span className="font-bold text-[13px] text-[#1a1a2e]">Part 3｜AI-RED 記錄</span>
-                    <span className="ml-auto font-mono text-[10px] text-[#8888aa]">完成後填寫</span>
-                </div>
-                <div className="bg-[#f8f7f4] rounded-lg border border-[#dddbd5] overflow-hidden m-5">
-                    <div className="grid grid-cols-[6rem_1fr] bg-[#1a1a2e] text-white text-[10px] font-mono uppercase tracking-wider">
-                        <div className="px-4 py-2">項目</div>
-                        <div className="px-4 py-2 border-l border-white/10">內容記錄（請在學習單填寫具體資訊）</div>
-                    </div>
-                    {[
-                        { key: 'A · Agent', val: '我使用了 ChatGPT / Claude / Gemini / 其他' },
-                        { key: 'I · Interaction', val: '我問了 AI：（填入具體提問）' },
-                        { key: 'R · Review', val: '我的評估：合理 ／ 有問題 ／ 部分合理' },
-                        { key: 'E · Evaluation', val: '原因說明：（為什麼這樣評估）' },
-                        { key: 'D · Dialogue', val: '對話名稱：（截圖或記錄對話）' },
-                    ].map((row, i) => (
-                        <div key={i} className={`grid grid-cols-[6rem_1fr] text-[12px] border-t border-[#dddbd5] ${i % 2 === 0 ? 'bg-white' : 'bg-[#f8f7f4]'}`}>
-                            <div className="px-4 py-3 font-mono font-bold text-[#2d5be3] text-[10px]">{row.key}</div>
-                            <div className="px-4 py-3 border-l border-[#dddbd5] text-[#8888aa] italic text-[11px]">{row.val}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* WRAP-UP & HOMEWORK */}
-            <div className="section-head">
-                <h2>本週總結</h2>
-                <div className="line"></div>
-                <span className="mono">WRAP-UP</span>
-            </div>
-
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-6">
-                <div className="p-4 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-sm text-[#1a1a2e]">
-                    ✅ 本週結束，你應該要會
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#dddbd5] bg-[#dddbd5]">
-                    <div className="p-4 px-6 bg-white text-[13px] text-[#4a4a6a]">✓ 說得出「我為什麼要研究這個」</div>
-                    <div className="p-4 px-6 bg-white text-[13px] text-[#4a4a6a]">✓ 研究動機有具體畫面、有困惑、說得出想知道什麼</div>
-                    <div className="p-4 px-6 bg-white text-[13px] text-[#4a4a6a]">✓ 完成手寫海報（四格）</div>
-                    <div className="p-4 px-6 bg-white text-[13px] text-[#4a4a6a]">✓ 確認 W4 最終定案題目與研究動機</div>
-                </div>
-            </div>
-
-            <div className="border border-[#dddbd5] rounded-xl overflow-hidden bg-white mb-16">
-                <div className="p-4 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <span className="bg-[#1a1a2e] text-white text-[10px] font-mono px-2 py-0.5 rounded">HOMEWORK</span>
-                        <span className="font-bold text-sm text-[#1a1a2e]">本週作業</span>
-                    </div>
-                    <span className="text-[11px] font-bold text-[#c0392b]">截止：{W4Data.homework.deadline}</span>
-                </div>
-                <div className="divide-y divide-[#dddbd5]">
-                    {W4Data.homework.items.map((hw, idx) => (
-                        <div className="p-4 px-6 flex items-center gap-6" key={idx}>
-                            <span className="font-mono text-[11px] font-bold text-[#2d5be3] w-16 shrink-0">{hw.p}</span>
-                            <span className="text-[13px] text-[#4a4a6a]">{hw.n}</span>
-                        </div>
-                    ))}
-                </div>
-                <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between text-[12px]">
-                    <span className="text-[#8888aa]">{W4Data.homework.footer}</span>
-                    <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="text-[#2d5be3] font-bold hover:underline">→ Google Classroom</a>
-                </div>
-            </div>
-
-            {/* NEXT WEEK PREVIEW */}
-            <div className="next-week-preview">
-                <div className="next-week-header">
-                    <span className="next-week-badge">NEXT WEEK</span>
-                    <h3 className="next-week-title">W5 預告</h3>
-                </div>
-                <div className="next-week-content">
-                    <div className="next-week-col">
-                        <div className="next-week-label">W5 主題</div>
-                        <p className="next-week-text">文獻搜尋入門——為你的研究找到 1 篇真實可信的相關研究。</p>
-                    </div>
-                    <div className="next-week-col border-l border-white/5">
-                        <div className="next-week-label">你會學到</div>
-                        <p className="next-week-text">用<strong className="text-white underline decoration-[#c9a84c] underline-offset-4">華藝資料庫</strong>找論文、AI 生成關鍵字、寫 APA 格式。</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* NAVIGATION */}
-            <div className="flex justify-between items-center py-12 border-t border-[#dddbd5]">
-                <Link to="/w3" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] flex items-center gap-2 transition-colors">
-                    <ArrowLeft size={16} /> 回 W3 題目健檢
-                </Link>
-                <Link to="/w5" className="bg-[#1a1a2e] text-white px-8 py-3 rounded-lg text-[13px] font-bold hover:bg-[#2d5be3] transition-all flex items-center gap-2 group shadow-lg shadow-[#1a1a2e]/10">
-                    前往 W5 文獻搜尋入門 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </Link>
-            </div>
+            {/* STEP ENGINE */}
+            <StepEngine
+                steps={steps}
+                prevWeek={{ label: '回 W3 題目健檢', to: '/w3' }}
+                nextWeek={{ label: '前往 W5 文獻搜尋入門', to: '/w5' }}
+            />
         </div>
     );
 };

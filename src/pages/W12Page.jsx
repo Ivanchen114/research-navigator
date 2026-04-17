@@ -1,272 +1,403 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, ArrowRight, Play, Presentation, CheckSquare, Award, AlertCircle, BarChart3, Database, MessageSquare, Bot, Map } from 'lucide-react';
 import CourseArc from '../components/ui/CourseArc';
+import './W13.css';
+import ThinkRecord from '../components/ui/ThinkRecord';
+import ExportButton from '../components/ui/ExportButton';
+import { readRecords } from '../components/ui/ThinkRecord';
+import {
+    ArrowRight,
+    ArrowLeft,
+    Bot,
+    Copy,
+    Check,
+    AlertTriangle,
+} from 'lucide-react';
 
-const closingBooks = [
-    {
-        icon: <BarChart3 className="text-blue-500" size={24} />,
-        name: '問卷法',
-        done: '已關閉表單，下載 csv/Excel 檔，且有效問卷達預定數量。',
-        notDone: '還在等幾個人填 / 已經下載但裡面有一堆無效亂填的還沒刪。'
-    },
-    {
-        icon: <MessageSquare className="text-orange-500" size={24} />,
-        name: '訪談法',
-        done: '受訪者皆已訪完，且已輸出逐字稿（可用 AI 輔助）並標註重點。',
-        notDone: '只有錄音檔 / 逐字稿是一大坨沒有分段的文字。'
-    },
-    {
-        icon: <CheckSquare className="text-purple-500" size={24} />,
-        name: '實驗/觀察',
-        done: '所有組別/場次的紀錄表皆已轉為數位表格，分數/次數已算好加總。',
-        notDone: '資料還散落在三張手寫紀錄表上，字跡看不太懂。'
-    },
-    {
-        icon: <Database className="text-emerald-500" size={24} />,
-        name: '文獻法',
-        done: '已完成 5 篇核心文獻的比較表格，並找出彼此的矛盾或共識。',
-        notDone: '下載了 10 篇 PDF 但完全沒看 / 只把摘要複製貼上。'
-    }
+/* ══════════════════════════════════════
+ *  資料常數
+ * ══════════════════════════════════════ */
+
+/* — 關帳入場券標準 — */
+const TICKET_STANDARDS = [
+    { icon: '📋', method: '問卷', requirement: '下載成 Excel，並刪除一直線亂填的無效問卷' },
+    { icon: '🎤', method: '訪談', requirement: '錄音必須轉成逐字稿文字檔（可用雅婷 / Whisper / NotebookLM 免費轉）' },
+    { icon: '🧪', method: '實驗', requirement: '手寫數據全部打字建成 Excel 表格' },
+    { icon: '👀', method: '觀察', requirement: '手寫紀錄全部打字建成 Word/Excel，並統計各類行為頻率' },
+    { icon: '📚', method: '文獻', requirement: '每篇都有摘要表（作者 / 年份 / 主要發現 / 和我研究的關聯）' },
 ];
 
-export const W12Page = () => {
-    const [templateFilled, setTemplateFilled] = useState({
-        q1: '', q2: '', q3: '', q4: ''
-    });
-    const [showLessonMap, setShowLessonMap] = useState(false);
+/* — 資料品質自查項目 — */
+const QUALITY_CHECKS = [
+    '問卷：無效問卷（一直線填、全選同一個）已標記或刪除',
+    '訪談：錄音已轉成逐字稿（至少初稿）',
+    '實驗：數據記錄完整，沒有漏格',
+    '觀察：每次紀錄都有日期、時段、地點',
+    '文獻：每篇都有摘要表（作者/年份/發現/關聯）',
+    '所有原始資料已數位化（打字建檔）',
+];
 
-    const updateTemplate = (key, value) => {
-        setTemplateFilled(prev => ({ ...prev, [key]: value }));
-    };
+/* — AI 初步探勘 Prompt（健康組用） — */
+const EXPLORE_PROMPT = `這是我的研究資料，請扮演資料分析師。
+請列出你在這份資料中看到的 3 個「最有趣的趨勢」或「最反常的現象」，並說明理由。
 
-    const isPitchReady = Object.values(templateFilled).every(v => v.trim().length > 0);
+【貼上你的部分資料：前幾份問卷回答 / 訪談逐字稿片段 / 實驗數據】`;
+
+/* — AI 補救策略 Prompt — */
+const RESCUE_PROMPT = `我是高中生，正在做研究專題，資料蒐集快截止了但進度落後。
+
+【我的研究方法】＿＿＿（問卷 / 訪談 / 實驗 / 觀察）
+【目標數量】＿＿＿
+【目前蒐集到】＿＿＿
+【剩餘時間】這週結束前必須收齊
+【最大困難】＿＿＿
+
+請幫我：
+1. 擬一個「每日行動計畫」（從今天到截止日，每天做什麼）
+2. 建議 2-3 個加速蒐集的策略
+3. 如果真的來不及，怎麼調整目標並誠實記錄在研究限制中`;
+
+/* — ExportButton 欄位 — */
+const EXPORT_FIELDS = [
+    { key: 'w13-pitch-notes', label: '盤點筆記', question: '聽其他組報告時的筆記與啟發' },
+    { key: 'w13-surprise', label: '最意外的發現', question: '蒐集過程中最意外的發現' },
+    { key: 'w13-diary-1', label: '關鍵行動 1' },
+    { key: 'w13-diary-2', label: '關鍵行動 2' },
+    { key: 'w13-diary-3', label: '關鍵行動 3' },
+    { key: 'w13-data-status', label: '資料收齊狀況', question: '最終蒐集量、達成率、品質自查' },
+    { key: 'w13-w14-question', label: 'W14 帶過去的問題' },
+    { key: 'w13-ai-explore', label: 'AI 初步探勘紀錄' },
+];
+
+/* ══════════════════════════════════════
+ *  內部元件
+ * ══════════════════════════════════════ */
+
+/* 可複製 Prompt 框 */
+const CopyablePrompt = ({ text, label }) => {
+    const [copied, setCopied] = useState(false);
+    const handleCopy = useCallback(() => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    }, [text]);
 
     return (
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-12 pb-32">
-            {/* TOP BAR / NAVIGATION PATH */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">研究診所 W13</span>
-                </div>
-                <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <button
-                        onClick={() => setShowLessonMap(!showLessonMap)}
-                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
+        <div style={{ borderRadius: 'var(--radius-unified)', overflow: 'hidden', background: '#1a1a2e' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', background: '#16213e', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-mono)' }}>
+                    <Bot size={14} /> {label || 'AI Prompt — 複製後貼到 AI 對話窗'}
+                </span>
+                <button onClick={handleCopy} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 10px', fontSize: 11, fontWeight: 700, color: '#fff', background: 'var(--accent)', border: 'none', borderRadius: 4, cursor: 'pointer' }}>
+                    {copied ? <><Check size={12} /> 已複製</> : <><Copy size={12} /> 複製</>}
+                </button>
+            </div>
+            <pre style={{ padding: 16, margin: 0, fontSize: 13, lineHeight: 1.7, color: '#e2e8f0', fontFamily: 'var(--font-mono)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{text}</pre>
+        </div>
+    );
+};
+
+/* 資料品質自查清單 */
+const QualityChecklist = () => {
+    const [checks, setChecks] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('w13-quality-checks') || 'null') || QUALITY_CHECKS.map(() => false); } catch { return QUALITY_CHECKS.map(() => false); }
+    });
+    const toggle = (i) => {
+        const next = checks.map((v, j) => j === i ? !v : v);
+        setChecks(next);
+        try { localStorage.setItem('w13-quality-checks', JSON.stringify(next)); } catch {}
+    };
+    const allChecked = checks.every(Boolean);
+    /* 只顯示與自己方法相關的項目 — 但因為不確定每個學生的方法，全部顯示讓他們自行勾選適用的 */
+
+    return (
+        <div>
+            <div className="w13-confirm-grid">
+                {QUALITY_CHECKS.map((item, i) => (
+                    <div
+                        key={i}
+                        className={`w13-confirm-item ${checks[i] ? 'checked' : ''}`}
+                        onClick={() => toggle(i)}
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
-                    </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                        <div className="w13-confirm-box">
+                            {checks[i] && <Check size={14} />}
+                        </div>
+                        <span>{item}</span>
+                    </div>
+                ))}
+            </div>
+            {allChecked && (
+                <div className="mt-3 p-3 rounded-[var(--radius-unified)] bg-[#F0FDF4] border border-[var(--success)] text-[13px] text-[var(--success)] font-bold flex items-center gap-2">
+                    <Check size={16} /> 全部通過！你準備好進入 W14 資料分析了！
+                </div>
+            )}
+        </div>
+    );
+};
+
+/* ══════════════════════════════════════
+ *  主頁面
+ * ══════════════════════════════════════ */
+
+const W12Page = () => {
+    const saved = readRecords();
+    const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
+    const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
+
+    /* 讀取 W12 已準備的中期報告 */
+    const midStatus = saved['w12-midterm-status'] || '';
+    const midGap = saved['w12-midterm-gap'] || '';
+    const midPlan = saved['w12-midterm-plan'] || '';
+    const hasMidPrep = midStatus || midGap || midPlan;
+
+    return (
+        <div className="mx-auto" style={{ maxWidth: 720, padding: '24px 16px 80px' }}>
+
+            {/* ─── 頁首 ─── */}
+            <CourseArc current={13} totalWeeks={17} title="W13 執行週 II" subtitle="中期盤點與資料收齊" />
+
+            <div className="mt-6 p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                <p className="text-[16px] font-bold text-[var(--ink)] mb-2">📢 資料蒐集最後一週！</p>
+                <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                    上半場：每組照模板做 <strong>1 分鐘中期盤點 Pitch</strong>，公開進度、互相施壓。
+                    <br />下半場：最後衝刺蒐集 + 資料關帳清洗。
+                    <br /><strong>W13 結束後不能再蒐集新資料，W14 開始進入分析！</strong>
+                </p>
+            </div>
+
+            {/* ═══ 第一節：中期盤點 Pitch ═══ */}
+            <h2 className="text-[15px] font-bold text-[var(--ink)] mt-8 mb-3">🎤 中期盤點 Pitch</h2>
+
+            {/* 填空模板 */}
+            <div className="w13-pitch-template">
+                <div className="w13-pitch-header">
+                    📋 電梯簡報模板（照唸填空處，不自由發揮！）
+                </div>
+                <div className="w13-pitch-body">
+                    我們是做
+                    <span className="w13-pitch-blank">{myMethod || '___'}</span>
+                    法的，
+                    <br />目標是
+                    <span className="w13-pitch-blank">___</span>
+                    ，目前已蒐集到
+                    <span className="w13-pitch-blank">___</span>
+                    ，達成率約
+                    <span className="w13-pitch-blank">___%</span>
+                    。
+                    <br /><br />
+                    我們目前最大的缺口是：
+                    <span className="w13-pitch-blank" style={{ minWidth: 200 }}>___</span>
+                    。
+                    <br /><br />
+                    為了在這週結束前收齊，我們接下來的具體行動是：
+                    <span className="w13-pitch-blank" style={{ minWidth: 200 }}>___</span>
+                    。
+                    <br /><br />
+                    蒐集過程中最意外的發現是：
+                    <span className="w13-pitch-blank" style={{ minWidth: 200 }}>___</span>
+                    。
                 </div>
             </div>
 
-            {showLessonMap && (
-                <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
-                    <div className="p-8 bg-[#f8f7f4] border border-[#dddbd5] rounded-xl text-center text-[#8888aa]">
-                        W13 為中期盤點週，主要進行電梯簡報與資料收網檢核。
-                    </div>
+            {/* W12 已準備的中期報告資料帶入 */}
+            {hasMidPrep && (
+                <div className="mt-4 p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border border-[#BAE6FD]">
+                    <p className="text-[12px] text-[#0369A1] font-bold mb-2">📂 你在 W12 已準備的報告內容</p>
+                    {midStatus && <p className="text-[12px] text-[#0C4A6E] mb-1"><strong>現況：</strong>{midStatus}</p>}
+                    {midGap && <p className="text-[12px] text-[#0C4A6E] mb-1"><strong>缺口：</strong>{midGap}</p>}
+                    {midPlan && <p className="text-[12px] text-[#0C4A6E]"><strong>計畫：</strong>{midPlan}</p>}
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header className="mb-14">
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🎯 W13 · 研究診所 II</div>
-                <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
-                    結案倒數：<span className="text-[#2d5be3]">中期盤點與資料收網</span>
-                </h1>
-                <p className="text-[16px] text-[#4a4a6a] max-w-[680px] leading-[1.75] mb-10">
-                    下半場的期中考：3 分鐘電梯簡報。資料收得差不多了嗎？該關門了，廚師要準備上菜了。
+            {/* 聽講筆記 */}
+            <div className="mt-5">
+                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📝 聽其他組報告時，記下對你有啟發的事</p>
+                <ThinkRecord
+                    dataKey="w13-pitch-notes"
+                    prompt="哪一組的經驗讓你印象深刻？他們的缺口或解法跟你有什麼關係？"
+                    scaffold={[
+                        '___組的方法是...，他們遇到的問題是...',
+                        '對我的啟發：...',
+                    ]}
+                />
+            </div>
+
+            {/* 最意外的發現 */}
+            <div className="mt-4">
+                <ThinkRecord
+                    dataKey="w13-surprise"
+                    prompt="蒐集過程中最意外的發現是什麼？（Pitch 時會用到！）"
+                    scaffold={['我本來以為...，但實際蒐集後發現...']}
+                />
+            </div>
+
+            {/* ═══ 關帳標準 ═══ */}
+            <h2 className="text-[15px] font-bold text-[var(--ink)] mt-8 mb-3">🎫 W14 入場券標準</h2>
+            <p className="text-[12px] text-[var(--ink-mid)] mb-3">
+                資料收齊 ≠ 可以進 W14。你必須把資料<strong>洗好、切好</strong>，才能進廚房！
+            </p>
+            <div className="w13-ticket-grid">
+                {TICKET_STANDARDS.map((t, i) => (
+                    <div key={i} className="w13-ticket-row">
+                        <span className="w13-ticket-icon">{t.icon}</span>
+                        <span className="w13-ticket-method">{t.method}</span>
+                        <span>{t.requirement}</span>
+                    </div>
+                ))}
+            </div>
+
+            {/* ═══ AI 工具箱 ═══ */}
+            <h2 className="text-[15px] font-bold text-[var(--ink)] mt-8 mb-3">🤖 AI 工具箱</h2>
+
+            <div className="flex flex-col gap-5">
+                <div>
+                    <p className="text-[13px] font-bold text-[var(--ink)] mb-2">🚨 進度落後？AI 補救策略</p>
+                    <p className="text-[12px] text-[var(--ink-mid)] mb-2">讓 AI 幫你擬每日行動計畫和加速策略。</p>
+                    <CopyablePrompt text={RESCUE_PROMPT} label="AI 補救策略 Prompt" />
+                </div>
+
+                <div>
+                    <p className="text-[13px] font-bold text-[var(--ink)] mb-2">🚀 已達標？AI 初步探勘</p>
+                    <p className="text-[12px] text-[var(--ink-mid)] mb-2">資料清洗完了？嚐一下 W14 的味道——讓 AI 幫你找有趣的趨勢。</p>
+                    <CopyablePrompt text={EXPLORE_PROMPT} label="AI 初步探勘 Prompt" />
+                </div>
+
+                <ThinkRecord
+                    dataKey="w13-ai-explore"
+                    prompt="AI 探勘紀錄：AI 說了什麼？你覺得哪些有道理、哪些是過度詮釋？"
+                    scaffold={[
+                        'AI 找到的趨勢/現象：...',
+                        '我的判斷：合理 / 過度詮釋 / 部分有道理，因為...',
+                    ]}
+                />
+            </div>
+
+            {/* ═══ 分隔線：資料確認區 ═══ */}
+            <div className="mt-10 mb-6 flex items-center gap-3">
+                <div className="flex-1 h-px bg-[var(--border)]" />
+                <span className="text-[13px] font-bold text-[var(--ink-mid)]">📦 資料關帳確認</span>
+                <div className="flex-1 h-px bg-[var(--border)]" />
+            </div>
+
+            <p className="text-[12px] text-[var(--ink-mid)] mb-4 leading-relaxed">
+                誠實填！不是為了交差，是為了讓你知道帶著什麼進入 W14。勾選適用於你的方法的項目。
+            </p>
+
+            {/* 資料量確認 */}
+            <ThinkRecord
+                dataKey="w13-data-status"
+                prompt="最終蒐集量與品質確認：你的方法、最終數量、原定目標、達成率、有無品質問題"
+                scaffold={[
+                    '方法：___，最終蒐集 ___，目標 ___，達成率約 ___%',
+                    '品質問題：有 / 沒有（如果有，說明如何處理）',
+                    '數位化狀態：已完成 / 還需要___',
+                ]}
+            />
+
+            {/* 品質自查清單 */}
+            <div className="mt-4">
+                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">🔍 資料品質自查（勾選你已完成的項目）</p>
+                <QualityChecklist />
+            </div>
+
+            {/* W14 帶過去的問題 */}
+            <div className="mt-4">
+                <ThinkRecord
+                    dataKey="w13-w14-question"
+                    prompt="在開始分析之前，你已經預見什麼困難或疑問？"
+                    scaffold={['我擔心的是...', '我不確定的是...']}
+                />
+            </div>
+
+            {/* ═══ 分隔線：研究日誌 ═══ */}
+            <div className="mt-10 mb-6 flex items-center gap-3">
+                <div className="flex-1 h-px bg-[var(--border)]" />
+                <span className="text-[13px] font-bold text-[var(--ink-mid)]">✏️ 研究日誌</span>
+                <div className="flex-1 h-px bg-[var(--border)]" />
+            </div>
+
+            <p className="text-[12px] text-[var(--ink-mid)] mb-4 leading-relaxed">
+                延續 W12 格式，記錄本週 <strong>3 個關鍵行動</strong>。
+            </p>
+
+            <div className="flex flex-col gap-4">
+                <ThinkRecord
+                    dataKey="w13-diary-1"
+                    prompt="🔑 關鍵行動 1：日期、做了什麼、結果/困難、下一步"
+                    scaffold={['日期：___月___日', '我做了：...', '結果/困難：...', '下一步：...']}
+                />
+                <ThinkRecord
+                    dataKey="w13-diary-2"
+                    prompt="🔑 關鍵行動 2：日期、做了什麼、結果/困難、下一步"
+                    scaffold={['日期：___月___日', '我做了：...', '結果/困難：...', '下一步：...']}
+                />
+                <ThinkRecord
+                    dataKey="w13-diary-3"
+                    prompt="🔑 關鍵行動 3：日期、做了什麼、結果/困難、下一步"
+                    scaffold={['日期：___月___日', '我做了：...', '結果/困難：...', '下一步：...']}
+                />
+            </div>
+
+            {/* ═══ 學期轉折提醒 ═══ */}
+            <div className="mt-8 p-5 rounded-[var(--radius-unified)] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white text-center">
+                <p className="text-[20px] mb-2">🔄</p>
+                <p className="text-[15px] font-bold mb-2">身份轉換</p>
+                <p className="text-[13px] opacity-80 leading-relaxed">
+                    從今天之後，你不再是「蒐集資料的研究員」。
+                    <br />你變成「<strong>分析資料的研究員</strong>」！
                 </p>
-
-                {/* META CARDS */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
-                    {[
-                        { label: '第一節', value: '期中盤點 Elevator Pitch' },
-                        { label: '第二節', value: '資料收齊檢核與收網' },
-                        { label: '課課產出', value: '中期盤點精華紀錄' },
-                        { label: '帶去 W14', value: '原始數據與初步發現' }
-                    ].map((item, idx) => (
-                        <div key={idx} className="bg-white border border-[#dddbd5] rounded-[12px] p-5">
-                            <div className="text-[11px] text-[#8888aa] mb-2 font-medium">{item.label}</div>
-                            <div className="text-[14px] font-bold text-[#1a1a2e]">{item.value}</div>
-                        </div>
-                    ))}
+                <div className="mt-4 text-[12px] opacity-60 text-left mx-auto" style={{ maxWidth: 400 }}>
+                    <p className="font-bold mb-1">W14 攜帶物品：</p>
+                    <p>📋 問卷組：Google 表單連結 + Excel</p>
+                    <p>🎤 訪談組：逐字稿文件</p>
+                    <p>🧪 實驗組：整理好的數據表格</p>
+                    <p>👀 觀察組：觀察紀錄 + 頻率統計</p>
+                    <p>📚 文獻組：每篇摘要表 + 交叉比較筆記</p>
                 </div>
+            </div>
 
-                {/* COURSE ARC */}
-                <CourseArc items={[
-                    { wk: 'W1-W4', name: '問題意識\n題目定案', past: true },
-                    { wk: 'W5-W7', name: '研究規劃\n文獻鑑識', past: true },
-                    { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
-                    { wk: 'W12', name: '研究診所 I\nOpen Office', past: true },
-                    { wk: 'W13', name: '研究診所 II\n中期盤點', now: true },
-                    { wk: 'W14-W16', name: '分析撰寫\n研究結論' },
-                    { wk: 'W17', name: '成果展示\nGallery Walk' }
-                ]} />
-            </header>
+            {/* ═══ 匯出 ═══ */}
+            <div className="mt-6">
+                <ExportButton
+                    weekLabel="W13 執行週 II：中期盤點與資料收齊"
+                    fields={EXPORT_FIELDS}
+                />
+            </div>
 
-            <div className="space-y-12">
-                {/* Part 1: 電梯簡報 */}
-                <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-3xl shadow-sm border border-indigo-100 p-6 md:p-8">
-                    <div className="flex items-center mb-6 gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-                            <Presentation size={24} />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-slate-800">Part 1｜期中盤點 Elevator Pitch</h2>
-                            <p className="text-indigo-700 text-sm">透過高壓的「電梯簡報」盤點目前的進度與困難，讓全班一起幫你找出生路。</p>
-                        </div>
-                    </div>
+            {/* ── 遊戲入口 ── */}
+            <div className="mt-6 p-4 rounded-[var(--radius-unified)] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white text-center">
+                <p className="text-[11px] opacity-60 mb-1">🎮 R.I.B. 調查檔案</p>
+                <p className="text-[14px] font-bold mb-3">幽靈數據 Ch5：實驗玫瑰線</p>
+                <Link
+                    to="/phantom-ch5"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#10B981] hover:bg-[#059669] text-white text-[13px] font-bold rounded-[var(--radius-unified)] transition-colors no-underline"
+                >
+                    進入任務 <ArrowRight size={14} />
+                </Link>
+            </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-indigo-100 space-y-4">
-                        <p className="font-bold text-slate-700 mb-2">🎤 準備你的發表講稿：</p>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                            <span className="shrink-0 text-slate-600 font-medium">1. 我們研究的問題是：</span>
-                            <input
-                                type="text"
-                                placeholder="請在此輸入問題..."
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-                                value={templateFilled.q1}
-                                onChange={(e) => updateTemplate('q1', e.target.value)}
-                            />
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                            <span className="shrink-0 text-slate-600 font-medium">2. 我們原本預期會發現：</span>
-                            <input
-                                type="text"
-                                placeholder="請在此輸入預期結果..."
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-                                value={templateFilled.q2}
-                                onChange={(e) => updateTemplate('q2', e.target.value)}
-                            />
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                            <span className="shrink-0 text-slate-600 font-medium">3. 目前收集到的資料（遇見的最大困難或意外是）：</span>
-                            <input
-                                type="text"
-                                placeholder="例如：我們發了100份但只收回20份..."
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-                                value={templateFilled.q3}
-                                onChange={(e) => updateTemplate('q3', e.target.value)}
-                            />
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                            <span className="shrink-0 text-slate-600 font-medium">4. 下週 W14（分析週）前，我們還需要完成：</span>
-                            <input
-                                type="text"
-                                placeholder="例如：整理最後的受訪者逐字稿..."
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-                                value={templateFilled.q4}
-                                onChange={(e) => updateTemplate('q4', e.target.value)}
-                            />
-                        </div>
-
-                        <div className={`mt-6 p-4 rounded-xl text-center font-bold tracking-wide transition-all ${isPitchReady ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 text-slate-400'}`}>
-                            {isPitchReady ? '✅ 講稿準備完畢！我們準備好上台了！' : '請填滿上面四格，點亮準備按鈕。'}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Part 2: Closing the Books */}
-                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-8">
-                    <div className="flex items-center mb-6 gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
-                            <CheckSquare size={24} />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-slate-800">Part 2｜資料收齊檢核：Closing the Books</h2>
-                            <p className="text-slate-500 text-sm">進入「收網」階段，檢核你的原始數據是否已收齊並轉化為數位格式，準備下週進廚房。</p>
-                        </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {closingBooks.map((item, idx) => (
-                            <div key={idx} className="border border-slate-200 rounded-2xl p-5 bg-slate-50 hover:bg-white transition-colors">
-                                <h3 className="flex items-center gap-2 font-bold text-slate-800 text-lg border-b border-slate-200 pb-3 mb-3">
-                                    {item.icon} {item.name}
-                                </h3>
-                                <div className="space-y-3">
-                                    <div className="flex gap-2 text-sm">
-                                        <span className="text-green-600 shrink-0">✅</span>
-                                        <span className="text-slate-700"><span className="font-semibold">Done:</span> {item.done}</span>
-                                    </div>
-                                    <div className="flex gap-2 text-sm">
-                                        <span className="text-red-500 shrink-0">❌</span>
-                                        <span className="text-slate-500 line-through decoration-red-200"><span className="font-semibold">Not Done:</span> {item.notDone}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="mt-6 flex items-start gap-3 bg-red-50 text-red-700 p-4 rounded-xl border border-red-100">
-                        <AlertCircle className="shrink-0 mt-0.5" size={20} />
-                        <p className="text-sm font-medium">
-                            **警告：** 如果今天還沒達到「Done」標準，這是最後的週末！如果資料殘缺，就在報告的「研究限制」中誠實寫出來，不要捏造數據！這才是真實的研究。
-                        </p>
-                    </div>
-                </div>
-
-                {/* Part 3: AI 資料探勘 (早鳥) */}
-                <div className="bg-slate-900 rounded-3xl p-6 md:p-8 relative overflow-hidden text-white shadow-xl">
-                    <div className="absolute -right-10 -bottom-10 opacity-10">
-                        <Bot size={200} />
-                    </div>
-                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                        <Award className="text-yellow-400" />
-                        Part 3｜早鳥任務：請 AI 幫你探勘資料
-                    </h2>
-                    <p className="text-slate-300 mb-6 max-w-2xl">
-                        進度領先者的早鳥獎勵——率先把數據餵給 AI，找出那些藏在數字背後的「意外點」。
-                    </p>
-
-                    <div className="bg-slate-800 rounded-xl p-5 border border-slate-700 relative z-10 w-full sm:w-2/3">
-                        <p className="text-blue-400 font-mono text-xs mb-2">// 📊 早鳥探勘 Prompt</p>
-                        <p className="text-sm text-slate-200 leading-relaxed font-mono">
-                            這是我目前收集到的初步數據/訪談逐字稿段落：<br />
-                            <span className="text-green-300">【貼上資料片段】</span><br /><br />
-                            我的研究問題是：「＿＿＿」。<br />
-                            請從這些有限的資料中，幫我找出 3 個「<span className="text-yellow-300">最值得進一步挖掘的異常點或趨勢</span>」，並解釋為什麼。這不是最後結論，只是探勘。
-                        </p>
-                    </div>
-                </div>
-
-                {/* Analysis Station CTA */}
-                <div className="my-8 border border-[#2d5be3]/20 rounded-[8px] overflow-hidden bg-[#f0f4ff]">
-                    <div className="px-5 py-4 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-[#2d5be3] p-2 rounded-[6px]">
-                                <Database size={18} className="text-white" />
-                            </div>
-                            <div>
-                                <div className="text-[13px] font-bold text-[#1a1a2e]">資料收齊了？先去資料分析站</div>
-                                <div className="text-[12px] text-[#4a4a6a]">選你的研究方法，取得逐步分析指南與 AI Prompt，準備好再進 W14</div>
-                            </div>
-                        </div>
-                        <Link
-                            to="/analysis-station"
-                            className="shrink-0 flex items-center gap-2 px-4 py-2 bg-[#2d5be3] text-white text-[12px] font-bold rounded-[6px] hover:bg-[#1a3fc0] transition-colors whitespace-nowrap"
-                        >
-                            前往分析站 <ArrowRight size={14} />
-                        </Link>
-                    </div>
-                </div>
-
-                {/* Navigation */}
-                <div className="flex justify-between items-center pt-8 border-t border-slate-100">
-                    <Link to="/w12" className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 font-bold">
-                        ← 回 W12 研究執行 I
-                    </Link>
-                    <Link to="/w14" className="flex items-center gap-2 text-sm bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-500 transition-colors font-bold shadow-md">
-                        前往 W14 數據轉譯 <ArrowRight size={16} />
-                    </Link>
-                </div>
+            {/* ── 底部導航 ── */}
+            <div className="mt-8 flex justify-between items-center">
+                <Link to="/w12" className="flex items-center gap-1 text-[13px] text-[var(--ink-mid)] no-underline hover:text-[var(--accent)]">
+                    <ArrowLeft size={14} /> W12
+                </Link>
+                <Link to="/w14" className="flex items-center gap-1 text-[13px] text-[var(--ink-mid)] no-underline hover:text-[var(--accent)]">
+                    W14 <ArrowRight size={14} />
+                </Link>
             </div>
         </div>
     );
 };
+
+export { W12Page };
+export default W12Page;

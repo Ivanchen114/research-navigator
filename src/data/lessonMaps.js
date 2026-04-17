@@ -1409,14 +1409,14 @@ export const W8Data = {
         },
         {
             badge: "第二節",
-            title: "精修 × 完成初版工具",
+            title: "精修 × 同儕試填 × 完成初版",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:35",
-                    duration: "35 min",
+                    timeEnd: "0:20",
+                    duration: "20 min",
                     colorClass: "c2",
                     icon: "✍️",
                     title: "⑤ 精修草稿",
@@ -1424,14 +1424,24 @@ export const W8Data = {
                     tags: ["精修實作", "初版產出"]
                 },
                 {
+                    timeStart: "0:20",
+                    timeEnd: "0:35",
+                    duration: "15 min",
+                    colorClass: "c4",
+                    icon: "🧪",
+                    title: "⑥ 同儕試填（Pilot Test）",
+                    desc: "單向輪轉配對（A→B→C），讓別組 2–3 人以受訪者身分實填工具。試填者填完後在 Part D 寫回饋：看不懂的題、不會選的題。",
+                    tags: ["預試驗證", "真人回饋"]
+                },
+                {
                     timeStart: "0:35",
                     timeEnd: "0:45",
                     duration: "10 min",
                     colorClass: "c5",
                     icon: "🗣️",
-                    title: "⑥ 修前修後展示",
-                    desc: "每組選出改得最滿意的 1 題，展示修改前 vs 修改後，說明改了什麼、為什麼改。",
-                    tags: ["成果展示", "反思分享"]
+                    title: "⑦ 修前修後展示 + 試填發現",
+                    desc: "每組選出改得最滿意的 1 題，展示修改前 vs 修改後。同時分享一個試填時的意外發現。",
+                    tags: ["成果展示", "試填分享"]
                 },
                 {
                     timeStart: "0:45",
@@ -1439,8 +1449,8 @@ export const W8Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🚀",
-                    title: "⑦ 收束 + 預告 W10",
-                    desc: "預告 W10 進行研究倫理審查 + 正式啟動資料收集。提醒回家再自讀一遍初版工具。",
+                    title: "⑧ 收束 + 預告 W10",
+                    desc: "預告 W10 進行研究倫理審查 + 正式啟動資料收集。特別再看試填時被標記的題目。",
                     tags: ["收束預告", "倫理審查"]
                 }
             ]
@@ -1623,42 +1633,54 @@ export const W9Data = {
 };
 
 export const W10Data = {
-    title: "W10 倫理審查：確認、授權、出發",
-    description: "這不是在刁難，是在保護你的研究。通過倫理審查，拿到出發許可，你的研究才算正式啟程。",
+    title: "W11 資料收集中期回顧：問題診斷與初步整理",
+    description: "資料收集進行到哪了？今天回顧進度、解決問題、開始整理——邊收集邊整理，比最後一起整理好得多。",
     periods: [
         {
             name: "第一節",
             duration: "50 min",
-            title: "工具定稿 + 倫理四問自查",
+            title: "進度回顧 × 問題診斷 × 計畫調整",
             stages: [
-                { time: "0:00 - 0:15", title: "一、工具定稿自查", desc: "拿出 W9 修正後的工具，對照 Part 0 自查清單逐項確認。", tags: ["自查清單", "互評交換"], colorClass: "lm-c1" },
-                { time: "0:15 - 0:30", title: "二、倫理四問自查", desc: "誠實回答知情同意、保密、不傷害、自願性四個問題。", tags: ["倫理四問", "敏感議題"], colorClass: "lm-c2" },
-                { time: "0:30 - 0:50", title: "三、AI 審查知情同意書", desc: "利用 AI 檢查說明的語言語氣，完成最終版知情同意書。", tags: ["AI 互動", "語氣修正"], colorClass: "lm-c3" }
+                { time: "0:00 - 0:05", title: "① 開場", desc: "資料收集進行到哪裡了？建立回顧框架。", tags: ["回顧", "框架"], colorClass: "lm-c3" },
+                { time: "0:05 - 0:30", title: "② 各組進度報告", desc: "每組 4–5 分鐘報告：已收集量、遇到問題、目前打算、需要幫忙的事。", tags: ["口頭報告", "進度確認"], colorClass: "lm-c5" },
+                { time: "0:30 - 0:45", title: "③ 常見問題解方", desc: "教師主導討論 2–3 個最常見問題：回收率不足、題目看不懂、觀察條件不符、資料有遺漏。", tags: ["問題診斷", "全班討論"], colorClass: "lm-c1" },
+                { time: "0:45 - 0:50", title: "④ 調整計畫", desc: "各組更新執行計畫，在學習單 Part B 記錄修改內容與理由。", tags: ["計畫調整", "修正方向"], colorClass: "lm-c2" }
             ]
         },
         {
             name: "第二節",
             duration: "50 min",
-            title: "執行計畫書 + 施測啟動宣告",
+            title: "初步資料整理 × AI 輔助分析",
             stages: [
-                { time: "0:00 - 0:25", title: "四、研究執行計畫書", desc: "填寫 W11-W12 詳細時程，包含理想目標、最低底線與失敗備案。", tags: ["計畫書", "具體備案"], colorClass: "lm-c4" },
-                { time: "0:25 - 0:40", title: "五、教師倫理審查 (巡迴)", desc: "教師於教室各組巡迴，確認計畫書與倫理考量後蓋章授權。", tags: ["教師面談", "授權蓋章"], colorClass: "lm-c5" },
-                { time: "0:40 - 0:50", title: "六、施測啟動宣告", desc: "念出啟動宣告，於黑板出發表打卡，正式啟動研究。", tags: ["出發宣告", "正式啟動"], colorClass: "lm-c3" }
+                { time: "0:00 - 0:30", title: "⑤ 初步資料整理", desc: "清理（去掉無效資料）→ 分類（按研究問題分組）→ 描述（數清楚各選項各幾人）。", tags: ["資料清理", "分類整理"], colorClass: "lm-c2" },
+                { time: "0:30 - 0:45", title: "⑥ AI 輔助初步分析", desc: "用 Prompt 範本讓 AI 做第一輪觀察，學生判斷 AI 的分析是否合理。", tags: ["AI 協作", "初步分析"], colorClass: "lm-c4" },
+                { time: "0:45 - 0:50", title: "⑦ 收束 + 預告", desc: "W12 量化分析、W13 質性分析。W12 前請確保資料已整理好。", tags: ["預告", "收束"], colorClass: "lm-c3" }
             ]
         }
     ],
-    summary: [
-        "倫理四問自查完成，教師蓋章通過",
-        "知情同意書最終版（AI 審查後修改）",
-        "研究執行計畫書（含具體備案）",
-        "施測宣告完成，黑板出發表打卡 ✈️"
+    summaries: [
+        {
+            icon: "📊",
+            label: "進度報告",
+            text: "各組口頭報告收集進度<br><small style=\"font-size:11px;color:#888;\">已收集量 / 問題 / 打算</small>"
+        },
+        {
+            icon: "🔧",
+            label: "問題解方",
+            text: "常見問題全班討論<br><small style=\"font-size:11px;color:#888;\">回收率 / 理解困難 / 遺漏</small>"
+        },
+        {
+            icon: "🤖",
+            label: "AI 初分析",
+            text: "AI 做初稿，學生做裁奪<br><small style=\"font-size:11px;color:#ccc;\">趨勢觀察 / 異常偵測</small>"
+        }
     ],
     legends: [
-        { colorClass: "lm-c1", label: "概念 / 判斷" },
-        { colorClass: "lm-c2", label: "實作 / 修正" },
-        { colorClass: "lm-c5", label: "互動 / 預試" },
-        { colorClass: "lm-c3", label: "引導 / 工具" },
-        { colorClass: "lm-c4", label: "總結 / 定稿" }
+        { colorClass: "lm-c1", label: "概念 / 討論" },
+        { colorClass: "lm-c2", label: "實作 / 整理" },
+        { colorClass: "lm-c4", label: "AI 協作" },
+        { colorClass: "lm-c5", label: "互動 / 報告" },
+        { colorClass: "lm-c3", label: "說明 / 收束" }
     ]
 };
 
@@ -1669,8 +1691,8 @@ export const W13Data = {
     durationDesc: "2 節課",
     metaCards: [
         { label: '第一節', value: '選對盤子：四大圖表與格式規範' },
-        { label: '第二節', value: '賦予意義：描述 vs 推論' },
-        { label: '課堂產出', value: '圖表初稿 + 圖說段落' },
+        { label: '第二節', value: '描述 vs 推論 × Chart Swap 互評' },
+        { label: '課堂產出', value: '圖表初稿 + 圖說段落 + 互評回饋' },
         { label: '帶去 W14', value: '完整圖表，準備撰寫結論' }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
@@ -1771,8 +1793,8 @@ export const W13Data = {
                 },
                 {
                     timeStart: "0:30",
-                    timeEnd: "0:45",
-                    duration: "15 min",
+                    timeEnd: "0:40",
+                    duration: "10 min",
                     colorClass: "c2",
                     icon: "✍️",
                     title: "實戰二｜寫下你們的圖說段落",
@@ -1780,13 +1802,23 @@ export const W13Data = {
                     tags: ["個人/小組寫作", "實作挑戰"]
                 },
                 {
-                    timeStart: "0:45",
+                    timeStart: "0:40",
+                    timeEnd: "0:48",
+                    duration: "8 min",
+                    colorClass: "c4",
+                    icon: "🔄",
+                    title: "Chart Swap 同儕互評",
+                    desc: "單向輪轉配對，把圖表+圖說交給另一組。對照 6 項清單（圖表類型、格式、N 值、描述精準度、推論合理性、邏輯連貫）逐項打勾，口頭回報最大問題。",
+                    tags: ["同儕互評", "品質檢查"]
+                },
+                {
+                    timeStart: "0:48",
                     timeEnd: "0:50",
-                    duration: "5 min",
+                    duration: "2 min",
                     colorClass: "c3",
                     icon: "🏆",
-                    title: "總結與 W14 預告",
-                    desc: "預看 W14 四層結論。收回學習單，確認各組已準備好所有圖解與初步圖說。",
+                    title: "總結與 W15 預告",
+                    desc: "預看 W15 四層結論。根據 Chart Swap 回饋回家修正，確認各組已準備好圖解與圖說。",
                     tags: ["總結收斂", "下週預告"]
                 }
             ]
@@ -1806,7 +1838,7 @@ export const W13Data = {
     ],
     legends: [
         { colorClass: "lm-c1", label: "核心觀念" },
-        { colorClass: "lm-c4", label: "格式規範" },
+        { colorClass: "lm-c4", label: "同儕互評" },
         { colorClass: "lm-c2", label: "互動演練" },
         { colorClass: "lm-c5", label: "案例拆解" },
         { colorClass: "lm-c3", label: "小結預告" }

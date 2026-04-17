@@ -1,0 +1,131 @@
+/* W12 — 執行週 I：研究診所 Open Office */
+
+/* 三色掛號卡 */
+.w12-triage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+.w12-triage-card {
+    border-radius: var(--radius-unified);
+    padding: 20px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    text-align: center;
+}
+.w12-triage-card:hover {
+    transform: translateY(-2px);
+}
+.w12-triage-card.selected {
+    border-color: currentColor;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.w12-triage-red {
+    background: #FEF2F2;
+    color: #DC2626;
+}
+.w12-triage-yellow {
+    background: #FFFBEB;
+    color: #D97706;
+}
+.w12-triage-green {
+    background: #F0FDF4;
+    color: #059669;
+}
+.w12-triage-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+.w12-triage-label {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.w12-triage-desc {
+    font-size: 11px;
+    opacity: 0.7;
+    line-height: 1.4;
+}
+
+/* 進度追蹤 */
+.w12-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+}
+.w12-progress-row:last-child {
+    border-bottom: none;
+}
+.w12-progress-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.w12-progress-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 80px;
+}
+
+/* 困難速查卡 */
+.w12-trouble-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.w12-trouble-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+}
+.w12-trouble-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--border);
+}
+.w12-trouble-body {
+    padding: 14px;
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.7;
+}
+
+/* 等待急救包 */
+.w12-rescue-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+}
+.w12-rescue-card {
+    background: #fff;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .w12-triage-grid {
+        grid-template-columns: 1fr;
+    }
+    .w12-trouble-grid {
+        grid-template-columns: 1fr;
+    }
+    .w12-rescue-grid {
+        grid-template-columns: 1fr;
+    }
+}

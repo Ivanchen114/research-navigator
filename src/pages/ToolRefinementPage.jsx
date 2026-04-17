@@ -1,371 +1,626 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './ToolRefinementPage.css';
 import CourseArc from '../components/ui/CourseArc';
-import { Map, ChevronRight, CheckCircle2, ArrowRight, Scale, Shield, Heart, BarChart3, Users } from 'lucide-react';
-import LessonMap from '../components/ui/LessonMap';
-import { W9Data } from '../data/lessonMaps';
+import './ToolRefinementPage.css';
+import ThinkRecord from '../components/ui/ThinkRecord';
+import StepEngine from '../components/ui/StepEngine';
+import ExportButton from '../components/ui/ExportButton';
+import { readRecords } from '../components/ui/ThinkRecord';
+import {
+    ArrowRight,
+    CheckCircle2,
+    Bot,
+    Users,
+    Copy,
+    Check,
+    Zap,
+} from 'lucide-react';
 
-/* ─── 五大倫理原則 ─── */
-const ethicsPrinciples = [
-    {
-        icon: '🤝', name: '知情同意', en: 'Informed Consent',
-        desc: '受訪者有權知道研究目的、內容、資料用途，並在了解後自願參與。',
-        question: '你有沒有告訴受訪者你在做什麼？他們有沒有機會拒絕？',
-        example: '問卷前應有說明文字：「本問卷用於研究 __，資料匿名，填寫自願，可隨時停止。」'
-    },
-    {
-        icon: '🔒', name: '隱私保護', en: 'Privacy & Confidentiality',
-        desc: '個人資料應保密，不能公開能識別特定個人的資訊（姓名、學號、班級等）。',
-        question: '你的問卷或訪談紀錄會不會讓人猜出是誰說的？',
-        example: '訪談逐字稿應匿名化：「受訪者 A 說：……」而非使用真名。'
-    },
-    {
-        icon: '💚', name: '不造成傷害', en: 'Do No Harm',
-        desc: '研究過程不應讓參與者感到不適、受到傷害、或受到歧視，包括心理上的不舒服。',
-        question: '你的題目有沒有可能讓受訪者感到被冒犯、被評判，或觸碰到敏感議題？',
-        example: '避免問「你覺得你的成績差是因為不努力嗎」——帶有評判意味。'
-    },
-    {
-        icon: '📊', name: '誠實呈現資料', en: 'Integrity',
-        desc: '不捏造資料，不選擇性刪除不合預期的結果，如實呈現所有收集到的資訊。',
-        question: '如果收集到的資料和你預期的不一樣，你會怎麼做？',
-        example: '「我們發現假說不成立，這本身就是重要的發現」——這才是科學態度。'
-    },
-    {
-        icon: '⚖️', name: '公平對待', en: 'Justice & Fairness',
-        desc: '研究對象的選擇應有合理理由，不應歧視特定群體，也不應讓某些人承擔不公平的風險。',
-        question: '你選擇研究對象的理由是什麼？有沒有排除某些人而沒有說明理由？',
-        example: '「只問成績好的人」會造成取樣偏誤，也可能讓成績較差的人覺得被排除。'
-    }
+/* ══════════════════════════════════════
+ *  資料常數
+ * ══════════════════════════════════════ */
+
+const METHOD_OPTIONS = [
+    { id: 'questionnaire', label: '📋 問卷組' },
+    { id: 'interview', label: '🎤 訪談組' },
+    { id: 'experiment', label: '🧪 實驗組' },
+    { id: 'observation', label: '👀 觀察組' },
+    { id: 'literature', label: '📚 文獻組' },
 ];
 
+/* — 各方法 AI 檢核 Prompt — */
+const AI_PROMPTS = {
+    questionnaire: `我設計了一份問卷，請幫我檢查：
+1. 有沒有問題不清楚？
+2. 選項是否完整、互斥？
+3. 有沒有雙重否定或雙重問題？
+4. 倫理考量是否足夠（知情同意、隱私保護）？
+5. 給我具體修改建議。
+
+【貼上你的問卷】`,
+    interview: `我設計了訪談大綱，請幫我檢查：
+1. 問題是否開放式？
+2. 追問設計是否合理？
+3. 順序是否流暢（從簡單到深層）？
+4. 倫理考量是否足夠？
+5. 給我具體修改建議。
+
+【貼上你的訪談大綱】`,
+    experiment: `我設計了一個實驗，請幫我檢查：
+1. 自變項與依變項的操作型定義清楚嗎？
+2. 控制變項有遺漏嗎？
+3. 實驗流程有邏輯漏洞嗎？
+4. 倫理考量是否足夠？
+5. 給我具體修改建議。
+
+【貼上你的實驗設計】`,
+    observation: `我設計了觀察紀錄表，請幫我檢查：
+1. 觀察行為的定義夠具體嗎？（是外顯行為而非推測？）
+2. 記錄方式來得及嗎？
+3. 觀察時段和地點設定合理嗎？
+4. 倫理考量是否足夠？
+5. 給我具體修改建議。
+
+【貼上你的觀察紀錄表設計】`,
+    literature: `我設計了文獻分析架構，請幫我檢查：
+1. 搜尋策略（關鍵字、篩選標準）夠精準嗎？
+2. 比較矩陣的欄位能回答研究問題嗎？
+3. 納入／排除標準合理嗎？
+4. 來源品質分級方式合適嗎？
+5. 給我具體修改建議。
+
+【貼上你的文獻分析架構】`,
+};
+
+const GENERIC_PROMPT = `我設計了一份研究工具，請幫我檢查：
+1. 有沒有不清楚的地方？
+2. 設計有什麼邏輯漏洞？
+3. 倫理考量足夠嗎？
+4. 給我具體修改建議。
+
+【貼上你的工具內容】`;
+
+/* — AI 的限制 — */
+const AI_LIMITS = [
+    { icon: '👁️', title: 'AI 看的是「文字」', desc: '看不到實際填答或訪談時的感受' },
+    { icon: '🏫', title: 'AI 不知道「文化脈絡」', desc: '高中生的用語習慣、本校的特殊情況' },
+    { icon: '⏱️', title: 'AI 不知道「實際可行性」', desc: '問卷會不會太長、訪談會不會太久，填填看才知道' },
+];
+
+/* — 各方法配對指示 — */
+const PAIRING_INSTRUCTIONS = {
+    questionnaire: '找另一組同學互填問卷。填完後記錄：哪題不清楚？哪個選項不知道怎麼選？花了多久填完？',
+    interview: '兩人一組互相模擬訪談。一人當訪談者、一人當受訪者，訪完後交換。注意：哪個問題讓你卡住？哪個追問太尬？',
+    experiment: '找同學實際跑一遍實驗流程。記錄：指令清楚嗎？需要多久？有沒有突發狀況？',
+    observation: '去實際場域試觀察 10 分鐘。記錄：來得及嗎？分類明確嗎？有沒有行為你歸不了類？',
+    literature: '請同學看你的比較矩陣。問他：看得懂嗎？欄位有沒有多餘或遺漏？能回答你的研究問題嗎？',
+};
+
+/* — ExportButton 欄位 — */
+const EXPORT_FIELDS = [
+    /* Step 1 */
+    { key: 'w10-tool-text', label: '工具文字版', question: '你貼給 AI 檢核的工具內容' },
+    { key: 'w10-ai-raw-feedback', label: 'AI 原始回覆', question: 'AI 給你的檢核報告' },
+    /* Step 2 */
+    { key: 'w10-ai-judge', label: 'AI 建議判斷表', question: '逐條判斷 AI 建議' },
+    { key: 'w10-judge-principle', label: '判斷原則', question: '你採納／不採納的理由是什麼？' },
+    { key: 'w10-tool-revision', label: '第一輪修正紀錄', question: '根據 AI 建議修改了什麼？' },
+    /* Step 3 */
+    { key: 'w10-pilot-partner', label: '預試配對對象' },
+    { key: 'w10-pilot-findings', label: '預試發現', question: '真人測試時發現了什麼問題？' },
+    /* Step 4 */
+    { key: 'w10-ai-found', label: 'AI 發現的問題' },
+    { key: 'w10-human-found', label: '人工預試才發現的問題' },
+    { key: 'w10-ai-effective', label: 'AI 建議效果評估', question: 'AI 建議的修改，預試後效果如何？' },
+    { key: 'w10-final-revision', label: '最終修正紀錄', question: '預試後的最終修改' },
+    /* Step 5 */
+    { key: 'w10-ai-reflection', label: 'AI 協助研究反思', question: '使用 AI 協助研究工具設計的心得' },
+];
+
+/* ══════════════════════════════════════
+ *  內部元件：可複製 Prompt 框
+ * ══════════════════════════════════════ */
+
+const CopyablePrompt = ({ text }) => {
+    const [copied, setCopied] = useState(false);
+    const handleCopy = useCallback(() => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }).catch(() => {
+            /* fallback: select + copy */
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    }, [text]);
+
+    return (
+        <div className="w10-prompt-box">
+            <div className="w10-prompt-header">
+                <span className="w10-prompt-label">
+                    <Bot size={14} /> AI 檢核 Prompt — 複製後貼到 AI 對話窗
+                </span>
+                <button onClick={handleCopy} className="w10-copy-btn">
+                    {copied ? <><Check size={12} /> 已複製</> : <><Copy size={12} /> 複製</>}
+                </button>
+            </div>
+            <pre className="w10-prompt-text">{text}</pre>
+        </div>
+    );
+};
+
+/* ══════════════════════════════════════
+ *  主元件
+ * ══════════════════════════════════════ */
+
 export const ToolRefinementPage = () => {
-    const [showLessonMap, setShowLessonMap] = useState(false);
-    const [expandedPrinciple, setExpandedPrinciple] = useState(null);
+    const [w9Method, setW9Method] = useState('');
+    const [w9Topic, setW9Topic] = useState('');
+    const [detectedMethodId, setDetectedMethodId] = useState('');
+
+    /* W9 資料帶入 */
+    useEffect(() => {
+        const saved = readRecords();
+        const method = saved['w9-my-method']?.trim() || saved['w8-tool-method']?.trim() || '';
+        const topic = saved['w8-merged-topic']?.trim() || saved['w8-research-question']?.trim() || '';
+        if (method) setW9Method(method);
+        if (topic) setW9Topic(topic);
+
+        const ml = method.toLowerCase();
+        if (ml.includes('問卷')) setDetectedMethodId('questionnaire');
+        else if (ml.includes('訪談')) setDetectedMethodId('interview');
+        else if (ml.includes('實驗')) setDetectedMethodId('experiment');
+        else if (ml.includes('觀察')) setDetectedMethodId('observation');
+        else if (ml.includes('文獻')) setDetectedMethodId('literature');
+    }, []);
+
+    const currentPrompt = AI_PROMPTS[detectedMethodId] || '';
+    const currentPairing = PAIRING_INSTRUCTIONS[detectedMethodId] || '找同學互相測試你的研究工具。';
+
+    /* ── 五步驟 ──────────────────────────────────────── */
+
+    const steps = [
+        /* ─── Step 1：AI 檢核站 ─── */
+        {
+            title: 'AI 檢核站',
+            icon: '🤖',
+            content: (
+                <div className="space-y-8">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        W9 你用三欄對應表完成了工具的「系統版」設計。今天讓 <strong className="text-[var(--ink)]">AI 當第一輪品管員</strong>——它能快速找出你沒注意到的問題。但記住：<strong className="text-[var(--accent)]">AI 不一定對，你要判斷！</strong>
+                    </p>
+
+                    {/* W9 帶入 */}
+                    {(w9Topic || w9Method) && (
+                        <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)] text-[13px]">
+                            <span className="text-[16px]">📎</span>
+                            <div>
+                                <span className="font-bold text-[var(--accent)]">W9 研究檔案帶入</span>
+                                {w9Topic && <p className="text-[var(--ink-mid)] mt-0.5">研究題目：{w9Topic}</p>}
+                                {w9Method && <p className="text-[var(--ink-mid)] mt-0.5">選用方法：{w9Method}</p>}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 任務流程 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center gap-2">
+                            <Zap size={16} />
+                            <span className="font-bold text-[13px]">今天的任務流程</span>
+                        </div>
+                        <div className="p-5 space-y-3 text-[13px] text-[var(--ink-mid)]">
+                            {[
+                                ['1️⃣', '把你的工具整理成文字版，貼給 AI 檢核'],
+                                ['2️⃣', '逐條判斷 AI 的建議——採納？不採納？部分採納？'],
+                                ['3️⃣', '根據判斷結果修正工具'],
+                                ['4️⃣', '下節課人工預試——讓真人試用你的工具'],
+                            ].map(([num, text], i) => (
+                                <div key={i} className="flex items-start gap-3">
+                                    <span className="text-[16px]">{num}</span>
+                                    <span>{text}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* AI Prompt */}
+                    <CopyablePrompt text={currentPrompt || GENERIC_PROMPT} />
+
+                    {!currentPrompt && (
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[13px] text-[var(--ink-mid)]">
+                            <strong className="text-[var(--ink)]">💡 提示：</strong> 未偵測到 W9 的方法選擇，顯示通用 Prompt。建議回 W9 完成三欄對應表後再來。
+                        </div>
+                    )}
+
+                    {/* 貼工具 */}
+                    <ThinkRecord
+                        dataKey="w10-tool-text"
+                        prompt="Step 1：把你的工具文字版貼在這裡（問卷題目／訪談大綱／實驗流程／觀察表／文獻架構）"
+                        placeholder="從 Google 表單、Word 或 W9 的三欄對應表複製你的工具內容……"
+                        rows={8}
+                    />
+
+                    {/* 貼 AI 回覆 */}
+                    <ThinkRecord
+                        dataKey="w10-ai-raw-feedback"
+                        prompt="Step 2：把 AI 的檢核回覆貼在這裡"
+                        placeholder="複製 AI（Claude／ChatGPT／Gemini）的完整回覆……"
+                        rows={8}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 2：AI 建議判斷表 ─── */
+        {
+            title: 'AI 建議判斷表',
+            icon: '⚖️',
+            content: (
+                <div className="space-y-8">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        AI 給了一堆建議，但<strong className="text-[var(--ink)]">不是每條都要照做</strong>。逐條判斷：這個建議合理嗎？適合高中生的研究嗎？符合你的研究目的嗎？
+                    </p>
+
+                    {/* 三種判斷 */}
+                    <div className="w10-judge-tips">
+                        <div className="w10-judge-tip">
+                            <span className="w10-judge-tip-icon">✅</span>
+                            <div>
+                                <strong>採納</strong>
+                                <span>AI 說得對，改了會讓工具更好</span>
+                            </div>
+                        </div>
+                        <div className="w10-judge-tip">
+                            <span className="w10-judge-tip-icon">❌</span>
+                            <div>
+                                <strong>不採納</strong>
+                                <span>AI 的建議不適用（太學術、不符文化、偏離研究目的）</span>
+                            </div>
+                        </div>
+                        <div className="w10-judge-tip">
+                            <span className="w10-judge-tip-icon">🔶</span>
+                            <div>
+                                <strong>部分採納</strong>
+                                <span>方向對但需要調整，改成適合你的版本</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 判斷表 */}
+                    <ThinkRecord
+                        dataKey="w10-ai-judge"
+                        prompt="AI 建議判斷表：逐條記錄 AI 的建議，並寫下你的判斷"
+                        placeholder={`建議 1：（AI 說了什麼？）\n→ 判斷：✅採納 / ❌不採納 / 🔶部分採納\n→ 理由：\n\n建議 2：\n→ 判斷：\n→ 理由：\n\n建議 3：\n→ 判斷：\n→ 理由：\n\n（繼續新增……）`}
+                        scaffold={[
+                            '建議___：AI 說___',
+                            '→ 判斷：✅採納 / ❌不採納 / 🔶部分採納',
+                            '→ 理由：___',
+                        ]}
+                        rows={14}
+                    />
+
+                    {/* 判斷原則 */}
+                    <ThinkRecord
+                        dataKey="w10-judge-principle"
+                        prompt="你的判斷原則：什麼時候聽 AI 的？什麼時候不聽？"
+                        placeholder={'我們採納 AI 建議是因為……\n我們不採納 AI 建議是因為……'}
+                        scaffold={['我們聽 AI 的，通常是因為___', '我們不聽 AI 的，通常是因為___']}
+                        rows={4}
+                    />
+
+                    {/* 修正紀錄 */}
+                    <ThinkRecord
+                        dataKey="w10-tool-revision"
+                        prompt="第一輪修正紀錄：根據 AI 建議，你實際改了什麼？"
+                        placeholder={'1. 第___題：原本___，改成___\n2. 新增___\n3. 刪除___'}
+                        scaffold={['第__題原本___', '改成___', '因為___']}
+                        rows={6}
+                    />
+
+                    {/* 選做提示 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[13px]">
+                        <strong className="text-[var(--ink)]">⚡ 選做：</strong>
+                        <span className="text-[var(--ink-mid)] ml-1">修改完成後，可以把修正版再貼給 AI 看一次，確認問題是否解決。時間夠就做，不夠就直接進入下節課的人工預試。</span>
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：人工預試 ─── */
+        {
+            title: '人工預試',
+            icon: '🧪',
+            content: (
+                <div className="space-y-8">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        AI 看的是文字，<strong className="text-[var(--ink)]">人工預試看的是真實體驗</strong>。讓真人試用你的工具，你會發現很多 AI 抓不到的問題。
+                    </p>
+
+                    {/* AI 的限制 */}
+                    <div className="w10-limits-grid">
+                        {AI_LIMITS.map((item, i) => (
+                            <div key={i} className="w10-limit-card">
+                                <span className="text-[20px]">{item.icon}</span>
+                                <strong className="text-[13px] text-[var(--ink)]">{item.title}</strong>
+                                <span className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{item.desc}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* 配對指示 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <Users size={16} />
+                            <span className="font-bold text-[13px]">預試配對方式</span>
+                        </div>
+                        <div className="p-5 text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                            {currentPairing}
+                        </div>
+                    </div>
+
+                    {/* 預試對象 */}
+                    <ThinkRecord
+                        dataKey="w10-pilot-partner"
+                        prompt="你和誰配對預試？"
+                        placeholder="配對對象：___組／___同學"
+                        rows={1}
+                    />
+
+                    {/* 預試發現 */}
+                    <ThinkRecord
+                        dataKey="w10-pilot-findings"
+                        prompt="預試中發現了什麼問題？（記錄每一個卡住的地方）"
+                        placeholder={`問題 1：第___題，對方說___\n問題 2：___\n問題 3：___\n整體花了___分鐘完成`}
+                        scaffold={[
+                            '第__題讓對方卡住，因為___',
+                            '對方反映___',
+                            '整體花了___分鐘',
+                        ]}
+                        rows={8}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 4：AI vs 人工比對 + 即時修正 ─── */
+        {
+            title: 'AI vs 人工比對',
+            icon: '🔍',
+            content: (
+                <div className="space-y-8">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        現在把 AI 的發現和人工預試的發現放在一起比較。<strong className="text-[var(--ink)]">誰找到了什麼？誰漏掉了什麼？</strong>
+                    </p>
+
+                    {/* 比對雙欄 */}
+                    <div className="w10-compare-grid">
+                        <div className="w10-compare-card w10-compare-ai">
+                            <div className="w10-compare-header">
+                                <Bot size={16} />
+                                <span>AI 發現的問題</span>
+                            </div>
+                            <div className="w10-compare-body">
+                                <ThinkRecord
+                                    dataKey="w10-ai-found"
+                                    prompt=""
+                                    placeholder={'AI 指出了：\n1. ___\n2. ___\n3. ___'}
+                                    rows={5}
+                                />
+                            </div>
+                        </div>
+                        <div className="w10-compare-card w10-compare-human">
+                            <div className="w10-compare-header">
+                                <Users size={16} />
+                                <span>人工預試才發現的問題</span>
+                            </div>
+                            <div className="w10-compare-body">
+                                <ThinkRecord
+                                    dataKey="w10-human-found"
+                                    prompt=""
+                                    placeholder={'真人測試時才發現：\n1. ___\n2. ___\n3. ___'}
+                                    rows={5}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* AI 建議效果 */}
+                    <ThinkRecord
+                        dataKey="w10-ai-effective"
+                        prompt="AI 建議的修改，預試後效果如何？"
+                        placeholder={'AI 建議修改的第___題：\n□ 有效，問題解決了\n□ 部分有效，還需要再改\n□ 無效，問題還在'}
+                        scaffold={[
+                            'AI 建議改的第__題，預試結果：___',
+                            '有效／部分有效／無效',
+                        ]}
+                        rows={4}
+                    />
+
+                    {/* 最終修正 */}
+                    <ThinkRecord
+                        dataKey="w10-final-revision"
+                        prompt="即時修正：根據人工預試結果，你最後改了什麼？"
+                        placeholder={'1. 第___題改成___（因為預試時___）\n2. 刪掉___（因為___）\n3. 新增___（因為___）'}
+                        scaffold={['第__題改成___', '因為預試時___']}
+                        rows={6}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 5：回顧與繳交 ─── */
+        {
+            title: '回顧與繳交',
+            icon: '📋',
+            content: (
+                <div className="space-y-8">
+                    {/* AI 反思 */}
+                    <ThinkRecord
+                        dataKey="w10-ai-reflection"
+                        prompt="使用 AI 協助研究工具設計，你學到了什麼？"
+                        placeholder={'AI 給了哪些有用的建議？\nAI 給了哪些不適用的建議？\n你覺得 AI 協助研究最大的優勢和限制是什麼？'}
+                        scaffold={[
+                            'AI 最有用的建議是___',
+                            'AI 最不適用的建議是___，因為___',
+                            'AI 的優勢是___，限制是___',
+                            '下次使用 AI 我會___',
+                        ]}
+                        rows={6}
+                    />
+
+                    {/* 今日重點 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--ink)] text-white font-bold text-[13px]">
+                            💡 今日重點
+                        </div>
+                        <div className="p-5 space-y-3">
+                            <div className="w10-summary-row">
+                                <span className="w10-summary-icon">🤖</span>
+                                <div>
+                                    <strong className="text-[13px] text-[var(--ink)]">AI 的優勢</strong>
+                                    <p className="text-[12px] text-[var(--ink-mid)]">快速找出明顯問題、提供專業建議、不會累</p>
+                                </div>
+                            </div>
+                            <div className="w10-summary-row">
+                                <span className="w10-summary-icon">🧑‍🤝‍🧑</span>
+                                <div>
+                                    <strong className="text-[13px] text-[var(--ink)]">人工預試的價值</strong>
+                                    <p className="text-[12px] text-[var(--ink-mid)]">發現 AI 沒發現的問題、測試實際可行性、真實的受訪者體驗</p>
+                                </div>
+                            </div>
+                            <div className="w10-summary-row">
+                                <span className="w10-summary-icon">⭐</span>
+                                <div>
+                                    <strong className="text-[13px] text-[var(--ink)]">最佳組合</strong>
+                                    <p className="text-[12px] text-[var(--accent)] font-bold">AI 第一輪檢核 → 人工預試 → 再修正</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 檢核清單 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ W10 完成後，請確認
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                '用 AI 檢核了你的研究工具',
+                                '逐條判斷了 AI 建議（不盲從）',
+                                '完成人工預試（真人測試）',
+                                '比較了 AI 發現 vs 人工發現',
+                                '根據雙重回饋修正了工具',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
+                                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
+                                    <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 一鍵複製 */}
+                    <ExportButton
+                        weekLabel="W10 AI 協助工具精進與預試"
+                        fields={EXPORT_FIELDS}
+                    />
+
+                    {/* R.I.B. 遊戲連結 */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[#7C3AED] p-6 rounded-r-lg text-white shadow-xl">
+                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                            <Bot className="text-[#7C3AED]" size={20} />
+                            R.I.B. 連貫劇情：幽靈數據 Ch3 — 問卷迷霧
+                        </h3>
+                        <p className="text-[var(--ink-light)] text-sm mb-4">
+                            Agent Amber 在社區發放的問卷出現了嚴重的設計缺陷。用你今天學到的 AI 審查技巧，幫她找出真相。
+                        </p>
+                        <Link to="/phantom/ch3" className="inline-flex items-center gap-2 bg-[#7C3AED] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
+                            進入任務 <ArrowRight size={14} />
+                        </Link>
+                    </div>
+
+                    {/* 下週預告 */}
+                    <div className="next-week-preview">
+                        <div className="next-week-header">
+                            <span className="next-week-badge">NEXT WEEK</span>
+                            <h3 className="next-week-title">W11 預告：倫理審查 + 正式施測準備</h3>
+                        </div>
+                        <div className="next-week-content">
+                            <div className="next-week-col">
+                                <div className="next-week-label">帶什麼來</div>
+                                <p className="next-week-text">修正完畢的工具定稿（問卷／訪談大綱／實驗流程／觀察表）</p>
+                            </div>
+                            <div className="next-week-col">
+                                <div className="next-week-label">做什麼</div>
+                                <p className="next-week-text">倫理四問自查、知情同意書 AI 審查、蓋章出發——通過審查才能正式施測！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <div className="page-container animate-in-fade-slide">
-
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[#1a1a2e] font-bold">倫理審查 W10</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
+                    研究方法與專題 / 資料蒐集 / <span className="text-[var(--ink)] font-bold">AI 工具精進 W10</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <button
-                        onClick={() => setShowLessonMap(!showLessonMap)}
-                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
-                    >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
-                    </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
                 </div>
             </div>
-
-            {showLessonMap && (
-                <div className="animate-in slide-in-from-top-4 duration-300 mb-12">
-                    <LessonMap data={W9Data} />
-                </div>
-            )}
 
             {/* PAGE HEADER */}
-            <div className="max-w-[800px] mb-16">
-                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">⚖️ W10 · 資料蒐集</div>
-                <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
-                    研究倫理審查：<span className="text-[#2d5be3]">五大原則 × 自審 × 啟動</span>
+            <header className="max-w-[800px] mb-16">
+                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🤖 W10 · 資料蒐集 → 工具精進</div>
+                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
+                    方法深化 II：<span className="text-[var(--accent)] italic">AI 協助工具精進與預試</span>
                 </h1>
-                <p className="text-[16px] text-[#4a4a6a] leading-relaxed mb-8">
-                    你的研究工具已經準備好了。但在出去找人做問卷、訪談之前，我們需要停下來問一個問題：這樣做，對嗎？通過倫理審查，拿到啟動許可，你的研究才算正式啟程。
+                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
+                    用 AI 做第一輪品管，再用真人預試做第二輪驗證。AI 能快速找出明顯問題，但看不到真實體驗——兩輪把關，工具才定稿。
                 </p>
 
-                {/* Course Arc */}
-                {W9Data.courseArc && <CourseArc items={W9Data.courseArc} />}
-            </div>
+                <CourseArc items={[
+                    { wk: 'W1-W4', name: '探索\n定題', status: 'past' },
+                    { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
+                    { wk: 'W7-W8', name: '方法選擇\n組隊企劃', status: 'past' },
+                    { wk: 'W9', name: '工具設計\n處方診斷', status: 'past' },
+                    { wk: 'W10', name: 'AI精進\n人工預試', status: 'now' },
+                    { wk: 'W11', name: '倫理審查\n施測準備', status: '' },
+                    { wk: 'W12-W15', name: '執行研究\n數據分析', status: '' },
+                ]} />
 
-            {/* META STRIP */}
-            <div className="meta-strip">
-                <div className="meta-item">
-                    <div className="meta-label">第一節</div>
-                    <div className="meta-value">五大倫理原則 × 自我審查</div>
-                </div>
-                <div className="meta-item">
-                    <div className="meta-label">第二節</div>
-                    <div className="meta-value">口頭報告 × 取得許可 × 啟動</div>
-                </div>
-                <div className="meta-item">
-                    <div className="meta-label">前置準備</div>
-                    <div className="meta-value">W9 完成的研究工具初版</div>
-                </div>
-                <div className="meta-item">
-                    <div className="meta-label">課堂產出</div>
-                    <div className="meta-value">倫理審查表 + 執行計畫 + 啟動許可</div>
-                </div>
-            </div>
-
-            {/* ═══════ 五大原則 ═══════ */}
-            <section className="mb-24">
-                <div className="w9-section-head">
-                    <h2 className="w9-section-title">學什麼</h2>
-                    <div className="w9-section-line"></div>
-                    <span className="w9-section-tag">CONCEPT</span>
-                </div>
-
-                <div className="text-[11px] font-mono text-[#8888aa] tracking-[0.1em] uppercase mb-6">五大研究倫理原則</div>
-
-                <div className="space-y-4">
-                    {ethicsPrinciples.map((p, idx) => (
-                        <div key={idx} className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden">
-                            <div
-                                className="flex items-center gap-4 p-5 cursor-pointer hover:bg-[#f8f7f4] transition-colors"
-                                onClick={() => setExpandedPrinciple(expandedPrinciple === idx ? null : idx)}
-                            >
-                                <span className="text-2xl">{p.icon}</span>
-                                <div className="flex-1">
-                                    <div className="font-bold text-[15px] text-[#1a1a2e]">原則 {idx + 1}：{p.name}</div>
-                                    <div className="text-[12px] text-[#8888aa] font-mono">{p.en}</div>
-                                </div>
-                                <ChevronRight size={16} className={`text-[#8888aa] transition-transform duration-300 ${expandedPrinciple === idx ? 'rotate-90' : ''}`} />
-                            </div>
-                            {expandedPrinciple === idx && (
-                                <div className="border-t border-[#dddbd5] p-5 bg-[#f8f7f4] space-y-3 text-[13px] animate-in">
-                                    <p className="text-[#4a4a6a]">{p.desc}</p>
-                                    <div className="bg-[#fef3c7] border border-[#d97706]/30 rounded-lg p-3">
-                                        <strong className="text-[#d97706]">🔍 自問：</strong>
-                                        <span className="text-[#4a4a6a] ml-1">{p.question}</span>
-                                    </div>
-                                    <div className="bg-[#d1fae5] border border-[#059669]/20 rounded-lg p-3">
-                                        <strong className="text-[#059669]">✅ 範例：</strong>
-                                        <span className="text-[#4a4a6a] ml-1">{p.example}</span>
-                                    </div>
-                                </div>
-                            )}
+                <div className="meta-grid">
+                    {[
+                        { label: '第一節', value: 'AI 檢核工具 + 判斷建議 + 第一輪修正' },
+                        { label: '第二節', value: '人工預試 + AI vs 人工比對 + 最終修正' },
+                        { label: '課堂產出', value: 'AI 建議判斷表 + 預試紀錄 + 工具修正版' },
+                        { label: '前置要求', value: 'W9 工具初稿（三欄對應表成果）' },
+                    ].map((item, idx) => (
+                        <div key={idx} className="meta-item">
+                            <div className="meta-label">{item.label}</div>
+                            <div className="meta-value">{item.value}</div>
                         </div>
                     ))}
                 </div>
-            </section>
+            </header>
 
-            {/* ═══════ 課堂流程 ═══════ */}
-            <section className="mb-24">
-                <div className="w9-section-head">
-                    <h2 className="w9-section-title">課堂流程</h2>
-                    <div className="w9-section-line"></div>
-                    <span className="w9-section-tag">IN-CLASS</span>
-                </div>
-
-                <div className="grid gap-6">
-
-                    {/* TASK 1 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 1</span>
-                            <span className="w9-task-title">開場：為什麼需要倫理審查？</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">5 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            所有嚴肅的研究——不管是大學、醫院還是政府機構——在收集資料前都必須通過倫理審查。今天模擬這個流程：你們自己審查，老師幫你們把關。
-                        </div>
-                    </div>
-
-                    {/* TASK 2 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 2</span>
-                            <span className="w9-task-title">五大倫理原則講解 + 舉例</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">20 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            依序介紹五大原則，每個原則配舉例。讓學生思考：「如果違反這個原則，會發生什麼事？」
-                        </div>
-                    </div>
-
-                    {/* TASK 3 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 3</span>
-                            <span className="w9-task-title">自我倫理審查</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">20 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            <p className="mb-3">拿出研究工具和企劃書，用學習單 Part B 的倫理審查表逐條自我評估。</p>
-                            <div className="bg-[#fef3c7] border border-[#d97706]/30 rounded-lg p-4">
-                                <strong className="text-[#d97706]">⚠️ 高風險議題提醒：</strong>
-                                <span className="ml-1">涉及「成績、體重、家庭、心理健康」的題目需要特別注意——這些是容易造成不適的敏感議題。</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* TASK 4 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 4</span>
-                            <span className="w9-task-title">互相審查</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">5 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            和旁邊的組交換審查表，看看有沒有他們沒注意到的風險。寫下一個你認為他們需要特別注意的地方。
-                        </div>
-                    </div>
-
-                    {/* 第二節分隔 */}
-                    <div className="flex items-center gap-4 my-4">
-                        <div className="h-px flex-1 bg-[#dddbd5]"></div>
-                        <span className="text-[11px] font-mono text-[#8888aa] tracking-widest">第二節</span>
-                        <div className="h-px flex-1 bg-[#dddbd5]"></div>
-                    </div>
-
-                    {/* TASK 5 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 5</span>
-                            <span className="w9-task-title">各組口頭報告倫理審查結果</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">20 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            <p className="mb-3">每組 2 分鐘報告：</p>
-                            <div className="bg-[#f8f7f4] border border-[#dddbd5] rounded-lg p-4">
-                                <ol className="list-decimal ml-4 space-y-1">
-                                    <li>研究主題（一句話）</li>
-                                    <li>研究方法（問卷 / 訪談 / 觀察 / 實驗 / 文獻）</li>
-                                    <li>哪個原則是你們的主要風險？如何處理？</li>
-                                    <li>同儕審查的補充意見？你們如何回應？</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* TASK 6 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 6</span>
-                            <span className="w9-task-title">修正 + 取得「研究啟動許可」</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">15 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            <p className="mb-3">根據報告和討論進行最後修正。填寫學習單 Part C「研究啟動確認表」——這就是你們的研究許可證。</p>
-                            <div className="bg-[#d1fae5] border border-[#059669]/20 rounded-lg p-4">
-                                <strong className="text-[#059669]">🛡️ 通過標準：</strong>
-                                <span className="ml-1">不需要「零風險」——重點是你能識別風險並有合理的處理方案。</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* TASK 7 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 7</span>
-                            <span className="w9-task-title">執行計畫確認 + 正式啟動資料收集</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">13 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            <p className="mb-3">恭喜取得研究啟動許可！確認每人具體行動計畫：誰負責找多少位受訪者、什麼時候完成、資料怎麼整理。</p>
-                            <div className="bg-[#ede9fe] border border-[#7c3aed]/20 rounded-lg p-4">
-                                <strong className="text-[#7c3aed]">📅 資料收集時程建議</strong>
-                                <div className="mt-2 space-y-1">
-                                    <p><strong>問卷法：</strong>1 週內完成發放與回收（第 1 天設計 Google 表單，第 2–5 天收集）。</p>
-                                    <p><strong>訪談法：</strong>至少訪談 2–3 位受訪者，每次 15–30 分鐘，需提前約好時間。</p>
-                                    <p><strong>觀察法：</strong>至少觀察 3 個不同時段 / 場次，每次至少 20 分鐘。</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* TASK 8 */}
-                    <div className="w9-task-block">
-                        <div className="w9-task-hd">
-                            <span className="w9-task-badge">TASK 8</span>
-                            <span className="w9-task-title">收束 + W11 預告</span>
-                            <span className="text-[11px] text-[#8888aa] font-mono ml-auto">2 min</span>
-                        </div>
-                        <div className="p-6 text-[13px] text-[#4a4a6a]">
-                            W11 進行資料收集中期回顧。遇到問題不要慌：受訪者不夠、題目理解有誤、觀察條件不符——都是正常的，帶來一起解決。
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            {/* ═══════ WRAP UP ═══════ */}
-            <section className="mb-24">
-                <div className="w9-section-head">
-                    <h2 className="w9-section-title">本週總結</h2>
-                    <div className="w9-section-line"></div>
-                    <span className="w9-section-tag">WRAP-UP</span>
-                </div>
-
-                <div className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden mb-6">
-                    <div className="bg-[#f0ede6] px-5 py-3 border-b border-[#dddbd5] font-bold text-[14px]">✅ 本週結束，你應該要會</div>
-                    <div className="grid grid-cols-2 bg-[#dddbd5] gap-[1px]">
-                        {[
-                            '說出五大研究倫理原則的核心精神',
-                            '用倫理審查表評估自己的研究計畫',
-                            '識別研究中的倫理風險並提出處理方案',
-                            '制定具體可行的資料收集執行計畫'
-                        ].map((txt, i) => (
-                            <div key={i} className="bg-white p-4 flex items-center gap-2 text-[13px]">
-                                <CheckCircle2 size={16} className="text-[#2e7d5a]" /> {txt}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="bg-white border border-[#dddbd5] rounded-xl overflow-hidden mb-6">
-                    <div className="bg-[#f0ede6] px-5 py-3 border-b border-[#dddbd5] flex items-center gap-3">
-                        <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">DELIVERABLES</span>
-                        <span className="font-bold text-[13px]">本週產出</span>
-                    </div>
-                    <div className="divide-y divide-[#dddbd5]">
-                        {[
-                            { part: 'Part A', text: '五大倫理原則速記（用自己的話）' },
-                            { part: 'Part B', text: '自我倫理審查表（五大原則逐條評估）', badge: '課堂完成' },
-                            { part: 'Part C', text: '研究啟動確認表（即許可證）', badge: '最重要' },
-                            { part: 'Part D', text: '資料收集執行計畫（W10 課後 → W11 課前）' },
-                        ].map((hw, idx) => (
-                            <div key={idx} className="p-4 px-6 flex items-center justify-between text-[13px]">
-                                <div className="flex items-center gap-6">
-                                    <span className="font-bold font-mono w-12 shrink-0 text-[#2d5be3]">{hw.part}</span>
-                                    <span className="text-[#4a4a6a]">{hw.text}</span>
-                                </div>
-                                {hw.badge && <span className="bg-[#fdecea] text-[#c0392b] text-[10px] px-2 py-0.5 rounded border border-[#c0392b]/20 font-bold">{hw.badge}</span>}
-                            </div>
-                        ))}
-                    </div>
-                    <div className="p-4 px-6 bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
-                        <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
-                        <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">
-                            → Google Classroom
-                        </a>
-                    </div>
-                </div>
-
-                <div className="w9-next-week">
-                    <div className="flex items-center gap-3 px-6 py-4 border-b border-white/10">
-                        <Map size={18} />
-                        <span className="font-bold text-[15px]">W11 預告：資料收集中期回顧</span>
-                    </div>
-                    <div className="w9-next-grid">
-                        <div className="w9-next-item">
-                            <div className="text-[10px] text-white/40 uppercase mb-2 font-mono">收集中</div>
-                            <p className="text-[13px] text-white/80 leading-relaxed">這 2 週是你們的資料收集窗口。W11 回來帶著你已經收集到的資料和遇到的問題。</p>
-                        </div>
-                        <div className="w9-next-item">
-                            <div className="text-[10px] text-red-400 uppercase mb-2 font-mono">注意</div>
-                            <p className="text-[13px] text-white/80 leading-relaxed">資料收集不需要完美，需要的是誠實。遇到問題帶來 W11 一起解決。</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Pagination */}
-            <div className="flex justify-between items-center py-12 border-t border-[#dddbd5] mt-12">
-                <Link to="/w9" className="flex items-center gap-2 text-[#8888aa] hover:text-[#1a1a2e] transition-colors text-[13px] font-bold no-underline">
-                    ← 回 W9 品質診斷
-                </Link>
-                <Link to="/w11" className="flex items-center gap-2 bg-[#1a1a2e] text-white px-6 py-3 rounded-lg hover:bg-[#2a2a4a] transition-colors text-[13px] font-bold no-underline">
-                    前往 W11 資料收集 <ArrowRight size={16} />
-                </Link>
-            </div>
+            {/* STEP ENGINE */}
+            <StepEngine
+                steps={steps}
+                prevWeek={{ label: '回 W9 工具設計', to: '/w9' }}
+                nextWeek={{ label: '前往 W11 倫理審查', to: '/w11' }}
+            />
         </div>
     );
 };

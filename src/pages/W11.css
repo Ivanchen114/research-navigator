@@ -1,0 +1,159 @@
+/* W11 — 工具定案、倫理審查與施測啟動 */
+
+/* 定稿自查清單 */
+.w11-checklist {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+}
+.w11-check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    font-size: 13px;
+    color: var(--ink-mid);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.w11-check-item:hover {
+    background: var(--paper-warm);
+}
+.w11-check-item.checked {
+    background: #F0FDF4;
+}
+.w11-check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+}
+.w11-check-item.checked .w11-check-box {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+}
+
+/* 倫理四問卡 */
+.w11-ethics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.w11-ethics-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+}
+.w11-ethics-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+}
+.w11-ethics-body {
+    padding: 16px;
+}
+.w11-ethics-question {
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+/* AI Prompt 複製框 — 沿用 w10 命名但用獨立 class 避免衝突 */
+.w11-prompt-box {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+    background: #1a1a2e;
+}
+.w11-prompt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #16213e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.w11-prompt-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: var(--font-mono);
+}
+.w11-copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+.w11-copy-btn:hover {
+    opacity: 0.85;
+}
+.w11-prompt-text {
+    padding: 16px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #e2e8f0;
+    font-family: var(--font-mono);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* 蓋章通過視覺 */
+.w11-stamp-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: var(--radius-unified);
+    border: 2px dashed var(--success);
+    background: #F0FDF4;
+}
+.w11-stamp-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+/* 航班起飛卡 */
+.w11-launch-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: var(--radius-unified);
+    padding: 32px;
+    color: #fff;
+    text-align: center;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .w11-ethics-grid {
+        grid-template-columns: 1fr;
+    }
+}

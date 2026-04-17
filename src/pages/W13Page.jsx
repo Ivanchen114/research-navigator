@@ -1,608 +1,537 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
+import './W14.css';
+import ThinkRecord from '../components/ui/ThinkRecord';
+import StepEngine from '../components/ui/StepEngine';
+import ExportButton from '../components/ui/ExportButton';
+import { readRecords } from '../components/ui/ThinkRecord';
 import {
-    BarChart2,
+    ArrowRight,
     TrendingUp,
+    BarChart2,
     PieChart,
     ScatterChart,
-    Info,
-    CheckCircle2,
-    ChevronDown,
-    ArrowLeft,
-    ArrowRight,
+    FileText,
     Lightbulb,
     AlertTriangle,
-    FileText,
-    MousePointer2,
-    Map,
-    ShieldAlert,
-    Database
+    Gamepad2,
 } from 'lucide-react';
-import LessonMap from '../components/ui/LessonMap';
-import { W13Data } from '../data/lessonMaps';
 
-const ChartCard = ({ icon: Icon, type, name, trigger, keywords }) => (
-    <div className="bg-white p-4 border-r border-[#dddbd5] last:border-r-0">
-        <div className="text-2xl mb-2.5">
-            <Icon size={28} className="text-[#1a1a2e]" />
-        </div>
-        <div className="font-mono text-[10px] font-bold text-[#8888aa] tracking-[0.1em] uppercase mb-1">
-            {type}
-        </div>
-        <div className="text-[14px] font-bold text-[#1a1a2e] mb-2">
-            {name}
-        </div>
-        <div className="text-[12px] text-[#4a4a6a] font-normal leading-[1.7]">
-            {trigger}
-        </div>
-        <div className="flex flex-wrap gap-1.5 mt-2">
-            {keywords.map((kw, idx) => (
-                <span key={idx} className="inline-block text-[10px] font-['DM_Mono',monospace] bg-[#f0ede6] border border-[#dddbd5] px-1.5 py-0.5 rounded-[3px] text-[#4a4a6a]">
-                    {kw}
-                </span>
-            ))}
-        </div>
-    </div>
-);
+/* ══════════════════════════════════════
+ *  資料常數
+ * ══════════════════════════════════════ */
 
-const DecisionRow = ({ index, question, answer, bg, color }) => (
-    <div className="bg-white p-[12px_20px] flex items-center gap-4 border-t first:border-t-0 border-[#dddbd5]">
-        <span className="font-['DM_Mono',monospace] text-[13px] text-[#8888aa] w-5 shrink-0">{index}</span>
-        <span className="text-[13px] text-[#1a1a2e] flex-1">{question}</span>
-        <span className="text-[#8888aa] text-[12px]">→</span>
-        <span className={`font-['DM_Mono',monospace] text-[12px] font-bold px-2.5 py-1 rounded-[4px] whitespace-nowrap ${bg} ${color}`}>
-            {answer}
-        </span>
-    </div>
-);
+/* — 四大圖表 — */
+const CHART_TYPES = [
+    {
+        icon: <TrendingUp size={18} />,
+        name: '折線圖',
+        eng: 'Line',
+        use: '看趨勢、時間變化',
+        keyword: '隨時間、波動',
+        color: '#2563EB',
+        bg: '#EFF6FF',
+        question: '有時間在流動嗎？',
+    },
+    {
+        icon: <PieChart size={18} />,
+        name: '圓餅圖',
+        eng: 'Pie',
+        use: '看比例、結構',
+        keyword: '佔比、總和 100%',
+        color: '#7C3AED',
+        bg: '#F5F3FF',
+        question: '看部分佔整體的比例嗎？',
+    },
+    {
+        icon: <BarChart2 size={18} />,
+        name: '長條圖',
+        eng: 'Bar',
+        use: '看比較、排名',
+        keyword: '比大小、第一名、複選題',
+        color: '#059669',
+        bg: '#F0FDF4',
+        question: '都不是？比大小排名嗎？',
+    },
+    {
+        icon: <ScatterChart size={18} />,
+        name: '散佈圖',
+        eng: 'Scatter',
+        use: '看相關性',
+        keyword: '關係、分佈',
+        color: '#DC2626',
+        bg: '#FEF2F2',
+        question: '找兩個變數的關係嗎？',
+    },
+];
 
-const FormatItem = ({ label, value, example, isDark }) => (
-    <div className="grid grid-cols-[140px_1fr] border-t first:border-t-0 border-[#dddbd5]">
-        <div className={`${isDark ? 'bg-[#1a1a2e] text-white' : 'bg-[#f0ede6] text-[#4a4a6a]'} p-[14px_16px] flex items-center font-bold text-[11px]`}>
-            {label}
-        </div>
-        <div className="bg-white p-[14px_18px] text-[12px] text-[#4a4a6a] font-normal leading-[1.8]">
-            <div dangerouslySetInnerHTML={{ __html: value }} />
-            {example && (
-                <div className="font-['DM_Mono',monospace] text-[11px] bg-[#f0ede6] border border-[#dddbd5] px-2.5 py-1 rounded-[4px] inline-block mt-1">
-                    {example}
-                </div>
-            )}
-        </div>
-    </div>
-);
+/* — 口訣決策流程 — */
+const DECISION_FLOW = [
+    { num: '❶', text: '有時間在流動嗎？', answer: '→ 折線圖', color: '#2563EB' },
+    { num: '❷', text: '看部分佔整體比例嗎？', answer: '→ 圓餅圖', color: '#7C3AED' },
+    { num: '❸', text: '找兩個變數的關係嗎？', answer: '→ 散佈圖', color: '#DC2626' },
+    { num: '❹', text: '都不是？比大小排名？', answer: '→ 長條圖', color: '#059669' },
+];
 
-const PracticeBlock = ({ badge, title, children }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [unlockCount, setUnlockCount] = useState(0);
-    const [isUnlocked, setIsUnlocked] = useState(false);
+/* — 演練題 — */
+const EXERCISE_ITEMS = [
+    { q: '全班同學「數學成績」與「物理成績」是否有關聯。', a: 'D 散佈圖', hint: '兩個變數的關聯' },
+    { q: '福利社過去三個月「珍珠奶茶」銷量的每日變化。', a: 'C 折線圖', hint: '時間流動的趨勢' },
+    { q: '比較全校各班級的「整潔競賽」總分排名。', a: 'B 長條圖', hint: '比大小排名' },
+    { q: '分析自己一天 24 小時的時間分配比例。', a: 'A 圓餅圖', hint: '部分佔整體比例' },
+];
 
-    const handleUnlock = (e) => {
-        e.stopPropagation();
-        const nextCount = unlockCount + 1;
-        setUnlockCount(nextCount);
-        if (nextCount >= 3) {
-            setIsUnlocked(true);
-        }
+/* — 格式規範 — */
+const FORMAT_RULES = [
+    { label: '📌 標題', rule: '永遠放在圖表上方', example: '圖一：高二學生社團參與時數 (N=120)' },
+    { label: '📌 資料來源', rule: '永遠放在圖表下方', example: '自己做的寫「資料來源：研究者繪製」' },
+    { label: '📌 正文引用', rule: '寫「如圖一所示」', example: '絕對不能寫「如上圖」或「如下圖」' },
+    { label: '📌 標註 N 值', rule: '在標題旁標註有效樣本數', example: '80% 是 100 人的 80% 還是 5 人的？差很多！' },
+];
+
+/* — ExportButton 欄位 — */
+const EXPORT_FIELDS = [
+    /* Step 1 */
+    { key: 'w14-chart-exercise', label: '圖表決策演練', question: '四題圖表配對答案' },
+    { key: 'w14-chart-debug', label: '圖表除錯', question: '小明的圓餅圖錯在哪？' },
+    /* Step 2 */
+    { key: 'w14-format-exercise', label: '格式規範演練' },
+    /* Step 3 */
+    { key: 'w14-case-1', label: '案例一：研究樣本背景' },
+    { key: 'w14-case-2', label: '案例二：兩性愛情觀' },
+    { key: 'w14-case-3', label: '案例三：精神病患民調' },
+    /* Step 4 */
+    { key: 'w14-my-chart-type', label: '我的圖表類型與理由' },
+    { key: 'w14-my-description', label: '我的描述（藍筆）' },
+    { key: 'w14-my-inference', label: '我的推論（紅筆）' },
+    /* Step 5 */
+    { key: 'w14-w15-preview', label: 'W15 預告：結論的第三層和第四層' },
+];
+
+/* ══════════════════════════════════════
+ *  演練題互動元件
+ * ══════════════════════════════════════ */
+
+const ChartExercise = () => {
+    const [answers, setAnswers] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('w14-chart-exercise-ans') || '{}'); } catch { return {}; }
+    });
+    const [showAnswers, setShowAnswers] = useState(() => {
+        try { return localStorage.getItem('w14-chart-exercise-show') === '1'; } catch { return false; }
+    });
+    const options = ['A 圓餅圖', 'B 長條圖', 'C 折線圖', 'D 散佈圖'];
+
+    const updateAnswer = (i, opt) => {
+        const next = { ...answers, [i]: opt };
+        setAnswers(next);
+        try { localStorage.setItem('w14-chart-exercise-ans', JSON.stringify(next)); } catch {}
+    };
+    const revealAnswers = () => {
+        setShowAnswers(true);
+        try { localStorage.setItem('w14-chart-exercise-show', '1'); } catch {}
+    };
+    const handleReset = () => {
+        setAnswers({});
+        setShowAnswers(false);
+        try { localStorage.removeItem('w14-chart-exercise-ans'); localStorage.removeItem('w14-chart-exercise-show'); } catch {}
     };
 
     return (
-        <div className={`border border-[#dddbd5] rounded-[10px] overflow-hidden mb-3 ${isOpen ? 'bg-white' : ''}`}>
-            <div
-                className="p-[14px_20px] bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5 cursor-pointer select-none"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                <span className="font-['DM_Mono',monospace] text-[10px] bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px] shrink-0">
-                    {badge}
-                </span>
-                <span className="text-[14px] font-bold text-[#1a1a2e] flex-1">
-                    {title}
-                </span>
-                <ChevronDown size={16} className={`text-[#8888aa] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-            </div>
-            {isOpen && (
-                <div className="p-5 md:p-6 bg-white">
-                    {!isUnlocked ? (
-                        <>
-                            <div className="mb-3 text-[13px] text-[#4a4a6a]">先填答案，再點解鎖。</div>
-                            <div
-                                className="bg-[#f0ede6] border border-dashed border-[#c8c5bc] rounded-lg p-3.5 text-center text-[13px] text-[#8888aa] cursor-pointer hover:bg-[#dddbd5] hover:text-[#4a4a6a] transition-colors"
-                                onClick={handleUnlock}
-                            >
-                                <MousePointer2 size={16} className="inline mr-1" />
-                                {unlockCount > 0 ? `👆 點三下看答案（還需再點 ${3 - unlockCount} 下）` : '👆 點三下看答案'}
-                            </div>
-                        </>
-                    ) : (
-                        <div className="animate-in fade-in duration-300">
-                            {children}
+        <div>
+            <div className="flex flex-col gap-3">
+                {EXERCISE_ITEMS.map((item, i) => (
+                    <div key={i} className="p-3 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
+                        <p className="text-[12px] text-[var(--ink)] mb-2"><strong>{i + 1}.</strong> {item.q}</p>
+                        <div className="flex flex-wrap gap-2">
+                            {options.map(opt => (
+                                <button
+                                    key={opt}
+                                    onClick={() => !showAnswers && updateAnswer(i, opt)}
+                                    className="px-3 py-1 text-[11px] rounded-[var(--radius-unified)] border transition-colors"
+                                    style={{
+                                        borderColor: answers[i] === opt ? 'var(--accent)' : 'var(--border)',
+                                        background: answers[i] === opt ? 'var(--accent)' : '#fff',
+                                        color: answers[i] === opt ? '#fff' : 'var(--ink-mid)',
+                                        fontWeight: answers[i] === opt ? 700 : 400,
+                                        cursor: showAnswers ? 'default' : 'pointer',
+                                    }}
+                                >
+                                    {opt}
+                                </button>
+                            ))}
                         </div>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-};
-
-const TaskBlock = ({ badge, title, children }) => (
-    <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white mb-3">
-        <div className="p-[12px_20px] bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5">
-            <span className="font-['DM_Mono',monospace] text-[10px] bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">
-                {badge}
-            </span>
-            <span className="text-[14px] font-bold text-[#1a1a2e]">
-                {title}
-            </span>
-        </div>
-        <div className="p-5 md:p-6">
-            {children}
-        </div>
-    </div>
-);
-
-export const W13Page = () => {
-    const [showInstructorView, setShowInstructorView] = useState(false);
-
-    return (
-        <div className="page-container animate-in-fade-slide">
-            {/* REMOVED: <style dangerouslySetInnerHTML /> - styles moved to index.css */}
-            {/* TOP BAR / NAVIGATION PATH */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 分析與撰寫 / <span className="text-[#1a1a2e] font-bold">讓數據自己說話 W14</span>
-                </div>
-                <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <button
-                        onClick={() => setShowInstructorView(!showInstructorView)}
-                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
-                    >
-                        <Map size={12} /> {showInstructorView ? 'Hide Plan' : 'Instructor View'}
-                    </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
-                </div>
-            </div>
-
-            {showInstructorView && (
-                <div className="mb-12 animate-in fade-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W13Data} />
-                </div>
-            )}
-
-            {/* ANALYSIS STATION BANNER */}
-            <div className="mb-8 border border-amber-200 rounded-[8px] overflow-hidden bg-amber-50">
-                <div className="px-5 py-3.5 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <Database size={16} className="text-amber-700 shrink-0" />
-                        <span className="text-[13px] text-amber-900">
-                            <span className="font-bold">還沒分析過資料？</span>
-                            <span className="text-amber-800"> 先去資料分析站，按方法取得逐步指南與 AI Prompt，再回來選圖表。</span>
-                        </span>
-                    </div>
-                    <Link
-                        to="/analysis-station"
-                        className="shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-700 text-white text-[12px] font-bold rounded-[5px] hover:bg-amber-800 transition-colors whitespace-nowrap"
-                    >
-                        前往分析站 <ArrowRight size={13} />
-                    </Link>
-                </div>
-            </div>
-
-            {/* PAGE HEADER */}
-            <div className="max-w-[800px] mb-16">
-                <div className="text-[#2d5be3] font-mono text-[11px] font-bold tracking-widest uppercase mb-4">📊 W14 · 分析與撰寫</div>
-                <h1 className="font-serif text-[42px] font-bold leading-[1.2] text-[#1a1a2e] mb-6 tracking-[-0.01em]">
-                    讓數據自己說話：<span className="text-[#2d5be3]">圖表選擇與圖說寫作</span>
-                </h1>
-                <p className="text-[16px] text-[#4a4a6a] leading-relaxed">
-                    數據是食材，圖表是盤子。今天要學兩件事：選對盤子（圖表類型），以及幫圖表寫一段說明——哪裡是客觀描述、哪裡是主觀推論。
-                </p>
-
-                {/* GAME BANNER */}
-                <div className="bg-[#1a1a2e] border-l-4 border-[#0891b2] p-6 rounded-r-lg mb-10 text-white shadow-xl mt-6">
-                    <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                        <ShieldAlert className="text-[#0891b2]" size={20} />
-                        即刻報到：行動代號解碼
-                    </h3>
-                    <p className="text-[#8888aa] text-sm mb-4">
-                        將雜亂情報解碼，配對成最高效的視覺化圖表！挑戰你的圖表選擇直覺。
-                    </p>
-                    <Link to="/game/chart-matcher" className="inline-flex items-center gap-2 bg-[#0891b2] text-white px-4 py-2 rounded font-bold text-sm hover:bg-[#06738c] transition-colors">
-                        進入遊戲系統 <ArrowRight size={14} />
-                    </Link>
-                </div>
-            </div>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {W13Data.metaCards.map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
+                        {showAnswers && (
+                            <p className="mt-2 text-[11px]" style={{ color: answers[i] === item.a ? 'var(--success)' : '#DC2626' }}>
+                                {answers[i] === item.a ? '✅ 正確！' : `❌ 正確答案：${item.a}`} — {item.hint}
+                            </p>
+                        )}
                     </div>
                 ))}
             </div>
-
-
-
-            {/* COURSE ARC */}
-            <CourseArc items={W13Data.courseArc} />
-
-            {/* Concept Section */}
-            <div className="flex items-center gap-3 mb-6 mt-12 text-[#1a1a2e]">
-                <h2 className="font-['Noto_Serif_TC',serif] text-[18px] font-bold whitespace-nowrap">學什麼</h2>
-                <div className="h-[1px] flex-1 bg-[#dddbd5]"></div>
-                <span className="font-['DM_Mono',monospace] text-[10px] text-[#8888aa] tracking-[0.08em]">CONCEPT</span>
+            <div className="flex items-center gap-3 mt-3">
+                {!showAnswers ? (
+                    <button
+                        onClick={revealAnswers}
+                        className="px-4 py-2 text-[12px] font-bold text-white rounded-[var(--radius-unified)] border-none cursor-pointer"
+                        style={{ background: 'var(--accent)' }}
+                    >
+                        對答案
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleReset}
+                        className="px-4 py-2 text-[11px] rounded-[var(--radius-unified)] border cursor-pointer"
+                        style={{ background: '#fff', borderColor: 'var(--border)', color: 'var(--ink-mid)' }}
+                    >
+                        重新作答
+                    </button>
+                )}
             </div>
-
-            {/* Four Main Charts */}
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5">
-                觀念一 · 四大圖表速查
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 border border-[#dddbd5] rounded-[10px] overflow-hidden mb-3">
-                <ChartCard
-                    icon={TrendingUp} type="LINE" name="折線圖"
-                    trigger="追蹤隨時間改變的趨勢。適合「每天、每週、每月」這類時間序列。"
-                    keywords={["時間流動", "趨勢", "波動"]}
-                />
-                <ChartCard
-                    icon={PieChart} type="PIE" name="圓餅圖"
-                    trigger="呈現部分佔整體的比例。鐵則：所有選項加總必須剛好是 100%。"
-                    keywords={["佔比", "結構", "單選題"]}
-                />
-                <ChartCard
-                    icon={BarChart2} type="BAR" name="長條圖"
-                    trigger="比較不同類別的大小或排名。複選題只能用這個，因為加總超過 100%。"
-                    keywords={["比大小", "排名", "複選題"]}
-                />
-                <ChartCard
-                    icon={ScatterChart} type="SCATTER" name="散佈圖"
-                    trigger="找出兩個數值變數之間有沒有相關性。每個點代表一個觀察值。"
-                    keywords={["相關性", "兩個變數", "分佈"]}
-                />
-            </div>
-
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5 mt-8">
-                決策口訣 · 做圖表前先問自己四個問題
-            </div>
-            <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-3">
-                <DecisionRow
-                    index="❶" question="有時間在流動嗎？（每天、每月、趨勢）"
-                    answer="📈 折線圖" bg="bg-[#e8eeff]" color="text-[#2d5be3]"
-                />
-                <DecisionRow
-                    index="❷" question="在看部分佔整體的比例嗎？（且加總 = 100%）"
-                    answer="🥧 圓餅圖" bg="bg-[#fdf6e3]" color="text-[#7a6020]"
-                />
-                <DecisionRow
-                    index="❸" question="在找兩個數值變數之間的關係嗎？"
-                    answer="🔵 散佈圖" bg="bg-[#e8f5ee]" color="text-[#2e7d5a]"
-                />
-                <DecisionRow
-                    index="❹" question="都不是？在比大小、排名或是複選題嗎？"
-                    answer="📊 長條圖" bg="bg-[#fdecea]" color="text-[#c0392b]"
-                />
-            </div>
-            <div className="p-[11px_16px] bg-[#fdf6e3] text-[#7a6020] border-l-4 border-[#c9a84c] rounded-r-[6px] text-[12px] leading-[1.75] mb-12 flex items-start gap-2">
-                <Lightbulb size={16} className="shrink-0 mt-0.5" />
-                <div>💡 記不住的話，從 ❹ 往上問。大多數情況答案都是長條圖——因為長條圖最通用，有疑問就選它，再想想有沒有更精準的選擇。</div>
-            </div>
-
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5 mt-8">
-                觀念二 · 圖表格式三鐵則 + 一個防呆
-            </div>
-            <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-3">
-                <FormatItem
-                    label="📌 標題位置"
-                    value="永遠放在圖表<strong>上方</strong>。格式：圖一：研究題目（N=有效樣本數）"
-                    example="圖一：高二學生每日手機使用時數分布 (N=120)"
-                />
-                <FormatItem
-                    label="📌 資料來源"
-                    value="永遠放在圖表<strong>下方</strong>。自己做的圖：研究者繪製；引用別人的：作者（年份）"
-                    example="資料來源：研究者繪製"
-                />
-                <FormatItem
-                    label="📌 正文引用"
-                    value="寫「<strong>如圖一所示</strong>」，<span class='text-[#c0392b]'>絕對不能寫「如上圖」或「如下圖」</span>——排版改動後上下會跑掉。"
-                />
-                <FormatItem
-                    label="🛡️ N 值防呆"
-                    value="「80% 的人有壓力」——這是 100 人的 80% 還是只有 5 個人的 80%？在圖表標題旁標上 <strong>(N=有效樣本數)</strong>。"
-                    isDark={true}
-                />
-            </div>
-            <div className="p-[11px_16px] bg-[#fdecea] text-[#c0392b] border-l-4 border-[#c0392b] rounded-r-[6px] text-[12px] leading-[1.75] mb-12 flex items-start gap-2">
-                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-                <div>⚠️ 圖放進報告後，一定要在正文裡寫「如圖一所示」來引用它——不能只貼圖、不說明。貼圖不引用，讀者不知道圖跟你要說的話有什麼關係。</div>
-            </div>
-
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5 mt-8">
-                觀念三 · 一張圖的說明公式
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_48px_1fr] border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12 bg-[#dddbd5]">
-                <div className="bg-white p-[20px_22px]">
-                    <span className="font-['DM_Mono',monospace] text-[10px] font-bold bg-[#e8eeff] text-[#2d5be3] px-2 py-0.5 rounded-[3px] mb-2 inline-block">描述 Description</span>
-                    <div className="text-[14px] font-bold text-[#1a1a2e] mb-2">客觀事實：你看到了什麼？</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.8] mb-2.5">報數字、報最高值、最低值、最明顯的那個趨勢。不加任何解釋。</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.8] pt-2.5 border-t border-[#dddbd5] italic">根據圖一，高達 80% 的學生在睡前滑手機超過一小時，僅 5% 表示不使用手機。</div>
-                </div>
-                <div className="bg-[#f0ede6] flex items-center justify-center text-[24px] text-[#8888aa] font-thin">+</div>
-                <div className="bg-white p-[20px_22px]">
-                    <span className="font-['DM_Mono',monospace] text-[10px] font-bold bg-[#e8f5ee] text-[#2e7d5a] px-2 py-0.5 rounded-[3px] mb-2 inline-block">推論 Inference</span>
-                    <div className="text-[14px] font-bold text-[#1a1a2e] mb-2">主觀見解：這代表什麼？</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.8] mb-2.5">解釋意義、推測原因、連結研究問題。永遠說「<strong>可能</strong>」，不說「一定」。</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.8] pt-2.5 border-t border-[#dddbd5] italic">這可能反映出學生放學後缺乏其他休閒管道，或者手機已成為主要的放鬆方式。</div>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
-                <div className="p-4 bg-white border-r border-[#dddbd5]">
-                    <div className="text-[11px] font-bold text-[#c0392b] mb-1.5">❌ 錯誤一：只報數字不推論</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.7]">像機器人唸數字，沒有分析價值。讀者自己會看圖，你要告訴他們這代表什麼。</div>
-                    <div className="text-[11px] text-[#8888aa] mt-1.5 italic">「圖一顯示 80% 的學生使用手機。」——然後呢？</div>
-                </div>
-                <div className="p-4 bg-white border-r border-[#dddbd5]">
-                    <div className="text-[11px] font-bold text-[#c0392b] mb-1.5">❌ 錯誤二：沒有數據就硬推論</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.7]">推論必須有數據支撐。從「喜歡喝手搖飲」跳到「不愛念書」——中間缺了邏輯。</div>
-                    <div className="text-[11px] text-[#8888aa] mt-1.5 italic">「由此可見學生完全不在乎健康。」——數據在哪？</div>
-                </div>
-                <div className="p-4 bg-white">
-                    <div className="text-[11px] font-bold text-[#c0392b] mb-1.5">❌ 錯誤三：量詞不精準</div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[1.7]">「絕大多數」、「大部分」——到底是幾成？描述時要說清楚比例或數字。</div>
-                    <div className="text-[11px] text-[#8888aa] mt-1.5 italic">「絕大多數人有壓力」≠ 「73.5% 的受訪者表示有壓力」</div>
-                </div>
-            </div>
-
-            <div className="p-[11px_16px] bg-[#e8eeff] text-[#2d5be3] border-l-4 border-[#2d5be3] rounded-r-[6px] text-[12px] leading-[1.75] mb-12 flex items-start gap-2">
-                <Info size={16} className="shrink-0 mt-0.5" />
-                <div>🔑 一段好的圖說 = 描述句（引用數字，根據圖一）+ 推論句（說可能的原因或意義）。兩句都不能省。</div>
-            </div>
-
-            {/* Practice Section */}
-            <div className="flex items-center gap-3 mb-6 mt-16 text-[#1a1a2e]">
-                <h2 className="font-['Noto_Serif_TC',serif] text-[18px] font-bold whitespace-nowrap">練什麼</h2>
-                <div className="h-[1px] flex-1 bg-[#dddbd5]"></div>
-                <span className="font-['DM_Mono',monospace] text-[10px] text-[#8888aa] tracking-[0.08em]">PRACTICE</span>
-            </div>
-
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5">
-                演練 1 · 圖表決策直覺訓練
-            </div>
-            <p className="text-[13px] text-[#4a4a6a] mb-4">（A）圓餅圖　（B）長條圖　（C）折線圖　（D）散佈圖 — 填入代號，完成測試。</p>
-
-            <PracticeBlock id="p1" badge="題 1" title="全班同學「數學成績」與「物理成績」是否有關聯">
-                <div className="bg-[#e8f5ee] border-l-4 border-[#2e7d5a] p-4 rounded-r-[6px] text-[13px] text-[#4a4a6a]">
-                    <strong className="text-[#2e7d5a]">D 散佈圖</strong><br /><br />
-                    兩個數值變數（數學分數、物理分數）之間有沒有關聯——這正是散佈圖的用途。每個點代表一個學生，橫軸是數學，縱軸是物理。
-                </div>
-            </PracticeBlock>
-
-            <PracticeBlock id="p2" badge="題 2" title="福利社過去三個月「珍珠奶茶」銷量的每日變化情形">
-                <div className="bg-[#e8f5ee] border-l-4 border-[#2e7d5a] p-4 rounded-r-[6px] text-[13px] text-[#4a4a6a]">
-                    <strong className="text-[#2e7d5a]">C 折線圖</strong><br /><br />
-                    「每日變化」有時間軸在流動，所以是折線圖。能清楚看出趨勢——是週末賣得多、還是考試週賣得少？
-                </div>
-            </PracticeBlock>
-
-            <PracticeBlock id="p3" badge="題 3" title="比較全校各班級的「整潔競賽」總分排名">
-                <div className="bg-[#e8f5ee] border-l-4 border-[#2e7d5a] p-4 rounded-r-[6px] text-[13px] text-[#4a4a6a]">
-                    <strong className="text-[#2e7d5a]">B 長條圖</strong><br /><br />
-                    「比大小、排名」是長條圖的典型用途。每個班是一條長條，長短直接反映分數高低。
-                </div>
-            </PracticeBlock>
-
-            <PracticeBlock id="p4" badge="題 4" title="分析自己一天 24 小時的時間分配比例">
-                <div className="bg-[#e8f5ee] border-l-4 border-[#2e7d5a] p-4 rounded-r-[6px] text-[13px] text-[#4a4a6a]">
-                    <strong className="text-[#2e7d5a]">A 圓餅圖</strong><br /><br />
-                    24 小時加總剛好是 100%，符合圓餅圖的唯一條件。加起來就是整體的 100%。
-                </div>
-            </PracticeBlock>
-
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5 mt-8">
-                演練 2 · 圖表除錯
-            </div>
-            <PracticeBlock id="p5" badge="除錯" title="小明問「你喜歡吃什麼水果？（可複選）」，蘋果 60%、香蕉 50%、芭樂 40%，他畫了圓餅圖。錯在哪？">
-                <div className="bg-[#fdecea] border-l-4 border-[#c0392b] p-4 rounded-r-[6px] text-[13px] text-[#4a4a6a]">
-                    <strong className="text-[#c0392b]">錯誤：圓餅圖的鐵則是加總 = 100%</strong><br /><br />
-                    60% + 50% + 40% = 150%，遠超 100%。圓餅圖沒辦法切出 150% 的面積。<strong>複選題只能用長條圖</strong>。
-                </div>
-            </PracticeBlock>
-
-            <div className="text-[10px] font-['DM_Mono',monospace] text-[#8888aa] tracking-[0.1em] uppercase mb-2.5 mt-8">
-                演練 3 · 描述 + 推論 Case Study
-            </div>
-            <p className="text-[13px] text-[#4a4a6a] mb-4">老師帶著全班一起做，練習用別人的資料套用公式。</p>
-
-            <div className="border border-[#dddbd5] rounded-[8px] overflow-hidden mb-3">
-                <div className="bg-[#1a1a2e] p-[10px_16px] flex items-center gap-2.5 text-white">
-                    <span className="font-['DM_Mono',monospace] text-[10px] bg-[#c9a84c] text-[#1a1a2e] px-2 py-0.5 rounded-[3px] font-bold">案例一</span>
-                    <span className="text-[13px] font-bold">研究樣本背景</span>
-                </div>
-                <div className="p-4 bg-white">
-                    <div className="text-[12px] text-[#4a4a6a] bg-[#f0ede6] border-l-4 border-[#c8c5bc] p-[8px_12px] rounded-r-[4px] mb-3 leading-[1.8]">
-                        數據：年齡 19–25 歲者佔「絕大多數」（男生 77.3%，女生 86.83%）。
-                    </div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[2.0]">
-                        （推論）這份問卷的主要調查對象大多為 <span className="inline-block border-b border-[#dddbd5] min-w-[120px] mx-1">大學學齡段青年</span>。<br /><br />
-                        <strong className="text-[#c0392b] font-bold">重點討論：「絕大多數」這個說法精準嗎？</strong><br />
-                        兩性比例差了將近 10%，說「絕大多數」會遮蔽細節。描述時應直接引用精確數字。
-                    </div>
-                </div>
-            </div>
-
-            <div className="border border-[#dddbd5] rounded-[8px] overflow-hidden mb-3">
-                <div className="bg-[#1a1a2e] p-[10px_16px] flex items-center gap-2.5 text-white">
-                    <span className="font-['DM_Mono',monospace] text-[10px] bg-[#c9a84c] text-[#1a1a2e] px-2 py-0.5 rounded-[3px] font-bold">案例二</span>
-                    <span className="text-[13px] font-bold">兩性愛情觀</span>
-                </div>
-                <div className="p-4 bg-white">
-                    <div className="text-[12px] text-[#4a4a6a] bg-[#f0ede6] border-l-4 border-[#c8c5bc] p-[8px_12px] rounded-r-[4px] mb-3 leading-[1.8]">
-                        數據：Q1 曾有單戀經驗（男 78%、女 79%）；Q2 主動追求（男 56%、女 31%）。
-                    </div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[2.0]">
-                        （描述）兩性在單戀經驗上比例相當（男 78%、女 79%）；但在主動追求上，男生（56%）顯著 <span className="inline-block border-b border-[#dddbd5] min-w-[60px] mx-1 pr-2">高</span> 於女生（31%）。<br /><br />
-                        （推論）雖然單戀是兩性的共同經驗，但社會文化 <span className="text-[#8888aa]">可能</span> 仍傾向由 <span className="inline-block border-b border-[#dddbd5] min-w-[60px] mx-1 pr-2">男</span> 性扮演主動角色。
-                    </div>
-                </div>
-            </div>
-
-            <div className="border border-[#dddbd5] rounded-[8px] overflow-hidden mb-12">
-                <div className="bg-[#1a1a2e] p-[10px_16px] flex items-center gap-2.5 text-white">
-                    <span className="font-['DM_Mono',monospace] text-[10px] bg-[#c9a84c] text-[#1a1a2e] px-2 py-0.5 rounded-[3px] font-bold">案例三</span>
-                    <span className="text-[13px] font-bold">整合兩個數字寫一段分析</span>
-                </div>
-                <div className="p-4 bg-white">
-                    <div className="text-[12px] text-[#4a4a6a] bg-[#f0ede6] border-l-4 border-[#c8c5bc] p-[8px_12px] rounded-r-[4px] mb-3 leading-[1.8]">
-                        數據：73.5% 民眾不滿現況；不滿主因是「結束刑期後的社會危害（如再犯）」（85.3%）。
-                    </div>
-                    <div className="text-[12px] text-[#4a4a6a] leading-[2.0]">
-                        試著用「描述 + 推論」公式整合：<br /><br />
-                        <span className="text-[#2d5be3] font-bold">【描述】</span>根據圖一，<span className="inline-block border-b border-[#dddbd5] min-w-[200px] mx-1">73.5% 民眾對現況表示不滿</span>，其中<span className="inline-block border-b border-[#dddbd5] min-w-[200px] mx-1">85.3% 指出再犯風險為關鍵主因</span>。<br /><br />
-                        <span className="text-[#2e7d5a] font-bold">【推論】</span>這可能代表<span className="inline-block border-b border-[#dddbd5] min-w-[200px] mx-1">社會對更生制度信心不足</span>。<br /><br />
-                        <div className="mt-4">
-                            <PracticeBlock id="ans3" badge="參考" title="看參考答案">
-                                <div className="bg-[#e8f5ee] border-l-4 border-[#2e7d5a] p-4 rounded-r-[6px] text-[13px] text-[#4a4a6a]">
-                                    <strong className="text-[#2e7d5a]">參考答案：</strong><br /><br />
-                                    【描述】根據圖一，73.5% 的民眾表示不滿，其中 85.3% 的不滿者將主因指向「結束刑期後對社會的潛在危害」。<br /><br />
-                                    【推論】這可能代表民眾對現行司法與精神衛生體系的協作機制缺乏信心，或者對後續追蹤政策知情不足。
-                                </div>
-                            </PracticeBlock>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Class Task */}
-            <div className="flex items-center gap-3 mb-6 mt-16 text-[#1a1a2e]">
-                <h2 className="font-['Noto_Serif_TC',serif] text-[18px] font-bold whitespace-nowrap">課堂任務</h2>
-                <div className="h-[1px] flex-1 bg-[#dddbd5]"></div>
-                <span className="font-['DM_Mono',monospace] text-[10px] text-[#8888aa] tracking-[0.08em]">IN-CLASS</span>
-            </div>
-
-            <TaskBlock badge="TASK 1" title="製作你們組的圖表（第一節）">
-                <ol className="list-decimal pl-5 text-[13px] text-[#4a4a6a] leading-[2.1]">
-                    <li>打開你們的原始資料（Google 表單回覆 / 數據表）</li>
-                    <li>挑選關鍵變項，用決策口訣決定圖表類型</li>
-                    <li>用 Google 試算表、Excel 或 Canva 製作圖表</li>
-                    <li>確認：標題（含 N 值）、資料來源、類型選擇正確</li>
-                </ol>
-                <div className="p-[11px_16px] bg-[#fdf6e3] text-[#7a6020] border-l-4 border-[#c9a84c] rounded-r-[6px] text-[12px] mt-4 leading-[1.75] flex items-start gap-2">
-                    <Lightbulb size={16} className="shrink-0 mt-0.5" />
-                    <div>💡 如果資料還沒整理好，老師有準備假資料讓你練習。等自己的資料整理完再替換。</div>
-                </div>
-            </TaskBlock>
-
-            <TaskBlock badge="TASK 2" title="寫圖說段落（第二節）">
-                <ol className="list-decimal pl-5 text-[13px] text-[#4a4a6a] leading-[2.1]">
-                    <li>拿出圖表，對照公式寫下說明</li>
-                    <li>寫描述句：「根據圖一，……（報數字）」</li>
-                    <li>寫推論句：「這可能代表……（解釋意義）」</li>
-                    <li>檢查：有沒有說「一定」？量詞是否精準？</li>
-                </ol>
-                <div className="p-[11px_16px] bg-[#fdecea] text-[#c0392b] border-l-4 border-[#c0392b] rounded-r-[6px] text-[12px] mt-4 leading-[1.75] flex items-start gap-2">
-                    <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-                    <div>⚠️ 如果你的推論句跳太快，老師會問你「這兩件事怎麼連起來？」。</div>
-                </div>
-            </TaskBlock>
-
-            <TaskBlock badge="TASK 3" title="分享與討論（第二節）">
-                <ol className="list-decimal pl-5 text-[13px] text-[#4a4a6a] leading-[2.1]">
-                    <li>1–2 組分享你們的圖說段落</li>
-                    <li>全班討論：描述夠精準嗎？推論有沒有跳太快？</li>
-                    <li>在學習單 Part 2 預填 W14 的空格</li>
-                </ol>
-                <div className="p-[11px_16px] bg-[#e8eeff] text-[#2d5be3] border-l-4 border-[#2d5be3] rounded-r-[6px] text-[12px] mt-4 leading-[1.75] flex items-start gap-2">
-                    <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
-                    <div>🔑 今天學的是針對一張圖的局部說明。W14 要升級：把所有圖說整合成四層結論。</div>
-                </div>
-            </TaskBlock>
-
-            {/* Wrap up Section */}
-            <div className="flex items-center gap-3 mb-6 mt-16 text-[#1a1a2e]">
-                <h2 className="font-['Noto_Serif_TC',serif] text-[18px] font-bold whitespace-nowrap">本週總結</h2>
-                <div className="h-[1px] flex-1 bg-[#dddbd5]"></div>
-                <span className="font-['DM_Mono',monospace] text-[10px] text-[#8888aa] tracking-[0.08em]">WRAP-UP</span>
-            </div>
-
-            <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-4">
-                <div className="p-[14px_20px] bg-[#f0ede6] border-b border-[#dddbd5] text-[14px] font-bold text-[#1a1a2e]">✅ 本週結束，你應該要會</div>
-                <div className="grid grid-cols-1 md:grid-cols-2 bg-[#dddbd5] gap-[1px]">
-                    <div className="bg-white p-[14px_20px] flex items-start gap-2.5">
-                        <CheckCircle2 size={16} className="text-[#2e7d5a] shrink-0 mt-0.5" />
-                        <span className="text-[13px] text-[#4a4a6a]">至少一張圖表，格式正確（含 N 值、來源）</span>
-                    </div>
-                    <div className="bg-white p-[14px_20px] flex items-start gap-2.5">
-                        <CheckCircle2 size={16} className="text-[#2e7d5a] shrink-0 mt-0.5" />
-                        <span className="text-[13px] text-[#4a4a6a]">每張圖各有一段圖說（描述句 + 推論句）</span>
-                    </div>
-                    <div className="bg-white p-[14px_20px] flex items-start gap-2.5">
-                        <CheckCircle2 size={16} className="text-[#2e7d5a] shrink-0 mt-0.5" />
-                        <span className="text-[13px] text-[#4a4a6a]">能說出「描述」和「推論」的差別</span>
-                    </div>
-                    <div className="bg-white p-[14px_20px] flex items-start gap-2.5">
-                        <CheckCircle2 size={16} className="text-[#2e7d5a] shrink-0 mt-0.5" />
-                        <span className="text-[13px] text-[#4a4a6a]">學習單 Part 2 的 W14 預告欄已填</span>
-                    </div>
-                </div>
-            </div>
-
-            <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
-                <div className="p-[12px_20px] bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5">
-                    <span className="text-[10px] font-mono bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px]">HOMEWORK</span>
-                    <span className="font-bold text-[14px] text-[#1a1a2e]">本週作業</span>
-                </div>
-                <div className="flex flex-col bg-[#dddbd5] gap-[1px]">
-                    <div className="bg-white p-[11px_20px] flex items-start gap-4">
-                        <span className="font-['DM_Mono',monospace] text-[11px] font-bold text-[#2d5be3] w-[72px] shrink-0 mt-0.5">圖說段落</span>
-                        <span className="text-[13px] text-[#4a4a6a] flex-1 leading-[1.65]">完成所有圖表圖說段落，上傳 Classroom</span>
-                    </div>
-                    <div className="bg-white p-[11px_20px] flex items-start gap-4">
-                        <span className="font-['DM_Mono',monospace] text-[11px] font-bold text-[#2d5be3] w-[72px] shrink-0 mt-0.5">帶去 W15</span>
-                        <span className="text-[13px] text-[#4a4a6a] flex-1 leading-[1.65]">攜帶所有圖表、圖說段落與研究問題</span>
-                    </div>
-                </div>
-                <div className="p-[12px_20px] bg-[#f8f7f4] border-t border-[#dddbd5] flex items-center justify-between">
-                    <span className="text-[12px] text-[#8888aa]">學習單在 Google Classroom 下載</span>
-                    <a href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#2d5be3]">→ Google Classroom</a>
-                </div>
-            </div>
-
-            {/* Dark Next Week Preview */}
-            <div className="bg-[#1a1a2e] rounded-[10px] overflow-hidden mb-8">
-                <div className="p-[16px_24px] border-b border-white border-opacity-5 flex items-center gap-2.5">
-                    <span className="font-['DM_Mono',monospace] text-[10px] bg-white bg-opacity-10 text-white text-opacity-50 px-2 py-0.5 rounded-[3px]">NEXT WEEK</span>
-                    <span className="text-[14px] font-bold text-white">W15 研究結論：四層寫作法</span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 bg-white bg-opacity-5 gap-[1px]">
-                    <div className="bg-[#1a1a2e] p-[20px_24px]">
-                        <div className="text-[10px] font-['DM_Mono',monospace] text-white text-opacity-30 uppercase tracking-[0.08em] mb-2">今天學了兩層</div>
-                        <div className="text-[13px] text-white text-opacity-75 leading-[1.75]">
-                            描述（第一層）＋ 推論（第二層）。這是局部說明。W14 要升級——把發現整合成四層結論。
-                        </div>
-                    </div>
-                    <div className="bg-[#1a1a2e] p-[20px_24px]">
-                        <div className="text-[10px] font-['DM_Mono',monospace] text-white text-opacity-30 uppercase tracking-[0.08em] mb-2">下週揭曉：第三、四層</div>
-                        <div className="text-[13px] text-white text-opacity-75 leading-[1.75]">
-                            第三層：<strong className="text-white">___________</strong>（回頭看研究問題）<br />
-                            第四層：<strong className="text-white">___________</strong>（你的結論有哪些不完美？）<br />
-                            <span className="text-[11px] opacity-50 mt-1 block">答案 W15 揭曉！</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="flex justify-between items-center py-8 border-t border-[#dddbd5]">
-                <Link to="/w13" className="text-[13px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
-                    <ArrowLeft size={16} /> 回 W13 研究執行 II
-                </Link>
-                <Link to="/w15" className="bg-[#1a1a2e] hover:bg-[#2a2a4a] text-white px-6 py-2.5 rounded-[6px] text-[14px] font-bold transition-colors flex items-center gap-2">
-                    前往 W15 研究結論 <ArrowRight size={16} />
-                </Link>
-            </div>
-
         </div>
     );
 };
+
+/* ══════════════════════════════════════
+ *  主頁面
+ * ══════════════════════════════════════ */
+
+const W13Page = () => {
+    const saved = readRecords();
+    const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
+    const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
+
+    const steps = [
+        {
+            title: '選對盤子',
+            icon: <BarChart2 size={18} />,
+            content: (
+                <div className="flex flex-col gap-6">
+                    <CourseArc current={14} totalWeeks={17} title="W14 讓數據自己說話" subtitle="圖表選擇與圖的說明" />
+
+                    <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🍽️ 數據是食材，圖表是盤子</p>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                            頂級和牛用塑膠臉盆裝，客人還想吃嗎？選錯圖表，數據就無法說話。
+                        </p>
+                    </div>
+
+                    {/* 四大圖表卡 */}
+                    <div className="w14-chart-grid">
+                        {CHART_TYPES.map((c, i) => (
+                            <div key={i} className="w14-chart-card">
+                                <div className="w14-chart-header" style={{ color: c.color }}>
+                                    {c.icon}
+                                    <span>{c.name} ({c.eng})</span>
+                                </div>
+                                <div className="w14-chart-body">
+                                    <p>{c.use}</p>
+                                    <span className="w14-chart-keyword" style={{ background: c.bg, color: c.color }}>
+                                        {c.keyword}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* 口訣決策流程 */}
+                    <div>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">💡 快速決策口訣</p>
+                        <div className="w14-flow">
+                            {DECISION_FLOW.map((d, i) => (
+                                <div key={i} className="w14-flow-step">
+                                    <div className="w14-flow-num" style={{ background: d.color }}>{d.num.replace(/[❶❷❸❹]/, String(i + 1))}</div>
+                                    <span className="text-[var(--ink)]">{d.text}</span>
+                                    <span className="w14-flow-arrow font-bold" style={{ color: d.color }}>{d.answer}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 演練：圖表決策 */}
+                    <div>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">✏️ 演練：圖表決策直覺訓練</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] mb-3">選出最適合的圖表類型，選完按「對答案」。</p>
+                        <ChartExercise />
+                    </div>
+
+                    <ThinkRecord
+                        dataKey="w14-chart-exercise"
+                        prompt="把四題的答案和理由寫下來"
+                        scaffold={['第1題：___圖，因為...', '第2題：___圖，因為...', '第3題：___圖，因為...', '第4題：___圖，因為...']}
+                    />
+
+                    {/* 演練：圖表除錯 */}
+                    <div className="w14-case-card">
+                        <div className="w14-case-header">✏️ 演練：圖表除錯</div>
+                        <div className="w14-case-body">
+                            <p><strong>情境：</strong>小明調查「你喜歡吃什麼水果？（可複選）」，結果：蘋果 60%、香蕉 50%、芭樂 40%。他畫了圓餅圖。</p>
+                            <p className="mt-2 font-bold text-[var(--ink)]">他錯在哪？正確應該用哪種圖表？</p>
+                        </div>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w14-chart-debug"
+                        prompt="小明的圓餅圖錯在哪？正確應該用什麼圖？為什麼？"
+                        scaffold={['錯在：圓餅圖要求總和 100%，但複選題加總會...', '正確應該用___圖，因為...']}
+                    />
+                </div>
+            ),
+        },
+        {
+            title: '圖表格式',
+            icon: <FileText size={18} />,
+            content: (
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📐 做圖表的三個鐵規定 + 一個防呆</p>
+                        <p className="text-[12px] text-[var(--ink-mid)]">自己做的圖表也要標出處！</p>
+                    </div>
+
+                    {/* 格式規範表 */}
+                    <div className="w14-format-grid">
+                        {FORMAT_RULES.map((r, i) => (
+                            <div key={i} className="w14-format-row">
+                                <span className="w14-format-label">{r.label}</span>
+                                <div>
+                                    <p className="text-[var(--ink)] font-bold">{r.rule}</p>
+                                    <p className="text-[11px] mt-1 opacity-70">{r.example}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* N 值重點提醒 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB]">
+                        <p className="text-[12px] text-[#92400E] flex items-center gap-2">
+                            <AlertTriangle size={14} /> <strong>N 值為什麼重要？</strong>
+                        </p>
+                        <p className="text-[12px] text-[#78350F] mt-1 leading-relaxed">
+                            「80% 的人有壓力」— 這是 100 人的 80%，還是只有 5 人的 80%？說服力完全不同！
+                            在圖表標題旁標註 (N=有效樣本數)。
+                        </p>
+                    </div>
+
+                    {/* 演練：格式 */}
+                    <div className="w14-case-card">
+                        <div className="w14-case-header">✏️ 演練：格式規範</div>
+                        <div className="w14-case-body">
+                            <p><strong>情境：</strong>你整理了 300 份問卷，做成一張圓餅圖，標題是「圖一：社團參與比例」。</p>
+                            <p className="mt-2">1. 圖表下方的「資料來源」該怎麼寫？</p>
+                            <p>2. 正文中提到這張圖時，該怎麼稱呼？</p>
+                        </div>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w14-format-exercise"
+                        prompt="格式規範演練：資料來源怎麼寫？正文怎麼引用？"
+                        scaffold={['1. 資料來源：...', '2. 正文寫法：...']}
+                    />
+
+                    {/* 遊戲入口：Chart Matcher */}
+                    <div className="p-4 rounded-[var(--radius-unified)] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white text-center">
+                        <p className="text-[11px] opacity-60 mb-1"><Gamepad2 size={12} className="inline" /> R.I.B. 技能挑戰</p>
+                        <p className="text-[14px] font-bold mb-2">Chart Matcher 解碼任務</p>
+                        <p className="text-[12px] opacity-70 mb-3">用遊戲把圖表決策口訣練到反射動作！</p>
+                        <Link
+                            to="/chart-matcher"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#10B981] hover:bg-[#059669] text-white text-[13px] font-bold rounded-[var(--radius-unified)] transition-colors no-underline"
+                        >
+                            進入遊戲 <ArrowRight size={14} />
+                        </Link>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            title: '描述 vs. 推論',
+            icon: <Lightbulb size={18} />,
+            content: (
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📝 一張圖的說明 ＝ 描述 ＋ 推論</p>
+                        <p className="text-[12px] text-[var(--ink-mid)]">圖表貼到報告裡，你不能什麼都不說。你要告訴讀者：你看到了什麼，以及這代表什麼。</p>
+                    </div>
+
+                    {/* 描述 vs 推論雙欄 */}
+                    <div className="w14-dual-grid">
+                        <div className="w14-dual-card w14-dual-desc">
+                            <p className="font-bold mb-2">📊 描述（客觀事實）</p>
+                            <p>看到了什麼？報事實、報數字。</p>
+                            <p className="mt-2 text-[11px] italic">例：根據圖一，80% 的學生在睡前滑手機超過一小時。</p>
+                        </div>
+                        <div className="w14-dual-card w14-dual-infer">
+                            <p className="font-bold mb-2">💡 推論（主觀見解）</p>
+                            <p>這代表什麼？解釋意義、推測原因。</p>
+                            <p className="mt-2 text-[11px] italic">例：這可能反映出學生放學後缺乏其他休閒管道。</p>
+                        </div>
+                    </div>
+
+                    {/* 常見錯誤 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#FCA5A5] bg-[#FEF2F2]">
+                        <p className="text-[12px] text-[#DC2626] font-bold mb-2">⚠️ 常見錯誤</p>
+                        <div className="text-[12px] text-[#991B1B] leading-relaxed flex flex-col gap-1">
+                            <span>1. <strong>只報數字不推論</strong>：像機器人，沒有分析價值</span>
+                            <span>2. <strong>亂推論</strong>：沒有數據支持就硬說，要說「可能」而非「一定」</span>
+                            <span>3. <strong>把 38% 說成「絕大多數」</strong>：量詞要精準</span>
+                        </div>
+                    </div>
+
+                    {/* 案例一 */}
+                    <div className="w14-case-card">
+                        <div className="w14-case-header">案例一：研究樣本背景</div>
+                        <div className="w14-case-body">
+                            <p><strong>數據：</strong>年齡 19-25 歲者佔絕大多數（男 77.3%，女 86.83%）。</p>
+                            <p className="mt-2">這份問卷的主要調查對象大多為___。「絕大多數」這個說法精準嗎？為什麼？</p>
+                        </div>
+                    </div>
+                    <ThinkRecord dataKey="w14-case-1" prompt="案例一作答" scaffold={['主要調查對象是...', '「絕大多數」不夠精準，因為...']} />
+
+                    {/* 案例二 */}
+                    <div className="w14-case-card">
+                        <div className="w14-case-header">案例二：兩性愛情觀</div>
+                        <div className="w14-case-body">
+                            <p><strong>數據：</strong>Q1 曾有單戀經驗（男 78%、女 79%）；Q2 主動追求（男 56%、女 31%）。</p>
+                            <p className="mt-2">
+                                <span className="text-[#1E40AF]">描述：</span>兩性在單戀經驗上比例相當；但在主動追求上，男生顯著___於女生。
+                                <br /><span className="text-[#991B1B]">推論：</span>社會文化可能仍傾向由___性扮演主動角色。
+                            </p>
+                        </div>
+                    </div>
+                    <ThinkRecord dataKey="w14-case-2" prompt="案例二作答：填入描述和推論的空格" scaffold={['描述：男生顯著___於女生', '推論：___性扮演主動角色']} />
+
+                    {/* 案例三 */}
+                    <div className="w14-case-card">
+                        <div className="w14-case-header">案例三：精神病患處置民調</div>
+                        <div className="w14-case-body">
+                            <p><strong>數據：</strong>73.5% 民眾不滿現況；不滿主因是「結束刑期後的社會危害（如再犯）」（85.3%）。</p>
+                            <p className="mt-2">請用「描述＋推論」公式，把這兩個數字整合成一段完整的說明。</p>
+                        </div>
+                    </div>
+                    <ThinkRecord dataKey="w14-case-3" prompt="案例三：用描述＋推論公式寫出完整說明" scaffold={['描述：根據調查結果，...', '推論：這可能反映出...']} />
+
+                    {/* 遊戲入口：Data Detective */}
+                    <div className="p-4 rounded-[var(--radius-unified)] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white text-center">
+                        <p className="text-[11px] opacity-60 mb-1"><Gamepad2 size={12} className="inline" /> R.I.B. 技能挑戰</p>
+                        <p className="text-[14px] font-bold mb-2">Data Detective 濾鏡任務</p>
+                        <p className="text-[12px] opacity-70 mb-3">找出菜鳥研究員的錯誤分析！</p>
+                        <Link
+                            to="/data-detective"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#10B981] hover:bg-[#059669] text-white text-[13px] font-bold rounded-[var(--radius-unified)] transition-colors no-underline"
+                        >
+                            進入遊戲 <ArrowRight size={14} />
+                        </Link>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            title: '各組實戰',
+            icon: <BarChart2 size={18} />,
+            content: (
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🛠️ 把公式套到你自己的資料上</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            打開你的問卷回覆或實驗數據，挑選最關鍵的 1-2 個變項，製作圖表，然後寫出描述＋推論。
+                        </p>
+                    </div>
+
+                    {/* 帶入研究資訊 */}
+                    {myTopic && (
+                        <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border border-[#BAE6FD]">
+                            <p className="text-[12px] text-[#0369A1] font-bold mb-1">📂 你的研究</p>
+                            <p className="text-[13px] text-[#0C4A6E]">{myTopic}</p>
+                            {myMethod && <p className="text-[12px] text-[#0369A1] mt-1">方法：{myMethod}</p>}
+                        </div>
+                    )}
+
+                    {/* 圖表類型選擇 */}
+                    <ThinkRecord
+                        dataKey="w14-my-chart-type"
+                        prompt="我選用的圖表類型是什麼？為什麼？（套用口訣說明）"
+                        scaffold={[
+                            '圖表類型：折線圖 / 圓餅圖 / 長條圖 / 散佈圖',
+                            '原因（套用口訣）：因為我的資料是在看...',
+                            '圖表標題：圖一：___ (N=___)',
+                        ]}
+                    />
+
+                    {/* 描述（藍筆） */}
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#1E40AF' }}>🔵 描述（藍筆）：客觀事實</p>
+                        <ThinkRecord
+                            dataKey="w14-my-description"
+                            prompt="根據你的圖表，你看到了什麼？報事實、報數字。"
+                            scaffold={['根據圖一，...']}
+                        />
+                    </div>
+
+                    {/* 推論（紅筆） */}
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#991B1B' }}>🔴 推論（紅筆）：主觀見解</p>
+                        <ThinkRecord
+                            dataKey="w14-my-inference"
+                            prompt="這個數據代表什麼？解釋意義、推測原因。"
+                            scaffold={['這可能代表...', '因為...']}
+                        />
+                    </div>
+
+                    {/* 教師巡視提醒 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">👀 老師巡視會檢查三件事</p>
+                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
+                            <span>1. 圖表類型選擇是否正確</span>
+                            <span>2. 標題在上方（含 N 值）、資料來源在下方</span>
+                            <span>3. 描述有沒有說到最高值、最低值或最明顯的數字</span>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            title: '回顧繳交',
+            icon: <FileText size={18} />,
+            content: (
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📋 今天學了兩件事</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            選對盤子（圖表）＋ 幫一張圖寫說明（描述＋推論）。
+                            <br />但記住：今天學的是針對<strong>一張圖</strong>的局部說明。下週 W15 要升級為<strong>整份研究的結論</strong>。
+                        </p>
+                    </div>
+
+                    {/* W15 預告 */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-dashed border-[var(--accent)] bg-[#F0F4FF]">
+                        <p className="text-[14px] font-bold text-[var(--accent)] mb-2">🚀 W15 預告：結論還要再加兩層</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed">
+                            今天的「描述＋推論」是針對一張圖的。下週要把整份研究的所有發現整合，寫出完整的研究結論。那個結論除了描述和推論，還要加：
+                        </p>
+                        <ThinkRecord
+                            dataKey="w14-w15-preview"
+                            prompt="猜猜看，結論的第三層和第四層是什麼？（提示：回頭看你的研究問題 + 你的結論有哪些不完美？）"
+                            scaffold={['第三層（提示：回頭看研究問題）：...', '第四層（提示：不完美的地方）：...']}
+                        />
+                    </div>
+
+                    <ExportButton
+                        weekLabel="W14 讓數據自己說話：圖表選擇與圖的說明"
+                        fields={EXPORT_FIELDS}
+                    />
+                </div>
+            ),
+        },
+    ];
+
+    return (
+        <StepEngine
+            weekTitle="W14 讓數據自己說話"
+            weekSubtitle="圖表選擇與圖的說明"
+            steps={steps}
+            prevWeek="/w13"
+            nextWeek="/w15"
+        />
+    );
+};
+
+export { W13Page };
+export default W13Page;

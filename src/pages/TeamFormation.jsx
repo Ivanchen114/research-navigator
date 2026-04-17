@@ -1,339 +1,605 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './TeamFormation.css';
-import { Users, ArrowRight, CheckCircle2, Search, Map, Zap, Target, Telescope, BookOpen } from 'lucide-react';
+import ThinkRecord from '../components/ui/ThinkRecord';
+import ThinkChoice from '../components/ui/ThinkChoice';
+import StepEngine from '../components/ui/StepEngine';
+import ExportButton from '../components/ui/ExportButton';
+import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
+import {
+    Map,
+    ArrowRight,
+    CheckCircle2,
+    ShieldAlert,
+    Users,
+} from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W7Data } from '../data/lessonMaps';
 
+/* ══════════════════════════════════════
+ *  資料常數
+ * ══════════════════════════════════════ */
+
+/* — 合題三情境 — */
+const MERGE_SCENARIOS = [
+    { n: '✅', t: '同一現象，不同角度', d: '「高中生每天睡幾小時？」＋「睡眠不足對考試的影響？」→ 合成「睡眠時數與高中生學業表現的關係」', action: '可直接合題', color: 'var(--success)' },
+    { n: '✅', t: '因果鏈相連，互為變項', d: '「高中生每天用社群媒體幾小時？」＋「高中生的焦慮感有多強？」→ 合成「社群媒體使用時間是否影響青少年焦慮感」', action: '可合題，明確誰是自變項誰是依變項', color: 'var(--success)' },
+    { n: '⚠️', t: '主題差距過大', d: '「學校午餐滿意度」＋「高中生職業志向」→ 幾乎無交集，強行合題會讓研究失焦。', action: '需討論或重新搭配隊友', color: '#D97706' },
+];
+
+/* — 研究主題 vs 研究問題 — */
+const TOPIC_VS_QUESTION = [
+    { type: '因果型', typeColor: 'var(--accent)', topic: '社群媒體使用與青少年焦慮感', question: '每日 IG 使用時間是否影響高中生的焦慮程度？' },
+    { type: '相關型', typeColor: 'var(--success)', topic: '高中生睡眠品質與學業表現', question: '就寢時間與段考成績之間有什麼關係？' },
+    { type: '描述型', typeColor: '#c9a84c', topic: '校園午餐滿意度調查', question: '松山高中學生對午餐菜色、份量、價格的滿意程度如何？' },
+];
+
+/* — 工具草稿範例 — */
+const TOOL_DRAFT_EXAMPLES = [
+    { method: '問卷法', shape: '一題封閉式問題（含選項）', example: '你每天使用 IG 的時間大約多長？ □ 不到 30 分　□ 30-60 分　□ 1-2 小時　□ 超過 2 小時' },
+    { method: '訪談法', shape: '一題開放式問題', example: '可以描述一下你通常在什麼情境下會打開 IG 嗎？' },
+    { method: '觀察法', shape: '一項觀察指標（誰＋情境＋行為）', example: '午休時間，觀察教室內有多少人在滑手機（每 5 分鐘記錄一次）' },
+    { method: '實驗法', shape: '一組操作步驟（操弄＋測量）', example: '實驗組使用番茄鐘 25 分鐘讀書，對照組自由讀書，測量兩組的記憶測驗分數' },
+    { method: '文獻分析', shape: '一組搜尋策略（關鍵字＋篩選）', example: '關鍵字「青少年 + 社群媒體 + 焦慮」，篩選近 5 年、中英文期刊' },
+];
+
+/* — 交流卡欄位 — */
+const CARD_FIELDS = [
+    { emoji: '🎯', label: '我想研究什麼？', desc: '題目' },
+    { emoji: '📚', label: '我的王牌文獻（W6 成果）', desc: '作者/年份 + 為什麼重要' },
+    { emoji: '🔧', label: '我想用什麼方法（W7）', desc: '問卷/訪談/實驗/觀察/文獻分析' },
+    { emoji: '💪', label: '我的優勢技能', desc: '統籌規劃/溝通協調/資訊能力/美編設計/邏輯清晰' },
+    { emoji: '🤝', label: '我在找的夥伴', desc: '題目相近/能力互補/想自己做/還在考慮' },
+];
+
+/* — ThinkChoice — */
+const THINK_CHOICES = [
+    {
+        id: 'tc1',
+        prompt: '甲想研究「手機使用時間」，乙想研究「學業成績下降原因」，他們的題目適合合併嗎？',
+        options: [
+            { label: 'A', text: '可以——手機時間可能影響學業，因果鏈相連' },
+            { label: 'B', text: '不行——一個是使用行為、一個是學業表現，方向差太遠' },
+            { label: 'C', text: '看情況——要看甲的「手機使用」是否和學業有關' },
+        ],
+        answer: 'A',
+        feedback: '手機使用時間可能導致學業成績下降——這是因果鏈相連的合題情境。合成後的研究問題可以是：「每日手機使用時間是否影響高中生的學業表現？」',
+    },
+    {
+        id: 'tc2',
+        prompt: '你在寫企劃書「研究問題」欄位。以下哪個寫法最好？',
+        options: [
+            { label: 'A', text: '我想研究高中生的壓力' },
+            { label: 'B', text: '高中生在期中考週的睡眠時數與考試焦慮程度之間有什麼關係？' },
+            { label: 'C', text: '壓力對學生影響很大' },
+        ],
+        answer: 'B',
+        feedback: 'A 太廣（「壓力」沒有聚焦），C 是感想不是問題。B 有明確的對象（高中生）、情境（期中考週）、變項（睡眠時數 vs 考試焦慮）、句型（相關型「有什麼關係」）。',
+    },
+];
+
+/* — ExportButton 欄位 — */
+const EXPORT_FIELDS = [
+    /* Part A */
+    { key: 'w8-my-topic', label: '我的研究題目' },
+    { key: 'w8-my-ref', label: '我的王牌文獻' },
+    { key: 'w8-my-method', label: '我打算用什麼方法' },
+    { key: 'w8-listen-notes', label: '聆聽紀錄', question: '讓我心動的潛在隊友' },
+    /* Part B */
+    { key: 'w8-teammates', label: '隊友姓名 & 題目' },
+    { key: 'w8-merge-discussion', label: '合題討論紀錄', question: '共同核心是什麼？合成什麼大主題？' },
+    { key: 'w8-merge-type', label: '合題情境判斷', question: '情境 1/2/3？' },
+    /* Part C */
+    { key: 'w8-team-members', label: '組長 + 成員名單' },
+    { key: 'w8-merged-topic', label: '合題後研究主題' },
+    { key: 'w8-research-question', label: '研究問題', question: '因果型/相關型/描述型' },
+    { key: 'w8-method-reason', label: '研究方法 + 理由' },
+    { key: 'w8-target', label: '研究對象' },
+    /* Part D */
+    { key: 'w8-tool-method', label: '我們組選用的研究方法' },
+    { key: 'w8-draft-q1', label: '草稿題目 1' },
+    { key: 'w8-draft-q2', label: '草稿題目 2' },
+    { key: 'w8-draft-q3', label: '草稿題目 3' },
+    { key: 'w8-draft-check', label: '自我檢核', question: '這 3 題和研究問題有關嗎？覺得怪怪的地方？' },
+];
+
+/* ══════════════════════════════════════
+ *  主元件
+ * ══════════════════════════════════════ */
+
 export const TeamFormation = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
+    const [choiceResults, setChoiceResults] = useState([]);
+
+    /* W4 題目 + W7 方法 + W5 文獻帶入 */
+    const [w4Topic, setW4Topic] = useState('');
+    const [w7Method, setW7Method] = useState('');
+
+    useEffect(() => {
+        const saved = readRecords();
+        const topic = saved['w4-final-topic']?.trim();
+        const method = saved['w7-main-method']?.trim();
+        if (topic) {
+            setW4Topic(topic);
+            if (!saved['w8-my-topic']?.trim()) {
+                const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                all['w8-my-topic'] = topic;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+            }
+        }
+        if (method) {
+            setW7Method(method);
+            if (!saved['w8-my-method']?.trim()) {
+                const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                all['w8-my-method'] = method;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+            }
+        }
+    }, []);
+
+    /* ThinkChoice callback */
+    const handleChoice = useCallback((id, prompt) => (label, isCorrect) => {
+        setChoiceResults(prev => {
+            const filtered = prev.filter(r => r.id !== id);
+            return [...filtered, { id, question: prompt, selected: label, correct: isCorrect }];
+        });
+    }, []);
+
+    /* ── 五步驟 ──────────────────────────────────────── */
+
+    const steps = [
+        /* ─── Step 1：Part A 交流卡 + 個人展示準備 ─── */
+        {
+            title: '交流卡 + 展示準備',
+            icon: '🔬',
+            content: (
+                <div className="space-y-8">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        博覽會前先填好你的展示準備。這頁對應紙本學習單 Part A：準備 1 分鐘展示，說清楚三件事；邊聽邊記錄讓你心動的潛在隊友。
+                    </p>
+
+                    {/* W4 + W7 帶入 */}
+                    {(w4Topic || w7Method) && (
+                        <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)] text-[13px]">
+                            <span className="text-[16px]">📎</span>
+                            <div>
+                                <span className="font-bold text-[var(--accent)]">自動帶入你的研究檔案</span>
+                                {w4Topic && <p className="text-[var(--ink-mid)] mt-0.5">W4 題目：{w4Topic}</p>}
+                                {w7Method && <p className="text-[var(--ink-mid)] mt-0.5">W7 方法：{w7Method}</p>}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 研究交流卡說明（紙本的數位版參考） */}
+                    <div className="bg-white border-2 border-dashed border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="text-[16px]">🔬</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">研究交流卡 Research Networking Card</span>
+                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">紙本發放 · 以下為欄位說明</span>
+                        </div>
+                        <div className="p-5 space-y-3">
+                            {CARD_FIELDS.map((f, i) => (
+                                <div key={i} className="flex items-start gap-3 text-[13px]">
+                                    <span className="text-[16px] shrink-0">{f.emoji}</span>
+                                    <div>
+                                        <span className="font-bold text-[var(--ink)]">{f.label}</span>
+                                        <span className="text-[var(--ink-light)] ml-2">— {f.desc}</span>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="mt-3 px-4 py-2.5 rounded-[var(--radius-unified)] bg-[var(--paper)] text-[12px] text-[var(--ink-mid)]">
+                                💡 填好後拿在胸前展示（像參加研討會的掛牌）。交流時互相拍照存檔——這些照片就是你的「研究網絡」！
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pitch 結構 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center gap-2">
+                            <Users size={16} />
+                            <span className="font-bold text-[13px]">1 分鐘展示 Pitch 結構</span>
+                        </div>
+                        <div className="p-5 text-[13px] text-[var(--ink-mid)] space-y-1.5 leading-relaxed">
+                            <p>❶ 我想研究 <strong>___</strong>（你的題目）</p>
+                            <p>❷ 我有一篇文獻是 <strong>___（作者、年份）</strong>，它發現……</p>
+                            <p>❸ 我打算用 <strong>___法</strong>，因為……</p>
+                        </div>
+                    </div>
+
+                    {/* 個人展示填寫 */}
+                    <ThinkRecord
+                        id="w8-my-topic"
+                        label="❶ 我的研究題目"
+                        placeholder="我想研究……"
+                        rows={2}
+                    />
+
+                    <ThinkRecord
+                        id="w8-my-ref"
+                        label="❷ 我的王牌文獻（W6 成果）"
+                        placeholder="作者（年份）發現______，這和我的研究有關，因為……"
+                        rows={3}
+                    />
+
+                    <ThinkRecord
+                        id="w8-my-method"
+                        label="❸ 我打算用什麼方法（W7）"
+                        placeholder="問卷/訪談/實驗/觀察/文獻分析，因為……"
+                        rows={2}
+                    />
+
+                    {/* 聆聽紀錄 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">LISTEN</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">聆聽紀錄：記下讓你心動的潛在隊友</span>
+                        </div>
+                        <div className="p-5 text-[12px] text-[var(--ink-mid)]">
+                            博覽會進行中，邊聽邊記：誰的題目讓你心動？他的研究方向和你有什麼交集？
+                        </div>
+                    </div>
+
+                    <ThinkRecord
+                        id="w8-listen-notes"
+                        label="聆聽紀錄"
+                        placeholder="姓名｜他的研究題目｜讓我心動的原因&#10;例：王小明｜高中生社群媒體焦慮｜和我的睡眠題目可能有因果關係"
+                        rows={5}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 2：Part B 合題討論 ─── */
+        {
+            title: '合題討論',
+            icon: '🤝',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        和隊友討論你們的題目能不能合，以及合成什麼。對應紙本學習單 Part B。
+                    </p>
+
+                    {/* 合題三情境 */}
+                    <div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">合題規則 · 三種情境判斷</div>
+                        <div className="w7-expo-grid">
+                            {MERGE_SCENARIOS.map((item, idx) => (
+                                <div key={idx} className="w7-expo-card">
+                                    <span className="w7-expo-num" style={{ color: item.color }}>{item.n}</span>
+                                    <span className="w7-expo-title">{item.t}</span>
+                                    <p className="w7-expo-desc">{item.d}</p>
+                                    <p className="text-[11px] font-mono font-bold mt-2" style={{ color: item.color }}>→ {item.action}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="w7-notice w7-notice-gold">
+                            ⚠️ 合題禁忌：不要讓同一份問卷同時問兩個完全不同方向的問題——受訪者會一頭霧水。
+                            方法不同不代表不能合作：可以各自負責不同子研究問題，只要整體主題一致即可。
+                        </div>
+                    </div>
+
+                    {/* 理解檢核 */}
+                    <ThinkChoice
+                        prompt={THINK_CHOICES[0].prompt}
+                        options={THINK_CHOICES[0].options}
+                        answer={THINK_CHOICES[0].answer}
+                        feedback={THINK_CHOICES[0].feedback}
+                        onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
+                    />
+
+                    {/* 合題討論紀錄 */}
+                    <ThinkRecord
+                        id="w8-teammates"
+                        label="隊友姓名 & 題目"
+                        placeholder="隊友 1：___，題目：___&#10;隊友 2：___，題目：___（若有）&#10;隊友 3：___，題目：___（若有）"
+                        rows={4}
+                    />
+
+                    <ThinkRecord
+                        id="w8-merge-discussion"
+                        label="合題討論：你們的題目有什麼共同核心？合成什麼大主題？"
+                        placeholder="請記錄討論歷程：我們發現______的共同點是______，所以合題方向是……"
+                        rows={5}
+                    />
+
+                    <ThinkRecord
+                        id="w8-merge-type"
+                        label="對照合題規則，我們的情況屬於"
+                        placeholder="情境 1（同一現象，不同角度）/ 情境 2（因果鏈相連）/ 情境 3（主題差距過大→需要重新搭配）"
+                        rows={2}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：Part C 研究企劃書 ─── */
+        {
+            title: '研究企劃書',
+            icon: '📝',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        每組共同完成一份企劃書，但學習單每人皆要繳交。可指派一人填寫，邊討論邊確認，最後再複製貼上自己的作業。
+                    </p>
+
+                    {/* 組員名單 */}
+                    <ThinkRecord
+                        id="w8-team-members"
+                        label="組長 + 成員"
+                        placeholder="組長：___&#10;成員 1：___&#10;成員 2：___&#10;成員 3：___"
+                        rows={4}
+                    />
+
+                    {/* ① 合題後主題 */}
+                    <ThinkRecord
+                        id="w8-merged-topic"
+                        label="① 合題後的研究主題（10–20 字，一句話說清楚）"
+                        placeholder="例如「社群媒體使用時間與青少年焦慮感的關係」"
+                        rows={2}
+                    />
+
+                    {/* 主題 vs 問題 範例 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">REF</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">主題 vs 問題 — 範例對照</span>
+                        </div>
+                        <div className="p-4 text-[12px] text-[var(--ink-mid)] space-y-2 leading-relaxed">
+                            {TOPIC_VS_QUESTION.map((row, i) => (
+                                <div key={i} className="flex items-start gap-2">
+                                    <span className="font-mono font-bold shrink-0" style={{ color: row.typeColor }}>{row.type}｜</span>
+                                    <span>主題：{row.topic} → 問題：<strong>{row.question}</strong></span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ② 研究問題 */}
+                    <ThinkRecord
+                        id="w8-research-question"
+                        label="② 精修後的研究問題（核心問句，選一個句型）"
+                        placeholder="→「……是否影響……？」（因果型）&#10;→「……之間有什麼關係？」（相關型）&#10;→「……的現況為何？」（描述型）"
+                        rows={3}
+                    />
+
+                    {/* 理解檢核 */}
+                    <ThinkChoice
+                        prompt={THINK_CHOICES[1].prompt}
+                        options={THINK_CHOICES[1].options}
+                        answer={THINK_CHOICES[1].answer}
+                        feedback={THINK_CHOICES[1].feedback}
+                        onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
+                    />
+
+                    {/* ③ 研究方法 */}
+                    <ThinkRecord
+                        id="w8-method-reason"
+                        label="③ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
+                        placeholder="我們選___法，理由是（引用兩層判斷中的某一條）……"
+                        rows={3}
+                    />
+
+                    {/* ④ 研究對象 */}
+                    <ThinkRecord
+                        id="w8-target"
+                        label="④ 預計研究對象（誰？多少人/案例？如何找到他們？）"
+                        placeholder="例如：本校高一 150 人問卷 / 5–8 位學生深度訪談 / ……"
+                        rows={2}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 4：Part D 工具草稿 ─── */
+        {
+            title: '工具草稿',
+            icon: '🔧',
+            content: (
+                <div className="space-y-6">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        這 3 題是你對研究工具的「第一次嘗試」——不求完美，但要認真。
+                        下週 W9，老師會用「診所模式」幫你們逐題診斷——你的草稿就是你的「掛號單」。
+                    </p>
+
+                    <ThinkRecord
+                        id="w8-tool-method"
+                        label="我們組選用的研究方法"
+                        placeholder="問卷法 / 訪談法 / 觀察法 / 實驗法 / 文獻分析"
+                        rows={1}
+                    />
+
+                    {/* 工具草稿範例表 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">REF</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">不知道怎麼寫？對照你的方法，看看範例</span>
+                        </div>
+                        <div className="divide-y divide-[var(--border)]">
+                            {TOOL_DRAFT_EXAMPLES.map((row, i) => (
+                                <div key={i} className="p-4 px-5">
+                                    <div className="flex items-center gap-2 mb-1.5">
+                                        <span className="text-[11px] font-mono font-bold text-[var(--accent)]">{row.method}</span>
+                                        <span className="text-[11px] text-[var(--ink-light)]">— {row.shape}</span>
+                                    </div>
+                                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{row.example}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="w7-notice w7-notice-danger">
+                        ⚠️ 這 3 題草稿不計分，但 W9 要帶來診所——沒有草稿就沒辦法診斷！
+                    </div>
+
+                    <ThinkRecord
+                        id="w8-draft-q1"
+                        label="草稿題目 1"
+                        placeholder="對應你的方法，寫出第一題問卷題/訪談問題/觀察指標/實驗步驟/搜尋策略"
+                        rows={3}
+                    />
+
+                    <ThinkRecord
+                        id="w8-draft-q2"
+                        label="草稿題目 2"
+                        placeholder="寫出你的第二題……"
+                        rows={3}
+                    />
+
+                    <ThinkRecord
+                        id="w8-draft-q3"
+                        label="草稿題目 3"
+                        placeholder="寫出你的第三題……"
+                        rows={3}
+                    />
+
+                    <ThinkRecord
+                        id="w8-draft-check"
+                        label="自我檢核：這 3 題和我們的研究問題有關係嗎？有沒有什麼覺得怪怪的地方？"
+                        placeholder="我覺得第___題可能有問題，因為……"
+                        rows={3}
+                    />
+                </div>
+            ),
+        },
+
+        /* ─── Step 5：回顧與繳交 ─── */
+        {
+            title: '回顧與繳交',
+            icon: '📋',
+            content: (
+                <div className="space-y-8">
+                    {/* 檢核清單 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ W8 完成後，請確認
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                '分組名單確認（或決定 Solo）',
+                                '企劃書已填寫（Part C 四個欄位）',
+                                '3 題草稿已完成（Part D）',
+                                '準備帶到 W9 診所',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
+                                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
+                                    <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 一鍵複製 */}
+                    <ExportButton
+                        weekLabel="W8 研究博覽會"
+                        fields={EXPORT_FIELDS}
+                        choices={choiceResults}
+                    />
+
+                    {/* 遊戲彩蛋 */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
+                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                            <ShieldAlert className="text-[var(--danger)]" size={20} />
+                            R.I.B. 單元挑戰：行動代號解碼
+                        </h3>
+                        <p className="text-[var(--ink-light)] text-sm mb-4">
+                            研究圖表解讀能力——你能從圖表中正確判讀研究發現嗎？
+                        </p>
+                        <Link to="/game/chart-matcher" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
+                            進入解碼 <ArrowRight size={14} />
+                        </Link>
+                    </div>
+
+                    {/* 下週預告 */}
+                    <div className="next-week-preview">
+                        <div className="next-week-header">
+                            <span className="next-week-badge">NEXT WEEK</span>
+                            <h3 className="next-week-title">W9 預告</h3>
+                        </div>
+                        <div className="next-week-content">
+                            <div className="next-week-col">
+                                <div className="next-week-label">帶什麼來</div>
+                                <p className="next-week-text">你的 3 題草稿問題——這是你的「掛號單」，沒有草稿就沒辦法進診所。</p>
+                            </div>
+                            <div className="next-week-col">
+                                <div className="next-week-label">做什麼</div>
+                                <p className="next-week-text">老師用「診所模式」逐題診斷你的問卷/訪綱/觀察指標品質，升級為 2.0 版。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <div className="page-container animate-in-fade-slide">
-
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[#1a1a2e] font-bold">研究博覽會 W8</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
+                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">研究博覽會 W8</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
-                        className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
+                        className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
                         <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
             {showLessonMap && (
-                <div className="w7-content pb-0">
-                    <div className="animate-in slide-in-from-top-4 duration-300">
-                        <LessonMap data={W7Data} />
-                    </div>
+                <div className="animate-in slide-in-from-top-4 duration-300">
+                    <LessonMap data={W7Data} />
                 </div>
             )}
 
-            <div className="w7-content">
-                <div className="w7-top-breadcrumb">
-                    <span>🔭 W8</span>
-                    <span className="w7-breadcrumb-sep">·</span>
-                    <span>研究規劃</span>
-                    <span className="w7-breadcrumb-sep">→</span>
-                    <span>裝備執行</span>
-                </div>
-
-                <h1 className="w7-page-title">
-                    研究博覽會：<span className="text-[#2d5be3]">組隊 × 合題 × 企劃書</span>
+            {/* PAGE HEADER */}
+            <header className="max-w-[800px] mb-16">
+                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🔭 W8 · 研究規劃 → 裝備執行</div>
+                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
+                    研究博覽會：<span className="text-[var(--accent)] italic">組隊 × 合題 × 企劃書</span>
                 </h1>
-                <p className="w7-page-subtitle">
+                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
                     今天是課程的轉折點——從一個人的研究，變成一個團隊的研究。
                     找到隊友、把題目合併、寫出一份研究企劃書，然後預寫 3 題工具草稿帶去 W9 診所。
                 </p>
 
-                <div className="w7-meta-grid">
+                <CourseArc items={[
+                    { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
+                    { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
+                    { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
+                    { wk: 'W7', name: '認識方法\n兩層判斷', status: 'past' },
+                    { wk: 'W8', name: '組隊決策\n企劃定案', status: 'now' },
+                    { wk: 'W9-W10', name: '工具設計\n倫理審查' },
+                    { wk: 'W11-W14', name: '執行研究\n數據分析' },
+                    { wk: 'W15-W16', name: '簡報製作\n發表呈現' }
+                ]} />
+
+                <div className="meta-grid">
                     {[
-                        { label: '第一節', value: '博覽會展示 + 合題規則 + 組隊確認' },
-                        { label: '第二節', value: '企劃書撰寫 + 3 題工具草稿' },
-                        { label: '課堂產出', value: '分組名單 + 企劃書初稿 + 3 題草稿' },
-                        { label: '帶去 W9', value: '3 題草稿問題（你的掛號單）' }
+                        { label: '第一節', value: '線上測驗 + 博覽會展示 + 聆聽紀錄' },
+                        { label: '第二節', value: '合題討論 + 企劃書 + 3 題工具草稿' },
+                        { label: '課堂產出', value: '分組名單 + 企劃書 + 3 題草稿' },
+                        { label: '帶去 W9', value: '3 題草稿問題（你的掛號單）' },
                     ].map((item, idx) => (
-                        <div key={idx} className="w7-meta-card">
-                            <div className="w7-meta-label">{item.label}</div>
-                            <div className="w7-meta-value">{item.value}</div>
+                        <div key={idx} className="meta-item">
+                            <div className="meta-label">{item.label}</div>
+                            <div className="meta-value">{item.value}</div>
                         </div>
                     ))}
                 </div>
+            </header>
 
-                <div className="w7-section-divider">
-                    <h2 className="w7-section-title">學什麼</h2>
-                    <div className="w7-section-line"></div>
-                    <span className="w7-section-tag">CONCEPT</span>
-                </div>
-
-                <CourseArc items={W7Data.courseArc} />
-
-                {/* ═══ 合題三情境 ═══ */}
-                <div className="w7-sub-label">合題規則 · 三種情境判斷</div>
-                <div className="w7-expo-grid">
-                    {[
-                        { n: '✅', t: '同一現象，不同角度', d: '「高中生每天睡幾小時？」＋「睡眠不足對考試的影響？」→ 合成「睡眠時數與高中生學業表現的關係」', color: '#059669' },
-                        { n: '✅', t: '因果鏈相連，互為變項', d: '「高中生每天用社群媒體幾小時？」＋「高中生的焦慮感有多強？」→ 合成「社群媒體使用時間是否影響青少年焦慮感」', color: '#059669' },
-                        { n: '⚠️', t: '主題差距過大 → 重新搭配', d: '「學校午餐滿意度」＋「高中生職業志向」→ 幾乎無交集，強行合題會讓研究失焦。建議重新找隊友。', color: '#D97706' }
-                    ].map((item, idx) => (
-                        <div key={idx} className="w7-expo-card">
-                            <span className="w7-expo-num" style={{ color: item.color }}>{item.n}</span>
-                            <span className="w7-expo-title">{item.t}</span>
-                            <p className="w7-expo-desc">{item.d}</p>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="w7-notice w7-notice-gold" style={{ marginBottom: '48px' }}>
-                    ⚠️ 合題禁忌：不要讓同一份問卷同時問兩個完全不同方向的問題——受訪者會一頭霧水。
-                    方法不同不代表不能合作：可以各自負責不同子研究問題，只要整體主題一致即可。
-                </div>
-
-                {/* ═══ 主題 vs 問題 ═══ */}
-                <div className="w7-sub-label">「研究主題」vs「研究問題」· 範例對照</div>
-                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-12">
-                    <div className="grid grid-cols-[80px_1fr_1fr] gap-[1px] bg-[#dddbd5]">
-                        <div className="bg-[#1a1a2e] p-3 px-4 text-[11px] font-bold text-white font-mono"></div>
-                        <div className="bg-[#1a1a2e] p-3 px-4 text-[11px] font-bold text-white">① 研究主題（像書名）</div>
-                        <div className="bg-[#1a1a2e] p-3 px-4 text-[11px] font-bold text-white">② 研究問題（要回答的核心題目）</div>
-
-                        <div className="bg-[#e8eeff] p-3 px-4 text-[11px] font-bold text-[#2d5be3] font-mono">因果型</div>
-                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">社群媒體使用與青少年焦慮感</div>
-                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">每日 IG 使用時間<strong>是否影響</strong>高中生的焦慮程度？</div>
-
-                        <div className="bg-[#e8f5ee] p-3 px-4 text-[11px] font-bold text-[#2e7d5a] font-mono">相關型</div>
-                        <div className="bg-[#fafaf8] p-3 px-4 text-[13px] text-[#4a4a6a]">高中生睡眠品質與學業表現</div>
-                        <div className="bg-[#fafaf8] p-3 px-4 text-[13px] text-[#4a4a6a]">就寢時間與段考成績之間<strong>有什麼關係</strong>？</div>
-
-                        <div className="bg-[#faf5e4] p-3 px-4 text-[11px] font-bold text-[#c9a84c] font-mono">描述型</div>
-                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">校園午餐滿意度調查</div>
-                        <div className="bg-white p-3 px-4 text-[13px] text-[#4a4a6a]">松山高中學生對午餐菜色、份量、價格的<strong>滿意程度如何</strong>？</div>
-                    </div>
-                </div>
-
-                {/* ═══ 課堂任務 ═══ */}
-                <div className="w7-section-divider">
-                    <h2 className="w7-section-title">課堂任務</h2>
-                    <div className="w7-section-line"></div>
-                    <span className="w7-section-tag">IN-CLASS</span>
-                </div>
-
-                {/* TASK 1: 開場 */}
-                <div className="w7-task-box">
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 1</span>
-                        <span className="w7-task-title">開場回顧（第一節 0:00–0:05，5 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <ul className="w7-task-ul">
-                            <li className="w7-task-li">回顧 W7 研究診所：你已經有了個人題目和方法判斷</li>
-                            <li className="w7-task-li">本節任務：找到隊友、把題目合併、寫出研究企劃書</li>
-                            <li className="w7-task-li">確認 W7 學習單已帶來（個人研究題目 + 判斷的研究方法）</li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* TASK 2: 博覽會 */}
-                <div className="w7-task-box">
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 2</span>
-                        <span className="w7-task-title">研究博覽會（第一節 0:05–0:25，20 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <ul className="w7-task-ul">
-                            <li className="w7-task-li">每人 1 分鐘介紹三件事：① 我想研究什麼 ② 我的研究問題 ③ 我打算用什麼方法</li>
-                            <li className="w7-task-li">全班輪流（按座位順序），班級人數多時可改為 4 人小組輪流</li>
-                            <li className="w7-task-li">邊聽邊記：在學習單 Part A 記下 2–3 位讓你心動的潛在隊友姓名與題目</li>
-                        </ul>
-                        <div className="w7-notice w7-notice-accent">
-                            💡 聆聽重點：有沒有人的題目和你很像，或者可以互補？
-                        </div>
-                    </div>
-                </div>
-
-                {/* TASK 3: 合題規則 */}
-                <div className="w7-task-box">
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 3</span>
-                        <span className="w7-task-title">合題規則講解 + 試配對（第一節 0:25–0:35，10 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <ul className="w7-task-ul">
-                            <li className="w7-task-li">學習三種合題情境（見上方「合題規則」），判斷自己屬於哪種</li>
-                            <li className="w7-task-li">合題的關鍵：找到兩個題目的<strong>共同核心</strong>，不是硬湊</li>
-                            <li className="w7-task-li">合題後的研究問題用三種句型寫：「是否影響」（因果）/「有什麼關係」（相關）/「現況為何」（描述）</li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* TASK 4: 組隊確認 */}
-                <div className="w7-task-box">
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 4</span>
-                        <span className="w7-task-title">組隊確認 + 初步合題（第一節 0:35–0:50，15 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <ul className="w7-task-ul">
-                            <li className="w7-task-li">每組 2–4 人，根據博覽會記下的名單找隊友</li>
-                            <li className="w7-task-li">在學習單 Part B 記錄：你們的題目能不能合？合成什麼？</li>
-                            <li className="w7-task-li">還沒找到隊友的同學舉手，老師協助媒合</li>
-                        </ul>
-                        <div className="w7-notice w7-notice-success">
-                            ✅ 分組確認後，填寫 Part B「合題結果」，教師統一記錄分組名單。
-                        </div>
-                    </div>
-                </div>
-
-                {/* TASK 5: 企劃書 */}
-                <div className="w7-task-box">
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 5</span>
-                        <span className="w7-task-title">企劃書撰寫（第二節 0:00–0:35，35 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <p className="text-[13px] text-[#4a4a6a] mb-3 leading-relaxed">
-                            企劃書是你們研究的地圖——讓你和隊友知道：我們要去哪裡、怎麼去、誰負責什麼。
-                        </p>
-                        <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden mb-4">
-                            <div className="grid grid-cols-[40px_1fr_2fr] gap-[1px] bg-[#dddbd5] text-[12px]">
-                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white text-center">#</div>
-                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">欄位</div>
-                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">說明</div>
-                                {[
-                                    ['1', '組名 & 成員', '組名自訂；列出所有成員'],
-                                    ['2', '分工表', '每人負責哪個子問題 or 任務'],
-                                    ['3', '研究主題', '合題後的大主題（10–20 字）'],
-                                    ['4', '研究問題', '因果型 / 相關型 / 描述型句型'],
-                                    ['5', '研究方法', '方法名稱 + 理由（參考 W7）'],
-                                    ['6', '研究對象', '對誰？多少人/案例？'],
-                                    ['7', '時程規劃', 'W9–W14 各做什麼？']
-                                ].map(([no, field, note], i) => (
-                                    <React.Fragment key={i}>
-                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 font-bold text-[#0D7377] text-center`}>{no}</div>
-                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 font-bold text-[#1a1a2e]`}>{field}</div>
-                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 text-[#4a4a6a]`}>{note}</div>
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="w7-notice w7-notice-accent">
-                            💡 欄位 4 是核心：如果問題太廣（如「學生壓力」），要縮小範疇（如「期中考週的睡眠壓力」）。
-                        </div>
-                    </div>
-                </div>
-
-                {/* TASK 6: 工具草稿 */}
-                <div className="w7-task-box">
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 6</span>
-                        <span className="w7-task-title">預寫 3 題工具草稿（第二節 0:35–0:45，10 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <p className="text-[13px] text-[#4a4a6a] mb-3 leading-relaxed">
-                            對照你在企劃書選定的方法，寫出 3 題草稿。W9 的診所會幫你們把關品質——草稿就是你的掛號單。
-                        </p>
-                        <div className="bg-white border border-[#dddbd5] rounded-lg overflow-hidden mb-4">
-                            <div className="grid grid-cols-[80px_1fr_2fr] gap-[1px] bg-[#dddbd5] text-[12px]">
-                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">方法</div>
-                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">草稿長什麼樣</div>
-                                <div className="bg-[#0D7377] p-2 px-3 font-bold text-white">範例</div>
-                                {[
-                                    ['問卷法', '封閉式問題（含選項）', '你每天使用 IG 的時間大約多長？ □不到30分 □30-60分 □1-2小時 □超過2小時'],
-                                    ['訪談法', '開放式問題', '可以描述一下你通常在什麼情境下會打開 IG 嗎？'],
-                                    ['觀察法', '觀察指標（誰＋情境＋行為）', '午休時間，觀察教室內有多少人在滑手機（每5分鐘記錄一次）'],
-                                    ['實驗法', '操作步驟（操弄＋測量）', '實驗組用番茄鐘25分鐘讀書，對照組自由讀書，測量記憶測驗分數'],
-                                    ['文獻分析', '搜尋策略（關鍵字＋篩選）', '關鍵字「青少年+社群媒體+焦慮」，篩選近5年、中英文期刊']
-                                ].map(([method, shape, example], i) => (
-                                    <React.Fragment key={i}>
-                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 font-bold text-[#0D7377]`}>{method}</div>
-                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 text-[#4a4a6a]`}>{shape}</div>
-                                        <div className={`${i % 2 === 0 ? 'bg-[#f5f5f5]' : 'bg-white'} p-2 px-3 text-[#4a4a6a]`}>{example}</div>
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="w7-notice w7-notice-danger">
-                            ⚠️ 這 3 題草稿不計分，但 W9 要帶來診所——沒有草稿就沒辦法診斷！
-                        </div>
-                    </div>
-                </div>
-
-                {/* TASK 7: 收束 */}
-                <div className="w7-task-box" style={{ marginBottom: '64px' }}>
-                    <div className="w7-task-header">
-                        <span className="w7-task-badge">TASK 7</span>
-                        <span className="w7-task-title">各組簡報 + 收束（第二節 0:45–0:50，5 分鐘）</span>
-                    </div>
-                    <div className="w7-task-content">
-                        <ul className="w7-task-ul">
-                            <li className="w7-task-li">每組 30 秒電梯簡報：你們的研究主題是什麼，打算問誰</li>
-                            <li className="w7-task-li">今天完成了重要一步：從個人題目，變成團隊研究計畫</li>
-                            <li className="w7-task-li">下週 W9，帶著 3 題草稿問題，一起來診斷品質</li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* ═══ 總結 ═══ */}
-                <div className="w7-section-divider">
-                    <h2 className="w7-section-title">本週總結</h2>
-                    <div className="w7-section-line"></div>
-                    <span className="w7-section-tag">WRAP-UP</span>
-                </div>
-
-                <div className="bg-white border border-[#dddbd5] rounded-[10px] overflow-hidden mb-6">
-                    <div className="p-4 px-5 bg-[#f0ede6] border-b border-[#dddbd5] font-bold text-[13px]">
-                        ✅ 本週結束，你應該要會
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[#dddbd5]">
-                        {[
-                            '完成分組，確認組員名單',
-                            '把個人題目合併為團隊研究主題',
-                            '完成研究企劃書初稿（含分工表）',
-                            '寫好 3 題工具草稿，準備帶到 W9 診所'
-                        ].map((item, i) => (
-                            <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
-                                <span className="text-[#2e7d5a] mt-0.5">✓</span>
-                                <span className="text-[13px] text-[#4a4a6a]">{item}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* 下週預告 */}
-                <div className="next-week-preview">
-                    <div className="next-week-header">
-                        <span className="next-week-badge">NEXT WEEK</span>
-                        <h3 className="next-week-title">W9 工具設計 預告</h3>
-                    </div>
-                    <div className="next-week-content">
-                        <div className="next-week-col">
-                            <div className="next-week-label">帶什麼來</div>
-                            <p className="next-week-text">你的 3 題草稿問題——這是你的「掛號單」，沒有草稿就沒辦法進診所。</p>
-                        </div>
-                        <div className="next-week-col">
-                            <div className="next-week-label">做什麼</div>
-                            <p className="next-week-text">老師用「診所模式」逐題診斷你的問卷/訪綱/觀察指標品質，升級為 2.0 版。</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div style={{ padding: '32px 0 64px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Link to="/w7" className="text-[14px] font-bold text-[#8888aa] hover:text-[#1a1a2e] transition-colors flex items-center gap-2">
-                        ← 回 W7 研究診所
-                    </Link>
-                    <Link to="/w9" className="bg-[#1a1a2e] text-white px-6 py-3 rounded-lg font-bold text-[14px] hover:bg-slate-800 transition-colors flex items-center gap-2">
-                        前往 W9 工具設計 →
-                    </Link>
-                </div>
-            </div>
+            {/* STEP ENGINE */}
+            <StepEngine
+                steps={steps}
+                prevWeek={{ label: '回 W7 研究診所', to: '/w7' }}
+                nextWeek={{ label: '前往 W9 工具設計', to: '/w9' }}
+            />
         </div>
     );
 };

@@ -9,6 +9,7 @@ import { W1Page } from './pages/W1Page';
 import { ProblemFocus } from './pages/ProblemFocus';
 import { ClinicPage } from './pages/ClinicPage';
 import { ToolDesignPage } from './pages/ToolDesignPage';
+import { W9Page } from './pages/W9Page';
 import { ToolRefinementPage } from './pages/ToolRefinementPage';
 import { W10Page } from './pages/W10Page';
 import { W11Page } from './pages/W11Page';
@@ -65,7 +66,7 @@ function App() {
           <Route path="w7" element={<ClinicPage />} />
           <Route path="w8" element={<TeamFormation />} />
           <Route path="tool-design" element={<ToolDesignPage />} />
-          <Route path="w9" element={<ToolDesignPage />} />
+          <Route path="w9" element={<W9Page />} />
           <Route path="tool-refinement" element={<ToolRefinementPage />} />
           <Route path="w10" element={<ToolRefinementPage />} />
           <Route path="w11" element={<W10Page />} />

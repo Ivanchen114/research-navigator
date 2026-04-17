@@ -56,11 +56,11 @@ export const Layout = () => {
         {
             sublabel: '分析與報告',
             items: [
-                { name: '研究執行 I', path: '/w12', week: 'W12', status: 'locked' },
-                { name: '研究執行 II', path: '/w13', week: 'W13', status: 'locked' },
-                { name: '數據轉譯', path: '/w14', week: 'W14', status: 'locked' },
+                { name: '研究診所', path: '/w12', week: 'W12', status: 'locked' },
+                { name: '質性編碼×量化統計', path: '/w13', week: 'W13', status: 'locked' },
+                { name: '圖表與圖說', path: '/w14', week: 'W14', status: 'locked' },
                 { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
-                { name: '簡報與海報', path: '/w16', week: 'W16', status: 'locked' },
+                { name: '報告與海報', path: '/w16', week: 'W16', status: 'locked' },
                 { name: '成果發表', path: '/w17', week: 'W17', status: 'locked' }
             ]
         }
@@ -116,35 +116,25 @@ export const Layout = () => {
     const dynamicSections = navSections.map(section => ({
         ...section,
         items: section.items.map(item => {
-            let finalStatus = item.status;
+            let finalStatus = 'none';
 
             if (item.path === '/') {
                 if (location.pathname === '/') finalStatus = 'active';
-                else finalStatus = 'none';
             } else if (item.path === '/games') {
                 if (location.pathname.startsWith('/game')) finalStatus = 'active';
-                else finalStatus = 'none';
             } else if (item.path === '/analysis-station') {
                 if (location.pathname === '/analysis-station') finalStatus = 'active';
-                else finalStatus = 'none';
             } else if (item.path === '/about') {
                 if (location.pathname === '/about') finalStatus = 'active';
-                else finalStatus = 'none';
             } else {
                 const itemWeekNum = getWeekNumber(item.path);
-
                 if (itemWeekNum !== -1) {
                     if (item.path === location.pathname) {
                         finalStatus = 'active';
                     } else if (itemWeekNum <= maxWeek) {
                         finalStatus = 'done';
-                    } else if (itemWeekNum > maxWeek) {
-                        finalStatus = 'locked';
-                    } else if (currentWeekNum === -1) {
-                        // If we are on a page that isn't a week (like home or games),
-                        // just default to the statically defined status in the array for demo purposes
-                        finalStatus = item.status;
                     }
+                    // 不再鎖定——所有週次皆可點擊
                 }
             }
 
@@ -201,7 +191,7 @@ export const Layout = () => {
                             {section.items.map((item, iIdx) => (
                                 <NavLink
                                     key={iIdx}
-                                    to={item.status === 'locked' ? '#' : item.path}
+                                    to={item.path}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={(navData) => {
                                         // Use our computed status rather than pure router active state for styling
