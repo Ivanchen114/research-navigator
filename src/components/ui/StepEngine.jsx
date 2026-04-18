@@ -45,8 +45,12 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
         )}
       </div>
 
-      {/* TAB 列 */}
-      <nav className="flex gap-1 mb-6 overflow-x-auto pb-1">
+      {/* TAB 列 — flat 模式下多一條分隔線，替代白框面板的視覺邊界 */}
+      <nav
+        className={`flex gap-1 mb-6 overflow-x-auto ${
+          flat ? 'pb-3 border-b border-[var(--border)]' : 'pb-1'
+        }`}
+      >
         {steps.map((step, i) => {
           const isActive = i === current;
           const isPast = i < current;
@@ -84,8 +88,8 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
         {steps[current]?.content}
       </div>
 
-      {/* 底部導覽 */}
-      <div className="flex items-center justify-between mt-4">
+      {/* 底部導覽 — flat 模式內容沒白框包裝，需要更大上距建立呼吸 */}
+      <div className={`flex items-center justify-between ${flat ? 'mt-10 pt-4 border-t border-[var(--border)]' : 'mt-4'}`}>
         {/* 左側：上一步 或 回上週 */}
         {isFirst && prevWeek ? (
           <Link
@@ -128,7 +132,7 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
         {isLast && nextWeek ? (
           <Link
             to={nextWeek.to}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[var(--ink)] text-white text-[13px] font-bold rounded-[8px] hover:opacity-90 transition-all group"
+            className="flex items-center gap-2 px-5 py-3 bg-[var(--ink)] text-white text-[13px] font-bold rounded-[8px] hover:opacity-90 transition-all group shadow-sm"
           >
             {nextWeek.label} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
@@ -136,9 +140,9 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
           <button
             onClick={() => goTo(current + 1)}
             disabled={isLast}
-            className="flex items-center gap-1 px-3 py-2 text-[13px] font-mono text-[var(--ink-mid)] hover:text-[var(--ink)] disabled:opacity-30 disabled:cursor-default transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[var(--ink)] text-[var(--ink)] text-[13px] font-bold rounded-[8px] hover:bg-[var(--ink)] hover:text-white active:bg-[var(--ink)] active:text-white disabled:opacity-30 disabled:cursor-default transition-all group"
           >
-            下一步 <ChevronRight size={14} />
+            下一步 <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </button>
         )}
       </div>
