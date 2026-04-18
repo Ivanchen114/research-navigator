@@ -144,6 +144,7 @@ export const W1Page = () => {
             <StepEngine
               prevWeek={{ label: '回 W0 偵探特訓班', to: '/w0' }}
               nextWeek={{ label: '前往 W2 問題意識', to: '/w2' }}
+              flat
               steps={[
 
                 /* ──────── Step 1: 暖身 ──────── */
@@ -151,7 +152,7 @@ export const W1Page = () => {
                     title: '暖身',
                     icon: '🌱',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 prose-zh">
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 0 · 我與研究的距離</div>
                                 <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">在開始之前，先認識自己</h3>
@@ -195,7 +196,7 @@ export const W1Page = () => {
                     title: '模仿遊戲',
                     icon: '🕵️',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 prose-zh">
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 1 · 找出偽裝者</div>
                                 <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">7 份自述裡，有 1 份是 AI 寫的</h3>
@@ -291,7 +292,7 @@ export const W1Page = () => {
                     title: 'AI-RED 公約',
                     icon: '🛡️',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 prose-zh">
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 2 · 簽署誠信公約</div>
                                 <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">AI-RED：五步驟協作框架</h3>
@@ -383,7 +384,7 @@ export const W1Page = () => {
                     title: '課堂活動',
                     icon: '🤝',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 prose-zh">
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 3 · 現場實驗：人機協作</div>
                                 <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">觀察老師示範一次真正的研究流程</h3>
@@ -438,7 +439,7 @@ export const W1Page = () => {
                     title: '回顧與繳交',
                     icon: '📋',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 prose-zh">
                             <div>
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">WRAP-UP</div>
                                 <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">本週結束，你應該要會</h3>

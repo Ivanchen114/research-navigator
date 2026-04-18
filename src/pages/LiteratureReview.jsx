@@ -195,7 +195,7 @@ export const LiteratureReview = () => {
             title: '換字抄襲 → 改寫偵錯',
             icon: '🔍',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* ── 觀念 1 ── */}
                     <div className="section-head"><h2>觀念：換字抄襲 vs. 真正的改寫</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
 
@@ -354,7 +354,7 @@ export const LiteratureReview = () => {
             title: '三明治引用法 → 實戰',
             icon: '🥪',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* ── 觀念 2 ── */}
                     <div className="section-head"><h2>觀念：三明治引用法</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
                     <p className="section-desc">
@@ -465,7 +465,7 @@ export const LiteratureReview = () => {
             title: '多文獻整合 → 結案報告',
             icon: '📝',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* ── 觀念 3 ── */}
                     <div className="section-head"><h2>觀念：多文獻整合原則</h2><div className="line"></div><span className="mono">10 分鐘</span></div>
                     <p className="section-desc">
@@ -586,7 +586,7 @@ export const LiteratureReview = () => {
             title: '同儕會診：互相驗屍',
             icon: '🏥',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <div className="section-head"><h2>同儕會診：互相驗屍</h2><div className="line"></div><span className="mono">10 分鐘</span></div>
                     <p className="section-desc">
                         兩人一組，交換演練 3 的文獻探討段落。依照四個審查項目，給出具體修改建議。<strong>不要寫「很好」「很清楚」——那叫敷衍結案。</strong>
@@ -650,7 +650,7 @@ export const LiteratureReview = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -784,6 +784,7 @@ export const LiteratureReview = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W5 文獻搜尋入門', to: '/w5' }}
                 nextWeek={{ label: '前往 W7 研究診所', to: '/w7' }}
+            flat
             />
         </div>
     );

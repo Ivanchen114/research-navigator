@@ -209,7 +209,7 @@ const W16Page = () => {
             title: '組裝出發',
             icon: <Package size={18} />,
             content: (
-                <>
+                <div className="prose-zh">
                     <div className="card">
                         <div className="card-header">
                             <FileText size={16} /> 報告 = 你已經寫好的碎片
@@ -270,7 +270,7 @@ const W16Page = () => {
                             />
                         </div>
                     </div>
-                </>
+                </div>
             ),
         },
 
@@ -279,7 +279,7 @@ const W16Page = () => {
             title: '報告組裝 + AI 潤色',
             icon: <PenTool size={18} />,
             content: (
-                <>
+                <div className="prose-zh">
                     {/* 組裝進度追蹤 */}
                     <div className="card">
                         <div className="card-header">
@@ -390,7 +390,7 @@ const W16Page = () => {
                             />
                         </div>
                     </div>
-                </>
+                </div>
             ),
         },
 
@@ -399,7 +399,7 @@ const W16Page = () => {
             title: '海報規劃',
             icon: <Layout size={18} />,
             content: (
-                <>
+                <div className="prose-zh">
                     <div className="card">
                         <div className="card-header">
                             <Eye size={16} /> 3 秒吸引力法則：大、少、準、亮
@@ -456,7 +456,7 @@ const W16Page = () => {
                             />
                         </div>
                     </div>
-                </>
+                </div>
             ),
         },
 
@@ -465,7 +465,7 @@ const W16Page = () => {
             title: '海報製作',
             icon: <Layout size={18} />,
             content: (
-                <>
+                <div className="prose-zh">
                     {/* 紙筆線框圖 */}
                     <div className="card" style={{ border: '2px solid #DC2626' }}>
                         <div className="card-header" style={{ background: '#FEF2F2', color: '#991B1B' }}>
@@ -523,7 +523,7 @@ const W16Page = () => {
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
             ),
         },
 
@@ -532,7 +532,7 @@ const W16Page = () => {
             title: '回顧繳交',
             icon: <FileText size={18} />,
             content: (
-                <>
+                <div className="prose-zh">
                     {/* 同儕 3 秒互評 */}
                     <div className="w16-review-card">
                         <div className="w16-review-header">
@@ -577,7 +577,7 @@ const W16Page = () => {
                             fields={EXPORT_FIELDS}
                         />
                     </div>
-                </>
+                </div>
             ),
         },
     ];
@@ -635,6 +635,7 @@ const W16Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W15 研究結論', to: '/w15' }}
                 nextWeek={{ label: '前往 W17 成果發表', to: '/w17' }}
+            flat
             />
         </div>
     );

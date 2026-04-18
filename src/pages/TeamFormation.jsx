@@ -154,7 +154,7 @@ export const TeamFormation = () => {
             title: '交流卡 + 展示準備',
             icon: '🔬',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         博覽會前先填好你的展示準備。這頁對應紙本學習單 Part A：準備 1 分鐘展示，說清楚三件事；邊聽邊記錄讓你心動的潛在隊友。
                     </p>
@@ -255,7 +255,7 @@ export const TeamFormation = () => {
             title: '合題討論',
             icon: '🤝',
             content: (
-                <div className="space-y-6">
+                <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         和隊友討論你們的題目能不能合，以及合成什麼。對應紙本學習單 Part B。
                     </p>
@@ -318,7 +318,7 @@ export const TeamFormation = () => {
             title: '研究企劃書',
             icon: '📝',
             content: (
-                <div className="space-y-6">
+                <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         每組共同完成一份企劃書，但學習單每人皆要繳交。可指派一人填寫，邊討論邊確認，最後再複製貼上自己的作業。
                     </p>
@@ -396,7 +396,7 @@ export const TeamFormation = () => {
             title: '工具草稿',
             icon: '🔧',
             content: (
-                <div className="space-y-6">
+                <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         這 3 題是你對研究工具的「第一次嘗試」——不求完美，但要認真。
                         下週 W9，老師會用「診所模式」幫你們逐題診斷——你的草稿就是你的「掛號單」。
@@ -468,7 +468,7 @@ export const TeamFormation = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -599,6 +599,7 @@ export const TeamFormation = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W7 研究診所', to: '/w7' }}
                 nextWeek={{ label: '前往 W9 工具設計', to: '/w9' }}
+            flat
             />
         </div>
     );

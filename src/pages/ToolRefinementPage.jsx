@@ -189,7 +189,7 @@ export const ToolRefinementPage = () => {
             title: 'AI 檢核站',
             icon: '🤖',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         W9 你用三欄對應表完成了工具的「系統版」設計。今天讓 <strong className="text-[var(--ink)]">AI 當第一輪品管員</strong>——它能快速找出你沒注意到的問題。但記住：<strong className="text-[var(--accent)]">AI 不一定對，你要判斷！</strong>
                     </p>
@@ -260,7 +260,7 @@ export const ToolRefinementPage = () => {
             title: 'AI 建議判斷表',
             icon: '⚖️',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         AI 給了一堆建議，但<strong className="text-[var(--ink)]">不是每條都要照做</strong>。逐條判斷：這個建議合理嗎？適合高中生的研究嗎？符合你的研究目的嗎？
                     </p>
@@ -335,7 +335,7 @@ export const ToolRefinementPage = () => {
             title: '人工預試',
             icon: '🧪',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         AI 看的是文字，<strong className="text-[var(--ink)]">人工預試看的是真實體驗</strong>。讓真人試用你的工具，你會發現很多 AI 抓不到的問題。
                     </p>
@@ -391,7 +391,7 @@ export const ToolRefinementPage = () => {
             title: 'AI vs 人工比對',
             icon: '🔍',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         現在把 AI 的發現和人工預試的發現放在一起比較。<strong className="text-[var(--ink)]">誰找到了什麼？誰漏掉了什麼？</strong>
                     </p>
@@ -457,7 +457,7 @@ export const ToolRefinementPage = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* AI 反思 */}
                     <ThinkRecord
                         dataKey="w10-ai-reflection"
@@ -604,6 +604,7 @@ export const ToolRefinementPage = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W9 工具設計', to: '/w9' }}
                 nextWeek={{ label: '前往 W11 倫理審查', to: '/w11' }}
+            flat
             />
         </div>
     );

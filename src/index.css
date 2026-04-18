@@ -44,7 +44,12 @@
   word-break: break-word;
   overflow-wrap: break-word;
 }
+/* 段距規則：只在「非 flex / 非 grid」容器生效
+   flex/grid 容器請用 gap-* 控制間距，避免與 margin 疊加 */
 .prose-zh > * + * { margin-top: var(--paragraph-gap); }
+.prose-zh.flex > * + *,
+.prose-zh.grid > * + * { margin-top: 0; }
+
 .prose-zh p { line-height: var(--leading-reading); }
 .prose-zh h2, .prose-zh h3, .prose-zh h4 {
   color: var(--ink);
@@ -59,6 +64,8 @@
 @media (max-width: 640px) {
   .prose-zh { font-size: var(--read-size-mobile); }
   .prose-zh > * + * { margin-top: 1.5em; }
+  .prose-zh.flex > * + *,
+  .prose-zh.grid > * + * { margin-top: 0; }
 }
 
 .page-container {

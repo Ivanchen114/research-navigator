@@ -114,7 +114,7 @@ export const W4Page = () => {
             title: '5W1H 規格化',
             icon: '🔪',
             content: (
-                <div className="space-y-10">
+                <div className="space-y-10 prose-zh">
                     {/* W1-W4 旅程回顧 */}
                     <div>
                         <div className="section-head"><h2>從 W3 到 W4</h2><div className="line"></div><span className="mono">WARM-UP</span></div>
@@ -255,7 +255,7 @@ export const W4Page = () => {
             title: '海報製作',
             icon: '🎨',
             content: (
-                <div className="space-y-10">
+                <div className="space-y-10 prose-zh">
                     {/* 自主草稿：研究動機 + 標題草稿 */}
                     <div>
                         <div className="section-head"><h2>自主草稿</h2><div className="line"></div><span className="mono">不准用 AI · 10 分鐘</span></div>
@@ -398,7 +398,7 @@ export const W4Page = () => {
             title: 'Gallery Walk',
             icon: '🚶',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <div className="section-head"><h2>Gallery Walk 四輪走讀</h2><div className="line"></div><span className="mono">23 分鐘</span></div>
                     <p className="section-desc">
                         每組 4 人。一個人留在海報旁報告，另外三個人去逛別人的。聽完給具體建議，不能只寫「很好」。
@@ -468,7 +468,7 @@ export const W4Page = () => {
             title: '題目最終定案',
             icon: '🎯',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <div className="section-head"><h2>整理建議 → 最終定案</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
                     <p className="section-desc">
                         看看同學給你的建議，分成三類。不是所有建議都要採納——有判斷力地接受，比什麼都接受更重要。
@@ -545,7 +545,7 @@ export const W4Page = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -689,6 +689,7 @@ export const W4Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W3 題目健檢', to: '/w3' }}
                 nextWeek={{ label: '前往 W5 文獻搜尋入門', to: '/w5' }}
+            flat
             />
         </div>
     );

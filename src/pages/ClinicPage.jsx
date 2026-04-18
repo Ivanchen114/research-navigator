@@ -310,7 +310,7 @@ export const ClinicPage = () => {
             title: '五種方法 + 兩層判斷',
             icon: '🩺',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         認識五種研究方法的目的與限制，再用「兩層判斷架構」決定你的題目該用哪種。
                     </p>
@@ -480,7 +480,7 @@ export const ClinicPage = () => {
             title: '分科判斷測驗',
             icon: '🎯',
             content: (
-                <div className="space-y-6">
+                <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         10 題選擇題，驗收你對兩層判斷架構的理解。做完之後注意自己錯在哪幾題——Step 4 反思會用到。
                     </p>
@@ -611,7 +611,7 @@ export const ClinicPage = () => {
             title: '幫自己的題目掛號',
             icon: '🏥',
             content: (
-                <div className="space-y-6">
+                <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         把剛學到的兩層判斷用在你真實的研究題目上。這才是今天最重要的事。
                     </p>
@@ -709,7 +709,7 @@ export const ClinicPage = () => {
             title: '反思',
             icon: '💭',
             content: (
-                <div className="space-y-6">
+                <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         回顧測驗與判斷過程，整理你今天學到的東西。這四題是課後學習單 Part C 的內容。
                     </p>
@@ -750,7 +750,7 @@ export const ClinicPage = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -903,6 +903,7 @@ export const ClinicPage = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W6 文獻偵探社', to: '/w6' }}
                 nextWeek={{ label: '前往 W8 組隊決策週', to: '/w8' }}
+            flat
             />
         </div>
     );

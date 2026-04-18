@@ -168,7 +168,7 @@ export const Wizard = () => {
             title: '碰壁 + 觀念',
             icon: '🏥',
             content: (
-                <div className="space-y-10">
+                <div className="space-y-10 prose-zh">
                     {/* 碰壁體驗 */}
                     <div>
                         <div className="w3-section-head"><h2>碰壁體驗</h2><div className="line"></div><div className="mono">PHASE 0</div></div>
@@ -296,7 +296,7 @@ export const Wizard = () => {
             title: '急診室 + 練習',
             icon: '🔍',
             content: (
-                <div className="space-y-10">
+                <div className="space-y-10 prose-zh">
                     {/* Part 1: 8 個病人 — 互動配對 */}
                     <div className="w3-task-block">
                         <div className="w3-task-hd">
@@ -545,7 +545,7 @@ export const Wizard = () => {
             title: 'AI 協作練手',
             icon: '🤖',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <div className="w3-task-block">
                         <div className="w3-task-hd">
                             <span className="w3-task-badge">PART 3</span>
@@ -634,7 +634,7 @@ export const Wizard = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 本週結束檢核 */}
                     <div className="bg-white border border-[var(--border)] rounded-[10px] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -766,6 +766,7 @@ export const Wizard = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W2 問題意識', to: '/w2' }}
                 nextWeek={{ label: '前往 W4 題目博覽會', to: '/w4' }}
+            flat
             />
         </div>
     );

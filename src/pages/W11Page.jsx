@@ -198,7 +198,7 @@ export const W11Page = () => {
             title: '工具定稿確認',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         W9 設計工具、W10 用 AI 和真人雙重把關。今天是準備<strong className="text-[var(--ink)]">「出門」的最後一天</strong>——工具帶好了嗎？知情同意書準備好了嗎？知道誰要去找誰、什麼時候要回來嗎？
                     </p>
@@ -256,7 +256,7 @@ export const W11Page = () => {
             title: '倫理四問自查',
             icon: '⚖️',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         不是背定義，是<strong className="text-[var(--ink)]">真的問你自己的研究</strong>。每一題都要針對你自己的工具回答。
                     </p>
@@ -310,7 +310,7 @@ export const W11Page = () => {
             title: 'AI 知情同意書審查',
             icon: '🤖',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         很多知情同意書寫得很官方，受訪者根本讀不懂。用 AI 幫你找出<strong className="text-[var(--ink)]">語言盲點</strong>——讓 16-18 歲的高中生也能完全理解。
                     </p>
@@ -355,7 +355,7 @@ export const W11Page = () => {
             title: '研究執行計畫書',
             icon: '🗺️',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         有了工具還不夠，還要知道：<strong className="text-[var(--ink)]">誰去找誰？什麼時候做完？萬一遇到困難怎麼辦？</strong>越具體越好。
                     </p>
@@ -412,7 +412,7 @@ export const W11Page = () => {
             title: '回顧與繳交',
             icon: '🛫',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 施測啟動宣告 */}
                     <div className="w11-launch-card">
                         <Plane size={32} className="mx-auto mb-4 text-[var(--gold)]" />
@@ -551,6 +551,7 @@ export const W11Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W10 工具精進', to: '/w10' }}
                 nextWeek={{ label: '前往 W12 研究執行', to: '/w12' }}
+            flat
             />
         </div>
     );

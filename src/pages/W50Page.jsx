@@ -131,7 +131,7 @@ export const W50Page = () => {
             title: '觀念：文獻是什麼',
             icon: '📚',
             content: (
-                <div className="space-y-10">
+                <div className="space-y-10 prose-zh">
                     {/* 定案題目帶入 */}
                     <div>
                         <div className="section-head"><h2>我的 W4 定案題目</h2><div className="line"></div><span className="mono">STARTING POINT</span></div>
@@ -274,7 +274,7 @@ export const W50Page = () => {
             title: '資料庫實戰',
             icon: '🔍',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <div className="section-head"><h2>資料庫查找練習</h2><div className="line"></div><span className="mono">不准用 AI · 25 分鐘</span></div>
                     <p className="section-desc">
                         先知道自己有多少斤兩。這個階段只能用華藝資料庫或國圖碩博系統，不能開 AI。靠你自己的搜尋策略找到第一篇真實證物。
@@ -379,7 +379,7 @@ export const W50Page = () => {
             title: 'APA 格式練習',
             icon: '📝',
             content: (
-                <div className="space-y-10">
+                <div className="space-y-10 prose-zh">
                     {/* APA 格式 */}
                     <div>
                         <div className="section-head"><h2>APA 格式練習</h2><div className="line"></div><span className="mono">10 分鐘</span></div>
@@ -436,7 +436,7 @@ export const W50Page = () => {
             title: '證物鑑識大賽',
             icon: '🔬',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <div className="section-head"><h2>證物鑑識大賽：等級判定</h2><div className="line"></div><span className="mono">小組任務 · 30 分鐘</span></div>
                     <p className="section-desc">
                         你的小組會拿到五張證物卡（A–E）。判斷每張的文獻等級，並記錄判斷理由和查核路徑。不要只勾等級——<strong>告訴我你怎麼知道的</strong>。
@@ -510,7 +510,7 @@ export const W50Page = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -644,6 +644,7 @@ export const W50Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W4 題目定案', to: '/w4' }}
                 nextWeek={{ label: '前往 W6 文獻偵探社', to: '/w6' }}
+            flat
             />
         </div>
     );

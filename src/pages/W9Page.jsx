@@ -297,7 +297,7 @@ export const W9Page = () => {
             title: '處方診斷熱身',
             icon: '🩺',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         W7 你學了 Level 1 掛號判斷（決定用什麼方法）。今天升級到 <strong className="text-[var(--ink)]">Level 2 處方判斷</strong>——工具設計得好不好？哪裡有毒？怎麼解毒？
                     </p>
@@ -374,7 +374,7 @@ export const W9Page = () => {
             title: '好工具三大標準',
             icon: '🎯',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         除了避開錯誤，好的研究工具還要符合三大標準。等一下設計自己的工具時，每一題都要通過這三關檢驗。
                     </p>
@@ -435,7 +435,7 @@ export const W9Page = () => {
             title: '三欄對應表實作',
             icon: '🔧',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* W8→W9 銜接說明 */}
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
                         <p className="text-[14px] text-[var(--ink)] leading-relaxed">
@@ -595,7 +595,7 @@ export const W9Page = () => {
             title: '同儕處方診斷',
             icon: '💊',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         兩兩小組互相交換「工具初稿」。用錯誤類型卡幫對方把脈——當一個負責任的主治醫師！
                     </p>
@@ -664,7 +664,7 @@ export const W9Page = () => {
             title: '回顧與繳交',
             icon: '📋',
             content: (
-                <div className="space-y-8">
+                <div className="space-y-8 prose-zh">
                     {/* 修改決定 */}
                     <ThinkRecord
                         dataKey="w9-revision-plan"
@@ -792,6 +792,7 @@ export const W9Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W8 研究博覽會', to: '/w8' }}
                 nextWeek={{ label: '前往 W10 工具精進', to: '/w10' }}
+            flat
             />
         </div>
     );

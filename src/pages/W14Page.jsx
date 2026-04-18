@@ -207,7 +207,7 @@ const W14Page = () => {
             title: '選對盤子',
             icon: <BarChart2 size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
 
                     {/* 四大圖表卡 */}
                     <div className="w14-chart-grid">
@@ -274,7 +274,7 @@ const W14Page = () => {
             title: '圖表格式',
             icon: <FileText size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📐 做圖表的三個鐵規定 + 一個防呆</p>
                         <p className="text-[12px] text-[var(--ink-mid)]">自己做的圖表也要標出處！</p>
@@ -338,7 +338,7 @@ const W14Page = () => {
             title: '描述 vs. 推論',
             icon: <Lightbulb size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📝 一張圖的說明 ＝ 描述 ＋ 推論</p>
                         <p className="text-[12px] text-[var(--ink-mid)]">圖表貼到報告裡，你不能什麼都不說。你要告訴讀者：你看到了什麼，以及這代表什麼。</p>
@@ -420,7 +420,7 @@ const W14Page = () => {
             title: '各組實戰',
             icon: <BarChart2 size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🛠️ 把公式套到你自己的資料上</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
@@ -484,7 +484,7 @@ const W14Page = () => {
             title: '回顧繳交',
             icon: <FileText size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📋 今天學了兩件事</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
@@ -555,6 +555,7 @@ const W14Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W13 中期盤點', to: '/w13' }}
                 nextWeek={{ label: '前往 W15 研究結論', to: '/w15' }}
+            flat
             />
         </div>
     );

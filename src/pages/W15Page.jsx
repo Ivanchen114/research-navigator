@@ -236,7 +236,7 @@ const W15Page = () => {
             title: '四層升級',
             icon: <Layers size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🎓 升級！從局部到全局</p>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
@@ -316,7 +316,7 @@ const W15Page = () => {
             title: '自己先寫',
             icon: <PenTool size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 你先寫，AI 再幫你檢核</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
@@ -353,7 +353,7 @@ const W15Page = () => {
             title: 'AI 檢核',
             icon: <Bot size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="w15-privacy-card">
                         <div className="w15-privacy-header"><Shield size={16} /> ⚠️ 餵 AI 之前的鐵規</div>
                         <div className="w15-privacy-body">
@@ -375,7 +375,7 @@ const W15Page = () => {
             title: '人工裁奪',
             icon: <Scale size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">⚖️ 對照 AI 版本，逐條判斷</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
@@ -403,7 +403,7 @@ const W15Page = () => {
             title: '回顧繳交',
             icon: <FileText size={18} />,
             content: (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">💡 AI 協作反思</p>
                         <p className="text-[12px] text-[var(--ink-mid)]">回顧今天和 AI 的協作過程。</p>
@@ -457,6 +457,7 @@ const W15Page = () => {
                 steps={steps}
                 prevWeek={{ label: '回 W14 圖表與圖說', to: '/w14' }}
                 nextWeek={{ label: '前往 W16 報告與海報', to: '/w16' }}
+            flat
             />
         </div>
     );
