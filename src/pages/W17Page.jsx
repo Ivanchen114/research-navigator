@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
+import HeroBlock from '../components/ui/HeroBlock';
 import './W17.css';
 import {
     ArrowLeft,
@@ -46,50 +47,38 @@ const W17Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 成果發表 / <span className="text-[var(--ink)] font-bold">Gallery Walk W17</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 成果發表 / </span><span className="text-[var(--ink)] font-bold">Gallery Walk W17</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🎤 W17 · Final</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    最終發表 Gallery Walk · <span className="text-[var(--accent)] italic">策展日</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    今天每個人都是知識的生產者，也是知識的接收者。紙本學習單發表時填寫，這頁只是行前說明。
-                </p>
-
-                <CourseArc items={[
-                    { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                    { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
-                    { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
-                    { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
-                    { wk: 'W11-W13', name: '執行階段\n自主研究', past: true },
-                    { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
-                    { wk: 'W16-W17', name: '成果簡報\n博覽發表', now: true },
-                ]} />
-
-                <div className="meta-grid">
-                    {[
-                        { label: '第一節', value: 'Gallery Walk 第一輪（A 守攤 / B 走動）' },
-                        { label: '第二節', value: 'Gallery Walk 第二輪 + 學術投資統計' },
-                        { label: '課堂產出', value: '報告者學習單 + 聆聽者學習單（紙本）' },
-                        { label: '前置要求', value: '列印好的海報 + 報告定稿' },
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W17"
+                title="最終發表 Gallery Walk · "
+                accentTitle="策展日"
+                subtitle="今天每個人都是知識的生產者，也是知識的接收者。紙本學習單發表時填寫，這頁只是行前說明。"
+                meta={[
+                    { label: '第一節', value: 'Gallery Walk 第一輪（A 守攤 / B 走動）' },
+                    { label: '第二節', value: 'Gallery Walk 第二輪 + 學術投資統計' },
+                    { label: '課堂產出', value: '報告者 + 聆聽者學習單（紙本）' },
+                    { label: '前置要求', value: '列印好的海報 + 報告定稿' },
+                ]}
+            />
+            <CourseArc items={[
+                { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
+                { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
+                { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
+                { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
+                { wk: 'W11-W13', name: '執行階段\n自主研究', past: true },
+                { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
+                { wk: 'W16-W17', name: '成果簡報\n博覽發表', now: true },
+            ]} />
 
             {/* ═══ SCROLLING CONTENT ═══ */}
             <div style={{ maxWidth: 720, margin: '0 auto' }}>

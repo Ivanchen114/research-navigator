@@ -75,7 +75,8 @@ const EXPORT_FIELDS = [
     { key: 'w2-step2-gap', label: 'Step 2 落差', question: '哪裡跟你想的不一樣？矛盾在哪？' },
     { key: 'w2-step3-question', label: 'Step 3 核心疑問', question: '你最想搞清楚的那一件事，白話說' },
     { key: 'w2-ai-gap-choice', label: 'AI 落差擴充：我的選擇', question: 'AI 給了 5 個落差，你選了哪一個？為什麼？' },
-    { key: 'w2-abc-judgment', label: 'ABC 型判斷', question: '你判斷是哪一型？為什麼？' },
+    { key: 'w2-abc-judgment', label: 'ABC 型判斷（人腦先行）', question: '你判斷是哪一型？為什麼？白話初稿？' },
+    { key: 'w2-ai-intent-choice', label: 'AI 三方向：我的選擇', question: 'AI 給了 3 個方向，你選哪一個？為什麼？' },
     { key: 'w2-final-intent', label: '最終探究意圖', question: '你的最終探究意圖（帶去 W3 的版本）' },
     { key: 'w2-aired-record', label: 'AI-RED 記錄', question: '用了什麼 AI、問了什麼、你的評估' },
 ];
@@ -396,22 +397,38 @@ export const ProblemFocus = () => {
                             {/* 分隔 */}
                             <div className="w-full h-px bg-[var(--border)]" />
 
-                            {/* 探究意圖生成器 — 去卡化 */}
+                            {/* 探究意圖生成器 — 人腦先行 → AI 放大鏡 → 人腦裁奪 */}
                             <div>
                                 <div className="flex items-center gap-2 mb-3">
                                     <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#e6efff] text-[#2d5be3]">AI 協作</span>
-                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">完成 Step 4</span>
+                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">人腦先行 → AI 放大鏡 → 人腦裁奪</span>
                                 </div>
                                 <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
                                     探究意圖生成器
                                 </h4>
-
-                                <div className="w2-notice warn mb-3">
-                                    ★ <strong>先做判斷，不准用 AI！</strong>看著你的核心疑問，自己判斷是 A / B / C 型。
-                                </div>
-
                                 <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    判斷好之後，把現象、落差、核心疑問都填進下方 Prompt，請 AI 翻譯成三種方向，然後<strong className="text-[var(--ink)]">你選一個</strong>。
+                                    這裡要跑三拍：<strong className="text-[var(--ink)]">先自己判斷</strong> → <strong className="text-[var(--ink)]">再用 AI 翻譯</strong> → <strong className="text-[var(--ink)]">最後由你裁奪</strong>。順序倒了就變成 AI 主導、你背書。
+                                </p>
+                            </div>
+
+                            {/* 拍 1：人腦先行 */}
+                            <div>
+                                <div className="w2-notice warn mb-3">
+                                    ★ <strong>拍 1 · 人腦先行：不准用 AI！</strong>看著你的核心疑問，先自己判斷是 A / B / C 型，並寫一句白話初稿。
+                                </div>
+                                <ThinkRecord
+                                    dataKey="w2-abc-judgment"
+                                    prompt="你自己判斷是哪一型？為什麼？並用白話寫一句初稿（等一下要給 AI 翻譯用的）"
+                                    placeholder={"我判斷是 ___ 型，因為我最想知道的是…\n白話初稿：我想搞清楚…"}
+                                    scaffold={['我判斷是___型', '因為我最想知道的是「影響／差異／原因」', '白話初稿：我想搞清楚___']}
+                                    rows={3}
+                                />
+                            </div>
+
+                            {/* 拍 2：AI 放大鏡 */}
+                            <div>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
+                                    <strong className="text-[var(--ink)]">拍 2 · AI 放大鏡：</strong>把現象、落差、核心疑問（還有拍 1 的白話初稿）填進下方 Prompt，請 AI 幫你翻譯成 A / B / C 三種專業方向。
                                 </p>
 
                                 <div className="prompt-box mt-4">
@@ -425,19 +442,26 @@ export const ProblemFocus = () => {
                                         我最想搞清楚的核心疑問是：[你的白話疑問]<br /><br />
                                         請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：<br /><br />
                                         A. 影響型（某因素如何影響某結果）<br />
-                                        B. 比較型（兩種對象/情境的差異）<br />
-                                        C. 深究型（某現象的運作機制/背後原因）<br /><br />
+                                        B. 比較型（兩種對象／情境的差異）<br />
+                                        C. 深究型（某現象的運作機制／背後原因）<br /><br />
                                         每個方向請用一句話說明，並標註適合的研究方法。
                                     </div>
                                 </div>
                             </div>
 
+                            {/* 拍 3：人腦裁奪 */}
+                            <div>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
+                                    <strong className="text-[var(--ink)]">拍 3 · 人腦裁奪：</strong>AI 給了三個方向，現在比對你在拍 1 的自判——<strong className="text-[var(--ink)]">一致</strong>代表直覺準；<strong className="text-[var(--ink)]">不一致</strong>代表 AI 點出你沒想到的角度。選一個真正打動你的。
+                                </p>
+                            </div>
+
                             <ThinkRecord
-                                dataKey="w2-abc-judgment"
-                                prompt="你自己判斷是哪一型？為什麼？（在 AI 翻譯之前先填）"
-                                placeholder="我判斷是 ___ 型，因為我最想知道的是…"
-                                scaffold={['我判斷是___型', '因為我最想知道的是「影響/差異/原因」']}
-                                rows={2}
+                                dataKey="w2-ai-intent-choice"
+                                prompt="AI 給了 3 個方向（A／B／C），你最終選哪一個？為什麼？（如果都不對，寫「用我自己判斷的那型」）"
+                                placeholder="我選了 ___ 型，因為…"
+                                scaffold={['我選 ___ 型', '因為 AI 的說法讓我想到…／跟我拍 1 的自判一致／點出我沒想到的…', '這個方向最吸引我的地方是…']}
+                                rows={3}
                             />
 
                             <ThinkChoice
@@ -465,13 +489,13 @@ export const ProblemFocus = () => {
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 3 FINAL · 定案 + AI-RED</div>
                                 <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">選定你的研究方向</h3>
                                 <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
-                                    AI 給了三種方向，現在由你選一個——選擇的標準是：做得到、有興趣、方向清楚。選完記得填 AI-RED。
+                                    你在 Step 3 已經選定方向。現在把它改寫成完整的探究意圖句（主詞＋動詞＋對象），這是帶去 W3 的定稿版本。選完記得填 AI-RED。
                                 </p>
                             </div>
 
                             <ThinkRecord
                                 dataKey="w2-final-intent"
-                                prompt="你的最終探究意圖（寫完整句子，這是你帶去 W3 的版本）"
+                                prompt="把 Step 3 選的方向寫成完整句子（帶去 W3 的定稿版）"
                                 placeholder="我想探究「___」如何影響/比較/深究「___」…"
                                 scaffold={['我想探究「___」如何影響「___」', '我想比較「___」和「___」的差異', '我想深究「___」背後的原因']}
                                 rows={3}

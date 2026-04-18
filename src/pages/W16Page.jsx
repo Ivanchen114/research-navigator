@@ -2,7 +2,9 @@ import React, { useState, useCallback } from 'react';
 import CourseArc from '../components/ui/CourseArc';
 import './W16.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
@@ -110,6 +112,7 @@ const EXPORT_FIELDS = [
     { key: 'w16-poster-conclusion', label: '海報結論' },
     { key: 'w16-peer-memory', label: '同儕 3 秒記住的' },
     { key: 'w16-peer-reflect', label: '互評反思' },
+    { key: 'w16-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -572,6 +575,9 @@ const W16Page = () => {
                     </div>
 
                     <div style={{ marginTop: 20 }}>
+                                                {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                        <AIREDNarrative week="16" hint="這週用 AI 組裝研究報告" />
+
                         <ExportButton
                             weekLabel="W16 報告撰寫與海報製作"
                             fields={EXPORT_FIELDS}
@@ -585,27 +591,30 @@ const W16Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 分析與報告 / <span className="text-[var(--ink)] font-bold">報告與海報 W16</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 分析與報告 / </span><span className="text-[var(--ink)] font-bold">報告與海報 W16</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">📋 W16 · 分析與報告階段</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    報告撰寫與海報製作 · <span className="text-[var(--accent)] italic">從數據到故事</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    好消息：你已經寫完 80%。前 15 週每份學習單都藏著報告的原料，現在只需要「搬運 → 縫合 → 潤色」三步組裝。
-                </p>
-
-                <CourseArc items={[
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W16"
+                title="報告撰寫與海報製作 · "
+                accentTitle="從數據到故事"
+                subtitle="好消息：你已經寫完 80%。前 15 週每份學習單都藏著報告的原料，現在只需要「搬運 → 縫合 → 潤色」三步組裝。"
+                meta={[
+                    { label: '第一節', value: '七步組裝清單 + AI 組裝 Prompt + 人工校對' },
+                    { label: '第二節', value: '海報製作 + 發表預演 + 繳交報告' },
+                    { label: '課堂產出', value: '研究報告初稿 + A1 海報' },
+                    { label: '帶去 W17', value: '列印好的海報 + 報告定稿' },
+                ]}
+            />
+            <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
                     { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
                     { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
@@ -614,21 +623,6 @@ const W16Page = () => {
                     { wk: 'W13-W14', name: '數據轉譯\n圖表結論', past: true },
                     { wk: 'W15-W16', name: '成果簡報\n博覽發表', now: true },
                 ]} />
-
-                <div className="meta-grid">
-                    {[
-                        { label: '第一節', value: '七步組裝清單 + AI 組裝 Prompt + 人工校對' },
-                        { label: '第二節', value: '海報製作 + 發表預演 + 繳交報告定稿' },
-                        { label: '課堂產出', value: '研究報告初稿 + A1 海報' },
-                        { label: '帶去 W17', value: '列印好的海報 + 報告定稿' },
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
 
             {/* STEP ENGINE */}
             <StepEngine

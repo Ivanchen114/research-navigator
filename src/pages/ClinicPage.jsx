@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import './ClinicPage.css';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
@@ -239,6 +241,7 @@ const EXPORT_FIELDS = [
     { key: 'w7-reflect-confused', label: '反思：最易搞混的方法', question: '你最容易搞混的兩種方法是哪兩個？' },
     { key: 'w7-reflect-insight', label: '反思：新想法', question: '幫自己的題目掛號後，你對研究方向有什麼新的想法？' },
     { key: 'w7-reflect-literature', label: '反思：文獻法用途', question: '文獻法的三種用途中，你的題目有可能用到哪一種？' },
+    { key: 'w7-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -771,6 +774,9 @@ export const ClinicPage = () => {
                         </div>
                     </div>
 
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="7" hint="判斷研究方法時可能用 AI 測驗" optional={true} />
+
                     {/* 一鍵複製 */}
                     <ExportButton
                         weekLabel="W7 研究診所"
@@ -829,19 +835,19 @@ export const ClinicPage = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">研究診所 W7</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">研究診所 W7</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -851,17 +857,20 @@ export const ClinicPage = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🩺 W7 · 研究規劃</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    研究診所：<span className="text-[var(--accent)] italic">從掛號到判斷</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    你的題目適合用什麼方法？今天先認識五種方法，再用兩層判斷架構找出答案，最後用 AI 測驗驗收——結束前你要能說出：我的題目適合用___法，因為___。
-                </p>
-
-                <CourseArc items={[
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W7"
+                title="研究診所："
+                accentTitle="從掛號到判斷"
+                subtitle="你的題目適合用什麼方法？今天先認識五種方法，再用兩層判斷架構找出答案，最後用 AI 測驗驗收——結束前你要能說出：我的題目適合用 ___ 法，因為 ___。"
+                meta={[
+                    { label: '課堂節奏', value: '講義導覽 → AI 測驗 → 判斷題目' },
+                    { label: '時長', value: '50 MINS' },
+                    { label: '課堂產出', value: '為題目選定研究方法並說明理由' },
+                    { label: '帶去 W8', value: '確定題目 + 研究方法 + 準備組隊' },
+                ]}
+            />
+            <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
                     { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
                     { wk: 'W5', name: '文獻搜尋\n入門', status: 'past' },
@@ -871,32 +880,6 @@ export const ClinicPage = () => {
                     { wk: 'W8-W10', name: '工具設計\n倫理審查' },
                     { wk: 'W13-W16', name: '數據轉譯\n解讀發表' }
                 ]} />
-
-                <div className="meta-grid">
-                    {[
-                        { label: '課堂節奏', value: '講義導覽 → AI 測驗 → 判斷自己的題目' },
-                        { label: '課堂產出', value: '為自己的 W4 題目選定研究方法並說明理由' },
-                        { label: '帶去 W8', value: '確定題目 + 研究方法 + 準備組隊' },
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* 本週簡報 */}
-                <div className="flex justify-end mt-8 mb-2">
-                    <a
-                        href="https://canva.link/y2kbukwzlntkci4"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[var(--ink-light)] hover:text-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--paper-warm)] border border-[var(--border)] hover:border-[var(--ink)]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                    >
-                        📊 本週簡報 ↗
-                    </a>
-                </div>
-            </header>
 
             {/* STEP ENGINE */}
             <StepEngine

@@ -4,7 +4,9 @@ import CourseArc from '../components/ui/CourseArc';
 import { W13Data } from '../data/lessonMaps';
 import './W14.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
@@ -108,6 +110,7 @@ const EXPORT_FIELDS = [
     { key: 'w14-my-inference', label: '我的推論（紅筆）' },
     /* Step 5 */
     { key: 'w14-w15-preview', label: 'W15 預告：結論的第三層和第四層' },
+    { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -506,6 +509,9 @@ const W14Page = () => {
                         />
                     </div>
 
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="14" hint="選圖表、寫圖說可能用 AI 建議" optional={true} />
+
                     <ExportButton
                         weekLabel="W14 讓數據自己說話：圖表選擇與圖的說明"
                         fields={EXPORT_FIELDS}
@@ -518,37 +524,30 @@ const W14Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 分析與報告 / <span className="text-[var(--ink)] font-bold">圖表與圖說 W14</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 分析與報告 / </span><span className="text-[var(--ink)] font-bold">圖表與圖說 W14</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">📊 W14 · 分析與報告階段</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    讓數據自己說話 · <span className="text-[var(--accent)] italic">圖表選擇與圖的說明</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    頂級和牛用塑膠臉盆裝，客人還想吃嗎？選錯圖表，數據就無法說話。今天學會選對盤子、寫好圖說。
-                </p>
-
-                <CourseArc items={W13Data.courseArc} />
-
-                <div className="meta-grid">
-                    {W13Data.metaCards.map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W14"
+                title="讓數據自己說話 · "
+                accentTitle="圖表選擇與圖的說明"
+                subtitle="頂級和牛用塑膠臉盆裝，客人還想吃嗎？選錯圖表，數據就無法說話。今天學會選對盤子、寫好圖說。"
+                meta={[
+                    { label: '本週任務', value: '四大圖表判斷 + 三鐵規寫圖說' },
+                    { label: '時長', value: '100 MINS' },
+                    { label: '課堂產出', value: '各組實戰圖表 + 藍筆描述紅筆推論' },
+                    { label: '下週預告', value: 'W15 四層結論' },
+                ]}
+            />
+            <CourseArc items={W13Data.courseArc} />
 
             {/* STEP ENGINE */}
             <StepEngine

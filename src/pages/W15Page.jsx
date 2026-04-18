@@ -3,7 +3,9 @@ import CourseArc from '../components/ui/CourseArc';
 import { W14Data } from '../data/lessonMaps';
 import './W15.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
@@ -138,6 +140,7 @@ const EXPORT_FIELDS = [
     { key: 'w15-ai-helpful', label: 'AI 最有幫助的地方' },
     { key: 'w15-ai-limit', label: 'AI 最大的限制' },
     { key: 'w15-ai-blind-trust', label: '完全相信 AI 會犯的錯' },
+    { key: 'w15-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -411,6 +414,9 @@ const W15Page = () => {
                     <ThinkRecord dataKey="w15-ai-helpful" prompt="今天 AI 最有幫助的地方是什麼？" />
                     <ThinkRecord dataKey="w15-ai-limit" prompt="今天 AI 最大的限制是什麼？" />
                     <ThinkRecord dataKey="w15-ai-blind-trust" prompt="如果我完全相信 AI，我會犯什麼錯？" />
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="15" hint="這週用 AI 檢核四層結論" />
+
                     <ExportButton weekLabel="W15 從圖的說明到研究結論：四層次寫作工作坊" fields={EXPORT_FIELDS} />
                 </div>
             ),
@@ -420,37 +426,30 @@ const W15Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 分析與報告 / <span className="text-[var(--ink)] font-bold">研究結論 W15</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 分析與報告 / </span><span className="text-[var(--ink)] font-bold">研究結論 W15</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">📝 W15 · 分析與報告階段</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    四層結論 · <span className="text-[var(--accent)] italic">從圖的說明到研究結論</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    W14 的描述＋推論是「一張圖的說明」。今天升級：把整份研究的所有發現整合，用描述、詮釋、回扣、批判四層寫出完整研究結論。
-                </p>
-
-                <CourseArc items={W14Data.courseArc} />
-
-                <div className="meta-grid">
-                    {W14Data.metaCards.map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W15"
+                title="四層結論 · "
+                accentTitle="從圖的說明到研究結論"
+                subtitle="W14 的描述＋推論是「一張圖的說明」。今天升級：把整份研究的所有發現整合，用描述、詮釋、回扣、批判四層寫出完整研究結論。"
+                meta={[
+                    { label: '本週任務', value: '四層結論寫作 + AI 檢核 + 人工裁奪' },
+                    { label: '時長', value: '100 MINS' },
+                    { label: '課堂產出', value: '研究結論定稿 + 章節對應' },
+                    { label: '下週預告', value: 'W16 報告與海報' },
+                ]}
+            />
+            <CourseArc items={W14Data.courseArc} />
 
             {/* STEP ENGINE */}
             <StepEngine

@@ -2,7 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import CourseArc from '../components/ui/CourseArc';
 import './W11.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
@@ -104,6 +106,7 @@ const EXPORT_FIELDS = [
     { key: 'w11-plan-backup', label: '應急備案' },
     /* Step 5 */
     { key: 'w11-launch', label: '施測啟動宣告' },
+    { key: 'w11-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -436,6 +439,9 @@ export const W11Page = () => {
                         rows={8}
                     />
 
+                    {/* AIRED 敘事版 · 本週 AI 互動總結 */}
+                    <AIREDNarrative week="11" hint="這週你用 AI 審查知情同意書或備案具體性" />
+
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -501,27 +507,30 @@ export const W11Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 資料蒐集 / <span className="text-[var(--ink)] font-bold">倫理審查 W11</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">倫理審查 W11</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
                 </div>
             </div>
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">⚖️ W11 · 設計階段 → 執行階段轉折點</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    工具定案 · <span className="text-[var(--accent)] italic">倫理審查 · 施測啟動</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    整個「設計階段」的總結，也是「執行階段」的正式開門。今天做三件事：繳交工具定稿、通過倫理審查、正式宣告開始施測。
-                </p>
-
-                <CourseArc items={[
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W11"
+                title="工具定案 · "
+                accentTitle="倫理審查 · 施測啟動"
+                subtitle="整個「設計階段」的總結，也是「執行階段」的正式開門。今天做三件事：繳交工具定稿、通過倫理審查、正式宣告開始施測。"
+                meta={[
+                    { label: '第一節', value: '工具定稿 + 倫理四問自查 + 知情同意書審查' },
+                    { label: '第二節', value: '研究執行計畫書 + 教師蓋章 + 施測啟動' },
+                    { label: '課堂產出', value: '工具定稿 + 倫理審查表 + 執行計畫書' },
+                    { label: '前置要求', value: 'W10 修正完畢的工具' },
+                ]}
+            />
+            <CourseArc items={[
                     { wk: 'W1-W4', name: '探索\n定題', status: 'past' },
                     { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
                     { wk: 'W7-W8', name: '方法選擇\n組隊企劃', status: 'past' },
@@ -530,21 +539,6 @@ export const W11Page = () => {
                     { wk: 'W12-W13', name: '執行研究\n蒐集資料', status: '' },
                     { wk: 'W14-W17', name: '分析報告\n發表', status: '' },
                 ]} />
-
-                <div className="meta-grid">
-                    {[
-                        { label: '第一節', value: '工具定稿確認 + 倫理四問自查 + AI 知情同意書審查' },
-                        { label: '第二節', value: '研究執行計畫書 + 教師走動蓋章 + 施測啟動宣告' },
-                        { label: '課堂產出', value: '工具定稿 + 倫理審查表 + 執行計畫書 + 啟動宣告' },
-                        { label: '前置要求', value: 'W10 修正完畢的工具' },
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
 
             {/* STEP ENGINE */}
             <StepEngine

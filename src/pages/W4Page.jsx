@@ -3,6 +3,7 @@ import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import CopyButton from '../components/ui/CopyButton';
 import { readRecords } from '../components/ui/ThinkRecord';
@@ -624,19 +625,19 @@ export const W4Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">題目博覽會 W4</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">題目博覽會 W4</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -646,31 +647,20 @@ export const W4Page = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header>
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🎯 W4 · 研究規劃</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    題目定案：<span className="text-[var(--accent)] italic">規格化 → 海報 → 壓力測試</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-10">
-                    先用 5W1H 把模糊的題目切成可執行的規格，讓 AI 包裝成學術標題，做海報公開展示，再接受同學的 Gallery Walk 壓力測試。撐過去了才是真正定案。
-                </p>
-                <CourseArc items={W4Data.courseArc} />
-            </header>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {(W4Data.metaCards || [
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W4"
+                title="題目定案："
+                accentTitle="規格化 → 海報 → 壓力測試"
+                subtitle="先用 5W1H 把模糊的題目切成可執行的規格，讓 AI 包裝成學術標題，做海報公開展示，再接受同學的 Gallery Walk 壓力測試。撐過去了才是真正定案。"
+                meta={[
                     { label: '本週任務', value: '5W1H 規格化 + 海報 + Gallery Walk' },
-                    { label: '課堂產出', value: 'W4 最終定案題目 + 研究動機' },
+                    { label: '時長', value: '100 MINS' },
+                    { label: '課堂產出', value: '最終定案題目 + 研究動機' },
                     { label: '下週預告', value: 'W5 文獻搜尋' },
-                ]).map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
-                    </div>
-                ))}
-            </div>
+                ]}
+            />
+            <CourseArc items={W4Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">

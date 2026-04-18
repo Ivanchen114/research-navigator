@@ -2,8 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import CopyButton from '../components/ui/CopyButton';
 import {
@@ -104,6 +106,7 @@ const EXPORT_FIELDS = [
     { key: 'w3-drill-group', label: '小組診斷', question: '小組選了哪一題？一起怎麼改的？' },
     { key: 'w3-ai-collab-compare', label: 'AI 協作練手：比對差異', question: '你的診斷 vs AI 的診斷，哪裡不同？' },
     { key: 'w3-ai-collab-choose', label: 'AI 協作練手：選擇理由', question: 'AI 給了 3 個改法，你選了哪個？為什麼？' },
+    { key: 'w3-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ── 主組件 ── */
@@ -620,6 +623,9 @@ export const Wizard = () => {
                                     scaffold={['AI 的三個改法分別是…', '我選了第…個', '理由是這個最…']}
                                     rows={4}
                                 />
+
+                                {/* AIRED 敘事版 · 本週 AI 互動總結 */}
+                                <AIREDNarrative week="3" hint="這週你用 AI 做題目診斷與改法" />
                             </div>
                         </div>
                     </div>
@@ -701,19 +707,19 @@ export const Wizard = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">題目健檢 W3</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">題目健檢 W3</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -723,31 +729,20 @@ export const Wizard = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header>
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🏥 W3 · 研究規劃</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    題目健檢：<span className="text-[var(--accent)] italic">碰壁→診斷→救活</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-10">
-                    好的研究不是「想出來」的，是「磨出來」的。今天先感受碰壁的真實感，學會診斷 8 種題目病症，再用 AI 協作練手。下週才進入你自己的題目定案。
-                </p>
-                <CourseArc items={W3Data.courseArc} />
-            </header>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {[
-                    { label: '本週任務', value: '8種病症 + 配對診斷 + AI協作練手' },
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W3"
+                title="題目健檢："
+                accentTitle="碰壁→診斷→救活"
+                subtitle="好的研究不是「想出來」的，是「磨出來」的。今天先感受碰壁的真實感，學會診斷 8 種題目病症，再用 AI 協作練手。下週才進入你自己的題目定案。"
+                meta={[
+                    { label: '本週任務', value: '8 種病症 + 配對診斷 + AI 協作練手' },
+                    { label: '時長', value: '100 MINS' },
                     { label: '課堂產出', value: 'AI 協作診斷紀錄 + AI-RED' },
                     { label: '下週預告', value: '5W1H 定案 + Gallery Walk' },
-                ].map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
-                    </div>
-                ))}
-            </div>
+                ]}
+            />
+            <CourseArc items={W3Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">

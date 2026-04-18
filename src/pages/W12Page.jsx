@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
+import HeroBlock from '../components/ui/HeroBlock';
 import './W12.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
@@ -119,6 +121,7 @@ const EXPORT_FIELDS = [
     { key: 'w12-midterm-status', label: 'W13 中期報告：現況' },
     { key: 'w12-midterm-gap', label: 'W13 中期報告：缺口' },
     { key: 'w12-midterm-plan', label: 'W13 中期報告：計畫' },
+    { key: 'w12-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -194,27 +197,30 @@ const W12Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 執行蒐集 / <span className="text-[var(--ink)] font-bold">研究診所 W12</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 執行蒐集 / </span><span className="text-[var(--ink)] font-bold">研究診所 W12</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🏥 W12 · 執行蒐集階段</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    研究診所 Open Office · <span className="text-[var(--accent)] italic">自由工作時間</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    這堂課沒有老師台上講課。整堂課是自由工作時間＋個別診所。核心任務只有一個：把資料蒐集回來。
-                </p>
-
-                <CourseArc items={[
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W12"
+                title="研究診所 Open Office · "
+                accentTitle="自由工作時間"
+                subtitle="這堂課沒有老師台上講課。整堂課是自由工作時間＋個別診所。核心任務只有一個：把資料蒐集回來。"
+                meta={[
+                    { label: '第一節', value: '自由工作時間 + 個別診所掛號' },
+                    { label: '第二節', value: '研究日誌 + W13 中期報告預備' },
+                    { label: '課堂產出', value: '研究日誌 ×3 + 中期報告草稿' },
+                    { label: '前置要求', value: 'W11 工具已設計 + 資料蒐集進行中' },
+                ]}
+            />
+            <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
                     { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
                     { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
@@ -223,21 +229,6 @@ const W12Page = () => {
                     { wk: 'W13-W14', name: '數據轉譯\n圖表結論' },
                     { wk: 'W15-W16', name: '成果簡報\n博覽發表' },
                 ]} />
-
-                <div className="meta-grid">
-                    {[
-                        { label: '第一節', value: '自由工作時間 + 個別診所掛號' },
-                        { label: '第二節', value: '研究日誌 + W13 中期報告預備' },
-                        { label: '課堂產出', value: '研究日誌 ×3 + 中期報告草稿' },
-                        { label: '前置要求', value: 'W11 工具已設計 + 資料蒐集進行中' },
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
 
             {/* ═══ SCROLLING CONTENT ═══ */}
             <div className="mx-auto" style={{ maxWidth: 720 }}>
@@ -400,6 +391,9 @@ const W12Page = () => {
 
             {/* ── 匯出 ── */}
             <div className="mt-6">
+                                {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                <AIREDNarrative week="12" hint="資料蒐集遇到困難可能問 AI" optional={true} />
+
                 <ExportButton
                     weekLabel="W12 執行週 I：研究診所 Open Office"
                     fields={EXPORT_FIELDS}

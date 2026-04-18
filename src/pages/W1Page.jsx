@@ -2,8 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import {
     CheckCircle2,
@@ -43,6 +45,7 @@ const EXPORT_FIELDS = [
     { key: 'w1-aired-hard', label: 'AI-RED 最難遵守的一條', question: 'AI-RED 五個步驟裡，你覺得哪一個最難遵守？為什麼？' },
     { key: 'w1-human-ai-observe', label: '人機協作觀察筆記', question: '觀察老師示範後，哪些步驟是人做的？哪些是 AI 做的？' },
     { key: 'w1-self-expect', label: '對自己的期許', question: '經過今天的課，你對這學期的自己有什麼期許？' },
+    { key: 'w1-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ── 主組件 ── */
@@ -84,19 +87,20 @@ export const W1Page = () => {
         <div className="page-container animate-in-fade-slide">
 
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 識能探索 / <span className="text-[#1a1a2e] font-bold">模仿遊戲 W1</span>
+            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 識能探索 / </span>
+                    <span className="text-[#1a1a2e] font-bold truncate">模仿遊戲 W1</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -106,27 +110,20 @@ export const W1Page = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header>
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🎭 W1 · 啟動課程</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
-                    模仿遊戲：<span className="text-[#2d5be3] italic">我寫→我猜→我怕→我簽</span>
-                </h1>
-                <p className="text-[15px] text-[#4a4a6a] max-w-[600px] leading-[1.75] mb-8">
-                    AI 已經強大到讓你分不清楚了。所以「誠實」變成唯一的防線——今天你要親手簽下這個承諾。
-                </p>
-                <CourseArc items={W1Data.courseArc} />
-            </header>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {W1Data.metaCards.map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
-                    </div>
-                ))}
-            </div>
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W1"
+                title="模仿遊戲："
+                accentTitle="我寫→我猜→我怕→我簽"
+                subtitle="AI 已經強大到讓你分不清楚了。所以「誠實」變成唯一的防線——今天你要親手簽下這個承諾。"
+                meta={[
+                    { label: '本週任務', value: '找出偽裝者 + 簽署公約' },
+                    { label: '時長', value: '100 MINS' },
+                    { label: '課堂產出', value: '好奇心種子' },
+                    { label: '下週預告', value: '你觀察到的生活現象' },
+                ]}
+            />
+            <CourseArc items={W1Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">
@@ -460,6 +457,9 @@ export const W1Page = () => {
                                     ))}
                                 </div>
                             </div>
+
+                                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                            <AIREDNarrative week="1" hint="這週你和 AI 玩模仿遊戲" />
 
                             {/* 一鍵複製 */}
                             <ExportButton

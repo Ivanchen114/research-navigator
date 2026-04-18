@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './TeamFormation.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
@@ -102,6 +104,7 @@ const EXPORT_FIELDS = [
     { key: 'w8-draft-q2', label: '草稿題目 2' },
     { key: 'w8-draft-q3', label: '草稿題目 3' },
     { key: 'w8-draft-check', label: '自我檢核', question: '這 3 題和研究問題有關嗎？覺得怪怪的地方？' },
+    { key: 'w8-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -489,6 +492,9 @@ export const TeamFormation = () => {
                         </div>
                     </div>
 
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="8" hint="合題、寫企劃書可能用 AI 協助" optional={true} />
+
                     {/* 一鍵複製 */}
                     <ExportButton
                         weekLabel="W8 研究博覽會"
@@ -535,19 +541,19 @@ export const TeamFormation = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">研究博覽會 W8</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">研究博覽會 W8</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -557,18 +563,20 @@ export const TeamFormation = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header className="max-w-[800px] mb-16">
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🔭 W8 · 研究規劃 → 裝備執行</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    研究博覽會：<span className="text-[var(--accent)] italic">組隊 × 合題 × 企劃書</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
-                    今天是課程的轉折點——從一個人的研究，變成一個團隊的研究。
-                    找到隊友、把題目合併、寫出一份研究企劃書，然後預寫 3 題工具草稿帶去 W9 診所。
-                </p>
-
-                <CourseArc items={[
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W8"
+                title="研究博覽會："
+                accentTitle="組隊 × 合題 × 企劃書"
+                subtitle="今天是課程的轉折點——從一個人的研究，變成一個團隊的研究。找到隊友、把題目合併、寫出一份研究企劃書，然後預寫 3 題工具草稿帶去 W9 診所。"
+                meta={[
+                    { label: '第一節', value: '線上測驗 + 博覽會展示 + 聆聽紀錄' },
+                    { label: '第二節', value: '合題討論 + 企劃書 + 3 題草稿' },
+                    { label: '課堂產出', value: '分組名單 + 企劃書 + 3 題草稿' },
+                    { label: '帶去 W9', value: '3 題草稿問題（你的掛號單）' },
+                ]}
+            />
+            <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
                     { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
                     { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
@@ -578,21 +586,6 @@ export const TeamFormation = () => {
                     { wk: 'W11-W14', name: '執行研究\n數據分析' },
                     { wk: 'W15-W16', name: '簡報製作\n發表呈現' }
                 ]} />
-
-                <div className="meta-grid">
-                    {[
-                        { label: '第一節', value: '線上測驗 + 博覽會展示 + 聆聽紀錄' },
-                        { label: '第二節', value: '合題討論 + 企劃書 + 3 題工具草稿' },
-                        { label: '課堂產出', value: '分組名單 + 企劃書 + 3 題草稿' },
-                        { label: '帶去 W9', value: '3 題草稿問題（你的掛號單）' },
-                    ].map((item, idx) => (
-                        <div key={idx} className="meta-item">
-                            <div className="meta-label">{item.label}</div>
-                            <div className="meta-value">{item.value}</div>
-                        </div>
-                    ))}
-                </div>
-            </header>
 
             {/* STEP ENGINE */}
             <StepEngine

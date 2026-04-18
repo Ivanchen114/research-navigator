@@ -2,8 +2,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
@@ -140,6 +142,7 @@ const EXPORT_FIELDS = [
     { key: 'w6-sandwich-analysis', label: '三明治：分析句', question: '第 3 層分析句——這個證據說明了什麼？跟你的研究有什麼關係？' },
     { key: 'w6-lit-review', label: '文獻探討段落（演練3）', question: '用三篇文獻寫出至少 5 句的文獻探討，最後一句連回你的研究題目' },
     { key: 'w6-peer-review', label: '同儕幫我審查的結果', question: '同儕幫你審查演練 3 後，給了什麼具體建議？你根據建議修改了什麼？' },
+    { key: 'w6-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -673,6 +676,9 @@ export const LiteratureReview = () => {
                         </div>
                     </div>
 
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="6" hint="寫文獻探討可能用 AI 幫忙潤稿" optional={true} />
+
                     {/* 一鍵複製 */}
                     <ExportButton
                         weekLabel="W6 文獻偵探社"
@@ -719,19 +725,19 @@ export const LiteratureReview = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">文獻偵探社 W6</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">文獻偵探社 W6</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · A</span>
+                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · A</span>
                 </div>
             </div>
 
@@ -741,31 +747,20 @@ export const LiteratureReview = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header>
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">🕵️ W6 · 研究規劃</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    文獻偵探社：<span className="text-[var(--accent)] italic">識破假改寫，寫出真文獻</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-10">
-                    偵探社的工作只有一件事——找出文獻裡的問題，然後寫出一份任何人都挑不出毛病的文獻探討。今天要學會識破兩種常見犯罪手法——<strong>換字抄襲</strong>與<strong>文獻堆砌</strong>——並親手寫出合格的文獻探討段落。
-                </p>
-                <CourseArc items={W5Data.courseArc} />
-            </header>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {[
-                    { label: '本週任務', value: '觀念3招 + 改寫偵錯 + 三明治 + 文獻探討寫作' },
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W6"
+                title="文獻偵探社："
+                accentTitle="識破假改寫，寫出真文獻"
+                subtitle="偵探社的工作只有一件事——找出文獻裡的問題，然後寫出一份任何人都挑不出毛病的文獻探討。今天要學會識破兩種常見犯罪手法：換字抄襲與文獻堆砌，並親手寫出合格的文獻探討段落。"
+                meta={[
+                    { label: '本週任務', value: '觀念 3 招 + 改寫偵錯 + 三明治' },
+                    { label: '時長', value: '100 MINS' },
                     { label: '課堂產出', value: '演練 1-3 + 同儕會診後修改稿' },
                     { label: '下週預告', value: 'W7 研究診所：掛號分流' },
-                ].map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
-                    </div>
-                ))}
-            </div>
+                ]}
+            />
+            <CourseArc items={W5Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">

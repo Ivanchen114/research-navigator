@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { Footer } from '../components/Footer';
 
 export const Layout = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return localStorage.getItem('researchNavigator_sidebarCollapsed') === '1';
+    });
     const [maxWeek, setMaxWeek] = useState(0);
     const location = useLocation();
 
     const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+    const toggleDesktopSidebar = () => {
+        setIsDesktopCollapsed(prev => {
+            const next = !prev;
+            localStorage.setItem('researchNavigator_sidebarCollapsed', next ? '1' : '0');
+            return next;
+        });
+    };
 
     // Scroll to top on route change (handles all pagination Link clicks)
     useEffect(() => {
@@ -170,20 +181,31 @@ export const Layout = () => {
 
             {/* SIDEBAR */}
             <aside
-                className={`fixed top-0 left-0 z-50 w-[240px] h-screen bg-white border-r border-[#dddbd5] flex flex-col transform transition-transform duration-300 ease-in-out md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-                    }`}
+                className={`fixed top-0 left-0 z-50 w-[240px] h-screen bg-white border-r border-[#dddbd5] flex flex-col transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                    } ${isDesktopCollapsed ? 'md:-translate-x-full' : 'md:translate-x-0'}`}
             >
                 {/* Brand Header */}
-                <div className="p-[24px_20px_20px] border-b border-[#dddbd5]">
-                    <div className="flex items-center gap-[10px] mb-1">
-                        <img src="/songshan-logo.svg" alt="松山高中" className="w-8 h-8 bg-white border border-[#dddbd5] rounded-lg p-0.5" />
-                        <div className="font-['Noto_Serif_TC',serif] font-bold text-[15px] text-[#1a1a2e]">
-                            研究方法與專題
+                <div className="p-[24px_20px_20px] border-b border-[#dddbd5] flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-[10px] mb-1">
+                            <img src="/songshan-logo.svg" alt="松山高中" className="w-8 h-8 bg-white border border-[#dddbd5] rounded-lg p-0.5 shrink-0" />
+                            <div className="font-['Noto_Serif_TC',serif] font-bold text-[15px] text-[#1a1a2e] truncate">
+                                研究方法與專題
+                            </div>
+                        </div>
+                        <div className="text-[11px] text-[#8888aa] tracking-[0.05em] ml-[42px]">
+                            松山高中 SSSH
                         </div>
                     </div>
-                    <div className="text-[11px] text-[#8888aa] tracking-[0.05em] ml-[42px]">
-                        松山高中 SSSH
-                    </div>
+                    {/* 桌面版收合按鈕 */}
+                    <button
+                        onClick={toggleDesktopSidebar}
+                        className="hidden md:flex shrink-0 w-7 h-7 items-center justify-center rounded-[6px] text-[#8888aa] hover:bg-[#f8f7f4] hover:text-[#1a1a2e] transition-colors"
+                        title="收合側邊欄"
+                        aria-label="收合側邊欄"
+                    >
+                        <PanelLeftClose size={16} />
+                    </button>
                 </div>
 
                 {/* Navigation Links */}
@@ -267,8 +289,20 @@ export const Layout = () => {
                 </div>
             </aside>
 
+            {/* 桌面版浮動展開按鈕（僅於收合時顯示） */}
+            {isDesktopCollapsed && (
+                <button
+                    onClick={toggleDesktopSidebar}
+                    className="hidden md:flex fixed top-4 left-4 z-40 w-10 h-10 items-center justify-center rounded-[8px] bg-white border border-[#dddbd5] text-[#4a4a6a] hover:text-[#1a1a2e] hover:border-[#2d5be3] hover:shadow-md transition-all"
+                    title="展開側邊欄"
+                    aria-label="展開側邊欄"
+                >
+                    <PanelLeftOpen size={18} />
+                </button>
+            )}
+
             {/* MAIN CONTENT AREA */}
-            <div className="flex flex-col flex-1 w-full min-w-0 md:ml-[240px]">
+            <div className={`flex flex-col flex-1 w-full min-w-0 transition-[margin] duration-300 ease-in-out ${isDesktopCollapsed ? 'md:ml-0' : 'md:ml-[240px]'}`}>
                 {/* Mobile Header */}
                 <div className="md:hidden bg-white border-b border-[#dddbd5] p-3 flex justify-between items-center z-20 sticky top-0">
                     <div className="flex items-center gap-2">

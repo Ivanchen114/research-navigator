@@ -2,8 +2,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
@@ -84,6 +86,7 @@ const EXPORT_FIELDS = [
     { key: 'w5-forensic-d', label: '證物 D 鑑識', question: '證物 D 你判定什麼等級？理由和查核路徑是？' },
     { key: 'w5-forensic-e', label: '證物 E 鑑識', question: '證物 E 你判定什麼等級？理由和查核路徑是？' },
     { key: 'w5-hardest', label: '小組總結：最難判斷的證物', question: '你們組覺得最難判斷的是哪一張？為什麼？' },
+    { key: 'w5-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ── 主組件 ── */
@@ -533,6 +536,9 @@ export const W50Page = () => {
                         </div>
                     </div>
 
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="5" hint="華藝搜尋可能遇到 AI 輔助" optional={true} />
+
                     {/* 一鍵複製 */}
                     <ExportButton
                         weekLabel="W5 文獻搜尋入門"
@@ -579,17 +585,17 @@ export const W50Page = () => {
     return (
         <div className="page-container animate-in-fade-slide">
             {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
-                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
-                    研究方法與專題 / 研究規劃 / <span className="text-[var(--ink)] font-bold">文獻搜尋入門 W5</span>
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">文獻搜尋入門 W5</span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> {showLessonMap ? 'Hide Plan' : 'Instructor View'}
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
                     <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-GREEN · B</span>
                 </div>
@@ -601,31 +607,20 @@ export const W50Page = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header>
-                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">📚 W5 · 研究規劃</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
-                    文獻搜尋入門：<span className="text-[var(--accent)] italic">找對資料，打好地基</span>
-                </h1>
-                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-10">
-                    W4 完成了題目定案。現在往前走一步：為你的研究找到文獻基礎。這週不用 AI——靠自己在華藝搜尋、練 APA 格式，最後進行證物鑑識大賽，學會辨別文獻真偽。
-                </p>
-                <CourseArc items={W50Data.courseArc} />
-            </header>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {[
-                    { label: '本週任務', value: '華藝搜尋 + APA 格式 + 證物鑑識大賽' },
-                    { label: '課堂產出', value: '1 篇 A/B 級文獻 + APA 書目 + 鑑識紀錄' },
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W5"
+                title="文獻搜尋入門："
+                accentTitle="找對資料，打好地基"
+                subtitle="W4 完成了題目定案。現在往前走一步：為你的研究找到文獻基礎。這週不用 AI——靠自己在華藝搜尋、練 APA 格式，最後進行證物鑑識大賽，學會辨別文獻真偽。"
+                meta={[
+                    { label: '本週任務', value: '華藝搜尋 + APA 格式 + 證物鑑識' },
+                    { label: '時長', value: '100 MINS' },
+                    { label: '課堂產出', value: 'A/B 級文獻 + APA 書目 + 鑑識紀錄' },
                     { label: '下週預告', value: 'W6 文獻偵探社' },
-                ].map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
-                    </div>
-                ))}
-            </div>
+                ]}
+            />
+            <CourseArc items={W50Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">
