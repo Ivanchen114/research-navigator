@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import { W14Data } from '../data/lessonMaps';
 import './W15.css';
@@ -17,6 +18,8 @@ import {
     PenTool,
     Scale,
     FileText,
+    ArrowRight,
+    ShieldAlert,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -418,6 +421,20 @@ const W15Page = () => {
                     <AIREDNarrative week="15" hint="這週用 AI 檢核四層結論" />
 
                     <ExportButton weekLabel="W15 從圖的說明到研究結論：四層次寫作工作坊" fields={EXPORT_FIELDS} />
+
+                    {/* 遊戲彩蛋 */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
+                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                            <ShieldAlert className="text-[var(--danger)]" size={20} />
+                            R.I.B. 單元挑戰：行動代號濾鏡
+                        </h3>
+                        <p className="text-[var(--ink-light)] text-sm mb-4">
+                            資料裁奪能力——面對可疑數據或結論，你能挑出真正該採納的那一份嗎？
+                        </p>
+                        <Link to="/game/data-detective" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
+                            進入濾鏡 <ArrowRight size={14} />
+                        </Link>
+                    </div>
                 </div>
             ),
         },

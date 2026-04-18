@@ -502,20 +502,6 @@ export const TeamFormation = () => {
                         choices={choiceResults}
                     />
 
-                    {/* 遊戲彩蛋 */}
-                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
-                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                            <ShieldAlert className="text-[var(--danger)]" size={20} />
-                            R.I.B. 單元挑戰：行動代號解碼
-                        </h3>
-                        <p className="text-[var(--ink-light)] text-sm mb-4">
-                            研究圖表解讀能力——你能從圖表中正確判讀研究發現嗎？
-                        </p>
-                        <Link to="/game/chart-matcher" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
-                            進入解碼 <ArrowRight size={14} />
-                        </Link>
-                    </div>
-
                     {/* 下週預告 */}
                     <div className="next-week-preview">
                         <div className="next-week-header">

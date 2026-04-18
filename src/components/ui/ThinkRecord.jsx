@@ -37,13 +37,12 @@ export default function ThinkRecord({
   const [status, setStatus] = useState('idle'); // idle | typing | saved | restored
   const timerRef = useRef(null);
 
-  // 初始載入已存內容
+  // 載入對應 dataKey 的內容——**必須**在 dataKey 切換時重置，否則 React 重用 instance（例如 StepEngine 切 tab）會讓舊內容污染新格子
   useEffect(() => {
     const records = readRecords();
-    if (records[dataKey]) {
-      setValue(records[dataKey]);
-      setStatus('restored');
-    }
+    const stored = records[dataKey];
+    setValue(stored || '');
+    setStatus(stored ? 'restored' : 'idle');
   }, [dataKey]);
 
   const handleChange = useCallback((e) => {
@@ -81,34 +80,44 @@ export default function ThinkRecord({
   };
 
   return (
-    <div className={`think-record-wrap ${className}`}>
-      {prompt && (
-        <div className="flex items-start gap-2 mb-2">
-          <span className="text-[14px]">✏️</span>
-          <p className="text-[14px] font-bold text-[var(--ink)] leading-relaxed">{prompt}</p>
-        </div>
-      )}
+    <div className={`think-record-wrap border-l-4 border-[var(--accent)] bg-white pl-4 pr-3 py-3 rounded-r-[8px] shadow-[0_1px_0_var(--border)] ${className}`}>
+      {/* 「要你填」徽章——一眼辨識這格是輸入框 */}
+      <div className="flex items-center gap-2 mb-2 flex-wrap">
+        <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[2px] tracking-wider">
+          ✍️ 輪到你填
+        </span>
+        {prompt && (
+          <p className="text-[14px] font-bold text-[var(--ink)] leading-relaxed m-0">{prompt}</p>
+        )}
+      </div>
 
       {scaffold && scaffold.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          {scaffold.map((hint, i) => (
-            <span
-              key={i}
-              className="inline-block text-[11px] px-2.5 py-1 rounded-full bg-[var(--accent-light)] text-[var(--accent)] border border-[var(--accent)]/15 font-mono cursor-default"
-            >
-              {hint}
-            </span>
-          ))}
+        <div className="mb-2">
+          <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-1">
+            💡 提示句型（參考用，不是要按的按鈕）
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {scaffold.map((hint, i) => (
+              <span
+                key={i}
+                className="inline-block text-[11px] px-2.5 py-1 rounded-full bg-[var(--paper-warm)] text-[var(--ink-light)] border border-dashed border-[var(--border)] font-mono cursor-default italic"
+              >
+                {hint}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 
       <textarea
+        name={dataKey}
+        autoComplete="off"
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
         placeholder={placeholder}
         rows={rows}
-        className="w-full px-4 py-3 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white text-[14px] leading-relaxed text-[var(--ink)] placeholder:text-[var(--ink-light)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all resize-y"
+        className="w-full px-4 py-3 rounded-[var(--radius-unified)] border-2 border-[var(--accent)]/30 bg-[var(--accent-light)]/20 text-[14px] leading-relaxed text-[var(--ink)] placeholder:text-[var(--ink-light)] focus:outline-none focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/15 transition-all resize-y"
       />
 
       <div className={`text-[11px] font-mono mt-1.5 h-4 transition-colors ${statusColor[status]}`}>

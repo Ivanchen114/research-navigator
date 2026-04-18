@@ -69,6 +69,85 @@ const EVIDENCE_CARDS = [
     },
 ];
 
+const HUAYI_STEPS = [
+    { n: '1', t: '列出關鍵字', d: '從題目中找 2-3 個核心名詞。例如：手機使用、睡眠品質、高中生。不要直接貼整個題目進去搜——搜不到東西。' },
+    { n: '2', t: '搜尋', d: '輸入關鍵字，先看搜到幾篇。太多？加限制條件。太少？換同義詞（如「手機」→「智慧型手機」→「行動裝置」）。' },
+    { n: '3', t: '加限制條件', d: '地區選台灣、時間選近五年、文件類型選碩博士論文。太舊的研究可能過時，碩博士論文有完整方法可參考。' },
+    { n: '4', t: '看標題 → 摘要 → 全文', d: '先看標題確認相關，再看摘要最後一段「本研究發現…」，確認跟你的題目有交集，再下載全文。' },
+];
+
+/* 華藝教學——漸進式揭露：預設第 1 步展開，其餘灰階待點擊 */
+function HuayiSearchTutorial() {
+    const [revealed, setRevealed] = useState(() => new Set([0]));
+    const toggle = (i) => {
+        setRevealed(prev => {
+            const next = new Set(prev);
+            if (next.has(i)) next.delete(i);
+            else next.add(i);
+            return next;
+        });
+    };
+    const revealAll = () => setRevealed(new Set(HUAYI_STEPS.map((_, i) => i)));
+
+    return (
+        <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white">
+            <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-3 flex-wrap">
+                <Search size={15} className="text-[var(--ink)]" />
+                <span className="font-bold text-[13px] text-[var(--ink)]">以「本校高一生手機使用與睡眠品質的關係」為範例</span>
+                <button
+                    type="button"
+                    onClick={revealAll}
+                    className="ml-auto text-[11px] font-mono text-[var(--ink-light)] hover:text-[var(--accent)] underline-offset-2 hover:underline transition-colors"
+                >
+                    全部展開 ▾
+                </button>
+            </div>
+            <div className="p-5 space-y-3">
+                {HUAYI_STEPS.map((step, i) => {
+                    const isOpen = revealed.has(i);
+                    return (
+                        <button
+                            type="button"
+                            key={step.n}
+                            onClick={() => toggle(i)}
+                            className={`w-full flex gap-4 text-left rounded-[8px] px-3 py-3 -mx-3 transition-all ${
+                                isOpen
+                                    ? 'bg-transparent'
+                                    : 'bg-[var(--paper-warm)]/50 hover:bg-[var(--accent-light)]/40 cursor-pointer'
+                            }`}
+                        >
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono font-bold text-[13px] flex-shrink-0 transition-all ${
+                                isOpen
+                                    ? 'bg-[var(--accent-light)] text-[var(--accent)]'
+                                    : 'bg-[var(--border)] text-[var(--ink-light)]'
+                            }`}>
+                                {step.n}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className={`flex items-center gap-2 font-bold text-[13px] mb-1 transition-colors ${
+                                    isOpen ? 'text-[var(--ink)]' : 'text-[var(--ink-light)]'
+                                }`}>
+                                    <span>{step.t}</span>
+                                    {!isOpen && (
+                                        <span className="text-[10px] font-mono font-normal text-[var(--ink-light)]/70 tracking-wider">
+                                            點我展開 ▸
+                                        </span>
+                                    )}
+                                </div>
+                                {isOpen && (
+                                    <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                        {step.d}
+                                    </div>
+                                )}
+                            </div>
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 const APA_FORMATS = [
     { type: '碩博士論文', template: '作者（出版年）。篇名。學校研究所所名：碩（博）士論文。', example: '鄒慧英（1989）。高中男女分校與其學校性別角色、成就動機之關係。國立高雄師範大學教育研究所：碩士論文。' },
     { type: '期刊論文', template: '作者（出版年）。論文篇名。期刊名，卷（期），起訖頁碼。', example: '林生傳（1994）。實習教師的困擾問題與輔導之研究。教育學刊，10，33-103。' },
@@ -243,28 +322,7 @@ export const W50Page = () => {
                     <div>
                         <div className="section-head"><h2>華藝資料庫搜尋步驟</h2><div className="line"></div><span className="mono">TUTORIAL</span></div>
 
-                        <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white">
-                            <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-3">
-                                <Search size={15} className="text-[var(--ink)]" />
-                                <span className="font-bold text-[13px] text-[var(--ink)]">以「本校高一生手機使用與睡眠品質的關係」為範例</span>
-                            </div>
-                            <div className="p-5 space-y-4">
-                                {[
-                                    { n: '1', t: '列出關鍵字', d: '從題目中找 2-3 個核心名詞。例如：手機使用、睡眠品質、高中生。不要直接貼整個題目進去搜——搜不到東西。' },
-                                    { n: '2', t: '搜尋', d: '輸入關鍵字，先看搜到幾篇。太多？加限制條件。太少？換同義詞（如「手機」→「智慧型手機」→「行動裝置」）。' },
-                                    { n: '3', t: '加限制條件', d: '地區選台灣、時間選近五年、文件類型選碩博士論文。太舊的研究可能過時，碩博士論文有完整方法可參考。' },
-                                    { n: '4', t: '看標題 → 摘要 → 全文', d: '先看標題確認相關，再看摘要最後一段「本研究發現…」，確認跟你的題目有交集，再下載全文。' },
-                                ].map(step => (
-                                    <div className="flex gap-4" key={step.n}>
-                                        <div className="w-8 h-8 rounded-full bg-[var(--accent-light)] text-[var(--accent)] flex items-center justify-center font-mono font-bold text-[13px] flex-shrink-0">{step.n}</div>
-                                        <div>
-                                            <div className="font-bold text-[13px] text-[var(--ink)] mb-1">{step.t}</div>
-                                            <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{step.d}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <HuayiSearchTutorial />
                     </div>
                 </div>
             ),
@@ -545,20 +603,6 @@ export const W50Page = () => {
                         fields={EXPORT_FIELDS}
                         choices={choiceResults}
                     />
-
-                    {/* 遊戲彩蛋 */}
-                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
-                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                            <ShieldAlert className="text-[var(--danger)]" size={20} />
-                            R.I.B. 單元挑戰：行動代號獵狐
-                        </h3>
-                        <p className="text-[var(--ink-light)] text-sm mb-4">
-                            追蹤研究文獻來源的能力——你能辨認哪些引用是真實可查的、哪些是偽造的嗎？
-                        </p>
-                        <Link to="/game/citation-detective" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
-                            進入獵狐 <ArrowRight size={14} />
-                        </Link>
-                    </div>
 
                     {/* 下週預告 */}
                     <div className="next-week-preview">

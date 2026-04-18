@@ -19,6 +19,7 @@ import {
     Lightbulb,
     AlertTriangle,
     Gamepad2,
+    ShieldAlert,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -516,6 +517,20 @@ const W14Page = () => {
                         weekLabel="W14 讓數據自己說話：圖表選擇與圖的說明"
                         fields={EXPORT_FIELDS}
                     />
+
+                    {/* 遊戲彩蛋 */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
+                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                            <ShieldAlert className="text-[var(--danger)]" size={20} />
+                            R.I.B. 單元挑戰：行動代號解碼
+                        </h3>
+                        <p className="text-[var(--ink-light)] text-sm mb-4">
+                            研究圖表解讀能力——你能從各式數據情境中，挑出最適合的圖表類型嗎？
+                        </p>
+                        <Link to="/game/chart-matcher" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
+                            進入解碼 <ArrowRight size={14} />
+                        </Link>
+                    </div>
                 </div>
             ),
         },
