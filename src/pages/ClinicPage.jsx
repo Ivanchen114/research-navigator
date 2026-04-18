@@ -17,6 +17,8 @@ import {
     Trophy,
     RefreshCw,
     Activity,
+    Ghost,
+    Unlock,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W6Data } from '../data/lessonMaps';
@@ -788,6 +790,18 @@ export const ClinicPage = () => {
                         <Link to="/game/tool-quiz" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
                             進入裝備 <ArrowRight size={14} />
                         </Link>
+                    </div>
+
+                    {/* 連貫劇情解鎖通知（不穿插；僅告知） */}
+                    <div className="border border-[#7C3AED]/40 bg-[#7C3AED]/5 rounded-lg p-4 flex items-start gap-3">
+                        <Unlock size={18} className="text-[#7C3AED] flex-shrink-0 mt-0.5" />
+                        <div className="text-[13px] text-[var(--ink-mid)] leading-[1.7]">
+                            <span className="font-bold text-[var(--ink)] flex items-center gap-1.5 mb-1">
+                                <Ghost size={14} className="text-[#7C3AED]" /> R.I.B. 連貫劇情解鎖：《幽靈數據》Ch1-5
+                            </span>
+                            W2-W7 累積的五種研究方法訓練告一段落，你已具備基本辦案能力。
+                            請從左側側邊欄 <strong>🎮 R.I.B. 調查檔案 → 幽靈數據</strong> 進入挑戰。共 5 章，依個人節奏調查即可。
+                        </div>
                     </div>
 
                     {/* 下週預告 */}

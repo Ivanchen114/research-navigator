@@ -16,6 +16,8 @@ import {
     Plane,
     ClipboardCheck,
     Users,
+    Radio,
+    Unlock,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -465,6 +467,18 @@ export const W11Page = () => {
                         weekLabel="W11 工具定案 · 倫理審查 · 施測啟動"
                         fields={EXPORT_FIELDS}
                     />
+
+                    {/* 連貫劇情解鎖通知（不穿插；僅告知） */}
+                    <div className="border border-indigo-500/40 bg-indigo-500/5 rounded-lg p-4 flex items-start gap-3">
+                        <Unlock size={18} className="text-indigo-500 flex-shrink-0 mt-0.5" />
+                        <div className="text-[13px] text-[var(--ink-mid)] leading-[1.7]">
+                            <span className="font-bold text-[var(--ink)] flex items-center gap-1.5 mb-1">
+                                <Radio size={14} className="text-indigo-500" /> R.I.B. 連貫劇情解鎖：《回聲》Ch1-5
+                            </span>
+                            完成倫理審查訓練後，你已具備判斷「該不該做」的能力。
+                            請從左側側邊欄 <strong>🎮 R.I.B. 調查檔案 → 回聲</strong> 進入挑戰。本系列倫理強度較高，需要你細心權衡。
+                        </div>
+                    </div>
 
                     {/* 下週預告 */}
                     <div className="next-week-preview">

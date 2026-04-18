@@ -406,18 +406,6 @@ const W12Page = () => {
                 />
             </div>
 
-            {/* ── 遊戲入口 ── */}
-            <div className="mt-6 p-4 rounded-[var(--radius-unified)] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white text-center">
-                <p className="text-[11px] opacity-60 mb-1">🎮 R.I.B. 調查檔案</p>
-                <p className="text-[14px] font-bold mb-3">幽靈數據 Ch4：文獻翡翠線</p>
-                <Link
-                    to="/phantom-ch4"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#10B981] hover:bg-[#059669] text-white text-[13px] font-bold rounded-[var(--radius-unified)] transition-colors no-underline"
-                >
-                    進入任務 <ArrowRight size={14} />
-                </Link>
-            </div>
-
             {/* ── 底部導航 ── */}
             <div className="mt-8 flex justify-between items-center">
                 <Link to="/w11" className="flex items-center gap-1 text-[13px] text-[var(--ink-mid)] no-underline hover:text-[var(--accent)]">

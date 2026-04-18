@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './ToolRefinementPage.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
@@ -7,7 +6,6 @@ import StepEngine from '../components/ui/StepEngine';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
-    ArrowRight,
     CheckCircle2,
     Bot,
     Users,
@@ -530,20 +528,6 @@ export const ToolRefinementPage = () => {
                         weekLabel="W10 AI 協助工具精進與預試"
                         fields={EXPORT_FIELDS}
                     />
-
-                    {/* R.I.B. 遊戲連結 */}
-                    <div className="bg-[var(--ink)] border-l-4 border-[#7C3AED] p-6 rounded-r-lg text-white shadow-xl">
-                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-                            <Bot className="text-[#7C3AED]" size={20} />
-                            R.I.B. 連貫劇情：幽靈數據 Ch3 — 問卷迷霧
-                        </h3>
-                        <p className="text-[var(--ink-light)] text-sm mb-4">
-                            Agent Amber 在社區發放的問卷出現了嚴重的設計缺陷。用你今天學到的 AI 審查技巧，幫她找出真相。
-                        </p>
-                        <Link to="/phantom/ch3" className="inline-flex items-center gap-2 bg-[#7C3AED] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
-                            進入任務 <ArrowRight size={14} />
-                        </Link>
-                    </div>
 
                     {/* 下週預告 */}
                     <div className="next-week-preview">

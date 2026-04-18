@@ -18,25 +18,35 @@ const METHOD_COLORS = {
     '實驗法':   { dot: 'bg-rose-400',   text: 'text-rose-400',   border: 'border-rose-700/40' },
 };
 
+const REQUIRED_WEEK = 7; // W7 研究診所結束後解鎖
+
 export const PhantomDataHub = () => {
     const navigate = useNavigate();
     const [chapterStates, setChapterStates] = useState({});
     const [agentName, setAgentName] = useState('');
+    const [maxWeek, setMaxWeek] = useState(0);
 
     useEffect(() => {
         const name = localStorage.getItem('rib_agent_name');
         if (name) setAgentName(name);
 
+        const stored = parseInt(localStorage.getItem('researchNavigator_maxWeek') || '0', 10);
+        setMaxWeek(stored);
+        const gateOpen = stored >= REQUIRED_WEEK;
+
         const states = {};
         CHAPTERS.forEach(ch => {
+            const prevDone = ch.completeKey === null || !!localStorage.getItem(ch.completeKey);
             states[ch.num] = {
                 complete: !!localStorage.getItem(`phantom_ch${ch.num}_complete`),
                 optimal: !!localStorage.getItem(`phantom_ch${ch.num}_optimal`),
-                unlocked: ch.completeKey === null || !!localStorage.getItem(ch.completeKey),
+                unlocked: gateOpen && prevDone,
             };
         });
         setChapterStates(states);
     }, []);
+
+    const gateOpen = maxWeek >= REQUIRED_WEEK;
 
     const completedCount = Object.values(chapterStates).filter(s => s.complete).length;
     const allComplete   = completedCount === 5;
@@ -93,6 +103,26 @@ export const PhantomDataHub = () => {
                         </div>
                     )}
                 </div>
+
+                {/* 解鎖閘門提示 */}
+                {!gateOpen && (
+                    <div className="mb-8 border border-amber-700/40 bg-amber-950/20 rounded-lg p-5 flex items-start gap-3">
+                        <Lock size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                            <div className="font-mono text-xs text-amber-400 tracking-widest mb-1">CASE FILE LOCKED</div>
+                            <p className="text-slate-300 text-sm leading-relaxed">
+                                本案調查需要先完成 <strong className="text-amber-300">W7 研究診所</strong> 的方法選擇訓練。
+                                完成後，所有五章將同步開放，可依個人節奏調查。
+                            </p>
+                            <button
+                                onClick={() => navigate('/w7')}
+                                className="mt-3 inline-flex items-center gap-2 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors"
+                            >
+                                前往 W7 研究診所 <ChevronRight size={12} />
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Chapters */}
                 <div className="space-y-3 mb-10">

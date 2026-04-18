@@ -53,25 +53,35 @@ const METHOD_COLORS = {
     '實驗法':   { dot: 'bg-amber-400',   text: 'text-amber-400',   border: 'border-amber-700/40'   },
 };
 
+const REQUIRED_WEEK = 11; // W11 倫理審查 · 施測啟動結束後解鎖
+
 export const EchoHub = () => {
     const navigate = useNavigate();
     const [chapterStates, setChapterStates] = useState({});
     const [agentName, setAgentName] = useState('');
+    const [maxWeek, setMaxWeek] = useState(0);
 
     useEffect(() => {
         const name = localStorage.getItem('rib_agent_name');
         if (name) setAgentName(name);
 
+        const stored = parseInt(localStorage.getItem('researchNavigator_maxWeek') || '0', 10);
+        setMaxWeek(stored);
+        const gateOpen = stored >= REQUIRED_WEEK;
+
         const states = {};
         CHAPTERS.forEach(ch => {
+            const prevDone = ch.completeKey === null || !!localStorage.getItem(ch.completeKey);
             states[ch.num] = {
                 complete: !!localStorage.getItem(`echo_ch${ch.num}_complete`),
                 optimal:  !!localStorage.getItem(`echo_ch${ch.num}_optimal`),
-                unlocked: ch.completeKey === null || !!localStorage.getItem(ch.completeKey),
+                unlocked: gateOpen && prevDone,
             };
         });
         setChapterStates(states);
     }, []);
+
+    const gateOpen = maxWeek >= REQUIRED_WEEK;
 
     const completedCount = Object.values(chapterStates).filter(s => s.complete).length;
     const allComplete   = completedCount === 5;
@@ -146,6 +156,26 @@ export const EchoHub = () => {
                         </div>
                     )}
                 </div>
+
+                {/* 解鎖閘門提示 */}
+                {!gateOpen && (
+                    <div className="mb-8 border border-indigo-700/40 bg-indigo-950/20 rounded-lg p-5 flex items-start gap-3">
+                        <Lock size={18} className="text-indigo-400 flex-shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                            <div className="font-mono text-xs text-indigo-300 tracking-widest mb-1">CASE FILE LOCKED</div>
+                            <p className="text-slate-300 text-sm leading-relaxed">
+                                本案涉及研究倫理判斷，需先完成 <strong className="text-indigo-200">W11 倫理審查 · 施測啟動</strong>。
+                                完成後，所有五章將同步開放，可依個人節奏調查。
+                            </p>
+                            <button
+                                onClick={() => navigate('/w11')}
+                                className="mt-3 inline-flex items-center gap-2 text-xs font-mono text-indigo-300 hover:text-indigo-200 transition-colors"
+                            >
+                                前往 W11 倫理審查 <ChevronRight size={12} />
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* Chapter list */}
                 <div className="space-y-3 mb-10">
