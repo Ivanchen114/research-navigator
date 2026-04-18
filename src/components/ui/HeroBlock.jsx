@@ -22,7 +22,7 @@ export default function HeroBlock({
 }) {
     return (
         <div
-            className={`hero-block relative overflow-hidden rounded-[8px] bg-[#14142a] text-white px-8 md:px-14 py-12 md:py-20 mb-12 ${className}`}
+            className={`hero-block relative overflow-hidden bg-[#14142a] text-white -mx-6 sm:mx-0 rounded-none sm:rounded-[8px] px-6 sm:px-10 md:px-14 py-14 md:py-20 mb-10 md:mb-12 ${className}`}
         >
             {/* 點陣網格背景 */}
             <div
