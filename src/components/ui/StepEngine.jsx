@@ -9,10 +9,11 @@ import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
  *   steps     (array, required) — [{ title, icon, content: <JSX> }, ...]
  *   prevWeek  (object)          — { label: '回 W1 模仿遊戲', to: '/w1' }
  *   nextWeek  (object)          — { label: '前往 W3 題目健檢', to: '/w3' }
+ *   weekCode  (string)          — 顯示在底部檔案編號列，如 "R.I.B. · W2"
  *   className (string)
  */
 
-export default function StepEngine({ steps, prevWeek, nextWeek, className = '' }) {
+export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, className = '' }) {
   const [current, setCurrent] = useState(0);
   const total = steps.length;
   const topRef = useRef(null);
@@ -31,6 +32,18 @@ export default function StepEngine({ steps, prevWeek, nextWeek, className = '' }
 
   return (
     <div className={`step-engine ${className}`} ref={topRef}>
+      {/* STEP 計數器 — 當前步驟 / 總步驟 */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.18em]">
+          STEP {current + 1} <span className="text-[var(--border-mid)]">/ {total}</span>
+        </div>
+        {steps[current]?.title && (
+          <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em]">
+            {steps[current].title}
+          </div>
+        )}
+      </div>
+
       {/* TAB 列 */}
       <nav className="flex gap-1 mb-6 overflow-x-auto pb-1">
         {steps.map((step, i) => {
@@ -122,6 +135,14 @@ export default function StepEngine({ steps, prevWeek, nextWeek, className = '' }
           </button>
         )}
       </div>
+
+      {/* 檔案編號頁尾 */}
+      {weekCode && (
+        <div className="mt-8 pt-4 border-t border-dashed border-[var(--border-mid)]/40 flex items-center justify-between text-[10px] font-mono text-[var(--ink-light)]/70 tracking-[0.15em]">
+          <span>● {weekCode} · STEP {current + 1}</span>
+          <span>{current + 1} / {total}</span>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
+import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import CopyButton from '../components/ui/CopyButton';
 import { readRecords } from '../components/ui/ThinkRecord';
@@ -132,31 +133,20 @@ export const ProblemFocus = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER */}
-            <header>
-                <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-[0.06em]">🔬 W2 · 品味訓練</div>
-                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[#1a1a2e] mb-4 tracking-[-0.02em]">
-                    問題意識的覺醒：<span className="text-[#2d5be3] italic">把好奇心變成好問題</span>
-                </h1>
-                <p className="text-[15px] text-[#4a4a6a] max-w-[600px] leading-[1.75] mb-8">
-                    「為什麼」是爛問題——太大、太空、太發散。今天你要學四段式思考框架。第一節靠自己，第二節用 AI 協助翻譯。
-                </p>
-                <CourseArc items={W2Data.courseArc} />
-            </header>
-
-            {/* META STRIP */}
-            <div className="meta-strip">
-                {[
+            {/* PAGE HEADER — Hero Block */}
+            <HeroBlock
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W2"
+                title="問題意識的覺醒："
+                accentTitle="把好奇心變成好問題"
+                subtitle="「為什麼」是爛問題——太大、太空、太發散。今天你要學四段式思考框架。第一節靠自己，第二節用 AI 協助翻譯。"
+                meta={[
                     { label: '本週任務', value: '練「品味」' },
+                    { label: '時長', value: '100 MINS' },
                     { label: '課堂產出', value: '探究意圖（初稿）' },
                     { label: '下週預告', value: '題目健檢 W3' },
-                ].map((item, idx) => (
-                    <div key={idx} className="meta-item">
-                        <div className="meta-label">{item.label}</div>
-                        <div className="meta-value">{item.value}</div>
-                    </div>
-                ))}
-            </div>
+                ]}
+            />
+            <CourseArc items={W2Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">
@@ -172,6 +162,7 @@ export const ProblemFocus = () => {
 
             {/* ══════════ STEP ENGINE ══════════ */}
             <StepEngine
+              weekCode="R.I.B. · W2"
               prevWeek={{ label: '回 W1 模仿遊戲', to: '/w1' }}
               nextWeek={{ label: '前往 W3 題目健檢', to: '/w3' }}
               steps={[
@@ -181,25 +172,30 @@ export const ProblemFocus = () => {
                     title: '觀念建立',
                     icon: '🔬',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 1 · 認識四段式思考框架</div>
-                                <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">「為什麼」是爛問題</h3>
-                                <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed">
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-3">PART 1 · 認識四段式思考框架</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">「為什麼」是爛問題</h3>
+                                <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
                                     研究不是問十萬個為什麼，而是有層次地把畫面變成學術問題。
                                 </p>
                             </div>
 
-                            {/* 爛問題示範 */}
-                            <div className="w2-practice-block" style={{ margin: 0 }}>
-                                <div className="w2-practice-header" style={{ background: 'var(--danger)', color: '#fff' }}>
-                                    <span className="font-bold text-[12px]">⚠️ 先打破這個習慣</span>
+                            {/* 爛問題示範 — 白底 + 左側紅框，降低整塊彩度 */}
+                            <div className="bg-white border border-[var(--border)] border-l-[3px] border-l-[var(--danger)] rounded-[8px] p-5 md:p-6">
+                                <div className="text-[11px] font-mono uppercase tracking-[0.12em] text-[var(--danger)] mb-3">
+                                    先打破這個習慣
                                 </div>
-                                <div className="w2-practice-body">
-                                    「<strong style={{ color: 'var(--danger)' }}>為什麼圖書館人很多？</strong>」— 爛問題。<br />
-                                    → 因為要讀書！→ 因為有冷氣！→ 因為要考試！都對，但你要研究什麼？不知道。問了等於沒問。<br /><br />
-                                    爛問題的特徵：太大、太空、太發散。今天你要學怎麼改掉它。
-                                </div>
+                                <p className="text-[15px] md:text-[16px] text-[var(--ink)] leading-[1.85] mb-4">
+                                    「<strong className="text-[var(--danger)]">為什麼圖書館人很多？</strong>」— 爛問題。
+                                </p>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] mb-4">
+                                    → 因為要讀書！→ 因為有冷氣！→ 因為要考試！<br />
+                                    都對，但你要研究什麼？不知道。問了等於沒問。
+                                </p>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] m-0">
+                                    爛問題的特徵：<strong className="text-[var(--ink)]">太大、太空、太發散</strong>。今天你要學怎麼改掉它。
+                                </p>
                             </div>
 
                             {/* 四段式思考框架表格 */}

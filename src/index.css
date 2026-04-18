@@ -23,6 +23,42 @@
   --border: #dddbd5;
   --border-mid: #c8c5bc;
   --radius-unified: 10px;
+
+  /* ─── 中文手機閱讀變數 ───
+     line-height 針對中文拉高到 1.8；桌機正文 15px 時行高 ≈ 27px
+     段距 = 1.5em（比行距明顯大，避免段落糊在一起）
+     正文字級下限 16px，手機端套 sm 斷點前強制放大 */
+  --leading-reading: 1.8;
+  --leading-tight: 1.5;
+  --paragraph-gap: 1.3em;
+  --read-size: 15px;
+  --read-size-mobile: 16px;
+}
+
+/* ─── prose-zh：中文閱讀友善區塊 ───
+   用在「大段純文字」的容器上。自動處理段距 / 行高 / 斷字。 */
+.prose-zh {
+  font-size: var(--read-size);
+  line-height: var(--leading-reading);
+  color: var(--ink-mid);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.prose-zh > * + * { margin-top: var(--paragraph-gap); }
+.prose-zh p { line-height: var(--leading-reading); }
+.prose-zh h2, .prose-zh h3, .prose-zh h4 {
+  color: var(--ink);
+  line-height: var(--leading-tight);
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+}
+.prose-zh strong { color: var(--ink); font-weight: 700; }
+.prose-zh ul, .prose-zh ol { padding-left: 1.25em; }
+.prose-zh li + li { margin-top: 0.4em; }
+
+@media (max-width: 640px) {
+  .prose-zh { font-size: var(--read-size-mobile); }
+  .prose-zh > * + * { margin-top: 1.5em; }
 }
 
 .page-container {
