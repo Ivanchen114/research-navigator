@@ -12,7 +12,11 @@ import {
   TrendingUp,
   Clock,
   LogOut,
-  ShieldAlert
+  ShieldAlert,
+  Ghost,
+  Radio,
+  Star,
+  Circle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,6 +31,10 @@ export const Dossier = () => {
         rigor: 0,
         visual: 0,
         critical: 0
+    });
+    const [storyStats, setStoryStats] = useState({
+        phantom: [null, null, null, null, null], // 'optimal' | 'complete' | null
+        echo:    [null, null, null, null, null]
     });
 
     useEffect(() => {
@@ -63,6 +71,19 @@ export const Dossier = () => {
 
         setGameStats(stats);
         setSkills(newSkills);
+
+        // 讀取連貫劇情完成與完美旗標
+        const readStory = (prefix) => {
+            return [1, 2, 3, 4, 5].map(n => {
+                if (localStorage.getItem(`${prefix}_ch${n}_optimal`) === 'true') return 'optimal';
+                if (localStorage.getItem(`${prefix}_ch${n}_complete`) === 'true') return 'complete';
+                return null;
+            });
+        };
+        setStoryStats({
+            phantom: readStory('phantom'),
+            echo:    readStory('echo')
+        });
     }, [navigate]);
 
     const handleLogout = () => {
@@ -72,10 +93,80 @@ export const Dossier = () => {
 
     const getAgentRank = () => {
         const completedCount = Object.keys(gameStats).length;
+        const optimalChapters =
+            storyStats.phantom.filter(s => s === 'optimal').length +
+            storyStats.echo.filter(s => s === 'optimal').length;
+        // 六項挑戰全破 + 十章劇情全完美 → 最高軍階
+        if (completedCount === 6 && optimalChapters === 10) return "特務首長 (Commander)";
         if (completedCount === 6) return "特級專案調查官 (Elite)";
-        if (completedCount >= 4) return "高級探員 (Senior Agent)";
-        if (completedCount >= 2) return "正式探員 (Field Agent)";
+        if (completedCount >= 4 || optimalChapters >= 5) return "高級探員 (Senior Agent)";
+        if (completedCount >= 2 || optimalChapters >= 2) return "正式探員 (Field Agent)";
         return "見習探員 (Trainee)";
+    };
+
+    const storyChapterMeta = {
+        phantom: {
+            label: '幽靈數據',
+            icon: Ghost,
+            color: 'text-violet-500',
+            bg: 'bg-violet-500',
+            chapters: ['觀察', '訪談', '問卷', '文獻', '實驗']
+        },
+        echo: {
+            label: '回音行動',
+            icon: Radio,
+            color: 'text-cyan-500',
+            bg: 'bg-cyan-500',
+            chapters: ['觀察', '訪談', '問卷', '文獻', '實驗']
+        }
+    };
+
+    const StoryRow = ({ seriesKey }) => {
+        const meta = storyChapterMeta[seriesKey];
+        const Icon = meta.icon;
+        const statuses = storyStats[seriesKey];
+        const optimalCount = statuses.filter(s => s === 'optimal').length;
+        const completeCount = statuses.filter(s => s !== null).length;
+        return (
+            <div className="mb-4 last:mb-0">
+                <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
+                        <Icon size={14} className={meta.color} />
+                        {meta.label}
+                    </div>
+                    <span className="text-xs font-mono font-bold text-slate-400">
+                        {optimalCount}/5 完美 · {completeCount}/5 通關
+                    </span>
+                </div>
+                <div className="flex gap-1.5">
+                    {statuses.map((s, i) => {
+                        const base = "flex-1 h-10 rounded-sm border flex flex-col items-center justify-center text-[10px] font-bold transition-all";
+                        if (s === 'optimal') {
+                            return (
+                                <div key={i} className={`${base} ${meta.bg} text-white border-transparent shadow-sm`} title={`Ch${i+1} 完美通關`}>
+                                    <Star size={12} fill="currentColor" />
+                                    <span className="mt-[-2px]">Ch{i+1}</span>
+                                </div>
+                            );
+                        }
+                        if (s === 'complete') {
+                            return (
+                                <div key={i} className={`${base} bg-white ${meta.color} border-slate-200`} title={`Ch${i+1} 已通關`}>
+                                    <Circle size={10} fill="currentColor" />
+                                    <span className="mt-[-2px]">Ch{i+1}</span>
+                                </div>
+                            );
+                        }
+                        return (
+                            <div key={i} className={`${base} bg-slate-50 text-slate-300 border-slate-100 border-dashed`} title={`Ch${i+1} 尚未嘗試`}>
+                                <Circle size={10} />
+                                <span className="mt-[-2px]">Ch{i+1}</span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
     };
 
     const SkillBar = ({ label, value, icon: Icon, textColor, bgColor }) => (
@@ -143,6 +234,18 @@ export const Dossier = () => {
                             <SkillBar label="設計嚴謹" value={skills.rigor} icon={ShieldCheck} textColor="text-indigo-500" bgColor="bg-indigo-500" />
                             <SkillBar label="數據呈現" value={skills.visual} icon={BarChart3} textColor="text-cyan-500" bgColor="bg-cyan-500" />
                             <SkillBar label="批判思考" value={skills.critical} icon={Zap} textColor="text-purple-500" bgColor="bg-purple-500" />
+                        </div>
+
+                        {/* 連貫劇情勳章 */}
+                        <div className="bg-white p-6 rounded-sm shadow-sm border border-slate-200">
+                            <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-5 flex items-center gap-2">
+                                <Star size={14} /> 劇情任務紀錄
+                            </h3>
+                            <StoryRow seriesKey="phantom" />
+                            <StoryRow seriesKey="echo" />
+                            <p className="text-[10px] text-slate-400 mt-3 leading-relaxed">
+                                ★ 完美通關（拿到關鍵線索）　○ 普通通關　虛線 = 尚未挑戰
+                            </p>
                         </div>
 
                         <div className="bg-slate-900 p-6 rounded-sm shadow-xl text-white relative overflow-hidden">

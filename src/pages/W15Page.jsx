@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
-import './W16.css';
+import { W14Data } from '../data/lessonMaps';
+import './W15.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import StepEngine from '../components/ui/StepEngine';
 import ExportButton from '../components/ui/ExportButton';
@@ -11,112 +12,140 @@ import {
     Bot,
     Copy,
     Check,
-    Package,
+    Shield,
+    Layers,
     PenTool,
-    Layout,
-    Users,
+    Scale,
     FileText,
-    Eye,
-    Clock,
-    CheckSquare,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
  *  資料常數
  * ══════════════════════════════════════ */
 
-const ASSEMBLY_STEPS = [
-    { num: 1, chapter: '第一章：引言', source: 'W3-W4 學習單', task: '「我為什麼做這個研究」＋「我的研究問題是什麼」', words: '150-200 字', time: '5 min', color: '#2563EB' },
-    { num: 2, chapter: '第二章：文獻探討', source: 'W6 學習單', task: '3 篇以上文獻摘要與比較＋「目前研究的缺口在於…」', words: '250-350 字', time: '5 min', color: '#7C3AED' },
-    { num: 3, chapter: '第三章：研究方法', source: 'W10 學習單', task: '方法名稱、參與者、工具、流程＋知情同意聲明', words: '150-250 字', time: '5 min', color: '#059669' },
-    { num: 4, chapter: '第四章：研究結果', source: 'W14 學習單', task: '2 個主要發現的客觀描述句＋圖表標注位置', words: '200-300 字', time: '10 min', color: '#D97706' },
-    { num: 5, chapter: '第五章：討論與結論', source: 'W14-W15 學習單', task: '主觀推論句＋研究限制＋未來建議', words: '200-300 字', time: '5 min', color: '#DC2626' },
-    { num: 6, chapter: '參考文獻', source: 'W6 文獻清單', task: '直接複製 APA 格式清單，確認格式統一', words: '—', time: '5 min', color: '#6B7280' },
-    { num: 7, chapter: '摘要 (Abstract)', source: '今天用 AI 生成', task: '用 AI 摘要 Prompt 生成初稿，再人工修改', words: '150-200 字', time: '10 min', color: '#0891B2' },
+const FOUR_LAYERS = [
+    { name: '描述', color: '#2563EB', task: '客觀報告數據或現象', ai: '人先寫，AI 檢核有無數字錯誤或量詞不精準', scaffold: '根據___，___，其中最明顯的是___。' },
+    { name: '詮釋', color: '#7C3AED', task: '解釋意義、推測原因', ai: '人先寫，AI 優化並補充可能遺漏的原因', scaffold: '這個結果顯示___，可能的原因是___。' },
+    { name: '回扣', color: '#DC2626', task: '直接回答研究問題', ai: '人寫內容和邏輯，AI 只能潤飾文句', scaffold: '本研究原本想了解___。根據分析結果，本研究的答案是___。但這個結論只能說明___，無法確定___。', star: true },
+    { name: '批判', color: '#059669', task: '說出研究的限制', ai: '人先寫，AI 補充常見限制類型供參考', scaffold: '本研究的限制在於___，因此結論不宜推論至___。若要更完整回答這個問題，未來可以___。' },
 ];
 
-const ROLES = [
-    { name: '搬運工', emoji: '📦', steps: 'Step 1-3', task: '找 W3-W10 學習單，把引言、文獻、方法貼進去', color: '#EFF6FF', border: '#BFDBFE' },
-    { name: '數據官', emoji: '📊', steps: 'Step 4-5', task: '找 W14-W15 的圖表跟描述句，負責貼到正確位置', color: '#FEF3C7', border: '#FDE68A' },
-    { name: 'AI 溝通師', emoji: '🤖', steps: 'Step 6-7', task: '開 AI 工具，負責潤色、摘要、縫合 Prompt', color: '#F0FDF4', border: '#BBF7D0' },
-];
+const METHOD_PROMPTS = {
+    questionnaire: {
+        label: '📋 問卷組',
+        prompt: `我的研究主題是＿＿＿，研究問題是＿＿＿。
 
-const POSTER_RULES = [
-    { word: '大', icon: '🔍', desc: '主標題要大，最重要的發現要大', color: '#EFF6FF', textColor: '#1E40AF' },
-    { word: '少', icon: '✂️', desc: '字越少越好，每區塊不超過三行', color: '#FEF2F2', textColor: '#991B1B' },
-    { word: '準', icon: '🎯', desc: '只放最重要的一個發現，不是全部', color: '#F0FDF4', textColor: '#166534' },
-    { word: '亮', icon: '💡', desc: '圖表是武器，放中間，放最大', color: '#FEF9C3', textColor: '#854D0E' },
-];
+以下是我自己寫的四層結論初稿：【貼上初稿】
 
-const PROMPTS = {
-    polish: `我寫了一段研究報告的草稿，請幫我：
-1. 在「不改變我的核心發現」的前提下，讓這段話更有學術嚴謹感
-2. 指出有沒有邏輯不通的地方
-3. 修正語法錯誤
-⚠️ 不可以自己捏造我沒有的數據，如果要舉例請先告訴我
+以下是問卷統計資料（已去除個資）：【貼上資料】
 
-以下是我的草稿：
-【貼上你的文字片段】`,
-    abstract: `我的研究標題是「＿＿＿」，以下是各章的核心句子：
+請幫我：
+1. 檢核描述層有無數字錯誤或量詞不精準，並建議修改。
+2. 優化詮釋層，補充可能遺漏的原因。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出問卷研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+        tips: ['相關不等於因果：「可能有相關」不是「導致」', '量詞要精準：38% 不是「多數」', '樣本數偏少（<30份）要加「本結果僅供初步參考」'],
+    },
+    interview: {
+        label: '🎤 訪談組',
+        prompt: `我的研究主題是＿＿＿，研究問題是＿＿＿。
 
-引言核心：研究問題是…
-文獻核心：目前文獻指出…
-方法核心：本研究使用……蒐集了……的資料
-結果核心：主要發現是…
-結論核心：此研究說明了…
+以下是我自己寫的四層結論初稿：【貼上初稿】
 
-請幫我寫一段 150-200 字的中文研究摘要。
-格式：目的 → 方法 → 主要發現 → 結論。
-語氣：學術、簡潔、第三人稱為主。`,
-    stitch: `我把小論文的不同章節拼在一起了。
-請幫我閱讀以下【第 __ 章結尾】與【第 __ 章開頭】的段落：
+以下是受訪者逐字稿（姓名已改為代號）：【貼上逐字稿】
 
-【貼上兩段文字】
+請幫我：
+1. 檢核描述層有無過度詮釋或遺漏重要現象，並建議修改。
+2. 優化詮釋層，補充可能遺漏的意義。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出質性訪談研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+        tips: ['AI 說得比受訪者更強 → 就是過度詮釋，對照原文', '只有 1 人說的 → 個案，不能說成普遍現象', '多數受訪者都提到的 → 才算主要發現'],
+    },
+    experiment: {
+        label: '🧪 實驗組',
+        prompt: `我的研究主題是＿＿＿，研究問題是＿＿＿。
+實驗組條件是＿＿＿，對照組條件是＿＿＿。
 
-請：
-1. 不要改變我的原意與任何數據
-2. 幫我在兩段之間加上 1-2 句「過渡句（Transition）」
-3. 把語氣統一成客觀的學術第三人稱
-讓這兩段讀起來像同一篇文章。`,
-    checkup: `我是高中生，剛完成一份研究小論文。
-請你扮演「論文健檢醫生」，閱讀我上傳的 PDF 報告，然後只做診斷、不動刀修改。
+以下是我自己寫的四層結論初稿：【貼上初稿】
 
-請依以下五項逐一檢查，每項給「✅ 通過」或「⚠️ 需注意」，並用一句話說明理由：
+以下是實驗數據：【貼上數據】
 
-1.【結構完整】五章（引言、文獻、方法、結果、討論）＋摘要＋參考文獻，有沒有缺少的？
-2.【前後一致】研究問題、方法、結果、結論之間的邏輯鏈有沒有斷掉？
-3.【結論回扣】第五章的結論有沒有直接回答第一章提出的研究問題？
-4.【描述 vs. 推論】第四章有沒有偷渡主觀推論？第五章有沒有把推論當事實寫？
-5.【參考文獻】格式是否統一（APA）？文中引用和文末清單有沒有對不上的？
+請幫我：
+1. 檢核描述層有無數字錯誤或遺漏，並建議修改。
+2. 優化詮釋層，補充可能的原因解釋。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出實驗研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+        tips: ['有差異不等於有效：先確認干擾變因', '用「顯示差異」不是「證明效果」', '霍桑效應：被觀察者知道有人在看，行為可能改變'],
+    },
+    observation: {
+        label: '👀 觀察組',
+        prompt: `我的研究主題是＿＿＿，研究問題是＿＿＿。
+觀察場景是＿＿＿。
 
-⚠️ 規則：
-- 你只能「指出問題」，不可以幫我改寫任何一句話
-- 如果某項通過，也請告訴我為什麼通過
-- 最後給一個 0-5 的「健康指數」（5 = 非常健康）`,
+以下是我自己寫的四層結論初稿：【貼上初稿】
+
+以下是觀察記錄（已去除個資）：【貼上記錄】
+
+請幫我：
+1. 檢核描述層有無行為模式遺漏或頻率描述不精準，並建議修改。
+2. 優化詮釋層，補充可能的脈絡解釋。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出觀察研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+        tips: ['補充脈絡：月考週、特殊活動要主動說明', '觀察者效應：被觀察者行為可能改變', '行為模式要有頻率支持，不能只憑印象'],
+    },
+    literature: {
+        label: '📚 文獻組',
+        prompt: `我的研究主題是＿＿＿，研究問題是＿＿＿。
+
+以下是我自己寫的四層結論初稿：【貼上初稿】
+
+以下是文獻摘要表（含作者、年份、主要發現）：【貼上摘要表】
+
+請幫我：
+1. 檢核描述層有無文獻引用錯誤或遺漏重要共識，並建議修改。
+2. 優化詮釋層，補充文獻支持的可能解釋。
+3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+4. 列出文獻研究常見的三種研究限制供我參考。
+5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+        tips: ['AI 說「多項研究顯示」→ 確認是否真有 2 篇以上支持', 'AI 找的研究缺口 → 確認是否對應你的研究問題', '引用要有出處：作者＋年份，不能只說「有研究指出」'],
+    },
+};
+const METHOD_KEYS = Object.keys(METHOD_PROMPTS);
+
+const DEMO_EXAMPLE = {
+    question: '高中生的手機使用時間是否與年級有關？',
+    layers: [
+        { name: '描述', color: '#2563EB', text: '根據問卷統計，67% 的受訪者每天使用手機超過三小時，其中高一生佔比最高（82%），高三生最低（51%）。' },
+        { name: '詮釋', color: '#7C3AED', text: '手機使用時間隨年級升高而下降，推測高三生因升學壓力增加而主動減少使用時間，高一生課後自律習慣尚在建立中。' },
+        { name: '回扣', color: '#DC2626', text: '本研究原本想了解手機使用時間是否與年級有關。根據分析結果，年級越高使用時間越短，兩者有相關性。但這個結論只能說明兩者有相關，無法確定是年級本身還是其他因素（如補習頻率）造成差異。' },
+        { name: '批判', color: '#059669', text: '本研究樣本僅限兩班 60 人，且為自填問卷可能存在社會期許偏差，結論不宜推論至全體高中生。若要更完整回答這個問題，未來可擴大樣本並加入訪談交叉驗證。' },
+    ],
 };
 
 const EXPORT_FIELDS = [
-    { key: 'w16-role', label: '我的角色' },
-    { key: 'w16-abstract-cores', label: '各章核心句' },
-    { key: 'w16-abstract-ai', label: 'AI 摘要初稿' },
-    { key: 'w16-abstract-edit', label: '我修改的部分' },
-    { key: 'w16-abstract-final', label: '最終摘要' },
-    { key: 'w16-polish-chapter', label: 'AI 潤色紀錄（哪一章）' },
-    { key: 'w16-polish-diff', label: 'AI 潤色差異' },
-    { key: 'w16-polish-judge', label: '保留/刪掉/改回去' },
-    { key: 'w16-checkup-result', label: 'AI 健檢結果' },
-    { key: 'w16-checkup-action', label: '我決定改什麼' },
-    { key: 'w16-poster-title', label: '海報大標題' },
-    { key: 'w16-poster-finding', label: '最核心發現' },
-    { key: 'w16-poster-chart', label: '關鍵圖表' },
-    { key: 'w16-poster-conclusion', label: '海報結論' },
-    { key: 'w16-peer-memory', label: '同儕 3 秒記住的' },
-    { key: 'w16-peer-reflect', label: '互評反思' },
+    { key: 'w15-foreshadow', label: 'W14 伏筆填答' },
+    { key: 'w15-draft-describe', label: '初稿：描述層' },
+    { key: 'w15-draft-interpret', label: '初稿：詮釋層' },
+    { key: 'w15-draft-anchor', label: '初稿：回扣層' },
+    { key: 'w15-draft-critique', label: '初稿：批判層' },
+    { key: 'w15-ai-feedback', label: 'AI 檢核建議紀錄' },
+    { key: 'w15-judge-table', label: '裁奪紀錄' },
+    { key: 'w15-rejected', label: '拒絕 AI 的建議與原因' },
+    { key: 'w15-human-context', label: 'AI 說不出來但我知道的脈絡' },
+    { key: 'w15-final-draft', label: '最終四層結論草稿' },
+    { key: 'w15-ai-helpful', label: 'AI 最有幫助的地方' },
+    { key: 'w15-ai-limit', label: 'AI 最大的限制' },
+    { key: 'w15-ai-blind-trust', label: '完全相信 AI 會犯的錯' },
 ];
 
 /* ══════════════════════════════════════
- *  CopyablePrompt 元件
+ *  內部元件
  * ══════════════════════════════════════ */
+
 const CopyablePrompt = ({ text, label }) => {
     const [copied, setCopied] = useState(false);
     const handleCopy = useCallback(() => {
@@ -145,454 +174,293 @@ const CopyablePrompt = ({ text, label }) => {
                     {copied ? <><Check size={12} /> 已複製</> : <><Copy size={12} /> 複製</>}
                 </button>
             </div>
-            <pre style={{ margin: 0, padding: 16, fontSize: 12, color: '#e2e8f0', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7, fontFamily: 'var(--font-mono)' }}>
-                {text}
-            </pre>
+            <pre style={{ padding: 16, margin: 0, fontSize: 13, lineHeight: 1.7, color: '#e2e8f0', fontFamily: 'var(--font-mono)', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{text}</pre>
         </div>
     );
 };
 
-/* ══════════════════════════════════════
- *  互動式自查清單
- * ══════════════════════════════════════ */
-const AssemblyChecklist = () => {
-    const [checked, setChecked] = useState(() => {
-        try { return JSON.parse(localStorage.getItem('w16-assembly-check') || '{}'); } catch { return {}; }
+const MethodSelector = () => {
+    const [selected, setSelected] = useState(() => {
+        try { return localStorage.getItem('w15-method-selected') || null; } catch { return null; }
     });
-    const toggle = (key) => {
-        const next = { ...checked, [key]: !checked[key] };
-        setChecked(next);
-        localStorage.setItem('w16-assembly-check', JSON.stringify(next));
+    const saved = readRecords();
+    const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
+    const autoDetect = () => {
+        const t = myMethod.toLowerCase();
+        if (t.includes('問卷')) return 'questionnaire';
+        if (t.includes('訪談')) return 'interview';
+        if (t.includes('實驗')) return 'experiment';
+        if (t.includes('觀察')) return 'observation';
+        if (t.includes('文獻')) return 'literature';
+        return null;
     };
-    const items = [
-        { key: 'ch1', label: 'Step 1 — 第一章：引言（W3-W4 素材整合）' },
-        { key: 'ch2', label: 'Step 2 — 第二章：文獻探討（W6 文獻摘要整合）' },
-        { key: 'ch3', label: 'Step 3 — 第三章：研究方法（W10 方法說明整合）' },
-        { key: 'ch4', label: 'Step 4 — 第四章：研究結果（W14 客觀描述整合＋圖表）' },
-        { key: 'ch5', label: 'Step 5 — 第五章：討論與結論（W14-W15 推論＋限制）' },
-        { key: 'ch6', label: 'Step 6 — 參考文獻（W6 APA 格式清單）' },
-        { key: 'stitch', label: '縫合檢查 — 各章節之間的過渡句已確認' },
-    ];
-    const allDone = items.every(i => checked[i.key]);
+    const active = selected || autoDetect();
+    const current = active ? METHOD_PROMPTS[active] : null;
 
     return (
         <div>
-            <div className="w16-checklist">
-                {items.map(item => (
-                    <div key={item.key} className="w16-check-item" onClick={() => toggle(item.key)}>
-                        <div className={`w16-check-box ${checked[item.key] ? 'checked' : ''}`}>
-                            {checked[item.key] && <Check size={14} />}
-                        </div>
-                        <span>{item.label}</span>
-                    </div>
+            <div className="w15-method-tabs">
+                {METHOD_KEYS.map(k => (
+                    <button key={k} className={`w15-method-tab ${active === k ? 'active' : ''}`} onClick={() => { setSelected(k); try { localStorage.setItem('w15-method-selected', k); } catch {} }}>
+                        {METHOD_PROMPTS[k].label}
+                    </button>
                 ))}
             </div>
-            {allDone && (
-                <div style={{ marginTop: 12, padding: '10px 16px', borderRadius: 'var(--radius-unified)', background: '#F0FDF4', border: '1px solid #BBF7D0', fontSize: 12, fontWeight: 700, color: '#166534', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Check size={16} /> 七步組裝全數完成！可以進入 Step 7 摘要了
+            {current ? (
+                <div className="flex flex-col gap-4">
+                    <CopyablePrompt text={current.prompt} label={`${current.label} Prompt`} />
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB]">
+                        <p className="text-[12px] text-[#92400E] font-bold mb-2">🧠 人工裁奪提醒</p>
+                        <div className="text-[12px] text-[#78350F] leading-relaxed flex flex-col gap-1">
+                            {current.tips.map((tip, i) => <span key={i}>• {tip}</span>)}
+                        </div>
+                    </div>
                 </div>
+            ) : (
+                <p className="text-[12px] text-[var(--ink-mid)]">請點選你的研究方法以顯示對應的 Prompt。</p>
             )}
         </div>
     );
 };
 
 /* ══════════════════════════════════════
- *  主元件
+ *  主頁面
  * ══════════════════════════════════════ */
+
 const W15Page = () => {
-    /* 讀取前週資料 */
-    const prev = readRecords(['w15-draft-describe', 'w15-draft-interpret', 'w15-draft-anchor', 'w15-draft-critique', 'w14-my-chart-type', 'w14-my-description', 'w14-my-inference']);
-    const topic = localStorage.getItem('w4-initial-topic') || '';
-    const method = localStorage.getItem('w8-method') || localStorage.getItem('w7-method') || '';
+    const saved = readRecords();
+    const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
+    const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
+    const myQuestion = saved['w8-research-question'] || myTopic;
 
     const steps = [
-        /* ── Step 1 ── */
         {
-            title: '組裝出發',
-            icon: <Package size={18} />,
+            title: '四層升級',
+            icon: <Layers size={18} />,
             content: (
-                <>
-                    <CourseArc current={16} />
-
-                    <div className="card" style={{ marginTop: 24 }}>
-                        <div className="card-header">
-                            <FileText size={16} /> 報告 = 你已經寫好的碎片
-                        </div>
-                        <div className="card-body" style={{ fontSize: 13, lineHeight: 1.8 }}>
-                            好消息：<strong>你已經寫完 80%</strong>。前 15 週每份學習單都藏著報告的原料，現在只需要「搬運 → 縫合 → 潤色」三步組裝。
+                <div className="flex flex-col gap-6">
+                    <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🎓 升級！從局部到全局</p>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                            W14 的描述＋推論是「一張圖的說明」，是局部的。今天要把<strong>整份研究的所有發現整合起來</strong>，寫出一個真正的研究結論。
+                        </p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mt-2" style={{ borderTop: '1px dashed var(--border)', paddingTop: 8 }}>
+                            💡 <strong>名詞升級：</strong>W14 的「推論」在學術上更精確的說法是「詮釋」——意思一樣，都是「解釋數據背後的意義」。今天開始我們用四層學術名稱：描述、詮釋、回扣、批判。
+                        </p>
+                    </div>
+                    <ThinkRecord dataKey="w15-foreshadow" prompt="W14 留下的伏筆：結論的第三層叫___，任務是___。第四層叫___，任務是___。" scaffold={['第三層叫做「回扣」，任務是：直接回答研究問題', '第四層叫做「批判」，任務是：說出研究的限制']} />
+                    <div>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📐 四層結論架構</p>
+                        <div className="w15-layer-grid">
+                            {FOUR_LAYERS.map((layer, i) => (
+                                <div key={i} className="w15-layer-row">
+                                    <div className="w15-layer-badge" style={{ background: layer.color }}>{layer.star && '⭐ '}{layer.name}</div>
+                                    <div className="w15-layer-content">
+                                        <span className="w15-layer-task">{layer.task}</span>
+                                        <span className="w15-layer-ai">AI 角色：{layer.ai}</span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
-
-                    {/* 七步組裝清單 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <CheckSquare size={16} /> 七步組裝清單
-                        </div>
-                        <div className="card-body">
-                            <div className="w16-assembly-grid">
-                                {ASSEMBLY_STEPS.map(s => (
-                                    <div className="w16-assembly-row" key={s.num}>
-                                        <div className="w16-assembly-num" style={{ background: s.color }}>{s.num}</div>
-                                        <div className="w16-assembly-body">
-                                            <div className="w16-assembly-title">{s.chapter}</div>
-                                            <div>{s.task}</div>
-                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
-                                                <span className="w16-assembly-source">來源：{s.source}</span>
-                                                <span className="w16-assembly-time">{s.time}</span>
-                                                {s.words !== '—' && <span className="w16-assembly-time">{s.words}</span>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#FCA5A5] bg-[#FEF2F2]">
+                        <p className="text-[13px] text-[#DC2626] font-bold mb-1">⭐ 回扣層為什麼特別？</p>
+                        <p className="text-[12px] text-[#991B1B] leading-relaxed">
+                            AI 可以幫你把回扣層的文句說得更通順，但<strong>內容和邏輯只能由你來寫</strong>。因為只有你知道你當初為什麼要做這個研究、你的問題問的是什麼。
+                        </p>
+                    </div>
+                    {/* 回扣層多方法範例 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📌 回扣層範例：不同方法怎麼寫？</p>
+                        <div className="flex flex-col gap-3">
+                            <div className="p-3 rounded-[var(--radius-unified)] bg-[#EFF6FF] border border-[#BFDBFE]">
+                                <p className="text-[11px] font-bold text-[#1E40AF] mb-1">📋 問卷研究</p>
+                                <p className="text-[12px] text-[#1E40AF] leading-relaxed">
+                                    「本研究原本想了解<u>社群媒體使用時間與焦慮感的關係</u>。根據 87 份有效問卷的分析結果，每日使用超過 3 小時的學生焦慮量表平均分數顯著高於 1 小時以下的學生。因此，<strong>社群媒體使用時間與焦慮感之間存在正相關</strong>。但本結論僅能說明兩者相關，<strong>無法確定</strong>是社群媒體導致焦慮，還是焦慮的人更傾向使用社群媒體。」
+                                </p>
+                            </div>
+                            <div className="p-3 rounded-[var(--radius-unified)] bg-[#F0FDF4] border border-[#BBF7D0]">
+                                <p className="text-[11px] font-bold text-[#166534] mb-1">🎤 訪談研究</p>
+                                <p className="text-[12px] text-[#166534] leading-relaxed">
+                                    「本研究原本想了解<u>高中生選擇補習的決策歷程</u>。根據 6 位受訪者的訪談分析，多數學生表示補習決定主要來自<strong>同儕壓力而非自我需求</strong>，且決策過程中家長的意見扮演關鍵角色。但本結論僅反映特定學校的 6 位學生經驗，<strong>不宜推論至</strong>所有高中生。」
+                                </p>
+                            </div>
+                            <div className="p-3 rounded-[var(--radius-unified)] bg-[#FEF3C7] border border-[#FDE68A]">
+                                <p className="text-[11px] font-bold text-[#92400E] mb-1">🔬 實驗研究</p>
+                                <p className="text-[12px] text-[#92400E] leading-relaxed">
+                                    「本研究原本想了解<u>背景音樂是否影響記憶力測驗表現</u>。實驗結果顯示，安靜組的平均分數（82.3）高於音樂組（74.1），差異達統計顯著。因此，<strong>背景音樂對短期記憶有負面影響</strong>。但本實驗僅測試了流行音樂，<strong>無法確定</strong>古典音樂或白噪音是否有相同效果。」
+                                </p>
                             </div>
                         </div>
+                        <p className="text-[11px] text-[var(--ink-mid)] mt-3">
+                            注意共同結構：「原本想了解___」→「根據結果，___」→「因此答案是___」→「但只能說明___，無法確定___」
+                        </p>
                     </div>
 
-                    {/* 角色分工 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Users size={16} /> 三人分工（Solo 全包）
-                        </div>
-                        <div className="card-body">
-                            <div className="w16-role-grid">
-                                {ROLES.map(r => (
-                                    <div className="w16-role-card" key={r.name} style={{ background: r.color, borderColor: r.border }}>
-                                        <div className="w16-role-header" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                                            {r.emoji} {r.name}
-                                        </div>
-                                        <div className="w16-role-body">
-                                            <div style={{ fontWeight: 700, marginBottom: 4 }}>{r.steps}</div>
-                                            {r.task}
-                                        </div>
+                    <div>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📖 示範：完整四層</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] mb-3">研究問題：{DEMO_EXAMPLE.question}</p>
+                        <div className="w15-layer-grid">
+                            {DEMO_EXAMPLE.layers.map((d, i) => (
+                                <div key={i} className="w15-layer-row">
+                                    <div className="w15-layer-badge" style={{ background: d.color, minWidth: 60 }}>{d.name}</div>
+                                    <div className="w15-layer-content">
+                                        <span className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{d.text}</span>
                                     </div>
-                                ))}
-                            </div>
-                            <ThinkRecord
-                                dataKey="w16-role"
-                                prompt="今天我的角色是？（搬運工／數據官／AI 溝通師／Solo 全包）"
-                                scaffold={['搬運工', '數據官', 'AI 溝通師', 'Solo（全包）']}
-                            />
+                                </div>
+                            ))}
                         </div>
                     </div>
-                </>
+                </div>
             ),
         },
-
-        /* ── Step 2 ── */
         {
-            title: '報告組裝 + AI 潤色',
+            title: '自己先寫',
             icon: <PenTool size={18} />,
             content: (
-                <>
-                    {/* 組裝進度追蹤 */}
-                    <div className="card">
-                        <div className="card-header">
-                            <CheckSquare size={16} /> 組裝進度（完成就打勾）
-                        </div>
-                        <div className="card-body">
-                            <AssemblyChecklist />
-                        </div>
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 你先寫，AI 再幫你檢核</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            寫得醜沒關係——先把骨架搭出來，第二節課 AI 會幫你把醜句子變漂亮！<strong>不准停筆！</strong>
+                        </p>
                     </div>
-
-                    {/* Step 7 摘要 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <FileText size={16} /> Step 7 — 摘要生成（最後做）
+                    {myQuestion && (
+                        <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border border-[#BAE6FD]">
+                            <p className="text-[12px] text-[#0369A1] font-bold mb-1">📂 你的研究問題</p>
+                            <p className="text-[13px] text-[#0C4A6E]">{myQuestion}</p>
+                            {myMethod && <p className="text-[12px] text-[#0369A1] mt-1">方法：{myMethod}</p>}
                         </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 12 }}>
-                                先填入各章核心句，再用下方 Prompt 讓 AI 幫你生成摘要初稿：
-                            </p>
-                            <ThinkRecord
-                                dataKey="w16-abstract-cores"
-                                prompt="各章核心句（一章一句）"
-                                scaffold={[
-                                    '引言核心：',
-                                    '文獻核心：',
-                                    '方法核心：',
-                                    '結果核心：',
-                                    '結論核心：',
-                                ]}
-                            />
-                            <div style={{ marginTop: 12 }}>
-                                <CopyablePrompt text={PROMPTS.abstract} label="摘要生成 Prompt" />
-                            </div>
-                            <ThinkRecord
-                                dataKey="w16-abstract-ai"
-                                prompt="AI 生成的摘要初稿（貼上）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-abstract-edit"
-                                prompt="我修改了哪些部分？AI 哪裡說錯了？語氣哪裡不對？"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-abstract-final"
-                                prompt="最終確定的摘要（150-200 字）"
-                            />
-                        </div>
+                    )}
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#2563EB' }}>📊 第一層：描述</p>
+                        <ThinkRecord dataKey="w15-draft-describe" prompt="根據你的資料，你看到了什麼？報事實、報數字、報最明顯的現象。" scaffold={[FOUR_LAYERS[0].scaffold]} />
                     </div>
-
-                    {/* AI 潤色 Prompt */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Bot size={16} /> AI 文字潤色（至少做一次）
-                        </div>
-                        <div className="card-body">
-                            <CopyablePrompt text={PROMPTS.polish} label="學術語言優化 Prompt" />
-                            <ThinkRecord
-                                dataKey="w16-polish-chapter"
-                                prompt="我選的段落來自第___章，AI 改了哪些東西？（用自己的話描述）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-polish-diff"
-                                prompt="AI 潤色後的版本有哪些改動？"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-polish-judge"
-                                prompt="我保留的／我刪掉的／我改回去的"
-                            />
-                        </div>
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#7C3AED' }}>💡 第二層：詮釋</p>
+                        <ThinkRecord dataKey="w15-draft-interpret" prompt="這代表什麼意義？可能的原因是什麼？" scaffold={[FOUR_LAYERS[1].scaffold]} />
                     </div>
-
-                    {/* 縫合 Prompt */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Bot size={16} /> 章節縫合手術（選用）
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 12 }}>
-                                如果你把不同章節拼在一起後，讀起來像「不同人寫的」——用這個 Prompt 做縫合手術：
-                            </p>
-                            <CopyablePrompt text={PROMPTS.stitch} label="章節縫合 Prompt" />
-                        </div>
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#DC2626' }}>⭐ 第三層：回扣（內容和邏輯只能你自己寫！）</p>
+                        <ThinkRecord dataKey="w15-draft-anchor" prompt="直接回答你的研究問題。這個結論能說明什麼？不能確定什麼？" scaffold={[FOUR_LAYERS[2].scaffold]} />
                     </div>
-
-                    {/* 完稿健檢 */}
-                    <div className="card" style={{ marginTop: 16, border: '2px solid var(--accent)' }}>
-                        <div className="card-header" style={{ background: 'var(--accent)', color: '#fff' }}>
-                            <FileText size={16} /> 完稿健檢（組裝完成後用）
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 12 }}>
-                                報告在 Canva 排版完成後，<strong>匯出 PDF → 上傳給 AI</strong>。AI 只做診斷、不動刀——你拿到「健檢報告」後自己決定改什麼。
-                            </p>
-                            <div style={{ padding: '10px 16px', background: '#FEF3C7', borderRadius: 'var(--radius-unified)', fontSize: 12, color: '#92400E', lineHeight: 1.7, marginBottom: 12 }}>
-                                <strong>操作步驟：</strong>Canva → 右上角「分享」→「下載」→ 選 PDF → 上傳到 ChatGPT 或 Claude → 貼上下方 Prompt
-                            </div>
-                            <CopyablePrompt text={PROMPTS.checkup} label="完稿健檢 Prompt（上傳 PDF 後使用）" />
-                            <ThinkRecord
-                                dataKey="w16-checkup-result"
-                                prompt="AI 健檢結果（貼上 AI 的五項診斷＋健康指數）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-checkup-action"
-                                prompt="我決定改什麼？哪些 AI 說的有道理？哪些我選擇不改？為什麼？"
-                                scaffold={[
-                                    '我決定修改的：',
-                                    '我選擇不改的（原因）：',
-                                ]}
-                            />
-                        </div>
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#059669' }}>🔍 第四層：批判</p>
+                        <ThinkRecord dataKey="w15-draft-critique" prompt="你的研究有什麼限制？結論不宜推論到哪裡？未來可以怎麼改進？" scaffold={[FOUR_LAYERS[3].scaffold]} />
                     </div>
-                </>
+                </div>
             ),
         },
-
-        /* ── Step 3 ── */
         {
-            title: '海報規劃',
-            icon: <Layout size={18} />,
+            title: 'AI 檢核',
+            icon: <Bot size={18} />,
             content: (
-                <>
-                    <div className="card">
-                        <div className="card-header">
-                            <Eye size={16} /> 3 秒吸引力法則：大、少、準、亮
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 16 }}>
-                                下週 Gallery Walk，沒有聽眾會讀你的論文。他們在走過來的 <strong>3 秒內</strong> 決定要不要停下來聽你說話。那 3 秒，靠的是你的海報。
-                            </p>
-                            <div className="w16-poster-grid">
-                                {POSTER_RULES.map(r => (
-                                    <div className="w16-poster-card" key={r.word} style={{ background: r.color, color: r.textColor }}>
-                                        <div className="w16-poster-icon">{r.icon}</div>
-                                        <div className="w16-poster-word">{r.word}</div>
-                                        <div className="w16-poster-desc">{r.desc}</div>
-                                    </div>
-                                ))}
-                            </div>
+                <div className="flex flex-col gap-6">
+                    <div className="w15-privacy-card">
+                        <div className="w15-privacy-header"><Shield size={16} /> ⚠️ 餵 AI 之前的鐵規</div>
+                        <div className="w15-privacy-body">
+                            <p className="mb-2">你在 W11 簽了知情同意書，承諾保護受訪者的個人資料。現在要把資料貼給 AI，是個資外流的風險點。</p>
+                            <p className="font-bold">📋 問卷：刪除所有姓名、學號、Line 暱稱再貼</p>
+                            <p className="font-bold">🎤 訪談：受訪者真實姓名改為代號（A、B、C）再貼</p>
+                            <p className="mt-2 font-bold">沒有完成個資清除就把資料貼給 AI，就是違反你對受訪者的承諾。</p>
                         </div>
                     </div>
-
-                    {/* 海報文字規劃 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <PenTool size={16} /> 海報文字規劃（先想好再排版）
-                        </div>
-                        <div className="card-body">
-                            <ThinkRecord
-                                dataKey="w16-poster-title"
-                                prompt="大標題（要吸引人停下來！建議用問句或驚人數字）"
-                                scaffold={['試試問句：「為什麼___？」', '或驚人數字：「___% 的高中生竟然___」']}
-                            />
-                            <ThinkRecord
-                                dataKey="w16-poster-finding"
-                                prompt="最核心的一個發現（一句話，可以是數字）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-poster-chart"
-                                prompt="關鍵圖表——你打算放哪一張？（W14 或 W15 做的哪一個？）"
-                            />
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 8 }}>
-                                <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 4 }}>左區：研究動機（一句話）</div>
-                                    <ThinkRecord dataKey="w16-poster-motive" prompt="一句話說清楚為什麼做這個研究" />
-                                </div>
-                                <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 4 }}>右區：研究方法（一句話）</div>
-                                    <ThinkRecord dataKey="w16-poster-method" prompt="一句話說清楚你用什麼方法" />
-                                </div>
-                            </div>
-                            <ThinkRecord
-                                dataKey="w16-poster-conclusion"
-                                prompt="結論（不超過三點，每點一行）"
-                                scaffold={['1.', '2.', '3.']}
-                            />
-                        </div>
+                    <div>
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🗂️ 選擇你的研究方法，取得對應的 Prompt</p>
+                        <MethodSelector />
                     </div>
-                </>
+                    <ThinkRecord dataKey="w15-ai-feedback" prompt="AI 提供了哪些建議？分別記錄描述層、詮釋層、回扣層潤飾、研究限制的建議重點。" scaffold={['描述層建議：...', '詮釋層建議：...', '回扣層潤飾：...', '研究限制建議：1.__ 2.__ 3.__']} />
+                </div>
             ),
         },
-
-        /* ── Step 4 ── */
         {
-            title: '海報製作',
-            icon: <Layout size={18} />,
+            title: '人工裁奪',
+            icon: <Scale size={18} />,
             content: (
-                <>
-                    {/* 紙筆線框圖 */}
-                    <div className="card" style={{ border: '2px solid #DC2626' }}>
-                        <div className="card-header" style={{ background: '#FEF2F2', color: '#991B1B' }}>
-                            ⚠️ 先畫紙筆線框圖！禁止打開電腦
-                        </div>
-                        <div className="card-body" style={{ background: '#FEF2F2' }}>
-                            <p style={{ fontSize: 13, lineHeight: 1.8, color: '#991B1B', fontWeight: 600, marginBottom: 12 }}>
-                                前 15 分鐘嚴禁打開電腦。先在紙上畫好版面配置——哪裡放標題、哪裡放圖表、重點在哪裡。<br />
-                                沒有拿給老師（或組長）看的，不准打開 Canva！
-                            </p>
-                            <div style={{
-                                background: '#fff',
-                                border: '2px dashed #FECACA',
-                                borderRadius: 'var(--radius-unified)',
-                                padding: 20,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: 11,
-                                color: '#6B7280',
-                                lineHeight: 2,
-                                whiteSpace: 'pre-line',
-                            }}>
-{`┌─────────────────────────────────────┐
-│          【研究大標題】               │
-│                                     │
-│ [左上：研究動機]   [右上：研究方法]     │
-│  一句話            一句話             │
-│                                     │
-│       [ 中央：最強圖表展現區 ]         │
-│       （全海報最顯眼的位置）           │
-│                                     │
-│ [左下：關鍵發現]   [右下：結論]        │
-│  1.                摘要一句最震撼重點   │
-│  2.                                 │
-│  3.               [QR Code]          │
-└─────────────────────────────────────┘`}
-                            </div>
-                            <p style={{ fontSize: 11, color: '#991B1B', marginTop: 8 }}>
-                                海報的重點是排版邏輯，不是漂亮的花邊。先確認最重要的發現有沒有放中間，再考慮美化。
-                            </p>
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">⚖️ 對照 AI 版本，逐條判斷</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            AI 給你的是建議，不是答案。每一條都要決定：<strong>採納、不採納、還是修改後採納</strong>。
+                        </p>
+                    </div>
+                    <ThinkRecord dataKey="w15-judge-table" prompt="逐條記錄 AI 的建議和你的裁奪（採納/不採納/修改後採納），並說明原因。" scaffold={['建議1：___。裁奪：___。原因：...', '建議2：___。裁奪：___。原因：...', '建議3：___。裁奪：___。原因：...']} />
+                    <ThinkRecord dataKey="w15-rejected" prompt="我拒絕了 AI 哪個建議？原因是什麼？" scaffold={['我拒絕了___，因為...']} />
+                    <ThinkRecord dataKey="w15-human-context" prompt="有什麼是 AI 說不出來、但我知道的研究脈絡？" scaffold={['AI 不知道的是...，但我知道因為...']} />
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)]">
+                        <p className="text-[14px] font-bold text-[var(--accent)] mb-3">📝 最終四層結論草稿</p>
+                        <ThinkRecord dataKey="w15-final-draft" prompt="整合後的最終版本。確認回扣層的內容還是你自己的，AI 只改了文句。" scaffold={['【描述】...', '【詮釋】...', '【回扣】本研究原本想了解___。根據分析結果，___。但這個結論只能說明___，無法確定___。', '【批判】本研究的限制在於___，因此結論不宜推論至___。未來可以___。']} />
+                    </div>
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">📋 這份草稿對應期末報告的章節</p>
+                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
+                            <span><strong>第四章 研究結果</strong> → 放【描述層】</span>
+                            <span><strong>第五章 討論與結論</strong> → 放【詮釋層】＋【回扣層】＋【批判層】</span>
                         </div>
                     </div>
-
-                    {/* 製作提示 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Layout size={16} /> 數位版製作提示
-                        </div>
-                        <div className="card-body" style={{ fontSize: 12, lineHeight: 1.8, color: 'var(--ink-mid)' }}>
-                            <p>線框圖確認後才可以打開電腦（Canva / Google 簡報 / 手繪皆可）。</p>
-                            <p style={{ marginTop: 8 }}><strong>常見陷阱提醒：</strong></p>
-                            <div style={{ marginTop: 8, padding: '12px 16px', background: 'var(--paper-warm)', borderRadius: 'var(--radius-unified)', fontSize: 12, lineHeight: 1.8 }}>
-                                「我想換一個很漂亮的背景」→ 先確認最重要發現有沒有放中間、字數有沒有控制。花邊是最後一步！<br />
-                                「內容很多，刪掉覺得少了」→ 完整內容在報告裡，海報只需讓人走過來問「這是什麼？」<br />
-                                「標題太學術了」→ 試改成問句：「為什麼高中生越補習反而越焦慮？」
-                            </div>
-                        </div>
-                    </div>
-                </>
+                </div>
             ),
         },
-
-        /* ── Step 5 ── */
         {
             title: '回顧繳交',
             icon: <FileText size={18} />,
             content: (
-                <>
-                    {/* 同儕 3 秒互評 */}
-                    <div className="w16-review-card">
-                        <div className="w16-review-header">
-                            <Eye size={16} /> 同儕 3 秒互評
-                        </div>
-                        <div className="w16-review-body">
-                            <p style={{ marginBottom: 12 }}>
-                                把你的海報草稿給旁邊的同學看 <strong>3 秒</strong>，然後問他：「你記住了什麼？」
-                            </p>
-                            <ThinkRecord
-                                dataKey="w16-peer-memory"
-                                prompt="同學看了 3 秒後，他記得的是什麼？"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-peer-reflect"
-                                prompt="我最重要的東西有被記住嗎？如果沒有，我打算怎麼調整？"
-                                scaffold={[
-                                    '有被記住 → 不需要大改',
-                                    '沒有被記住 → 我打算把「___」放更大',
-                                ]}
-                            />
-                        </div>
+                <div className="flex flex-col gap-6">
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">💡 AI 協作反思</p>
+                        <p className="text-[12px] text-[var(--ink-mid)]">回顧今天和 AI 的協作過程。</p>
                     </div>
-
-                    {/* W17 預告 */}
-                    <div className="card" style={{ marginTop: 16, background: '#1a1a2e', border: 'none' }}>
-                        <div className="card-body" style={{ color: '#e2e8f0' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                                <ArrowRight size={16} style={{ color: 'var(--accent)' }} />
-                                <span style={{ fontSize: 13, fontWeight: 700 }}>下週 W17 最終戰：Gallery Walk 發表會</span>
-                            </div>
-                            <div style={{ fontSize: 12, lineHeight: 1.8, opacity: 0.8 }}>
-                                必須攜帶：海報（紙本或電子）＋ 2 分鐘宣傳話術<br />
-                                你是報告者，也是聆聽者！A/B 組輪替，每個人兩個身分都要做。
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style={{ marginTop: 20 }}>
-                        <ExportButton
-                            weekLabel="W16 報告撰寫與海報製作"
-                            fields={EXPORT_FIELDS}
-                        />
-                    </div>
-                </>
+                    <ThinkRecord dataKey="w15-ai-helpful" prompt="今天 AI 最有幫助的地方是什麼？" />
+                    <ThinkRecord dataKey="w15-ai-limit" prompt="今天 AI 最大的限制是什麼？" />
+                    <ThinkRecord dataKey="w15-ai-blind-trust" prompt="如果我完全相信 AI，我會犯什麼錯？" />
+                    <ExportButton weekLabel="W15 從圖的說明到研究結論：四層次寫作工作坊" fields={EXPORT_FIELDS} />
+                </div>
             ),
         },
     ];
 
     return (
-        <StepEngine
-            weekTitle="W16 報告撰寫與海報製作：從數據到故事"
-            steps={steps}
-            prevWeek={{ path: '/w15', label: 'W15' }}
-            nextWeek={{ path: '/w17', label: 'W17' }}
-        />
+        <div className="page-container animate-in-fade-slide">
+            {/* TOP BAR */}
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-16">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2">
+                    研究方法與專題 / 分析與報告 / <span className="text-[var(--ink)] font-bold">研究結論 W15</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <span className="bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
+                </div>
+            </div>
+
+            {/* PAGE HEADER */}
+            <header className="max-w-[800px] mb-16">
+                <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-[0.06em]">📝 W15 · 分析與報告階段</div>
+                <h1 className="font-serif text-[36px] font-bold leading-[1.2] text-[var(--ink)] mb-4 tracking-[-0.02em]">
+                    四層結論 · <span className="text-[var(--accent)] italic">從圖的說明到研究結論</span>
+                </h1>
+                <p className="text-[15px] text-[var(--ink-mid)] max-w-[600px] leading-[1.75] mb-8">
+                    W14 的描述＋推論是「一張圖的說明」。今天升級：把整份研究的所有發現整合，用描述、詮釋、回扣、批判四層寫出完整研究結論。
+                </p>
+
+                <CourseArc items={W14Data.courseArc} />
+
+                <div className="meta-grid">
+                    {W14Data.metaCards.map((item, idx) => (
+                        <div key={idx} className="meta-item">
+                            <div className="meta-label">{item.label}</div>
+                            <div className="meta-value">{item.value}</div>
+                        </div>
+                    ))}
+                </div>
+            </header>
+
+            {/* STEP ENGINE */}
+            <StepEngine
+                steps={steps}
+                prevWeek={{ label: '回 W14 圖表與圖說', to: '/w14' }}
+                nextWeek={{ label: '前往 W16 報告與海報', to: '/w16' }}
+            />
+        </div>
     );
 };
 

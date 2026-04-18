@@ -21,8 +21,16 @@ export const Layout = () => {
             items: [
                 { name: '任務總覽', path: '/', status: 'active' },
                 { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
+                { name: '探員檔案', path: '/dossier', status: 'none' },
                 { name: '資料分析站', path: '/analysis-station', status: 'none' },
                 { name: '關於本站', path: '/about', status: 'none' },
+            ]
+        },
+        {
+            label: '連貫劇情',
+            items: [
+                { name: '幽靈數據', path: '/phantom', status: 'none' },
+                { name: '回音行動', path: '/echo', status: 'none' },
             ]
         },
         {
@@ -121,11 +129,17 @@ export const Layout = () => {
             if (item.path === '/') {
                 if (location.pathname === '/') finalStatus = 'active';
             } else if (item.path === '/games') {
-                if (location.pathname.startsWith('/game')) finalStatus = 'active';
+                if (location.pathname === '/games' || location.pathname.startsWith('/game/')) finalStatus = 'active';
+            } else if (item.path === '/dossier') {
+                if (location.pathname === '/dossier') finalStatus = 'active';
             } else if (item.path === '/analysis-station') {
                 if (location.pathname === '/analysis-station') finalStatus = 'active';
             } else if (item.path === '/about') {
                 if (location.pathname === '/about') finalStatus = 'active';
+            } else if (item.path === '/phantom') {
+                if (location.pathname.startsWith('/phantom')) finalStatus = 'active';
+            } else if (item.path === '/echo') {
+                if (location.pathname.startsWith('/echo')) finalStatus = 'active';
             } else {
                 const itemWeekNum = getWeekNumber(item.path);
                 if (itemWeekNum !== -1) {

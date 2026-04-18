@@ -1,15 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
+import { baseCourseArc } from '../../data/lessonMaps';
 
 /**
  * CourseArc — 課程弧線單列元件
  *
- * 支援兩種資料格式：
- *   { wk, name, past: true, now: true }   ← lessonMaps 格式
- *   { wk, name, status: 'past'|'now'|'' } ← 部分頁面的 inline 格式
+ * 用法一（明確 items）：
+ *   <CourseArc items={[{ wk, name, past, now }]} />
  *
- * 自動將 now 項目水平置中顯示（邊邊週次受限不置中）。
+ * 用法二（簡寫 current）：
+ *   <CourseArc current={13} />
+ *   自動從 baseCourseArc 產生 items，current 週之前標 past、所在區段標 now。
  */
-export default function CourseArc({ items, label = '課程弧線 · 你在哪裡' }) {
+export default function CourseArc({ items: itemsProp, current, label = '課程弧線 · 你在哪裡' }) {
+    /* 若傳了 current 而非 items，自動產生 */
+    const items = useMemo(() => {
+        if (itemsProp) return itemsProp;
+        if (current == null) return [];
+        /* 解析每個 arc 項目涵蓋的週次範圍 */
+        return baseCourseArc.map(entry => {
+            const m = entry.wk.match(/W(\d+)(?:-W?(\d+))?/);
+            if (!m) return { ...entry };
+            const lo = Number(m[1]);
+            const hi = m[2] ? Number(m[2]) : lo;
+            const isNow = current >= lo && current <= hi;
+            const isPast = hi < current;
+            return { ...entry, now: isNow, past: isPast };
+        });
+    }, [itemsProp, current]);
     const wrapperRef = useRef(null);
     const nowRef = useRef(null);
 

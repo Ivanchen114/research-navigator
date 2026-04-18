@@ -12,6 +12,18 @@ dist
 dist-ssr
 *.local
 
+# macOS Finder 自動複製產生的 dist 備份（dist 2、dist 3、dist 10...）
+dist [0-9]*/
+dist_broken/
+
+# 一次性轉檔／修補腳本與紀錄（保留在本機，不入庫）
+convert_*.py
+update_*.py
+fix_*.js
+patch_*.sh
+diagnostic.mjs
+tool_quiz_log.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

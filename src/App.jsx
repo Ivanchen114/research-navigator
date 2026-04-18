@@ -11,13 +11,13 @@ import { ClinicPage } from './pages/ClinicPage';
 import { ToolDesignPage } from './pages/ToolDesignPage';
 import { W9Page } from './pages/W9Page';
 import { ToolRefinementPage } from './pages/ToolRefinementPage';
-import { W10Page } from './pages/W10Page';
 import { W11Page } from './pages/W11Page';
 import { W12Page } from './pages/W12Page';
 import { W13Page } from './pages/W13Page';
 import { W14Page } from './pages/W14Page';
 import { W15Page } from './pages/W15Page';
 import { W16Page } from './pages/W16Page';
+import { W17Page } from './pages/W17Page';
 import { W4Page } from './pages/W4Page';
 import { W50Page } from './pages/W50Page';
 import { GameHub } from './pages/games/GameHub';
@@ -69,13 +69,13 @@ function App() {
           <Route path="w9" element={<W9Page />} />
           <Route path="tool-refinement" element={<ToolRefinementPage />} />
           <Route path="w10" element={<ToolRefinementPage />} />
-          <Route path="w11" element={<W10Page />} />
-          <Route path="w12" element={<W11Page />} />
-          <Route path="w13" element={<W12Page />} />
-          <Route path="w14" element={<W13Page />} />
-          <Route path="w15" element={<W14Page />} />
-          <Route path="w16" element={<W15Page />} />
-          <Route path="w17" element={<W16Page />} />
+          <Route path="w11" element={<W11Page />} />
+          <Route path="w12" element={<W12Page />} />
+          <Route path="w13" element={<W13Page />} />
+          <Route path="w14" element={<W14Page />} />
+          <Route path="w15" element={<W15Page />} />
+          <Route path="w16" element={<W16Page />} />
+          <Route path="w17" element={<W17Page />} />
           <Route path="analysis" element={<AnalysisHub />} />
           <Route path="chart-selection" element={<ChartSelection />} />
 
