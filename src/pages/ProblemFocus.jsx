@@ -271,23 +271,24 @@ export const ProblemFocus = () => {
                                 </p>
                             </div>
 
-                            {/* 圖片練習 1 & 2 */}
-                            <div className="w2-practice-block" style={{ margin: 0 }}>
-                                <div className="w2-practice-header">
-                                    <span className="w2-practice-badge w2-pb-human">人腦</span>
-                                    <span className="w2-practice-title">圖片轉化戰（練習 1 & 2）</span>
-                                    <span className="w2-practice-sub">先練手感</span>
+                            {/* 圖片練習 1 & 2 — 去卡化，純敘事流 */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#f0ede6] text-[#6b4a2e]">人腦</span>
+                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">先練手感</span>
                                 </div>
-                                <div className="w2-practice-body">
-                                    老師投影兩張對比圖片，練習用前三步快速思考。節奏要快，不分享，Step 3 白話說就好。<br /><br />
-                                    對每張圖片分別完成：
-                                    <ol style={{ margin: '8px 0 0 20px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                        <li><strong>現象：</strong>像攝影機一樣描述（至少 30 字，不解釋，只描述）</li>
-                                        <li><strong>落差：</strong>哪裡矛盾？規則與現實的衝突在哪？（至少 30 字）</li>
-                                        <li><strong>核心疑問：</strong>你最想搞清楚的那件事，白話說出來</li>
-                                    </ol>
-                                    <div className="w2-notice block" style={{ marginTop: '12px' }}>❌ 禁止用「為什麼」開頭。Step 3 不需要學術格式，說白話就好。</div>
-                                </div>
+                                <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
+                                    圖片轉化戰（練習 1 & 2）
+                                </h4>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
+                                    老師投影兩張對比圖片，練習用前三步快速思考。節奏要快，不分享，Step 3 白話說就好。對每張圖片分別完成：
+                                </p>
+                                <ol className="list-decimal pl-5 text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] mt-2">
+                                    <li><strong className="text-[var(--ink)]">現象：</strong>像攝影機一樣描述（至少 30 字，不解釋，只描述）</li>
+                                    <li><strong className="text-[var(--ink)]">落差：</strong>哪裡矛盾？規則與現實的衝突在哪？（至少 30 字）</li>
+                                    <li><strong className="text-[var(--ink)]">核心疑問：</strong>你最想搞清楚的那件事，白話說出來</li>
+                                </ol>
+                                <div className="w2-notice block mt-3">❌ 禁止用「為什麼」開頭。Step 3 不需要學術格式，說白話就好。</div>
                             </div>
 
                             {/* 練習 0：核心！ */}
@@ -352,36 +353,35 @@ export const ProblemFocus = () => {
                                 </p>
                             </div>
 
-                            {/* 落差擴充器 */}
-                            <div className="w2-practice-block" style={{ margin: 0 }}>
-                                <div className="w2-practice-header">
-                                    <span className="w2-practice-badge w2-pb-ai">AI 協作</span>
-                                    <span className="w2-practice-title">落差擴充器</span>
-                                    <span className="w2-practice-sub">AI 給選項，你做判斷</span>
+                            {/* 落差擴充器 — 去卡化 */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#e6efff] text-[#2d5be3]">AI 協作</span>
+                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">AI 給選項，你做判斷</span>
                                 </div>
-                                <div className="w2-practice-body">
+                                <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
+                                    落差擴充器
+                                </h4>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
                                     把 Step 2 寫好的現象貼進去，讓 AI 幫你從多角度找矛盾：
+                                </p>
 
-                                    <div className="prompt-box">
-                                        <div className="prompt-hd">
-                                            <span>PROMPT · 落差擴充器</span>
-                                            <CopyButton text={PROMPT_GAP} label="複製" />
-                                        </div>
-                                        <div className="prompt-body">
-                                            我觀察到一個現象：[請貼上你的現象]<br /><br />
-                                            請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。<br />
-                                            （例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）<br /><br />
-                                            請給我 5 個不同的矛盾點，每個用一句話說明。
-                                        </div>
+                                <div className="prompt-box mt-4">
+                                    <div className="prompt-hd">
+                                        <span>PROMPT · 落差擴充器</span>
+                                        <CopyButton text={PROMPT_GAP} label="複製" />
                                     </div>
-
-                                    <div style={{ fontSize: '13px', color: 'var(--ink-mid)', lineHeight: '1.8', marginTop: '10px' }}>
-                                        AI 給了 5 個選項之後，問自己：<br />
-                                        → 這個矛盾我<strong>真的觀察到了嗎</strong>？（AI 在猜，不代表真實）<br />
-                                        → 這個矛盾我<strong>有興趣深究嗎</strong>？<br />
-                                        如果 5 個都不對，就用你原本的落差——AI 只是放大鏡，你才是眼睛。
+                                    <div className="prompt-body">
+                                        我觀察到一個現象：[請貼上你的現象]<br /><br />
+                                        請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。<br />
+                                        （例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）<br /><br />
+                                        請給我 5 個不同的矛盾點，每個用一句話說明。
                                     </div>
                                 </div>
+
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] mt-4">
+                                    AI 給了 5 個選項之後，問自己：這個矛盾我<strong className="text-[var(--ink)]">真的觀察到了嗎</strong>？（AI 在猜，不代表真實）這個矛盾我<strong className="text-[var(--ink)]">有興趣深究嗎</strong>？如果 5 個都不對，就用你原本的落差——AI 只是放大鏡，你才是眼睛。
+                                </p>
                             </div>
 
                             <ThinkRecord
@@ -395,35 +395,38 @@ export const ProblemFocus = () => {
                             {/* 分隔 */}
                             <div className="w-full h-px bg-[var(--border)]" />
 
-                            {/* 探究意圖生成器 */}
-                            <div className="w2-practice-block" style={{ margin: 0 }}>
-                                <div className="w2-practice-header">
-                                    <span className="w2-practice-badge w2-pb-ai">AI 協作</span>
-                                    <span className="w2-practice-title">探究意圖生成器</span>
-                                    <span className="w2-practice-sub">完成 Step 4</span>
+                            {/* 探究意圖生成器 — 去卡化 */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#e6efff] text-[#2d5be3]">AI 協作</span>
+                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">完成 Step 4</span>
                                 </div>
-                                <div className="w2-practice-body">
-                                    <div className="w2-notice warn" style={{ marginBottom: '12px' }}>
-                                        ★ <strong>先做判斷，不准用 AI！</strong>看著你的核心疑問，自己判斷是 A / B / C 型。
+                                <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
+                                    探究意圖生成器
+                                </h4>
+
+                                <div className="w2-notice warn mb-3">
+                                    ★ <strong>先做判斷，不准用 AI！</strong>看著你的核心疑問，自己判斷是 A / B / C 型。
+                                </div>
+
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
+                                    判斷好之後，把現象、落差、核心疑問都填進下方 Prompt，請 AI 翻譯成三種方向，然後<strong className="text-[var(--ink)]">你選一個</strong>。
+                                </p>
+
+                                <div className="prompt-box mt-4">
+                                    <div className="prompt-hd">
+                                        <span>PROMPT · 探究意圖生成器</span>
+                                        <CopyButton text={PROMPT_INTENT} label="複製" />
                                     </div>
-
-                                    判斷好之後，把現象、落差、核心疑問都填進下方 Prompt，請 AI 翻譯成三種方向，然後<strong>你選一個</strong>。
-
-                                    <div className="prompt-box">
-                                        <div className="prompt-hd">
-                                            <span>PROMPT · 探究意圖生成器</span>
-                                            <CopyButton text={PROMPT_INTENT} label="複製" />
-                                        </div>
-                                        <div className="prompt-body">
-                                            我觀察到：[你的現象]<br />
-                                            發現落差：[你最終決定的落差]<br />
-                                            我最想搞清楚的核心疑問是：[你的白話疑問]<br /><br />
-                                            請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：<br /><br />
-                                            A. 影響型（某因素如何影響某結果）<br />
-                                            B. 比較型（兩種對象/情境的差異）<br />
-                                            C. 深究型（某現象的運作機制/背後原因）<br /><br />
-                                            每個方向請用一句話說明，並標註適合的研究方法。
-                                        </div>
+                                    <div className="prompt-body">
+                                        我觀察到：[你的現象]<br />
+                                        發現落差：[你最終決定的落差]<br />
+                                        我最想搞清楚的核心疑問是：[你的白話疑問]<br /><br />
+                                        請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：<br /><br />
+                                        A. 影響型（某因素如何影響某結果）<br />
+                                        B. 比較型（兩種對象/情境的差異）<br />
+                                        C. 深究型（某現象的運作機制/背後原因）<br /><br />
+                                        每個方向請用一句話說明，並標註適合的研究方法。
                                     </div>
                                 </div>
                             </div>
@@ -509,21 +512,19 @@ export const ProblemFocus = () => {
                                 <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">本週結束，你應該要會</h3>
                             </div>
 
-                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
-                                    {[
-                                        '說出「為什麼」是爛問題的原因，並用四段式框架改造它',
-                                        '區分 A / B / C 三種探究句型，知道各自對應什麼研究方法',
-                                        '用 AI 找落差、翻譯句型，但選擇是自己做的',
-                                        '寫出最終探究意圖，下週帶去 W3 題目健檢',
-                                    ].map((txt, i) => (
-                                        <div key={i} className="p-5 bg-white flex items-start gap-3">
-                                            <span className="text-[var(--success)] mt-0.5 text-[15px]">✓</span>
-                                            <span className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.75]">{txt}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                            <ul className="flex flex-col gap-3 md:gap-4 pt-2 list-none pl-0">
+                                {[
+                                    '說出「為什麼」是爛問題的原因，並用四段式框架改造它',
+                                    '區分 A / B / C 三種探究句型，知道各自對應什麼研究方法',
+                                    '用 AI 找落差、翻譯句型，但選擇是自己做的',
+                                    '寫出最終探究意圖，下週帶去 W3 題目健檢',
+                                ].map((txt, i) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <span className="text-[var(--success)] mt-1 text-[16px] shrink-0">✓</span>
+                                        <span className="text-[15px] md:text-[16px] text-[var(--ink)] leading-[1.75]">{txt}</span>
+                                    </li>
+                                ))}
+                            </ul>
 
                             {/* 一鍵複製 */}
                             <ExportButton
