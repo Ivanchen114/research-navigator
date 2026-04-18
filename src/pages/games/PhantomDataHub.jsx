@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, CheckCircle, ChevronRight, FileText, AlertCircle } from 'lucide-react';
+import { Lock, CheckCircle, ChevronRight, AlertCircle } from 'lucide-react';
 
 const CHAPTERS = [
     { num: 1, title: '潛伏監看', method: '觀察法', desc: '在不驚動目標的情況下，記錄電腦區的異常行為模式', path: '/phantom/ch1', completeKey: null },

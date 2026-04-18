@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './W16.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
@@ -17,7 +16,6 @@ import {
     Users,
     FileText,
     Eye,
-    Clock,
     CheckSquare,
 } from 'lucide-react';
 

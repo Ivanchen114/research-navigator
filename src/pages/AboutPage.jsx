@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Gamepad2, Brain, BarChart2, FileText, Shield, Users,
-  ArrowLeft, Zap, Target, BookOpen, Microscope
+    Gamepad2,
+    Brain,
+    BarChart2,
+    ArrowLeft,
+    BookOpen,
 } from 'lucide-react';
 
 export const AboutPage = () => {

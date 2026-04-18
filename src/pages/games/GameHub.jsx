@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    ShieldAlert, Search, Stethoscope, BriefcaseMedical,
-    BarChart3, PieChart, UserCircle2, LogIn, LogOut,
-    Activity, ArrowRight, BookOpen, Bug, Star, StarHalf,
-    ChevronRight, FolderOpen, Lock
+    ShieldAlert,
+    Search,
+    Stethoscope,
+    BriefcaseMedical,
+    PieChart,
+    UserCircle2,
+    LogIn,
+    LogOut,
+    Activity,
+    ArrowRight,
+    BookOpen,
+    Bug,
+    Star,
+    StarHalf,
+    ChevronRight,
+    FolderOpen,
 } from 'lucide-react';
 
 // 定義六大任務卡片資料

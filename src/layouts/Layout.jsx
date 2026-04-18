@@ -88,8 +88,8 @@ export const Layout = () => {
         if (path === '/w6') return 6;
         if (path === '/w7') return 7;
         if (path === '/w8') return 8;
-        if (path === '/w9' || path === '/tool-design') return 9;
-        if (path === '/w10' || path === '/tool-refinement') return 10;
+        if (path === '/w9') return 9;
+        if (path === '/w10') return 10;
         if (path === '/w11') return 11;
         if (path === '/w12') return 12;
         if (path === '/w13') return 13;

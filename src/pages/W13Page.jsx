@@ -11,7 +11,6 @@ import {
     Bot,
     Copy,
     Check,
-    AlertTriangle,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════

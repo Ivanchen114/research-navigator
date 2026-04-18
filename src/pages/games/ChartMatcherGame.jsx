@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // ========== 迷你圖表預覽元件（全部 SVG）==========
 // 統一尺寸常數

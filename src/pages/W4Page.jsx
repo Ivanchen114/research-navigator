@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import ThinkChoice from '../components/ui/ThinkChoice';
@@ -9,7 +8,6 @@ import CopyButton from '../components/ui/CopyButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     Map,
-    ArrowRight,
     CheckCircle2,
     Users2,
     Lightbulb,

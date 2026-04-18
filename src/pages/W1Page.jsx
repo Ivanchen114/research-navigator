@@ -8,7 +8,6 @@ import ExportButton from '../components/ui/ExportButton';
 import {
     CheckCircle2,
     ArrowRight,
-    ChevronDown,
     ChevronUp,
     Map,
     Activity,

@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './W11.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
@@ -7,14 +6,11 @@ import StepEngine from '../components/ui/StepEngine';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
-    ArrowRight,
     CheckCircle2,
     Bot,
     Copy,
     Check,
-    Shield,
     Plane,
-    ClipboardCheck,
     Users,
     Radio,
     Unlock,

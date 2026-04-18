@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Eye,
-    Search,
-    Zap,
     CheckCircle2,
     AlertCircle,
-    Flame,
-    Ghost,
     ChevronDown,
     ChevronUp,
-    Brain,
-    Flag,
-    Lock,
     MessageCircle,
-    Layout,
-    Clock,
     ArrowRight,
-    Map
+    Map,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LessonMap from '../components/ui/LessonMap';

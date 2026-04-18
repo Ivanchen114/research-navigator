@@ -1,24 +1,23 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Search,
-  BookOpen,
-  Target,
-  Compass,
-  Users,
-  Stethoscope,
-  Gamepad2,
-  Wrench,
-  Microscope,
-  FlaskConical,
-  BarChart2,
-  FileText,
-  Palette,
-  Trophy,
-  Zap,
-  Rocket,
-  ChevronRight,
-  ArrowRight
+    Search,
+    BookOpen,
+    Target,
+    Compass,
+    Users,
+    Stethoscope,
+    Wrench,
+    Microscope,
+    FlaskConical,
+    BarChart2,
+    FileText,
+    Palette,
+    Trophy,
+    Zap,
+    Rocket,
+    ChevronRight,
+    ArrowRight,
 } from 'lucide-react';
 
 export const Home = () => {
@@ -182,7 +181,6 @@ export const Home = () => {
                 }
                 .wc-mission:hover .wm-arrow { transform: translateX(5px); color: #c9a84c; }
                 .wc-mission:hover .wm-name { color: rgba(255,255,255,0.95); }
-
 
                 /* ═══ QUICK JUMP ═══ */
                 .jump-grid {
@@ -409,7 +407,7 @@ export const Home = () => {
             <p className="hero-sub">這不是幫你寫作業的工具，而是你的研究教練。透過人機協作，把複雜的研究方法變得像通關遊戲一樣有跡可循。</p>
           </div>
           <div className="hero-stats">
-            <div className="stat"><div className="stat-n">W0–W16</div><div className="stat-label">課程週次</div></div>
+            <div className="stat"><div className="stat-n">W0–W17</div><div className="stat-label">課程週次</div></div>
             <div className="stat"><div className="stat-n">4</div><div className="stat-label">學習階段</div></div>
             <div className="stat"><div className="stat-n">6</div><div className="stat-label">互動任務</div></div>
             <div className="stat"><div className="stat-n">5</div><div className="stat-label">AI-RED 原則</div></div>
@@ -456,7 +454,7 @@ export const Home = () => {
         <div className="section-head">
           <h2>課程地圖</h2>
           <div className="line"></div>
-          <span className="tag">Course Roadmap · W0 – W16</span>
+          <span className="tag">Course Roadmap · W0 – W17</span>
         </div>
 
         <div className="roadmap">

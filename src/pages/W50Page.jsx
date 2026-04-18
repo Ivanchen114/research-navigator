@@ -563,11 +563,11 @@ export const W50Page = () => {
                         <div className="next-week-content">
                             <div className="next-week-col">
                                 <div className="next-week-label">W6 主題</div>
-                                <p className="next-week-text">五路分流——根據你的研究方法（問卷/訪談/實驗/觀察/文獻）分組學習。</p>
+                                <p className="next-week-text">文獻偵探社——識破換字抄襲、文獻堆砌，學會「三明治」寫法把文獻變成自己的論述。</p>
                             </div>
                             <div className="next-week-col">
-                                <div className="next-week-label">你要確認</div>
-                                <p className="next-week-text">你的 <strong>How（研究方法）</strong>決定你下週去哪一組。確認 W4 學習單的 How 欄位有填好。</p>
+                                <div className="next-week-label">你要帶</div>
+                                <p className="next-week-text">這週找到的 <strong>A/B 級文獻</strong>與 APA 書目——W6 要用這些素材練文獻探討寫作。</p>
                             </div>
                         </div>
                     </div>
@@ -618,7 +618,7 @@ export const W50Page = () => {
                 {[
                     { label: '本週任務', value: '華藝搜尋 + APA 格式 + 證物鑑識大賽' },
                     { label: '課堂產出', value: '1 篇 A/B 級文獻 + APA 書目 + 鑑識紀錄' },
-                    { label: '下週預告', value: 'W6 五路分流' },
+                    { label: '下週預告', value: 'W6 文獻偵探社' },
                 ].map((item, idx) => (
                     <div key={idx} className="meta-item">
                         <div className="meta-label">{item.label}</div>
@@ -643,7 +643,7 @@ export const W50Page = () => {
             <StepEngine
                 steps={steps}
                 prevWeek={{ label: '回 W4 題目定案', to: '/w4' }}
-                nextWeek={{ label: '前往 W6 五路分流', to: '/w6' }}
+                nextWeek={{ label: '前往 W6 文獻偵探社', to: '/w6' }}
             />
         </div>
     );

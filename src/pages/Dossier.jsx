@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {
-  User,
-  Trophy,
-  Target,
-  ShieldCheck,
-  Zap,
-  BarChart3,
-  Brain,
-  Award,
-  ChevronRight,
-  TrendingUp,
-  Clock,
-  LogOut,
-  ShieldAlert,
-  Ghost,
-  Radio,
-  Star,
-  Circle
+    User,
+    Target,
+    ShieldCheck,
+    Zap,
+    BarChart3,
+    Brain,
+    Award,
+    ChevronRight,
+    TrendingUp,
+    Clock,
+    LogOut,
+    ShieldAlert,
+    Ghost,
+    Radio,
+    Star,
+    Circle,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -92,15 +91,20 @@ export const Dossier = () => {
     };
 
     const getAgentRank = () => {
-        const completedCount = Object.keys(gameStats).length;
+        // 「過關」= 該遊戲分數 >= 滿分 60%（不再把「有玩過」當過關）
+        const passedCount = Object.values(gameStats).filter(g => {
+            if (!g || !g.maxScore) return false;
+            return (g.score / g.maxScore) >= 0.6;
+        }).length;
         const optimalChapters =
             storyStats.phantom.filter(s => s === 'optimal').length +
             storyStats.echo.filter(s => s === 'optimal').length;
-        // 六項挑戰全破 + 十章劇情全完美 → 最高軍階
-        if (completedCount === 6 && optimalChapters === 10) return "特務首長 (Commander)";
-        if (completedCount === 6) return "特級專案調查官 (Elite)";
-        if (completedCount >= 4 || optimalChapters >= 5) return "高級探員 (Senior Agent)";
-        if (completedCount >= 2 || optimalChapters >= 2) return "正式探員 (Field Agent)";
+        // 六項挑戰全過關 + 十章劇情全完美 → 最高軍階
+        if (passedCount === 6 && optimalChapters === 10) return "特務首長 (Commander)";
+        if (passedCount === 6 && optimalChapters >= 5)   return "首席探員 (Master Agent)";
+        if (passedCount === 6) return "特級專案調查官 (Elite)";
+        if (passedCount >= 4 || optimalChapters >= 5) return "高級探員 (Senior Agent)";
+        if (passedCount >= 2 || optimalChapters >= 2) return "正式探員 (Field Agent)";
         return "見習探員 (Trainee)";
     };
 

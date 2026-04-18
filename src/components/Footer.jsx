@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Target, Lightbulb, ScanText, CheckCircle, FileText, Zap, School, ShieldAlert, Fingerprint } from 'lucide-react';
+import { Zap, School, Fingerprint } from 'lucide-react';
 
 export const Footer = () => {
     const location = useLocation();

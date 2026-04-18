@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import { W14Data } from '../data/lessonMaps';
 import './W15.css';
@@ -8,7 +7,6 @@ import StepEngine from '../components/ui/StepEngine';
 import ExportButton from '../components/ui/ExportButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
-    ArrowRight,
     Bot,
     Copy,
     Check,

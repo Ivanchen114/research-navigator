@@ -3,12 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './layouts/Layout';
 import { Home } from './pages/Home';
 import { Wizard } from './pages/Wizard';
-import { AnalysisHub } from './pages/AnalysisHub';
 import { Discovery } from './pages/Discovery';
 import { W1Page } from './pages/W1Page';
 import { ProblemFocus } from './pages/ProblemFocus';
 import { ClinicPage } from './pages/ClinicPage';
-import { ToolDesignPage } from './pages/ToolDesignPage';
 import { W9Page } from './pages/W9Page';
 import { ToolRefinementPage } from './pages/ToolRefinementPage';
 import { W11Page } from './pages/W11Page';
@@ -29,7 +27,6 @@ import { DataDetectiveGame } from './pages/games/DataDetectiveGame';
 import { ChartMatcherGame } from './pages/games/ChartMatcherGame';
 import { LiteratureReview } from './pages/LiteratureReview';
 import { TeamFormation } from './pages/TeamFormation';
-import { ChartSelection } from './pages/ChartSelection';
 import { PromptLab } from './pages/PromptLab';
 import { DataAnalysisStation } from './pages/DataAnalysisStation';
 import { Dossier } from './pages/Dossier';
@@ -65,9 +62,7 @@ function App() {
           <Route path="w6" element={<LiteratureReview />} />
           <Route path="w7" element={<ClinicPage />} />
           <Route path="w8" element={<TeamFormation />} />
-          <Route path="tool-design" element={<ToolDesignPage />} />
           <Route path="w9" element={<W9Page />} />
-          <Route path="tool-refinement" element={<ToolRefinementPage />} />
           <Route path="w10" element={<ToolRefinementPage />} />
           <Route path="w11" element={<W11Page />} />
           <Route path="w12" element={<W12Page />} />
@@ -76,8 +71,6 @@ function App() {
           <Route path="w15" element={<W15Page />} />
           <Route path="w16" element={<W16Page />} />
           <Route path="w17" element={<W17Page />} />
-          <Route path="analysis" element={<AnalysisHub />} />
-          <Route path="chart-selection" element={<ChartSelection />} />
 
           <Route path="games" element={<GameHub />} />
           <Route path="game/question-er" element={<QuestionERGame />} />

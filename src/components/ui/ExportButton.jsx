@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Copy, Check, Download } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { readRecords } from './ThinkRecord';
 
 /**
