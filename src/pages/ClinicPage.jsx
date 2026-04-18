@@ -24,7 +24,7 @@ import {
     Unlock,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
-import { W6Data } from '../data/lessonMaps';
+import { W7Data } from '../data/lessonMaps';
 
 /* ══════════════════════════════════════
  *  資料常數
@@ -857,7 +857,7 @@ export const ClinicPage = () => {
 
             {showLessonMap && (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W6Data} />
+                    <LessonMap data={W7Data} />
                 </div>
             )}
 

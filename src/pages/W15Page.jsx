@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
-import { W14Data } from '../data/lessonMaps';
+import { W15Data } from '../data/lessonMaps';
 import './W15.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
@@ -468,7 +468,7 @@ const W15Page = () => {
                     { label: '下週預告', value: 'W16 報告與海報' },
                 ]}
             />
-            <CourseArc items={W14Data.courseArc} />
+            <CourseArc items={W15Data.courseArc} />
 
             {/* STEP ENGINE */}
             <StepEngine

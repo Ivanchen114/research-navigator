@@ -18,7 +18,7 @@ import {
     ShieldAlert,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
-import { W50Data } from '../data/lessonMaps';
+import { W5Data } from '../data/lessonMaps';
 
 /* ── 資料常數 ── */
 
@@ -650,7 +650,7 @@ export const W50Page = () => {
 
             {showLessonMap && (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W50Data} />
+                    <LessonMap data={W5Data} />
                 </div>
             )}
 
@@ -667,7 +667,7 @@ export const W50Page = () => {
                     { label: '下週預告', value: 'W6 文獻偵探社' },
                 ]}
             />
-            <CourseArc items={W50Data.courseArc} />
+            <CourseArc items={W5Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">

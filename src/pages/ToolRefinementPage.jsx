@@ -7,6 +7,8 @@ import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
+import LessonMap from '../components/ui/LessonMap';
+import { W10Data } from '../data/lessonMaps';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     CheckCircle2,
@@ -15,6 +17,7 @@ import {
     Copy,
     Check,
     Zap,
+    Map,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -165,6 +168,7 @@ export const ToolRefinementPage = () => {
     const [w9Method, setW9Method] = useState('');
     const [w9Topic, setW9Topic] = useState('');
     const [detectedMethodId, setDetectedMethodId] = useState('');
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     /* W9 資料帶入 */
     useEffect(() => {
@@ -568,9 +572,22 @@ export const ToolRefinementPage = () => {
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <ResetWeekButton weekPrefix="w10-" />
+                    <button
+                        onClick={() => setShowLessonMap(!showLessonMap)}
+                        className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
+                        type="button"
+                    >
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                    </button>
                     <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
                 </div>
             </div>
+
+            {showLessonMap && (
+                <div className="animate-in slide-in-from-top-4 duration-300 mb-8">
+                    <LessonMap data={W10Data} />
+                </div>
+            )}
 
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock

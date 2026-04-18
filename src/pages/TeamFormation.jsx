@@ -18,7 +18,7 @@ import {
     Users,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
-import { W7Data } from '../data/lessonMaps';
+import { W8Data } from '../data/lessonMaps';
 
 /* ══════════════════════════════════════
  *  資料常數
@@ -549,7 +549,7 @@ export const TeamFormation = () => {
 
             {showLessonMap && (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W7Data} />
+                    <LessonMap data={W8Data} />
                 </div>
             )}
 

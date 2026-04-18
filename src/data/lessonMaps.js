@@ -202,95 +202,6 @@ export const W3Data = {
     }))
 };
 
-export const W0Data = {
-    id: "W0",
-    title: "前導課程：偵探特訓班",
-    duration: 50,
-    durationDesc: "1 節課",
-    coreConcepts: [
-        {
-            prefix: "①",
-            title: "觀察力",
-            subtitle: "看見問題的眼",
-            desc: "不注意視盲 (Inattentional Blindness)",
-            colorConfig: "r"
-        },
-        {
-            prefix: "②",
-            title: "假設檢定",
-            subtitle: "蒐集證據、修正假設",
-            desc: "邏輯與假設",
-            colorConfig: "c"
-        },
-        {
-            prefix: "③",
-            title: "批判思考",
-            subtitle: "識破謊言的心",
-            desc: "尋找證據、不被騙",
-            colorConfig: "y"
-        }
-    ],
-    periods: [
-        {
-            badge: "全課",
-            title: "偵探試煉的開始",
-            duration: 50,
-            hasBreakAfter: false,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeEnd: "0:05",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "🕵️",
-                    title: "一、 開場：偵探試煉的開始",
-                    desc: "情境營造：老師投影簡報首頁「TOP SECRET」，宣佈今天不講課，而是進行「偵探特訓」。",
-                    tags: ["情境營造", "暖身提問"]
-                },
-                {
-                    timeStart: "0:05",
-                    timeEnd: "0:15",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "👀",
-                    title: "二、 試煉一：專注力測試",
-                    desc: "任務指令：請學生觀看影片，算出「白衣人傳球幾次」。反轉揭曉是否有看到大猩猩。理論導引：不注意視盲。",
-                    tags: ["觀察力", "實驗影片"],
-                    keyPoint: "⚠️ 第一把劍：觀察力 (Observation)，這是看見問題的眼。"
-                },
-                {
-                    timeStart: "0:15",
-                    timeEnd: "0:40",
-                    duration: "25 min",
-                    colorClass: "c4",
-                    icon: "🐢",
-                    title: "三、 試煉二：海龜湯遊戲",
-                    desc: "Level 1：奇怪的考試 (只能問 Yes/No)。Level 2：沙漠中的半根火柴 (必須先寫假設，再提問)。",
-                    tags: ["邏輯訓練", "假設檢定", "批判思考"],
-                    additionalNotes: "第二把劍：假設檢定。第三把劍：批判思考。"
-                },
-                {
-                    timeStart: "0:40",
-                    timeEnd: "0:50",
-                    duration: "10 min",
-                    colorClass: "c2",
-                    icon: "🤖",
-                    title: "四、 試煉三：挑戰全知者",
-                    desc: "現場向 AI 詢問關於松山高中的在地問題。說明 AI 的盲點與研究的價值（發現 AI 不知道的事）。結案報告與下週預告。",
-                    tags: ["AI 實測", "研究價值", "總結預告"]
-                }
-            ]
-        }
-    ],
-    summaries: [],
-    legends: [
-        { colorClass: "lm-c1", label: "觀察力" },
-        { colorClass: "lm-c4", label: "邏輯 / 假設" },
-        { colorClass: "lm-c2", label: "AI 實測" },
-        { colorClass: "lm-c3", label: "開場 / 總結" }
-    ]
-};
-
 export const W1Data = {
     id: "W1",
     title: "研究方法啟動：模仿遊戲與人機協作",
@@ -801,7 +712,7 @@ export const W4Data = {
 };
 
 
-export const W50Data = {
+export const W5Data = {
     id: "W5",
     title: "文獻偵探的入門訓練",
     duration: 100,
@@ -921,7 +832,7 @@ export const W50Data = {
     }
 };
 
-export const W5Data = {
+export const W6Data = {
     id: "W6",
     title: "文獻偵探社 (Sherlock Edition)",
     duration: 100,
@@ -1038,7 +949,7 @@ export const W5Data = {
     homework: { deadline: '下次上課前', items: [ { p: '繳交', n: '修改演練報告並上傳' } ], footer: '' }
 };
 
-export const W6Data = {
+export const W7Data = {
     id: "W7",
     title: "研究診所：掛號判斷工作坊",
     duration: 100,
@@ -1193,7 +1104,7 @@ export const W6Data = {
     ]
 };
 
-export const W7Data = {
+export const W8Data = {
     id: "W8",
     title: "研究博覽會：組隊 × 合題 × 企劃書",
     duration: 100,
@@ -1332,8 +1243,8 @@ export const W7Data = {
     ]
 };
 
-export const W8Data = {
-    id: "W9",
+export const W10Data = {
+    id: "W10",
     title: "研究工具診所 Level 2：品質診斷與修改",
     duration: 100,
     durationDesc: "2 節課",
@@ -1482,8 +1393,8 @@ export const W8Data = {
     ]
 };
 
-export const W9Data = {
-    id: "W10",
+export const W11Data = {
+    id: "W11",
     title: "研究倫理審查：五大原則 × 自審 × 啟動",
     duration: 100,
     durationDesc: "2 節課",
@@ -1632,8 +1543,9 @@ export const W9Data = {
     ]
 };
 
-export const W10Data = {
-    title: "W11 資料收集中期回顧：問題診斷與初步整理",
+export const W13Data = {
+    id: "W13",
+    title: "中期盤點與資料收齊：問題診斷與最後衝刺",
     description: "資料收集進行到哪了？今天回顧進度、解決問題、開始整理——邊收集邊整理，比最後一起整理好得多。",
     periods: [
         {
@@ -1684,7 +1596,7 @@ export const W10Data = {
     ]
 };
 
-export const W13Data = {
+export const W14Data = {
     id: "W14",
     title: "讓數據自己說話：圖表選擇與圖說寫作",
     duration: 100,
@@ -1844,7 +1756,7 @@ export const W13Data = {
         { colorClass: "lm-c3", label: "小結預告" }
     ]
 };
-export const W14Data = {
+export const W15Data = {
     id: "W15",
     title: "研究結論：四層寫作法",
     duration: 100,

@@ -17,7 +17,7 @@ import {
     EyeOff,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
-import { W5Data } from '../data/lessonMaps';
+import { W6Data } from '../data/lessonMaps';
 import '../pages/LiteratureReview.css';
 
 /* ══════════════════════════════════════
@@ -747,7 +747,7 @@ export const LiteratureReview = () => {
 
             {showLessonMap && (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W5Data} />
+                    <LessonMap data={W6Data} />
                 </div>
             )}
 
@@ -764,7 +764,7 @@ export const LiteratureReview = () => {
                     { label: '下週預告', value: 'W7 研究診所：掛號分流' },
                 ]}
             />
-            <CourseArc items={W5Data.courseArc} />
+            <CourseArc items={W6Data.courseArc} />
 
             {/* 本週簡報 */}
             <div className="flex justify-end mb-8 -mt-2">
