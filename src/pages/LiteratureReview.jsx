@@ -7,6 +7,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     Map,
@@ -337,6 +338,7 @@ export const LiteratureReview = () => {
                     </div>
 
                     <ThinkChoice
+                        dataKey="w6-tc1"
                         question="以下哪個是「遮蓋測試」的核心判斷標準？"
                         options={[
                             { label: 'A', text: '看改寫有沒有用到跟原文不一樣的詞彙' },
@@ -384,6 +386,7 @@ export const LiteratureReview = () => {
                     </div>
 
                     <ThinkChoice
+                        dataKey="w6-tc2"
                         question="三明治引用法的第 3 層（分析句）的功能是什麼？"
                         options={[
                             { label: 'A', text: '重複第 2 層的引用內容，換個說法再說一遍' },
@@ -731,6 +734,7 @@ export const LiteratureReview = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <ResetWeekButton weekPrefix="w6-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"

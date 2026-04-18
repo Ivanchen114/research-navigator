@@ -8,6 +8,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     Map,
@@ -468,6 +469,7 @@ export const ClinicPage = () => {
 
                     {/* 理解檢核 1 */}
                     <ThinkChoice
+                        dataKey="w7-tc1"
                         prompt={THINK_CHOICES[0].prompt}
                         options={THINK_CHOICES[0].options}
                         answer={THINK_CHOICES[0].answer}
@@ -490,6 +492,7 @@ export const ClinicPage = () => {
 
                     {/* 理解檢核 2（在測驗前暖身） */}
                     <ThinkChoice
+                        dataKey="w7-tc2"
                         prompt={THINK_CHOICES[1].prompt}
                         options={THINK_CHOICES[1].options}
                         answer={THINK_CHOICES[1].answer}
@@ -841,6 +844,7 @@ export const ClinicPage = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
+                    <ResetWeekButton weekPrefix="w7-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"

@@ -7,6 +7,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import CopyButton from '../components/ui/CopyButton';
 import {
     Map,
@@ -238,6 +239,7 @@ export const Wizard = () => {
                         </div>
 
                         <ThinkChoice
+                            dataKey="w3-tc1"
                             prompt="下列哪個題目是「觀落陰病」？"
                             options={[
                                 { label: 'A', text: '2030 年最熱門的工作是什麼？' },
@@ -713,6 +715,7 @@ export const Wizard = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <ResetWeekButton weekPrefix="w3-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"

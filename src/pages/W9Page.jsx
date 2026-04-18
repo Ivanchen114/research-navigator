@@ -8,6 +8,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     ArrowRight,
@@ -339,6 +340,7 @@ export const W9Page = () => {
 
                     {/* 理解檢核 1 */}
                     <ThinkChoice
+                        dataKey="w9-tc1"
                         prompt={THINK_CHOICES[0].prompt}
                         options={THINK_CHOICES[0].options}
                         answer={THINK_CHOICES[0].answer}
@@ -398,6 +400,7 @@ export const W9Page = () => {
 
                     {/* 理解檢核：可靠性 */}
                     <ThinkChoice
+                        dataKey="w9-tc2"
                         prompt={THINK_CHOICES[2].prompt}
                         options={THINK_CHOICES[2].options}
                         answer={THINK_CHOICES[2].answer}
@@ -407,6 +410,7 @@ export const W9Page = () => {
 
                     {/* 理解檢核：訪談問法 */}
                     <ThinkChoice
+                        dataKey="w9-tc3"
                         prompt={THINK_CHOICES[1].prompt}
                         options={THINK_CHOICES[1].options}
                         answer={THINK_CHOICES[1].answer}
@@ -753,6 +757,7 @@ export const W9Page = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <ResetWeekButton weekPrefix="w9-" />
                     <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import {
     CheckCircle2,
     ArrowRight,
@@ -94,6 +95,7 @@ export const W1Page = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <ResetWeekButton weekPrefix="w1-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
@@ -354,6 +356,7 @@ export const W1Page = () => {
                             </div>
 
                             <ThinkChoice
+                                dataKey="w1-tc1"
                                 prompt="理解檢核：以下哪一項是「人類」該做的事？"
                                 options={[
                                     { label: 'A', text: '把 300 份問卷的答案分類統計' },

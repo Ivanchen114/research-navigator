@@ -5,6 +5,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import CopyButton from '../components/ui/CopyButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import { Map } from 'lucide-react';
@@ -118,6 +119,7 @@ export const ProblemFocus = () => {
                 </div>
                 <div className="flex items-center gap-4">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <ResetWeekButton weekPrefix="w2-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[#8888aa] hover:text-[#2d5be3] transition-colors flex items-center gap-1 font-mono"
@@ -245,6 +247,7 @@ export const ProblemFocus = () => {
 
                             {/* 理解檢核 */}
                             <ThinkChoice
+                                dataKey="w2-tc1"
                                 prompt="小測驗：「段考前後，學生使用圖書館的方式有何不同？」這屬於哪一型？"
                                 options={[
                                     { label: 'A', text: '影響型 — 某因素如何影響某結果' },
@@ -465,6 +468,7 @@ export const ProblemFocus = () => {
                             />
 
                             <ThinkChoice
+                                dataKey="w2-tc2"
                                 prompt="小測驗：AI 在「四段式思考」中可以幫忙哪些步驟？"
                                 options={[
                                     { label: 'A', text: 'Step 1 + Step 2（觀察現象和發現落差）' },

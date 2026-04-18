@@ -7,6 +7,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
+import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     Map,
@@ -305,6 +306,7 @@ export const W50Page = () => {
                         </div>
 
                         <ThinkChoice
+                            dataKey="w5-tc1"
                             prompt="以下哪一種來源可以寫進你的研究報告？"
                             options={[
                                 { label: 'A', text: '維基百科上的「睡眠品質」條目' },
@@ -635,6 +637,7 @@ export const W50Page = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <ResetWeekButton weekPrefix="w5-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
