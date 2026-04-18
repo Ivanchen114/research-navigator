@@ -165,6 +165,7 @@ export const ProblemFocus = () => {
               weekCode="R.I.B. · W2"
               prevWeek={{ label: '回 W1 模仿遊戲', to: '/w1' }}
               nextWeek={{ label: '前往 W3 題目健檢', to: '/w3' }}
+              flat
               steps={[
 
                 /* ──────── Step 1: 觀念建立 ──────── */

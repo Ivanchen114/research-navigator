@@ -10,10 +10,11 @@ import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
  *   prevWeek  (object)          — { label: '回 W1 模仿遊戲', to: '/w1' }
  *   nextWeek  (object)          — { label: '前往 W3 題目健檢', to: '/w3' }
  *   weekCode  (string)          — 顯示在底部檔案編號列，如 "R.I.B. · W2"
+ *   flat      (boolean)         — 拿掉內容面板的白卡外殼，讓內容直接跟頁面背景融合
  *   className (string)
  */
 
-export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, className = '' }) {
+export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat = false, className = '' }) {
   const [current, setCurrent] = useState(0);
   const total = steps.length;
   const topRef = useRef(null);
@@ -73,7 +74,13 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, classN
       </nav>
 
       {/* 內容面板 */}
-      <div className="step-engine-panel bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-6 min-h-[200px]">
+      <div
+        className={
+          flat
+            ? 'step-engine-panel py-2 min-h-[200px]'
+            : 'step-engine-panel bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-6 min-h-[200px]'
+        }
+      >
         {steps[current]?.content}
       </div>
 
