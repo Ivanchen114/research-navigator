@@ -262,11 +262,11 @@ export const ProblemFocus = () => {
                     title: '人腦練習',
                     icon: '🧠',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 2 · 第一節課 · 禁止使用 AI</div>
-                                <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">從觀察到核心疑問（人自己做）</h3>
-                                <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed">
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2 · 第一節課 · 禁止使用 AI</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">從觀察到核心疑問（人自己做）</h3>
+                                <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
                                     先練手感：跟著老師投影的圖片做兩輪快速練習，再改寫你 W1 的觀察。全程人腦，不准碰 AI。
                                 </p>
                             </div>
@@ -343,11 +343,11 @@ export const ProblemFocus = () => {
                     title: 'AI 協作',
                     icon: '🤖',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 2.5 + PART 3 · 第二節課</div>
-                                <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">AI 當放大鏡，你當眼睛</h3>
-                                <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed">
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2.5 + PART 3 · 第二節課</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">AI 當放大鏡，你當眼睛</h3>
+                                <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
                                     AI 沒去過你的學校，觀察只能靠人。但它可以從多角度幫你找矛盾，還能把白話文翻譯成學術句型。
                                 </p>
                             </div>
@@ -456,11 +456,11 @@ export const ProblemFocus = () => {
                     title: '探究意圖',
                     icon: '🎯',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">PART 3 FINAL · 定案 + AI-RED</div>
-                                <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">選定你的研究方向</h3>
-                                <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed">
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 3 FINAL · 定案 + AI-RED</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">選定你的研究方向</h3>
+                                <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
                                     AI 給了三種方向，現在由你選一個——選擇的標準是：做得到、有興趣、方向清楚。選完記得填 AI-RED。
                                 </p>
                             </div>
@@ -503,10 +503,10 @@ export const ProblemFocus = () => {
                     title: '回顧與繳交',
                     icon: '📋',
                     content: (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">WRAP-UP</div>
-                                <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">本週結束，你應該要會</h3>
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">WRAP-UP</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">本週結束，你應該要會</h3>
                             </div>
 
                             <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
@@ -517,9 +517,9 @@ export const ProblemFocus = () => {
                                         '用 AI 找落差、翻譯句型，但選擇是自己做的',
                                         '寫出最終探究意圖，下週帶去 W3 題目健檢',
                                     ].map((txt, i) => (
-                                        <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
-                                            <span className="text-[var(--success)] mt-0.5">✓</span>
-                                            <span className="text-[13px] text-[var(--ink-mid)]">{txt}</span>
+                                        <div key={i} className="p-5 bg-white flex items-start gap-3">
+                                            <span className="text-[var(--success)] mt-0.5 text-[15px]">✓</span>
+                                            <span className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.75]">{txt}</span>
                                         </div>
                                     ))}
                                 </div>
