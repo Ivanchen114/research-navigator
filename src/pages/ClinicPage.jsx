@@ -632,8 +632,8 @@ export const ClinicPage = () => {
 
                     {/* 我的定案題目 */}
                     <ThinkRecord
-                        id="w7-my-topic"
-                        label="我的 W4 定案題目"
+                        dataKey="w7-my-topic"
+                        prompt="我的 W4 定案題目"
                         placeholder="貼上或輸入你在 W4 定案的研究題目…"
                         rows={2}
                     />
@@ -651,8 +651,8 @@ export const ClinicPage = () => {
                     </div>
 
                     <ThinkRecord
-                        id="w7-layer1"
-                        label="第一層判斷"
+                        dataKey="w7-layer1"
+                        prompt="第一層判斷"
                         placeholder="我的資料要自己收集，因為……（或）我要分析已有文本，因為……"
                         rows={2}
                     />
@@ -671,30 +671,30 @@ export const ClinicPage = () => {
                     </div>
 
                     <ThinkRecord
-                        id="w7-layer2"
-                        label="第二層判斷"
+                        dataKey="w7-layer2"
+                        prompt="第二層判斷"
                         placeholder="最關鍵的那一條分科問題是 ❶/❷/❸，我的回答是……"
                         rows={3}
                     />
 
                     {/* 主要方法 */}
                     <ThinkRecord
-                        id="w7-main-method"
-                        label="我選定的主要方法"
+                        dataKey="w7-main-method"
+                        prompt="我選定的主要方法"
                         placeholder="問卷/訪談/實驗/觀察/文獻（如果是文獻，請寫明用途：文獻回顧/歷史分析/內容分析）"
                         rows={2}
                     />
 
                     <ThinkRecord
-                        id="w7-reason"
-                        label="選擇理由（請引用兩層判斷中的某一條）"
+                        dataKey="w7-reason"
+                        prompt="選擇理由（請引用兩層判斷中的某一條）"
                         placeholder="我選___法，因為我的核心問題問的是___，對應兩層判斷的___條……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w7-aux-method"
-                        label="輔助方法（如果需要）"
+                        dataKey="w7-aux-method"
+                        prompt="輔助方法（如果需要）"
                         placeholder="不需要 / 需要___法做輔助，因為……"
                         rows={2}
                     />
@@ -718,29 +718,29 @@ export const ClinicPage = () => {
                     </p>
 
                     <ThinkRecord
-                        id="w7-reflect-wrong"
-                        label="1. 測驗錯題分析"
+                        dataKey="w7-reflect-wrong"
+                        prompt="1. 測驗錯題分析"
                         placeholder="我錯了第___題，錯的原因是我搞混了___和___……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w7-reflect-confused"
-                        label="2. 最容易搞混的方法"
+                        dataKey="w7-reflect-confused"
+                        prompt="2. 最容易搞混的方法"
                         placeholder="我最容易搞混___和___，差別在於……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w7-reflect-insight"
-                        label="3. 掛號後的新想法"
+                        dataKey="w7-reflect-insight"
+                        prompt="3. 掛號後的新想法"
                         placeholder="幫自己的題目掛號後，我對研究方向有新的想法是……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w7-reflect-literature"
-                        label="4. 文獻法的三種用途"
+                        dataKey="w7-reflect-literature"
+                        prompt="4. 文獻法的三種用途"
                         placeholder="文獻法的三種用途中，我的題目有可能用到___（文獻回顧/歷史分析/內容分析），因為……"
                         rows={3}
                     />

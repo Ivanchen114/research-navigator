@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Copy, Check } from 'lucide-react';
-import { readRecords } from './ThinkRecord';
+import { Copy, Check, RotateCcw } from 'lucide-react';
+import { readRecords, STORAGE_KEY } from './ThinkRecord';
 
 /**
  * ExportButton — 一鍵複製本頁所有學習紀錄

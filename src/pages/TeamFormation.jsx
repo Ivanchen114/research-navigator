@@ -212,22 +212,22 @@ export const TeamFormation = () => {
 
                     {/* 個人展示填寫 */}
                     <ThinkRecord
-                        id="w8-my-topic"
-                        label="❶ 我的研究題目"
+                        dataKey="w8-my-topic"
+                        prompt="❶ 我的研究題目"
                         placeholder="我想研究……"
                         rows={2}
                     />
 
                     <ThinkRecord
-                        id="w8-my-ref"
-                        label="❷ 我的王牌文獻（W6 成果）"
+                        dataKey="w8-my-ref"
+                        prompt="❷ 我的王牌文獻（W6 成果）"
                         placeholder="作者（年份）發現______，這和我的研究有關，因為……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w8-my-method"
-                        label="❸ 我打算用什麼方法（W7）"
+                        dataKey="w8-my-method"
+                        prompt="❸ 我打算用什麼方法（W7）"
                         placeholder="問卷/訪談/實驗/觀察/文獻分析，因為……"
                         rows={2}
                     />
@@ -244,8 +244,8 @@ export const TeamFormation = () => {
                     </div>
 
                     <ThinkRecord
-                        id="w8-listen-notes"
-                        label="聆聽紀錄"
+                        dataKey="w8-listen-notes"
+                        prompt="聆聽紀錄"
                         placeholder="姓名｜他的研究題目｜讓我心動的原因&#10;例：王小明｜高中生社群媒體焦慮｜和我的睡眠題目可能有因果關係"
                         rows={5}
                     />
@@ -293,22 +293,22 @@ export const TeamFormation = () => {
 
                     {/* 合題討論紀錄 */}
                     <ThinkRecord
-                        id="w8-teammates"
-                        label="隊友姓名 & 題目"
+                        dataKey="w8-teammates"
+                        prompt="隊友姓名 & 題目"
                         placeholder="隊友 1：___，題目：___&#10;隊友 2：___，題目：___（若有）&#10;隊友 3：___，題目：___（若有）"
                         rows={4}
                     />
 
                     <ThinkRecord
-                        id="w8-merge-discussion"
-                        label="合題討論：你們的題目有什麼共同核心？合成什麼大主題？"
+                        dataKey="w8-merge-discussion"
+                        prompt="合題討論：你們的題目有什麼共同核心？合成什麼大主題？"
                         placeholder="請記錄討論歷程：我們發現______的共同點是______，所以合題方向是……"
                         rows={5}
                     />
 
                     <ThinkRecord
-                        id="w8-merge-type"
-                        label="對照合題規則，我們的情況屬於"
+                        dataKey="w8-merge-type"
+                        prompt="對照合題規則，我們的情況屬於"
                         placeholder="情境 1（同一現象，不同角度）/ 情境 2（因果鏈相連）/ 情境 3（主題差距過大→需要重新搭配）"
                         rows={2}
                     />
@@ -328,16 +328,16 @@ export const TeamFormation = () => {
 
                     {/* 組員名單 */}
                     <ThinkRecord
-                        id="w8-team-members"
-                        label="組長 + 成員"
+                        dataKey="w8-team-members"
+                        prompt="組長 + 成員"
                         placeholder="組長：___&#10;成員 1：___&#10;成員 2：___&#10;成員 3：___"
                         rows={4}
                     />
 
                     {/* ① 合題後主題 */}
                     <ThinkRecord
-                        id="w8-merged-topic"
-                        label="① 合題後的研究主題（10–20 字，一句話說清楚）"
+                        dataKey="w8-merged-topic"
+                        prompt="① 合題後的研究主題（10–20 字，一句話說清楚）"
                         placeholder="例如「社群媒體使用時間與青少年焦慮感的關係」"
                         rows={2}
                     />
@@ -360,8 +360,8 @@ export const TeamFormation = () => {
 
                     {/* ② 研究問題 */}
                     <ThinkRecord
-                        id="w8-research-question"
-                        label="② 精修後的研究問題（核心問句，選一個句型）"
+                        dataKey="w8-research-question"
+                        prompt="② 精修後的研究問題（核心問句，選一個句型）"
                         placeholder="→「……是否影響……？」（因果型）&#10;→「……之間有什麼關係？」（相關型）&#10;→「……的現況為何？」（描述型）"
                         rows={3}
                     />
@@ -377,16 +377,16 @@ export const TeamFormation = () => {
 
                     {/* ③ 研究方法 */}
                     <ThinkRecord
-                        id="w8-method-reason"
-                        label="③ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
+                        dataKey="w8-method-reason"
+                        prompt="③ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
                         placeholder="我們選___法，理由是（引用兩層判斷中的某一條）……"
                         rows={3}
                     />
 
                     {/* ④ 研究對象 */}
                     <ThinkRecord
-                        id="w8-target"
-                        label="④ 預計研究對象（誰？多少人/案例？如何找到他們？）"
+                        dataKey="w8-target"
+                        prompt="④ 預計研究對象（誰？多少人/案例？如何找到他們？）"
                         placeholder="例如：本校高一 150 人問卷 / 5–8 位學生深度訪談 / ……"
                         rows={2}
                     />
@@ -406,8 +406,8 @@ export const TeamFormation = () => {
                     </p>
 
                     <ThinkRecord
-                        id="w8-tool-method"
-                        label="我們組選用的研究方法"
+                        dataKey="w8-tool-method"
+                        prompt="我們組選用的研究方法"
                         placeholder="問卷法 / 訪談法 / 觀察法 / 實驗法 / 文獻分析"
                         rows={1}
                     />
@@ -436,29 +436,29 @@ export const TeamFormation = () => {
                     </div>
 
                     <ThinkRecord
-                        id="w8-draft-q1"
-                        label="草稿題目 1"
+                        dataKey="w8-draft-q1"
+                        prompt="草稿題目 1"
                         placeholder="對應你的方法，寫出第一題問卷題/訪談問題/觀察指標/實驗步驟/搜尋策略"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w8-draft-q2"
-                        label="草稿題目 2"
+                        dataKey="w8-draft-q2"
+                        prompt="草稿題目 2"
                         placeholder="寫出你的第二題……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w8-draft-q3"
-                        label="草稿題目 3"
+                        dataKey="w8-draft-q3"
+                        prompt="草稿題目 3"
                         placeholder="寫出你的第三題……"
                         rows={3}
                     />
 
                     <ThinkRecord
-                        id="w8-draft-check"
-                        label="自我檢核：這 3 題和我們的研究問題有關係嗎？有沒有什麼覺得怪怪的地方？"
+                        dataKey="w8-draft-check"
+                        prompt="自我檢核：這 3 題和我們的研究問題有關係嗎？有沒有什麼覺得怪怪的地方？"
                         placeholder="我覺得第___題可能有問題，因為……"
                         rows={3}
                     />
