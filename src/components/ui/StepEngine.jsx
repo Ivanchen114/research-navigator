@@ -132,7 +132,7 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
         {isLast && nextWeek ? (
           <Link
             to={nextWeek.to}
-            className="flex items-center gap-2 px-5 py-3 bg-[var(--ink)] text-white text-[13px] font-bold rounded-[8px] hover:opacity-90 transition-all group shadow-sm"
+            className="flex items-center gap-2 px-5 py-3 bg-[var(--accent)] text-white text-[13px] font-bold rounded-[8px] hover:brightness-110 transition-all group shadow-md shadow-[var(--accent)]/20"
           >
             {nextWeek.label} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
@@ -140,7 +140,7 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
           <button
             onClick={() => goTo(current + 1)}
             disabled={isLast}
-            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[var(--ink)] text-[var(--ink)] text-[13px] font-bold rounded-[8px] hover:bg-[var(--ink)] hover:text-white active:bg-[var(--ink)] active:text-white disabled:opacity-30 disabled:cursor-default transition-all group"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-[var(--ink)] text-[var(--ink)] text-[13px] font-bold rounded-[8px] hover:bg-[var(--ink)] hover:text-white active:bg-[var(--ink)] active:text-white disabled:opacity-30 disabled:cursor-default transition-all group"
           >
             下一步 <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </button>
