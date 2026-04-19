@@ -138,6 +138,7 @@ export const PORTFOLIO_REGISTRY = [
       { key: 'w8-my-ref', label: '我的王牌文獻' },
       { key: 'w8-my-method', label: '我打算用什麼方法' },
       { key: 'w8-listen-notes', label: '聆聽紀錄', question: '讓我心動的潛在隊友' },
+      { key: 'w8-group-rationale', label: '組隊理由', question: '為什麼我們決定同一組？（合題前先寫下動機）' },
       { key: 'w8-teammates', label: '隊友姓名 & 題目' },
       { key: 'w8-merge-discussion', label: '合題討論紀錄', question: '共同核心是什麼？合成什麼大主題？' },
       { key: 'w8-merge-type', label: '合題情境判斷', question: '情境 1/2/3？' },

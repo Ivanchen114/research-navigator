@@ -32,18 +32,20 @@ export const Layout = () => {
             items: [
                 { name: '任務總覽', path: '/', status: 'active' },
                 { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
-                { name: '探員檔案', path: '/dossier', status: 'none' },
-                { name: '學習歷程策展室', path: '/portfolio', status: 'none' },
-                { name: '資料分析站', path: '/analysis-station', status: 'none' },
-                { name: 'AI 協作實驗室', path: '/prompt-lab', status: 'none' },
-                { name: '關於本站', path: '/about', status: 'none' },
             ]
         },
         {
-            label: '連貫劇情',
+            label: '我的檔案',
             items: [
-                { name: '幽靈數據', path: '/phantom', status: 'none' },
-                { name: '回音行動', path: '/echo', status: 'none' },
+                { name: '探員檔案', path: '/dossier', status: 'none' },
+                { name: '學習歷程策展室', path: '/portfolio', status: 'none' },
+            ]
+        },
+        {
+            label: '研究工具',
+            items: [
+                { name: 'AI 協作實驗室', path: '/prompt-lab', status: 'none' },
+                { name: '資料分析站', path: '/analysis-station', status: 'none' },
             ]
         },
         {
@@ -83,6 +85,12 @@ export const Layout = () => {
                 { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
                 { name: '報告與海報', path: '/w16', week: 'W16', status: 'locked' },
                 { name: '成果發表', path: '/w17', week: 'W17', status: 'locked' }
+            ]
+        },
+        {
+            label: '關於',
+            items: [
+                { name: '關於本站', path: '/about', status: 'none' },
             ]
         }
     ];
@@ -153,10 +161,6 @@ export const Layout = () => {
                 if (location.pathname === '/prompt-lab') finalStatus = 'active';
             } else if (item.path === '/about') {
                 if (location.pathname === '/about') finalStatus = 'active';
-            } else if (item.path === '/phantom') {
-                if (location.pathname.startsWith('/phantom')) finalStatus = 'active';
-            } else if (item.path === '/echo') {
-                if (location.pathname.startsWith('/echo')) finalStatus = 'active';
             } else {
                 const itemWeekNum = getWeekNumber(item.path);
                 if (itemWeekNum !== -1) {

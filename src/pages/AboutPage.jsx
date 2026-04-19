@@ -283,6 +283,26 @@ export const AboutPage = () => {
 
           <div className="hl-card">
             <div className="card-head">
+              <div className="card-icon" style={{ background: '#fdeef0' }}>
+                <BookMarked size={18} color="#c5456b" />
+              </div>
+              <h3>學習歷程不是作業集，是自我策展<span className="en">Self-Curation, not a Homework Dump</span></h3>
+            </div>
+            <p>
+              大多數平台把學期末的「學習歷程檔案」等同於「作業總匯出」——這是對大學招生準備的根本誤解。
+              這個站分開兩件事：每週一鍵匯出文字貼到 Classroom 是給老師評分的；
+              而「學習歷程策展室」是學生自己的作品。
+              系統把整學期所有思考紀錄攤開，學生親手挑出 10 則關鍵時刻，
+              為每一則補上「當時為什麼寫」與「現在回看怎麼想」——三層交錯的，正是大學教授想看到的思考軌跡。
+            </p>
+            <div className="example">
+              <strong>Timeline</strong>（盤點整學期紀錄）→ <strong>Curate</strong>（挑選 + 雙層反思）→ <strong>Export</strong>（一鍵列印 A4 襯線版 PDF）。
+              全程在瀏覽器端，不上傳、不監控；主權在學生手上。
+            </div>
+          </div>
+
+          <div className="hl-card">
+            <div className="card-head">
               <div className="card-icon" style={{ background: '#faf5e4' }}>
                 <BookOpen size={18} color="#c9a84c" />
               </div>
@@ -331,26 +351,6 @@ export const AboutPage = () => {
               後期逐步簡化為三行「AI 使用簡記」，讓學生從被引導走向自主反思。
               搭配 Prompt 實驗室，學生學的不只是「怎麼用 AI」，而是「怎麼負責任地用 AI 做研究」。
             </p>
-          </div>
-
-          <div className="hl-card">
-            <div className="card-head">
-              <div className="card-icon" style={{ background: '#fdeef0' }}>
-                <BookMarked size={18} color="#c5456b" />
-              </div>
-              <h3>學習歷程不是作業集，是自我策展<span className="en">Self-Curation, not a Homework Dump</span></h3>
-            </div>
-            <p>
-              大多數平台把學期末的「學習歷程檔案」等同於「作業總匯出」——這是對大學招生準備的根本誤解。
-              這個站分開兩件事：每週一鍵匯出文字貼到 Classroom 是給老師評分的；
-              而「學習歷程策展室」是學生自己的作品。
-              系統把整學期所有思考紀錄攤開，學生親手挑出 10 則關鍵時刻，
-              為每一則補上「當時為什麼寫」與「現在回看怎麼想」——三層交錯的，正是大學教授想看到的思考軌跡。
-            </p>
-            <div className="example">
-              <strong>Timeline</strong>（盤點整學期紀錄）→ <strong>Curate</strong>（挑選 + 雙層反思）→ <strong>Export</strong>（一鍵列印 A4 襯線版 PDF）。
-              全程在瀏覽器端，不上傳、不監控；主權在學生手上。
-            </div>
           </div>
         </div>
 

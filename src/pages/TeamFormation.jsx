@@ -82,6 +82,14 @@ const THINK_CHOICES = [
     },
 ];
 
+/* — 找隊友的四條準則（研究導向，非社交導向） — */
+const TEAMMATE_CRITERIA = [
+    { ok: true, t: '題目相近或互補', d: '你的「睡眠時數」＋他的「考試焦慮」，因果鏈可能相連' },
+    { ok: true, t: '能力互補', d: '你擅長統計分析，他擅長訪談溝通（看交流卡 💪 欄位）' },
+    { ok: true, t: '實際可協作', d: '同班、同午休、同放學路線——能湊得到時間的才叫組' },
+    { ok: false, t: '不是「找最熟的朋友」', d: '熟＝好相處，但題目不合就是研究失敗——先驗證題目，再看默契' },
+];
+
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Part A */
@@ -89,6 +97,7 @@ const EXPORT_FIELDS = [
     { key: 'w8-my-ref', label: '我的王牌文獻' },
     { key: 'w8-my-method', label: '我打算用什麼方法' },
     { key: 'w8-listen-notes', label: '聆聽紀錄', question: '讓我心動的潛在隊友' },
+    { key: 'w8-group-rationale', label: '組隊理由', question: '為什麼我們決定同一組？（研究層面的理由）' },
     /* Part B */
     { key: 'w8-teammates', label: '隊友姓名 & 題目' },
     { key: 'w8-merge-discussion', label: '合題討論紀錄', question: '共同核心是什麼？合成什麼大主題？' },
@@ -250,6 +259,51 @@ export const TeamFormation = () => {
                         placeholder="姓名｜他的研究題目｜讓我心動的原因&#10;例：王小明｜高中生社群媒體焦慮｜和我的睡眠題目可能有因果關係"
                         rows={5}
                     />
+
+                    {/* ─── 組隊行動區：聆聽 → 決定 → 合題 ─── */}
+                    <div className="border-t border-dashed border-[var(--border)] pt-6 mt-2">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">ACTION</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">現在，去找到你的隊友</span>
+                            <span className="ml-auto text-[11px] font-mono text-[var(--ink-light)]">約 5–8 分鐘</span>
+                        </div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[720px] mb-4">
+                            把「心動名單」轉成「組隊行動」。帶著你的交流卡，主動走向名單上的人——確認題目是否可合、時間是否可湊。
+                            <strong className="text-[var(--ink)]">目標：</strong>找到 2–3 位隊友，或決定 Solo。
+                        </p>
+
+                        {/* 找隊友準則 */}
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                            <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                                <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">CRITERIA</span>
+                                <span className="font-bold text-[13px] text-[var(--ink)]">找隊友的 4 條準則</span>
+                            </div>
+                            <div className="divide-y divide-[var(--border)]">
+                                {TEAMMATE_CRITERIA.map((c, i) => (
+                                    <div key={i} className="p-4 px-5 flex items-start gap-3 text-[13px]">
+                                        <span className="text-[15px] shrink-0 mt-0.5">{c.ok ? '✅' : '❌'}</span>
+                                        <div>
+                                            <div className="font-bold text-[var(--ink)]">{c.t}</div>
+                                            <p className="text-[12px] text-[var(--ink-light)] mt-0.5 leading-relaxed">{c.d}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="w7-notice w7-notice-gold mb-4">
+                            ⏱️ <strong>時間提醒：</strong>這個階段大約 5–8 分鐘——不要變成「聊天 20 分鐘還沒決定」。如果沒人和你題目合，
+                            寧可 Solo 也別勉強合題，下週 W9 老師會協助你。Solo 不是失敗，硬湊才是。
+                        </div>
+
+                        {/* 新增：為什麼我們同組 */}
+                        <ThinkRecord
+                            dataKey="w8-group-rationale"
+                            prompt="為什麼我們決定同一組？（合題前先寫下動機）"
+                            placeholder="用研究語言寫，不是「因為我們很熟」。&#10;例：我們都想研究「睡眠品質 × 學業表現」，我負責問卷設計，他有數據分析能力，而且我們同班可以一起發問卷。&#10;如果決定 Solo，寫下你的理由：為什麼單打獨鬥對這個題目比較合適？"
+                            rows={4}
+                        />
+                    </div>
                 </div>
             ),
         },
