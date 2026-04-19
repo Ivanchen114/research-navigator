@@ -34,6 +34,7 @@ export const Layout = () => {
                 { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
                 { name: '探員檔案', path: '/dossier', status: 'none' },
                 { name: '資料分析站', path: '/analysis-station', status: 'none' },
+                { name: 'AI 協作實驗室', path: '/prompt-lab', status: 'none' },
                 { name: '關於本站', path: '/about', status: 'none' },
             ]
         },
@@ -145,6 +146,8 @@ export const Layout = () => {
                 if (location.pathname === '/dossier') finalStatus = 'active';
             } else if (item.path === '/analysis-station') {
                 if (location.pathname === '/analysis-station') finalStatus = 'active';
+            } else if (item.path === '/prompt-lab') {
+                if (location.pathname === '/prompt-lab') finalStatus = 'active';
             } else if (item.path === '/about') {
                 if (location.pathname === '/about') finalStatus = 'active';
             } else if (item.path === '/phantom') {
