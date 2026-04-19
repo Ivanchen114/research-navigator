@@ -30,9 +30,9 @@ const AI_ROLES = [
 
 const RESEARCH_STAGES = [
   { id: 'topic', name: '問題意識與對焦', promptTemplate: '我正在進行關於「[TOPIC]」的研究。目前我的研究問題是「[QUESTION]」。請針對這個題目的「可執行性」與「研究價值」進行初步評估，並指出是否有「百科全書病」或「抽象哲學病」的風險。' },
-  { id: 'lit_review', name: '文獻回顧與整理', promptTemplate: '針對「[TOPIC]」這個主題,我已經蒐集了以下關鍵字:[KEYWORDS]。請幫我架構一個初步的文獻回顧地圖,並說明為了支持「[QUESTION]」,我該重點閱讀哪一類的文獻?' },
-  { id: 'methodology', name: '研究方法與工具', promptTemplate: '我的研究題目是「[QUESTION]」,我打算使用「[METHOD]」法。請幫我模擬 5 位受訪者/受測者可能的回應,並指出我的工具設計中是否存在「誘導性提問」或「變因失控」的缺陷。' },
-  { id: 'analysis', name: '數據分析與詮釋', promptTemplate: '我蒐集到了以下原始數據:[DATA]。請根據這些數據,提出 3 個可能的詮釋方向,並提醒我如何避免「倖存者偏差」或「過度推論」。' }
+  { id: 'lit_review', name: '文獻回顧與整理', promptTemplate: '針對「[TOPIC]」這個主題，我已經蒐集了以下關鍵字：[KEYWORDS]。請幫我架構一個初步的文獻回顧地圖，並說明為了支持「[QUESTION]」，我該重點閱讀哪一類的文獻？' },
+  { id: 'methodology', name: '研究方法與工具', promptTemplate: '我的研究題目是「[QUESTION]」，我打算使用「[METHOD]」法。請幫我模擬 5 位受訪者/受測者可能的回應，並指出我的工具設計中是否存在「誘導性提問」或「變因失控」的缺陷。' },
+  { id: 'analysis', name: '數據分析與詮釋', promptTemplate: '我蒐集到了以下原始數據:[DATA]。請根據這些數據，提出 3 個可能的詮釋方向，並提醒我如何避免「倖存者偏差」或「過度推論」。' }
 ];
 
 const WHY_TIPS = {
@@ -70,30 +70,30 @@ const PROMPT_COMPARISONS = [
     bad: '再給我多一點',
     badWhy: '「多一點」是模糊指令，AI 只會重複剛才說過的內容。',
     good: '你剛才提到的第 2 點「樣本選擇偏差」，可以舉一個高中校園研究的具體案例嗎？並說明這個偏差會如何影響結論的推論範圍。',
-    goodWhy: 'Prompt 工程核心能力：**迭代追問**。指定要延伸哪一點 + 要求具體範例 + 限定情境（高中校園）。'
+    goodWhy: 'Prompt 工程核心能力：迭代追問。指定要延伸哪一點 + 要求具體範例 + 限定情境（高中校園）。'
   }
 ];
 
 const AI_PLATFORMS = [
-  { name: 'ChatGPT', url: 'https://chatgpt.com/', color: 'bg-emerald-600 hover:bg-emerald-700' },
-  { name: 'Claude', url: 'https://claude.ai/', color: 'bg-orange-600 hover:bg-orange-700' },
-  { name: 'Gemini', url: 'https://gemini.google.com/', color: 'bg-blue-600 hover:bg-blue-700' }
+  { name: 'ChatGPT', url: 'https://chatgpt.com/' },
+  { name: 'Claude', url: 'https://claude.ai/' },
+  { name: 'Gemini', url: 'https://gemini.google.com/' }
 ];
 
 const CollapsibleWhy = ({ tip }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mt-3 border-t border-slate-100 pt-3">
+    <div className="mt-3 border-t border-[var(--pl-border-light)] pt-3">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+        className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--pl-accent)] hover:text-[var(--pl-accent-deep)] transition-colors"
       >
         <Lightbulb size={13} />
         {tip.title}
         {open ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
       </button>
       {open && (
-        <div className="mt-2 text-[12px] leading-relaxed text-slate-600 bg-indigo-50/50 border-l-2 border-indigo-300 pl-3 py-2">
+        <div className="mt-2 text-[12.5px] leading-[1.85] text-[var(--pl-ink-mid)] bg-[var(--pl-accent-light)] border-l-2 border-[var(--pl-accent)] pl-3 py-2.5 rounded-r">
           {tip.body}
         </div>
       )}
@@ -118,7 +118,6 @@ export const PromptLab = () => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  // 檢查必填欄位是否完成
   const getRequiredFields = () => {
     switch (selectedStage.id) {
       case 'topic': return ['topic', 'question'];
@@ -174,38 +173,138 @@ ${template}
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-12 px-4 md:px-8 font-sans">
+    <div className="promptlab-root min-h-screen py-12 px-4 md:px-8">
       <style dangerouslySetInnerHTML={{ __html: `
-        .prompt-card { background: white; border: 1px solid #e2e8f0; border-radius: 2px; padding: 1.5rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-        .input-group { margin-bottom: 1.5rem; }
-        .input-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
-        .input-field { width: 100%; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 2px; padding: 0.625rem 1rem; color: #1e293b; transition: border-color 0.2s; }
-        .input-field:focus { outline: none; border-color: #6366f1; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+
+        .promptlab-root {
+          --pl-ink: #1a1a2e;
+          --pl-ink-mid: #4a4a6a;
+          --pl-ink-light: #9090b0;
+          --pl-paper: #f7f5f0;
+          --pl-paper-warm: #edeae2;
+          --pl-accent: #4f46e5;
+          --pl-accent-deep: #3730a3;
+          --pl-accent-light: #eef0ff;
+          --pl-border: #d8d4ca;
+          --pl-border-light: #e8e4dc;
+          --pl-gold: #c9a84c;
+          --pl-gold-pale: #faf5e4;
+
+          font-family: 'Noto Sans TC', sans-serif;
+          color: var(--pl-ink);
+          background: var(--pl-paper);
+          background-image: radial-gradient(circle, #c8c4ba 1px, transparent 1px);
+          background-size: 28px 28px;
+          background-attachment: fixed;
+        }
+
+        .promptlab-root .pl-serif { font-family: 'Noto Serif TC', serif; }
+        .promptlab-root .pl-mono { font-family: 'DM Mono', monospace; }
+
+        .pl-card {
+          background: #fff;
+          border: 1px solid var(--pl-border);
+          border-radius: 8px;
+          padding: 24px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .pl-card.accent { border-left: 3px solid var(--pl-accent); }
+
+        .pl-input-label {
+          display: flex; align-items: center; gap: 0.5rem;
+          font-family: 'DM Mono', monospace;
+          font-size: 11px; font-weight: 500;
+          color: var(--pl-ink-mid);
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          margin-bottom: 12px;
+        }
+        .pl-step-num {
+          font-family: 'DM Mono', monospace;
+          color: var(--pl-accent);
+          font-weight: 700;
+        }
+        .pl-input-field {
+          width: 100%;
+          background: var(--pl-paper-warm);
+          border: 1px solid var(--pl-border-light);
+          border-radius: 6px;
+          padding: 0.625rem 0.875rem;
+          color: var(--pl-ink);
+          font-family: 'Noto Sans TC', sans-serif;
+          transition: all 0.2s;
+        }
+        .pl-input-field:focus {
+          outline: none;
+          border-color: var(--pl-accent);
+          background: #fff;
+          box-shadow: 0 0 0 3px var(--pl-accent-light);
+        }
+
+        .pl-option-btn {
+          text-align: left; padding: 14px 16px;
+          border-radius: 6px; border: 1px solid var(--pl-border-light);
+          background: #fff; transition: all 0.15s;
+          width: 100%;
+        }
+        .pl-option-btn:hover {
+          border-color: var(--pl-accent);
+          background: #fafbff;
+        }
+        .pl-option-btn.selected {
+          background: var(--pl-accent-light);
+          border-color: var(--pl-accent);
+          box-shadow: 0 0 0 1px var(--pl-accent);
+        }
+
+        .pl-kicker {
+          font-family: 'DM Mono', monospace;
+          font-size: 10px; letter-spacing: 0.18em;
+          color: var(--pl-ink-light);
+          text-transform: uppercase;
+          display: flex; align-items: center; gap: 10px;
+        }
+        .pl-kicker::before {
+          content: ''; display: inline-block;
+          width: 20px; height: 1px;
+          background: var(--pl-border);
+        }
+
+        .pl-prompt-output {
+          background: var(--pl-ink);
+          color: #d4d4dc;
+          padding: 24px;
+          border-radius: 8px;
+          font-family: 'DM Mono', monospace;
+          font-size: 13px;
+          line-height: 1.85;
+          white-space: pre-wrap;
+          overflow: auto;
+          max-height: 500px;
+        }
       `}} />
 
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="mb-10 border-b border-slate-200 pb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="bg-indigo-600 p-3 rounded-sm text-white shadow-lg shadow-indigo-200">
-              <Terminal size={32} />
-            </div>
-            <div>
-              <div className="text-xs font-black text-indigo-600 tracking-[0.2em] uppercase mb-1 flex items-center gap-2">
-                AI-RED Framework V2.0
-                <span className="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] normal-case tracking-normal font-bold flex items-center gap-1">
-                  <GraduationCap size={11} /> 自學模式
-                </span>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-black text-slate-900 font-serif tracking-tight">
-                AI 協作實驗室 <span className="text-indigo-600">Prompt Lab</span>
-              </h1>
-            </div>
+        <div className="mb-12 border-b border-[var(--pl-border)] pb-10">
+          <div className="pl-kicker mb-5">
+            AI-RED Framework V2.0 · Prompt Workbench
           </div>
-          <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
-            依 <strong>角色 → 階段 → 素材</strong> 三步驟，幫你組出對 AI 提問的高品質 prompt。
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+            <h1 className="pl-serif text-[32px] md:text-[40px] font-bold leading-[1.15] text-[var(--pl-ink)] tracking-tight">
+              AI 協作實驗室<br />
+              <span className="text-[var(--pl-accent)]">Prompt Lab</span>
+            </h1>
+            <span className="self-start md:self-end inline-flex items-center gap-1.5 bg-[var(--pl-gold-pale)] text-[var(--pl-gold)] border border-[var(--pl-gold)]/30 px-3 py-1.5 rounded text-[11px] font-bold tracking-wider">
+              <GraduationCap size={13} /> 自學模式
+            </span>
+          </div>
+          <p className="text-[14px] text-[var(--pl-ink-mid)] leading-[1.95] max-w-3xl">
+            依 <strong className="text-[var(--pl-ink)]">角色 → 階段 → 素材</strong> 三步驟，幫你組出對 AI 提問的高品質 prompt。
             每個步驟旁邊點開「💡 為什麼這樣寫」，你會看到背後的 prompt 工程原理。
-            下方還有「爛 vs 好 prompt 對照」可以自學——沒有老師在旁邊也看得懂。
+            下方還有「Prompt 對照診所」可以自學——沒有老師在旁邊也看得懂。
           </p>
         </div>
 
@@ -214,20 +313,25 @@ ${template}
           <div className="lg:col-span-5 space-y-6">
 
             {/* Step 1: Role */}
-            <div className="prompt-card" style={{ borderTop: '4px solid #6366f1' }}>
-              <label className="input-label"><UserCircle2 size={14} /> Step 1 · 設定 AI 角色</label>
-              <div className="grid grid-cols-1 gap-3">
+            <div className="pl-card accent">
+              <label className="pl-input-label">
+                <UserCircle2 size={13} />
+                <span className="pl-step-num">Step 01</span>
+                <span>·</span>
+                <span>設定 AI 角色</span>
+              </label>
+              <div className="grid grid-cols-1 gap-2.5">
                 {AI_ROLES.map(role => (
                   <button
                     key={role.id}
                     onClick={() => setSelectedRole(role)}
-                    className={`text-left p-4 rounded border transition-all ${selectedRole.id === role.id ? 'bg-indigo-50 border-indigo-400 ring-1 ring-indigo-400' : 'bg-white border-slate-200 hover:border-indigo-200'}`}
+                    className={`pl-option-btn ${selectedRole.id === role.id ? 'selected' : ''}`}
                   >
-                    <div className="font-bold text-slate-800 flex items-center justify-between">
+                    <div className="font-bold text-[14px] text-[var(--pl-ink)] flex items-center justify-between">
                       {role.name}
-                      {selectedRole.id === role.id && <CheckCircle2 size={16} className="text-indigo-600" />}
+                      {selectedRole.id === role.id && <CheckCircle2 size={16} className="text-[var(--pl-accent)]" />}
                     </div>
-                    <div className="text-xs text-slate-500 mt-1">{role.desc}</div>
+                    <div className="text-[12px] text-[var(--pl-ink-mid)] mt-1 leading-relaxed">{role.desc}</div>
                   </button>
                 ))}
               </div>
@@ -235,17 +339,22 @@ ${template}
             </div>
 
             {/* Step 2: Stage */}
-            <div className="prompt-card" style={{ borderTop: '4px solid #06b6d4' }}>
-              <label className="input-label"><BrainCircuit size={14} /> Step 2 · 選研究階段</label>
-              <div className="space-y-3">
+            <div className="pl-card accent">
+              <label className="pl-input-label">
+                <BrainCircuit size={13} />
+                <span className="pl-step-num">Step 02</span>
+                <span>·</span>
+                <span>選研究階段</span>
+              </label>
+              <div className="space-y-2.5">
                 {RESEARCH_STAGES.map(stage => (
                   <button
                     key={stage.id}
                     onClick={() => setSelectedStage(stage)}
-                    className={`w-full text-left px-4 py-3 rounded border transition-all flex items-center justify-between ${selectedStage.id === stage.id ? 'bg-cyan-50 border-cyan-400' : 'bg-white border-slate-200 hover:border-cyan-200'}`}
+                    className={`pl-option-btn flex items-center justify-between ${selectedStage.id === stage.id ? 'selected' : ''}`}
                   >
-                    <span className={`font-bold ${selectedStage.id === stage.id ? 'text-cyan-700' : 'text-slate-700'}`}>{stage.name}</span>
-                    <ChevronRight size={16} className={selectedStage.id === stage.id ? 'text-cyan-600' : 'text-slate-300'} />
+                    <span className={`font-bold text-[14px] ${selectedStage.id === stage.id ? 'text-[var(--pl-accent-deep)]' : 'text-[var(--pl-ink)]'}`}>{stage.name}</span>
+                    <ChevronRight size={16} className={selectedStage.id === stage.id ? 'text-[var(--pl-accent)]' : 'text-[var(--pl-ink-light)]'} />
                   </button>
                 ))}
               </div>
@@ -253,37 +362,42 @@ ${template}
             </div>
 
             {/* Step 3: Materials */}
-            <div className="prompt-card" style={{ borderTop: '4px solid #10b981' }}>
-              <label className="input-label"><Database size={14} /> Step 3 · 填入研究素材</label>
+            <div className="pl-card accent">
+              <label className="pl-input-label">
+                <Database size={13} />
+                <span className="pl-step-num">Step 03</span>
+                <span>·</span>
+                <span>填入研究素材</span>
+              </label>
               <div className="space-y-4">
                 {(selectedStage.id === 'topic' || selectedStage.id === 'lit_review') && (
-                  <div className="input-group">
-                    <label className="text-xs font-bold text-slate-400 mb-1 block">研究大主題 *</label>
-                    <input name="topic" value={inputs.topic} onChange={handleInputChange} placeholder="例如：高中生社群成癮、校園節能..." className="input-field" />
+                  <div>
+                    <label className="text-[11px] font-bold text-[var(--pl-ink-mid)] mb-1.5 block tracking-wider uppercase pl-mono">研究大主題 *</label>
+                    <input name="topic" value={inputs.topic} onChange={handleInputChange} placeholder="例如：高中生社群成癮、校園節能..." className="pl-input-field" />
                   </div>
                 )}
                 {(selectedStage.id === 'topic' || selectedStage.id === 'methodology' || selectedStage.id === 'lit_review') && (
-                  <div className="input-group">
-                    <label className="text-xs font-bold text-slate-400 mb-1 block">當前的研究問題 *</label>
-                    <textarea name="question" value={inputs.question} onChange={handleInputChange} placeholder="例如：本校學生在段考前的睡眠品質..." className="input-field h-20" />
+                  <div>
+                    <label className="text-[11px] font-bold text-[var(--pl-ink-mid)] mb-1.5 block tracking-wider uppercase pl-mono">當前的研究問題 *</label>
+                    <textarea name="question" value={inputs.question} onChange={handleInputChange} placeholder="例如：本校學生在段考前的睡眠品質..." className="pl-input-field h-20" />
                   </div>
                 )}
                 {selectedStage.id === 'lit_review' && (
-                  <div className="input-group">
-                    <label className="text-xs font-bold text-slate-400 mb-1 block">關鍵字清單 *</label>
-                    <input name="keywords" value={inputs.keywords} onChange={handleInputChange} placeholder="例如：FOMO, 睡眠不足, 學業表現..." className="input-field" />
+                  <div>
+                    <label className="text-[11px] font-bold text-[var(--pl-ink-mid)] mb-1.5 block tracking-wider uppercase pl-mono">關鍵字清單 *</label>
+                    <input name="keywords" value={inputs.keywords} onChange={handleInputChange} placeholder="例如：FOMO、睡眠不足、學業表現..." className="pl-input-field" />
                   </div>
                 )}
                 {selectedStage.id === 'methodology' && (
-                  <div className="input-group">
-                    <label className="text-xs font-bold text-slate-400 mb-1 block">擬採用的方法 *</label>
-                    <input name="method" value={inputs.method} onChange={handleInputChange} placeholder="例如：半結構式訪談、李克特五點量表問卷..." className="input-field" />
+                  <div>
+                    <label className="text-[11px] font-bold text-[var(--pl-ink-mid)] mb-1.5 block tracking-wider uppercase pl-mono">擬採用的方法 *</label>
+                    <input name="method" value={inputs.method} onChange={handleInputChange} placeholder="例如：半結構式訪談、李克特五點量表問卷..." className="pl-input-field" />
                   </div>
                 )}
                 {selectedStage.id === 'analysis' && (
-                  <div className="input-group">
-                    <label className="text-xs font-bold text-slate-400 mb-1 block">原始數據摘要 *</label>
-                    <textarea name="data" value={inputs.data} onChange={handleInputChange} placeholder="貼上你的觀察紀錄、問卷初步統計或數據..." className="input-field h-32" />
+                  <div>
+                    <label className="text-[11px] font-bold text-[var(--pl-ink-mid)] mb-1.5 block tracking-wider uppercase pl-mono">原始數據摘要 *</label>
+                    <textarea name="data" value={inputs.data} onChange={handleInputChange} placeholder="貼上你的觀察紀錄、問卷初步統計或數據..." className="pl-input-field h-32" />
                   </div>
                 )}
               </div>
@@ -291,7 +405,7 @@ ${template}
               <CollapsibleWhy tip={WHY_TIPS.material} />
 
               {!isReady && (
-                <div className="mt-4 text-[12px] text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 flex items-start gap-2">
+                <div className="mt-4 text-[12px] text-amber-800 bg-amber-50 border border-amber-200 rounded-md px-3 py-2.5 flex items-start gap-2">
                   <Info size={14} className="shrink-0 mt-0.5" />
                   <span>請先填寫：{missingFields.map(f => fieldLabels[f]).join('、')}</span>
                 </div>
@@ -300,65 +414,67 @@ ${template}
               <button
                 onClick={generatePrompt}
                 disabled={!isReady}
-                className={`w-full font-black py-4 rounded-sm transition-all flex items-center justify-center gap-2 mt-4 shadow-lg ${
+                className={`w-full font-bold text-[14px] py-3.5 rounded-md transition-all flex items-center justify-center gap-2 mt-4 ${
                   isReady
-                    ? 'bg-slate-900 text-white hover:bg-indigo-600'
-                    : 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none'
+                    ? 'bg-[var(--pl-ink)] text-white hover:bg-[var(--pl-accent-deep)] shadow-md'
+                    : 'bg-[var(--pl-paper-warm)] text-[var(--pl-ink-light)] cursor-not-allowed border border-[var(--pl-border-light)]'
                 }`}
               >
-                <Sparkles size={18} /> 產生協作 Prompt
+                <Sparkles size={16} /> 產生協作 Prompt
               </button>
             </div>
           </div>
 
           {/* Output Section */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="prompt-card h-full flex flex-col min-h-[600px] border-2 border-indigo-100 bg-[#fdfdff]">
+            <div className="pl-card h-full flex flex-col min-h-[600px]" style={{ background: '#fdfcfa' }}>
               <div className="flex justify-between items-center mb-6">
-                <div className="flex items-center gap-2">
-                  <div className="bg-indigo-100 p-2 rounded text-indigo-600">
-                    <Eye size={20} />
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-[var(--pl-accent-light)] p-2 rounded-md text-[var(--pl-accent)]">
+                    <Eye size={18} />
                   </div>
-                  <h3 className="font-black text-slate-800 tracking-wider">預覽協作內容</h3>
+                  <h3 className="pl-serif font-bold text-[17px] text-[var(--pl-ink)]">預覽協作內容</h3>
                 </div>
-                <div className="flex gap-2">
-                  {generatedPrompt && (
-                    <button
-                      onClick={resetAll}
-                      className="p-2 text-slate-400 hover:text-rose-500 transition-colors"
-                      title="重置"
-                    >
-                      <RotateCcw size={20} />
-                    </button>
-                  )}
-                </div>
+                {generatedPrompt && (
+                  <button
+                    onClick={resetAll}
+                    className="p-2 text-[var(--pl-ink-light)] hover:text-rose-500 transition-colors"
+                    title="重置"
+                  >
+                    <RotateCcw size={18} />
+                  </button>
+                )}
               </div>
 
               {!generatedPrompt ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-slate-400 space-y-4 py-20 px-10 text-center border-2 border-dashed border-slate-100 rounded">
-                  <div className="bg-slate-50 p-6 rounded-full">
-                    <FileEdit size={48} className="opacity-20" />
+                <div className="flex-1 flex flex-col items-center justify-center text-[var(--pl-ink-light)] space-y-4 py-20 px-10 text-center border-2 border-dashed border-[var(--pl-border-light)] rounded-md">
+                  <div className="bg-[var(--pl-paper-warm)] p-6 rounded-full">
+                    <FileEdit size={42} className="opacity-30" />
                   </div>
-                  <p className="font-bold">依序完成左方（或下方）三步驟<br />並點擊「產生協作 Prompt」</p>
+                  <p className="font-bold text-[13px] leading-relaxed">依序完成左方（或下方）三步驟<br />並點擊「產生協作 Prompt」</p>
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col">
-                  <div className="bg-slate-900 text-slate-300 p-6 rounded border border-slate-800 font-mono text-sm leading-relaxed whitespace-pre-wrap flex-1 shadow-inner overflow-auto max-h-[500px]">
+                  <div className="pl-prompt-output flex-1">
                     {generatedPrompt}
                   </div>
 
                   <div className="mt-6 space-y-3">
                     <button
                       onClick={copyToClipboard}
-                      className={`w-full ${copied ? 'bg-emerald-600' : 'bg-indigo-600 hover:bg-indigo-700'} text-white font-black py-4 rounded-sm transition-all flex items-center justify-center gap-2 shadow-lg`}
+                      className={`w-full font-bold text-[14px] py-3.5 rounded-md transition-all flex items-center justify-center gap-2 shadow-md ${
+                        copied
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-[var(--pl-accent)] text-white hover:bg-[var(--pl-accent-deep)]'
+                      }`}
                     >
-                      {copied ? <CheckCircle2 size={20} /> : <Copy size={20} />}
+                      {copied ? <CheckCircle2 size={18} /> : <Copy size={18} />}
                       {copied ? '已複製到剪貼簿！' : '複製 Prompt'}
                     </button>
 
                     {copied && (
                       <div>
-                        <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">貼到你常用的 AI：</div>
+                        <div className="pl-mono text-[10px] font-bold text-[var(--pl-ink-light)] uppercase tracking-widest mb-2.5">貼到你常用的 AI</div>
                         <div className="grid grid-cols-3 gap-2">
                           {AI_PLATFORMS.map(p => (
                             <a
@@ -366,10 +482,10 @@ ${template}
                               href={p.url}
                               target="_blank"
                               rel="noreferrer"
-                              className={`${p.color} text-white font-bold px-3 py-3 rounded-sm flex items-center justify-center gap-1.5 text-sm transition-all shadow`}
+                              className="bg-white border border-[var(--pl-border)] hover:border-[var(--pl-accent)] hover:bg-[var(--pl-accent-light)] text-[var(--pl-ink)] font-bold px-3 py-2.5 rounded-md flex items-center justify-center gap-1.5 text-[13px] transition-all"
                             >
                               {p.name}
-                              <ExternalLink size={12} />
+                              <ExternalLink size={11} className="text-[var(--pl-ink-light)]" />
                             </a>
                           ))}
                         </div>
@@ -377,20 +493,20 @@ ${template}
                     )}
                   </div>
 
-                  <div className="mt-8 bg-amber-50 border border-amber-200 p-5 rounded-sm">
-                    <div className="flex items-center gap-2 text-amber-700 font-black mb-3 uppercase text-xs tracking-widest">
-                      <Info size={16} /> 拿到 AI 回答之後，別忘了 E 與 D
+                  <div className="mt-8 bg-[var(--pl-gold-pale)] border border-[var(--pl-gold)]/30 p-5 rounded-md">
+                    <div className="pl-mono flex items-center gap-2 text-[var(--pl-gold)] font-bold mb-3 uppercase text-[11px] tracking-widest">
+                      <Info size={14} /> 拿到 AI 回答之後，別忘了 E 與 D
                     </div>
                     <div className="space-y-3">
-                      <div className="text-sm">
-                        <span className="font-black text-amber-600">E (Evaluate) 評估：</span>
-                        <p className="text-slate-700 mt-1 leading-relaxed">
-                          AI 的回答<strong>不是標準答案</strong>。把它貼回你所在週次的「AI-RED 敘事紀錄」欄，寫下你採納了什麼、不採納什麼、為什麼。
+                      <div className="text-[13px]">
+                        <span className="font-bold text-[var(--pl-ink)]">E (Evaluate) 評估：</span>
+                        <p className="text-[var(--pl-ink-mid)] mt-1 leading-[1.85]">
+                          AI 的回答<strong className="text-[var(--pl-ink)]">不是標準答案</strong>。把它貼回你所在週次的「AI-RED 敘事紀錄」欄，寫下你採納了什麼、不採納什麼、為什麼。
                         </p>
                       </div>
-                      <div className="text-sm">
-                        <span className="font-black text-amber-600">D (Document) 紀錄：</span>
-                        <p className="text-slate-700 mt-1 leading-relaxed">
+                      <div className="text-[13px]">
+                        <span className="font-bold text-[var(--pl-ink)]">D (Document) 紀錄：</span>
+                        <p className="text-[var(--pl-ink-mid)] mt-1 leading-[1.85]">
                           把這次對話存下來——可以截圖存 Google Drive、或複製整段對話到 Google Doc。研究結束要能回溯 AI 在你研究裡扮演了什麼角色。
                         </p>
                       </div>
@@ -403,50 +519,53 @@ ${template}
         </div>
 
         {/* Prompt 對照診所 */}
-        <div className="mt-16 border-t-2 border-slate-200 pt-10">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="bg-rose-100 p-2 rounded text-rose-600">
-              <Sparkles size={20} />
+        <div className="mt-16 pt-10 border-t-2 border-[var(--pl-border)]">
+          <div className="pl-kicker mb-4">
+            Section 02 · 自學區
+          </div>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="bg-[var(--pl-accent-light)] p-2.5 rounded-md text-[var(--pl-accent)]">
+              <Sparkles size={18} />
             </div>
-            <h2 className="text-2xl font-black text-slate-900 font-serif tracking-tight">
+            <h2 className="pl-serif text-[24px] md:text-[28px] font-bold text-[var(--pl-ink)] tracking-tight">
               Prompt 對照診所
             </h2>
           </div>
-          <p className="text-sm text-slate-600 mb-8 max-w-3xl leading-relaxed">
+          <p className="text-[14px] text-[var(--pl-ink-mid)] mb-8 max-w-3xl leading-[1.95]">
             上面的工具幫你產 prompt，但如果離開這頁、你能自己寫嗎？
             下面三組對照可以幫你看懂「為什麼結構化的 prompt 比隨口一問強」——等你能一眼認出爛 prompt，就不再需要模板了。
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-5">
             {PROMPT_COMPARISONS.map((c, i) => (
-              <div key={i} className="prompt-card">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
+              <div key={i} className="pl-card">
+                <div className="pl-mono text-[10px] font-bold text-[var(--pl-ink-light)] uppercase tracking-widest mb-3">
                   對照 {String(i + 1).padStart(2, '0')} · {c.scenario}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
                   {/* Bad */}
-                  <div className="border-l-4 border-rose-300 bg-rose-50/50 p-4 rounded-r">
-                    <div className="flex items-center gap-1.5 text-rose-700 font-black text-xs uppercase tracking-wider mb-2">
-                      <XCircle size={14} /> 爛 Prompt
+                  <div className="border-l-3 border-l-rose-300 bg-rose-50/40 p-4 rounded-r-md flex flex-col">
+                    <div className="flex items-center gap-1.5 text-rose-700 font-bold text-[11px] uppercase tracking-wider mb-2 pl-mono">
+                      <XCircle size={13} /> 爛 Prompt
                     </div>
-                    <div className="text-sm text-slate-800 bg-white p-3 rounded border border-rose-100 font-mono leading-relaxed mb-2">
+                    <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-rose-100 pl-mono leading-[1.8] mb-3 flex-1">
                       {c.bad}
                     </div>
-                    <div className="text-xs text-slate-600 leading-relaxed">
+                    <div className="text-[12px] text-[var(--pl-ink-mid)] leading-[1.85]">
                       <strong className="text-rose-700">問題：</strong>{c.badWhy}
                     </div>
                   </div>
 
                   {/* Good */}
-                  <div className="border-l-4 border-emerald-400 bg-emerald-50/50 p-4 rounded-r">
-                    <div className="flex items-center gap-1.5 text-emerald-700 font-black text-xs uppercase tracking-wider mb-2">
-                      <CheckCircle2 size={14} /> 好 Prompt
+                  <div className="border-l-3 border-l-emerald-400 bg-emerald-50/40 p-4 rounded-r-md flex flex-col">
+                    <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px] uppercase tracking-wider mb-2 pl-mono">
+                      <CheckCircle2 size={13} /> 好 Prompt
                     </div>
-                    <div className="text-sm text-slate-800 bg-white p-3 rounded border border-emerald-100 font-mono leading-relaxed mb-2">
+                    <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-emerald-100 pl-mono leading-[1.8] mb-3 flex-1">
                       {c.good}
                     </div>
-                    <div className="text-xs text-slate-600 leading-relaxed">
+                    <div className="text-[12px] text-[var(--pl-ink-mid)] leading-[1.85]">
                       <strong className="text-emerald-700">為什麼好：</strong>{c.goodWhy}
                     </div>
                   </div>
@@ -456,35 +575,28 @@ ${template}
           </div>
 
           {/* 自學小結 */}
-          <div className="mt-8 bg-slate-900 text-slate-100 p-6 rounded-sm">
-            <div className="flex items-center gap-2 text-amber-400 font-black text-xs uppercase tracking-widest mb-3">
-              <GraduationCap size={14} /> 自學小結：好 Prompt 的五要素
+          <div className="mt-8 bg-[var(--pl-ink)] text-slate-100 p-7 rounded-md">
+            <div className="pl-mono flex items-center gap-2 text-[var(--pl-gold)] font-bold text-[11px] uppercase tracking-widest mb-4">
+              <GraduationCap size={14} /> 自學小結 · 好 Prompt 的五要素
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
-              <div className="bg-slate-800 p-3 rounded">
-                <div className="font-black text-indigo-400 text-xs uppercase mb-1">01 角色</div>
-                <div className="text-slate-300 text-xs leading-relaxed">你是誰？什麼專業？</div>
-              </div>
-              <div className="bg-slate-800 p-3 rounded">
-                <div className="font-black text-cyan-400 text-xs uppercase mb-1">02 任務</div>
-                <div className="text-slate-300 text-xs leading-relaxed">要做什麼？動詞要明確。</div>
-              </div>
-              <div className="bg-slate-800 p-3 rounded">
-                <div className="font-black text-emerald-400 text-xs uppercase mb-1">03 脈絡</div>
-                <div className="text-slate-300 text-xs leading-relaxed">背景、題目、現況資料。</div>
-              </div>
-              <div className="bg-slate-800 p-3 rounded">
-                <div className="font-black text-amber-400 text-xs uppercase mb-1">04 格式</div>
-                <div className="text-slate-300 text-xs leading-relaxed">要表格？編號？幾段？</div>
-              </div>
-              <div className="bg-slate-800 p-3 rounded">
-                <div className="font-black text-rose-400 text-xs uppercase mb-1">05 限制</div>
-                <div className="text-slate-300 text-xs leading-relaxed">不要什麼？字數上限？</div>
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {[
+                { num: '01', label: '角色', desc: '你是誰？什麼專業？' },
+                { num: '02', label: '任務', desc: '要做什麼？動詞要明確。' },
+                { num: '03', label: '脈絡', desc: '背景、題目、現況資料。' },
+                { num: '04', label: '格式', desc: '要表格？編號？幾段？' },
+                { num: '05', label: '限制', desc: '不要什麼？字數上限？' }
+              ].map(item => (
+                <div key={item.num} className="bg-white/5 border border-white/10 p-3.5 rounded-md">
+                  <div className="pl-mono font-bold text-[var(--pl-gold)] text-[11px] mb-1.5">{item.num}</div>
+                  <div className="font-bold text-white text-[14px] mb-1">{item.label}</div>
+                  <div className="text-slate-400 text-[11.5px] leading-relaxed">{item.desc}</div>
+                </div>
+              ))}
             </div>
-            <p className="text-xs text-slate-400 mt-4 leading-relaxed">
-              下次寫 prompt 前，先在腦中快速過一次這五格——缺一格就補一格，
-              習慣之後你會發現，「問得好」比「換更好的 AI」有用得多。
+            <p className="text-[12.5px] text-slate-400 mt-5 leading-[1.9]">
+              下次寫 prompt 前，先在腦中快速過一次這五格——缺一格就補一格。
+              習慣之後你會發現，「<strong className="text-white">問得好</strong>」比「<strong className="text-white">換更好的 AI</strong>」有用得多。
             </p>
           </div>
         </div>
