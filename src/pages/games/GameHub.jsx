@@ -235,7 +235,7 @@ export const GameHub = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[url('/images/game_hub_bg.png')] bg-cover bg-center bg-fixed font-sans text-slate-200 p-4 md:p-8 relative">
+        <div className="min-h-screen bg-[url('/images/game_hub_bg.png')] bg-cover bg-center font-sans text-slate-200 p-4 md:p-8 relative">
             <div className="absolute inset-0 bg-slate-900/85 backdrop-blur-none z-0"></div>
             <div className="max-w-6xl mx-auto relative z-10">
 

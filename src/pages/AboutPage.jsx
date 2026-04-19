@@ -38,7 +38,6 @@ export const AboutPage = () => {
           min-height: 100vh;
           background-image: radial-gradient(circle, #c8c4ba 1px, transparent 1px);
           background-size: 28px 28px;
-          background-attachment: fixed;
         }
 
         .about-inner { max-width: 780px; margin: 0 auto; padding: 0 40px; }

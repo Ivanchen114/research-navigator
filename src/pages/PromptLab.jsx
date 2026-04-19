@@ -193,10 +193,9 @@ ${template}
 
           font-family: 'Noto Sans TC', sans-serif;
           color: var(--pl-ink);
-          background: var(--pl-paper);
+          background-color: var(--pl-paper);
           background-image: radial-gradient(circle, #c8c4ba 1px, transparent 1px);
           background-size: 28px 28px;
-          background-attachment: fixed;
         }
 
         .promptlab-root .pl-serif { font-family: 'Noto Serif TC', serif; }

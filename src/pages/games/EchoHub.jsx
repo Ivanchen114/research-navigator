@@ -93,7 +93,7 @@ export const EchoHub = () => {
 
             {/* 背景：keyart + overlay + scanline */}
             <div
-                className="absolute inset-0 bg-cover bg-center bg-fixed pointer-events-none"
+                className="absolute inset-0 bg-cover bg-center pointer-events-none"
                 style={{ backgroundImage: "url('/assets/echo/keyart/echo_keyart_hub_v1.webp')" }}
             />
             <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px] pointer-events-none z-0" />
