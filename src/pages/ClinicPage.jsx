@@ -425,10 +425,10 @@ export const ClinicPage = () => {
                                     <div className="w6-speed-q-text font-bold">{TWO_LAYER.layer1.question}</div>
                                     <div className="flex flex-col gap-2 mt-3">
                                         {TWO_LAYER.layer1.options.map((opt, i) => (
-                                            <div key={i} className="flex items-start gap-2 text-[12px] text-[var(--ink-mid)]">
+                                            <div key={i} className="flex flex-wrap items-start gap-x-2 gap-y-1.5 text-[12px] text-[var(--ink-mid)]">
                                                 <span className="text-[var(--ink-light)] shrink-0">→</span>
-                                                <span>{opt.label}</span>
-                                                <span className="w6-method-tag whitespace-nowrap shrink-0">{opt.arrow}</span>
+                                                <span className="flex-1 min-w-[140px]">{opt.label}</span>
+                                                <span className="w6-method-tag whitespace-nowrap shrink-0 ml-5 sm:ml-0">{opt.arrow}</span>
                                             </div>
                                         ))}
                                     </div>
