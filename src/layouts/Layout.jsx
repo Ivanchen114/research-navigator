@@ -33,6 +33,7 @@ export const Layout = () => {
                 { name: '任務總覽', path: '/', status: 'active' },
                 { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
                 { name: '探員檔案', path: '/dossier', status: 'none' },
+                { name: '學習歷程策展室', path: '/portfolio', status: 'none' },
                 { name: '資料分析站', path: '/analysis-station', status: 'none' },
                 { name: 'AI 協作實驗室', path: '/prompt-lab', status: 'none' },
                 { name: '關於本站', path: '/about', status: 'none' },
@@ -144,6 +145,8 @@ export const Layout = () => {
                 if (location.pathname === '/games' || location.pathname.startsWith('/game/')) finalStatus = 'active';
             } else if (item.path === '/dossier') {
                 if (location.pathname === '/dossier') finalStatus = 'active';
+            } else if (item.path === '/portfolio') {
+                if (location.pathname === '/portfolio') finalStatus = 'active';
             } else if (item.path === '/analysis-station') {
                 if (location.pathname === '/analysis-station') finalStatus = 'active';
             } else if (item.path === '/prompt-lab') {

@@ -30,6 +30,7 @@ import { TeamFormation } from './pages/TeamFormation';
 import { PromptLab } from './pages/PromptLab';
 import { DataAnalysisStation } from './pages/DataAnalysisStation';
 import { Dossier } from './pages/Dossier';
+import { Portfolio } from './pages/Portfolio';
 import { AboutPage } from './pages/AboutPage';
 import { PhantomDataHub } from './pages/games/PhantomDataHub';
 import { PhantomCh1 } from './pages/games/PhantomCh1';
@@ -82,6 +83,7 @@ function App() {
           <Route path="prompt-lab" element={<PromptLab />} />
           <Route path="analysis-station" element={<DataAnalysisStation />} />
           <Route path="dossier" element={<Dossier />} />
+          <Route path="portfolio" element={<Portfolio />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="phantom" element={<PhantomDataHub />} />
           <Route path="phantom/ch1" element={<PhantomCh1 />} />
