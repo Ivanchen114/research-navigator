@@ -1243,6 +1243,152 @@ export const W8Data = {
     ]
 };
 
+export const W9Data = {
+    id: "W9",
+    title: "方法深化 I：工具設計基礎與處方診斷",
+    duration: 100,
+    durationDesc: "2 節課",
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 3,
+        now: idx === 3
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "處方診斷",
+            subtitle: "X 型病例 × 錯誤類型速查",
+            desc: "識別誘導性提問、選項重疊、不完整等三大病症",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "好工具三大標準",
+            subtitle: "可靠性 · 有效性 · 可行性",
+            desc: "每題都要通過三關，才是合格的研究工具",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "三欄對應表",
+            subtitle: "研究問題 → 題目 → 工具",
+            desc: "把抽象的研究問題轉換成可執行的工具初稿",
+            colorConfig: "g"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "處方診斷 × 三大標準 × 分流準備",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeStartFormatted: "00:00",
+                    duration: 5,
+                    colorClass: "c3",
+                    icon: "📢",
+                    title: "一、 開場：從 Level 1 到 Level 2",
+                    desc: "W7 學掛號判斷（用什麼方法）。今天升級：工具設計得好不好？哪裡有毒？怎麼解毒？"
+                },
+                {
+                    timeStart: "0:05",
+                    timeStartFormatted: "00:05",
+                    duration: 15,
+                    colorClass: "c1",
+                    icon: "🩺",
+                    title: "二、 處方診斷熱身",
+                    desc: "三道 X 型病例（手機/睡眠主題問卷）示範，對照錯誤類型速查卡找出毒性並開處方。",
+                    tags: ["X 型病例", "錯誤類型"]
+                },
+                {
+                    timeStart: "0:20",
+                    timeStartFormatted: "00:20",
+                    duration: 20,
+                    colorClass: "c1",
+                    icon: "🎯",
+                    title: "三、 好工具三大標準",
+                    desc: "可靠性（一致）、有效性（問對）、可行性（答得出）三關講解，搭配兩題理解檢核。",
+                    tags: ["信效度", "理解檢核"]
+                },
+                {
+                    timeStart: "0:40",
+                    timeStartFormatted: "00:40",
+                    duration: 10,
+                    colorClass: "c4",
+                    icon: "🚏",
+                    title: "四、 分流準備",
+                    desc: "依 W8 決定的方法分組：問卷前半、訪談後半、實驗/觀察/文獻側邊。下節開始實作。",
+                    tags: ["分組", "工作表"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "三欄對應表 × 同儕診斷 × 繳交",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeStartFormatted: "00:00",
+                    duration: 25,
+                    colorClass: "c2",
+                    icon: "📐",
+                    title: "五、 三欄對應表實作",
+                    desc: "各組依方法取用專屬工作表（問卷/訪談/實驗/觀察/文獻），把研究問題拆成題目並寫出工具初稿。",
+                    tags: ["核心產出", "分流實作"]
+                },
+                {
+                    timeStart: "0:25",
+                    timeStartFormatted: "00:25",
+                    duration: 20,
+                    colorClass: "c5",
+                    icon: "🤝",
+                    title: "六、 同儕處方診斷",
+                    desc: "兩組交換初稿，用三大標準與錯誤類型卡互相開處方，每題至少寫一條改進建議。",
+                    tags: ["同儕診斷", "三大標準"]
+                },
+                {
+                    timeStart: "0:45",
+                    timeStartFormatted: "00:45",
+                    duration: 5,
+                    colorClass: "c3",
+                    icon: "📤",
+                    title: "七、 回顧與繳交",
+                    desc: "繳交三欄對應表與工具初稿。預告 W10：帶著初稿進 AI 工具精進與預試。",
+                    tags: ["銜接 W10"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📐",
+            label: "核心產出",
+            text: "三欄對應表 + 工具初稿<br><small style=\"font-size:11px;color:#888;\">依方法分流</small>"
+        },
+        {
+            icon: "🩺",
+            label: "診斷能力",
+            text: "錯誤類型速查 + 三大標準<br><small style=\"font-size:11px;color:#888;\">W10 精進的基礎</small>"
+        },
+        {
+            icon: "🤝",
+            label: "同儕回饋",
+            text: "互相處方建議清單<br><small style=\"font-size:11px;color:#888;\">第二輪修改依據</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念講解" },
+        { colorClass: "lm-c2", label: "個人 / 小組實作" },
+        { colorClass: "lm-c4", label: "分流 / 決策" },
+        { colorClass: "lm-c5", label: "同儕互動" },
+        { colorClass: "lm-c3", label: "說明 / 收束" }
+    ]
+};
+
 export const W10Data = {
     id: "W10",
     title: "研究工具診所 Level 2：品質診斷與修改",
@@ -1878,5 +2024,152 @@ export const W15Data = {
         { colorClass: "lm-c2", label: "實作 / 寫作" },
         { colorClass: "lm-c4", label: "診斷 / 演練" },
         { colorClass: "lm-c5", label: "AI 輔助" }
+    ]
+};
+
+export const W16Data = {
+    id: "W16",
+    title: "報告撰寫與海報製作：從數據到故事",
+    duration: 100,
+    durationDesc: "2 節課",
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 7,
+        now: idx === 7
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "七步組裝",
+            subtitle: "搬運 → 縫合 → 潤色",
+            desc: "80% 內容前 15 週已寫完，現在只要組裝",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "AI 潤色校對",
+            subtitle: "縫合稿 + 人工校對",
+            desc: "AI 協助縫合與語氣調整，人工把關事實與邏輯",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "海報設計",
+            subtitle: "A1 海報 + 發表預演",
+            desc: "把七章壓縮到一張海報，能在 3 分鐘內說完",
+            colorConfig: "g"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "七步組裝 × AI 潤色 × 人工校對",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeStartFormatted: "00:00",
+                    duration: 5,
+                    colorClass: "c3",
+                    icon: "📦",
+                    title: "一、 開場：組裝出發",
+                    desc: "好消息：報告已寫完 80%。前 15 週學習單都是原料，今天只需搬運、縫合、潤色。",
+                    tags: ["動機", "框架"]
+                },
+                {
+                    timeStart: "0:05",
+                    timeStartFormatted: "00:05",
+                    duration: 15,
+                    colorClass: "c1",
+                    icon: "🧭",
+                    title: "二、 七步組裝清單",
+                    desc: "依七章清單逐項核對學習單來源：動機（W2）、文獻（W5-6）、方法（W8-11）、結果（W14）、結論（W15）。",
+                    tags: ["章節對照"]
+                },
+                {
+                    timeStart: "0:20",
+                    timeStartFormatted: "00:20",
+                    duration: 20,
+                    colorClass: "c5",
+                    icon: "🤖",
+                    title: "三、 AI 組裝 Prompt",
+                    desc: "貼入七章素材與風格指引，讓 AI 產生縫合稿；同步記錄 AI-RED 五要素（A-I-R-E-D）。",
+                    tags: ["AI 協作", "AI-RED"]
+                },
+                {
+                    timeStart: "0:40",
+                    timeStartFormatted: "00:40",
+                    duration: 10,
+                    colorClass: "c4",
+                    icon: "🔍",
+                    title: "四、 人工校對",
+                    desc: "逐章檢查 AI 是否扭曲事實、補數據、跳結論；標出需要人工改寫的段落。",
+                    tags: ["把關", "AI 限制"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "海報製作 × 發表預演 × 繳交",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeStartFormatted: "00:00",
+                    duration: 15,
+                    colorClass: "c1",
+                    icon: "🗺️",
+                    title: "五、 海報規劃",
+                    desc: "A1 海報骨架：題目、動機、方法、關鍵圖、結論、限制。先畫手稿版面，再開工。",
+                    tags: ["版面配置", "視覺層級"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeStartFormatted: "00:15",
+                    duration: 25,
+                    colorClass: "c2",
+                    icon: "🎨",
+                    title: "六、 海報製作",
+                    desc: "使用 Canva / Figma / Slides 模板填入內容，掌握三大準則：圖大於字、標題可讀、留白乾淨。",
+                    tags: ["核心產出"]
+                },
+                {
+                    timeStart: "0:40",
+                    timeStartFormatted: "00:40",
+                    duration: 10,
+                    colorClass: "c5",
+                    icon: "🎙️",
+                    title: "七、 發表預演 + 繳交",
+                    desc: "組內 3 分鐘電梯簡報預演，繳交報告定稿與海報檔；預告 W17 策展人登場。",
+                    tags: ["預演", "銜接 W17"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📄",
+            label: "核心產出",
+            text: "研究報告定稿<br><small style=\"font-size:11px;color:#888;\">七章組裝完成</small>"
+        },
+        {
+            icon: "🖼️",
+            label: "發表工具",
+            text: "A1 海報檔 + 3 分鐘簡報<br><small style=\"font-size:11px;color:#888;\">W17 成果發表用</small>"
+        },
+        {
+            icon: "🤖",
+            label: "AI 紀錄",
+            text: "組裝 Prompt + AI-RED 紀錄<br><small style=\"font-size:11px;color:#888;\">誠實揭露協作歷程</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 架構" },
+        { colorClass: "lm-c2", label: "個人 / 小組實作" },
+        { colorClass: "lm-c4", label: "校對 / 把關" },
+        { colorClass: "lm-c5", label: "AI 協作 / 發表" },
+        { colorClass: "lm-c3", label: "說明 / 收束" }
     ]
 };

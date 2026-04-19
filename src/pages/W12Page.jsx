@@ -205,6 +205,7 @@ const W12Page = () => {
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <ResetWeekButton weekPrefix="w12-" />
+                    <span className="hidden md:inline text-[10px] font-mono text-[var(--ink-light)] italic" title="本週為 Open Office 自由工作時間，無固定時程地圖">無教程地圖</span>
                     <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>

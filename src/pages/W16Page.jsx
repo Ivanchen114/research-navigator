@@ -7,6 +7,8 @@ import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
+import LessonMap from '../components/ui/LessonMap';
+import { W16Data } from '../data/lessonMaps';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     ArrowRight,
@@ -20,6 +22,7 @@ import {
     FileText,
     Eye,
     CheckSquare,
+    Map,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -202,6 +205,7 @@ const AssemblyChecklist = () => {
  *  主元件
  * ══════════════════════════════════════ */
 const W16Page = () => {
+    const [showLessonMap, setShowLessonMap] = useState(false);
     /* 讀取前週資料 */
     const prev = readRecords(['w15-draft-describe', 'w15-draft-interpret', 'w15-draft-anchor', 'w15-draft-critique', 'w14-my-chart-type', 'w14-my-description', 'w14-my-inference']);
     const topic = localStorage.getItem('w4-initial-topic') || '';
@@ -599,9 +603,22 @@ const W16Page = () => {
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <ResetWeekButton weekPrefix="w16-" />
+                    <button
+                        onClick={() => setShowLessonMap(!showLessonMap)}
+                        className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
+                        type="button"
+                    >
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                    </button>
                     <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
+
+            {showLessonMap && (
+                <div className="animate-in slide-in-from-top-4 duration-300 mb-8">
+                    <LessonMap data={W16Data} />
+                </div>
+            )}
 
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock

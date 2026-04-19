@@ -9,6 +9,8 @@ import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
+import LessonMap from '../components/ui/LessonMap';
+import { W9Data } from '../data/lessonMaps';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     ArrowRight,
@@ -22,6 +24,7 @@ import {
     FileSearch,
     ShieldCheck,
     AlertTriangle,
+    Map,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -256,6 +259,7 @@ export const W9Page = () => {
     const [selectedMethod, setSelectedMethod] = useState('');
     const [w8Method, setW8Method] = useState('');
     const [w8Topic, setW8Topic] = useState('');
+    const [showLessonMap, setShowLessonMap] = useState(false);
 
     /* W8 帶入方法和題目 */
     useEffect(() => {
@@ -758,9 +762,22 @@ export const W9Page = () => {
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <ResetWeekButton weekPrefix="w9-" />
+                    <button
+                        onClick={() => setShowLessonMap(!showLessonMap)}
+                        className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
+                        type="button"
+                    >
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                    </button>
                     <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
+
+            {showLessonMap && (
+                <div className="animate-in slide-in-from-top-4 duration-300 mb-8">
+                    <LessonMap data={W9Data} />
+                </div>
+            )}
 
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock

@@ -274,6 +274,7 @@ export const Home = () => {
                   background: #fff;
                   display: flex; flex-direction: column;
                   transition: all 0.15s ease;
+                  min-width: 0;           /* 防止中文標題撐寬破版 */
                 }
                 .week-card:hover { background: #fdfcfa; z-index: 2; position: relative; }
 
@@ -384,16 +385,63 @@ export const Home = () => {
 
                 @media (max-width: 900px) {
                   .jump-grid { grid-template-columns: 1fr; }
-                  .wg-3, .wg-4, .wg-5, .wg-6 { grid-template-columns: repeat(2, 1fr); }
+                  .wg-3, .wg-4, .wg-6 { grid-template-columns: repeat(2, 1fr); }
+                  .wg-5 { grid-template-columns: 1fr; }   /* 5 格→2 欄會出孤兒列，直接收成 1 欄 */
                   .ar-grid { grid-template-columns: repeat(2, 1fr); }
                   .hero-inner { grid-template-columns: 1fr; }
                   .hero h1 { font-size: 36px; }
                 }
-                @media (max-width: 600px) {
+                @media (max-width: 720px) {
+                  /* 手機版：全部週次卡片單欄 */
                   .wg-3, .wg-4, .wg-5, .wg-6 { grid-template-columns: 1fr; }
                   .ar-grid { grid-template-columns: 1fr; }
-                  .inner { padding: 0 24px; }
-                  .hero-inner { padding: 60px 24px 48px; }
+                  .inner { padding: 0 20px; }
+                  .hero-inner { padding: 56px 20px 44px; }
+
+                  /* Phase head 縮 padding */
+                  .phase-head { padding: 12px 18px; gap: 10px; }
+                  .ph-title { font-size: 14px; }
+                  .ph-range { font-size: 9.5px; padding: 2px 7px; }
+
+                  /* Week card 橫向佈局：左側 num+icon 直條，右側 title+desc */
+                  .wc-body {
+                    padding: 16px 18px 14px;
+                    display: grid;
+                    grid-template-columns: 42px 1fr;
+                    grid-template-rows: auto auto auto;
+                    grid-template-areas:
+                      "num   title"
+                      "icon  desc"
+                      "icon  goto";
+                    gap: 2px 14px;
+                    align-items: start;
+                  }
+                  .wc-num { grid-area: num; margin-bottom: 0; font-size: 10px; }
+                  .wc-num::after { display: none; }
+                  .wc-icon { grid-area: icon; margin-bottom: 0; padding-top: 2px; }
+                  .wc-title { grid-area: title; font-size: 14px; margin-bottom: 4px; align-self: center; }
+                  .wc-desc { grid-area: desc; font-size: 11.5px; line-height: 1.65; }
+                  .wc-goto { grid-area: goto; opacity: 1; font-size: 9px; margin-top: 6px; }
+
+                  /* 實作週徽章（W12）保持原樣但縮邊距 */
+                  .impl-badge { margin: 0 14px 14px; padding: 5px 10px; }
+
+                  /* Mission 列：縮小、緊貼卡片底 */
+                  .wc-mission { padding: 8px 18px; gap: 6px; }
+                  .wm-tag { font-size: 9px; padding: 1.5px 6px; }
+                  .wm-name { font-size: 10px; }
+                }
+                @media (max-width: 480px) {
+                  /* 超窄螢幕：再縮一點 */
+                  .wc-body {
+                    grid-template-columns: 36px 1fr;
+                    padding: 14px 16px 12px;
+                    gap: 2px 12px;
+                  }
+                  .wc-title { font-size: 13.5px; }
+                  .wc-desc { font-size: 11px; }
+                  .phase-head { padding: 11px 16px; }
+                  .inner { padding: 0 16px; }
                 }
                 `
       }} />
