@@ -267,25 +267,16 @@ export const Layout = () => {
                 </nav>
 
                 {/* AIRed Footer */}
-                <div className="p-[16px_20px] border-t border-[#dddbd5] space-y-3">
+                <div className="p-[14px_20px] border-t border-[#dddbd5]">
                     <div className="flex items-center gap-2 text-[11px] text-[#8888aa]">
                         <span>AI-RED</span>
                         <span className="font-['DM_Mono',monospace] bg-[#1a1a2e] text-white px-1.5 py-0.5 rounded-[3px] text-[10px]">
-                            V2.0.4
+                            學習框架
                         </span>
-                        <span>學習框架</span>
                     </div>
-                    {/* 開發測試用重置按鈕 */}
-                    <button
-                        onClick={() => {
-                            localStorage.removeItem('researchNavigator_maxWeek');
-                            window.location.href = '/';
-                        }}
-                        className="text-[10px] text-[#e32d5b] border border-[#f2dada] bg-[#fdf2f2] rounded px-2 py-1 hover:bg-[#e32d5b] hover:text-white transition-colors w-fit flex items-center font-bold"
-                        title="清除瀏覽器記憶的解鎖進度"
-                    >
-                        🔄 重置測試進度
-                    </button>
+                    <div className="mt-1.5 text-[10px] text-[#aaa8a0] font-['DM_Mono',monospace] tracking-wider">
+                        UPDATED · 2026.04.19
+                    </div>
                 </div>
             </aside>
 
