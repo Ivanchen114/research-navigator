@@ -384,13 +384,13 @@ export const Home = () => {
 
                 @media (max-width: 900px) {
                   .jump-grid { grid-template-columns: 1fr; }
-                  .wg-3, .wg-4, .wg-6 { grid-template-columns: repeat(2, 1fr); }
+                  .wg-3, .wg-4, .wg-5, .wg-6 { grid-template-columns: repeat(2, 1fr); }
                   .ar-grid { grid-template-columns: repeat(2, 1fr); }
                   .hero-inner { grid-template-columns: 1fr; }
                   .hero h1 { font-size: 36px; }
                 }
                 @media (max-width: 600px) {
-                  .wg-3, .wg-4, .wg-6 { grid-template-columns: 1fr; }
+                  .wg-3, .wg-4, .wg-5, .wg-6 { grid-template-columns: 1fr; }
                   .ar-grid { grid-template-columns: 1fr; }
                   .inner { padding: 0 24px; }
                   .hero-inner { padding: 60px 24px 48px; }
