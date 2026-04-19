@@ -199,6 +199,7 @@ export const Home = () => {
                 .jump-card:hover { background: #fdfcfa; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
                 .jump-card.primary { background: var(--ink); }
                 .jump-card.primary:hover { background: #242436; }
+                .jump-card.full { grid-column: 1 / -1; }
                 .j-eyebrow {
                   display: flex; align-items: center; gap: 8px;
                   margin-bottom: 14px;
@@ -479,18 +480,24 @@ export const Home = () => {
             <div className="j-cta">前往 W2 <ArrowRight size={14} /></div>
           </Link>
           <Link className="jump-card" to="/w3">
-            <div className="j-eyebrow"><span className="j-step">Step 02</span><span className="j-range">W3 – W10</span></div>
-            <div className="j-title">我要選研究方法</div>
-            <div className="j-desc">8 種病例速查，三問法找到對的研究方法，工具設計、AI 審稿一站搞定。</div>
+            <div className="j-eyebrow"><span className="j-step">Step 02</span><span className="j-range">W3 – W8</span></div>
+            <div className="j-title">我在規劃研究</div>
+            <div className="j-desc">8 種病例速查、三問法選方法、文獻探討、組隊決策——研究藍圖一次規劃完。</div>
             <div className="j-cta">題目健檢 <ArrowRight size={14} /></div>
           </Link>
+          <Link className="jump-card" to="/w9">
+            <div className="j-eyebrow"><span className="j-step">Step 03</span><span className="j-range">W9 – W13</span></div>
+            <div className="j-title">我要進場收資料</div>
+            <div className="j-desc">工具設計與精進、AI 倫理審查、資料蒐集執行週的完整支援。</div>
+            <div className="j-cta">前往 W9 <ArrowRight size={14} /></div>
+          </Link>
           <Link className="jump-card" to="/w14">
-            <div className="j-eyebrow"><span className="j-step">Step 03</span><span className="j-range">W14 – W17</span></div>
-            <div className="j-title">我有資料，但不知道怎麼分析</div>
+            <div className="j-eyebrow"><span className="j-step">Step 04</span><span className="j-range">W14 – W17</span></div>
+            <div className="j-title">我有資料要分析</div>
             <div className="j-desc">數據轉譯、圖表選擇、四層結論寫作、海報設計全流程。</div>
             <div className="j-cta">前往 W14 <ArrowRight size={14} /></div>
           </Link>
-          <Link className="jump-card primary" style={{ background: '#4f46e5' }} to="/prompt-lab">
+          <Link className="jump-card primary full" style={{ background: '#4f46e5' }} to="/prompt-lab">
             <div className="j-eyebrow"><span className="j-step text-[#c7d2fe]">NEW Tool</span><span className="j-range bg-[#4338ca] text-[#a5b4fc] border-none">V2.0</span></div>
             <div className="j-title text-white">AI-RED Prompt 實驗室</div>
             <div className="j-desc text-indigo-100">人機協作專用的提問產生器，幫你寫出高品質的研究指令。</div>
@@ -540,12 +547,12 @@ export const Home = () => {
             </div>
           </div>
 
-          {/* Phase 3 裝備執行 W9–W13 */}
+          {/* Phase 3 實戰階段 W9–W13 */}
           <div className="phase">
             <div className="phase-head">
               <span className="ph-num">Phase 03</span>
               <span className="ph-divider"></span>
-              <span className="ph-title">裝備執行</span>
+              <span className="ph-title">實戰階段</span>
               <span className="ph-range">W9 – W13</span>
             </div>
             <div className="week-grid wg-5">
