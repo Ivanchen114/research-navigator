@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './W9Page.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import Checklist from '../components/ui/Checklist';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import AIAssistToggle from '../components/ui/AIAssistToggle';
@@ -431,7 +432,8 @@ const EXPORT_FIELDS = [
     { key: 'w9-three-col-q1', label: '三欄對應表 1', question: '合題 → 拆解單位（變項/層面/行為/維度）→ 對應產出' },
     { key: 'w9-three-col-q2', label: '三欄對應表 2', question: '合題 → 拆解單位 → 對應產出' },
     { key: 'w9-three-col-q3', label: '三欄對應表 3（若有）', question: '合題 → 拆解單位 → 對應產出' },
-    { key: 'w9-basic-info-check', label: '基本資料 / 知情同意 / 結構確認' },
+    { key: 'w9-basic-checklist', label: '基本結構自查清單（勾選）', question: '依方法逐項確認' },
+    { key: 'w9-basic-info-check', label: '基本規格填答', question: '題數／時間／分組／篩選標準等數字與具體值' },
     /* Step 5：同儕處方診斷 */
     { key: 'w9-peer-from', label: '我診斷了哪一組' },
     { key: 'w9-peer-diagnosis', label: '同儕處方診斷紀錄', question: '在對方的工具初稿中發現什麼問題？' },
@@ -1002,33 +1004,75 @@ export const W9Page = () => {
                                 );
                             })()}
 
-                            {/* 基本資料與結構確認 */}
-                            <ThinkRecord
-                                dataKey="w9-basic-info-check"
-                                prompt={
-                                    selectedMethod === 'questionnaire'
-                                        ? '基本資料與知情同意確認'
-                                        : selectedMethod === 'interview'
-                                            ? '訪談結構確認'
-                                            : selectedMethod === 'experiment'
-                                                ? '實驗流程確認'
-                                                : selectedMethod === 'observation'
-                                                    ? '觀察情境設定'
-                                                    : '文獻篩選標準設定'
-                                }
-                                placeholder={
-                                    selectedMethod === 'questionnaire'
-                                        ? '□ 開場白已寫好（我是誰、研究目的、保密承諾、需時多久）\n□ 基本變項設計完成（年級/性別/類組）\n□ 題目數量：___題，預計填答___分鐘'
-                                        : selectedMethod === 'interview'
-                                            ? '□ 暖身問題準備好了\n□ 問題排序合理（從簡單→深層）\n□ 收尾準備好了（「還有什麼想補充的嗎？」）\n□ 預計訪談___分鐘'
-                                            : selectedMethod === 'experiment'
-                                                ? '□ 知情同意步驟已安排\n□ 分組方式：___\n□ 控制變項已列出___項\n□ 預計___天完成實驗'
-                                                : selectedMethod === 'observation'
-                                                    ? '□ 觀察時間：每次___分鐘，共___次\n□ 觀察地點：___\n□ 觀察者定位：□參與觀察 □非參與觀察'
-                                                    : '□ 關鍵字：中文___ / 英文___\n□ 年份限制：___\n□ 納入標準：___\n□ 排除標準：___'
-                                }
-                                rows={4}
-                            />
+                            {/* 基本資料與結構確認：上 Checklist（純檢核）＋下 ThinkRecord（填空） */}
+                            {(() => {
+                                const checklistConfig = {
+                                    questionnaire: {
+                                        prompt: '基本資料與知情同意確認',
+                                        items: [
+                                            '開場白已寫好（我是誰、研究目的、保密承諾、需時多久）',
+                                            '基本變項設計完成（年級／性別／類組）',
+                                        ],
+                                        fillPrompt: '題目數量與填答時間',
+                                        fillTemplate: '預計題目數：___ 題\n預計填答時間：___ 分鐘',
+                                    },
+                                    interview: {
+                                        prompt: '訪談結構確認',
+                                        items: [
+                                            '暖身問題準備好了',
+                                            '問題排序合理（從簡單 → 深層）',
+                                            '收尾問題準備好了（「還有什麼想補充的嗎？」）',
+                                        ],
+                                        fillPrompt: '預計訪談時間',
+                                        fillTemplate: '預計訪談時間：___ 分鐘',
+                                    },
+                                    experiment: {
+                                        prompt: '實驗流程確認',
+                                        items: [
+                                            '知情同意步驟已安排',
+                                            '已備妥實驗材料／場地',
+                                        ],
+                                        fillPrompt: '分組、控制變項、時程',
+                                        fillTemplate: '分組方式：___\n控制變項共 ___ 項\n預計 ___ 天完成實驗',
+                                    },
+                                    observation: {
+                                        prompt: '觀察情境設定',
+                                        items: [
+                                            '已決定觀察者定位（參與 or 非參與）',
+                                            '觀察紀錄表欄位已設計好',
+                                        ],
+                                        fillPrompt: '時間、地點、角色',
+                                        fillTemplate: '觀察者定位：□參與觀察  □非參與觀察（擇一圈選）\n觀察時間：每次 ___ 分鐘，共 ___ 次\n觀察地點：___',
+                                    },
+                                    literature: {
+                                        prompt: '文獻篩選標準設定',
+                                        items: [
+                                            '中文關鍵字已列出',
+                                            '英文關鍵字已列出',
+                                            '納入／排除標準已與組員共識',
+                                        ],
+                                        fillPrompt: '年份與具體標準',
+                                        fillTemplate: '年份限制：___\n納入標準：___\n排除標準：___',
+                                    },
+                                };
+                                const cfg = checklistConfig[selectedMethod];
+                                if (!cfg) return null;
+                                return (
+                                    <>
+                                        <Checklist
+                                            dataKey="w9-basic-checklist"
+                                            prompt={cfg.prompt}
+                                            items={cfg.items}
+                                        />
+                                        <ThinkRecord
+                                            dataKey="w9-basic-info-check"
+                                            prompt={cfg.fillPrompt}
+                                            defaultTemplate={cfg.fillTemplate}
+                                            rows={4}
+                                        />
+                                    </>
+                                );
+                            })()}
                         </div>
                     ) : (
                         <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-8 text-center">
@@ -1093,7 +1137,7 @@ export const W9Page = () => {
                     <ThinkRecord
                         dataKey="w9-peer-diagnosis"
                         prompt="醫師把脈紀錄：對方的三欄對應表與題目草稿有什麼問題？"
-                        placeholder="問題 1：第___題犯了「___」→ 建議改為___&#10;問題 2：子問題 ___ 和題目對不上，因為___&#10;總評：這些題目整體能回答他們的研究問題嗎？___"
+                        defaultTemplate={'問題 1：第 ___ 題犯了「___」→ 建議改為 ___\n問題 2：子問題 ___ 和題目對不上，因為 ___\n總評：這些題目整體能回答他們的研究問題嗎？___'}
                         scaffold={['第__題犯了「___」', '建議改為___', '整體評價：___']}
                         rows={8}
                     />
@@ -1101,7 +1145,7 @@ export const W9Page = () => {
                     <ThinkRecord
                         dataKey="w9-received-feedback"
                         prompt="我收到的處方：別組醫師給我們的回饋"
-                        placeholder="醫師說我們的第___題有___的問題，建議改為___&#10;醫師的總評是：___"
+                        defaultTemplate={'醫師說我們的第 ___ 題有 ___ 的問題，建議改為 ___\n醫師的總評是：___'}
                         scaffold={['第__題需要改___', '醫師建議___', '我們覺得___']}
                         rows={6}
                     />
@@ -1140,7 +1184,7 @@ export const W9Page = () => {
                     <ThinkRecord
                         dataKey="w9-revision-plan"
                         prompt="綜合同學的診斷與老師的建議，下週 W10 之前必須做出的最大修改是什麼？"
-                        placeholder="我們決定修改的方向是___，因為同儕診斷時發現___&#10;具體來說，第___題要改成___"
+                        defaultTemplate={'我們決定修改的方向是 ___，因為同儕診斷時發現 ___\n具體來說，第 ___ 題要改成 ___'}
                         scaffold={['最大的修改是___', '因為___', '組裝時會特別注意___']}
                         rows={5}
                     />
