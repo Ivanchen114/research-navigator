@@ -32,47 +32,52 @@ import {
  *  資料常數
  * ══════════════════════════════════════ */
 
-/* — 錯誤類型速查（含徵狀 desc + 怎麼改 fix） — */
-const ERROR_TYPES = [
-    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', fix: '改成中性語彙：「你覺得 X 對 Y 的影響是？」搭配雙向量表', color: 'var(--danger)', scope: '共通' },
-    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', fix: '拆成兩題，一題問一件事', color: '#2563EB', scope: '共通' },
-    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', fix: '改成真正開放或完全中性，不提示立場', color: '#059669', scope: '共通' },
-    { name: '選項重疊', icon: '🔄', desc: '1-3次 和 3-5次——3次算哪個？', fix: '邊界清楚不重疊：0、1-2、3-4、5 次以上', color: '#D97706', scope: '問卷' },
-    { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', fix: '加「其他：___」或把範圍補完整（覆蓋所有可能）', color: '#7C3AED', scope: '問卷' },
+/* — 共通錯誤（五方法都可能犯）：三欄結構 類型 / 徵狀 / 怎麼改 — */
+const COMMON_ERRORS = [
+    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', fix: '改成中性語彙：「你覺得 X 對 Y 的影響是？」搭配雙向量表', color: 'var(--danger)' },
+    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', fix: '拆成兩題，一題問一件事', color: '#2563EB' },
+    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', fix: '改成真正開放或完全中性，不提示立場', color: '#059669' },
 ];
 
-/* — 方法獨家陷阱：訪談 / 觀察 / 實驗 / 文獻（問卷的 2 個獨家陷阱已合併進 ERROR_TYPES） — */
+/* — 方法獨家陷阱：5 方法 × 2~3 條；同為 類型 / 徵狀 / 怎麼改 三欄結構 — */
 const METHOD_PITFALLS = {
-    interview: {
-        title: '🎤 訪談組獨家陷阱',
+    questionnaire: {
+        label: '📋 問卷',
         items: [
-            { name: '假設性問題', desc: '「如果……你會怎樣？」對方容易給理想答案，不是真實行為。' },
-            { name: '追問斷掉', desc: '問完主問題沒有 why / how 追問，只拿到表面答案。' },
-            { name: '過早封閉', desc: '訪談變成問卷式是/否題，浪費訪談的開放價值。' },
+            { name: '選項重疊', icon: '🔄', desc: '1-3次 和 3-5次——3次算哪個？', fix: '邊界清楚不重疊：0、1-2、3-4、5 次以上', color: '#D97706' },
+            { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', fix: '加「其他：___」或把範圍補完整（覆蓋所有可能）', color: '#7C3AED' },
+        ],
+    },
+    interview: {
+        label: '🎤 訪談',
+        items: [
+            { name: '假設性問題', icon: '💭', desc: '「如果……你會怎樣？」對方容易給理想答案，不是真實行為', fix: '改問具體經驗：「上次遇到 X 時你實際怎麼做？結果如何？」', color: '#DB2777' },
+            { name: '追問斷掉', icon: '🔇', desc: '問完主問題沒有 why / how 追問，只拿到表面答案', fix: '事先備 follow-up 清單；聽到「還好」「有時」就追問「可以舉個例嗎？」', color: '#0891B2' },
+            { name: '過早封閉', icon: '🚪', desc: '訪談變成問卷式是/否題，浪費訪談的開放價值', fix: '主問題用「請描述…／聊聊…」取代「你會不會…」', color: '#6366F1' },
         ],
     },
     observation: {
-        title: '👀 觀察組獨家陷阱',
+        label: '👀 觀察',
         items: [
-            { name: '指標模糊', desc: '「認真程度」要怎麼測？沒有操作化定義就無法穩定記錄。' },
-            { name: '觀察者偏誤', desc: '先入為主（覺得這組就是比較混），記錄時不自覺選擇性。' },
-            { name: '取樣時段偏誤', desc: '只看第 3 節課不能代表整天；只看週一不能代表一週。' },
+            { name: '指標模糊', icon: '🌫️', desc: '「認真程度」要怎麼測？沒有操作化定義就無法穩定記錄', fix: '改成可觀測行為：抬頭次數／動筆分鐘／主動發言次數', color: '#DB2777' },
+            { name: '觀察者偏誤', icon: '👁️', desc: '先入為主（覺得這組就是比較混），記錄時不自覺選擇性', fix: '兩人獨立記錄同一場、事後比對；或用計數表取代主觀評分', color: '#0891B2' },
+            { name: '取樣時段偏誤', icon: '⏰', desc: '只看第 3 節課不能代表整天；只看週一不能代表一週', fix: '分散時段（早／中／晚 × 週一到五），或隨機時段取樣', color: '#6366F1' },
         ],
     },
     experiment: {
-        title: '🧪 實驗組獨家陷阱',
+        label: '🧪 實驗',
         items: [
-            { name: '混淆變項', desc: '實驗組和對照組還差了別的東西（時段、教師、氣氛），不是只差你要測的那一個。' },
-            { name: '操作定義不精確', desc: '「多喝水」是幾 cc？「學習效果」是哪一份測驗？沒定義等於沒實驗。' },
-            { name: '前後測污染', desc: '前測讓受試者猜到你要測什麼，後測表現被污染。' },
+            { name: '混淆變項', icon: '🌀', desc: '實驗組和對照組還差了別的東西（時段、教師、氣氛），不只差你要測的那一個', fix: '非目標變項做到一致（同教師／時段／教材），或隨機分派抵銷', color: '#DB2777' },
+            { name: '操作定義不精確', icon: '📏', desc: '「多喝水」是幾 cc？「學習效果」是哪一份測驗？沒定義等於沒實驗', fix: '寫成 SOP：數量（2000cc）、頻率（3 次/日）、測驗工具（段考數學科）', color: '#0891B2' },
+            { name: '前後測污染', icon: '🧪', desc: '前測讓受試者猜到你要測什麼，後測表現被污染', fix: '加對照組比差異；或只後測設計；或讓前後測題目不同形式', color: '#6366F1' },
         ],
     },
     literature: {
-        title: '📚 文獻組獨家陷阱',
+        label: '📚 文獻',
         items: [
-            { name: '分析維度不清', desc: '「整理」到底要歸納什麼——主題、方法、結論、爭議？沒定軸就是剪貼簿。' },
-            { name: '取樣偏誤', desc: '只看 Google 前 5 篇／只看某立場的來源，結論早就被預設。' },
-            { name: '編碼不一致', desc: '同一個概念前後用不同標籤，統計起來數據錯。' },
+            { name: '分析維度不清', icon: '🧭', desc: '「整理」到底要歸納什麼——主題、方法、結論、爭議？沒定軸就是剪貼簿', fix: '事先列分析欄（年份／方法／樣本／結論），每篇照填，結尾才歸納', color: '#DB2777' },
+            { name: '取樣偏誤', icon: '🔍', desc: '只看 Google 前 5 篇／只看某立場的來源，結論早就被預設', fix: '多資料庫交叉（華藝／GS／DOI），正反立場至少各 3 篇', color: '#0891B2' },
+            { name: '編碼不一致', icon: '🏷️', desc: '同一個概念前後用不同標籤，統計起來數據錯', fix: '先做編碼手冊（同義詞合併、層次區分），一致套用到每篇', color: '#6366F1' },
         ],
     },
 };
@@ -243,17 +248,14 @@ const METHOD_SCAFFOLDS = {
     },
 };
 
-/* — 變項拆解示範（W4 聚焦題目 → 可測量變項） — */
-const VARIABLE_DEMO = {
-    topic: '松山高中高一學生對作業拖延的心理狀態',
-    topicNote: '（這是 W4 用 5W1H 聚焦後的題目，不是「高中生為何拖延？」這種大命題）',
-    vars: [
-        { label: '變項 1', text: '拖延當下的情緒', maps: '3-4 題測焦慮／愧疚／放鬆程度' },
-        { label: '變項 2', text: '自我歸因傾向', maps: '3-4 題測內在歸因 vs 外在歸因' },
-        { label: '變項 3', text: '行為模式', maps: '3-4 題測逃避／延遲／中斷頻率' },
-    ],
-    total: '加總 9-12 題 → 每題都對應到某個變項，就是「把題目操作化」',
-};
+/* — 各方法的「拆解單位」對照（並非都叫變項） — */
+const OPERATIONALIZE_MAP = [
+    { method: '問卷', unit: '變項', output: '每個變項 3-5 題問卷題' },
+    { method: '訪談', unit: '探詢層面', output: '每個層面 1 大問題 + 追問' },
+    { method: '實驗', unit: '自變項／依變項／控制變項', output: '操作定義 + 實驗流程' },
+    { method: '觀察', unit: '具體行為指標', output: '紀錄表欄位（時間/代號/行為/時長）' },
+    { method: '文獻', unit: '比較維度', output: '篩選標準 + 比較矩陣欄位' },
+];
 
 /* — 課後組裝作業：各方法的工具元件清單 — */
 const ASSEMBLY_TASKS = {
@@ -422,8 +424,7 @@ const ASSEMBLY_AI_PROMPTS = {
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 3：組內看診 W8 三題 */
-    { key: 'w9-peer-diagnosis-notes', label: '組內診斷筆記', question: '組員提醒我 + 反向學習（輕量落筆）' },
-    { key: 'w9-self-diagnosis', label: '書面處方：W8 初稿三題診斷', question: '對照 Step 2 兩把尺，W8 三題哪裡有問題' },
+    { key: 'w9-self-diagnosis', label: '組內看診紀錄：W8 三題診斷與共識', question: '三題分別發現什麼錯誤/不符合哪個原則 → 組內討論修成什麼' },
     /* Step 4：分流工作坊 — 三欄對應表 */
     { key: 'w9-my-method', label: '我的分流方法' },
     { key: 'w9-variable-ai-record', label: 'AI 變項發散判斷紀錄', question: '有用 AI 發散題目才要填：選了哪個版本、刷掉哪個、為什麼' },
@@ -453,8 +454,8 @@ export const W9Page = () => {
     const [w8Topic, setW8Topic] = useState('');
     const [w8Drafts, setW8Drafts] = useState({ q1: '', q2: '', q3: '' });
     const [showLessonMap, setShowLessonMap] = useState(false);
-    /* Step 2 方法獨家陷阱頁籤：預設顯示 W8 選到的方法；無則 interview */
-    const [pitfallTab, setPitfallTab] = useState('interview');
+    /* Step 2 方法頁籤：預設 W8 選到的方法；無則 questionnaire（最常見） */
+    const [pitfallTab, setPitfallTab] = useState('questionnaire');
 
     /* W8 帶入方法、題目與 3 題初稿（前測素材） */
     useEffect(() => {
@@ -470,9 +471,9 @@ export const W9Page = () => {
             q3: saved['w8-draft-q3']?.trim() || '',
         });
 
-        /* 嘗試自動偵測分流；pitfallTab 同步（問卷除外，因為 METHOD_PITFALLS 沒有問卷） */
+        /* 嘗試自動偵測分流；pitfallTab 同步 */
         const methodLower = method.toLowerCase();
-        if (methodLower.includes('問卷')) setSelectedMethod('questionnaire');
+        if (methodLower.includes('問卷')) { setSelectedMethod('questionnaire'); setPitfallTab('questionnaire'); }
         else if (methodLower.includes('訪談')) { setSelectedMethod('interview'); setPitfallTab('interview'); }
         else if (methodLower.includes('實驗')) { setSelectedMethod('experiment'); setPitfallTab('experiment'); }
         else if (methodLower.includes('觀察')) { setSelectedMethod('observation'); setPitfallTab('observation'); }
@@ -513,7 +514,7 @@ export const W9Page = () => {
 
                     <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[12px] text-[#92400E] leading-relaxed max-w-[720px]">
                         <strong>⚠️ 為什麼 Step 1 示範都是問卷？</strong><br />
-                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在下一步 <strong>Step 2 診斷工具包 · 尺 3</strong> 用頁籤切換查看。
+                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在下一步 <strong>Step 2 診斷工具包 · 尺 2</strong> 切換頁籤就會看到。
                     </div>
 
                     {/* ① 老師示範：打開 RxInspector 遊戲，全班共玩 1-2 題 */}
@@ -563,7 +564,7 @@ export const W9Page = () => {
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——兩把尺：<strong>三大標準</strong>（設計原則）+ <strong>五種錯誤類型</strong>（常見陷阱）。Step 3 看診、Step 4 做三欄表、Step 5 同儕互評，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
+                        這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——兩把尺：<strong>三大標準</strong>（設計原則）+ <strong>錯誤類型清單</strong>（3 共通 + 你的方法獨家）。Step 3 看診、Step 4 做三欄表、Step 5 同儕互評，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
                     </p>
 
                     {/* 尺 1 · 三大標準 — 手機 1 欄 / 桌機 3 欄 */}
@@ -587,9 +588,26 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 尺 2 · 五錯誤類型 — 手機卡片 / 桌機 table（五條一次全放，不分共通/問卷） */}
+                    {/* 尺 2 · 錯誤類型（5 方法頁籤統一 3 欄表：類型 / 徵狀 / 怎麼改） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 2 · 五種錯誤類型（每題都用這 5 支尺量）</div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 2 · 錯誤類型（3 條共通 + 你的方法獨家）</div>
+
+                        {/* 方法頁籤 bar */}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                            {['questionnaire', 'interview', 'observation', 'experiment', 'literature'].map((id) => (
+                                <button
+                                    key={id}
+                                    type="button"
+                                    onClick={() => setPitfallTab(id)}
+                                    className={`text-[12px] font-bold px-3 py-1.5 rounded-[6px] border transition-colors ${pitfallTab === id
+                                        ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
+                                        : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink)]'
+                                        }`}
+                                >
+                                    {METHOD_PITFALLS[id].label}
+                                </button>
+                            ))}
+                        </div>
 
                         {/* 桌機：table 版（3 欄：類型 / 徵狀 / 怎麼改） */}
                         <div className="hidden md:block bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
@@ -598,89 +616,50 @@ export const W9Page = () => {
                                 <div className="px-4 py-2.5 border-l border-[var(--border)]">徵狀（長這樣是病）</div>
                                 <div className="px-4 py-2.5 border-l border-[var(--border)]">怎麼改</div>
                             </div>
-                            {ERROR_TYPES.map((e, i) => (
-                                <div key={i} className="grid grid-cols-[1.2fr_2fr_2fr] border-b border-[var(--border)] last:border-b-0 text-[12px]">
-                                    <div className="px-4 py-3 flex items-center gap-2">
-                                        <span className="text-[16px]">{e.icon}</span>
-                                        <span className="font-bold" style={{ color: e.color }}>{e.name}</span>
+                            {[...COMMON_ERRORS, ...(METHOD_PITFALLS[pitfallTab]?.items || [])].map((e, i) => {
+                                const isCommon = i < COMMON_ERRORS.length;
+                                return (
+                                    <div key={i} className={`grid grid-cols-[1.2fr_2fr_2fr] border-b border-[var(--border)] last:border-b-0 text-[12px] ${isCommon ? '' : 'bg-[var(--paper-warm)]/50'}`}>
+                                        <div className="px-4 py-3 flex items-center gap-2">
+                                            <span className="text-[16px]">{e.icon}</span>
+                                            <span className="font-bold" style={{ color: e.color }}>{e.name}</span>
+                                            {!isCommon && <span className="ml-1 text-[9px] font-mono text-[var(--ink-light)] bg-[var(--ink)]/5 px-1 py-0.5 rounded">獨家</span>}
+                                        </div>
+                                        <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
+                                        <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--success)] leading-relaxed">{e.fix}</div>
                                     </div>
-                                    <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
-                                    <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--success)] leading-relaxed">{e.fix}</div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* 手機：卡片堆疊版 */}
                         <div className="md:hidden space-y-3">
-                            {ERROR_TYPES.map((e, i) => (
-                                <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                                    <div className="px-4 py-3 border-b border-[var(--border)] flex items-center gap-2">
-                                        <span className="text-[18px]">{e.icon}</span>
-                                        <span className="text-[14px] font-bold flex-1" style={{ color: e.color }}>{e.name}</span>
-                                    </div>
-                                    <div className="p-4 space-y-2 text-[12px]">
-                                        <div>
-                                            <div className="text-[10px] font-mono font-bold text-[var(--ink-light)] mb-0.5">徵狀</div>
-                                            <div className="text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
+                            {[...COMMON_ERRORS, ...(METHOD_PITFALLS[pitfallTab]?.items || [])].map((e, i) => {
+                                const isCommon = i < COMMON_ERRORS.length;
+                                return (
+                                    <div key={i} className={`border rounded-[var(--radius-unified)] overflow-hidden ${isCommon ? 'bg-white border-[var(--border)]' : 'bg-[var(--paper-warm)]/60 border-[var(--ink)]/15'}`}>
+                                        <div className="px-4 py-3 border-b border-[var(--border)] flex items-center gap-2">
+                                            <span className="text-[18px]">{e.icon}</span>
+                                            <span className="text-[14px] font-bold flex-1" style={{ color: e.color }}>{e.name}</span>
+                                            {!isCommon && <span className="text-[9px] font-mono text-[var(--ink-light)] bg-[var(--ink)]/5 px-1.5 py-0.5 rounded">獨家</span>}
                                         </div>
-                                        <div>
-                                            <div className="text-[10px] font-mono font-bold text-[var(--success)] mb-0.5">怎麼改</div>
-                                            <div className="text-[var(--success)] leading-relaxed">{e.fix}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 尺 3 · 方法獨家陷阱（頁籤切換） */}
-                    <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 3 · 方法獨家陷阱（選你的方法翻查；需要時再點回這裡）</div>
-
-                        {/* 頁籤 bar — 手機橫向捲動、桌機自動排 */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                            {[
-                                { id: 'interview', label: '🎤 訪談' },
-                                { id: 'observation', label: '👀 觀察' },
-                                { id: 'experiment', label: '🧪 實驗' },
-                                { id: 'literature', label: '📚 文獻' },
-                            ].map((t) => (
-                                <button
-                                    key={t.id}
-                                    type="button"
-                                    onClick={() => setPitfallTab(t.id)}
-                                    className={`text-[12px] font-bold px-3 py-1.5 rounded-[6px] border transition-colors ${pitfallTab === t.id
-                                        ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
-                                        : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink)]'
-                                        }`}
-                                >
-                                    {t.label}
-                                </button>
-                            ))}
-                        </div>
-
-                        {METHOD_PITFALLS[pitfallTab] && (
-                            <div className="bg-white border-2 border-[var(--danger)] rounded-[var(--radius-unified)] overflow-hidden">
-                                <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
-                                    <AlertTriangle size={16} />
-                                    <span className="font-bold text-[13px]">{METHOD_PITFALLS[pitfallTab].title}</span>
-                                </div>
-                                <div className="divide-y divide-[var(--border)]">
-                                    {METHOD_PITFALLS[pitfallTab].items.map((p, i) => (
-                                        <div key={i} className="p-4 px-5">
-                                            <div className="flex items-start gap-2 mb-1">
-                                                <span className="shrink-0 bg-[var(--danger)] text-white px-1.5 py-0.5 rounded-[3px] font-mono text-[10px] font-bold">PIT {i + 1}</span>
-                                                <span className="font-bold text-[13px] text-[var(--danger)]">{p.name}</span>
+                                        <div className="p-4 space-y-2 text-[12px]">
+                                            <div>
+                                                <div className="text-[10px] font-mono font-bold text-[var(--ink-light)] mb-0.5">徵狀</div>
+                                                <div className="text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
                                             </div>
-                                            <p className="ml-10 text-[12px] text-[var(--ink-mid)] leading-relaxed">{p.desc}</p>
+                                            <div>
+                                                <div className="text-[10px] font-mono font-bold text-[var(--success)] mb-0.5">怎麼改</div>
+                                                <div className="text-[var(--success)] leading-relaxed">{e.fix}</div>
+                                            </div>
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
 
                         <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
-                            📋 問卷組的獨家陷阱「選項重疊 / 選項不完整」已在上面 <strong>尺 2</strong> 裡——問卷組這頁籤跳過即可。
+                            💡 前 3 條（誘導性／雙重／假開放）五方法都會犯；後 2~3 條是你這方法的獨家陷阱。切換上方頁籤可查看別組的狀況。
                         </div>
                     </div>
 
@@ -730,50 +709,34 @@ export const W9Page = () => {
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        把 Step 2 的尺拿出來，對<strong>你們組（或你）</strong>的 W8 三題做<strong className="text-[var(--ink)]">看診 + 治療</strong>。這一步是<strong>口頭討論 → 書面處方</strong>，為 Step 4 的三欄對應表鋪路。忘記尺 → 點回 Step 2。
+                        把 Step 2 的尺拿出來，對<strong>你們組（或你）</strong>的 W8 三題逐題看診——<strong className="text-[var(--ink)]">發現什麼錯誤？違反哪個原則？組內討論後要改成什麼？</strong>一題一格，直接落筆。忘記尺 → 點回 Step 2。
                     </p>
 
                     {/* ① 組內看診實戰 */}
                     <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
                             <span className="text-[15px]">🩺</span>
-                            <span className="font-bold text-[13px]">① 組內看診＋治療：把 W8 的 3 題當病人（10 分鐘）</span>
+                            <span className="font-bold text-[13px]">① 組內看診流程：把 W8 的 3 題當病人（10 分鐘）</span>
                         </div>
                         <div className="p-5 space-y-4">
                             <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">Team 組員</strong>：這不是互評，是<strong>集體手術</strong>——組內共寫的 3 題是你們的共同病人。輪流念題 → 全組用 Step 2 尺挑毒點 → <strong>當場討論怎麼改</strong>（每題 2-3 分鐘）。<br />
-                                <strong className="text-[var(--ink)]">Solo 路線</strong>：與鄰座 2-3 位同為 Solo 同學臨時組成「診斷圈」，輪念互評（題目各自獨立，這時才是真的互評）。
+                                <strong className="text-[var(--ink)]">Team 組員</strong>：這不是互評，是<strong>集體手術</strong>——組內共寫的 3 題是共同病人。輪流念題 → 全組用 Step 2 尺挑毒點 → <strong>當場討論怎麼改</strong>（每題 2-3 分鐘）→ 把結論寫進下方 ② 看診紀錄。<br />
+                                <strong className="text-[var(--ink)]">Solo 路線</strong>：與鄰座 2-3 位 Solo 同學組成「診斷圈」，輪念互評（題目各自獨立，這時才是真的互評），再自己落筆。
                             </p>
                             <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">Team 操作流程</strong>：念題 → 指出「這題犯了 ＿＿＿」→ 討論怎麼改 → 把共識寫到下方 ③ 書面處方。<br />
-                                <strong className="text-[var(--ink)]">Solo 操作流程</strong>：念題 → 診斷圈挑錯 → 自己記下別人的提醒 + 自己的書面處方。
+                                <strong className="text-[var(--ink)]">每一題的寫法</strong>：(1) 發現什麼錯誤——用 Step 2 的錯誤類型語言；(2) 違反三大原則哪一個——有效性／可靠性／可行性；(3) 討論後決定修成什麼。
                             </div>
                         </div>
                     </div>
 
-                    {/* ② 組員提醒筆記（輕量落筆） */}
-                    <ThinkRecord
-                        dataKey="w9-peer-diagnosis-notes"
-                        prompt="② 組員提醒筆記：組內看診時別人抓到的問題（3 點即可，輕量）"
-                        scaffold={[
-                            '組員提醒我｜第 ___ 題的問題是：___（用 Step 2 錯誤類型語言）',
-                            '組員提醒我｜第 ___ 題的問題是：___',
-                            '反向學習｜聽別人念題時，我學到最狠的診斷語言是：___',
-                        ]}
-                        rows={6}
-                    />
-
-                    {/* ③ W8 三題唯讀卡 + 書面處方 */}
-                    <div className="border-t-2 border-[var(--ink)] pt-6 mt-2">
+                    {/* ② W8 三題唯讀卡 + 合併診斷紀錄 */}
+                    <div>
                         <div className="flex items-center gap-2 mb-3">
                             <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">RX</span>
                             <span className="font-bold text-[13px] text-[var(--ink)]">
-                                ③ 書面處方：對照 Step 2 兩把尺正式落筆（Team = 組內共識 / Solo = 自我診斷）
+                                ② 組內看診紀錄：三題一起診斷 + 討論後共識
                             </span>
                         </div>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[720px] mb-4">
-                            口頭看診完了，現在書面落筆。這份處方是 Step 4 三欄對應表的<strong>起點</strong>——寫清楚哪裡爛，下一步才知道怎麼重建。
-                        </p>
 
                         {/* W8 三題唯讀卡 */}
                         {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
@@ -799,24 +762,23 @@ export const W9Page = () => {
                             </div>
                         ) : (
                             <div className="w7-notice w7-notice-gold mb-4">
-                                ⚠️ 讀不到你的 W8 三題初稿。如果 W8 沒寫，可以跳過書面處方、直接到 Step 4。如果 W8 有寫但這裡讀不到，請回 W8 確認是否已存檔。
+                                ⚠️ 讀不到你的 W8 三題初稿。如果 W8 沒寫，可以跳過這題、直接到 Step 4。如果 W8 有寫但這裡讀不到，請回 W8 確認是否已存檔。
                             </div>
                         )}
 
                         <ThinkRecord
                             dataKey="w9-self-diagnosis"
-                            prompt="書面處方：對照 Step 2 兩把尺——W8 那三題哪裡有問題？"
+                            prompt="三題一起診斷：發現什麼錯誤？違反哪個原則？組內討論後修成什麼？"
                             scaffold={[
-                                '題 1 的問題：違反「（有效性 / 可靠性 / 可行性）」——具體錯誤：___（用 Step 2 五錯誤類型語言）',
-                                '題 2 的問題：',
-                                '題 3 的問題：',
-                                '我（我們組）W8 寫題時最常犯的錯是___，Step 4 寫新版時要避免___',
+                                '題 1｜發現的錯誤：___（用 Step 2 錯誤類型語言）｜違反原則：有效性／可靠性／可行性（圈一個）｜組內討論後修成：___',
+                                '題 2｜發現的錯誤：___｜違反原則：___｜修成：___',
+                                '題 3｜發現的錯誤：___｜違反原則：___｜修成：___',
                             ]}
-                            rows={10}
+                            rows={9}
                         />
 
                         <div className="w7-notice w7-notice-gold mt-4">
-                            💡 <strong>處方寫完就往 Step 4。</strong>不用重寫這三題——接下來的三欄對應表會用更嚴謹的方法重新產出新題目。這裡只是讓你看見「沒方法 vs 有方法」的差別。
+                            💡 <strong>看診完就往 Step 4。</strong>這裡的目的是看見「沒方法 vs 有方法」的差別；Step 4 會用三欄對應表從頭系統性產出新題目，不是修這三題。
                         </div>
                     </div>
                 </div>
@@ -836,42 +798,54 @@ export const W9Page = () => {
                         </p>
                     </div>
 
-                    {/* 變項拆解示範卡 */}
+                    {/* 操作化對照卡：五方法拆解單位不同 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
                             <span className="text-[15px]">🧩</span>
-                            <span className="font-bold text-[13px]">把聚焦題目操作化：一個題目 → 2-3 個可測量的變項</span>
+                            <span className="font-bold text-[13px]">把合題操作化：依你的方法拆成「可以實際執行的單位」</span>
                         </div>
                         <div className="p-5 space-y-4">
                             <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                你在 <strong className="text-[var(--ink)]">W4 的 5W1H</strong> 已經把題目聚焦到具體對象、場域、變項。現在要更進一步——把這個題目<strong className="text-[var(--ink)]">操作化</strong>：拆成 2-3 個可以實際測量的變項維度，每個變項再對應 3-5 題。
+                                W8 合題後的<strong className="text-[var(--ink)]">研究問題</strong>還太大，不能直接拿去施測。現在要<strong className="text-[var(--ink)]">操作化</strong>——依你的方法拆成可實際執行的小單位。<strong className="text-[var(--ink)]">單位名稱因方法而異</strong>，不是每個方法都叫「變項」：
                             </p>
-                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[8px] p-4">
-                                <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">示範</div>
-                                <div className="text-[13px] font-bold text-[var(--ink)] mb-1">聚焦題目：{VARIABLE_DEMO.topic}</div>
-                                <div className="text-[11px] text-[var(--ink-light)] mb-3">{VARIABLE_DEMO.topicNote}</div>
-                                <div className="space-y-2">
-                                    {VARIABLE_DEMO.vars.map((s, i) => (
-                                        <div key={i} className="flex items-start gap-2 text-[12px]">
-                                            <span className="shrink-0 bg-[var(--accent)] text-white px-1.5 py-0.5 rounded-[3px] font-mono text-[10px] font-bold">{s.label}</span>
-                                            <div className="min-w-0 flex-1">
-                                                <div className="text-[var(--ink)] font-bold leading-relaxed">{s.text}</div>
-                                                <div className="text-[var(--ink-mid)] leading-relaxed">→ {s.maps}</div>
-                                            </div>
-                                        </div>
-                                    ))}
+
+                            {/* 方法 × 拆解單位 × 產出 — 桌機表格 */}
+                            <div className="hidden md:block border border-[var(--border)] rounded-[8px] overflow-hidden">
+                                <div className="grid grid-cols-[1fr_2fr_2.2fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                                    <div className="px-4 py-2.5">方法</div>
+                                    <div className="px-4 py-2.5 border-l border-[var(--border)]">拆解單位（操作化的對象）</div>
+                                    <div className="px-4 py-2.5 border-l border-[var(--border)]">每個單位要產出什麼</div>
                                 </div>
-                                <div className="mt-3 pt-3 border-t border-[var(--border)] text-[11px] font-mono text-[var(--ink-light)]">{VARIABLE_DEMO.total}</div>
+                                {OPERATIONALIZE_MAP.map((r, i) => (
+                                    <div key={i} className={`grid grid-cols-[1fr_2fr_2.2fr] text-[12px] ${i % 2 === 1 ? 'bg-[var(--paper-warm)]/30' : 'bg-white'}`}>
+                                        <div className="px-4 py-2.5 font-bold text-[var(--ink)]">{r.method}</div>
+                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--accent)] font-bold leading-relaxed">{r.unit}</div>
+                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{r.output}</div>
+                                    </div>
+                                ))}
                             </div>
+
+                            {/* 手機：卡片版 */}
+                            <div className="md:hidden space-y-2">
+                                {OPERATIONALIZE_MAP.map((r, i) => (
+                                    <div key={i} className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
+                                        <div className="text-[12px] font-bold text-[var(--ink)] mb-1">{r.method}</div>
+                                        <div className="text-[12px] text-[var(--accent)] font-bold leading-relaxed">拆解單位：{r.unit}</div>
+                                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed mt-0.5">產出：{r.output}</div>
+                                    </div>
+                                ))}
+                            </div>
+
                             <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">方法差異</strong>：問卷組拆成「變項」、訪談組拆成「探詢層面」、實驗組拆成「自變項／依變項／控制變項」、觀察組拆成「行為指標」、文獻組拆成「分析維度」。名字不同，邏輯一樣：<strong className="text-[var(--ink)]">題目 → 要測量什麼 → 怎麼測</strong>。
+                                <strong className="text-[var(--ink)]">邏輯一樣</strong>：合題 → 要測/問/看/比什麼 → 怎麼操作。選下方方法後，會帶出這個方法的範例與工作表；<strong>沒有變項概念的方法</strong>（訪談／觀察／文獻）也能照樣落筆。
                             </p>
+
                             {/* W4 後門：題目還沒聚焦 */}
                             <div className="flex items-start gap-2 text-[12px] bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[#92400E]">
                                 <span className="shrink-0">🚨</span>
                                 <div>
                                     <strong>題目還像「高中生為何拖延？」這種大命題嗎？</strong>
-                                    <p className="mt-1 leading-relaxed">那是 W4 該處理的事。硬上 W9 只會卡住，請先回 <Link to="/w4" className="underline font-bold">W4</Link> 用 5W1H 加工到「對象 + 場域 + 變項」都具體化再回來。</p>
+                                    <p className="mt-1 leading-relaxed">那是 W4 該處理的事。硬上 W9 只會卡住，請先回 <Link to="/w4" className="underline font-bold">W4</Link> 用 5W1H 加工到「對象 + 場域 + 焦點」都具體化，再到 W8 合題。</p>
                                 </div>
                             </div>
                         </div>
@@ -979,29 +953,49 @@ export const W9Page = () => {
                                 recordPlaceholder="我選了第 ___ 版，因為___&#10;我刷掉第 ___ 版，因為___&#10;我把選中版本又改了：___，因為___"
                             />
 
-                            {/* 填寫區 */}
-                            <ThinkRecord
-                                dataKey="w9-three-col-q1"
-                                prompt="三欄對應表 — 變項 / 層面 1"
-                                placeholder={`聚焦題目（從 W4 帶來）：___\n這個變項/層面要測什麼：___\n對應題目設計：\n題1: ___\n題2: ___\n題3: ___`}
-                                scaffold={['聚焦題目：', '變項/層面：', '題目設計：']}
-                                rows={6}
-                            />
+                            {/* 填寫區：單位名稱依方法而異（問卷=變項／訪談=探詢層面／實驗=變因／觀察=行為指標／文獻=比較維度） */}
+                            {(() => {
+                                const unitLabel =
+                                    selectedMethod === 'questionnaire' ? '變項'
+                                        : selectedMethod === 'interview' ? '探詢層面'
+                                            : selectedMethod === 'experiment' ? '變因（自/依/控）'
+                                                : selectedMethod === 'observation' ? '行為指標'
+                                                    : selectedMethod === 'literature' ? '比較維度'
+                                                        : '拆解單位';
+                                const outputLabel =
+                                    selectedMethod === 'questionnaire' ? '問卷題目'
+                                        : selectedMethod === 'interview' ? '訪談大問題＋追問'
+                                            : selectedMethod === 'experiment' ? '操作定義/測量方式'
+                                                : selectedMethod === 'observation' ? '紀錄表欄位'
+                                                    : selectedMethod === 'literature' ? '比較矩陣欄位'
+                                                        : '產出';
+                                return (
+                                    <>
+                                        <ThinkRecord
+                                            dataKey="w9-three-col-q1"
+                                            prompt={`三欄對應表 — ${unitLabel} 1`}
+                                            placeholder={`合題（從 W8 帶來）：___\n這個${unitLabel}要${selectedMethod === 'interview' ? '問什麼經驗/想法' : selectedMethod === 'observation' ? '看什麼行為' : selectedMethod === 'literature' ? '比什麼' : '測什麼'}：___\n對應${outputLabel}：\n1: ___\n2: ___\n3: ___`}
+                                            scaffold={['合題：', `${unitLabel}：`, `${outputLabel}：`]}
+                                            rows={6}
+                                        />
 
-                            <ThinkRecord
-                                dataKey="w9-three-col-q2"
-                                prompt="三欄對應表 — 變項 / 層面 2"
-                                placeholder={`聚焦題目：同上\n這個變項/層面要測什麼：___\n對應題目設計：\n題4: ___\n題5: ___\n題6: ___`}
-                                scaffold={['同上題目', '變項/層面：', '題目設計：']}
-                                rows={6}
-                            />
+                                        <ThinkRecord
+                                            dataKey="w9-three-col-q2"
+                                            prompt={`三欄對應表 — ${unitLabel} 2`}
+                                            placeholder={`合題：同上\n這個${unitLabel}：___\n對應${outputLabel}：\n4: ___\n5: ___\n6: ___`}
+                                            scaffold={['同上合題', `${unitLabel}：`, `${outputLabel}：`]}
+                                            rows={6}
+                                        />
 
-                            <ThinkRecord
-                                dataKey="w9-three-col-q3"
-                                prompt="三欄對應表 — 變項 / 層面 3（若有）"
-                                placeholder={`聚焦題目：同上\n這個變項/層面要測什麼：___\n對應題目設計：\n題7: ___\n題8: ___`}
-                                rows={5}
-                            />
+                                        <ThinkRecord
+                                            dataKey="w9-three-col-q3"
+                                            prompt={`三欄對應表 — ${unitLabel} 3（若有）`}
+                                            placeholder={`合題：同上\n這個${unitLabel}：___\n對應${outputLabel}：\n7: ___\n8: ___`}
+                                            rows={5}
+                                        />
+                                    </>
+                                );
+                            })()}
 
                             {/* 基本資料與結構確認 */}
                             <ThinkRecord
