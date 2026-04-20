@@ -308,18 +308,33 @@ export const TeamFormation = () => {
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                             <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">LISTEN</span>
-                            <span className="font-bold text-[13px] text-[var(--ink)]">聆聽紀錄：記下讓你心動的潛在隊友</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">聆聽紀錄：至少 3 人的研究（課堂成績）</span>
                         </div>
-                        <div className="p-5 text-[12px] text-[var(--ink-mid)]">
-                            博覽會進行中，邊聽邊記：誰的題目讓你心動？他的研究方向和你有什麼交集？
+                        <div className="p-5 text-[12px] text-[var(--ink-mid)] space-y-2 leading-relaxed">
+                            <p>
+                                <strong className="text-[var(--ink)]">流程：</strong>先在 4 人暖身組內（<span className="text-[var(--ink-light)]">不是最終研究組</span>）每人 1 分鐘分享 → 全場自由移動找隊友。
+                            </p>
+                            <p>
+                                <strong className="text-[var(--ink)]">任務：</strong>整場活動下來，至少記下 <strong>3 位</strong>同學的研究題目、與你的交集 / 互補 / 可借鑑之處。記超過 3 位更好。
+                            </p>
                         </div>
+                    </div>
+
+                    {/* 時間提醒 */}
+                    <div className="w7-notice w7-notice-gold">
+                        ⏱️ <strong>時間配置：</strong>組內分享 6 分鐘（每人 1 分 + 邊填寫）→ 全場自由分享 6 分鐘。
                     </div>
 
                     <ThinkRecord
                         dataKey="w8-listen-notes"
-                        prompt="聆聽紀錄"
-                        placeholder="姓名｜他的研究題目｜讓我心動的原因&#10;例：王小明｜高中生社群媒體焦慮｜和我的睡眠題目可能有因果關係"
-                        rows={5}
+                        prompt="聆聽紀錄：至少 3 人，可以更多（課堂成績）"
+                        scaffold={[
+                            '同學 1｜姓名：___｜他的題目：___｜心動原因（交集 / 互補 / 可借鑑）：',
+                            '同學 2｜姓名：___｜他的題目：___｜心動原因：',
+                            '同學 3｜姓名：___｜他的題目：___｜心動原因：',
+                            '（可再加）同學 4、5……：',
+                        ]}
+                        rows={10}
                     />
 
                     {/* ─── 組隊行動區：聆聽 → 決定 → 合題 ─── */}
