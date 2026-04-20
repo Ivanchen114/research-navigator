@@ -41,7 +41,7 @@ const ERROR_TYPES = [
     { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', fix: '加「其他：___」或把範圍補完整（覆蓋所有可能）', color: '#7C3AED', scope: '問卷' },
 ];
 
-/* — 方法獨家陷阱：訪談 / 觀察 / 實驗 / 文獻（問卷已在 Step 1 示範） — */
+/* — 方法獨家陷阱：訪談 / 觀察 / 實驗 / 文獻（問卷的 2 個獨家陷阱已合併進 ERROR_TYPES） — */
 const METHOD_PITFALLS = {
     interview: {
         title: '🎤 訪談組獨家陷阱',
@@ -453,6 +453,8 @@ export const W9Page = () => {
     const [w8Topic, setW8Topic] = useState('');
     const [w8Drafts, setW8Drafts] = useState({ q1: '', q2: '', q3: '' });
     const [showLessonMap, setShowLessonMap] = useState(false);
+    /* Step 2 方法獨家陷阱頁籤：預設顯示 W8 選到的方法；無則 interview */
+    const [pitfallTab, setPitfallTab] = useState('interview');
 
     /* W8 帶入方法、題目與 3 題初稿（前測素材） */
     useEffect(() => {
@@ -468,13 +470,13 @@ export const W9Page = () => {
             q3: saved['w8-draft-q3']?.trim() || '',
         });
 
-        /* 嘗試自動偵測分流 */
+        /* 嘗試自動偵測分流；pitfallTab 同步（問卷除外，因為 METHOD_PITFALLS 沒有問卷） */
         const methodLower = method.toLowerCase();
         if (methodLower.includes('問卷')) setSelectedMethod('questionnaire');
-        else if (methodLower.includes('訪談')) setSelectedMethod('interview');
-        else if (methodLower.includes('實驗')) setSelectedMethod('experiment');
-        else if (methodLower.includes('觀察')) setSelectedMethod('observation');
-        else if (methodLower.includes('文獻')) setSelectedMethod('literature');
+        else if (methodLower.includes('訪談')) { setSelectedMethod('interview'); setPitfallTab('interview'); }
+        else if (methodLower.includes('實驗')) { setSelectedMethod('experiment'); setPitfallTab('experiment'); }
+        else if (methodLower.includes('觀察')) { setSelectedMethod('observation'); setPitfallTab('observation'); }
+        else if (methodLower.includes('文獻')) { setSelectedMethod('literature'); setPitfallTab('literature'); }
     }, []);
 
     /* ThinkChoice callback */
@@ -511,7 +513,7 @@ export const W9Page = () => {
 
                     <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[12px] text-[#92400E] leading-relaxed max-w-[720px]">
                         <strong>⚠️ 為什麼 Step 1 示範都是問卷？</strong><br />
-                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在 <strong>Step 4 分流時</strong>會補上。
+                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在下一步 <strong>Step 2 診斷工具包 · 尺 3</strong> 用頁籤切換查看。
                     </div>
 
                     {/* ① 老師示範：打開 RxInspector 遊戲，全班共玩 1-2 題 */}
@@ -585,31 +587,22 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 尺 2 · 五錯誤類型 — 手機卡片 / 桌機 table */}
+                    {/* 尺 2 · 五錯誤類型 — 手機卡片 / 桌機 table（五條一次全放，不分共通/問卷） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 2 · 五種錯誤類型（★共通，◆問卷專屬）</div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 2 · 五種錯誤類型（每題都用這 5 支尺量）</div>
 
-                        {/* 桌機：table 版 */}
+                        {/* 桌機：table 版（3 欄：類型 / 徵狀 / 怎麼改） */}
                         <div className="hidden md:block bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                            <div className="grid grid-cols-[1.2fr_0.6fr_2fr_2fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                            <div className="grid grid-cols-[1.2fr_2fr_2fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
                                 <div className="px-4 py-2.5">類型</div>
-                                <div className="px-4 py-2.5">適用</div>
                                 <div className="px-4 py-2.5 border-l border-[var(--border)]">徵狀（長這樣是病）</div>
                                 <div className="px-4 py-2.5 border-l border-[var(--border)]">怎麼改</div>
                             </div>
                             {ERROR_TYPES.map((e, i) => (
-                                <div key={i} className="grid grid-cols-[1.2fr_0.6fr_2fr_2fr] border-b border-[var(--border)] last:border-b-0 text-[12px]">
+                                <div key={i} className="grid grid-cols-[1.2fr_2fr_2fr] border-b border-[var(--border)] last:border-b-0 text-[12px]">
                                     <div className="px-4 py-3 flex items-center gap-2">
                                         <span className="text-[16px]">{e.icon}</span>
                                         <span className="font-bold" style={{ color: e.color }}>{e.name}</span>
-                                    </div>
-                                    <div className="px-4 py-3 flex items-center">
-                                        <span
-                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px]"
-                                            style={{ background: e.scope === '共通' ? 'var(--ink)' : '#D97706', color: 'white' }}
-                                        >
-                                            {e.scope === '共通' ? '★共通' : '◆問卷'}
-                                        </span>
                                     </div>
                                     <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
                                     <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--success)] leading-relaxed">{e.fix}</div>
@@ -624,12 +617,6 @@ export const W9Page = () => {
                                     <div className="px-4 py-3 border-b border-[var(--border)] flex items-center gap-2">
                                         <span className="text-[18px]">{e.icon}</span>
                                         <span className="text-[14px] font-bold flex-1" style={{ color: e.color }}>{e.name}</span>
-                                        <span
-                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px]"
-                                            style={{ background: e.scope === '共通' ? 'var(--ink)' : '#D97706', color: 'white' }}
-                                        >
-                                            {e.scope === '共通' ? '★共通' : '◆問卷'}
-                                        </span>
                                     </div>
                                     <div className="p-4 space-y-2 text-[12px]">
                                         <div>
@@ -646,8 +633,55 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    <div className="w7-notice w7-notice-gold">
-                        🎤 訪談 / 👀 觀察 / 🧪 實驗 / 📚 文獻組的<strong>方法獨家陷阱</strong>會在 <strong>Step 4 分流時</strong>補上——這一頁先掌握共通 + 問卷那 8 把尺（3 標準 + 5 錯誤）。
+                    {/* 尺 3 · 方法獨家陷阱（頁籤切換） */}
+                    <div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 3 · 方法獨家陷阱（選你的方法翻查；需要時再點回這裡）</div>
+
+                        {/* 頁籤 bar — 手機橫向捲動、桌機自動排 */}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                            {[
+                                { id: 'interview', label: '🎤 訪談' },
+                                { id: 'observation', label: '👀 觀察' },
+                                { id: 'experiment', label: '🧪 實驗' },
+                                { id: 'literature', label: '📚 文獻' },
+                            ].map((t) => (
+                                <button
+                                    key={t.id}
+                                    type="button"
+                                    onClick={() => setPitfallTab(t.id)}
+                                    className={`text-[12px] font-bold px-3 py-1.5 rounded-[6px] border transition-colors ${pitfallTab === t.id
+                                        ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
+                                        : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink)]'
+                                        }`}
+                                >
+                                    {t.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {METHOD_PITFALLS[pitfallTab] && (
+                            <div className="bg-white border-2 border-[var(--danger)] rounded-[var(--radius-unified)] overflow-hidden">
+                                <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
+                                    <AlertTriangle size={16} />
+                                    <span className="font-bold text-[13px]">{METHOD_PITFALLS[pitfallTab].title}</span>
+                                </div>
+                                <div className="divide-y divide-[var(--border)]">
+                                    {METHOD_PITFALLS[pitfallTab].items.map((p, i) => (
+                                        <div key={i} className="p-4 px-5">
+                                            <div className="flex items-start gap-2 mb-1">
+                                                <span className="shrink-0 bg-[var(--danger)] text-white px-1.5 py-0.5 rounded-[3px] font-mono text-[10px] font-bold">PIT {i + 1}</span>
+                                                <span className="font-bold text-[13px] text-[var(--danger)]">{p.name}</span>
+                                            </div>
+                                            <p className="ml-10 text-[12px] text-[var(--ink-mid)] leading-relaxed">{p.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
+                            📋 問卷組的獨家陷阱「選項重疊 / 選項不完整」已在上面 <strong>尺 2</strong> 裡——問卷組這頁籤跳過即可。
+                        </div>
                     </div>
 
                     {/* 理解檢核：可靠性 */}
@@ -888,39 +922,10 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 方法獨家陷阱卡（依 selectedMethod 顯示；問卷組在 Step 2 工具包已學） */}
-                    {selectedMethod === 'questionnaire' && (
-                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="text-[15px]">📋</span>
-                                <span className="font-bold text-[13px] text-[var(--ink)]">問卷組 — 獨家陷阱已在 Step 2 工具包</span>
-                            </div>
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                Step 2 五錯誤類型表中，「選項重疊」「選項不完整」就是問卷的專屬陷阱，加上共通的誘導性／雙重／假開放，一共 5 種——設計問卷時每題都要用這 5 支尺量。
-                            </p>
-                        </div>
-                    )}
-
-                    {METHOD_PITFALLS[selectedMethod] && (
-                        <div className="bg-white border-2 border-[var(--danger)] rounded-[var(--radius-unified)] overflow-hidden">
-                            <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
-                                <AlertTriangle size={16} />
-                                <span className="font-bold text-[13px]">{METHOD_PITFALLS[selectedMethod].title}（三欄表前先看）</span>
-                                <span className="ml-auto text-[10px] font-mono opacity-80">共通陷阱請回 Step 2 工具包</span>
-                            </div>
-                            <div className="divide-y divide-[var(--border)]">
-                                {METHOD_PITFALLS[selectedMethod].items.map((p, i) => (
-                                    <div key={i} className="p-4 px-5">
-                                        <div className="flex items-start gap-2 mb-1">
-                                            <span className="shrink-0 bg-[var(--danger)] text-white px-1.5 py-0.5 rounded-[3px] font-mono text-[10px] font-bold">PIT {i + 1}</span>
-                                            <span className="font-bold text-[13px] text-[var(--danger)]">{p.name}</span>
-                                        </div>
-                                        <p className="ml-10 text-[12px] text-[var(--ink-mid)] leading-relaxed">{p.desc}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    {/* 需要方法獨家陷阱 / 5 錯誤 / 三大標準？→ 滑回 Step 2 診斷工具包 */}
+                    <div className="w7-notice w7-notice-gold">
+                        🧰 設計過程忘記了尺？<strong>三大標準 / 五錯誤類型 / 方法獨家陷阱</strong>全部都在 <strong>Step 2 診斷工具包</strong>——點上方 Step 2 隨時翻。
+                    </div>
 
                     {/* 分流內容 */}
                     {currentScaffold ? (
