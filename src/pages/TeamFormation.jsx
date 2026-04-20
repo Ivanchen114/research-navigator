@@ -127,14 +127,21 @@ const EXPORT_FIELDS = [
     { key: 'w8-teammates', label: '隊友姓名 & 題目' },
     { key: 'w8-merge-discussion', label: '合題討論紀錄', question: '共同核心是什麼？合成什麼大主題？' },
     { key: 'w8-merge-type', label: '合題情境判斷', question: '情境 1/2/3？' },
-    /* Part C */
-    { key: 'w8-team-members', label: '組長 + 成員名單' },
-    { key: 'w8-merged-topic', label: '合題後研究主題' },
+    /* Part B'（單飛才會有：確認 W4 題目 + W7 方法） */
+    { key: 'w8-solo-topic-confirm', label: '單飛題目確認', question: '維持 W4 原題目還是微調？' },
+    { key: 'w8-solo-method-confirm', label: '單飛方法確認', question: '維持 W7 原方法還是微調？' },
+    /* Part C 研究施工單 */
+    { key: 'w8-merged-topic', label: '研究主題（合題後或 Solo 題目）' },
     { key: 'w8-research-question', label: '研究問題', question: '因果型/相關型/描述型' },
+    { key: 'w8-motivation', label: '研究動機', question: '為什麼選這題？這個研究對誰有意義？' },
     { key: 'w8-method-reason', label: '研究方法 + 理由' },
     { key: 'w8-target', label: '研究對象' },
-    /* Part D */
-    { key: 'w8-tool-method', label: '我們組選用的研究方法' },
+    /* Part C'（Solo only：可行性 + 風險 + 求援） */
+    { key: 'w8-solo-feasibility', label: '單飛自評', question: '憑什麼獨撐？風險？Plan B？求援計畫？' },
+    /* 路線選擇 */
+    { key: 'w8-route', label: '路線選擇', question: '合題組隊 / 單飛獨行' },
+    /* Part D 工具草稿 */
+    { key: 'w8-tool-method', label: '選用的研究方法' },
     { key: 'w8-draft-ai-record', label: 'AI 協助草稿判斷紀錄', question: '有用 AI 發散題目方向才要填：選了哪個、刷掉哪個、為什麼' },
     { key: 'w8-draft-q1', label: '草稿題目 1' },
     { key: 'w8-draft-q2', label: '草稿題目 2' },
@@ -155,11 +162,31 @@ export const TeamFormation = () => {
     const [w4Topic, setW4Topic] = useState('');
     const [w7Method, setW7Method] = useState('');
     const [detectedMethodId, setDetectedMethodId] = useState('');
+    const [w2Intent, setW2Intent] = useState('');
+
+    /* 路線：'team' | 'solo' | '' */
+    const [route, setRoute] = useState(() => {
+        if (typeof window === 'undefined') return '';
+        return localStorage.getItem('w8-route') || '';
+    });
+
+    const chooseRoute = useCallback((newRoute) => {
+        setRoute(newRoute);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('w8-route', newRoute);
+            /* 同步到 ThinkRecord STORAGE_KEY 以進 ExportButton */
+            const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            all['w8-route'] = newRoute === 'team' ? '合題組隊' : newRoute === 'solo' ? '單飛獨行' : '';
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+        }
+    }, []);
 
     useEffect(() => {
         const saved = readRecords();
         const topic = saved['w4-final-topic']?.trim();
         const method = saved['w7-main-method']?.trim();
+        const intent = saved['w2-final-intent']?.trim();
+        if (intent) setW2Intent(intent);
         /* 嘗試從 w7-main-method 或 w8-tool-method 推斷 method id */
         const rawMethod = (method || saved['w8-tool-method'] || saved['w8-my-method'] || '').toLowerCase();
         if (rawMethod.includes('問卷')) setDetectedMethodId('questionnaire');
@@ -339,16 +366,140 @@ export const TeamFormation = () => {
                             rows={4}
                         />
                     </div>
+
+                    {/* ─── 路線決策：合題 or 單飛 ─── */}
+                    <div className="border-t-2 border-[var(--ink)] pt-6 mt-2">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">DECISION</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">決定你的路線（必選）</span>
+                        </div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[720px] mb-4">
+                            下一步要做什麼，看你現在選哪條路線。<strong className="text-[var(--ink)]">選了可以再改</strong>——已填的欄位不會被清空。
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <button
+                                type="button"
+                                onClick={() => chooseRoute('team')}
+                                className={`p-4 border-2 rounded-[var(--radius-unified)] text-left transition-all ${
+                                    route === 'team'
+                                        ? 'border-[var(--accent)] bg-[var(--accent-light)] shadow-sm'
+                                        : 'border-[var(--border)] bg-white hover:border-[var(--ink)]'
+                                }`}
+                            >
+                                <div className="flex items-center gap-2 mb-1.5">
+                                    <span className="text-[18px]">🤝</span>
+                                    <span className="font-bold text-[14px] text-[var(--ink)]">合題組隊</span>
+                                    {route === 'team' && <span className="ml-auto text-[10px] font-mono font-bold text-[var(--accent)]">CURRENT</span>}
+                                </div>
+                                <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
+                                    找到隊友了。下一步進入<strong>合題討論</strong>，再寫一份組合企劃書。
+                                </p>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => chooseRoute('solo')}
+                                className={`p-4 border-2 rounded-[var(--radius-unified)] text-left transition-all ${
+                                    route === 'solo'
+                                        ? 'border-[var(--accent)] bg-[var(--accent-light)] shadow-sm'
+                                        : 'border-[var(--border)] bg-white hover:border-[var(--ink)]'
+                                }`}
+                            >
+                                <div className="flex items-center gap-2 mb-1.5">
+                                    <span className="text-[18px]">🧭</span>
+                                    <span className="font-bold text-[14px] text-[var(--ink)]">單飛獨行</span>
+                                    {route === 'solo' && <span className="ml-auto text-[10px] font-mono font-bold text-[var(--accent)]">CURRENT</span>}
+                                </div>
+                                <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
+                                    決定自己做。下一步<strong>確認 W4 題目 + W7 方法</strong>，再寫單飛施工單。
+                                </p>
+                            </button>
+                        </div>
+
+                        {!route && (
+                            <div className="mt-4 px-4 py-3 rounded-[var(--radius-unified)] bg-[#FEF3C7] border border-[#F59E0B] text-[12px] text-[#92400E] flex items-start gap-2">
+                                <ShieldAlert size={14} className="mt-0.5 shrink-0" />
+                                <span>請先選擇路線，下一步的內容會根據你的選擇改變。</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             ),
         },
 
-        /* ─── Step 2：Part B 合題討論 ─── */
+        /* ─── Step 2：Part B 合題討論 / Solo 確認（動態分流） ─── */
         {
-            title: '合題討論',
-            icon: '🤝',
-            content: (
+            title: route === 'solo' ? '單飛確認' : '合題討論',
+            icon: route === 'solo' ? '🧭' : '🤝',
+            content: route === 'solo' ? (
+                /* ── Solo 路線：確認 W4 題目 + W7 方法 ── */
                 <div className="space-y-6 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        你選了單飛——跳過合題討論。先確認你的 <strong>W4 題目</strong>與 <strong>W7 方法</strong>還是要作為最終方案，下一步才會寫單飛施工單。
+                    </p>
+
+                    {/* W4 題目帶入卡 */}
+                    {w4Topic ? (
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                                <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W4 ARCHIVE</span>
+                                <span className="font-bold text-[13px] text-[var(--ink)]">你在 W4 定下的題目</span>
+                            </div>
+                            <div className="p-5 text-[13px] text-[var(--ink)] leading-relaxed">
+                                {w4Topic}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="w7-notice w7-notice-gold">
+                            ⚠️ 讀不到 W4 題目。請回 W4 完成題目定稿再回來，否則單飛計畫沒有題目。
+                        </div>
+                    )}
+
+                    <ThinkRecord
+                        dataKey="w8-solo-topic-confirm"
+                        prompt="① 確認題目：W4 的題目還是你要繼續做的嗎？"
+                        placeholder="如果不改，寫「維持原題目」。&#10;如果要微調，直接寫新題目 + 一句理由（例：把範圍從『高中生』縮小到『松山高中一年級』，因為單飛做不到跨校抽樣）。"
+                        rows={3}
+                    />
+
+                    {/* W7 方法帶入卡 */}
+                    {w7Method ? (
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                                <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W7 ARCHIVE</span>
+                                <span className="font-bold text-[13px] text-[var(--ink)]">你在 W7 選的方法</span>
+                            </div>
+                            <div className="p-5 text-[13px] text-[var(--ink)] leading-relaxed">
+                                {w7Method}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="w7-notice w7-notice-gold">
+                            ⚠️ 讀不到 W7 主方法。請回 W7 完成方法選擇再回來。
+                        </div>
+                    )}
+
+                    <ThinkRecord
+                        dataKey="w8-solo-method-confirm"
+                        prompt="② 確認方法：W7 的方法還是要用嗎？"
+                        placeholder="如果不改，寫「維持原方法」。&#10;如果要改，寫新方法 + 理由（例：從實驗法改問卷法，因為一個人做不到兩組對照實驗）。"
+                        rows={3}
+                    />
+
+                    <div className="w7-notice w7-notice-gold">
+                        💡 <strong>提醒：</strong>單飛的好處是自由，代價是沒有隊友分擔。如果這裡發現題目或方法做不起來，就是現在調整的時機——下一步要動筆的是「單飛施工單」，現在不修，之後要動就麻煩了。
+                    </div>
+                </div>
+            ) : (
+                /* ── Team 路線：合題討論（原內容） ── */
+                <div className="space-y-6 prose-zh">
+                    {!route && (
+                        <div className="w7-notice w7-notice-gold">
+                            ⚠️ <strong>你還沒選路線。</strong>請回上一步（Step 1 底部）選擇「合題組隊」或「單飛獨行」，下面的內容才會切換到正確版本。目前顯示的是 Team 版預設。
+                        </div>
+                    )}
+
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         和隊友討論你們的題目能不能合，以及合成什麼。對應紙本學習單 Part B。
                     </p>
@@ -407,23 +558,122 @@ export const TeamFormation = () => {
             ),
         },
 
-        /* ─── Step 3：Part C 研究企劃書 ─── */
+        /* ─── Step 3：研究施工單（Team：合題版 / Solo：單飛版） ─── */
         {
-            title: '研究企劃書',
+            title: route === 'solo' ? '單飛施工單' : '研究施工單',
             icon: '📝',
-            content: (
+            content: route === 'solo' ? (
+                /* ── Solo 版：動機 + 可行性/風險/求援（輕版 scaffold 合一） ── */
                 <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        每組共同完成一份企劃書，但學習單每人皆要繳交。可指派一人填寫，邊討論邊確認，最後再複製貼上自己的作業。
+                        單飛的施工單不是簡化版企劃書——是一份<strong>誠實自評</strong>。寫清楚你為什麼做得到、可能卡在哪、卡住找誰。
                     </p>
 
-                    {/* 組員名單 */}
+                    {/* W2 意圖參考卡（選讀） */}
+                    {w2Intent && (
+                        <details className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden text-[13px]">
+                            <summary className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] cursor-pointer flex items-center gap-2">
+                                <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">W2 REF</span>
+                                <span className="font-bold text-[var(--ink)]">點開：你 W2 寫的探究意圖（動機參考）</span>
+                            </summary>
+                            <div className="p-5 text-[var(--ink-mid)] leading-relaxed">
+                                {w2Intent}
+                                <p className="text-[11px] text-[var(--ink-light)] mt-3 italic">
+                                    提醒：經過 W3/W4 題目診斷、W6 文獻、W7 方法選擇，你對這題的理解已經不同。動機欄位請<strong>用現在的視角</strong>重寫，不要複製貼上。
+                                </p>
+                            </div>
+                        </details>
+                    )}
+
+                    {/* 研究動機（Solo 版） */}
                     <ThinkRecord
-                        dataKey="w8-team-members"
-                        prompt="組長 + 成員"
-                        placeholder="組長：___&#10;成員 1：___&#10;成員 2：___&#10;成員 3：___"
+                        dataKey="w8-motivation"
+                        prompt="① 研究動機：為什麼選這題？這個研究對誰有意義？"
+                        placeholder="用一段話說清楚。可以從「我關心的現象」「我觀察到的問題」「這個研究做出來後誰會用到」三個角度選一個切入。"
                         rows={4}
                     />
+
+                    {/* 可行性 + 風險 + 求援（合一 scaffold） */}
+                    <ThinkRecord
+                        dataKey="w8-solo-feasibility"
+                        prompt="② 單飛自評：憑什麼獨撐？風險？Plan B？求援計畫？"
+                        scaffold={[
+                            'Step 1 — 我憑什麼獨撐：這個題目 + 方法，我一個人做得起來，因為（具體能力 / 資源 / 時間）——',
+                            'Step 2 — 最可能卡住的點：我最擔心卡在（例：找不到夠多受訪者、數據分析不會、訪談被拒絕）——',
+                            'Step 3 — Plan B：萬一真的卡住了，我的退路是（例：縮小樣本數、改用二手資料、改問卷法）——',
+                            'Step 4 — 求援計畫：遇到困難我會先問___，次選___，最後找老師（老師要在最後，不是第一）——',
+                        ]}
+                        rows={10}
+                    />
+
+                    {/* 研究主題（= W4 題目，讓 ExportButton 有資料） */}
+                    <ThinkRecord
+                        dataKey="w8-merged-topic"
+                        prompt="③ 研究主題（一句話寫清楚，可複製 Step 2 題目確認的結果）"
+                        placeholder="例：社群媒體使用時間與高中生焦慮感的關係"
+                        rows={2}
+                    />
+
+                    {/* 主題 vs 問題 範例（Solo 也要看，避免把主題當問題） */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">REF</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">主題 vs 問題 — 範例對照</span>
+                        </div>
+                        <div className="p-4 text-[12px] text-[var(--ink-mid)] space-y-2 leading-relaxed">
+                            {TOPIC_VS_QUESTION.map((row, i) => (
+                                <div key={i} className="flex items-start gap-2">
+                                    <span className="font-mono font-bold shrink-0" style={{ color: row.typeColor }}>{row.type}｜</span>
+                                    <span>主題：{row.topic} → 問題：<strong>{row.question}</strong></span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 研究問題 */}
+                    <ThinkRecord
+                        dataKey="w8-research-question"
+                        prompt="④ 研究問題（核心問句，選一個句型）"
+                        placeholder="→「……是否影響……？」（因果型）&#10;→「……之間有什麼關係？」（相關型）&#10;→「……的現況為何？」（描述型）"
+                        rows={3}
+                    />
+
+                    {/* 理解檢核 */}
+                    <ThinkChoice
+                        dataKey="w8-tc2"
+                        prompt={THINK_CHOICES[1].prompt}
+                        options={THINK_CHOICES[1].options}
+                        answer={THINK_CHOICES[1].answer}
+                        feedback={THINK_CHOICES[1].feedback}
+                        onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
+                    />
+
+                    {/* 方法 + 理由 */}
+                    <ThinkRecord
+                        dataKey="w8-method-reason"
+                        prompt="⑤ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
+                        placeholder="我選___法，理由是（引用 W7 兩層判斷中的某一條）……"
+                        rows={3}
+                    />
+
+                    {/* 研究對象 */}
+                    <ThinkRecord
+                        dataKey="w8-target"
+                        prompt="⑥ 研究對象（誰？多少人/案例？如何找到他們？）"
+                        placeholder="例如：本校高一 30 人問卷 / 3–5 位同學深度訪談 / ……&#10;注意：單飛的樣本量要比合題組小一些才做得完"
+                        rows={2}
+                    />
+                </div>
+            ) : (
+                /* ── Team 版：合題企劃書（砍組員分工、加研究動機） ── */
+                <div className="space-y-6 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        每組共同完成一份施工單，但學習單每人皆要繳交。可指派一人填寫，邊討論邊確認，最後再複製貼上自己的作業。
+                    </p>
+
+                    <div className="w7-notice w7-notice-gold">
+                        💡 <strong>規劃階段不鎖分工。</strong>誰做什麼、誰當組長留到 W9 資料蒐集開始時再決定——這週只產出「施工圖」，不安排「施工隊」。
+                    </div>
 
                     {/* ① 合題後主題 */}
                     <ThinkRecord
@@ -467,18 +717,26 @@ export const TeamFormation = () => {
                         onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
                     />
 
-                    {/* ③ 研究方法 */}
+                    {/* ③ 研究動機（新增——對合題組特別重要：合題後動機會改變） */}
+                    <ThinkRecord
+                        dataKey="w8-motivation"
+                        prompt="③ 研究動機：為什麼選這題？這個研究對誰有意義？"
+                        placeholder="合題後的動機通常不同於個人原題——你們合了別人的想法後，現在這個題目為什麼值得研究？對誰有意義？&#10;用一段話說清楚，避免「因為有興趣」這類空話。"
+                        rows={4}
+                    />
+
+                    {/* ④ 研究方法 */}
                     <ThinkRecord
                         dataKey="w8-method-reason"
-                        prompt="③ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
+                        prompt="④ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
                         placeholder="我們選___法，理由是（引用兩層判斷中的某一條）……"
                         rows={3}
                     />
 
-                    {/* ④ 研究對象 */}
+                    {/* ⑤ 研究對象 */}
                     <ThinkRecord
                         dataKey="w8-target"
-                        prompt="④ 預計研究對象（誰？多少人/案例？如何找到他們？）"
+                        prompt="⑤ 預計研究對象（誰？多少人/案例？如何找到他們？）"
                         placeholder="例如：本校高一 150 人問卷 / 5–8 位學生深度訪談 / ……"
                         rows={2}
                     />
@@ -576,18 +834,35 @@ export const TeamFormation = () => {
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 檢核清單 */}
+                    {/* 檢核清單（動態依路線） */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px] flex items-center gap-2">
                             ✅ W8 完成後，請確認
+                            {route && (
+                                <span className="ml-auto text-[10px] font-mono font-bold text-[var(--accent)] border border-[var(--accent)] px-2 py-0.5 rounded-[3px]">
+                                    {route === 'solo' ? 'SOLO 路線' : 'TEAM 路線'}
+                                </span>
+                            )}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
-                            {[
-                                '分組名單確認（或決定 Solo）',
-                                '企劃書已填寫（Part C 四個欄位）',
-                                '3 題草稿已完成（Part D）',
-                                '準備帶到 W9 診所',
-                            ].map((item, i) => (
+                            {(route === 'solo'
+                                ? [
+                                    'Step 1 路線選擇完成（Solo）',
+                                    'W4 題目 + W7 方法確認完成',
+                                    '研究動機 + 單飛自評（可行性/風險/求援）',
+                                    '施工單五要素（主題/問題/方法/對象）',
+                                    '3 題草稿已完成（帶到 W9 診所）',
+                                    'AI-RED 敘事紀錄（若有用 AI）',
+                                ]
+                                : [
+                                    'Step 1 路線選擇完成（Team）',
+                                    '合題討論紀錄 + 情境判斷',
+                                    '研究動機已寫（合題後的視角）',
+                                    '施工單五要素（主題/問題/方法/對象）',
+                                    '3 題草稿已完成（帶到 W9 診所）',
+                                    'AI-RED 敘事紀錄（若有用 AI）',
+                                ]
+                            ).map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
                                     <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>

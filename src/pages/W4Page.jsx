@@ -14,7 +14,6 @@ import {
     Users2,
     Lightbulb,
     MessageSquare,
-    Brain,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W4Data } from '../data/lessonMaps';
@@ -29,27 +28,8 @@ const W5H1_ITEMS = [
     { w: 'How', l: '方法', q: '用問卷？訪談？觀察？文獻？實驗？' },
 ];
 
-const COLLAB_STEPS_OWN = [
-    { n: '1', t: '修改初稿', d: '寫出你 5W1H 修改後的題目。', s: 'step-human' },
-    { n: '2', t: '問 AI 診斷', d: '讓 AI 幫你做最後掃描。', s: 'step-ai' },
-    { n: '3', t: '確認心意', d: '聽聽看就好，還是你做主。', s: 'step-you' },
-    { n: '4', t: '要 3 個建議', d: '請 AI 給三個方向的修改建議。', s: 'step-ai' },
-    { n: '5', t: '你來選', d: '選出一個方向。', s: 'step-you' },
-    { n: '6', t: '機器包裝', d: '使用下方【句型優化器】產生專業標題。', s: 'step-ai' },
-    { n: '7', t: '定案！', d: '產出你的【W4 專題定案題目】，帶進海報。', s: 'step-you step-green', badge: '帶入海報' },
-];
-
-const TITLE_PROMPT = `我的研究題目初稿是：【請貼上你的初稿】
-
-請幫我優化成更專業的版本：
-1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）
-2. 讓 Who(研究對象) / What(研究變數) 描述更精確
-3. 確保高中生可以執行，字數不要過長
-
-請給我 3 個優化版本。`;
-
-const POSTER_PROMPT = `我的研究海報需要以下元素：
-- 研究題目：【貼上 W3 定案題目】
+const buildPosterPrompt = (topic) => `我的研究海報需要以下元素：
+- 研究題目：「${topic || '【貼上 W3 定案題目】'}」
 - 吸引人的標題草稿：【貼上你的草稿】
 - 預期發現草稿：【貼上你的預測】
 
@@ -73,8 +53,8 @@ const EXPORT_FIELDS = [
     { key: 'w4-5w1h-what', label: '5W1H — What（變項）', question: '核心概念是什麼？要能測量。' },
     { key: 'w4-5w1h-when', label: '5W1H — When（時間）', question: '有特定的時間點或情境嗎？' },
     { key: 'w4-5w1h-how', label: '5W1H — How（方法）', question: '用問卷？訪談？觀察？文獻？實驗？' },
-    { key: 'w4-initial-topic', label: 'AI 包裝後的定案題目', question: '經過 AI 句型優化後，你帶進海報的題目是什麼？' },
-    { key: 'w4-aired-record', label: 'AI-RED 記錄', question: '這次 AI 協作中，你的 AI-RED 五欄分別記了什麼？' },
+    { key: 'w4-initial-topic', label: 'W4 起跑題目（5W1H 對齊後）', question: '5W1H 切完後，你帶進海報的起跑題目是什麼？' },
+    { key: 'w4-aired-record', label: 'AI-RED 記錄（海報文案優化）', question: '這次請 AI 優化海報文案時，AI-RED 五欄分別記了什麼？' },
     { key: 'w4-motivation-raw', label: '白話版動機（自己寫的）', question: '用跟朋友聊天的方式，說說你為什麼想研究這個題目？' },
     { key: 'w4-title-draft', label: '標題草稿', question: '用口語問句寫一個吸引人的標題' },
     { key: 'w4-prediction', label: '預期發現', question: '你預測這個研究可能發現什麼？大膽猜 2-3 個' },
@@ -90,16 +70,20 @@ export const W4Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [choiceResults, setChoiceResults] = useState([]);
 
-    /* 帶入上週題目：優先 W3 最終定案（w3-final-topic），退回 W2 最終探究意圖 */
+    /* 帶入上週題目：優先 W3 Part 4 白話版（5W1H 真的切得開），退回 Part 5 定案，再退回 W2 意圖 */
     const [w2Intent, setW2Intent] = useState('');
-    const [w2Source, setW2Source] = useState('w2'); // 'w3' | 'w2'
+    const [w2Source, setW2Source] = useState('w2'); // 'w3-revised' | 'w3-final' | 'w2'
     useEffect(() => {
         const records = readRecords();
-        const w3Final = (records['w3-final-topic'] || '').trim();
-        const w2Final = (records['w2-final-intent'] || '').trim();
-        if (w3Final) {
+        const w3Revised = (records['w3-own-revised'] || '').trim();  // Part 4 白話版
+        const w3Final = (records['w3-final-topic'] || '').trim();     // Part 5 AI 優化定案
+        const w2Final = (records['w2-final-intent'] || '').trim();    // W2 意圖句
+        if (w3Revised) {
+            setW2Intent(w3Revised);
+            setW2Source('w3-revised');
+        } else if (w3Final) {
             setW2Intent(w3Final);
-            setW2Source('w3');
+            setW2Source('w3-final');
         } else {
             setW2Intent(w2Final);
             setW2Source('w2');
@@ -162,11 +146,19 @@ export const W4Page = () => {
                                 <span className="text-[16px]">📎</span>
                                 <div>
                                     <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">
-                                        {w2Source === 'w3' ? 'W3 最終定案題目（Part 5 Step 7）' : 'W2 最終探究意圖（你還沒做 W3 的 Part 5）'}
+                                        {w2Source === 'w3-revised'
+                                            ? 'W3 Part 4 修改版題目（白話版，最適合切 5W1H）'
+                                            : w2Source === 'w3-final'
+                                                ? 'W3 Part 5 最終定案題目（AI 包裝版）'
+                                                : 'W2 最終探究意圖（你還沒做 W3，建議先回 W3）'}
                                     </div>
                                     <p className="text-[13px] text-[var(--ink)] leading-relaxed font-medium">{w2Intent}</p>
                                     <p className="text-[11px] text-[var(--ink-light)] mt-1">
-                                        {w2Source === 'w3' ? '用 5W1H 再切一次，看看通不通得過 Gallery Walk。' : '建議先回 W3 做完 Part 4+5 再來，這裡會順很多。'}
+                                        {w2Source === 'w3-revised'
+                                            ? '這是你 Part 4 自己改的白話版，最適合拿來切 5W1H。'
+                                            : w2Source === 'w3-final'
+                                                ? '這版已經 AI 包裝過，5W1H 可能很好切。重點放在確認研究範圍跟題目一致。'
+                                                : '建議先回 W3 做完 Part 4+5 再來，這裡會順很多。'}
                                     </p>
                                 </div>
                             </div>
@@ -201,63 +193,26 @@ export const W4Page = () => {
                         </div>
                     </div>
 
-                    {/* AI 最終協作 */}
+                    {/* W4 起跑題目確認 */}
                     <div>
-                        <div className="section-head"><h2>AI 句型包裝</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                        <div className="section-head"><h2>W4 起跑題目確認</h2><div className="line"></div><span className="mono">不准用 AI · 5 分鐘</span></div>
                         <p className="section-desc">
-                            你的題目通過快篩了！現在請 AI 把粗糙的初稿包裝成專業學術標題，帶進下一步的海報。
+                            5W1H 切完後，回頭對照你帶進來的題目。如果發現題目寫的 Who／What 跟你 5W1H 不一致，趁現在調整——這是你帶進海報與 Gallery Walk 的起跑版本。
                         </p>
 
-                        <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white mb-6">
-                            <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-3">
-                                <Brain size={15} className="text-[var(--ink)]" />
-                                <span className="font-bold text-[13px] text-[var(--ink)]">AI 協作 7 步驟</span>
-                            </div>
-                            <div className="p-5 space-y-3">
-                                {COLLAB_STEPS_OWN.map(step => (
-                                    <div className="flex gap-4" key={step.n}>
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono font-bold text-[13px] flex-shrink-0 ${step.s.includes('step-green') ? 'bg-[var(--success)] text-white' : step.s.includes('step-ai') ? 'bg-[var(--accent-light)] text-[var(--accent)]' : 'bg-[var(--paper-warm)] text-[var(--ink)]'}`}>{step.n}</div>
-                                        <div>
-                                            <div className="font-bold text-[13px] text-[var(--ink)] mb-0.5 flex items-center gap-2">
-                                                {step.t} {step.badge && <span className="inline-block text-[10px] font-mono font-bold bg-[var(--success)] text-white px-2 py-0.5 rounded-full">{step.badge}</span>}
-                                            </div>
-                                            <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{step.d}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="notice notice-gold text-[12px] mb-4">
+                            💡 <strong>這個版本不用追求「學術包裝」。</strong>W3 已經練過 AI 句型優化了，這邊只要確認 5W1H 跟題目一致、寫得出來就好。真正的文案優化，留到下一步的海報。
                         </div>
 
-                        {/* Prompt 句型優化器 */}
-                        <div className="prompt-box mb-6">
-                            <div className="prompt-hd">
-                                <span>PROMPT · 句型優化器 (Step 6 用)</span>
-                                <CopyButton text={TITLE_PROMPT} label="複製" />
-                            </div>
-                            <div className="prompt-body">
-                                我的研究題目初稿是：【請貼上你的初稿】<br /><br />
-                                請幫我優化成更專業的版本：<br />
-                                1. 加上學術量化或質性動作（如：探討、相關性、差異分析、影響）<br />
-                                2. 讓 Who(研究對象) / What(研究變數) 描述更精確<br />
-                                3. 確保高中生可以執行，字數不要過長<br /><br />
-                                請給我 3 個優化版本。
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <ThinkRecord
-                                dataKey="w4-initial-topic"
-                                prompt="經過 AI 句型優化後，你帶進海報的定案題目是什麼？"
-                                scaffold={['我的定案題目是：…', '這個題目符合小實近易的…項']}
-                                rows={3}
-                            />
-                            <ThinkRecord
-                                dataKey="w4-aired-record"
-                                prompt="這次 AI 協作中，你的 AI-RED 五欄分別記了什麼？"
-                                scaffold={['A (歸屬)：我用了哪個 AI、做什麼…', 'I (提問)：我問了什麼、為什麼這樣問…', 'R (引用)：AI 給的來源是什麼？我有去查嗎？可信嗎？', 'E (評估)：AI 的回答合理嗎？有沒有錯或偏見？', 'D (記錄)：我做了什麼決策？AI 扮演什麼角色？']}
-                                rows={6}
-                            />
-                        </div>
+                        <ThinkRecord
+                            dataKey="w4-initial-topic"
+                            prompt="對照 5W1H 後，你帶進海報的起跑題目是什麼？"
+                            scaffold={[
+                                '我的起跑題目是：…',
+                                '5W1H 對齊檢查：Who／What／Where／How 都跟題目描述一致（有不一致的話，我已經調過了）',
+                            ]}
+                            rows={3}
+                        />
                     </div>
                 </div>
             ),
@@ -325,15 +280,15 @@ export const W4Page = () => {
                             </div>
                         </a>
 
-                        {/* Prompt：海報文案優化 */}
+                        {/* Prompt：海報文案優化（研究題目自動帶入 W3 定案） */}
                         <div className="prompt-box mb-6">
                             <div className="prompt-hd">
                                 <span>PROMPT · 海報文案優化</span>
-                                <CopyButton text={POSTER_PROMPT} label="複製" />
+                                <CopyButton text={buildPosterPrompt(w2Intent)} label="複製" />
                             </div>
                             <div className="prompt-body">
                                 我的研究海報需要以下元素：<br />
-                                - 研究題目：【貼上 W3 定案題目】<br />
+                                - 研究題目：「{w2Intent || <span className="text-[var(--ink-light)]">【請先回 Step 1 帶入 W3 定案題目】</span>}」<br />
                                 - 吸引人的標題草稿：【貼上你的草稿】<br />
                                 - 預期發現草稿：【貼上你的預測】<br /><br />
                                 請幫我：<br />
@@ -400,6 +355,22 @@ export const W4Page = () => {
 
                         <div className="notice notice-success text-[12px] mt-4">
                             ✏️ <strong>手寫海報（5 分鐘）</strong>——在 A4 紙上完成四格。不用美工，字跡清楚就好。
+                        </div>
+
+                        {/* AI-RED：這是 W4 唯一一次真正找 AI 生產內容，一定要記 */}
+                        <div className="mt-8">
+                            <ThinkRecord
+                                dataKey="w4-aired-record"
+                                prompt="剛才請 AI 優化海報文案，你的 AI-RED 五欄分別記了什麼？"
+                                scaffold={[
+                                    'A (歸屬)：我用了哪個 AI、做什麼…',
+                                    'I (提問)：我問了什麼、為什麼這樣問…',
+                                    'R (引用)：AI 這次沒有給文獻來源，我用什麼方式判斷 AI 的建議合不合理？',
+                                    'E (評估)：AI 改的標題／預測，我覺得哪裡好、哪裡要修掉？',
+                                    'D (記錄)：我最後採用了哪個版本？哪些是我自己的決定？',
+                                ]}
+                                rows={6}
+                            />
                         </div>
                     </div>
                 </div>
