@@ -32,6 +32,15 @@ const METHOD_OPTIONS = [
     { id: 'literature', label: '📚 文獻組' },
 ];
 
+/* — W9 組裝模板（與 W9 ASSEMBLY_TASKS 同步） — */
+const TEMPLATES = {
+    questionnaire: { url: 'https://docs.google.com/document/d/1J72qYFrcvG_0jvYc27j4xS2pBGa3cMQy_tuhf2bPZ4U/copy',    name: '01_問卷模板' },
+    interview:     { url: 'https://docs.google.com/document/d/1PB7S91j73YIIUnBQapBAeCPKK2e7yOFwod83ZTYuMs0/copy',    name: '02_訪綱模板' },
+    experiment:    { url: 'https://docs.google.com/document/d/1HQ6KutZIUXrfLEuBCs88le116HVgefvfSMdEfL_s0II/copy',    name: '03_實驗計畫書模板' },
+    observation:   { url: 'https://docs.google.com/spreadsheets/d/1VwhCcHdpHPCX_YzVKIU98QrDQuXVup8h_ERcnm9R-D4/copy', name: '04_觀察紀錄表模板' },
+    literature:    { url: 'https://docs.google.com/spreadsheets/d/11mr5up4hsirhP3LH1qOxzxFAV0w189BIF585mcF8G6Q/copy', name: '05_文獻比較矩陣模板' },
+};
+
 /* — 各方法 AI 檢核 Prompt — */
 const AI_PROMPTS = {
     questionnaire: `我設計了一份問卷，請幫我檢查：
@@ -161,6 +170,145 @@ const CopyablePrompt = ({ text }) => {
 };
 
 /* ══════════════════════════════════════
+ *  內部元件：W10 入口自檢（W9 組裝作業狀態）
+ * ══════════════════════════════════════ */
+
+const PREP_OPTIONS = [
+    { id: 'complete', icon: '✅', label: '完成',      desc: '工具已組裝成完整版' },
+    { id: 'partial',  icon: '🔶', label: '部分完成',  desc: '有架構但還缺欄位' },
+    { id: 'none',     icon: '⚠️', label: '完全沒做',  desc: '只有 W9 的對應表' },
+];
+
+const PrepStatusCheck = ({ methodId }) => {
+    const [status, setStatus] = useState(() => {
+        try { return localStorage.getItem('w10-prep-status') || null; } catch { return null; }
+    });
+    const template = TEMPLATES[methodId];
+
+    const select = (s) => {
+        setStatus(s);
+        try { localStorage.setItem('w10-prep-status', s); } catch {}
+    };
+    const reset = () => {
+        setStatus(null);
+        try { localStorage.removeItem('w10-prep-status'); } catch {}
+    };
+
+    return (
+        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+            <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center justify-between gap-2">
+                <span className="font-bold text-[13px]">🚦 開場自檢：W9 → W10 組裝作業</span>
+                {status && (
+                    <button
+                        onClick={reset}
+                        className="text-[11px] opacity-70 hover:opacity-100 transition-opacity"
+                        style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+                    >
+                        重新作答
+                    </button>
+                )}
+            </div>
+            <div className="p-5 space-y-4">
+                {!status && (
+                    <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                        進入 AI 檢核前先誠實回報——你有把 W9 Step 5 的「課後組裝作業」做完嗎？選擇會決定這節課開頭 15 分鐘的用法。
+                    </p>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {PREP_OPTIONS.map((opt) => {
+                        const isMe = status === opt.id;
+                        const palette =
+                            opt.id === 'complete' ? 'border-[var(--success)] bg-[var(--success-light)]' :
+                            opt.id === 'partial'  ? 'border-[var(--accent)]  bg-[var(--accent-light)]'  :
+                                                    'border-[var(--danger)]  bg-[var(--danger-light)]';
+                        let cls = 'border-[var(--border)] bg-white hover:border-[var(--accent)] cursor-pointer';
+                        if (isMe) cls = palette;
+                        else if (status) cls = 'border-[var(--border)] bg-[var(--paper)] opacity-50 cursor-default';
+                        return (
+                            <button
+                                key={opt.id}
+                                onClick={() => select(opt.id)}
+                                disabled={!!status}
+                                className={`text-left p-4 rounded-[8px] border transition-all ${cls}`}
+                            >
+                                <span className="text-[20px]">{opt.icon}</span>
+                                <strong className="block text-[13px] text-[var(--ink)] mt-1">{opt.label}</strong>
+                                <span className="text-[11px] text-[var(--ink-mid)] block mt-0.5">{opt.desc}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {status === 'complete' && (
+                    <div className="bg-[var(--success-light)] border-l-[3px] border-[var(--success)] p-4 rounded-[4px] text-[13px] text-[var(--ink)]">
+                        <strong>✅ 太好了。</strong> 直接跳到下方 AI 檢核流程，把整份工具貼進 Step 1 的文字框即可。
+                    </div>
+                )}
+
+                {status === 'partial' && (
+                    <div className="bg-[var(--accent-light)] border-l-[3px] border-[var(--accent)] p-4 rounded-[4px] text-[13px] text-[var(--ink-mid)] space-y-3">
+                        <strong className="text-[var(--ink)] block">🔶 半成品也能上場——前 10 分鐘補齊架構。</strong>
+                        <p className="leading-relaxed">
+                            不要求完美，把「能讓真人試答／試跑」當最低標。缺的通常是開場白、指導語、結尾、倫理說明這些外框，題目／行為定義核心你應該都有。
+                        </p>
+                        {template && (
+                            <a
+                                href={template.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 bg-[var(--ink)] hover:bg-black text-white rounded-[6px] px-3 py-2 text-[12px] no-underline transition-colors"
+                            >
+                                📋 開啟模板副本（{template.name}）
+                            </a>
+                        )}
+                        <p className="text-[12px]">補完後整份貼進下方 Step 1 的工具文字框。</p>
+                    </div>
+                )}
+
+                {status === 'none' && (
+                    <div className="bg-[var(--danger-light)] border-l-[3px] border-[var(--danger)] p-4 rounded-[4px] text-[13px] text-[var(--ink)] space-y-3">
+                        <strong className="block text-[var(--danger)] text-[14px]">⚠️ 急救組裝模式：15 分鐘極速版</strong>
+                        <p className="text-[12px] leading-relaxed">
+                            W10 的教學目標是「<strong>用 AI 審稿 + 自我迭代</strong>」——沒完整工具也能訓練這個技能，但你需要一份能讓 AI 挑毛病的草稿。深呼吸，照下面順序做：
+                        </p>
+
+                        {template ? (
+                            <a
+                                href={template.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 no-underline transition-colors"
+                            >
+                                <span className="text-[18px]">📋</span>
+                                <div className="min-w-0">
+                                    <div className="text-[13px] font-bold">① 開啟「{template.name}」副本</div>
+                                    <div className="text-[11px] font-mono opacity-70 truncate">副本會存到你自己的雲端硬碟</div>
+                                </div>
+                            </a>
+                        ) : (
+                            <div className="bg-white border border-[var(--border)] rounded-[6px] p-3 text-[12px]">
+                                <strong>⚠️ 未偵測到 W9 的方法選擇。</strong> 請先<a href="/w9" className="text-[var(--accent)] underline">回 W9</a> 完成 Step 1 的方法選擇，再回來。
+                            </div>
+                        )}
+
+                        <div className="bg-white border border-[var(--border)] rounded-[6px] p-3 space-y-2 text-[12px] leading-relaxed">
+                            <p><strong>② 把 W9 q1-q3 的變項對應表貼進模板「題目／內容」區</strong>——根據對應表生 3-5 題最低數量就好，求有不求多。</p>
+                            <p><strong>③ 補上開場白、指導語、結尾</strong>（模板都有現成範例句可改）。倫理提醒一句話帶過即可。</p>
+                            <p><strong>④ 把這份半成品整份貼進下方 Step 1 的工具文字框。</strong></p>
+                        </div>
+
+                        <p className="text-[11px] bg-white border border-[var(--border)] rounded-[4px] p-2 text-[var(--ink-mid)]">
+                            💡 <strong className="text-[var(--ink)]">誠實面對：</strong>今天的 AI 審稿品質會比預習同學差一截——這是自然後果，不是懲罰。下週 W11 要帶定稿去倫理審查，今天不補、下週更慘。
+                        </p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+/* ══════════════════════════════════════
  *  主元件
  * ══════════════════════════════════════ */
 
@@ -214,6 +362,9 @@ export const ToolRefinementPage = () => {
                         </div>
                     )}
 
+                    {/* 入口自檢：組裝作業狀態分流 */}
+                    <PrepStatusCheck methodId={detectedMethodId} />
+
                     {/* 任務流程 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center gap-2">
@@ -247,9 +398,9 @@ export const ToolRefinementPage = () => {
                     {/* 貼工具 */}
                     <ThinkRecord
                         dataKey="w10-tool-text"
-                        prompt="Step 1：把你的工具文字版貼在這裡（問卷題目／訪談大綱／實驗流程／觀察表／文獻架構）"
-                        placeholder="從 Google 表單、Word 或 W9 的三欄對應表複製你的工具內容……"
-                        rows={8}
+                        prompt="Step 1：把你的「W9 → W10 組裝作業」整份貼在這裡（完整工具文字）"
+                        placeholder={`這一格要貼的是你課後組裝完成的完整工具文字，不是散落的題目。&#10;&#10;問卷組：開場白 + 基本資料 + 所有題目 + 結尾（整份複製進來）&#10;訪談組：開場白 + 暖身 + 核心大問題 + 追問 + 收尾&#10;實驗組：研究目的 + 變項 + 實驗流程 + 數據記錄表&#10;觀察組：觀察目的 + 時地 + 行為定義 + 紀錄表欄位&#10;文獻組：搜尋策略 + 納入排除標準 + 比較矩陣欄位 + 預選清單&#10;&#10;沒組裝完成？回 W9 Step 5 的「課後組裝作業鷹架」。`}
+                        rows={10}
                     />
 
                     {/* 貼 AI 回覆 */}

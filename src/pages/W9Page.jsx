@@ -231,15 +231,105 @@ const METHOD_SCAFFOLDS = {
     },
 };
 
+/* — 變項拆解示範（W4 聚焦題目 → 可測量變項） — */
+const VARIABLE_DEMO = {
+    topic: '松山高中高一學生對作業拖延的心理狀態',
+    topicNote: '（這是 W4 用 5W1H 聚焦後的題目，不是「高中生為何拖延？」這種大命題）',
+    vars: [
+        { label: '變項 1', text: '拖延當下的情緒', maps: '3-4 題測焦慮／愧疚／放鬆程度' },
+        { label: '變項 2', text: '自我歸因傾向', maps: '3-4 題測內在歸因 vs 外在歸因' },
+        { label: '變項 3', text: '行為模式', maps: '3-4 題測逃避／延遲／中斷頻率' },
+    ],
+    total: '加總 9-12 題 → 每題都對應到某個變項，就是「把題目操作化」',
+};
+
+/* — 課後組裝作業：各方法的工具元件清單 — */
+const ASSEMBLY_TASKS = {
+    questionnaire: {
+        outputName: '完整問卷',
+        deliverable: 'Google Doc（可再轉 Google Form）',
+        timeEstimate: '週間自行組裝，約 60-90 分鐘',
+        templateUrl: 'https://docs.google.com/document/d/1J72qYFrcvG_0jvYc27j4xS2pBGa3cMQy_tuhf2bPZ4U/copy',
+        templateName: '01_問卷模板',
+        components: [
+            { t: '開場白', d: '我是誰、研究目的、預計填答時間、保密承諾、隨時可退出' },
+            { t: '基本資料區', d: '年級 / 性別 / 類組（3-5 題，避免姓名學號）' },
+            { t: '核心題目', d: '把三欄表第三欄的題目整合編號，每個變項一個小區塊' },
+            { t: '結尾致謝', d: '謝謝填寫、聯絡方式（若願意接受後續訪談）' },
+        ],
+        checks: ['題數 15-20 題（5 分鐘填完）', '每題都對應到某個變項', '沒有誘導、重疊、雙重問題'],
+    },
+    interview: {
+        outputName: '完整訪綱',
+        deliverable: 'Google Doc（A4 一到兩頁）',
+        timeEstimate: '週間自行組裝，約 60 分鐘',
+        templateUrl: 'https://docs.google.com/document/d/1PB7S91j73YIIUnBQapBAeCPKK2e7yOFwod83ZTYuMs0/copy',
+        templateName: '02_訪綱模板',
+        components: [
+            { t: '開場白', d: '自我介紹、錄音同意、預計時間、保密承諾' },
+            { t: '暖身問題', d: '1-2 題輕鬆話題，讓受訪者開口' },
+            { t: '核心大問題', d: '從三欄表整理，5-8 題由淺入深' },
+            { t: '追問技巧備忘', d: '為什麼？能不能舉個例？當下的感受是？' },
+            { t: '收尾', d: '「還有什麼想補充的嗎？」+ 致謝' },
+        ],
+        checks: ['總時長估 30-40 分鐘', '大問題由淺入深', '每題都不是封閉是非題'],
+    },
+    experiment: {
+        outputName: '實驗計畫書',
+        deliverable: 'Google Doc',
+        timeEstimate: '週間自行組裝，約 90 分鐘（比其他方法稍重）',
+        templateUrl: 'https://docs.google.com/document/d/1HQ6KutZIUXrfLEuBCs88le116HVgefvfSMdEfL_s0II/copy',
+        templateName: '03_實驗計畫書模板',
+        components: [
+            { t: '研究目的與假設', d: '「我預測 A 會導致 B」' },
+            { t: '變項定義', d: '自變項（操作）/ 依變項（測量）/ 控制變項（列 3+）' },
+            { t: '實驗流程', d: '知情同意 → 分組 → 操作 → 測量 → 結束，含預計時間' },
+            { t: '數據記錄表', d: '欄位設計：受試者代號 / 組別 / 各測量指標' },
+            { t: '抽樣規則', d: '受試者 20+ 人、如何分組、排除條件' },
+        ],
+        checks: ['有對照組', '變項是否可操作（不是「好聽的音樂」）', '4 週內可完成'],
+    },
+    observation: {
+        outputName: '觀察紀錄表（含觀察計畫）',
+        deliverable: 'Google Sheets（三分頁：計畫 / 紀錄表 / 自檢）',
+        timeEstimate: '週間自行組裝，約 60 分鐘',
+        templateUrl: 'https://docs.google.com/spreadsheets/d/1VwhCcHdpHPCX_YzVKIU98QrDQuXVup8h_ERcnm9R-D4/copy',
+        templateName: '04_觀察紀錄表模板',
+        components: [
+            { t: '觀察目的', d: '要回答什麼研究問題' },
+            { t: '時間 / 地點', d: '每次 20-30 分鐘、共 3-5 次、具體地點' },
+            { t: '行為操作定義', d: '「分心 = 視線離開課本連續超過 10 秒」' },
+            { t: '紀錄表欄位', d: '時間 / 代號 / 行為類別 / 持續時間 / 備註' },
+            { t: '倫理聲明', d: '代號保護、公開場域、不拍照' },
+        ],
+        checks: ['只記外顯行為（不是「他在想事情」）', '記錄方式來得及寫', '觀察者定位明確'],
+    },
+    literature: {
+        outputName: '文獻分析矩陣',
+        deliverable: 'Google Sheets（四分頁：搜尋計畫 / 矩陣 / 預選清單 / 自檢）',
+        timeEstimate: '週間自行組裝，約 60 分鐘（不含實際讀文獻）',
+        templateUrl: 'https://docs.google.com/spreadsheets/d/11mr5up4hsirhP3LH1qOxzxFAV0w189BIF585mcF8G6Q/copy',
+        templateName: '05_文獻比較矩陣模板',
+        components: [
+            { t: '研究問題', d: '要回答的核心問題' },
+            { t: '搜尋策略', d: '資料庫：華藝 / Google Scholar；中英文關鍵字；年份範圍' },
+            { t: '納入排除標準', d: '近 5 年、中英文期刊、排除內容農場與維基' },
+            { t: '比較矩陣欄位', d: '作者年份 / 對象 / 方法 / 發現 / 支持或反對 / 限制' },
+            { t: '預選清單', d: '已搜到至少 5 篇候選文獻的標題與來源' },
+        ],
+        checks: ['關鍵字夠精準', '比較欄位能回答研究問題', '5 篇以上文獻'],
+    },
+};
+
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1 */
     { key: 'w9-xcase-diagnosis', label: '壞題診斷練習', question: '你在 X 型病例中找到了什麼問題？' },
     /* Step 3 */
     { key: 'w9-my-method', label: '我的分流方法' },
-    { key: 'w9-three-col-q1', label: '三欄對應表：研究問題 1', question: '研究問題→變項→題目設計' },
-    { key: 'w9-three-col-q2', label: '三欄對應表：研究問題 2', question: '研究問題→變項→題目設計' },
-    { key: 'w9-three-col-q3', label: '三欄對應表：研究問題 3', question: '研究問題→變項→題目設計' },
+    { key: 'w9-three-col-q1', label: '三欄對應表：變項/層面 1', question: '聚焦題目→變項→題目設計' },
+    { key: 'w9-three-col-q2', label: '三欄對應表：變項/層面 2', question: '聚焦題目→變項→題目設計' },
+    { key: 'w9-three-col-q3', label: '三欄對應表：變項/層面 3', question: '聚焦題目→變項→題目設計' },
     { key: 'w9-basic-info-check', label: '基本資料 / 知情同意 / 結構確認' },
     /* Step 4 */
     { key: 'w9-peer-from', label: '我診斷了哪一組' },
@@ -454,6 +544,47 @@ export const W9Page = () => {
                         </p>
                     </div>
 
+                    {/* 變項拆解示範卡 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="text-[15px]">🧩</span>
+                            <span className="font-bold text-[13px]">把聚焦題目操作化：一個題目 → 2-3 個可測量的變項</span>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                你在 <strong className="text-[var(--ink)]">W4 的 5W1H</strong> 已經把題目聚焦到具體對象、場域、變項。現在要更進一步——把這個題目<strong className="text-[var(--ink)]">操作化</strong>：拆成 2-3 個可以實際測量的變項維度，每個變項再對應 3-5 題。
+                            </p>
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[8px] p-4">
+                                <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">示範</div>
+                                <div className="text-[13px] font-bold text-[var(--ink)] mb-1">聚焦題目：{VARIABLE_DEMO.topic}</div>
+                                <div className="text-[11px] text-[var(--ink-light)] mb-3">{VARIABLE_DEMO.topicNote}</div>
+                                <div className="space-y-2">
+                                    {VARIABLE_DEMO.vars.map((s, i) => (
+                                        <div key={i} className="flex items-start gap-2 text-[12px]">
+                                            <span className="shrink-0 bg-[var(--accent)] text-white px-1.5 py-0.5 rounded-[3px] font-mono text-[10px] font-bold">{s.label}</span>
+                                            <div className="min-w-0 flex-1">
+                                                <div className="text-[var(--ink)] font-bold leading-relaxed">{s.text}</div>
+                                                <div className="text-[var(--ink-mid)] leading-relaxed">→ {s.maps}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="mt-3 pt-3 border-t border-[var(--border)] text-[11px] font-mono text-[var(--ink-light)]">{VARIABLE_DEMO.total}</div>
+                            </div>
+                            <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
+                                <strong className="text-[var(--ink)]">方法差異</strong>：問卷組拆成「變項」、訪談組拆成「探詢層面」、實驗組拆成「自變項／依變項／控制變項」、觀察組拆成「行為指標」、文獻組拆成「分析維度」。名字不同，邏輯一樣：<strong className="text-[var(--ink)]">題目 → 要測量什麼 → 怎麼測</strong>。
+                            </p>
+                            {/* W4 後門：題目還沒聚焦 */}
+                            <div className="flex items-start gap-2 text-[12px] bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[#92400E]">
+                                <span className="shrink-0">🚨</span>
+                                <div>
+                                    <strong>題目還像「高中生為何拖延？」這種大命題嗎？</strong>
+                                    <p className="mt-1 leading-relaxed">那是 W4 該處理的事。硬上 W9 只會卡住，請先回 <Link to="/w4" className="underline font-bold">W4</Link> 用 5W1H 加工到「對象 + 場域 + 變項」都具體化再回來。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* 倫理快速提醒（警告框，非教學） */}
                     <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[#FEF2F2] border border-[var(--danger)]/20 text-[13px]">
                         <ShieldAlert size={18} className="text-[var(--danger)] shrink-0 mt-0.5" />
@@ -542,24 +673,24 @@ export const W9Page = () => {
                             {/* 填寫區 */}
                             <ThinkRecord
                                 dataKey="w9-three-col-q1"
-                                prompt="三欄對應表 — 研究子問題 1"
-                                placeholder={`研究問題：___\n需要量測/了解：1.___ 2.___\n對應題目設計：\n題1: ___\n題2: ___`}
-                                scaffold={['研究問題：', '變項/經驗：', '題目設計：']}
+                                prompt="三欄對應表 — 變項 / 層面 1"
+                                placeholder={`聚焦題目（從 W4 帶來）：___\n這個變項/層面要測什麼：___\n對應題目設計：\n題1: ___\n題2: ___\n題3: ___`}
+                                scaffold={['聚焦題目：', '變項/層面：', '題目設計：']}
                                 rows={6}
                             />
 
                             <ThinkRecord
                                 dataKey="w9-three-col-q2"
-                                prompt="三欄對應表 — 研究子問題 2"
-                                placeholder={`研究問題：___\n需要量測/了解：1.___ 2.___\n對應題目設計：\n題3: ___\n題4: ___`}
-                                scaffold={['研究問題：', '變項/經驗：', '題目設計：']}
+                                prompt="三欄對應表 — 變項 / 層面 2"
+                                placeholder={`聚焦題目：同上\n這個變項/層面要測什麼：___\n對應題目設計：\n題4: ___\n題5: ___\n題6: ___`}
+                                scaffold={['同上題目', '變項/層面：', '題目設計：']}
                                 rows={6}
                             />
 
                             <ThinkRecord
                                 dataKey="w9-three-col-q3"
-                                prompt="三欄對應表 — 研究子問題 3（若有）"
-                                placeholder={`研究問題：___\n需要量測/了解：1.___ 2.___\n對應題目設計：\n題5: ___\n題6: ___`}
+                                prompt="三欄對應表 — 變項 / 層面 3（若有）"
+                                placeholder={`聚焦題目：同上\n這個變項/層面要測什麼：___\n對應題目設計：\n題7: ___\n題8: ___`}
                                 rows={5}
                             />
 
@@ -608,7 +739,7 @@ export const W9Page = () => {
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        兩兩小組互相交換「工具初稿」。用錯誤類型卡幫對方把脈——當一個負責任的主治醫師！
+                        兩兩小組互相交換「三欄對應表 + 各題題目草稿」。用錯誤類型卡幫對方把脈——當一個負責任的主治醫師！（完整工具會在課後組裝，W10 帶來。）
                     </p>
 
                     {/* 診斷流程 */}
@@ -620,7 +751,7 @@ export const W9Page = () => {
                         <div className="p-5 space-y-3 text-[13px] text-[var(--ink-mid)]">
                             <div className="flex items-start gap-3">
                                 <span className="w9-step-num">1</span>
-                                <span>和隔壁組交換你的<strong className="text-[var(--ink)]">三欄對應表 + 工具初稿</strong></span>
+                                <span>和隔壁組交換你的<strong className="text-[var(--ink)]">三欄對應表 + 各題題目草稿</strong></span>
                             </div>
                             <div className="flex items-start gap-3">
                                 <span className="w9-step-num">2</span>
@@ -653,8 +784,8 @@ export const W9Page = () => {
 
                     <ThinkRecord
                         dataKey="w9-peer-diagnosis"
-                        prompt="醫師把脈紀錄：對方的工具有什麼問題？"
-                        placeholder="問題 1：第___題犯了「___」→ 建議改為___&#10;問題 2：第___題犯了「___」→ 建議改為___&#10;總評：這份工具整體能回答他們的研究問題嗎？___"
+                        prompt="醫師把脈紀錄：對方的三欄對應表與題目草稿有什麼問題？"
+                        placeholder="問題 1：第___題犯了「___」→ 建議改為___&#10;問題 2：子問題 ___ 和題目對不上，因為___&#10;總評：這些題目整體能回答他們的研究問題嗎？___"
                         scaffold={['第__題犯了「___」', '建議改為___', '整體評價：___']}
                         rows={8}
                     />
@@ -676,16 +807,7 @@ export const W9Page = () => {
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 修改決定 */}
-                    <ThinkRecord
-                        dataKey="w9-revision-plan"
-                        prompt="綜合同學的診斷與老師的建議，下週 W10 之前必須做出的最大修改是什麼？"
-                        placeholder="我們決定修改的方向是___，因為同儕診斷時發現___&#10;具體來說，第___題要改成___"
-                        scaffold={['最大的修改是___', '因為___', '下週帶來的初稿會___']}
-                        rows={5}
-                    />
-
-                    {/* 檢核清單 */}
+                    {/* 1. 檢核清單（先確認收穫） */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
                             ✅ W9 完成後，請確認
@@ -694,7 +816,7 @@ export const W9Page = () => {
                             {[
                                 '學會 Level 2 處方診斷（用規準找問題）',
                                 '掌握三大標準（有效性、可靠性、可行性）',
-                                '用三欄對應表產出工具初稿',
+                                '用三欄對應表把研究問題 → 變項 → 題目連起來',
                                 '完成同儕處方診斷（幫別組把脈）',
                                 '記錄收到的回饋與修改方向',
                             ].map((item, i) => (
@@ -706,17 +828,26 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    {/* 2. 修改決定（向前看） */}
+                    <ThinkRecord
+                        dataKey="w9-revision-plan"
+                        prompt="綜合同學的診斷與老師的建議，下週 W10 之前必須做出的最大修改是什麼？"
+                        placeholder="我們決定修改的方向是___，因為同儕診斷時發現___&#10;具體來說，第___題要改成___"
+                        scaffold={['最大的修改是___', '因為___', '組裝時會特別注意___']}
+                        rows={5}
+                    />
+
+                    {/* 3. AIRED 敘事紀錄 */}
                     <AIREDNarrative week="9" hint="工具設計可能用 AI 檢核題目" optional={true} />
 
-                    {/* 一鍵複製 */}
+                    {/* 4. 一鍵複製 */}
                     <ExportButton
                         weekLabel="W9 工具設計基礎"
                         fields={EXPORT_FIELDS}
                         choices={choiceResults}
                     />
 
-                    {/* 遊戲彩蛋 */}
+                    {/* 5. 遊戲彩蛋 */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
                         <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
                             <ShieldAlert className="text-[var(--danger)]" size={20} />
@@ -730,20 +861,92 @@ export const W9Page = () => {
                         </Link>
                     </div>
 
-                    {/* 下週預告 */}
-                    <div className="next-week-preview">
-                        <div className="next-week-header">
-                            <span className="next-week-badge">NEXT WEEK</span>
-                            <h3 className="next-week-title">W10 預告：工具精進 + 預試</h3>
+                    {/* 6. 課後組裝作業鷹架（取代原下週預告） */}
+                    <div className="bg-[#FEF3C7] border-2 border-[#D97706] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-4 bg-[#D97706] text-white flex items-center gap-3">
+                            <span className="bg-white text-[#D97706] text-[10px] font-mono font-bold px-2 py-1 rounded-[3px]">HOMEWORK</span>
+                            <h3 className="font-bold text-[14px] leading-tight">W9 → W10 課後組裝作業</h3>
+                            <span className="ml-auto text-[11px] font-mono opacity-90">繳交期限：W10 上課前</span>
                         </div>
-                        <div className="next-week-content">
-                            <div className="next-week-col">
-                                <div className="next-week-label">帶什麼來</div>
-                                <p className="next-week-text">修改後的工具初稿（問卷 15-20 題 / 訪談 5-8 大題 / 其他方法對應成品）</p>
-                            </div>
-                            <div className="next-week-col">
-                                <div className="next-week-label">做什麼</div>
-                                <p className="next-week-text">AI 審稿 + 人工預試（Pilot Test）雙重把關——讓真人試填你的工具，你會發現很多意想不到的問題！</p>
+                        <div className="p-5 space-y-4">
+                            <p className="text-[13px] text-[#92400E] leading-relaxed">
+                                <strong>現實盤點</strong>：你現在手上有「三欄對應表 + 散落的題目草稿」，還<strong className="text-[var(--danger)]">不是</strong>一份能拿去施測的完整工具。
+                                W10 的 AI 審稿和人工預試都需要一份「成品」，所以這週回家要把散件組裝起來。
+                            </p>
+
+                            {ASSEMBLY_TASKS[selectedMethod] ? (
+                                (() => {
+                                    const task = ASSEMBLY_TASKS[selectedMethod];
+                                    return (
+                                        <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-4">
+                                            <div className="flex items-start gap-3 pb-3 border-b border-[var(--border)]">
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-1">你的組裝任務</div>
+                                                    <div className="text-[15px] font-bold text-[var(--ink)] mb-0.5">{task.outputName}</div>
+                                                    <div className="text-[12px] text-[var(--ink-mid)]">繳交格式：{task.deliverable}</div>
+                                                    <div className="text-[11px] font-mono text-[var(--ink-light)] mt-1">⏱ {task.timeEstimate}</div>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">必要元件（按順序組裝）</div>
+                                                <div className="space-y-2">
+                                                    {task.components.map((c, i) => (
+                                                        <div key={i} className="flex items-start gap-3 text-[12px]">
+                                                            <span className="shrink-0 bg-[var(--paper-warm)] text-[var(--ink)] w-6 h-6 rounded-full flex items-center justify-center font-mono font-bold text-[11px]">{i + 1}</span>
+                                                            <div className="min-w-0 flex-1">
+                                                                <div className="font-bold text-[var(--ink)]">{c.t}</div>
+                                                                <div className="text-[var(--ink-mid)] leading-relaxed">{c.d}</div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-3">
+                                                <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">繳交前自檢</div>
+                                                <div className="space-y-1">
+                                                    {task.checks.map((c, i) => (
+                                                        <div key={i} className="flex items-start gap-2 text-[12px] text-[var(--ink-mid)]">
+                                                            <span className="shrink-0">□</span>
+                                                            <span>{c}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {task.templateUrl && (
+                                                <a
+                                                    href={task.templateUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center justify-between gap-3 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 transition-colors no-underline"
+                                                >
+                                                    <div className="flex items-center gap-3 min-w-0">
+                                                        <span className="text-[18px]">📋</span>
+                                                        <div className="min-w-0">
+                                                            <div className="text-[13px] font-bold">建立我的模板副本</div>
+                                                            <div className="text-[11px] font-mono opacity-70 truncate">{task.templateName}</div>
+                                                        </div>
+                                                    </div>
+                                                    <ArrowRight size={16} className="shrink-0" />
+                                                </a>
+                                            )}
+                                            <p className="text-[11px] text-[var(--ink-light)] leading-relaxed">
+                                                點上面按鈕 → Google 會跳出「建立副本」視窗 → 副本直接存到<strong className="text-[var(--ink)]">你自己的雲端硬碟</strong>。老師的母版不會被動到。
+                                            </p>
+                                        </div>
+                                    );
+                                })()
+                            ) : (
+                                <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 text-center text-[13px] text-[var(--ink-mid)]">
+                                    ⚠️ 尚未選擇研究方法，請回 Step 3 選擇後，此處會顯示你的組裝清單。
+                                </div>
+                            )}
+
+                            <div className="bg-[var(--ink)] rounded-[6px] p-4 text-white">
+                                <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-1">W10 會做什麼</div>
+                                <p className="text-[13px] leading-relaxed">AI 審稿 + 人工預試（Pilot Test）雙重把關——讓真人試填你的工具，你會發現很多意想不到的問題。沒組裝完成就來上課 = 空手進手術房。</p>
                             </div>
                         </div>
                     </div>
