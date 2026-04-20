@@ -691,14 +691,14 @@ export const ClinicPage = () => {
                     <ThinkRecord
                         dataKey="w7-reason"
                         prompt="選擇理由（請引用兩層判斷中的某一條）"
-                        placeholder="我選___法，因為我的核心問題問的是___，對應兩層判斷的___條……"
+                        defaultTemplate={'我選___法\n因為我的核心問題問的是___\n對應兩層判斷的第___條'}
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w7-aux-method"
                         prompt="輔助方法（如果需要）"
-                        placeholder="不需要 / 需要___法做輔助，因為……"
+                        defaultTemplate={'不需要\n（若需要：需要___法做輔助，因為______）'}
                         rows={2}
                     />
 
@@ -723,14 +723,14 @@ export const ClinicPage = () => {
                     <ThinkRecord
                         dataKey="w7-reflect-wrong"
                         prompt="1. 測驗錯題分析"
-                        placeholder="我錯了第___題，錯的原因是我搞混了___和___……"
+                        defaultTemplate={'我錯了第___題\n錯的原因是我搞混了___和___'}
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w7-reflect-confused"
                         prompt="2. 最容易搞混的方法"
-                        placeholder="我最容易搞混___和___，差別在於……"
+                        defaultTemplate={'我最容易搞混___和___\n差別在於______'}
                         rows={3}
                     />
 
@@ -744,7 +744,7 @@ export const ClinicPage = () => {
                     <ThinkRecord
                         dataKey="w7-reflect-literature"
                         prompt="4. 文獻法的三種用途"
-                        placeholder="文獻法的三種用途中，我的題目有可能用到___（文獻回顧/歷史分析/內容分析），因為……"
+                        defaultTemplate={'我的題目有可能用到___（文獻回顧／歷史分析／內容分析）\n因為______'}
                         rows={3}
                     />
                 </div>

@@ -293,7 +293,7 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-my-ref"
                         prompt="❷ 我的王牌文獻（W6 成果）"
-                        placeholder="作者（年份）發現______，這和我的研究有關，因為……"
+                        defaultTemplate="作者（年份）發現______，這和我的研究有關，因為……"
                         rows={3}
                     />
 
@@ -552,14 +552,14 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-teammates"
                         prompt="隊友姓名 & 題目"
-                        placeholder="隊友 1：___，題目：___&#10;隊友 2：___，題目：___（若有）&#10;隊友 3：___，題目：___（若有）"
+                        defaultTemplate={'隊友 1：___，題目：___\n隊友 2：___，題目：___（若有）\n隊友 3：___，題目：___（若有）'}
                         rows={4}
                     />
 
                     <ThinkRecord
                         dataKey="w8-merge-discussion"
                         prompt="合題討論：你們的題目有什麼共同核心？合成什麼大主題？"
-                        placeholder="請記錄討論歷程：我們發現______的共同點是______，所以合題方向是……"
+                        defaultTemplate={'我們發現______的共同點是______\n所以合題方向是______'}
                         rows={5}
                     />
 
@@ -667,7 +667,7 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-method-reason"
                         prompt="⑤ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
-                        placeholder="我選___法，理由是（引用 W7 兩層判斷中的某一條）……"
+                        defaultTemplate={'我選___法\n理由是（引用 W7 兩層判斷中的某一條）______'}
                         rows={3}
                     />
 
@@ -744,7 +744,7 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-method-reason"
                         prompt="④ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
-                        placeholder="我們選___法，理由是（引用兩層判斷中的某一條）……"
+                        defaultTemplate={'我們選___法\n理由是（引用兩層判斷中的某一條）______'}
                         rows={3}
                     />
 

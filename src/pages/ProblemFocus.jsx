@@ -392,7 +392,7 @@ export const ProblemFocus = () => {
                             <ThinkRecord
                                 dataKey="w2-ai-gap-choice"
                                 prompt="AI 給了 5 個落差，你最終選了哪一個？為什麼？（如果都不對，寫「用我自己的」）"
-                                placeholder="我選了第___個，因為…"
+                                defaultTemplate={'我選了第___個\n因為______'}
                                 scaffold={['我選第___個', '因為我真的觀察到…', '這個矛盾讓我想深究…']}
                                 rows={2}
                             />
@@ -422,7 +422,7 @@ export const ProblemFocus = () => {
                                 <ThinkRecord
                                     dataKey="w2-abc-judgment"
                                     prompt="你自己判斷是哪一型？為什麼？並用白話寫一句初稿（等一下要給 AI 翻譯用的）"
-                                    placeholder={"我判斷是 ___ 型，因為我最想知道的是…\n白話初稿：我想搞清楚…"}
+                                    defaultTemplate={'我判斷是 ___ 型\n因為我最想知道的是______\n白話初稿：我想搞清楚______'}
                                     scaffold={['我判斷是___型', '因為我最想知道的是「影響／差異／原因」', '白話初稿：我想搞清楚___']}
                                     rows={3}
                                 />
@@ -462,7 +462,7 @@ export const ProblemFocus = () => {
                             <ThinkRecord
                                 dataKey="w2-ai-intent-choice"
                                 prompt="AI 給了 3 個方向（A／B／C），你最終選哪一個？為什麼？（如果都不對，寫「用我自己判斷的那型」）"
-                                placeholder="我選了 ___ 型，因為…"
+                                defaultTemplate={'我選了 ___ 型\n因為______'}
                                 scaffold={['我選 ___ 型', '因為 AI 的說法讓我想到…／跟我拍 1 的自判一致／點出我沒想到的…', '這個方向最吸引我的地方是…']}
                                 rows={3}
                             />
@@ -500,7 +500,7 @@ export const ProblemFocus = () => {
                             <ThinkRecord
                                 dataKey="w2-final-intent"
                                 prompt="把 Step 3 選的方向寫成完整句子（帶去 W3 的定稿版）"
-                                placeholder="我想探究「___」如何影響/比較/深究「___」…"
+                                defaultTemplate={'我想探究「___」如何影響「___」\n（或：我想比較「___」和「___」的差異）\n（或：我想深究「___」背後的原因）'}
                                 scaffold={['我想探究「___」如何影響「___」', '我想比較「___」和「___」的差異', '我想深究「___」背後的原因']}
                                 rows={3}
                             />
@@ -522,7 +522,7 @@ export const ProblemFocus = () => {
                             <ThinkRecord
                                 dataKey="w2-aired-record"
                                 prompt="把你的 AI-RED 記錄寫在這裡（用了什麼 AI、問了什麼 Prompt、你的評估）"
-                                placeholder="A: 我用了 ChatGPT，做落差擴充和探究意圖翻譯。\nI: 我問了…\nR: 無（AI 生成）。\nE: AI 給的建議大致合理，但…\nD: 最終我選了…"
+                                defaultTemplate={'A: 我用了___（AI 工具名）\nI: 我問了___\nR: 無（AI 生成）\nE: AI 給的建議___\nD: 最終我選了___'}
                                 scaffold={['A: 我用了___', 'I: 我問了___', 'E: AI 的建議___', 'D: 最終我選了___']}
                                 rows={6}
                             />

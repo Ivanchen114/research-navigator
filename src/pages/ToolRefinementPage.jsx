@@ -494,7 +494,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-ai-judge"
                         prompt="AI 建議判斷表：逐條記錄 AI 的建議，並寫下你的判斷"
-                        placeholder={`建議 1：（AI 說了什麼？）\n→ 判斷：✅採納 / ❌不採納 / 🔶部分採納\n→ 理由：\n\n建議 2：\n→ 判斷：\n→ 理由：\n\n建議 3：\n→ 判斷：\n→ 理由：\n\n（繼續新增……）`}
+                        defaultTemplate={`建議 1：（AI 說了什麼？）\n→ 判斷：✅採納 / ❌不採納 / 🔶部分採納\n→ 理由：\n\n建議 2：\n→ 判斷：\n→ 理由：\n\n建議 3：\n→ 判斷：\n→ 理由：\n\n（繼續新增……）`}
                         scaffold={[
                             '建議___：AI 說___',
                             '→ 判斷：✅採納 / ❌不採納 / 🔶部分採納',
@@ -507,7 +507,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-judge-principle"
                         prompt="你的判斷原則：什麼時候聽 AI 的？什麼時候不聽？"
-                        placeholder={'我們採納 AI 建議是因為……\n我們不採納 AI 建議是因為……'}
+                        defaultTemplate={'我們採納 AI 建議是因為……\n我們不採納 AI 建議是因為……'}
                         scaffold={['我們聽 AI 的，通常是因為___', '我們不聽 AI 的，通常是因為___']}
                         rows={4}
                     />
@@ -516,7 +516,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-tool-revision"
                         prompt="第一輪修正紀錄：根據 AI 建議，你實際改了什麼？"
-                        placeholder={'1. 第___題：原本___，改成___\n2. 新增___\n3. 刪除___'}
+                        defaultTemplate={'1. 第___題：原本___，改成___\n2. 新增___\n3. 刪除___'}
                         scaffold={['第__題原本___', '改成___', '因為___']}
                         rows={6}
                     />
@@ -566,7 +566,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-pilot-partner"
                         prompt="你和誰配對預試？"
-                        placeholder="配對對象：___組／___同學"
+                        defaultTemplate="配對對象：___組／___同學"
                         rows={1}
                     />
 
@@ -574,7 +574,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-pilot-findings"
                         prompt="預試中發現了什麼問題？（記錄每一個卡住的地方）"
-                        placeholder={`問題 1：第___題，對方說___\n問題 2：___\n問題 3：___\n整體花了___分鐘完成`}
+                        defaultTemplate={`問題 1：第___題，對方說___\n問題 2：___\n問題 3：___\n整體花了___分鐘完成`}
                         scaffold={[
                             '第__題讓對方卡住，因為___',
                             '對方反映___',
@@ -607,7 +607,7 @@ export const ToolRefinementPage = () => {
                                 <ThinkRecord
                                     dataKey="w10-ai-found"
                                     prompt=""
-                                    placeholder={'AI 指出了：\n1. ___\n2. ___\n3. ___'}
+                                    defaultTemplate={'AI 指出了：\n1. ___\n2. ___\n3. ___'}
                                     rows={5}
                                 />
                             </div>
@@ -621,7 +621,7 @@ export const ToolRefinementPage = () => {
                                 <ThinkRecord
                                     dataKey="w10-human-found"
                                     prompt=""
-                                    placeholder={'真人測試時才發現：\n1. ___\n2. ___\n3. ___'}
+                                    defaultTemplate={'真人測試時才發現：\n1. ___\n2. ___\n3. ___'}
                                     rows={5}
                                 />
                             </div>
@@ -644,7 +644,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-final-revision"
                         prompt="即時修正：根據人工預試結果，你最後改了什麼？"
-                        placeholder={'1. 第___題改成___（因為預試時___）\n2. 刪掉___（因為___）\n3. 新增___（因為___）'}
+                        defaultTemplate={'1. 第___題改成___（因為預試時___）\n2. 刪掉___（因為___）\n3. 新增___（因為___）'}
                         scaffold={['第__題改成___', '因為預試時___']}
                         rows={6}
                     />
