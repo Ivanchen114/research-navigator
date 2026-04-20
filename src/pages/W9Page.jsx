@@ -428,9 +428,9 @@ const EXPORT_FIELDS = [
     /* Step 4：分流工作坊 — 三欄對應表 */
     { key: 'w9-my-method', label: '我的分流方法' },
     { key: 'w9-variable-ai-record', label: 'AI 變項發散判斷紀錄', question: '有用 AI 發散題目才要填：選了哪個版本、刷掉哪個、為什麼' },
-    { key: 'w9-three-col-q1', label: '三欄對應表：變項/層面 1', question: '聚焦題目→變項→題目設計' },
-    { key: 'w9-three-col-q2', label: '三欄對應表：變項/層面 2', question: '聚焦題目→變項→題目設計' },
-    { key: 'w9-three-col-q3', label: '三欄對應表：變項/層面 3', question: '聚焦題目→變項→題目設計' },
+    { key: 'w9-three-col-q1', label: '三欄對應表 1', question: '合題 → 拆解單位（變項/層面/行為/維度）→ 對應產出' },
+    { key: 'w9-three-col-q2', label: '三欄對應表 2', question: '合題 → 拆解單位 → 對應產出' },
+    { key: 'w9-three-col-q3', label: '三欄對應表 3（若有）', question: '合題 → 拆解單位 → 對應產出' },
     { key: 'w9-basic-info-check', label: '基本資料 / 知情同意 / 結構確認' },
     /* Step 5：同儕處方診斷 */
     { key: 'w9-peer-from', label: '我診斷了哪一組' },
@@ -702,7 +702,7 @@ export const W9Page = () => {
             ),
         },
 
-        /* ─── Step 3：組內看診 W8 三題（合併口頭看診 + 書面處方） ─── */
+        /* ─── Step 3：組內看診 W8 三題（逐題診斷：錯誤 + 違反原則 + 組內共識） ─── */
         {
             title: '組內看診 W8 三題',
             icon: '🔍',
@@ -969,29 +969,34 @@ export const W9Page = () => {
                                                 : selectedMethod === 'observation' ? '紀錄表欄位'
                                                     : selectedMethod === 'literature' ? '比較矩陣欄位'
                                                         : '產出';
+                                const measureVerb =
+                                    selectedMethod === 'interview' ? '問什麼經驗/想法'
+                                        : selectedMethod === 'observation' ? '看什麼行為'
+                                            : selectedMethod === 'literature' ? '比什麼'
+                                                : '測什麼';
                                 return (
                                     <>
                                         <ThinkRecord
                                             dataKey="w9-three-col-q1"
                                             prompt={`三欄對應表 — ${unitLabel} 1`}
-                                            placeholder={`合題（從 W8 帶來）：___\n這個${unitLabel}要${selectedMethod === 'interview' ? '問什麼經驗/想法' : selectedMethod === 'observation' ? '看什麼行為' : selectedMethod === 'literature' ? '比什麼' : '測什麼'}：___\n對應${outputLabel}：\n1: ___\n2: ___\n3: ___`}
+                                            defaultTemplate={`合題（從 W8 帶來）：\n這個${unitLabel}要${measureVerb}：\n對應${outputLabel}：\n1. \n2. \n3. `}
                                             scaffold={['合題：', `${unitLabel}：`, `${outputLabel}：`]}
-                                            rows={6}
+                                            rows={7}
                                         />
 
                                         <ThinkRecord
                                             dataKey="w9-three-col-q2"
                                             prompt={`三欄對應表 — ${unitLabel} 2`}
-                                            placeholder={`合題：同上\n這個${unitLabel}：___\n對應${outputLabel}：\n4: ___\n5: ___\n6: ___`}
+                                            defaultTemplate={`合題：同上\n這個${unitLabel}：\n對應${outputLabel}：\n4. \n5. \n6. `}
                                             scaffold={['同上合題', `${unitLabel}：`, `${outputLabel}：`]}
-                                            rows={6}
+                                            rows={7}
                                         />
 
                                         <ThinkRecord
                                             dataKey="w9-three-col-q3"
                                             prompt={`三欄對應表 — ${unitLabel} 3（若有）`}
-                                            placeholder={`合題：同上\n這個${unitLabel}：___\n對應${outputLabel}：\n7: ___\n8: ___`}
-                                            rows={5}
+                                            defaultTemplate={`合題：同上\n這個${unitLabel}：\n對應${outputLabel}：\n7. \n8. `}
+                                            rows={6}
                                         />
                                     </>
                                 );

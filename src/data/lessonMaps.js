@@ -1256,30 +1256,30 @@ export const W9Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "處方診斷",
-            subtitle: "X 型病例 × 錯誤類型速查",
-            desc: "識別誘導性提問、選項重疊、不完整等三大病症",
+            title: "診斷工具包（兩把尺）",
+            subtitle: "三大標準 + 錯誤類型清單",
+            desc: "信／效／行 + 3 共通錯誤 + 5 方法獨家陷阱（頁籤切換）",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "好工具三大標準",
-            subtitle: "可靠性 · 有效性 · 可行性",
-            desc: "每題都要通過三關，才是合格的研究工具",
+            title: "組內看診 W8 三題",
+            subtitle: "集體手術・逐題找毒",
+            desc: "每題寫「發現錯誤 + 違反哪個原則 + 組內修成什麼」",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "三欄對應表",
-            subtitle: "研究問題 → 題目 → 工具",
-            desc: "把抽象的研究問題轉換成可執行的工具初稿",
+            title: "三欄對應表（分流）",
+            subtitle: "合題 → 拆解單位 → 產出",
+            desc: "依方法拆：變項／探詢層面／變因／行為指標／比較維度",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "處方診斷 × 三大標準 × 分流準備",
+            title: "處方熱身 × 診斷工具包 × 組內看診",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1289,66 +1289,66 @@ export const W9Data = {
                     duration: 5,
                     colorClass: "c3",
                     icon: "📢",
-                    title: "一、 開場：從 Level 1 到 Level 2",
-                    desc: "W7 學掛號判斷（用什麼方法）。今天升級：工具設計得好不好？哪裡有毒？怎麼解毒？"
+                    title: "一、 開場：Level 1 → Level 2",
+                    desc: "W7 學掛號判斷（決定用什麼方法）。今天升級到處方診斷：工具設計得好不好？哪裡有毒？怎麼解毒？"
                 },
                 {
                     timeStart: "0:05",
                     timeStartFormatted: "00:05",
-                    duration: 15,
+                    duration: 7,
                     colorClass: "c1",
                     icon: "🩺",
-                    title: "二、 處方診斷熱身",
-                    desc: "三道 X 型病例（手機/睡眠主題問卷）示範，對照錯誤類型速查卡找出毒性並開處方。",
-                    tags: ["X 型病例", "錯誤類型"]
+                    title: "二、 Step 1 處方診斷熱身",
+                    desc: "老師現場打開 RxInspector 防線遊戲，帶全班共玩 1-2 題典型壞題，建立「診斷語言」。",
+                    tags: ["RxInspector", "共玩示範"]
                 },
                 {
-                    timeStart: "0:20",
-                    timeStartFormatted: "00:20",
-                    duration: 20,
+                    timeStart: "0:12",
+                    timeStartFormatted: "00:12",
+                    duration: 18,
                     colorClass: "c1",
-                    icon: "🎯",
-                    title: "三、 好工具三大標準",
-                    desc: "可靠性（一致）、有效性（問對）、可行性（答得出）三關講解，搭配兩題理解檢核。",
-                    tags: ["信效度", "理解檢核"]
+                    icon: "🧰",
+                    title: "三、 Step 2 診斷工具包（兩把尺）",
+                    desc: "尺 1：三大標準（有效性／可靠性／可行性）。尺 2：錯誤類型（3 共通 + 問卷／訪談／觀察／實驗／文獻 5 方法頁籤獨家陷阱）。",
+                    tags: ["三大標準", "5 方法頁籤"]
                 },
                 {
-                    timeStart: "0:40",
-                    timeStartFormatted: "00:40",
-                    duration: 10,
-                    colorClass: "c4",
-                    icon: "🚏",
-                    title: "四、 分流準備",
-                    desc: "依 W8 決定的方法分組：問卷前半、訪談後半、實驗/觀察/文獻側邊。下節開始實作。",
-                    tags: ["分組", "工作表"]
+                    timeStart: "0:30",
+                    timeStartFormatted: "00:30",
+                    duration: 20,
+                    colorClass: "c2",
+                    icon: "🔍",
+                    title: "四、 Step 3 組內看診 W8 三題",
+                    desc: "Team 組員集體手術／Solo 臨時診斷圈。逐題寫「發現的錯誤 + 違反三大原則哪個 + 組內討論修成什麼」，每題 2-3 分鐘。",
+                    tags: ["W8 三題", "集體手術"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "三欄對應表 × 同儕診斷 × 繳交",
+            title: "三欄對應表 × 同儕診斷 × 組裝鷹架",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
                     timeStartFormatted: "00:00",
-                    duration: 25,
-                    colorClass: "c2",
+                    duration: 30,
+                    colorClass: "c4",
                     icon: "📐",
-                    title: "五、 三欄對應表實作",
-                    desc: "各組依方法取用專屬工作表（問卷/訪談/實驗/觀察/文獻），把研究問題拆成題目並寫出工具初稿。",
-                    tags: ["核心產出", "分流實作"]
+                    title: "五、 Step 4 三欄對應表（方法分流）",
+                    desc: "依 W8 合題取用方法專屬工作表：問卷拆變項／訪談拆探詢層面／實驗拆自依控／觀察拆行為指標／文獻拆比較維度。合題 → 拆解單位 → 產出。",
+                    tags: ["核心產出", "方法分流"]
                 },
                 {
-                    timeStart: "0:25",
-                    timeStartFormatted: "00:25",
-                    duration: 20,
+                    timeStart: "0:30",
+                    timeStartFormatted: "00:30",
+                    duration: 15,
                     colorClass: "c5",
                     icon: "🤝",
-                    title: "六、 同儕處方診斷",
-                    desc: "兩組交換初稿，用三大標準與錯誤類型卡互相開處方，每題至少寫一條改進建議。",
-                    tags: ["同儕診斷", "三大標準"]
+                    title: "六、 Step 5 同儕處方診斷",
+                    desc: "兩組交換三欄表 + 題目草稿，對照 Step 2 兩把尺互相開處方。每份初稿至少找出 2 個改進點並標注違反哪條規準。",
+                    tags: ["跨組診斷", "兩把尺"]
                 },
                 {
                     timeStart: "0:45",
@@ -1356,9 +1356,9 @@ export const W9Data = {
                     duration: 5,
                     colorClass: "c3",
                     icon: "📤",
-                    title: "七、 回顧與繳交",
-                    desc: "繳交三欄對應表與工具初稿。預告 W10：帶著初稿進 AI 工具精進與預試。",
-                    tags: ["銜接 W10"]
+                    title: "七、 Step 6 回顧與繳交",
+                    desc: "修改決定 → AIRED 敘事紀錄 → ExportButton 複製繳交。說明課後組裝作業鷹架：W10 上課前要交工具成品（問卷／訪綱／實驗計畫書／觀察紀錄表／文獻矩陣）。",
+                    tags: ["AIRED", "課後組裝鷹架"]
                 }
             ]
         }
@@ -1367,17 +1367,17 @@ export const W9Data = {
         {
             icon: "📐",
             label: "核心產出",
-            text: "三欄對應表 + 工具初稿<br><small style=\"font-size:11px;color:#888;\">依方法分流</small>"
+            text: "三欄對應表 + 題目草稿<br><small style=\"font-size:11px;color:#888;\">5 方法各自分流</small>"
         },
         {
-            icon: "🩺",
+            icon: "🧰",
             label: "診斷能力",
-            text: "錯誤類型速查 + 三大標準<br><small style=\"font-size:11px;color:#888;\">W10 精進的基礎</small>"
+            text: "兩把尺：三大標準 + 錯誤類型<br><small style=\"font-size:11px;color:#888;\">3 共通 + 5 方法獨家陷阱</small>"
         },
         {
-            icon: "🤝",
-            label: "同儕回饋",
-            text: "互相處方建議清單<br><small style=\"font-size:11px;color:#888;\">第二輪修改依據</small>"
+            icon: "📦",
+            label: "課後任務",
+            text: "組裝工具成品（模板副本）<br><small style=\"font-size:11px;color:#888;\">W10 上課前繳交</small>"
         }
     ],
     legends: [

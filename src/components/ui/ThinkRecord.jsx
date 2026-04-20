@@ -6,7 +6,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
  * Props:
  *   dataKey   (string, required) — localStorage 鍵值，如 "w2-predict-1"
  *   prompt    (string)           — 提示文字
- *   placeholder (string)         — 輸入框提示
+ *   placeholder (string)         — 輸入框提示（打字後消失，屬 HTML 原生行為）
+ *   defaultTemplate (string)     — 預設樣板文字：若 localStorage 沒存過，載入此值作為初始內容（可覆寫），打字不會消失。適合長樣板（三欄表、檢核清單）。
  *   scaffold  (array)            — 鷹架句型提示，如 ['我觀察到…', '我覺得奇怪的是…']
  *   rows      (number)           — textarea 行數，預設 3
  *   className (string)           — 額外 class
@@ -29,6 +30,7 @@ export default function ThinkRecord({
   dataKey,
   prompt,
   placeholder = '寫下你的想法…',
+  defaultTemplate,
   scaffold,
   rows = 3,
   className = '',
@@ -36,13 +38,25 @@ export default function ThinkRecord({
   const [value, setValue] = useState('');
   const [status, setStatus] = useState('idle'); // idle | typing | saved | restored
   const timerRef = useRef(null);
+  // 用 ref 存 defaultTemplate，避免「變動的樣板字串」觸發 useEffect 重跑覆蓋使用者已打但未存的輸入
+  const defaultTemplateRef = useRef(defaultTemplate);
+  defaultTemplateRef.current = defaultTemplate;
 
   // 載入對應 dataKey 的內容——**必須**在 dataKey 切換時重置，否則 React 重用 instance（例如 StepEngine 切 tab）會讓舊內容污染新格子
+  // 若 localStorage 沒存過（undefined）且有 defaultTemplate，載入樣板作初始內容；學生改動才會存檔覆寫
   useEffect(() => {
     const records = readRecords();
     const stored = records[dataKey];
-    setValue(stored || '');
-    setStatus(stored ? 'restored' : 'idle');
+    if (stored !== undefined) {
+      setValue(stored);
+      setStatus(stored ? 'restored' : 'idle');
+    } else if (defaultTemplateRef.current) {
+      setValue(defaultTemplateRef.current);
+      setStatus('idle');
+    } else {
+      setValue('');
+      setStatus('idle');
+    }
   }, [dataKey]);
 
   const handleChange = useCallback((e) => {
