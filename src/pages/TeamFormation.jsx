@@ -5,6 +5,7 @@ import './TeamFormation.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
+import AIAssistToggle from '../components/ui/AIAssistToggle';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
@@ -37,6 +38,30 @@ const TOPIC_VS_QUESTION = [
     { type: '相關型', typeColor: 'var(--success)', topic: '高中生睡眠品質與學業表現', question: '就寢時間與段考成績之間有什麼關係？' },
     { type: '描述型', typeColor: '#c9a84c', topic: '校園午餐滿意度調查', question: '松山高中學生對午餐菜色、份量、價格的滿意程度如何？' },
 ];
+
+/* — 草稿題目 AI 發散 Prompt（每個方法不同） — */
+const DRAFT_AI_PROMPTS = {
+    questionnaire: `我是高中生在做研究方法課的專題。我的研究問題是：
+【在這裡貼上你的研究問題】
+
+我打算用「問卷法」。請幫我發散 3 個可能的問題方向（例如要測態度、行為頻率、認知等）——只給方向，不要幫我寫題幹或選項。我會從中挑一個，自己寫題目。`,
+    interview: `我是高中生在做研究方法課的專題。我的研究問題是：
+【在這裡貼上你的研究問題】
+
+我打算用「訪談法」。請幫我發散 3 個可能探詢的面向——只給探詢方向，不要幫我寫開放式問題。我會從中挑一個，自己設計訪談大綱。`,
+    experiment: `我是高中生在做研究方法課的專題。我的研究問題是：
+【在這裡貼上你的研究問題】
+
+我打算用「實驗法」。請幫我發散 3 組可能的「自變項—依變項」配對假設——只給變項配對，不要幫我設計實驗流程。我會從中挑一組，自己設計實驗。`,
+    observation: `我是高中生在做研究方法課的專題。我的研究問題是：
+【在這裡貼上你的研究問題】
+
+我打算用「觀察法」。請幫我發散 3 個可能的觀察指標方向——只給指標方向，不要幫我寫行為操作定義。我會從中挑一個，自己具體化。`,
+    literature: `我是高中生在做研究方法課的專題。我的研究問題是:
+【在這裡貼上你的研究問題】
+
+我打算用「文獻分析」。請幫我發散 3 組可能的關鍵字組合（中英文各一組）——只給關鍵字，不要幫我做分析。我會從中挑一組自己搜尋。`,
+};
 
 /* — 工具草稿範例 — */
 const TOOL_DRAFT_EXAMPLES = [
@@ -110,6 +135,7 @@ const EXPORT_FIELDS = [
     { key: 'w8-target', label: '研究對象' },
     /* Part D */
     { key: 'w8-tool-method', label: '我們組選用的研究方法' },
+    { key: 'w8-draft-ai-record', label: 'AI 協助草稿判斷紀錄', question: '有用 AI 發散題目方向才要填：選了哪個、刷掉哪個、為什麼' },
     { key: 'w8-draft-q1', label: '草稿題目 1' },
     { key: 'w8-draft-q2', label: '草稿題目 2' },
     { key: 'w8-draft-q3', label: '草稿題目 3' },
@@ -128,11 +154,20 @@ export const TeamFormation = () => {
     /* W4 題目 + W7 方法 + W5 文獻帶入 */
     const [w4Topic, setW4Topic] = useState('');
     const [w7Method, setW7Method] = useState('');
+    const [detectedMethodId, setDetectedMethodId] = useState('');
 
     useEffect(() => {
         const saved = readRecords();
         const topic = saved['w4-final-topic']?.trim();
         const method = saved['w7-main-method']?.trim();
+        /* 嘗試從 w7-main-method 或 w8-tool-method 推斷 method id */
+        const rawMethod = (method || saved['w8-tool-method'] || saved['w8-my-method'] || '').toLowerCase();
+        if (rawMethod.includes('問卷')) setDetectedMethodId('questionnaire');
+        else if (rawMethod.includes('訪談')) setDetectedMethodId('interview');
+        else if (rawMethod.includes('實驗')) setDetectedMethodId('experiment');
+        else if (rawMethod.includes('觀察')) setDetectedMethodId('observation');
+        else if (rawMethod.includes('文獻')) setDetectedMethodId('literature');
+
         if (topic) {
             setW4Topic(topic);
             if (!saved['w8-my-topic']?.trim()) {
@@ -491,6 +526,18 @@ export const TeamFormation = () => {
                     <div className="w7-notice w7-notice-danger">
                         ⚠️ 這 3 題草稿不計分，但 W9 要帶來診所——沒有草稿就沒辦法診斷！
                     </div>
+
+                    {/* AI 協助（可選）：從研究問題發散題目方向 */}
+                    <AIAssistToggle
+                        id="w8-draft-ai"
+                        title="卡住了？讓 AI 給你 3 個題目方向（可選）"
+                        reason="AI 只給方向，不會幫你寫題目。用意是讓你不要對著空白腦袋卡 10 分鐘。用了要留下你「挑了哪個、為什麼」的判斷紀錄。"
+                        promptByMethod={DRAFT_AI_PROMPTS}
+                        method={detectedMethodId}
+                        recordKey="w8-draft-ai-record"
+                        recordPrompt="你從 AI 給的 3 個方向中選了哪一個？為什麼不選其他的？"
+                        recordPlaceholder="我選了方向 ___，因為___&#10;我刷掉方向 ___，因為___"
+                    />
 
                     <ThinkRecord
                         dataKey="w8-draft-q1"

@@ -5,6 +5,7 @@ import './W9Page.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
+import AIAssistToggle from '../components/ui/AIAssistToggle';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
@@ -321,12 +322,99 @@ const ASSEMBLY_TASKS = {
     },
 };
 
+/* — 變項→題目發散 AI Prompt（每個方法不同） — */
+const VARIABLE_AI_PROMPTS = {
+    questionnaire: `我是高中生在做研究方法課的專題（問卷法）。
+
+我要測的變項是：【在這裡貼上你這個變項的名稱與定義】
+研究對象：【例如：松山高中高一學生】
+
+請幫我發散 3-5 種可能的問卷題目寫法（含題幹與選項，選項要互斥窮盡）。
+每一版請註明它的特色（例如：封閉式/量表式/情境式）。
+
+我會從中挑一個最合適的版本，並說明為什麼刷掉其他版本。不要給我「建議使用某一版」，判斷是我的工作。`,
+    interview: `我是高中生在做研究方法課的專題（訪談法）。
+
+我要探詢的面向是：【在這裡貼上你這個面向的名稱與想了解的經驗】
+受訪者：【例如：3 位曾有拖延經驗的高一學生】
+
+請幫我發散 3-5 種可能的開放式訪談問題寫法。每一版請註明它的特色（例如：引發故事/追問情緒/反思框架）。
+
+我會從中挑一個最能引出故事的版本，並說明為什麼刷掉其他版本。不要替我決定哪個最好。`,
+    experiment: `我是高中生在做研究方法課的專題（實驗法）。
+
+我要操作的變項是：【貼上自變項名稱】
+受試者：【例如：20 位高一自願者，隨機分組】
+
+請幫我發散 3-5 種可能的操作化方式（具體怎麼實施這個變項——例如不同時長、不同情境、不同強度）。每一版請註明它的優點與限制。
+
+我會從中挑一個可執行的版本。不要替我決定最佳方案。`,
+    observation: `我是高中生在做研究方法課的專題（觀察法）。
+
+我要觀察的行為指標是：【貼上你想觀察的行為類型】
+觀察情境：【例如：教室內、午休時間、30 分鐘】
+
+請幫我發散 3-5 種可能的操作型定義（用具體看得到的動作描述——例如「視線離開課本連續 X 秒」）。每一版請註明它的判斷難度。
+
+我會從中挑一個最容易即時記錄的版本。不要替我決定最佳版。`,
+    literature: `我是高中生在做研究方法課的專題（文獻分析）。
+
+我要比較的分析維度是：【貼上維度名稱，例如「研究對象」「研究方法」「核心發現」】
+研究問題：【貼上你的研究問題】
+
+請幫我發散 3-5 種可能的比較矩陣欄位設計。每一版請註明它能回答研究問題的哪個面向。
+
+我會從中挑一個最貼合研究問題的版本，並說明為什麼刷掉其他版本。`,
+};
+
+/* — 組裝樣板文字 AI Prompt（每個方法各自的 boilerplate） — */
+const ASSEMBLY_AI_PROMPTS = {
+    questionnaire: `我是高中生在做研究方法課的專題（問卷法）。我的研究主題是：【貼上主題】
+
+請幫我寫以下三段樣板文字（不要碰我的題目，只寫這三段外框）：
+1. 開場白（50 字以內）：我是誰、研究目的、預計填答時間、保密承諾、隨時可退出
+2. 基本資料區說明（30 字以內）：請告訴受訪者為什麼要填基本資料
+3. 結尾致謝（30 字以內）：謝謝填寫、聯絡方式
+
+產出後我會自己改語氣。不要替我決定措辭。`,
+    interview: `我是高中生在做研究方法課的專題（訪談法）。我的研究主題是：【貼上主題】
+
+請幫我寫以下三段樣板文字（不要碰我的訪談問題，只寫這三段外框）：
+1. 開場白（60 字以內）：自我介紹、錄音同意、預計時間、保密承諾
+2. 暖身問題 2 題（讓受訪者先開口，輕鬆話題即可）
+3. 收尾話術（「還有什麼想補充的嗎？」+ 致謝）
+
+產出後我會自己改語氣。`,
+    experiment: `我是高中生在做研究方法課的專題（實驗法）。我的研究主題是：【貼上主題】
+
+請幫我寫以下兩段樣板文字（不要碰我的實驗流程，只寫這兩段外框）：
+1. 知情同意聲明（80 字以內，適合高中生研究）：研究目的、實驗內容、退出權、保密
+2. 受試者指導語（60 字以內）：實驗前我要唸給受試者聽的話
+
+產出後我會自己改。`,
+    observation: `我是高中生在做研究方法課的專題（觀察法）。我的研究主題是：【貼上主題】
+
+請幫我寫以下兩段樣板文字（不要碰我的觀察指標，只寫這兩段外框）：
+1. 觀察倫理聲明（60 字以內）：代號保護、公開場域、不拍照、不透露個人身份
+2. 觀察紀錄表欄位說明（每個欄位一句話）：時間 / 代號 / 行為類別 / 持續時間 / 備註
+
+產出後我會自己改。`,
+    literature: `我是高中生在做研究方法課的專題（文獻分析）。我的研究主題是：【貼上主題】
+
+請幫我寫以下兩段樣板文字（不要碰我的核心分析，只寫這兩段外框）：
+1. 搜尋策略說明（60 字以內）：資料庫、關鍵字邏輯、年份範圍
+2. 納入／排除標準列表（每條一句話，共 3-4 條）
+
+產出後我會自己改。`,
+};
+
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1 */
     { key: 'w9-xcase-diagnosis', label: '壞題診斷練習', question: '你在 X 型病例中找到了什麼問題？' },
     /* Step 3 */
     { key: 'w9-my-method', label: '我的分流方法' },
+    { key: 'w9-variable-ai-record', label: 'AI 變項發散判斷紀錄', question: '有用 AI 發散題目才要填：選了哪個版本、刷掉哪個、為什麼' },
     { key: 'w9-three-col-q1', label: '三欄對應表：變項/層面 1', question: '聚焦題目→變項→題目設計' },
     { key: 'w9-three-col-q2', label: '三欄對應表：變項/層面 2', question: '聚焦題目→變項→題目設計' },
     { key: 'w9-three-col-q3', label: '三欄對應表：變項/層面 3', question: '聚焦題目→變項→題目設計' },
@@ -337,6 +425,8 @@ const EXPORT_FIELDS = [
     { key: 'w9-received-feedback', label: '我收到的回饋', question: '別組醫師給我們的處方是什麼？' },
     /* Step 5 */
     { key: 'w9-revision-plan', label: '修改決定', question: '根據回饋，我們最大的修改方向是什麼？' },
+    { key: 'w9-assembly-ai-record', label: 'AI 組裝樣板判斷紀錄', question: '有用 AI 生樣板文字才要填：改了哪裡、為什麼' },
+    { key: 'w9-homework-commitment', label: '組裝作業時間承諾', question: '我打算什麼時候動手組裝？' },
     { key: 'w9-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
@@ -670,6 +760,18 @@ export const W9Page = () => {
                                 <p className="mt-3 text-[11px] text-[#92400E]/70 font-mono">{currentScaffold.tips}</p>
                             </div>
 
+                            {/* AI 協助（可選）：從變項發散題目 */}
+                            <AIAssistToggle
+                                id="w9-variable-ai"
+                                title="卡在「題目怎麼寫」？讓 AI 幫你發散 3-5 種版本（可選）"
+                                reason="AI 給你多個版本當選項，你挑一個、刷掉其他、留下判斷理由。這是在訓練「診斷好壞題」的能力，不是讓 AI 代寫。"
+                                promptByMethod={VARIABLE_AI_PROMPTS}
+                                method={selectedMethod}
+                                recordKey="w9-variable-ai-record"
+                                recordPrompt="你從 AI 給的 3-5 種版本中選了哪個？刷掉哪個？為什麼？"
+                                recordPlaceholder="我選了第 ___ 版，因為___&#10;我刷掉第 ___ 版，因為___&#10;我把選中版本又改了：___，因為___"
+                            />
+
                             {/* 填寫區 */}
                             <ThinkRecord
                                 dataKey="w9-three-col-q1"
@@ -943,6 +1045,36 @@ export const W9Page = () => {
                                     ⚠️ 尚未選擇研究方法，請回 Step 3 選擇後，此處會顯示你的組裝清單。
                                 </div>
                             )}
+
+                            {/* AI 協助（可選）：生成樣板文字（開場白/結尾/知情同意） */}
+                            <AIAssistToggle
+                                id="w9-assembly-ai"
+                                title="組裝時卡在寫樣板文字？讓 AI 生外框，你改核心（可選）"
+                                reason="開場白、指導語、結尾致謝、知情同意聲明——這些「外框文字」AI 寫得比你快，你只要審閱改語氣。但核心題目／行為定義／變項設計絕對要自己做。"
+                                promptByMethod={ASSEMBLY_AI_PROMPTS}
+                                method={selectedMethod}
+                                recordKey="w9-assembly-ai-record"
+                                recordPrompt="你對 AI 生出來的樣板改了哪裡？為什麼？（改越多代表你越清楚自己要什麼）"
+                                recordPlaceholder="開場白：AI 原本寫「___」，我改成「___」，因為___&#10;結尾致謝：AI 原本寫「___」，我改成「___」，因為___"
+                            />
+
+                            {/* 自我承諾：具體意圖設計（implementation intention） */}
+                            <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-3">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[14px]">⏰</span>
+                                    <span className="font-bold text-[13px] text-[var(--ink)]">時間承諾：避免拖到最後一刻</span>
+                                </div>
+                                <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                    研究心理學：寫下「什麼時候、在哪裡、做多久」，完成率比模糊計畫高 2-3 倍。不要寫「這週找時間」。
+                                </p>
+                                <ThinkRecord
+                                    dataKey="w9-homework-commitment"
+                                    prompt="我打算什麼時候動手組裝？（越具體越有效）"
+                                    placeholder="例：週三晚上 7:30-9:00，在家裡房間，先寫開場白和基本資料（20 分鐘），再把三欄對應表的題目排進模板（40 分鐘）。&#10;&#10;有隊友的記得附上「誰負責什麼」。"
+                                    scaffold={['時間：', '地點：', '分段／誰負責什麼：']}
+                                    rows={4}
+                                />
+                            </div>
 
                             <div className="bg-[var(--ink)] rounded-[6px] p-4 text-white">
                                 <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-1">W10 會做什麼</div>
