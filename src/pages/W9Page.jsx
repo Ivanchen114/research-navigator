@@ -32,39 +32,50 @@ import {
  *  資料常數
  * ══════════════════════════════════════ */
 
-/* — X 型病例：壞題示範 — */
-const BAD_EXAMPLES = [
-    {
-        id: 1,
-        text: '你同意手機會嚴重傷害睡眠嗎？ (1非常同意~4不同意)',
-        errors: ['誘導性提問'],
-        explain: '「嚴重傷害」已經預設立場，大家都會順著選同意，數據全毀。',
-        fix: '你認為手機對睡眠的影響是？(1非常正面~5非常負面)',
-    },
-    {
-        id: 2,
-        text: '你睡前滑手機多久？ (A. 0-10分鐘 B. 10-20分鐘 C. 20-30分鐘)',
-        errors: ['選項重疊', '選項不完整'],
-        explain: '10 分鐘算 A 還是 B？滑 1 小時沒得選！',
-        fix: 'A. 10分鐘以下 B. 11-30分鐘 C. 31-60分鐘 D. 超過60分鐘',
-    },
-    {
-        id: 3,
-        text: '你最近一週平均睡眠時間？ (A. 6小時 B. 7小時)',
-        errors: ['選項不完整'],
-        explain: '睡 5 小時或 8 小時的人沒得選！',
-        fix: 'A. 少於6小時 B. 6-7小時 C. 7-8小時 D. 超過8小時',
-    },
-];
-
 /* — 錯誤類型速查 — */
 const ERROR_TYPES = [
-    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', color: 'var(--danger)' },
-    { name: '選項重疊', icon: '🔄', desc: '1-3次 和 3-5次——3次算哪個？', color: '#D97706' },
-    { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', color: '#7C3AED' },
-    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', color: '#2563EB' },
-    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', color: '#059669' },
+    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', color: 'var(--danger)', scope: '共通' },
+    { name: '選項重疊', icon: '🔄', desc: '1-3次 和 3-5次——3次算哪個？', color: '#D97706', scope: '問卷' },
+    { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', color: '#7C3AED', scope: '問卷' },
+    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', color: '#2563EB', scope: '共通' },
+    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', color: '#059669', scope: '共通' },
 ];
+
+/* — 方法獨家陷阱：訪談 / 觀察 / 實驗 / 文獻（問卷已在 Step 1 示範） — */
+const METHOD_PITFALLS = {
+    interview: {
+        title: '🎤 訪談組獨家陷阱',
+        items: [
+            { name: '假設性問題', desc: '「如果……你會怎樣？」對方容易給理想答案，不是真實行為。' },
+            { name: '追問斷掉', desc: '問完主問題沒有 why / how 追問，只拿到表面答案。' },
+            { name: '過早封閉', desc: '訪談變成問卷式是/否題，浪費訪談的開放價值。' },
+        ],
+    },
+    observation: {
+        title: '👀 觀察組獨家陷阱',
+        items: [
+            { name: '指標模糊', desc: '「認真程度」要怎麼測？沒有操作化定義就無法穩定記錄。' },
+            { name: '觀察者偏誤', desc: '先入為主（覺得這組就是比較混），記錄時不自覺選擇性。' },
+            { name: '取樣時段偏誤', desc: '只看第 3 節課不能代表整天；只看週一不能代表一週。' },
+        ],
+    },
+    experiment: {
+        title: '🧪 實驗組獨家陷阱',
+        items: [
+            { name: '混淆變項', desc: '實驗組和對照組還差了別的東西（時段、教師、氣氛），不是只差你要測的那一個。' },
+            { name: '操作定義不精確', desc: '「多喝水」是幾 cc？「學習效果」是哪一份測驗？沒定義等於沒實驗。' },
+            { name: '前後測污染', desc: '前測讓受試者猜到你要測什麼，後測表現被污染。' },
+        ],
+    },
+    literature: {
+        title: '📚 文獻組獨家陷阱',
+        items: [
+            { name: '分析維度不清', desc: '「整理」到底要歸納什麼——主題、方法、結論、爭議？沒定軸就是剪貼簿。' },
+            { name: '取樣偏誤', desc: '只看 Google 前 5 篇／只看某立場的來源，結論早就被預設。' },
+            { name: '編碼不一致', desc: '同一個概念前後用不同標籤，統計起來數據錯。' },
+        ],
+    },
+};
 
 /* — 三大標準 — */
 const THREE_STANDARDS = [
@@ -411,8 +422,9 @@ const ASSEMBLY_AI_PROMPTS = {
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1 */
-    { key: 'w9-xcase-diagnosis', label: '壞題診斷練習', question: '你在 X 型病例中找到了什麼問題？' },
+    { key: 'w9-peer-diagnosis-notes', label: '組內診斷筆記', question: '組員提醒我 + 反向學習（輕量落筆）' },
     /* Step 3 */
+    { key: 'w9-self-diagnosis', label: '自我處方：W8 初稿三題診斷', question: '學了三大標準 + 錯誤類型後，回頭看 W8 自己寫的三題有什麼問題' },
     { key: 'w9-my-method', label: '我的分流方法' },
     { key: 'w9-variable-ai-record', label: 'AI 變項發散判斷紀錄', question: '有用 AI 發散題目才要填：選了哪個版本、刷掉哪個、為什麼' },
     { key: 'w9-three-col-q1', label: '三欄對應表：變項/層面 1', question: '聚焦題目→變項→題目設計' },
@@ -439,15 +451,22 @@ export const W9Page = () => {
     const [selectedMethod, setSelectedMethod] = useState('');
     const [w8Method, setW8Method] = useState('');
     const [w8Topic, setW8Topic] = useState('');
+    const [w8Drafts, setW8Drafts] = useState({ q1: '', q2: '', q3: '' });
     const [showLessonMap, setShowLessonMap] = useState(false);
 
-    /* W8 帶入方法和題目 */
+    /* W8 帶入方法、題目與 3 題初稿（前測素材） */
     useEffect(() => {
         const saved = readRecords();
         const method = saved['w8-tool-method']?.trim() || saved['w8-method-reason']?.trim() || '';
         const topic = saved['w8-merged-topic']?.trim() || saved['w8-research-question']?.trim() || '';
         if (method) setW8Method(method);
         if (topic) setW8Topic(topic);
+        /* 讀取 W8 三題初稿：學完三大標準後回頭自我診斷用 */
+        setW8Drafts({
+            q1: saved['w8-draft-q1']?.trim() || '',
+            q2: saved['w8-draft-q2']?.trim() || '',
+            q3: saved['w8-draft-q3']?.trim() || '',
+        });
 
         /* 嘗試自動偵測分流 */
         const methodLower = method.toLowerCase();
@@ -490,39 +509,34 @@ export const W9Page = () => {
                         W7 你學了 Level 1 掛號判斷（決定用什麼方法）。今天升級到 <strong className="text-[var(--ink)]">Level 2 處方判斷</strong>——工具設計得好不好？哪裡有毒？怎麼解毒？
                     </p>
 
-                    {/* X 型病例診斷 */}
+                    <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[12px] text-[#92400E] leading-relaxed max-w-[720px]">
+                        <strong>⚠️ 為什麼 Step 1 示範都是問卷？</strong><br />
+                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在 <strong>Step 3 分流時</strong>會補上。
+                    </div>
+
+                    {/* ① 老師示範：打開 RxInspector 遊戲，全班共玩 1-2 題 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
                             <Stethoscope size={16} />
-                            <span className="font-bold text-[13px]">X 型病例：這份問卷哪裡有毒？</span>
-                            <span className="ml-auto text-[10px] font-mono opacity-70">研究目的：手機使用與睡眠趨勢調查</span>
+                            <span className="font-bold text-[13px]">① 老師帶全班共玩：RxInspector 防線（2-7 分鐘）</span>
                         </div>
-                        <div className="divide-y divide-[var(--border)]">
-                            {BAD_EXAMPLES.map((ex) => (
-                                <div key={ex.id} className="p-5">
-                                    <div className="flex items-start gap-3 mb-3">
-                                        <span className="w9-bad-num">Q{ex.id}</span>
-                                        <span className="text-[14px] text-[var(--danger)] font-bold leading-relaxed">{ex.text}</span>
-                                    </div>
-                                    <div className="ml-8 space-y-2">
-                                        <div className="flex items-start gap-2">
-                                            <span className="text-[var(--danger)] text-[12px] shrink-0">❌</span>
-                                            <div>
-                                                <span className="text-[12px] font-bold text-[var(--danger)]">{ex.errors.join(' + ')}</span>
-                                                <span className="text-[12px] text-[var(--ink-mid)] ml-1">— {ex.explain}</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                            <span className="text-[var(--success)] text-[12px] shrink-0">✅</span>
-                                            <span className="text-[12px] text-[var(--success)]">{ex.fix}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="p-5 space-y-4">
+                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                老師現場打開「防線」遊戲，帶全班共同診斷 1-2 題壞題。<strong className="text-[var(--ink)]">重點不是破關，是學會用診斷語言</strong>——誘導性？選項重疊？雙重問題？先把這套「醫生用語」聽熟。
+                            </p>
+                            <Link
+                                to="/game/rx-inspector"
+                                className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded-[6px] font-bold text-[13px] hover:opacity-90 transition-opacity"
+                            >
+                                <Stethoscope size={14} />
+                                打開 RxInspector 防線遊戲
+                                <ArrowRight size={14} />
+                            </Link>
+                            <div className="text-[11px] text-[var(--ink-light)]">建議老師示範：從 X 型病例 Q1-Q2 挑一題，全班口頭診斷後再揭曉答案。</div>
                         </div>
                     </div>
 
-                    {/* 理解檢核 1 */}
+                    {/* 理解檢核 1（老師示範後做，確認大家跟上） */}
                     <ThinkChoice
                         dataKey="w9-tc1"
                         prompt={THINK_CHOICES[0].prompt}
@@ -532,27 +546,59 @@ export const W9Page = () => {
                         onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
                     />
 
-                    {/* 錯誤類型速查卡 */}
+                    {/* 錯誤類型速查卡（組內 hands-on 時隨時翻閱） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">錯誤類型速查卡 · 你的護身符</div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">錯誤類型速查卡 · 組內診斷用護身符（★=五方法共通，◆=問卷專屬）</div>
                         <div className="w9-error-grid">
                             {ERROR_TYPES.map((e, i) => (
                                 <div key={i} className="w9-error-card">
                                     <span className="text-[18px]">{e.icon}</span>
-                                    <span className="text-[13px] font-bold" style={{ color: e.color }}>{e.name}</span>
+                                    <span className="text-[13px] font-bold flex items-center gap-1" style={{ color: e.color }}>
+                                        {e.name}
+                                        <span
+                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px]"
+                                            style={{
+                                                background: e.scope === '共通' ? 'var(--ink)' : '#D97706',
+                                                color: 'white',
+                                            }}
+                                        >
+                                            {e.scope === '共通' ? '★共通' : '◆問卷'}
+                                        </span>
+                                    </span>
                                     <span className="text-[11px] text-[var(--ink-mid)] leading-relaxed">{e.desc}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* 你的診斷練習 */}
+                    {/* ② 組內實戰：把 W8 的 3 題當病人看診 + 治療 */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="text-[15px]">🩺</span>
+                            <span className="font-bold text-[13px]">② 組內看診＋治療：把 W8 的 3 題當病人（10 分鐘）</span>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                <strong className="text-[var(--ink)]">Team 組員</strong>：這不是互評，是<strong>集體手術</strong>——組內共寫的 3 題是你們的共同病人。輪流念題 → 全組指出毒點（用速查卡語言）→ <strong>當場改寫</strong>成合規版（每題 2-3 分鐘）。<br />
+                                <strong className="text-[var(--ink)]">Solo 路線</strong>：與鄰座 2-3 位同為 Solo 同學臨時組成「診斷圈」，輪念互評（題目各自獨立，這時才是真的互評）。
+                            </p>
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                <strong className="text-[var(--ink)]">Team 操作流程</strong>：念題 → 指出「這題犯了 ＿＿＿」→ 討論怎麼改 → <strong>當場覆寫</strong>到 W9 三欄對應表（Step 3 會用到）。<br />
+                                <strong className="text-[var(--ink)]">Solo 操作流程</strong>：念題 → 診斷圈挑錯 → 主人記下別人的提醒，散會後自己決定要不要改。
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ③ 組內診斷筆記（輕量落筆，為 Step 3 自我診斷鋪路） */}
                     <ThinkRecord
-                        dataKey="w9-xcase-diagnosis"
-                        prompt="動手練習：你在 X 型病例中發現了什麼？試著用錯誤類型卡的語言描述問題。"
-                        placeholder="例如：Q1 犯了「誘導性提問」，因為「嚴重傷害」已經預設了立場……"
-                        scaffold={['Q__ 犯了「___」的錯誤', '因為___', '應該改成___']}
-                        rows={4}
+                        dataKey="w9-peer-diagnosis-notes"
+                        prompt="組內診斷筆記：組員提醒 + 我的反向學習（3 點即可，輕量）"
+                        scaffold={[
+                            '組員提醒我｜第 ___ 題的問題是：___（用錯誤類型語言）',
+                            '組員提醒我｜第 ___ 題的問題是：___',
+                            '反向學習｜聽別人念題時，我學到最狠的診斷語言是：___',
+                        ]}
+                        rows={6}
                     />
                 </div>
             ),
@@ -704,6 +750,62 @@ export const W9Page = () => {
                         </div>
                     )}
 
+                    {/* ─── 自我處方：回頭看 W8 初稿（前測後測反差點） ─── */}
+                    <div className="border-t-2 border-[var(--ink)] pt-6 mt-2">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">SELF-DIAGNOSIS</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">自我處方：回頭看 W8 初稿</span>
+                        </div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[720px] mb-4">
+                            學了<strong>三大標準</strong>（有效/可靠/可行）和<strong>錯誤類型速查卡</strong>之後，先做一件事：
+                            <strong className="text-[var(--ink)]">回頭看你 W8 那三題初稿</strong>——當初還沒學這些原則時隨手寫的三題，現在看出哪裡有問題了嗎？
+                        </p>
+
+                        {/* W8 三題唯讀卡 */}
+                        {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
+                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                                <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                                    <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W8 ARCHIVE</span>
+                                    <span className="font-bold text-[13px] text-[var(--ink)]">你 W8 寫的三題初稿（唯讀）</span>
+                                </div>
+                                <div className="divide-y divide-[var(--border)]">
+                                    {[
+                                        { n: 1, text: w8Drafts.q1 },
+                                        { n: 2, text: w8Drafts.q2 },
+                                        { n: 3, text: w8Drafts.q3 },
+                                    ].map((d) => (
+                                        <div key={d.n} className="p-4 px-5 text-[13px] leading-relaxed">
+                                            <span className="font-mono font-bold text-[var(--accent)] mr-2">題 {d.n}：</span>
+                                            <span className="text-[var(--ink)] whitespace-pre-line">
+                                                {d.text || <span className="text-[var(--ink-light)] italic">（W8 這題沒寫）</span>}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="w7-notice w7-notice-gold mb-4">
+                                ⚠️ 讀不到你的 W8 三題初稿。如果你 W8 沒寫，可以跳過自我診斷、直接進入下方的三欄對應表。如果你 W8 有寫但這裡讀不到，請回 W8 確認是否已存檔。
+                            </div>
+                        )}
+
+                        <ThinkRecord
+                            dataKey="w9-self-diagnosis"
+                            prompt="用三大標準 + 錯誤類型卡自我診斷：W8 那三題哪裡有問題？"
+                            scaffold={[
+                                '題 1 的問題：違反「（有效性 / 可靠性 / 可行性）」——（具體錯誤：選項重疊 / 誘導性 / 雙重問題 / ……）',
+                                '題 2 的問題：',
+                                '題 3 的問題：',
+                                '我 W8 寫題時最常犯的錯是___，下面寫三欄表新版時要避免___',
+                            ]}
+                            rows={10}
+                        />
+
+                        <div className="w7-notice w7-notice-gold mt-4">
+                            💡 <strong>診斷完就往下走。</strong>不用重寫這三題——接下來的三欄對應表會讓你用更嚴謹的方法重新產出新題目。這裡只是讓你看見「沒方法 vs 有方法」的差別。
+                        </div>
+                    </div>
+
                     {/* 方法選擇 */}
                     <div>
                         <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">選擇你的方法</div>
@@ -719,6 +821,40 @@ export const W9Page = () => {
                             ))}
                         </div>
                     </div>
+
+                    {/* 方法獨家陷阱卡（依 selectedMethod 顯示；問卷組在 Step 1 已學） */}
+                    {selectedMethod === 'questionnaire' && (
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className="text-[15px]">📋</span>
+                                <span className="font-bold text-[13px] text-[var(--ink)]">問卷組 — 獨家陷阱已在 Step 1 示範</span>
+                            </div>
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                Step 1 錯誤類型速查卡中，「選項重疊」「選項不完整」就是問卷的專屬陷阱，加上共通的誘導性／雙重／假開放，一共 5 種——設計問卷時每題都要用這 5 支尺量。
+                            </p>
+                        </div>
+                    )}
+
+                    {METHOD_PITFALLS[selectedMethod] && (
+                        <div className="bg-white border-2 border-[var(--danger)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
+                                <AlertTriangle size={16} />
+                                <span className="font-bold text-[13px]">{METHOD_PITFALLS[selectedMethod].title}（三欄表前先看）</span>
+                                <span className="ml-auto text-[10px] font-mono opacity-80">共通陷阱請回 Step 1 速查卡</span>
+                            </div>
+                            <div className="divide-y divide-[var(--border)]">
+                                {METHOD_PITFALLS[selectedMethod].items.map((p, i) => (
+                                    <div key={i} className="p-4 px-5">
+                                        <div className="flex items-start gap-2 mb-1">
+                                            <span className="shrink-0 bg-[var(--danger)] text-white px-1.5 py-0.5 rounded-[3px] font-mono text-[10px] font-bold">PIT {i + 1}</span>
+                                            <span className="font-bold text-[13px] text-[var(--danger)]">{p.name}</span>
+                                        </div>
+                                        <p className="ml-10 text-[12px] text-[var(--ink-mid)] leading-relaxed">{p.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* 分流內容 */}
                     {currentScaffold ? (

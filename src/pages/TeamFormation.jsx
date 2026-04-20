@@ -766,13 +766,24 @@ export const TeamFormation = () => {
             content: (
                 <div className="space-y-6 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        這 3 題是你對研究工具的「第一次嘗試」——不求完美，但要認真。
-                        下週 W9，老師會用「診所模式」幫你們逐題診斷——你的草稿就是你的「掛號單」。
+                        {route === 'solo' ? (
+                            <>這 3 題是<strong>你個人</strong>對研究工具的「第一次嘗試」——不求完美，但要認真。<br />
+                            下週 W9，老師會用「診所模式」幫你們逐題診斷——你的草稿就是你的「掛號單」。</>
+                        ) : (
+                            <>這 3 題是<strong>組內共同</strong>的第一次嘗試——4 人一起攻 3 題，不是每人各寫 3 題。<br />
+                            建議流程：組內白板／便利貼腦力激盪 → 定稿 3 題 → <strong>每位組員都要複製到自己的帳號存檔</strong>（W9 診所要用）。</>
+                        )}
                     </p>
+
+                    {route === 'team' && (
+                        <div className="w7-notice w7-notice-warning">
+                            🤝 <strong>組內共寫機制</strong>：3 題是組的集體決定，每人 localStorage 各存一份。定稿後請互相確認貼對內容——W9 開課時老師會當場抽查比對。
+                        </div>
+                    )}
 
                     <ThinkRecord
                         dataKey="w8-tool-method"
-                        prompt="我們組選用的研究方法"
+                        prompt={route === 'solo' ? '我選用的研究方法' : '我們組選用的研究方法'}
                         placeholder="問卷法 / 訪談法 / 觀察法 / 實驗法 / 文獻分析"
                         rows={1}
                     />
@@ -814,28 +825,32 @@ export const TeamFormation = () => {
 
                     <ThinkRecord
                         dataKey="w8-draft-q1"
-                        prompt="草稿題目 1"
+                        prompt={route === 'solo' ? '我的草稿題目 1' : '組內共寫・草稿題目 1'}
                         placeholder="對應你的方法，寫出第一題問卷題/訪談問題/觀察指標/實驗步驟/搜尋策略"
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w8-draft-q2"
-                        prompt="草稿題目 2"
-                        placeholder="寫出你的第二題……"
+                        prompt={route === 'solo' ? '我的草稿題目 2' : '組內共寫・草稿題目 2'}
+                        placeholder="寫出第二題……"
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w8-draft-q3"
-                        prompt="草稿題目 3"
-                        placeholder="寫出你的第三題……"
+                        prompt={route === 'solo' ? '我的草稿題目 3' : '組內共寫・草稿題目 3'}
+                        placeholder="寫出第三題……"
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w8-draft-check"
-                        prompt="自我檢核：這 3 題和我們的研究問題有關係嗎？有沒有什麼覺得怪怪的地方？"
+                        prompt={
+                            route === 'solo'
+                                ? '自我檢核：這 3 題和我的研究問題有關係嗎？有沒有覺得怪怪的地方？'
+                                : '組內檢核：這 3 題和我們的研究問題有關係嗎？有沒有覺得怪怪的地方？'
+                        }
                         placeholder="我覺得第___題可能有問題，因為……"
                         rows={3}
                     />
