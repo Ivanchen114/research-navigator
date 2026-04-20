@@ -90,11 +90,20 @@ export const W4Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [choiceResults, setChoiceResults] = useState([]);
 
-    /* W2 探究意圖帶入 */
+    /* 帶入上週題目：優先 W3 最終定案（w3-final-topic），退回 W2 最終探究意圖 */
     const [w2Intent, setW2Intent] = useState('');
+    const [w2Source, setW2Source] = useState('w2'); // 'w3' | 'w2'
     useEffect(() => {
         const records = readRecords();
-        setW2Intent(records['w2-final-intent'] || '');
+        const w3Final = (records['w3-final-topic'] || '').trim();
+        const w2Final = (records['w2-final-intent'] || '').trim();
+        if (w3Final) {
+            setW2Intent(w3Final);
+            setW2Source('w3');
+        } else {
+            setW2Intent(w2Final);
+            setW2Source('w2');
+        }
     }, []);
 
     const trackChoice = useCallback((question, selected, correct) => {
@@ -145,16 +154,20 @@ export const W4Page = () => {
                     <div>
                         <div className="section-head"><h2>5W1H 規格化</h2><div className="line"></div><span className="mono">不准用 AI · 15 分鐘</span></div>
                         <p className="section-desc">
-                            拿出 W2 你的「最終探究意圖」，用 5W1H 切開它。只要有一格寫不出來或做不到，就用 W3 學的心法立刻修改！
+                            拿出你帶進來的題目（優先 W3 最終定案，沒做 W3 就用 W2 最終探究意圖），用 5W1H 再切一次。Gallery Walk 會有人挑戰你，現在多磨一刀。
                         </p>
 
                         {w2Intent && (
                             <div className="bg-[var(--accent-light)] border border-[var(--accent)]/20 rounded-lg p-4 flex items-start gap-3 mb-6">
                                 <span className="text-[16px]">📎</span>
                                 <div>
-                                    <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">W2 最終探究意圖</div>
+                                    <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">
+                                        {w2Source === 'w3' ? 'W3 最終定案題目（Part 5 Step 7）' : 'W2 最終探究意圖（你還沒做 W3 的 Part 5）'}
+                                    </div>
                                     <p className="text-[13px] text-[var(--ink)] leading-relaxed font-medium">{w2Intent}</p>
-                                    <p className="text-[11px] text-[var(--ink-light)] mt-1">把這句話切成下面的 5W1H 五格。</p>
+                                    <p className="text-[11px] text-[var(--ink-light)] mt-1">
+                                        {w2Source === 'w3' ? '用 5W1H 再切一次，看看通不通得過 Gallery Walk。' : '建議先回 W3 做完 Part 4+5 再來，這裡會順很多。'}
+                                    </p>
                                 </div>
                             </div>
                         )}

@@ -185,6 +185,16 @@ const PrepStatusCheck = ({ methodId }) => {
     });
     const template = TEMPLATES[methodId];
 
+    /* 第零層檢測：有沒有做過 W9？三欄表或方法選擇全空 = 沒來上課 */
+    const w9SkippedEntirely = (() => {
+        try {
+            const saved = readRecords();
+            const anyThreeCol = (saved['w9-three-col-q1']?.trim() || saved['w9-three-col-q2']?.trim() || saved['w9-three-col-q3']?.trim());
+            const anyMethod = saved['w9-my-method']?.trim();
+            return !anyThreeCol && !anyMethod;
+        } catch { return false; }
+    })();
+
     const select = (s) => {
         setStatus(s);
         try { localStorage.setItem('w10-prep-status', s); } catch {}
@@ -193,6 +203,37 @@ const PrepStatusCheck = ({ methodId }) => {
         setStatus(null);
         try { localStorage.removeItem('w10-prep-status'); } catch {}
     };
+
+    /* 零層閘門：連 W9 都沒做 → 擋下 */
+    if (w9SkippedEntirely) {
+        return (
+            <div className="bg-[var(--danger-light)] border-2 border-[var(--danger)] rounded-[var(--radius-unified)] overflow-hidden">
+                <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
+                    <span className="text-[14px]">🚫</span>
+                    <span className="font-bold text-[13px]">偵測到你沒做 W9</span>
+                </div>
+                <div className="p-5 space-y-3 text-[13px] text-[var(--ink)]">
+                    <p className="leading-relaxed">
+                        W10 的 AI 審稿需要一份<strong>有結構的工具草稿</strong>當素材。W9 的三欄對應表是這份草稿的骨架——直接跳進 W10 沒有素材可審。
+                    </p>
+                    <p className="leading-relaxed">
+                        硬要在 W10 補做 W9 的量 = 同時跑兩週份的思考，效率最差。請先回 W9 至少把 Step 3（三欄對應表）做完再回來。
+                    </p>
+                    <div className="flex flex-col md:flex-row gap-2 pt-1">
+                        <a
+                            href="/w9"
+                            className="flex items-center justify-center gap-2 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 no-underline transition-colors text-[13px] font-bold"
+                        >
+                            回 W9 工具設計基礎 →
+                        </a>
+                    </div>
+                    <p className="text-[11px] text-[var(--ink-mid)] bg-white border border-[var(--border)] rounded-[4px] p-2 leading-relaxed">
+                        💡 <strong className="text-[var(--ink)]">如果你有做 W9 但資料不見了</strong>（換裝置、清過瀏覽器快取），請回 W9 重填最基本的 Step 3 變項 / 題目（10-15 分鐘），W10 才能繼續。
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
