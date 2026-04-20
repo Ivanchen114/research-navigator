@@ -32,13 +32,13 @@ import {
  *  資料常數
  * ══════════════════════════════════════ */
 
-/* — 錯誤類型速查 — */
+/* — 錯誤類型速查（含徵狀 desc + 怎麼改 fix） — */
 const ERROR_TYPES = [
-    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', color: 'var(--danger)', scope: '共通' },
-    { name: '選項重疊', icon: '🔄', desc: '1-3次 和 3-5次——3次算哪個？', color: '#D97706', scope: '問卷' },
-    { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', color: '#7C3AED', scope: '問卷' },
-    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', color: '#2563EB', scope: '共通' },
-    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', color: '#059669', scope: '共通' },
+    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', fix: '改成中性語彙：「你覺得 X 對 Y 的影響是？」搭配雙向量表', color: 'var(--danger)', scope: '共通' },
+    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', fix: '拆成兩題，一題問一件事', color: '#2563EB', scope: '共通' },
+    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', fix: '改成真正開放或完全中性，不提示立場', color: '#059669', scope: '共通' },
+    { name: '選項重疊', icon: '🔄', desc: '1-3次 和 3-5次——3次算哪個？', fix: '邊界清楚不重疊：0、1-2、3-4、5 次以上', color: '#D97706', scope: '問卷' },
+    { name: '選項不完整', icon: '❓', desc: '受訪者找不到自己的答案', fix: '加「其他：___」或把範圍補完整（覆蓋所有可能）', color: '#7C3AED', scope: '問卷' },
 ];
 
 /* — 方法獨家陷阱：訪談 / 觀察 / 實驗 / 文獻（問卷已在 Step 1 示範） — */
@@ -421,21 +421,21 @@ const ASSEMBLY_AI_PROMPTS = {
 
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    /* Step 1 */
+    /* Step 3：組內看診 W8 三題 */
     { key: 'w9-peer-diagnosis-notes', label: '組內診斷筆記', question: '組員提醒我 + 反向學習（輕量落筆）' },
-    /* Step 3 */
-    { key: 'w9-self-diagnosis', label: '自我處方：W8 初稿三題診斷', question: '學了三大標準 + 錯誤類型後，回頭看 W8 自己寫的三題有什麼問題' },
+    { key: 'w9-self-diagnosis', label: '書面處方：W8 初稿三題診斷', question: '對照 Step 2 兩把尺，W8 三題哪裡有問題' },
+    /* Step 4：分流工作坊 — 三欄對應表 */
     { key: 'w9-my-method', label: '我的分流方法' },
     { key: 'w9-variable-ai-record', label: 'AI 變項發散判斷紀錄', question: '有用 AI 發散題目才要填：選了哪個版本、刷掉哪個、為什麼' },
     { key: 'w9-three-col-q1', label: '三欄對應表：變項/層面 1', question: '聚焦題目→變項→題目設計' },
     { key: 'w9-three-col-q2', label: '三欄對應表：變項/層面 2', question: '聚焦題目→變項→題目設計' },
     { key: 'w9-three-col-q3', label: '三欄對應表：變項/層面 3', question: '聚焦題目→變項→題目設計' },
     { key: 'w9-basic-info-check', label: '基本資料 / 知情同意 / 結構確認' },
-    /* Step 4 */
+    /* Step 5：同儕處方診斷 */
     { key: 'w9-peer-from', label: '我診斷了哪一組' },
     { key: 'w9-peer-diagnosis', label: '同儕處方診斷紀錄', question: '在對方的工具初稿中發現什麼問題？' },
     { key: 'w9-received-feedback', label: '我收到的回饋', question: '別組醫師給我們的處方是什麼？' },
-    /* Step 5 */
+    /* Step 6：回顧與繳交 */
     { key: 'w9-revision-plan', label: '修改決定', question: '根據回饋，我們最大的修改方向是什麼？' },
     { key: 'w9-assembly-ai-record', label: 'AI 組裝樣板判斷紀錄', question: '有用 AI 生樣板文字才要填：改了哪裡、為什麼' },
     { key: 'w9-homework-commitment', label: '組裝作業時間承諾', question: '我打算什麼時候動手組裝？' },
@@ -511,7 +511,7 @@ export const W9Page = () => {
 
                     <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[12px] text-[#92400E] leading-relaxed max-w-[720px]">
                         <strong>⚠️ 為什麼 Step 1 示範都是問卷？</strong><br />
-                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在 <strong>Step 3 分流時</strong>會補上。
+                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在 <strong>Step 4 分流時</strong>會補上。
                     </div>
 
                     {/* ① 老師示範：打開 RxInspector 遊戲，全班共玩 1-2 題 */}
@@ -546,86 +546,108 @@ export const W9Page = () => {
                         onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
                     />
 
-                    {/* 錯誤類型速查卡（組內 hands-on 時隨時翻閱） */}
+                    {/* 前往下一步：診斷工具包 */}
+                    <div className="w7-notice w7-notice-gold">
+                        ➡️ 老師示範完，先到 <strong>Step 2 診斷工具包</strong>——把「診斷用的尺」看清楚，再到 Step 3 拿自己的 W8 三題來練。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 2：診斷工具包（新建，響應式表格） ─── */
+        {
+            title: '診斷工具包',
+            icon: '🧰',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——兩把尺：<strong>三大標準</strong>（設計原則）+ <strong>五種錯誤類型</strong>（常見陷阱）。Step 3 看診、Step 4 做三欄表、Step 5 同儕互評，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
+                    </p>
+
+                    {/* 尺 1 · 三大標準 — 手機 1 欄 / 桌機 3 欄 */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">錯誤類型速查卡 · 組內診斷用護身符（★=五方法共通，◆=問卷專屬）</div>
-                        <div className="w9-error-grid">
-                            {ERROR_TYPES.map((e, i) => (
-                                <div key={i} className="w9-error-card">
-                                    <span className="text-[18px]">{e.icon}</span>
-                                    <span className="text-[13px] font-bold flex items-center gap-1" style={{ color: e.color }}>
-                                        {e.name}
-                                        <span
-                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px]"
-                                            style={{
-                                                background: e.scope === '共通' ? 'var(--ink)' : '#D97706',
-                                                color: 'white',
-                                            }}
-                                        >
-                                            {e.scope === '共通' ? '★共通' : '◆問卷'}
-                                        </span>
-                                    </span>
-                                    <span className="text-[11px] text-[var(--ink-mid)] leading-relaxed">{e.desc}</span>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 1 · 好工具三大標準（每題都要過這三關）</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            {THREE_STANDARDS.map((s, i) => (
+                                <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-4">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-[20px]">{s.emoji}</span>
+                                        <div>
+                                            <div className="text-[14px] font-bold text-[var(--ink)] leading-tight">{s.name}</div>
+                                            <div className="text-[10px] font-mono text-[var(--ink-light)]">{s.en}</div>
+                                        </div>
+                                    </div>
+                                    <div className="text-[12px] text-[var(--ink-mid)] mb-2 leading-relaxed">{s.desc}</div>
+                                    <div className="text-[12px] text-[var(--danger)] mb-1 leading-relaxed">❌ {s.bad}</div>
+                                    <div className="text-[12px] text-[var(--success)] leading-relaxed">✅ {s.good}</div>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* ② 組內實戰：把 W8 的 3 題當病人看診 + 治療 */}
-                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[15px]">🩺</span>
-                            <span className="font-bold text-[13px]">② 組內看診＋治療：把 W8 的 3 題當病人（10 分鐘）</span>
-                        </div>
-                        <div className="p-5 space-y-4">
-                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">Team 組員</strong>：這不是互評，是<strong>集體手術</strong>——組內共寫的 3 題是你們的共同病人。輪流念題 → 全組指出毒點（用速查卡語言）→ <strong>當場改寫</strong>成合規版（每題 2-3 分鐘）。<br />
-                                <strong className="text-[var(--ink)]">Solo 路線</strong>：與鄰座 2-3 位同為 Solo 同學臨時組成「診斷圈」，輪念互評（題目各自獨立，這時才是真的互評）。
-                            </p>
-                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">Team 操作流程</strong>：念題 → 指出「這題犯了 ＿＿＿」→ 討論怎麼改 → <strong>當場覆寫</strong>到 W9 三欄對應表（Step 3 會用到）。<br />
-                                <strong className="text-[var(--ink)]">Solo 操作流程</strong>：念題 → 診斷圈挑錯 → 主人記下別人的提醒，散會後自己決定要不要改。
+                    {/* 尺 2 · 五錯誤類型 — 手機卡片 / 桌機 table */}
+                    <div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 2 · 五種錯誤類型（★共通，◆問卷專屬）</div>
+
+                        {/* 桌機：table 版 */}
+                        <div className="hidden md:block bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="grid grid-cols-[1.2fr_0.6fr_2fr_2fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                                <div className="px-4 py-2.5">類型</div>
+                                <div className="px-4 py-2.5">適用</div>
+                                <div className="px-4 py-2.5 border-l border-[var(--border)]">徵狀（長這樣是病）</div>
+                                <div className="px-4 py-2.5 border-l border-[var(--border)]">怎麼改</div>
                             </div>
+                            {ERROR_TYPES.map((e, i) => (
+                                <div key={i} className="grid grid-cols-[1.2fr_0.6fr_2fr_2fr] border-b border-[var(--border)] last:border-b-0 text-[12px]">
+                                    <div className="px-4 py-3 flex items-center gap-2">
+                                        <span className="text-[16px]">{e.icon}</span>
+                                        <span className="font-bold" style={{ color: e.color }}>{e.name}</span>
+                                    </div>
+                                    <div className="px-4 py-3 flex items-center">
+                                        <span
+                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px]"
+                                            style={{ background: e.scope === '共通' ? 'var(--ink)' : '#D97706', color: 'white' }}
+                                        >
+                                            {e.scope === '共通' ? '★共通' : '◆問卷'}
+                                        </span>
+                                    </div>
+                                    <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
+                                    <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--success)] leading-relaxed">{e.fix}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* 手機：卡片堆疊版 */}
+                        <div className="md:hidden space-y-3">
+                            {ERROR_TYPES.map((e, i) => (
+                                <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                    <div className="px-4 py-3 border-b border-[var(--border)] flex items-center gap-2">
+                                        <span className="text-[18px]">{e.icon}</span>
+                                        <span className="text-[14px] font-bold flex-1" style={{ color: e.color }}>{e.name}</span>
+                                        <span
+                                            className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px]"
+                                            style={{ background: e.scope === '共通' ? 'var(--ink)' : '#D97706', color: 'white' }}
+                                        >
+                                            {e.scope === '共通' ? '★共通' : '◆問卷'}
+                                        </span>
+                                    </div>
+                                    <div className="p-4 space-y-2 text-[12px]">
+                                        <div>
+                                            <div className="text-[10px] font-mono font-bold text-[var(--ink-light)] mb-0.5">徵狀</div>
+                                            <div className="text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-[10px] font-mono font-bold text-[var(--success)] mb-0.5">怎麼改</div>
+                                            <div className="text-[var(--success)] leading-relaxed">{e.fix}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* ③ 組內診斷筆記（輕量落筆，為 Step 3 自我診斷鋪路） */}
-                    <ThinkRecord
-                        dataKey="w9-peer-diagnosis-notes"
-                        prompt="組內診斷筆記：組員提醒 + 我的反向學習（3 點即可，輕量）"
-                        scaffold={[
-                            '組員提醒我｜第 ___ 題的問題是：___（用錯誤類型語言）',
-                            '組員提醒我｜第 ___ 題的問題是：___',
-                            '反向學習｜聽別人念題時，我學到最狠的診斷語言是：___',
-                        ]}
-                        rows={6}
-                    />
-                </div>
-            ),
-        },
-
-        /* ─── Step 2：好工具三大標準 ─── */
-        {
-            title: '好工具三大標準',
-            icon: '🎯',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        除了避開錯誤，好的研究工具還要符合三大標準。等一下設計自己的工具時，每一題都要通過這三關檢驗。
-                    </p>
-
-                    {/* 三大標準 */}
-                    <div className="w9-standards-grid">
-                        {THREE_STANDARDS.map((s, i) => (
-                            <div key={i} className="w9-std-card">
-                                <div className="text-[20px] mb-2">{s.emoji}</div>
-                                <div className="text-[14px] font-bold text-[var(--ink)] mb-0.5">{s.name}</div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] mb-3">{s.en}</div>
-                                <div className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed">{s.desc}</div>
-                                <div className="text-[12px] text-[var(--danger)] mb-1.5 leading-relaxed">❌ {s.bad}</div>
-                                <div className="text-[12px] text-[var(--success)] leading-relaxed">✅ {s.good}</div>
-                            </div>
-                        ))}
+                    <div className="w7-notice w7-notice-gold">
+                        🎤 訪談 / 👀 觀察 / 🧪 實驗 / 📚 文獻組的<strong>方法獨家陷阱</strong>會在 <strong>Step 4 分流時</strong>補上——這一頁先掌握共通 + 問卷那 8 把尺（3 標準 + 5 錯誤）。
                     </div>
 
                     {/* 理解檢核：可靠性 */}
@@ -652,7 +674,7 @@ export const W9Page = () => {
                     <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6 text-white">
                         <div className="flex items-center gap-2 mb-3">
                             <AlertTriangle size={16} className="text-[var(--gold)]" />
-                            <span className="font-bold text-[14px]">分流準備：第二節開始依方法分組</span>
+                            <span className="font-bold text-[14px]">分流準備：Step 4 開始依方法分組</span>
                         </div>
                         <p className="text-[13px] text-[rgba(255,255,255,0.7)] leading-relaxed mb-4">
                             依照 W8 決定的方法分流。問卷組坐前半部，訪談組坐後半部，其他組坐側邊。帶著你們的企劃書，準備動手設計！
@@ -667,7 +689,107 @@ export const W9Page = () => {
             ),
         },
 
-        /* ─── Step 3：分流工作坊 — 三欄對應表 ─── */
+        /* ─── Step 3：組內看診 W8 三題（合併口頭看診 + 書面處方） ─── */
+        {
+            title: '組內看診 W8 三題',
+            icon: '🔍',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        把 Step 2 的尺拿出來，對<strong>你們組（或你）</strong>的 W8 三題做<strong className="text-[var(--ink)]">看診 + 治療</strong>。這一步是<strong>口頭討論 → 書面處方</strong>，為 Step 4 的三欄對應表鋪路。忘記尺 → 點回 Step 2。
+                    </p>
+
+                    {/* ① 組內看診實戰 */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="text-[15px]">🩺</span>
+                            <span className="font-bold text-[13px]">① 組內看診＋治療：把 W8 的 3 題當病人（10 分鐘）</span>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                <strong className="text-[var(--ink)]">Team 組員</strong>：這不是互評，是<strong>集體手術</strong>——組內共寫的 3 題是你們的共同病人。輪流念題 → 全組用 Step 2 尺挑毒點 → <strong>當場討論怎麼改</strong>（每題 2-3 分鐘）。<br />
+                                <strong className="text-[var(--ink)]">Solo 路線</strong>：與鄰座 2-3 位同為 Solo 同學臨時組成「診斷圈」，輪念互評（題目各自獨立，這時才是真的互評）。
+                            </p>
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                <strong className="text-[var(--ink)]">Team 操作流程</strong>：念題 → 指出「這題犯了 ＿＿＿」→ 討論怎麼改 → 把共識寫到下方 ③ 書面處方。<br />
+                                <strong className="text-[var(--ink)]">Solo 操作流程</strong>：念題 → 診斷圈挑錯 → 自己記下別人的提醒 + 自己的書面處方。
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ② 組員提醒筆記（輕量落筆） */}
+                    <ThinkRecord
+                        dataKey="w9-peer-diagnosis-notes"
+                        prompt="② 組員提醒筆記：組內看診時別人抓到的問題（3 點即可，輕量）"
+                        scaffold={[
+                            '組員提醒我｜第 ___ 題的問題是：___（用 Step 2 錯誤類型語言）',
+                            '組員提醒我｜第 ___ 題的問題是：___',
+                            '反向學習｜聽別人念題時，我學到最狠的診斷語言是：___',
+                        ]}
+                        rows={6}
+                    />
+
+                    {/* ③ W8 三題唯讀卡 + 書面處方 */}
+                    <div className="border-t-2 border-[var(--ink)] pt-6 mt-2">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">RX</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">
+                                ③ 書面處方：對照 Step 2 兩把尺正式落筆（Team = 組內共識 / Solo = 自我診斷）
+                            </span>
+                        </div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[720px] mb-4">
+                            口頭看診完了，現在書面落筆。這份處方是 Step 4 三欄對應表的<strong>起點</strong>——寫清楚哪裡爛，下一步才知道怎麼重建。
+                        </p>
+
+                        {/* W8 三題唯讀卡 */}
+                        {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
+                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                                <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                                    <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W8 ARCHIVE</span>
+                                    <span className="font-bold text-[13px] text-[var(--ink)]">W8 寫的三題初稿（唯讀）</span>
+                                </div>
+                                <div className="divide-y divide-[var(--border)]">
+                                    {[
+                                        { n: 1, text: w8Drafts.q1 },
+                                        { n: 2, text: w8Drafts.q2 },
+                                        { n: 3, text: w8Drafts.q3 },
+                                    ].map((d) => (
+                                        <div key={d.n} className="p-4 px-5 text-[13px] leading-relaxed">
+                                            <span className="font-mono font-bold text-[var(--accent)] mr-2">題 {d.n}：</span>
+                                            <span className="text-[var(--ink)] whitespace-pre-line">
+                                                {d.text || <span className="text-[var(--ink-light)] italic">（W8 這題沒寫）</span>}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="w7-notice w7-notice-gold mb-4">
+                                ⚠️ 讀不到你的 W8 三題初稿。如果 W8 沒寫，可以跳過書面處方、直接到 Step 4。如果 W8 有寫但這裡讀不到，請回 W8 確認是否已存檔。
+                            </div>
+                        )}
+
+                        <ThinkRecord
+                            dataKey="w9-self-diagnosis"
+                            prompt="書面處方：對照 Step 2 兩把尺——W8 那三題哪裡有問題？"
+                            scaffold={[
+                                '題 1 的問題：違反「（有效性 / 可靠性 / 可行性）」——具體錯誤：___（用 Step 2 五錯誤類型語言）',
+                                '題 2 的問題：',
+                                '題 3 的問題：',
+                                '我（我們組）W8 寫題時最常犯的錯是___，Step 4 寫新版時要避免___',
+                            ]}
+                            rows={10}
+                        />
+
+                        <div className="w7-notice w7-notice-gold mt-4">
+                            💡 <strong>處方寫完就往 Step 4。</strong>不用重寫這三題——接下來的三欄對應表會用更嚴謹的方法重新產出新題目。這裡只是讓你看見「沒方法 vs 有方法」的差別。
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 4：分流工作坊 — 三欄對應表 ─── */
         {
             title: '三欄對應表實作',
             icon: '🔧',
@@ -750,62 +872,6 @@ export const W9Page = () => {
                         </div>
                     )}
 
-                    {/* ─── 自我處方：回頭看 W8 初稿（前測後測反差點） ─── */}
-                    <div className="border-t-2 border-[var(--ink)] pt-6 mt-2">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">SELF-DIAGNOSIS</span>
-                            <span className="font-bold text-[13px] text-[var(--ink)]">自我處方：回頭看 W8 初稿</span>
-                        </div>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[720px] mb-4">
-                            學了<strong>三大標準</strong>（有效/可靠/可行）和<strong>錯誤類型速查卡</strong>之後，先做一件事：
-                            <strong className="text-[var(--ink)]">回頭看你 W8 那三題初稿</strong>——當初還沒學這些原則時隨手寫的三題，現在看出哪裡有問題了嗎？
-                        </p>
-
-                        {/* W8 三題唯讀卡 */}
-                        {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
-                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
-                                <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                                    <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W8 ARCHIVE</span>
-                                    <span className="font-bold text-[13px] text-[var(--ink)]">你 W8 寫的三題初稿（唯讀）</span>
-                                </div>
-                                <div className="divide-y divide-[var(--border)]">
-                                    {[
-                                        { n: 1, text: w8Drafts.q1 },
-                                        { n: 2, text: w8Drafts.q2 },
-                                        { n: 3, text: w8Drafts.q3 },
-                                    ].map((d) => (
-                                        <div key={d.n} className="p-4 px-5 text-[13px] leading-relaxed">
-                                            <span className="font-mono font-bold text-[var(--accent)] mr-2">題 {d.n}：</span>
-                                            <span className="text-[var(--ink)] whitespace-pre-line">
-                                                {d.text || <span className="text-[var(--ink-light)] italic">（W8 這題沒寫）</span>}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="w7-notice w7-notice-gold mb-4">
-                                ⚠️ 讀不到你的 W8 三題初稿。如果你 W8 沒寫，可以跳過自我診斷、直接進入下方的三欄對應表。如果你 W8 有寫但這裡讀不到，請回 W8 確認是否已存檔。
-                            </div>
-                        )}
-
-                        <ThinkRecord
-                            dataKey="w9-self-diagnosis"
-                            prompt="用三大標準 + 錯誤類型卡自我診斷：W8 那三題哪裡有問題？"
-                            scaffold={[
-                                '題 1 的問題：違反「（有效性 / 可靠性 / 可行性）」——（具體錯誤：選項重疊 / 誘導性 / 雙重問題 / ……）',
-                                '題 2 的問題：',
-                                '題 3 的問題：',
-                                '我 W8 寫題時最常犯的錯是___，下面寫三欄表新版時要避免___',
-                            ]}
-                            rows={10}
-                        />
-
-                        <div className="w7-notice w7-notice-gold mt-4">
-                            💡 <strong>診斷完就往下走。</strong>不用重寫這三題——接下來的三欄對應表會讓你用更嚴謹的方法重新產出新題目。這裡只是讓你看見「沒方法 vs 有方法」的差別。
-                        </div>
-                    </div>
-
                     {/* 方法選擇 */}
                     <div>
                         <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">選擇你的方法</div>
@@ -822,15 +888,15 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 方法獨家陷阱卡（依 selectedMethod 顯示；問卷組在 Step 1 已學） */}
+                    {/* 方法獨家陷阱卡（依 selectedMethod 顯示；問卷組在 Step 2 工具包已學） */}
                     {selectedMethod === 'questionnaire' && (
                         <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
                             <div className="flex items-center gap-2 mb-2">
                                 <span className="text-[15px]">📋</span>
-                                <span className="font-bold text-[13px] text-[var(--ink)]">問卷組 — 獨家陷阱已在 Step 1 示範</span>
+                                <span className="font-bold text-[13px] text-[var(--ink)]">問卷組 — 獨家陷阱已在 Step 2 工具包</span>
                             </div>
                             <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                Step 1 錯誤類型速查卡中，「選項重疊」「選項不完整」就是問卷的專屬陷阱，加上共通的誘導性／雙重／假開放，一共 5 種——設計問卷時每題都要用這 5 支尺量。
+                                Step 2 五錯誤類型表中，「選項重疊」「選項不完整」就是問卷的專屬陷阱，加上共通的誘導性／雙重／假開放，一共 5 種——設計問卷時每題都要用這 5 支尺量。
                             </p>
                         </div>
                     )}
@@ -840,7 +906,7 @@ export const W9Page = () => {
                             <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
                                 <AlertTriangle size={16} />
                                 <span className="font-bold text-[13px]">{METHOD_PITFALLS[selectedMethod].title}（三欄表前先看）</span>
-                                <span className="ml-auto text-[10px] font-mono opacity-80">共通陷阱請回 Step 1 速查卡</span>
+                                <span className="ml-auto text-[10px] font-mono opacity-80">共通陷阱請回 Step 2 工具包</span>
                             </div>
                             <div className="divide-y divide-[var(--border)]">
                                 {METHOD_PITFALLS[selectedMethod].items.map((p, i) => (
@@ -970,7 +1036,7 @@ export const W9Page = () => {
             ),
         },
 
-        /* ─── Step 4：同儕處方診斷 ─── */
+        /* ─── Step 5：同儕處方診斷 ─── */
         {
             title: '同儕處方診斷',
             icon: '💊',
@@ -993,11 +1059,11 @@ export const W9Page = () => {
                             </div>
                             <div className="flex items-start gap-3">
                                 <span className="w9-step-num">2</span>
-                                <span>拿出<strong className="text-[var(--ink)]">錯誤類型速查卡</strong>，逐題對照：選項重疊？誘導性？雙重問題？</span>
+                                <span>點回 <strong className="text-[var(--ink)]">Step 2 診斷工具包</strong>，用<strong>五錯誤類型</strong>逐題對照：選項重疊？誘導性？雙重問題？</span>
                             </div>
                             <div className="flex items-start gap-3">
                                 <span className="w9-step-num">3</span>
-                                <span>用三大標準檢查：<strong className="text-[var(--ink)]">有效嗎？可靠嗎？可行嗎？</strong></span>
+                                <span>再用 Step 2 的<strong>三大標準</strong>檢查：<strong className="text-[var(--ink)]">有效嗎？可靠嗎？可行嗎？</strong></span>
                             </div>
                             <div className="flex items-start gap-3">
                                 <span className="w9-step-num">4</span>
@@ -1039,7 +1105,7 @@ export const W9Page = () => {
             ),
         },
 
-        /* ─── Step 5：回顧與繳交 ─── */
+        /* ─── Step 6：回顧與繳交 ─── */
         {
             title: '回顧與繳交',
             icon: '📋',
@@ -1178,7 +1244,7 @@ export const W9Page = () => {
                                 })()
                             ) : (
                                 <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 text-center text-[13px] text-[var(--ink-mid)]">
-                                    ⚠️ 尚未選擇研究方法，請回 Step 3 選擇後，此處會顯示你的組裝清單。
+                                    ⚠️ 尚未選擇研究方法，請回 Step 4 選擇後，此處會顯示你的組裝清單。
                                 </div>
                             )}
 
@@ -1257,8 +1323,8 @@ export const W9Page = () => {
                 accentTitle="工具設計基礎與處方診斷"
                 subtitle="帶著 W8 的 3 題草稿走進診所。今天學會用處方診斷抓出設計缺陷，掌握好工具的三大標準，再用三欄對應表把研究問題轉換為完整的工具初稿。"
                 meta={[
-                    { label: '第一節', value: '處方診斷 + 三大標準 + 分流準備' },
-                    { label: '第二節', value: '三欄對應表實作 + 同儕診斷' },
+                    { label: '第一節', value: '處方熱身 + 診斷工具包 + 組內看診' },
+                    { label: '第二節', value: '三欄對應表 + 同儕診斷 + 繳交' },
                     { label: '課堂產出', value: '三欄對應表 + 工具初稿' },
                     { label: '前置要求', value: 'W8 企劃書 + 3 題草稿' },
                 ]}
