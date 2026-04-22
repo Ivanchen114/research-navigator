@@ -55,22 +55,100 @@ const PROMPT_COMPARISONS = [
     scenario: '情境：我想研究「高中生睡眠」',
     bad: '幫我看看我想研究高中生睡眠這個題目怎麼樣？',
     badWhy: '沒角色、沒具體問題、沒提想怎麼做——AI 只會給你「建議多參考文獻」這種廢話。',
+    badOutput: `高中生睡眠是一個很有意義的研究題目！以下是一些建議：
+
+1. 建議你多參考相關文獻，了解前人的研究成果。
+2. 可以從睡眠時長、品質、習慣等面向切入。
+3. 確定你的研究方法（如問卷、訪談或實驗）。
+4. 注意樣本的代表性。
+5. 分析時要保持客觀，避免過度推論。
+
+祝你研究順利！如有需要，歡迎進一步討論。`,
     good: '你是一位量化研究專家。我想研究「高中生睡眠時間與段考成績的關係」，打算用問卷法收集 120 位學生的資料。請評估：(1) 這個題目的可執行性；(2) 問卷可能遇到的變因失控風險；(3) 建議的樣本抽樣方式。',
-    goodWhy: '角色 + 具體題目 + 方法 + 明確要 AI 做什麼（三個編號任務）。AI 會給結構化、可用的回答。'
+    goodWhy: '角色 + 具體題目 + 方法 + 明確要 AI 做什麼（三個編號任務）。AI 會給結構化、可用的回答。',
+    goodOutput: `## (1) 可執行性評估
+✅ 可執行，但需要先釐清三個定義：
+・「睡眠時間」：平日還是平日+假日平均？計入午睡嗎？
+・「段考成績」：哪一次、哪些科目？原始分數或 PR 值？
+・120 份可做相關分析，但不足以做多變量迴歸。
+
+## (2) 變因失控風險（高到低）
+| 變因      | 風險 | 處理建議              |
+|-----------|------|-----------------------|
+| 讀書時間  | 🔴 高 | 列為控制變項同步測量 |
+| 家庭經濟  | 🟡 中 | 做背景變項詢問        |
+| 社團/打工 | 🟡 中 | 測「每週課外活動時數」|
+| 學習能力  | 🟢 低 | 以過往平均成績代理    |
+
+## (3) 抽樣建議
+採「分層隨機抽樣」：高一/高二/高三各 40 人。
+避免全部取樣高三，以免升學壓力成為未測量的混淆變項。`
   },
   {
     scenario: '情境：請 AI 幫忙看訪談逐字稿',
     bad: '這是我的訪談稿，幫我分析。',
     badWhy: '沒說要分析什麼、沒說用什麼角度、沒說輸出格式——AI 會隨便給個摘要。',
+    badOutput: `根據您提供的訪談內容，可以看出以下幾個重點：
+
+1. 受訪者對該議題有不同的看法
+2. 大家都提到了時間管理的重要性
+3. 心理壓力是共同關注的議題
+4. 建議可以進一步探討背後的原因
+
+希望這個分析對您有幫助。如需更詳細的分析，請提供更多細節或具體問題。`,
     good: '你是一位質性研究專家。以下是我訪問 3 位學生關於手機成癮的逐字稿。請：(1) 用開放編碼方式標出重複出現的主題（至少 5 個）；(2) 指出哪些回答可能有「社會期待偏誤」；(3) 建議我下一輪訪談該補問什麼問題。輸出用表格。',
-    goodWhy: '明確動詞（編碼、標出、建議）+ 數量（至少 5 個）+ 格式（表格）。限制越清楚，AI 越難打混。'
+    goodWhy: '明確動詞（編碼、標出、建議）+ 數量（至少 5 個）+ 格式（表格）。限制越清楚，AI 越難打混。',
+    goodOutput: `## (1) 開放編碼主題（共 6 個重複主題）
+
+| 主題             | 頻次 | 代表引文                     |
+|------------------|------|------------------------------|
+| 睡前無法放下手機 | 3/3  | 「明明想睡還是忍不住滑」     |
+| 社交比較焦慮     | 2/3  | 「看到別人發文覺得自己無聊」 |
+| 逃避現實壓力     | 3/3  | 「考試壓力大就一直滑影片」   |
+| 時間感扭曲       | 2/3  | 「滑一下就 2 小時過去」      |
+| 被通知驅動       | 2/3  | 「震動一響就忍不住拿起來」   |
+| 使用後補償心理   | 1/3  | 「告訴自己滑完就念書」       |
+
+## (2) 社會期待偏誤警示
+🚨 A 同學自陳「一天只用 2 小時」——但訪談 45 分鐘內
+檢查手機 4 次。自我陳述可能系統性低估。
+
+## (3) 下一輪訪談補問建議
+・能否分享螢幕使用時間 App 的客觀數據？
+・最後一次「完全不滑手機」是什麼時候？感覺如何？
+・如果明天失去手機一週，最擔心錯過什麼？`
   },
   {
     scenario: '情境：AI 答得不夠好，要追問',
     bad: '再給我多一點',
     badWhy: '「多一點」是模糊指令，AI 只會重複剛才說過的內容。',
+    badOutput: `好的，關於剛才討論的研究方法議題，我再補充一些：
+
+研究方法的選擇很重要，要根據你的研究問題來決定。
+量化研究和質性研究各有優缺點，有時也可以混合使用。
+記得在研究過程中保持嚴謹的態度，並注意倫理議題。
+
+如果還有其他問題，歡迎繼續詢問！`,
     good: '你剛才提到的第 2 點「樣本選擇偏差」，可以舉一個高中校園研究的具體案例嗎？並說明這個偏差會如何影響結論的推論範圍。',
-    goodWhy: 'Prompt 工程核心能力：迭代追問。指定要延伸哪一點 + 要求具體範例 + 限定情境（高中校園）。'
+    goodWhy: 'Prompt 工程核心能力：迭代追問。指定要延伸哪一點 + 要求具體範例 + 限定情境（高中校園）。',
+    goodOutput: `## 具體案例：志願者偏誤（Volunteer Bias）
+
+情境：某研究者想探討「高中生社團參與動機」，
+在學校官網發佈問卷連結，開放自由填寫。
+
+## 偏差發生機制
+願意花時間填問卷的學生，本身就是**對社團有想法**的人。
+真正「不參加社團 / 對社團無感」的人，根本不會點開問卷。
+——樣本系統性傾向「有熱情的一群」。
+
+## 對結論推論的影響
+❌ 不能說：「高中生普遍對社團參與有高度熱情。」
+✅ 只能說：「在願意填答問卷的高中生中，有 78% 表達⋯⋯」
+
+## 三個補救建議
+1. 改在**課堂現場**發放，含未參加社團者
+2. 加「過去三年是否退出社團」這類負向經驗題
+3. 分析時在「研究限制」章節明確標註樣本偏誤`
   }
 ];
 
@@ -95,6 +173,37 @@ const CollapsibleWhy = ({ tip }) => {
       {open && (
         <div className="mt-2 text-[12.5px] leading-[1.85] text-[var(--pl-ink-mid)] bg-[var(--pl-accent-light)] border-l-2 border-[var(--pl-accent)] pl-3 py-2.5 rounded-r">
           {tip.body}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Prompt 對照診所：展開看 AI 真實輸出
+// 輸出內容為 LLM 典型回應示範；若有實錄，可替換 badOutput / goodOutput 字串
+const ComparisonOutput = ({ output, tone }) => {
+  const [open, setOpen] = useState(false);
+  const isBad = tone === 'bad';
+  return (
+    <div className="mt-3 pt-3 border-t border-dashed border-[var(--pl-border-light)]">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors ${isBad ? 'text-rose-700 hover:text-rose-900' : 'text-emerald-700 hover:text-emerald-900'}`}
+        style={{ fontFamily: '"DM Mono", monospace' }}
+      >
+        {open ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+        <Eye size={12} />
+        {open ? '收起' : '看'} AI 實際跑出來的回答
+      </button>
+      {open && (
+        <div className={`mt-2.5 rounded border p-3.5 ${isBad ? 'bg-rose-100/50 border-rose-200' : 'bg-emerald-100/50 border-emerald-200'}`}>
+          <div className={`flex items-center justify-between mb-2 text-[10px] font-bold uppercase tracking-widest ${isBad ? 'text-rose-700' : 'text-emerald-700'}`} style={{ fontFamily: '"DM Mono", monospace' }}>
+            <span>AI Output · 示範輸出</span>
+            <span className="text-[var(--pl-ink-light)] font-normal normal-case tracking-normal">LLM 典型回應</span>
+          </div>
+          <pre className="text-[12.5px] text-[var(--pl-ink)] leading-[1.9] whitespace-pre-wrap" style={{ fontFamily: '"PingFang TC", "Noto Sans TC", system-ui, sans-serif' }}>
+{output}
+          </pre>
         </div>
       )}
     </div>
@@ -532,7 +641,9 @@ ${template}
           </div>
           <p className="text-[14px] text-[var(--pl-ink-mid)] mb-8 max-w-3xl leading-[1.95]">
             上面的工具幫你產 prompt，但如果離開這頁、你能自己寫嗎？
-            下面三組對照可以幫你看懂「為什麼結構化的 prompt 比隨口一問強」——等你能一眼認出爛 prompt，就不再需要模板了。
+            下面三組對照幫你看懂「為什麼結構化的 prompt 比隨口一問強」。
+            <strong className="text-[var(--pl-ink)]">每組可展開看 AI 實際跑出來的回答</strong>——
+            親眼看到差別，比聽人講「這樣問比較好」有用一百倍。
           </p>
 
           <div className="space-y-5">
@@ -548,12 +659,13 @@ ${template}
                     <div className="flex items-center gap-1.5 text-rose-700 font-bold text-[11px] uppercase tracking-wider mb-2 pl-mono">
                       <XCircle size={13} /> 爛 Prompt
                     </div>
-                    <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-rose-100 pl-mono leading-[1.8] mb-3 flex-1">
+                    <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-rose-100 pl-mono leading-[1.8] mb-3">
                       {c.bad}
                     </div>
-                    <div className="text-[12px] text-[var(--pl-ink-mid)] leading-[1.85]">
+                    <div className="text-[12px] text-[var(--pl-ink-mid)] leading-[1.85] flex-1">
                       <strong className="text-rose-700">問題：</strong>{c.badWhy}
                     </div>
+                    {c.badOutput && <ComparisonOutput output={c.badOutput} tone="bad" />}
                   </div>
 
                   {/* Good */}
@@ -561,12 +673,13 @@ ${template}
                     <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px] uppercase tracking-wider mb-2 pl-mono">
                       <CheckCircle2 size={13} /> 好 Prompt
                     </div>
-                    <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-emerald-100 pl-mono leading-[1.8] mb-3 flex-1">
+                    <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-emerald-100 pl-mono leading-[1.8] mb-3">
                       {c.good}
                     </div>
-                    <div className="text-[12px] text-[var(--pl-ink-mid)] leading-[1.85]">
+                    <div className="text-[12px] text-[var(--pl-ink-mid)] leading-[1.85] flex-1">
                       <strong className="text-emerald-700">為什麼好：</strong>{c.goodWhy}
                     </div>
+                    {c.goodOutput && <ComparisonOutput output={c.goodOutput} tone="good" />}
                   </div>
                 </div>
               </div>
