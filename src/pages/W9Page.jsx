@@ -431,23 +431,40 @@ const ASSEMBLY_AI_PROMPTS = {
 產出後我會自己改。`,
 };
 
-/* — 計畫書第一章 AI 檢核 Prompt（本週 Step 3 用） — */
-const PLAN_CH1_CHECK_PROMPT = `你是高中專題指導顧問。以下是我計畫書第一章（研究主題基本資訊），請幫我檢查四件事：
+/* — 計畫書 1-5 章 AI 檢核 Prompt（本週 Step 3 用｜Gemini 思考模式）— */
+const PLAN_CH1_CHECK_PROMPT = `【請使用 Gemini 2.5 Pro 思考模式（Thinking Mode）】
 
-1. 研究動機是否能支撐研究問題？（若落差大，指出在哪）
-2. 研究目的與主研究問題是否邏輯一致？
-3. 子問題是否都對應主問題？或有子問題偏離？
-4. 研究對象寫得夠具體嗎？（例：哪所學校哪個年級）
+你是高中專題指導顧問。以下是我計畫書第一到第五章的內容。請用思考模式深入檢查以下六件事，找出我自己看不到的盲點：
 
-不用替我修改，只要指出問題點。
+1. 【方向】研究動機是否能支撐研究問題？（若落差大，指出在哪）
+2. 【一致】研究目的與主研究問題是否邏輯一致？子問題是否都對應主問題？
+3. 【定義】第二章的關鍵詞操作定義，是否足以讓第六章的工具「測得到」那個概念？（若定義太抽象會讓後續工具設計失準）
+4. 【文獻】第三章的文獻是否真的支持（或挑戰）我的研究問題？還是只是有關鍵字相關？
+5. 【變項／主題】第四章的變項／主題／維度，是否每一個都能對應到研究問題的某個子問題？有沒有遺漏或多餘？
+6. 【對象】第五章的對象與抽樣，是否能真正回答研究問題？樣本數／招募方式合理嗎？
+
+不用替我修改，只要指出問題點與建議修改方向。
 
 【研究方法】___
-【研究題目】___
-【研究動機】（1）情境／理由：___（2）能解決什麼：___
-【研究目的】___
-【主研究問題】___
-【子問題】___
-【研究對象】___`;
+【第一章：研究主題基本資訊】
+  研究題目：___
+  研究動機：___
+  研究目的：___
+  主研究問題：___
+  子問題：___
+  研究對象：___
+【第二章：關鍵詞操作定義】
+  1. ___
+  2. ___
+  3. ___
+【第三章：文獻回顧】
+  1. ___
+  2. ___
+  3. ___
+【第四章：變項／主題／維度設計】
+  ___
+【第五章：對象與抽樣】
+  ___`;
 
 const PLAN_AI_PROMPTS = {
     questionnaire: PLAN_CH1_CHECK_PROMPT,
@@ -457,6 +474,41 @@ const PLAN_AI_PROMPTS = {
     literature: PLAN_CH1_CHECK_PROMPT,
 };
 
+/* — W9 Step 3 AI 檢核 Prompt 展示框（必做、一鍵複製） — */
+const W9AiCheckPromptBox = () => {
+    const [copied, setCopied] = useState(false);
+    const handleCopy = useCallback(() => {
+        navigator.clipboard.writeText(PLAN_CH1_CHECK_PROMPT).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = PLAN_CH1_CHECK_PROMPT;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    }, []);
+    return (
+        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+            <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center justify-between gap-3">
+                <span className="font-mono text-[11px] uppercase tracking-wider">AI 檢核 Prompt · 點右邊複製</span>
+                <button
+                    onClick={handleCopy}
+                    className="text-[12px] font-bold bg-white text-[var(--ink)] px-3 py-1 rounded hover:bg-[var(--paper-warm)] transition-colors flex-shrink-0"
+                    type="button"
+                >
+                    {copied ? '✓ 已複製' : '📋 複製'}
+                </button>
+            </div>
+            <pre className="p-5 text-[12px] text-[var(--ink)] leading-[1.85] whitespace-pre-wrap font-mono max-h-[360px] overflow-y-auto">{PLAN_CH1_CHECK_PROMPT}</pre>
+        </div>
+    );
+};
+
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1：W8 老師回饋快速讀取 */
@@ -464,10 +516,9 @@ const EXPORT_FIELDS = [
     /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
     { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-3 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
+    { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 Gemini 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
     /* Step 4：回顧與繳交 */
-    { key: 'w9-revision-plan', label: 'W10 前必須做的最大修改', question: '整合 W8 建議與三大標準後，計畫書前段要做的最大修改' },
-    { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第二～八章？' },
-    { key: 'w9-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第三、四章的定版？' },
 ];
 
 /* ══════════════════════════════════════
@@ -1029,17 +1080,44 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* AI 檢核第 1-3 章（必做，帶 Prompt 回家跑） */}
-                    <AIAssistToggle
-                        id="w9-plan-ai"
-                        title="AI 檢核第 1-3 章：帶 Prompt 回家跑 → 補 AIRED R 欄位（必做）"
-                        reason="本節結束前準備好 Prompt，回家貼進 ChatGPT / Claude 跑。AI 會檢核第一章的方向邏輯、第二章關鍵詞定義、第三章文獻對應——抓出你自己看不到的盲點。跑完後把 AI 回覆的重點補到 Step 4 的 AIRED 的 R 欄位。"
-                        promptByMethod={PLAN_AI_PROMPTS}
-                        method={selectedMethod}
-                        recordKey="w9-plan-ai-check"
-                        recordPrompt="AI 檢核後的判斷紀錄（課後補完）"
-                        recordPlaceholder="AI 指出的主要問題（至少 2-3 點）：&#10;1. ___&#10;2. ___&#10;3. ___&#10;&#10;我的決定：&#10;・採納：___（理由：___）&#10;・不採納：___（理由：___）"
-                    />
+                    {/* AI 檢核（必做）· Gemini 思考模式審第 1-5 章 */}
+                    <div className="space-y-4">
+                        <div className="bg-[var(--ink)] text-white rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2">
+                                <span className="text-[11px] font-mono font-bold tracking-[0.12em] uppercase">AI 檢核 · 必做</span>
+                                <span className="font-bold text-[14px] ml-1">🤖 用 Gemini 思考模式檢核第 1-5 章</span>
+                            </div>
+                            <div className="p-5 space-y-3">
+                                <p className="text-[13px] text-white/90 leading-[1.9]">
+                                    本節結束前複製下方 Prompt，回家貼進 <strong className="text-white">Gemini 2.5 Pro（開啟 Thinking Mode 思考模式）</strong>。把 docx 第 1-5 章內容填進 Prompt 的【___】位置後送出。AI 會深入找出你自己看不到的盲點。
+                                </p>
+                                <p className="text-[12px] text-white/70 leading-[1.9]">
+                                    💡 <strong>為什麼是 Gemini 思考模式？</strong>Thinking Mode 會花更多時間推理、檢核深度比一般對話更高——地基工程一次定勝負，值得等它多思考幾分鐘。
+                                </p>
+                                <p className="text-[12px] text-white/70 leading-[1.9]">
+                                    📝 <strong>流程：</strong>複製 Prompt → 回家填入內容 → 等 Gemini 思考 → 讀回覆後在下方記錄判斷 → 補完 AIRED 的 R 欄位。
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Prompt 展示 + 複製 */}
+                        <W9AiCheckPromptBox />
+
+                        {/* AI 建議判斷紀錄 */}
+                        <ThinkRecord
+                            dataKey="w9-plan-ai-check"
+                            prompt="AI 檢核後的判斷紀錄（課後 Gemini 跑完後補）"
+                            defaultTemplate={'Gemini 指出的主要問題（至少 3 點）：\n1. ___\n2. ___\n3. ___\n\n我的決定：\n・採納：___（理由：___）\n・不採納：___（理由：___）\n・部分採納：___（怎麼改：___）'}
+                            rows={10}
+                        />
+
+                        {/* W9 完整 AIRED（從 Step 4 搬來，緊接 AI 檢核紀錄） */}
+                        <AIREDNarrative
+                            week="9"
+                            hint="本節預想式填 A/I/E/D；R 回家跑完 Gemini 思考模式再補"
+                            optional={false}
+                        />
+                    </div>
 
                     {/* 五章進度 checklist */}
                     <Checklist
@@ -1092,22 +1170,7 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 2. W10 前要做的最大修改 */}
-                    <ThinkRecord
-                        dataKey="w9-revision-plan"
-                        prompt="整合 W8 老師建議與本節學到的三大標準，W10 之前計畫書前段必須做的最大修改是什麼？"
-                        defaultTemplate={'最大的修改：___\n理由（引用老師建議或三大標準）：___\n預計完成時間：___'}
-                        rows={5}
-                    />
-
-                    {/* 3. AIRED 敘事紀錄（W9 完整一次，預想式填寫：課堂寫 A/I/E/D，R 回家 AI 跑完補） */}
-                    <AIREDNarrative
-                        week="9"
-                        hint="本節結尾預想式填寫 A/I/E/D；R 欄位回家跑 AI 檢核第 1-3 章後再補"
-                        optional={false}
-                    />
-
-                    {/* 4. 一鍵複製 */}
+                    {/* 2. 一鍵複製（AIRED 與 AI 檢核紀錄已在 Step 3 完成） */}
                     <ExportButton
                         weekLabel="W9 工具設計基礎"
                         fields={EXPORT_FIELDS}

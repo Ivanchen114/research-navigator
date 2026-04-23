@@ -1370,24 +1370,24 @@ export const W9Data = {
                     tags: ["docx 動手", "關鍵決策紀錄"]
                 },
                 {
-                    timeStart: "0:40",
-                    timeStartFormatted: "00:40",
+                    timeStart: "0:43",
+                    timeStartFormatted: "00:43",
                     duration: 5,
-                    colorClass: "c5",
+                    colorClass: "c1",
                     icon: "🤖",
-                    title: "九、 Step 3 AI 檢核（可選）",
-                    desc: "用內建 Prompt 讓 AI 檢查第一章動機／目的／問題三者的邏輯一致性。記錄 AIRED。",
-                    tags: ["AI 檢核", "選用"]
+                    title: "九、 Step 3 AI 檢核 Prompt + 預想式 AIRED（必做）",
+                    desc: "複製 Gemini 思考模式 Prompt（審計畫書第 1-5 章）帶回家跑；課堂預想式寫 AIRED 的 A/I/E/D，R 欄位回家補。",
+                    tags: ["Gemini Thinking", "預想 AIRED"]
                 },
                 {
-                    timeStart: "0:45",
-                    timeStartFormatted: "00:45",
-                    duration: 5,
+                    timeStart: "0:48",
+                    timeStartFormatted: "00:48",
+                    duration: 2,
                     colorClass: "c3",
                     icon: "📤",
-                    title: "十、 Step 4 回顧與繳交",
-                    desc: "修改決定 → AIRED 敘事紀錄 → 時間承諾（課後寫第二～八章）→ ExportButton 複製繳交。",
-                    tags: ["AIRED", "時間承諾"]
+                    title: "十、 Step 4 回顧繳交 + 時間承諾",
+                    desc: "勾驗收 Checklist → 時間承諾（課後寫第三、四章定版）→ ExportButton 複製繳交。",
+                    tags: ["時間承諾", "繳交"]
                 }
             ]
         }
@@ -1420,7 +1420,7 @@ export const W9Data = {
 
 export const W10Data = {
     id: "W10",
-    title: "研究工具診所 Level 2：品質診斷與修改",
+    title: "工具設計 × 整本計畫書 AI 檢核 × 定稿繳交",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: baseCourseArc.map((item, idx) => ({
@@ -1431,23 +1431,30 @@ export const W10Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "品質診斷",
-            subtitle: "用規準找出草稿問題",
-            desc: "問卷 / 訪談 / 觀察三種診斷規準",
+            title: "工具設計（第六章）",
+            subtitle: "計畫書第六章 = 工具本體",
+            desc: "依方法分流：問卷題目／訪綱／實驗流程／觀察紀錄表／比較矩陣",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "精修初版",
-            subtitle: "從 3 題草稿到 5–10 題完整版",
-            desc: "修改並擴充為可用的研究工具",
+            title: "整本計畫書 AI 檢核",
+            subtitle: "Gemini 檢整體邏輯一致性",
+            desc: "方向（1-3）→ 方法（4-5）→ 工具（6）→ 執行（7-13）整條連貫性",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "定稿 + W11 預告",
+            subtitle: "計畫書全本定稿繳交",
+            desc: "ExportButton、GC 上傳、W11 Pilot Test 與倫理審查準備",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "示範診斷 × 互相診斷",
+            title: "入場擋板 × W9 回饋 × 工具設計",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1456,107 +1463,137 @@ export const W10Data = {
                     timeEnd: "0:05",
                     duration: "5 min",
                     colorClass: "c3",
-                    icon: "🩺",
-                    title: "① 開場：確認草稿到位",
-                    desc: "確認每位學生帶著 W8 Part D 的 3 題草稿。說明今天三步驟：示範診斷 → 互相診斷 → 自己修改。",
-                    tags: ["開場確認", "流程說明"]
+                    icon: "🚦",
+                    title: "一、 入場擋板：W9 完成狀態自檢",
+                    desc: "PrepStatusCheck 讀 W9 計畫書 checklist、方法、AIRED 是否到位；沒做 W9 的擋下。",
+                    tags: ["入場擋板", "W9 完成度"]
+                },
+                {
+                    timeStart: "0:05",
+                    timeEnd: "0:10",
+                    duration: "5 min",
+                    colorClass: "c2",
+                    icon: "📬",
+                    title: "二、 讀 W9 老師回饋（新）",
+                    desc: "打開 Google Classroom 看 W9 計畫書 1-5 章批改，把老師最主要的一兩句建議記下來。",
+                    tags: ["W9 回饋", "快速讀取"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeEnd: "0:15",
+                    duration: "5 min",
+                    colorClass: "c3",
+                    icon: "🎯",
+                    title: "三、 Step 1 開場 + 方法確認",
+                    desc: "本節目標：計畫書第六章工具設計完成。方法從 W9 自動帶入；必要時手動切換。",
+                    tags: ["方法分流"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeEnd: "0:45",
+                    duration: "30 min",
+                    colorClass: "c2",
+                    icon: "🔧",
+                    title: "四、 工具設計實作（docx）",
+                    desc: "問卷組：每變項 3-5 題 ／ 訪談組：主題題組 ／ 實驗組：流程 Step 1-5 + 記錄表 ／ 觀察組：紀錄表欄位 ／ 文獻組：比較矩陣 7+ 欄。",
+                    tags: ["docx 動手", "第六章"]
+                },
+                {
+                    timeStart: "0:45",
+                    timeEnd: "0:50",
+                    duration: "5 min",
+                    colorClass: "c4",
+                    icon: "✅",
+                    title: "五、 工具設計關鍵決策紀錄",
+                    desc: "在網頁 ThinkRecord 摘要「工具設計中的 2-3 個關鍵決定」。docx 寫完後，網頁只記決策。",
+                    tags: ["關鍵決策"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "整本 AI 檢核 × 定稿繳交",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:05",
+                    duration: "5 min",
+                    colorClass: "c3",
+                    icon: "🤖",
+                    title: "六、 Step 2 開場：整本 AI 檢核準備",
+                    desc: "複製 AI_PROMPTS[方法] 對應的檢核 Prompt，貼進 AI 對話框、填入全本 13 章內容。",
+                    tags: ["Prompt 複製"]
                 },
                 {
                     timeStart: "0:05",
                     timeEnd: "0:20",
                     duration: "15 min",
                     colorClass: "c1",
-                    icon: "🔬",
-                    title: "② 教師示範診斷",
-                    desc: "問卷、訪談、觀察各示範 1 個典型壞題，帶全班走一遍「哪裡有問題？哪條規準？怎麼修？」的診斷流程。",
-                    tags: ["示範教學", "建立診斷語言"]
+                    icon: "📥",
+                    title: "七、 AI 回覆 + AIRED 的 A/I/R 紀錄",
+                    desc: "網頁 w10-ai-raw-feedback 開頭寫 A（用什麼 AI）+ I（問了什麼），然後貼 AI 完整回覆（含追問）。",
+                    tags: ["AIRED · A/I/R", "貼全文"]
                 },
                 {
                     timeStart: "0:20",
-                    timeEnd: "0:38",
-                    duration: "18 min",
-                    colorClass: "c5",
-                    icon: "🤝",
-                    title: "③ 各組互相診斷",
-                    desc: "和隔壁組交換 3 題草稿，對照診斷規準圈出問題、寫上規準編號，每題至少找出 1 個改進建議。",
-                    tags: ["同儕診斷", "規準應用"]
-                },
-                {
-                    timeStart: "0:38",
-                    timeEnd: "0:50",
-                    duration: "12 min",
+                    timeEnd: "0:30",
+                    duration: "10 min",
                     colorClass: "c4",
-                    icon: "📊",
-                    title: "④ 教師統整 + Q&A",
-                    desc: "各組分享常見問題。統整三大常見錯誤：一題問兩件事、引導性語氣、問受訪者無法回答的事。",
-                    tags: ["概念統整", "常見問題"]
-                }
-            ]
-        },
-        {
-            badge: "第二節",
-            title: "精修 × 同儕試填 × 完成初版",
-            duration: 50,
-            hasBreakAfter: false,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeEnd: "0:20",
-                    duration: "20 min",
-                    colorClass: "c2",
-                    icon: "✍️",
-                    title: "⑤ 精修草稿",
-                    desc: "根據診斷結果修改草稿，補充至 5–10 題完整版本。用學習單 Part C 逐題記錄修前 / 修後 / 原因。",
-                    tags: ["精修實作", "初版產出"]
+                    icon: "⚖️",
+                    title: "八、 採納判斷 + 修正紀錄（E/D）",
+                    desc: "w10-ai-judge 逐條評估（✅/❌/🔶）= AIRED 的 E；w10-tool-revision 寫整本要改哪些章節 = AIRED 的 D。",
+                    tags: ["AIRED · E/D"]
                 },
                 {
-                    timeStart: "0:20",
+                    timeStart: "0:30",
                     timeEnd: "0:35",
-                    duration: "15 min",
-                    colorClass: "c4",
-                    icon: "🧪",
-                    title: "⑥ 同儕試填（Pilot Test）",
-                    desc: "單向輪轉配對（A→B→C），讓別組 2–3 人以受訪者身分實填工具。試填者填完後在 Part D 寫回饋：看不懂的題、不會選的題。",
-                    tags: ["預試驗證", "真人回饋"]
+                    duration: "5 min",
+                    colorClass: "c3",
+                    icon: "📋",
+                    title: "九、 Step 3 開場：定稿驗收",
+                    desc: "六項驗收 Checklist：第六章完成／整本到位／AI 檢核讀完／修正紀錄／docx 已上傳 GC。",
+                    tags: ["定稿驗收"]
                 },
                 {
                     timeStart: "0:35",
                     timeEnd: "0:45",
                     duration: "10 min",
-                    colorClass: "c5",
-                    icon: "🗣️",
-                    title: "⑦ 修前修後展示 + 試填發現",
-                    desc: "每組選出改得最滿意的 1 題，展示修改前 vs 修改後。同時分享一個試填時的意外發現。",
-                    tags: ["成果展示", "試填分享"]
+                    colorClass: "c2",
+                    icon: "📤",
+                    title: "十、 ExportButton + 上傳 GC",
+                    desc: "網頁一鍵匯出本週紀錄；docx 上傳 Google Classroom W10 作業區。",
+                    tags: ["匯出繳交"]
                 },
                 {
                     timeStart: "0:45",
                     timeEnd: "0:50",
                     duration: "5 min",
-                    colorClass: "c3",
-                    icon: "🚀",
-                    title: "⑧ 收束 + 預告 W10",
-                    desc: "預告 W10 進行研究倫理審查 + 正式啟動資料收集。特別再看試填時被標記的題目。",
-                    tags: ["收束預告", "倫理審查"]
+                    colorClass: "c5",
+                    icon: "🔮",
+                    title: "十一、 W11 預告：Pilot Test + 倫理審查",
+                    desc: "課後任務：約 2-3 位預試者、把問卷轉 Google Form 或訪綱印紙本；W11 帶定稿工具來做真人預試。",
+                    tags: ["W11 預告", "課後準備"]
                 }
             ]
         }
     ],
     summaries: [
         {
-            icon: "🩺",
-            label: "診斷記錄",
-            text: "同儕診斷回饋表<br><small style=\"font-size:11px;color:#888;\">用規準找出草稿問題</small>"
+            icon: "🔧",
+            label: "核心產出",
+            text: "計畫書第六章工具設計 + 整本定稿<br><small style=\"font-size:11px;color:#888;\">docx 13 章全到位</small>"
         },
         {
-            icon: "📝",
-            label: "初版工具",
-            text: "修改後 5–10 題完整版<br><small style=\"font-size:11px;color:#888;\">含修改記錄與理由</small>"
+            icon: "🤖",
+            label: "AI 檢核",
+            text: "整本計畫書邏輯一致性檢核<br><small style=\"font-size:11px;color:#888;\">AIRED 五要素分散在 w10-ai-* 欄位</small>"
         },
         {
             icon: "📅",
-            label: "重要預告",
-            text: "W10 倫理審查 + 資料收集<br><small style=\"font-size:11px;color:#ccc;\">帶著初版工具進入實戰</small>"
+            label: "課後任務",
+            text: "約預試者 + 準備工具實體形式<br><small style=\"font-size:11px;color:#ccc;\">W11 Pilot Test + 倫理審查</small>"
         }
     ],
     legends: [
@@ -1570,7 +1607,7 @@ export const W10Data = {
 
 export const W11Data = {
     id: "W11",
-    title: "研究倫理審查：五大原則 × 自審 × 啟動",
+    title: "Pilot Test × 倫理審查 × 施測啟動",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: baseCourseArc.map((item, idx) => ({
@@ -1581,23 +1618,30 @@ export const W11Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "五大倫理原則",
-            subtitle: "知情同意、隱私、不傷害、誠實、公平",
-            desc: "建立研究倫理的基本判斷力",
+            title: "Pilot Test（方法組內輪轉）",
+            subtitle: "真人預試抓工具毛病",
+            desc: "問卷互填／訪談模擬／實驗審架設圖／觀察試紀錄／文獻互閱矩陣",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "啟動資料收集",
-            subtitle: "通過審查 → 正式出發",
-            desc: "取得研究啟動許可，開始收集資料",
+            title: "倫理審查 + 教師蓋章",
+            subtitle: "四問自查 + AI 審知情同意書",
+            desc: "知情同意／隱私／不傷害／自願，秘密按鈕（⚖ 點 5 次）觸發教師審查",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "施測啟動 + W12 預告",
+            subtitle: "目標、時程、備案、啟動宣告",
+            desc: "W11 AIRED 本週最重要 AI 互動：知情同意書 AI 審",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "五大倫理原則 × 自我審查",
+            title: "讀 W10 回饋 × Pilot Test 實戰",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1605,108 +1649,128 @@ export const W11Data = {
                     timeStart: "0:00",
                     timeEnd: "0:05",
                     duration: "5 min",
-                    colorClass: "c3",
-                    icon: "⚖️",
-                    title: "① 開場：為什麼需要倫理審查？",
-                    desc: "所有嚴肅的研究在收集資料前都必須通過倫理審查。今天你們自己審，老師幫你們把關。",
-                    tags: ["開場動機", "倫理意識"]
+                    colorClass: "c2",
+                    icon: "📬",
+                    title: "一、 Step 1 開場：讀 W10 老師回饋",
+                    desc: "打開 Google Classroom 看 W10 計畫書定稿批改，把老師最主要的一兩句建議記下來。",
+                    tags: ["W10 回饋", "快速讀取"]
                 },
                 {
                     timeStart: "0:05",
-                    timeEnd: "0:25",
-                    duration: "20 min",
-                    colorClass: "c1",
-                    icon: "📋",
-                    title: "② 五大倫理原則講解",
-                    desc: "知情同意、隱私保護、不造成傷害、誠實呈現資料、公平對待。每個原則配舉例，討論違反後果。",
-                    tags: ["概念講解", "原則建立"]
+                    timeEnd: "0:15",
+                    duration: "10 min",
+                    colorClass: "c4",
+                    icon: "🗺",
+                    title: "二、 Step 1 Pilot 配對指示 + 知情同意預告",
+                    desc: "方法組內輪轉：問卷組 A→B→C 互填／訪談組兩人模擬／實驗組審架設圖／觀察組試跑紀錄表／文獻組互閱矩陣。預試前先讀一段知情同意給預試者聽。",
+                    tags: ["方法分流", "配對指示"]
                 },
                 {
-                    timeStart: "0:25",
+                    timeStart: "0:15",
                     timeEnd: "0:45",
-                    duration: "20 min",
-                    colorClass: "c2",
-                    icon: "✍️",
-                    title: "③ 自我倫理審查",
-                    desc: "拿出研究工具和企劃書，用審查表逐條自我評估：有沒有做到？有風險怎麼處理？",
-                    tags: ["自我評估", "風險識別"]
+                    duration: "30 min",
+                    colorClass: "c5",
+                    icon: "🧪",
+                    title: "三、 Step 2 Pilot Test 實戰",
+                    desc: "依方法分流執行預試：真人填／真人訪／互審架設圖／試跑觀察／互閱矩陣。過程中隨時記工具卡點。",
+                    tags: ["Pilot 實戰", "5 方法分流"]
                 },
                 {
                     timeStart: "0:45",
                     timeEnd: "0:50",
                     duration: "5 min",
-                    colorClass: "c5",
-                    icon: "🤝",
-                    title: "④ 互相審查",
-                    desc: "和旁邊的組交換審查表，看看有沒有他們沒注意到的風險，寫下一個需要特別注意的地方。",
-                    tags: ["同儕審查", "互相把關"]
+                    colorClass: "c3",
+                    icon: "📝",
+                    title: "四、 Step 2 預試者口頭回饋 + 紀錄",
+                    desc: "預試者 3 分鐘口頭回饋「哪題卡住／哪個選項不會選／填多久」；研究者把發現寫進 w11-pilot-findings。",
+                    tags: ["回饋整理"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "口頭報告 × 取得許可 × 啟動",
+            title: "工具修正 × 倫理審查 × 施測啟動",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:20",
-                    duration: "20 min",
-                    colorClass: "c5",
-                    icon: "🗣️",
-                    title: "⑤ 各組口頭報告倫理審查結果",
-                    desc: "每組 2 分鐘：研究主題、方法、主要倫理風險、處理方式。其他組和老師可提問補充。",
-                    tags: ["口頭報告", "公開確認"]
+                    timeEnd: "0:15",
+                    duration: "15 min",
+                    colorClass: "c2",
+                    icon: "🔧",
+                    title: "五、 Step 3 第二輪工具修正",
+                    desc: "根據 Pilot 發現直接改 docx 第六章——這是工具最後一版，從現在開始不再大改。實驗組改架設圖。",
+                    tags: ["docx 修正", "最後一版"]
                 },
                 {
-                    timeStart: "0:20",
-                    timeEnd: "0:35",
-                    duration: "15 min",
+                    timeStart: "0:15",
+                    timeEnd: "0:25",
+                    duration: "10 min",
                     colorClass: "c4",
-                    icon: "🛡️",
-                    title: "⑥ 修正 + 取得「研究啟動許可」",
-                    desc: "根據報告和討論進行最後修正。填寫研究啟動確認表，教師逐組確認後正式許可啟動。",
-                    tags: ["修正計畫", "正式許可"]
+                    icon: "⚖",
+                    title: "六、 Step 3 倫理四問自查",
+                    desc: "知情同意（怎麼告知）／隱私（會不會收到可識別資料）／不傷害（有沒有敏感題）／自願（有沒有壓力）逐一具體回答。",
+                    tags: ["四問自查", "倫理底線"]
+                },
+                {
+                    timeStart: "0:25",
+                    timeEnd: "0:30",
+                    duration: "5 min",
+                    colorClass: "c1",
+                    icon: "🤖",
+                    title: "七、 Step 3 知情同意書 AI 審查",
+                    desc: "複製 CONSENT_PROMPT 貼 AI，請 AI 從 16-18 歲高中生角度找看不懂／有壓力的詞句，寫出定稿版。",
+                    tags: ["AI 審", "知情同意"]
+                },
+                {
+                    timeStart: "0:30",
+                    timeEnd: "0:35",
+                    duration: "5 min",
+                    colorClass: "c5",
+                    icon: "✅",
+                    title: "八、 Step 3 教師倫理審查（秘密按鈕）",
+                    desc: "老師當面看完學生計畫書，用秘密按鈕審查通過：連續點 ⚖ 圖示 5 次 → 輸入老師姓名 → 學生端顯示「已通過」綠色卡片。",
+                    tags: ["⚖ 點 5 次", "教師蓋章"]
                 },
                 {
                     timeStart: "0:35",
-                    timeEnd: "0:48",
-                    duration: "13 min",
+                    timeEnd: "0:45",
+                    duration: "10 min",
                     colorClass: "c2",
-                    icon: "🚀",
-                    title: "⑦ 執行計畫確認 + 正式啟動",
-                    desc: "確認每人具體行動：誰負責找多少位受訪者、什麼時候完成、資料怎麼整理。正式啟動資料收集！",
-                    tags: ["執行計畫", "啟動行動"]
+                    icon: "🛫",
+                    title: "九、 Step 4 施測啟動：目標 + 時程 + 備案 + 宣告",
+                    desc: "w11-plan-target（樣本數目標/底線）+ w11-plan-schedule（W12-W13 時程）+ w11-plan-backup（Plan B）+ w11-launch（啟動宣告）。",
+                    tags: ["施測啟動"]
                 },
                 {
-                    timeStart: "0:48",
+                    timeStart: "0:45",
                     timeEnd: "0:50",
-                    duration: "2 min",
+                    duration: "5 min",
                     colorClass: "c3",
-                    icon: "📅",
-                    title: "⑧ 收束 + W11 預告",
-                    desc: "W11 進行資料收集中期回顧。遇到問題不要慌，W11 帶來一起解決。",
-                    tags: ["收束預告", "中期回顧"]
+                    icon: "📤",
+                    title: "十、 Step 4 W11 AIRED + ExportButton + W12 預告",
+                    desc: "AIREDNarrative（本週主要 AI 互動：知情同意 AI 審）→ 一鍵匯出繳交 → W12 預告（正式施測）。",
+                    tags: ["AIRED", "繳交", "W12 預告"]
                 }
             ]
         }
     ],
     summaries: [
         {
-            icon: "⚖️",
+            icon: "🧪",
+            label: "Pilot 發現",
+            text: "方法組內輪轉預試紀錄<br><small style=\"font-size:11px;color:#888;\">抓到 AI 看不到的工具毛病</small>"
+        },
+        {
+            icon: "⚖",
             label: "倫理審查",
-            text: "自審 + 互審完成<br><small style=\"font-size:11px;color:#888;\">五大原則逐條評估</small>"
+            text: "四問自查 + 知情同意定稿 + 教師蓋章<br><small style=\"font-size:11px;color:#888;\">秘密按鈕：⚖ 點 5 次</small>"
         },
         {
-            icon: "🛡️",
-            label: "啟動許可",
-            text: "研究啟動確認表<br><small style=\"font-size:11px;color:#888;\">教師簽核正式許可</small>"
-        },
-        {
-            icon: "📅",
-            label: "執行計畫",
-            text: "2 週資料收集行動計畫<br><small style=\"font-size:11px;color:#ccc;\">分工、時程、備用方案</small>"
+            icon: "🛫",
+            label: "施測啟動",
+            text: "目標／時程／備案／啟動宣告<br><small style=\"font-size:11px;color:#ccc;\">W12 正式蒐集資料</small>"
         }
     ],
     legends: [

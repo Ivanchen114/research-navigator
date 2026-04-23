@@ -111,17 +111,15 @@ const PAIRING_INSTRUCTIONS = {
 
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    /* 入場擋板 */
+    /* Step 1：入場 + 工具設計 */
     { key: 'w10-entry-self-report', label: '入場自報（W9 docx 完成度）', question: '第二~五章章節完成狀況' },
-    /* Step 1：工具設計 */
+    { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
     { key: 'w10-tool-text', label: '工具文字版', question: '設計完成的工具本體（若已整合在 docx 第六章則留空）' },
-    /* Step 2：整本 AI 檢核 */
-    { key: 'w10-ai-raw-feedback', label: 'AI 對全本計畫書的回覆' },
-    { key: 'w10-ai-judge', label: 'AI 建議採納判斷', question: '採納／不採納／部分採納的決定與理由' },
-    { key: 'w10-tool-revision', label: '整本修正紀錄', question: '根據 AI 建議修改了哪些章節？' },
-    /* Step 3：定稿繳交 */
-    { key: 'w10-aired-record', label: 'W10 完整 AIRED 敘事', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    /* Step 2：整本 AI 檢核（含 AIRED 五要素：A/I 前置 + R/E/D 分欄） */
+    { key: 'w10-ai-raw-feedback', label: 'AI 回覆原文（含 A+I 前置）', question: 'A: 用什麼 AI | I: 問了什麼 | R: AI 完整回覆' },
+    { key: 'w10-ai-judge', label: 'AI 建議採納判斷（E: Evaluation）', question: '採納／不採納／部分採納的決定與理由' },
+    { key: 'w10-tool-revision', label: '整本修正紀錄（D: Decision）', question: '根據 AI 建議修改了哪些章節？' },
 ];
 
 /* ══════════════════════════════════════
@@ -384,6 +382,26 @@ export const ToolRefinementPage = () => {
                     {/* 入場擋板：W9 完成狀態自檢 */}
                     <PrepStatusCheck methodId={detectedMethodId} />
 
+                    {/* W9 老師回饋快速讀取（5 分鐘暖身） */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[18px]">📬</span>
+                            <span className="font-bold text-[14px] text-[var(--ink)]">開始前：先看老師對 W9 計畫書第一~五章的回饋（5 分鐘）</span>
+                        </div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            老師已在 <strong>Google Classroom</strong> 發回 W9 計畫書的批改。請先打開看過，把老師<strong className="text-[var(--ink)]">最主要</strong>的一兩句建議記下來——這些建議會影響你今天第六章工具設計的方向。
+                        </p>
+                        <ThinkRecord
+                            dataKey="w10-w9-feedback-quick"
+                            prompt="老師對我 W9 計畫書最主要的建議是？"
+                            placeholder="例：第四章變項太多要砍、第五章抽樣方式要改、第三章文獻對應不夠清楚⋯⋯"
+                            rows={3}
+                        />
+                        <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
+                            💡 還沒拿到回饋？可能老師還在批。先往下做工具設計，之後有回饋再回頭修正。
+                        </p>
+                    </div>
+
                     {/* Step 1 開場 */}
                     <div>
                         <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
@@ -457,12 +475,12 @@ export const ToolRefinementPage = () => {
                         </p>
                     </div>
 
-                    {/* AI 原始回覆 */}
+                    {/* AI 回覆原文 + AIRED 的 A/I 前置 */}
                     <ThinkRecord
                         dataKey="w10-ai-raw-feedback"
-                        prompt="AI 回覆原文（貼上或截圖重點）"
-                        placeholder="AI 指出的主要問題（整本邏輯一致性、章節對齊、工具與方向的對應）..."
-                        rows={8}
+                        prompt="AI 回覆原文（開頭先寫 A+I 兩行；貼全文沒關係；有追問也一起貼）"
+                        defaultTemplate={'A: 我用了 ___（例：Gemini 2.5 Pro Thinking Mode）\nI: 我貼了 ___（例：全本計畫書 13 章，請 AI 檢核整體邏輯一致性）\n\n──── AI 完整回覆（以下貼上）────\n'}
+                        rows={14}
                     />
 
                     {/* 採納判斷 */}
@@ -520,12 +538,7 @@ export const ToolRefinementPage = () => {
                         </div>
                     </div>
 
-                    {/* W10 完整 AIRED */}
-                    <AIREDNarrative
-                        week="10"
-                        hint="W10 主要 AI 互動：整本計畫書檢核"
-                        optional={false}
-                    />
+                    {/* W10 的 A/I/R/E/D 已分散在 Step 1（w10-w9-feedback-quick = Action/Intent 前置）與 Step 2（w10-ai-raw-feedback/judge/revision = R/E/D）四個欄位，不再重複寫完整敘事 */}
 
                     {/* ExportButton */}
                     <ExportButton
