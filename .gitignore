@@ -16,6 +16,13 @@ dist-ssr
 dist [0-9]*/
 dist_broken/
 
+# Vite 臨時 outDir（為了繞開 dist 鎖住問題曾用 --outDir dist-v2 / dist-test-*）
+dist-v2/
+dist-v3/
+dist-test-*/
+dist-*/
+dist_v*/
+
 # 一次性轉檔／修補腳本與紀錄（保留在本機，不入庫）
 convert_*.py
 update_*.py

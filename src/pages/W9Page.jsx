@@ -431,10 +431,11 @@ const ASSEMBLY_AI_PROMPTS = {
 產出後我會自己改。`,
 };
 
-/* — 計畫書 1-5 章 AI 檢核 Prompt（本週 Step 3 用｜Gemini 思考模式）— */
-const PLAN_CH1_CHECK_PROMPT = `【請使用 Gemini 2.5 Pro 思考模式（Thinking Mode）】
+/* — 計畫書 1-5 章 AI 檢核 Prompt（本週 Step 3 用｜AI 深度思考模式）— */
+const PLAN_CH1_CHECK_PROMPT = `【建議使用 AI 的「深度思考／推理模式」】
+（Gemini 的 Thinking 模式、ChatGPT 的 o1 或 Pro、Claude 的 Extended Thinking 等——請選你慣用 AI 的深度推理版本。一般對話模式回答太淺，這份檢核值得等它多想幾分鐘。）
 
-你是高中專題指導顧問。以下是我計畫書第一到第五章的內容。請用思考模式深入檢查以下六件事，找出我自己看不到的盲點：
+你是高中專題指導顧問。以下是我計畫書第一到第五章的內容。請深入檢查以下六件事，找出我自己看不到的盲點：
 
 1. 【方向】研究動機是否能支撐研究問題？（若落差大，指出在哪）
 2. 【一致】研究目的與主研究問題是否邏輯一致？子問題是否都對應主問題？
@@ -445,26 +446,7 @@ const PLAN_CH1_CHECK_PROMPT = `【請使用 Gemini 2.5 Pro 思考模式（Thinki
 
 不用替我修改，只要指出問題點與建議修改方向。
 
-【研究方法】___
-【第一章：研究主題基本資訊】
-  研究題目：___
-  研究動機：___
-  研究目的：___
-  主研究問題：___
-  子問題：___
-  研究對象：___
-【第二章：關鍵詞操作定義】
-  1. ___
-  2. ___
-  3. ___
-【第三章：文獻回顧】
-  1. ___
-  2. ___
-  3. ___
-【第四章：變項／主題／維度設計】
-  ___
-【第五章：對象與抽樣】
-  ___`;
+【以下貼上你的計畫書第 1-5 章內容】`;
 
 const PLAN_AI_PROMPTS = {
     questionnaire: PLAN_CH1_CHECK_PROMPT,
@@ -516,7 +498,7 @@ const EXPORT_FIELDS = [
     /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
     { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-3 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
-    { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 Gemini 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 AI 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
     /* Step 4：回顧與繳交 */
     { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第三、四章的定版？' },
 ];
@@ -1080,22 +1062,22 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* AI 檢核（必做）· Gemini 思考模式審第 1-5 章 */}
+                    {/* AI 檢核（必做）· AI 思考模式審第 1-5 章 */}
                     <div className="space-y-4">
                         <div className="bg-[var(--ink)] text-white rounded-[var(--radius-unified)] overflow-hidden">
                             <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2">
                                 <span className="text-[11px] font-mono font-bold tracking-[0.12em] uppercase">AI 檢核 · 必做</span>
-                                <span className="font-bold text-[14px] ml-1">🤖 用 Gemini 思考模式檢核第 1-5 章</span>
+                                <span className="font-bold text-[14px] ml-1">🤖 用 AI 思考模式檢核第 1-5 章</span>
                             </div>
                             <div className="p-5 space-y-3">
                                 <p className="text-[13px] text-white/90 leading-[1.9]">
-                                    本節結束前複製下方 Prompt，回家貼進 <strong className="text-white">Gemini 2.5 Pro（開啟 Thinking Mode 思考模式）</strong>。把 docx 第 1-5 章內容填進 Prompt 的【___】位置後送出。AI 會深入找出你自己看不到的盲點。
+                                    本節結束前複製下方 Prompt，回家貼進<strong className="text-white">你慣用的 AI（開啟深度思考／推理模式）</strong>。把 docx 第 1-5 章內容填進 Prompt 的【___】位置後送出。AI 會深入找出你自己看不到的盲點。
                                 </p>
                                 <p className="text-[12px] text-white/70 leading-[1.9]">
-                                    💡 <strong>為什麼是 Gemini 思考模式？</strong>Thinking Mode 會花更多時間推理、檢核深度比一般對話更高——地基工程一次定勝負，值得等它多思考幾分鐘。
+                                    💡 <strong>為什麼要用思考模式？</strong>深度推理模式會花更多時間檢核，揪出一般對話抓不到的邏輯盲點——地基工程一次定勝負，值得等它多想幾分鐘。
                                 </p>
                                 <p className="text-[12px] text-white/70 leading-[1.9]">
-                                    📝 <strong>流程：</strong>複製 Prompt → 回家填入內容 → 等 Gemini 思考 → 讀回覆後在下方記錄判斷 → 補完 AIRED 的 R 欄位。
+                                    📝 <strong>流程：</strong>複製 Prompt → 回家貼入計畫書內容 → 等 AI 思考完成 → 讀回覆後在下方記錄判斷 → 補完 AIRED 的 R 欄位。
                                 </p>
                             </div>
                         </div>
@@ -1106,15 +1088,15 @@ export const W9Page = () => {
                         {/* AI 建議判斷紀錄 */}
                         <ThinkRecord
                             dataKey="w9-plan-ai-check"
-                            prompt="AI 檢核後的判斷紀錄（課後 Gemini 跑完後補）"
-                            defaultTemplate={'Gemini 指出的主要問題（至少 3 點）：\n1. ___\n2. ___\n3. ___\n\n我的決定：\n・採納：___（理由：___）\n・不採納：___（理由：___）\n・部分採納：___（怎麼改：___）'}
+                            prompt="AI 檢核後的判斷紀錄（課後 AI 跑完後補）"
+                            defaultTemplate={'AI 指出的主要問題（至少 3 點）：\n1. ___\n2. ___\n3. ___\n\n我的決定：\n・採納：___（理由：___）\n・不採納：___（理由：___）\n・部分採納：___（怎麼改：___）'}
                             rows={10}
                         />
 
                         {/* W9 完整 AIRED（從 Step 4 搬來，緊接 AI 檢核紀錄） */}
                         <AIREDNarrative
                             week="9"
-                            hint="本節預想式填 A/I/E/D；R 回家跑完 Gemini 思考模式再補"
+                            hint="本節預想式填 A/I/E/D；R 回家跑完 AI 思考模式再補"
                             optional={false}
                         />
                     </div>
@@ -1191,56 +1173,40 @@ export const W9Page = () => {
                         </Link>
                     </div>
 
-                    {/* 6. 課後計畫書撰寫鷹架 */}
-                    <div className="bg-[#FEF3C7] border-2 border-[#D97706] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-4 bg-[#D97706] text-white flex items-center gap-3">
-                            <span className="bg-white text-[#D97706] text-[10px] font-mono font-bold px-2 py-1 rounded-[3px]">HOMEWORK</span>
-                            <h3 className="font-bold text-[14px] leading-tight">W9 → W10 課後：計畫書第二～第八章</h3>
-                            <span className="ml-auto text-[11px] font-mono opacity-90">W10 第二節前完成</span>
+                    {/* 6. W10 預告 + 輕量課後提示 */}
+                    <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6 text-white">
+                        <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-2">W10 會做什麼</div>
+                        <p className="text-[13px] leading-[1.9] mb-4">
+                            第一節：<strong className="text-white">工具設計（第六章）</strong>——問卷題目／訪綱／實驗流程／觀察紀錄表／比較矩陣，依你方法分流。<br />
+                            第二節：<strong className="text-white">整本計畫書 AI 檢核 → 定稿繳交</strong>。
+                        </p>
+                        <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-2">W10 之前的輕量任務</div>
+                        <ul className="text-[13px] leading-[1.9] space-y-1 list-disc pl-5 mb-4">
+                            <li>第三章文獻補到 2-3 篇 + 差異段</li>
+                            <li>第四章變項／主題／維度定版 + 操作定義</li>
+                            <li>跑 AI 思考模式檢核第 1-5 章（用上方複製的 Prompt）→ 補完 AIRED 的 R 欄位</li>
+                            <li>docx 上傳 Google Classroom</li>
+                        </ul>
+                        <p className="text-[12px] text-white/70 leading-[1.85]">
+                            💡 大部分已在課堂完成，課後只是「補細節 + 跑 AI + 繳交」。若要幫自己規劃具體時間，下方可以寫。
+                        </p>
+                    </div>
+
+                    {/* 時間承諾（選填） */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-5 space-y-3">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[14px]">⏰</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">時間承諾（選填）</span>
                         </div>
-                        <div className="p-5 space-y-4">
-                            <p className="text-[13px] text-[#92400E] leading-relaxed">
-                                <strong>現實盤點</strong>：本節完成了計畫書第一章。第二到第八章要課後寫完，<strong className="text-[var(--danger)]">不要拖到 W10 下課前才趕</strong>——那時還要設計工具。
-                            </p>
-
-                            <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-3">
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-1">課後要寫完的章節</div>
-                                <ul className="text-[13px] text-[var(--ink)] space-y-1.5 leading-relaxed">
-                                    <li>・<strong>第二章</strong>：關鍵詞／行為操作型定義（3 個以上）</li>
-                                    <li>・<strong>第三章</strong>：文獻回顧（至少 2–3 篇，從 W5–W6 整合）</li>
-                                    <li>・<strong>第四章</strong>：變項／主題／維度設計（方法特性專屬欄位）</li>
-                                    <li>・<strong>第五章</strong>：對象與抽樣（從 W8 整合）</li>
-                                    <li>・<strong>第六章</strong>：工具設計（W10 第二節完成）</li>
-                                    <li>・<strong>第七～九章</strong>：實施／分析／結論（W10 第二節完成）</li>
-                                </ul>
-                            </div>
-
-                            {/* 自我承諾：具體意圖設計（implementation intention） */}
-                            <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-3">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[14px]">⏰</span>
-                                    <span className="font-bold text-[13px] text-[var(--ink)]">時間承諾：避免拖到最後一刻</span>
-                                </div>
-                                <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                    研究心理學：寫下「什麼時候、在哪裡、做多久」，完成率比模糊計畫高 2-3 倍。不要寫「這週找時間」。
-                                </p>
-                                <ThinkRecord
-                                    dataKey="w9-homework-commitment"
-                                    prompt="我打算什麼時候寫計畫書？（越具體越有效）"
-                                    defaultTemplate={'時段 1：___（日期+時間段），地點：___，預計寫第 ___ 章\n時段 2：___\n時段 3：___'}
-                                    rows={5}
-                                />
-                            </div>
-
-                            <div className="bg-[var(--ink)] rounded-[6px] p-4 text-white">
-                                <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-1">W10 會做什麼</div>
-                                <p className="text-[13px] leading-relaxed">
-                                    第一節：AI 檢核計畫書前段 + 設計工具（問卷題目 / 訪綱 / 實驗流程 / 觀察紀錄表 / 比較矩陣）。<br />
-                                    第二節：計畫書定稿 + 繳交。<br />
-                                    <strong className="text-[var(--danger)]">計畫書沒寫到第五章就來上課 = W10 第一節會卡死</strong>。
-                                </p>
-                            </div>
-                        </div>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            研究心理學：寫下「什麼時候、在哪裡、做多久」，完成率比模糊計畫高 2-3 倍。
+                        </p>
+                        <ThinkRecord
+                            dataKey="w9-homework-commitment"
+                            prompt="我打算什麼時候把課後三件事做完？"
+                            defaultTemplate={'補第三、四章：___（日期+時段+地點）\n跑 AI 檢核 + 補 AIRED：___\n上傳 docx 到 GC：___'}
+                            rows={4}
+                        />
                     </div>
                 </div>
             ),
@@ -1277,14 +1243,14 @@ export const W9Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W9"
-                title="方法深化 I："
-                accentTitle="工具設計基礎與處方診斷"
-                subtitle="帶著 W8 的 3 題草稿走進診所。今天學會用處方診斷抓出設計缺陷，掌握好工具的三大標準，再用三欄對應表把研究問題轉換為完整的工具初稿。"
+                title="診斷語言 × "
+                accentTitle="五章地基工程"
+                subtitle="第一節學診斷尺與檢查清單——認清什麼是好工具、什麼是毒題。第二節把 W2–W8 累積的成果整合為計畫書第一到第五章——工具設計之前，地基必須先打穩。"
                 meta={[
-                    { label: '第一節', value: '處方熱身 + 診斷工具包 + 組內看診' },
-                    { label: '第二節', value: '三欄對應表 + 同儕診斷 + 繳交' },
-                    { label: '課堂產出', value: '三欄對應表 + 工具初稿' },
-                    { label: '前置要求', value: 'W8 企劃書 + 3 題草稿' },
+                    { label: '第一節', value: '讀 W8 回饋 + 診斷尺 + 檢查清單 + 6 題練習' },
+                    { label: '第二節', value: '計畫書五章地基工程 + AI 檢核 Prompt + 預想 AIRED' },
+                    { label: '課堂產出', value: '計畫書第 1-5 章雛形 + W9 AIRED' },
+                    { label: '前置要求', value: 'W8 合題企劃書／單飛施工單' },
                 ]}
             />
             <CourseArc items={[

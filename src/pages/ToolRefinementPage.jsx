@@ -161,7 +161,7 @@ const CopyablePrompt = ({ text }) => {
 };
 
 /* ══════════════════════════════════════
- *  內部元件：W10 入口自檢（W9 組裝作業狀態）
+ *  內部元件：W10 入口自檢（W9 計畫書 1-5 章完成度）
  * ══════════════════════════════════════ */
 
 const PREP_OPTIONS = [
@@ -230,7 +230,7 @@ const PrepStatusCheck = ({ methodId }) => {
     return (
         <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
             <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center justify-between gap-2">
-                <span className="font-bold text-[13px]">🚦 開場自檢：W9 → W10 組裝作業</span>
+                <span className="font-bold text-[13px]">🚦 開場自檢：W9 計畫書第 1-5 章完成度</span>
                 {status && (
                     <button
                         onClick={reset}
@@ -244,7 +244,7 @@ const PrepStatusCheck = ({ methodId }) => {
             <div className="p-5 space-y-4">
                 {!status && (
                     <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                        進入 AI 檢核前先誠實回報——你有把 W9 Step 5 的「課後組裝作業」做完嗎？選擇會決定這節課開頭 15 分鐘的用法。
+                        進入工具設計前先誠實回報——你的 W9 計畫書第 1-5 章是否都寫完了？選擇會決定這節課開頭 15 分鐘要不要先補。
                     </p>
                 )}
 
@@ -275,64 +275,46 @@ const PrepStatusCheck = ({ methodId }) => {
 
                 {status === 'complete' && (
                     <div className="bg-[var(--success-light)] border-l-[3px] border-[var(--success)] p-4 rounded-[4px] text-[13px] text-[var(--ink)]">
-                        <strong>✅ 太好了。</strong> 直接跳到下方 AI 檢核流程，把整份工具貼進 Step 1 的文字框即可。
+                        <strong>✅ 太好了。</strong> 直接往下進入 Step 1 工具設計（計畫書第六章）——前段地基穩，今天可以專心把工具寫完。
                     </div>
                 )}
 
                 {status === 'partial' && (
                     <div className="bg-[var(--accent-light)] border-l-[3px] border-[var(--accent)] p-4 rounded-[4px] text-[13px] text-[var(--ink-mid)] space-y-3">
-                        <strong className="text-[var(--ink)] block">🔶 半成品也能上場——前 10 分鐘補齊架構。</strong>
+                        <strong className="text-[var(--ink)] block">🔶 本節前 10 分鐘先補齊第三、四章</strong>
                         <p className="leading-relaxed">
-                            不要求完美，把「能讓真人試答／試跑」當最低標。缺的通常是開場白、指導語、結尾、倫理說明這些外框，題目／行為定義核心你應該都有。
+                            第一、二、五章都到位的話，這節開工前先花 10 分鐘把第三章（文獻回顧補到 2-3 篇 + 差異）和第四章（變項／主題／維度定版）補完，再往下進工具設計。
                         </p>
-                        {template && (
-                            <a
-                                href={template.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-[var(--ink)] hover:bg-black text-white rounded-[6px] px-3 py-2 text-[12px] no-underline transition-colors"
-                            >
-                                📋 開啟模板副本（{template.name}）
-                            </a>
-                        )}
-                        <p className="text-[12px]">補完後整份貼進下方 Step 1 的工具文字框。</p>
+                        <p className="text-[12px]">
+                            為什麼不拖？<strong className="text-[var(--ink)]">第六章工具要長在第四章變項上</strong>——變項沒定完就設計工具 = 工具也長歪。
+                        </p>
                     </div>
                 )}
 
                 {status === 'none' && (
                     <div className="bg-[var(--danger-light)] border-l-[3px] border-[var(--danger)] p-4 rounded-[4px] text-[13px] text-[var(--ink)] space-y-3">
-                        <strong className="block text-[var(--danger)] text-[14px]">⚠️ 急救組裝模式：15 分鐘極速版</strong>
+                        <strong className="block text-[var(--danger)] text-[14px]">⚠️ 地基沒建好就蓋樓——今天會卡死</strong>
                         <p className="text-[12px] leading-relaxed">
-                            W10 的教學目標是「<strong>用 AI 審稿 + 自我迭代</strong>」——沒完整工具也能訓練這個技能，但你需要一份能讓 AI 挑毛病的草稿。深呼吸，照下面順序做：
+                            第六章工具是計畫書的一個章節，它必須長在前五章的地基上（特別是第四章變項／主題）。只有第一章沒辦法支撐工具設計。
                         </p>
 
-                        {template ? (
-                            <a
-                                href={template.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-3 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 no-underline transition-colors"
-                            >
-                                <span className="text-[18px]">📋</span>
-                                <div className="min-w-0">
-                                    <div className="text-[13px] font-bold">① 開啟「{template.name}」副本</div>
-                                    <div className="text-[11px] font-mono opacity-70 truncate">副本會存到你自己的雲端硬碟</div>
-                                </div>
-                            </a>
-                        ) : (
-                            <div className="bg-white border border-[var(--border)] rounded-[6px] p-3 text-[12px]">
-                                <strong>⚠️ 未偵測到 W9 的方法選擇。</strong> 請先<a href="/w9" className="text-[var(--accent)] underline">回 W9</a> 完成 Step 1 的方法選擇，再回來。
-                            </div>
-                        )}
-
                         <div className="bg-white border border-[var(--border)] rounded-[6px] p-3 space-y-2 text-[12px] leading-relaxed">
-                            <p><strong>② 把 W9 q1-q3 的變項對應表貼進模板「題目／內容」區</strong>——根據對應表生 3-5 題最低數量就好，求有不求多。</p>
-                            <p><strong>③ 補上開場白、指導語、結尾</strong>（模板都有現成範例句可改）。倫理提醒一句話帶過即可。</p>
-                            <p><strong>④ 把這份半成品整份貼進下方 Step 1 的工具文字框。</strong></p>
+                            <p><strong>可行選項：</strong></p>
+                            <p>① <strong>回 W9</strong> 把第二、三、四、五章快速補齊（就算只有骨架也行）→ 今天再回來做工具。</p>
+                            <p>② 如果時程真的來不及，<strong>找老師面談</strong>——地基沒打好就施工，是整份研究的風險。</p>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row gap-2">
+                            <a
+                                href="/w9"
+                                className="flex items-center justify-center gap-2 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 no-underline transition-colors text-[13px] font-bold"
+                            >
+                                回 W9 補齊第 2-5 章 →
+                            </a>
                         </div>
 
                         <p className="text-[11px] bg-white border border-[var(--border)] rounded-[4px] p-2 text-[var(--ink-mid)]">
-                            💡 <strong className="text-[var(--ink)]">誠實面對：</strong>今天的 AI 審稿品質會比預習同學差一截——這是自然後果，不是懲罰。下週 W11 要帶定稿去倫理審查，今天不補、下週更慘。
+                            💡 <strong className="text-[var(--ink)]">誠實面對：</strong>硬做工具會讓 W11 Pilot Test 與倫理審查連帶出錯——錯在上游，下游會放大。
                         </p>
                     </div>
                 )}
@@ -479,7 +461,7 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-ai-raw-feedback"
                         prompt="AI 回覆原文（開頭先寫 A+I 兩行；貼全文沒關係；有追問也一起貼）"
-                        defaultTemplate={'A: 我用了 ___（例：Gemini 2.5 Pro Thinking Mode）\nI: 我貼了 ___（例：全本計畫書 13 章，請 AI 檢核整體邏輯一致性）\n\n──── AI 完整回覆（以下貼上）────\n'}
+                        defaultTemplate={'A: 我用了 ___（例：Gemini Thinking / ChatGPT o1 / Claude Extended Thinking，選深度推理版本）\nI: 我貼了 ___（例：全本計畫書 13 章，請 AI 檢核整體邏輯一致性）\n\n──── AI 完整回覆（以下貼上）────\n'}
                         rows={14}
                     />
 
@@ -609,7 +591,7 @@ export const ToolRefinementPage = () => {
                     { label: '第一節', value: 'AI 檢核 + 判斷建議 + 第一輪修正' },
                     { label: '第二節', value: '人工預試 + AI vs 人工比對' },
                     { label: '課堂產出', value: 'AI 建議判斷表 + 預試紀錄 + 工具修正版' },
-                    { label: '前置要求', value: 'W9 工具初稿' },
+                    { label: '前置要求', value: 'W9 計畫書第 1-5 章（含第四章變項／主題）' },
                 ]}
             />
             <CourseArc items={[

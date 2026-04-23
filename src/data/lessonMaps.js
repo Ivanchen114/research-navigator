@@ -1376,8 +1376,8 @@ export const W9Data = {
                     colorClass: "c1",
                     icon: "🤖",
                     title: "九、 Step 3 AI 檢核 Prompt + 預想式 AIRED（必做）",
-                    desc: "複製 Gemini 思考模式 Prompt（審計畫書第 1-5 章）帶回家跑；課堂預想式寫 AIRED 的 A/I/E/D，R 欄位回家補。",
-                    tags: ["Gemini Thinking", "預想 AIRED"]
+                    desc: "複製 AI 思考模式 Prompt（審計畫書第 1-5 章）帶回家跑；課堂預想式寫 AIRED 的 A/I/E/D，R 欄位回家補。",
+                    tags: ["AI 思考模式", "預想 AIRED"]
                 },
                 {
                     timeStart: "0:48",
@@ -1439,7 +1439,7 @@ export const W10Data = {
         {
             prefix: "②",
             title: "整本計畫書 AI 檢核",
-            subtitle: "Gemini 檢整體邏輯一致性",
+            subtitle: "AI 檢整體邏輯一致性",
             desc: "方向（1-3）→ 方法（4-5）→ 工具（6）→ 執行（7-13）整條連貫性",
             colorConfig: "b"
         },
