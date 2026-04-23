@@ -83,31 +83,40 @@ const METHOD_PITFALLS = {
     },
 };
 
-/* — 三大標準 — */
+/* — 三大標準（階層：方向 → 精度 → 執行；越上層錯越沒救） — */
 const THREE_STANDARDS = [
     {
+        layer: 1,
         name: '有效性',
         en: 'Validity',
         emoji: '🎯',
-        desc: '能測到你想測的東西',
-        bad: '「你覺得睡眠重要嗎？」→ 問不出睡眠時間',
-        good: '「你平日幾點睡覺？」→ 直接量測目標變項',
+        plainQ: '方向對嗎？',
+        desc: '你問的東西，根本答不出你想知道的答案——方向錯了，整個研究白做。',
+        bad: '「你覺得睡眠重要嗎？」→ 拿到一個態度，拿不到任何時間',
+        good: '「你平日幾點睡覺？」→ 問的就是你要測的變項',
+        stakes: '錯了不能修，只能重來',
     },
     {
+        layer: 2,
         name: '可靠性',
         en: 'Reliability',
         emoji: '🔒',
-        desc: '測出來的結果穩定，沒有模糊空間',
-        bad: '「你常常熬夜嗎？」→ 常常是多常？熬夜是幾點？',
-        good: '「上週你有幾天超過晚上12點睡？」→ 數字明確',
+        plainQ: '測得準嗎？',
+        desc: '方向對，但題目太模糊——同一個人不同時間答，結果不一樣。',
+        bad: '「你常常熬夜嗎？」→「常常」每個人定義不同，今天答「還好」明天答「超常」',
+        good: '「上週你有幾天超過晚上 12 點睡？」→ 數字明確，答得一致',
+        stakes: '可以修，改題目措辭就能救',
     },
     {
+        layer: 3,
         name: '可行性',
         en: 'Feasibility',
         emoji: '⚡',
-        desc: '做得到、對方願意理你',
-        bad: '問卷100題、訪談5小時 → 沒人理你',
-        good: '問卷15-20題（5分鐘填完）、訪談3-5大題（30分鐘內）',
+        plainQ: '做得到嗎？',
+        desc: '設計再漂亮，對方不肯陪你走完——沒收到資料，等於沒做。',
+        bad: '問卷 100 題、訪談 5 小時 → 沒人理你',
+        good: '問卷 15-20 題（5 分鐘填完）、訪談 3-5 大題（30 分鐘內）',
+        stakes: '最容易修，砍規模就行',
     },
 ];
 
@@ -569,22 +578,35 @@ export const W9Page = () => {
                         這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——兩把尺：<strong>三大標準</strong>（設計原則）+ <strong>錯誤類型清單</strong>（3 共通 + 你的方法獨家）。Step 3 看診、Step 4 做三欄表、Step 5 同儕互評，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
                     </p>
 
-                    {/* 尺 1 · 三大標準 — 手機 1 欄 / 桌機 3 欄 */}
+                    {/* 尺 1 · 三大標準 — 手機 1 欄 / 桌機 3 欄（階層：方向 → 精度 → 執行） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 1 · 好工具三大標準（每題都要過這三關）</div>
+                        <div className="mb-3">
+                            <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider">尺 1 · 好工具三大標準</div>
+                            <div className="text-[12px] text-[var(--ink-mid)] mt-1 leading-relaxed">
+                                由根本到細節的三層關卡：<strong className="text-[var(--ink)]">方向 → 精度 → 執行</strong>。<span className="text-[var(--ink-mid)]">越上層錯，越沒救。</span>
+                            </div>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             {THREE_STANDARDS.map((s, i) => (
-                                <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-4">
-                                    <div className="flex items-center gap-2 mb-2">
+                                <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-4 flex flex-col">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="inline-block text-[10px] font-mono font-bold text-[var(--ink-light)] border border-[var(--border)] rounded px-1.5 py-0.5 tracking-wider">
+                                            LAYER {s.layer}
+                                        </span>
                                         <span className="text-[20px]">{s.emoji}</span>
-                                        <div>
-                                            <div className="text-[14px] font-bold text-[var(--ink)] leading-tight">{s.name}</div>
-                                            <div className="text-[10px] font-mono text-[var(--ink-light)]">{s.en}</div>
+                                    </div>
+                                    <div className="mb-2">
+                                        <div className="text-[15px] font-bold text-[var(--ink)] leading-tight">{s.plainQ}</div>
+                                        <div className="text-[10px] font-mono text-[var(--ink-light)] mt-0.5">
+                                            {s.name} · {s.en}
                                         </div>
                                     </div>
-                                    <div className="text-[12px] text-[var(--ink-mid)] mb-2 leading-relaxed">{s.desc}</div>
+                                    <div className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed">{s.desc}</div>
                                     <div className="text-[12px] text-[var(--danger)] mb-1 leading-relaxed">❌ {s.bad}</div>
-                                    <div className="text-[12px] text-[var(--success)] leading-relaxed">✅ {s.good}</div>
+                                    <div className="text-[12px] text-[var(--success)] mb-3 leading-relaxed">✅ {s.good}</div>
+                                    <div className="mt-auto text-[11px] font-mono text-[var(--ink-light)] border-t border-dashed border-[var(--border)] pt-2 leading-relaxed">
+                                        錯了的代價：<span className="text-[var(--ink-mid)]">{s.stakes}</span>
+                                    </div>
                                 </div>
                             ))}
                         </div>
