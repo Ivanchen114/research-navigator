@@ -111,24 +111,17 @@ const PAIRING_INSTRUCTIONS = {
 
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    /* Step 1 */
-    { key: 'w10-tool-text', label: '工具文字版', question: '你貼給 AI 檢核的工具內容' },
-    { key: 'w10-ai-raw-feedback', label: 'AI 原始回覆', question: 'AI 給你的檢核報告' },
-    /* Step 2 */
-    { key: 'w10-ai-judge', label: 'AI 建議判斷表', question: '逐條判斷 AI 建議' },
-    { key: 'w10-judge-principle', label: '判斷原則', question: '你採納／不採納的理由是什麼？' },
-    { key: 'w10-tool-revision', label: '第一輪修正紀錄', question: '根據 AI 建議修改了什麼？' },
-    /* Step 3 */
-    { key: 'w10-pilot-partner', label: '預試配對對象' },
-    { key: 'w10-pilot-findings', label: '預試發現', question: '真人測試時發現了什麼問題？' },
-    /* Step 4 */
-    { key: 'w10-ai-found', label: 'AI 發現的問題' },
-    { key: 'w10-human-found', label: '人工預試才發現的問題' },
-    { key: 'w10-ai-effective', label: 'AI 建議效果評估', question: 'AI 建議的修改，預試後效果如何？' },
-    { key: 'w10-final-revision', label: '最終修正紀錄', question: '預試後的最終修改' },
-    /* Step 5 */
-    { key: 'w10-ai-reflection', label: 'AI 協助研究反思', question: '使用 AI 協助研究工具設計的心得' },
-    { key: 'w10-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    /* 入場擋板 */
+    { key: 'w10-entry-self-report', label: '入場自報（W9 docx 完成度）', question: '第二~五章章節完成狀況' },
+    /* Step 1：工具設計 */
+    { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
+    { key: 'w10-tool-text', label: '工具文字版', question: '設計完成的工具本體（若已整合在 docx 第六章則留空）' },
+    /* Step 2：整本 AI 檢核 */
+    { key: 'w10-ai-raw-feedback', label: 'AI 對全本計畫書的回覆' },
+    { key: 'w10-ai-judge', label: 'AI 建議採納判斷', question: '採納／不採納／部分採納的決定與理由' },
+    { key: 'w10-tool-revision', label: '整本修正紀錄', question: '根據 AI 建議修改了哪些章節？' },
+    /* Step 3：定稿繳交 */
+    { key: 'w10-aired-record', label: 'W10 完整 AIRED 敘事', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -174,9 +167,9 @@ const CopyablePrompt = ({ text }) => {
  * ══════════════════════════════════════ */
 
 const PREP_OPTIONS = [
-    { id: 'complete', icon: '✅', label: '完成',      desc: '工具已組裝成完整版' },
-    { id: 'partial',  icon: '🔶', label: '部分完成',  desc: '有架構但還缺欄位' },
-    { id: 'none',     icon: '⚠️', label: '完全沒做',  desc: '只有 W9 的對應表' },
+    { id: 'complete', icon: '✅', label: '第二~五章完成',    desc: 'docx 五章都寫完' },
+    { id: 'partial',  icon: '🔶', label: '部分完成',          desc: '第三、四章還在補' },
+    { id: 'none',     icon: '⚠️', label: '只寫到第一章',      desc: 'W9 課後沒補第二~五章' },
 ];
 
 const PrepStatusCheck = ({ methodId }) => {
@@ -185,13 +178,14 @@ const PrepStatusCheck = ({ methodId }) => {
     });
     const template = TEMPLATES[methodId];
 
-    /* 第零層檢測：有沒有做過 W9？三欄表或方法選擇全空 = 沒來上課 */
+    /* 第零層檢測：有沒有做過 W9？計畫書 checklist / 方法選擇 / AIRED 全空 = 沒來上課 */
     const w9SkippedEntirely = (() => {
         try {
             const saved = readRecords();
-            const anyThreeCol = (saved['w9-three-col-q1']?.trim() || saved['w9-three-col-q2']?.trim() || saved['w9-three-col-q3']?.trim());
-            const anyMethod = saved['w9-my-method']?.trim();
-            return !anyThreeCol && !anyMethod;
+            const hasChecklist = saved['w9-plan-ch1-checklist']?.trim();
+            const hasMethod = saved['w9-my-method']?.trim();
+            const hasAired = saved['w9-aired-record']?.trim();
+            return !hasChecklist && !hasMethod && !hasAired;
         } catch { return false; }
     })();
 
@@ -214,10 +208,10 @@ const PrepStatusCheck = ({ methodId }) => {
                 </div>
                 <div className="p-5 space-y-3 text-[13px] text-[var(--ink)]">
                     <p className="leading-relaxed">
-                        W10 的 AI 審稿需要一份<strong>有結構的工具草稿</strong>當素材。W9 的三欄對應表是這份草稿的骨架——直接跳進 W10 沒有素材可審。
+                        W10 的工具設計需要建立在 <strong>W9 計畫書第一~五章的地基</strong>上。網頁讀不到你的 W9 checklist、方法選擇、AIRED——代表 W9 沒做。
                     </p>
                     <p className="leading-relaxed">
-                        硬要在 W10 補做 W9 的量 = 同時跑兩週份的思考，效率最差。請先回 W9 至少把 Step 3（三欄對應表）做完再回來。
+                        硬要在 W10 補做 W9 的量 = 同時跑兩週份的思考，效率最差。請先回 W9 把 Step 3 五章地基工程做完再回來。
                     </p>
                     <div className="flex flex-col md:flex-row gap-2 pt-1">
                         <a
@@ -381,342 +375,142 @@ export const ToolRefinementPage = () => {
     /* ── 五步驟 ──────────────────────────────────────── */
 
     const steps = [
-        /* ─── Step 1：AI 檢核站 ─── */
+        /* ─── Step 1：工具設計（第六章）— 第一節 50 min ─── */
         {
-            title: 'AI 檢核站',
+            title: '工具設計（第六章）',
+            icon: '🔧',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    {/* 入場擋板：W9 完成狀態自檢 */}
+                    <PrepStatusCheck methodId={detectedMethodId} />
+
+                    {/* Step 1 開場 */}
+                    <div>
+                        <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                            W9 你已完成計畫書第一~五章地基。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把第六章（工具本體）寫完</strong>。依你的方法，具體產出下方表格指定的內容。
+                        </p>
+                        <div className="w7-notice w7-notice-gold">
+                            🎯 <strong>本節目標：計畫書第六章工具設計完成。</strong>內容寫在 <strong>docx</strong> 上，網頁只記關鍵決策。
+                        </div>
+                    </div>
+
+                    {/* 方法分流提示 */}
+                    {detectedMethodId ? (
+                        (() => {
+                            const toolByMethod = {
+                                questionnaire: { label: '📋 問卷組', out: '每個變項 3–5 題問卷題目（第四章變項 × 第六章題目）' },
+                                interview: { label: '🎤 訪談組', out: '每個主題 1 主問題 + 2–3 追問（第四章主題 × 第六章大綱）' },
+                                experiment: { label: '🧪 實驗組', out: '實驗流程 Step 1–5 + 數據記錄表（第四章變項 × 第六章流程）' },
+                                observation: { label: '👀 觀察組', out: '觀察紀錄表欄位 + 時段採樣方式（第四章維度 × 第六章紀錄表）' },
+                                literature: { label: '📚 文獻組', out: '比較矩陣欄位（至少 7 欄）+ 分析流程 Step 1–5' },
+                            }[detectedMethodId];
+                            return (
+                                <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">你的方法</span>
+                                        <span className="font-bold text-[14px] text-[var(--ink)]">{toolByMethod.label}</span>
+                                    </div>
+                                    <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                        <strong className="text-[var(--ink)]">本節要產出：</strong>{toolByMethod.out}
+                                    </p>
+                                </div>
+                            );
+                        })()
+                    ) : (
+                        <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[12.5px] text-[var(--ink-light)]">
+                            👆 未偵測到你的研究方法。請回 W9 完成方法選擇。
+                        </div>
+                    )}
+
+                    {/* 工具設計關鍵決策 */}
+                    <ThinkRecord
+                        dataKey="w10-tool-design-notes"
+                        prompt="工具設計的 2-3 個關鍵決策（docx 寫完後在此摘要）"
+                        defaultTemplate={'決策 1：___（例：問卷改用五點量表不用七點，因為___）\n決策 2：___\n決策 3：___'}
+                        rows={6}
+                    />
+
+                    {/* 下節預告 */}
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 第六章完成 → 第二節做 <strong>整本 AI 檢核 + 定稿繳交</strong>。中場休息時可以先準備整本 docx（13 章都到齊才能給 AI 整體檢核）。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 2：整本計畫書 AI 檢核 — 第二節前半 25 min ─── */
+        {
+            title: '整本計畫書 AI 檢核',
             icon: '🤖',
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        W9 你用三欄對應表完成了工具的「系統版」設計。今天讓 <strong className="text-[var(--ink)]">AI 當第一輪品管員</strong>——它能快速找出你沒注意到的問題。但記住：<strong className="text-[var(--accent)]">AI 不一定對，你要判斷！</strong>
+                        工具設計完了，整本計畫書 13 章都到位。這次 AI 檢核是<strong className="text-[var(--ink)]">最後一次綜合檢查</strong>——比對「方向（第 1-3 章）→ 方法（第 4-5 章）→ 工具（第 6 章）→ 執行（第 7-13 章）」是否邏輯一致。
                     </p>
 
-                    {/* W9 帶入 */}
-                    {(w9Topic || w9Method) && (
-                        <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)] text-[13px]">
-                            <span className="text-[16px]">📎</span>
-                            <div>
-                                <span className="font-bold text-[var(--accent)]">W9 研究檔案帶入</span>
-                                {w9Topic && <p className="text-[var(--ink-mid)] mt-0.5">研究題目：{w9Topic}</p>}
-                                {w9Method && <p className="text-[var(--ink-mid)] mt-0.5">選用方法：{w9Method}</p>}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 入口自檢：組裝作業狀態分流 */}
-                    <PrepStatusCheck methodId={detectedMethodId} />
-
-                    {/* 任務流程 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center gap-2">
-                            <Zap size={16} />
-                            <span className="font-bold text-[13px]">今天的任務流程</span>
-                        </div>
-                        <div className="p-5 space-y-3 text-[13px] text-[var(--ink-mid)]">
-                            {[
-                                ['1️⃣', '把你的工具整理成文字版，貼給 AI 檢核'],
-                                ['2️⃣', '逐條判斷 AI 的建議——採納？不採納？部分採納？'],
-                                ['3️⃣', '根據判斷結果修正工具'],
-                                ['4️⃣', '下節課人工預試——讓真人試用你的工具'],
-                            ].map(([num, text], i) => (
-                                <div key={i} className="flex items-start gap-3">
-                                    <span className="text-[16px]">{num}</span>
-                                    <span>{text}</span>
-                                </div>
-                            ))}
-                        </div>
+                    {/* AI 檢核 Prompt */}
+                    <div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">第一步：複製 Prompt 貼到 AI</div>
+                        <CopyablePrompt text={currentPrompt || GENERIC_PROMPT} />
+                        <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
+                            💡 把計畫書<strong>全本 13 章（含工具）</strong>貼進 AI 對話框底部的「【貼上你的 XXX】」位置。
+                        </p>
                     </div>
 
-                    {/* AI Prompt */}
-                    <CopyablePrompt text={currentPrompt || GENERIC_PROMPT} />
-
-                    {!currentPrompt && (
-                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[13px] text-[var(--ink-mid)]">
-                            <strong className="text-[var(--ink)]">💡 提示：</strong> 未偵測到 W9 的方法選擇，顯示通用 Prompt。建議回 W9 完成三欄對應表後再來。
-                        </div>
-                    )}
-
-                    {/* 貼工具 */}
+                    {/* AI 原始回覆 */}
                     <ThinkRecord
-                        dataKey="w10-tool-text"
-                        prompt="Step 1：把你的「W9 → W10 組裝作業」整份貼在這裡（完整工具文字）"
-                        placeholder={`這一格要貼的是你課後組裝完成的完整工具文字，不是散落的題目。\n\n問卷組：開場白 + 基本資料 + 所有題目 + 結尾（整份複製進來）\n訪談組：開場白 + 暖身 + 核心大問題 + 追問 + 收尾\n實驗組：研究目的 + 變項 + 實驗流程 + 數據記錄表\n觀察組：觀察目的 + 時地 + 行為定義 + 紀錄表欄位\n文獻組：搜尋策略 + 納入排除標準 + 比較矩陣欄位 + 預選清單\n\n沒組裝完成？回 W9 Step 5 的「課後組裝作業鷹架」。`}
+                        dataKey="w10-ai-raw-feedback"
+                        prompt="AI 回覆原文（貼上或截圖重點）"
+                        placeholder="AI 指出的主要問題（整本邏輯一致性、章節對齊、工具與方向的對應）..."
+                        rows={8}
+                    />
+
+                    {/* 採納判斷 */}
+                    <ThinkRecord
+                        dataKey="w10-ai-judge"
+                        prompt="AI 建議採納判斷（逐條評估）"
+                        defaultTemplate={'建議 1：AI 說___\n→ ✅ 採納 / ❌ 不採納 / 🔶 部分採納\n→ 理由：___\n\n建議 2：___\n→ 判斷：___\n→ 理由：___\n\n建議 3：___\n→ 判斷：___\n→ 理由：___'}
                         rows={10}
                     />
 
-                    {/* 貼 AI 回覆 */}
-                    <ThinkRecord
-                        dataKey="w10-ai-raw-feedback"
-                        prompt="Step 2：把 AI 的檢核回覆貼在這裡"
-                        placeholder="複製 AI（Claude／ChatGPT／Gemini）的完整回覆……"
-                        rows={8}
-                    />
-                </div>
-            ),
-        },
-
-        /* ─── Step 2：AI 建議判斷表 ─── */
-        {
-            title: 'AI 建議判斷表',
-            icon: '⚖️',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        AI 給了一堆建議，但<strong className="text-[var(--ink)]">不是每條都要照做</strong>。逐條判斷：這個建議合理嗎？適合高中生的研究嗎？符合你的研究目的嗎？
-                    </p>
-
-                    {/* 三種判斷 */}
-                    <div className="w10-judge-tips">
-                        <div className="w10-judge-tip">
-                            <span className="w10-judge-tip-icon">✅</span>
-                            <div>
-                                <strong>採納</strong>
-                                <span>AI 說得對，改了會讓工具更好</span>
-                            </div>
-                        </div>
-                        <div className="w10-judge-tip">
-                            <span className="w10-judge-tip-icon">❌</span>
-                            <div>
-                                <strong>不採納</strong>
-                                <span>AI 的建議不適用（太學術、不符文化、偏離研究目的）</span>
-                            </div>
-                        </div>
-                        <div className="w10-judge-tip">
-                            <span className="w10-judge-tip-icon">🔶</span>
-                            <div>
-                                <strong>部分採納</strong>
-                                <span>方向對但需要調整，改成適合你的版本</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 判斷表 */}
-                    <ThinkRecord
-                        dataKey="w10-ai-judge"
-                        prompt="AI 建議判斷表：逐條記錄 AI 的建議，並寫下你的判斷"
-                        defaultTemplate={`建議 1：（AI 說了什麼？）\n→ 判斷：✅採納 / ❌不採納 / 🔶部分採納\n→ 理由：\n\n建議 2：\n→ 判斷：\n→ 理由：\n\n建議 3：\n→ 判斷：\n→ 理由：\n\n（繼續新增……）`}
-                        scaffold={[
-                            '建議___：AI 說___',
-                            '→ 判斷：✅採納 / ❌不採納 / 🔶部分採納',
-                            '→ 理由：___',
-                        ]}
-                        rows={14}
-                    />
-
-                    {/* 判斷原則 */}
-                    <ThinkRecord
-                        dataKey="w10-judge-principle"
-                        prompt="你的判斷原則：什麼時候聽 AI 的？什麼時候不聽？"
-                        defaultTemplate={'我們採納 AI 建議是因為……\n我們不採納 AI 建議是因為……'}
-                        scaffold={['我們聽 AI 的，通常是因為___', '我們不聽 AI 的，通常是因為___']}
-                        rows={4}
-                    />
-
-                    {/* 修正紀錄 */}
+                    {/* 整本修正紀錄 */}
                     <ThinkRecord
                         dataKey="w10-tool-revision"
-                        prompt="第一輪修正紀錄：根據 AI 建議，你實際改了什麼？"
-                        defaultTemplate={'1. 第___題：原本___，改成___\n2. 新增___\n3. 刪除___'}
-                        scaffold={['第__題原本___', '改成___', '因為___']}
+                        prompt="根據 AI 建議，整本計畫書要改哪些章節？"
+                        defaultTemplate={'第___章要改：___（改成___）\n第___章要改：___\n第___章要改：___'}
                         rows={6}
                     />
 
-                    {/* 選做提示 */}
-                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[13px]">
-                        <strong className="text-[var(--ink)]">⚡ 選做：</strong>
-                        <span className="text-[var(--ink-mid)] ml-1">修改完成後，可以把修正版再貼給 AI 看一次，確認問題是否解決。時間夠就做，不夠就直接進入下節課的人工預試。</span>
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 修正紀錄寫完 → 下一個 Step 寫 W10 AIRED + 定稿繳交。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 3：人工預試 ─── */
+        /* ─── Step 3：W10 AIRED + 定稿繳交 — 第二節後半 25 min ─── */
         {
-            title: '人工預試',
-            icon: '🧪',
+            title: 'W10 AIRED + 定稿繳交',
+            icon: '📤',
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        AI 看的是文字，<strong className="text-[var(--ink)]">人工預試看的是真實體驗</strong>。讓真人試用你的工具，你會發現很多 AI 抓不到的問題。
+                        最後 25 分鐘：完整記錄 W10 AIRED（本週最重要的 AI 互動），上傳定稿，預告 W11 Pilot Test 與倫理審查。
                     </p>
 
-                    {/* AI 的限制 */}
-                    <div className="w10-limits-grid">
-                        {AI_LIMITS.map((item, i) => (
-                            <div key={i} className="w10-limit-card">
-                                <span className="text-[20px]">{item.icon}</span>
-                                <strong className="text-[13px] text-[var(--ink)]">{item.title}</strong>
-                                <span className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{item.desc}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* 配對指示 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <Users size={16} />
-                            <span className="font-bold text-[13px]">預試配對方式</span>
-                        </div>
-                        <div className="p-5 text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                            {currentPairing}
-                        </div>
-                    </div>
-
-                    {/* 預試對象 */}
-                    <ThinkRecord
-                        dataKey="w10-pilot-partner"
-                        prompt="你和誰配對預試？"
-                        defaultTemplate="配對對象：___組／___同學"
-                        rows={1}
-                    />
-
-                    {/* 預試發現 */}
-                    <ThinkRecord
-                        dataKey="w10-pilot-findings"
-                        prompt="預試中發現了什麼問題？（記錄每一個卡住的地方）"
-                        defaultTemplate={`問題 1：第___題，對方說___\n問題 2：___\n問題 3：___\n整體花了___分鐘完成`}
-                        scaffold={[
-                            '第__題讓對方卡住，因為___',
-                            '對方反映___',
-                            '整體花了___分鐘',
-                        ]}
-                        rows={8}
-                    />
-                </div>
-            ),
-        },
-
-        /* ─── Step 4：AI vs 人工比對 + 即時修正 ─── */
-        {
-            title: 'AI vs 人工比對',
-            icon: '🔍',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        現在把 AI 的發現和人工預試的發現放在一起比較。<strong className="text-[var(--ink)]">誰找到了什麼？誰漏掉了什麼？</strong>
-                    </p>
-
-                    {/* 比對雙欄 */}
-                    <div className="w10-compare-grid">
-                        <div className="w10-compare-card w10-compare-ai">
-                            <div className="w10-compare-header">
-                                <Bot size={16} />
-                                <span>AI 發現的問題</span>
-                            </div>
-                            <div className="w10-compare-body">
-                                <ThinkRecord
-                                    dataKey="w10-ai-found"
-                                    prompt=""
-                                    defaultTemplate={'AI 指出了：\n1. ___\n2. ___\n3. ___'}
-                                    rows={5}
-                                />
-                            </div>
-                        </div>
-                        <div className="w10-compare-card w10-compare-human">
-                            <div className="w10-compare-header">
-                                <Users size={16} />
-                                <span>人工預試才發現的問題</span>
-                            </div>
-                            <div className="w10-compare-body">
-                                <ThinkRecord
-                                    dataKey="w10-human-found"
-                                    prompt=""
-                                    defaultTemplate={'真人測試時才發現：\n1. ___\n2. ___\n3. ___'}
-                                    rows={5}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* AI 建議效果 */}
-                    <ThinkRecord
-                        dataKey="w10-ai-effective"
-                        prompt="AI 建議的修改，預試後效果如何？"
-                        placeholder={'AI 建議修改的第___題：\n□ 有效，問題解決了\n□ 部分有效，還需要再改\n□ 無效，問題還在'}
-                        scaffold={[
-                            'AI 建議改的第__題，預試結果：___',
-                            '有效／部分有效／無效',
-                        ]}
-                        rows={4}
-                    />
-
-                    {/* 最終修正 */}
-                    <ThinkRecord
-                        dataKey="w10-final-revision"
-                        prompt="即時修正：根據人工預試結果，你最後改了什麼？"
-                        defaultTemplate={'1. 第___題改成___（因為預試時___）\n2. 刪掉___（因為___）\n3. 新增___（因為___）'}
-                        scaffold={['第__題改成___', '因為預試時___']}
-                        rows={6}
-                    />
-                </div>
-            ),
-        },
-
-        /* ─── Step 5：回顧與繳交 ─── */
-        {
-            title: '回顧與繳交',
-            icon: '📋',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    {/* AI 反思 */}
-                    <ThinkRecord
-                        dataKey="w10-ai-reflection"
-                        prompt="使用 AI 協助研究工具設計，你學到了什麼？"
-                        placeholder={'AI 給了哪些有用的建議？\nAI 給了哪些不適用的建議？\n你覺得 AI 協助研究最大的優勢和限制是什麼？'}
-                        scaffold={[
-                            'AI 最有用的建議是___',
-                            'AI 最不適用的建議是___，因為___',
-                            'AI 的優勢是___，限制是___',
-                            '下次使用 AI 我會___',
-                        ]}
-                        rows={6}
-                    />
-
-                    {/* AIRED 敘事版 · 本週 AI 互動總結 */}
-                    <AIREDNarrative week="10" hint="這週你用 AI 檢核研究工具並判斷建議" />
-
-                    {/* 今日重點 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--ink)] text-white font-bold text-[13px]">
-                            💡 今日重點
-                        </div>
-                        <div className="p-5 space-y-3">
-                            <div className="w10-summary-row">
-                                <span className="w10-summary-icon">🤖</span>
-                                <div>
-                                    <strong className="text-[13px] text-[var(--ink)]">AI 的優勢</strong>
-                                    <p className="text-[12px] text-[var(--ink-mid)]">快速找出明顯問題、提供專業建議、不會累</p>
-                                </div>
-                            </div>
-                            <div className="w10-summary-row">
-                                <span className="w10-summary-icon">🧑‍🤝‍🧑</span>
-                                <div>
-                                    <strong className="text-[13px] text-[var(--ink)]">人工預試的價值</strong>
-                                    <p className="text-[12px] text-[var(--ink-mid)]">發現 AI 沒發現的問題、測試實際可行性、真實的受訪者體驗</p>
-                                </div>
-                            </div>
-                            <div className="w10-summary-row">
-                                <span className="w10-summary-icon">⭐</span>
-                                <div>
-                                    <strong className="text-[13px] text-[var(--ink)]">最佳組合</strong>
-                                    <p className="text-[12px] text-[var(--accent)] font-bold">AI 第一輪檢核 → 人工預試 → 再修正</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 檢核清單 */}
+                    {/* W10 定稿驗收 checklist */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
-                            ✅ W10 完成後，請確認
+                            ✅ W10 定稿前驗收
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
-                                '用 AI 檢核了你的研究工具',
-                                '逐條判斷了 AI 建議（不盲從）',
-                                '完成人工預試（真人測試）',
-                                '比較了 AI 發現 vs 人工發現',
-                                '根據雙重回饋修正了工具',
+                                '第六章工具設計已完成（docx）',
+                                '整本計畫書 13 章都有內容（docx）',
+                                'AI 檢核回覆已讀完、判斷已做',
+                                '整本修正紀錄已寫',
+                                'W10 AIRED 敘事完整填寫',
+                                '計畫書 docx 已上傳 Google Classroom',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
@@ -726,28 +520,39 @@ export const ToolRefinementPage = () => {
                         </div>
                     </div>
 
-                    {/* 一鍵複製 */}
+                    {/* W10 完整 AIRED */}
+                    <AIREDNarrative
+                        week="10"
+                        hint="W10 主要 AI 互動：整本計畫書檢核"
+                        optional={false}
+                    />
+
+                    {/* ExportButton */}
                     <ExportButton
-                        weekLabel="W10 AI 協助工具精進與預試"
+                        weekLabel="W10 工具設計 + 整本 AI 檢核"
                         fields={EXPORT_FIELDS}
                     />
 
-                    {/* 下週預告 */}
-                    <div className="next-week-preview">
-                        <div className="next-week-header">
-                            <span className="next-week-badge">NEXT WEEK</span>
-                            <h3 className="next-week-title">W11 預告：倫理審查 + 正式施測準備</h3>
+                    {/* W11 預告（Pilot + 倫理） */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Users size={20} className="text-[var(--danger)]" />
+                            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">W11 預告 · Pilot Test + 倫理審查</span>
                         </div>
-                        <div className="next-week-content">
-                            <div className="next-week-col">
-                                <div className="next-week-label">帶什麼來</div>
-                                <p className="next-week-text">修正完畢的工具定稿（問卷／訪談大綱／實驗流程／觀察表）</p>
-                            </div>
-                            <div className="next-week-col">
-                                <div className="next-week-label">做什麼</div>
-                                <p className="next-week-text">倫理四問自查、知情同意書 AI 審查、蓋章出發——通過審查才能正式施測！</p>
-                            </div>
+                        <div className="font-bold text-[17px] md:text-[18px] mb-3 leading-tight">
+                            下週帶定稿工具來做真人預試
                         </div>
+                        <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
+                            AI 檢核已經是第一輪把關——但 AI 看不到「填答者的臉」。W11 要做<strong className="text-white">真人預試</strong>：找 2-3 人實際填／答／測你的工具，看出 AI 沒抓到的問題。
+                        </p>
+                        <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1 mb-4 pl-4">
+                            <li>・<strong className="text-white">倫理審查</strong>：知情同意書、隱私保護、退出機制最後確認</li>
+                            <li>・<strong className="text-white">預試對象聯絡</strong>：W10 課後先約好 2-3 位預試者</li>
+                            <li>・<strong className="text-white">工具形式準備</strong>：問卷轉 Google Form、訪綱印紙本、觀察表印紙本</li>
+                        </ul>
+                        <p className="text-[12.5px] text-white/70 leading-[1.9] font-mono">
+                            課後任務：約預試對象 + 準備工具實體形式（印出或線上版）
+                        </p>
                     </div>
                 </div>
             ),

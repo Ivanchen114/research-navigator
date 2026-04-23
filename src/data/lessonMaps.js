@@ -1256,30 +1256,30 @@ export const W9Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "診斷工具包（兩把尺）",
+            title: "診斷工具包（診斷尺 + 檢查清單）",
             subtitle: "三大標準 + 錯誤類型清單",
-            desc: "信／效／行 + 3 共通錯誤 + 5 方法獨家陷阱（頁籤切換）",
+            desc: "方向／精度／執行 三層 + 3 共通錯誤 + 5 方法獨家陷阱（頁籤切換）",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "組內看診 W8 三題",
-            subtitle: "集體手術・逐題找毒",
-            desc: "每題寫「發現錯誤 + 違反哪個原則 + 組內修成什麼」",
+            title: "計畫書組裝工作坊",
+            subtitle: "整合 W2–W8 成果到第一章",
+            desc: "W8 老師建議納入修正、第一章（動機／問題／目的／對象）定版",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "三欄對應表（分流）",
-            subtitle: "合題 → 拆解單位 → 產出",
-            desc: "依方法拆：變項／探詢層面／變因／行為指標／比較維度",
+            title: "課後計畫書撰寫鷹架",
+            subtitle: "第二～八章的時間承諾",
+            desc: "W9–W10 間完成第二～八章；W10 第二節全本定稿",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "處方熱身 × 診斷工具包 × 組內看診",
+            title: "W8 回饋 × 處方熱身 × 診斷工具包",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1295,60 +1295,89 @@ export const W9Data = {
                 {
                     timeStart: "0:05",
                     timeStartFormatted: "00:05",
+                    duration: 5,
+                    colorClass: "c2",
+                    icon: "📬",
+                    title: "二、 Step 1a 讀 W8 老師回饋",
+                    desc: "學生打開 Google Classroom 看 W8 計畫書批改，用一兩句記下老師最主要的建議（詳細整合留到 Step 3）。",
+                    tags: ["W8 回饋", "快速讀取"]
+                },
+                {
+                    timeStart: "0:10",
+                    timeStartFormatted: "00:10",
                     duration: 7,
                     colorClass: "c1",
                     icon: "🩺",
-                    title: "二、 Step 1 處方診斷熱身",
+                    title: "三、 Step 1b 處方診斷熱身",
                     desc: "老師現場打開 RxInspector 防線遊戲，帶全班共玩 1-2 題典型壞題，建立「診斷語言」。",
                     tags: ["RxInspector", "共玩示範"]
                 },
                 {
-                    timeStart: "0:12",
-                    timeStartFormatted: "00:12",
-                    duration: 18,
+                    timeStart: "0:17",
+                    timeStartFormatted: "00:17",
+                    duration: 28,
                     colorClass: "c1",
                     icon: "🧰",
-                    title: "三、 Step 2 診斷工具包（兩把尺）",
-                    desc: "尺 1：三大標準（有效性／可靠性／可行性）。尺 2：錯誤類型（3 共通 + 問卷／訪談／觀察／實驗／文獻 5 方法頁籤獨家陷阱）。",
-                    tags: ["三大標準", "5 方法頁籤"]
+                    title: "四、 Step 2 診斷工具包（診斷尺 + 檢查清單）",
+                    desc: "診斷尺：三大標準（方向／精度／執行）+ 三題階層練習。檢查清單：錯誤類型（3 共通 + 5 方法頁籤獨家陷阱）+ 三題錯誤類型練習。",
+                    tags: ["三大標準", "6 題練習"]
                 },
                 {
-                    timeStart: "0:30",
-                    timeStartFormatted: "00:30",
-                    duration: 20,
-                    colorClass: "c2",
-                    icon: "🔍",
-                    title: "四、 Step 3 組內看診 W8 三題",
-                    desc: "Team 組員集體手術／Solo 臨時診斷圈。逐題寫「發現的錯誤 + 違反三大原則哪個 + 組內討論修成什麼」，每題 2-3 分鐘。",
-                    tags: ["W8 三題", "集體手術"]
+                    timeStart: "0:45",
+                    timeStartFormatted: "00:45",
+                    duration: 5,
+                    colorClass: "c3",
+                    icon: "📋",
+                    title: "五、 下節預告：計畫書組裝工作坊",
+                    desc: "老師在 GC 發對應方法的計畫書 docx 副本；下課前先打開看結構。",
+                    tags: ["計畫書發放"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "三欄對應表 × 同儕診斷 × 組裝鷹架",
+            title: "計畫書組裝工作坊 × 回顧繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
                     timeStartFormatted: "00:00",
-                    duration: 30,
-                    colorClass: "c4",
-                    icon: "📐",
-                    title: "五、 Step 4 三欄對應表（方法分流）",
-                    desc: "依 W8 合題取用方法專屬工作表：問卷拆變項／訪談拆探詢層面／實驗拆自依控／觀察拆行為指標／文獻拆比較維度。合題 → 拆解單位 → 產出。",
-                    tags: ["核心產出", "方法分流"]
+                    duration: 5,
+                    colorClass: "c3",
+                    icon: "🎯",
+                    title: "六、 Step 3 開場：本節目標",
+                    desc: "完成計畫書第一章（研究主題／動機／目的／問題／對象）。W8 老師建議在這一章修。"
                 },
                 {
-                    timeStart: "0:30",
-                    timeStartFormatted: "00:30",
-                    duration: 15,
+                    timeStart: "0:05",
+                    timeStartFormatted: "00:05",
+                    duration: 10,
+                    colorClass: "c4",
+                    icon: "🗺",
+                    title: "七、 Step 3 方法分流 + 章節地圖",
+                    desc: "對照 W8 選的方法確認你的計畫書模板；看章節地圖了解 W9→W17 各章來源。",
+                    tags: ["5 方法分流", "13 章地圖"]
+                },
+                {
+                    timeStart: "0:15",
+                    timeStartFormatted: "00:15",
+                    duration: 25,
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "八、 Step 3 第一章組裝（6 格）",
+                    desc: "研究題目／動機／目的／主問題／子問題／對象——在 docx 上填。網頁 ThinkRecord 只記關鍵決策與修改方向。",
+                    tags: ["docx 動手", "關鍵決策紀錄"]
+                },
+                {
+                    timeStart: "0:40",
+                    timeStartFormatted: "00:40",
+                    duration: 5,
                     colorClass: "c5",
-                    icon: "🤝",
-                    title: "六、 Step 5 同儕處方診斷",
-                    desc: "兩組交換三欄表 + 題目草稿，對照 Step 2 兩把尺互相開處方。每份初稿至少找出 2 個改進點並標注違反哪條規準。",
-                    tags: ["跨組診斷", "兩把尺"]
+                    icon: "🤖",
+                    title: "九、 Step 3 AI 檢核（可選）",
+                    desc: "用內建 Prompt 讓 AI 檢查第一章動機／目的／問題三者的邏輯一致性。記錄 AIRED。",
+                    tags: ["AI 檢核", "選用"]
                 },
                 {
                     timeStart: "0:45",
@@ -1356,28 +1385,28 @@ export const W9Data = {
                     duration: 5,
                     colorClass: "c3",
                     icon: "📤",
-                    title: "七、 Step 6 回顧與繳交",
-                    desc: "修改決定 → AIRED 敘事紀錄 → ExportButton 複製繳交。說明課後組裝作業鷹架：W10 上課前要交工具成品（問卷／訪綱／實驗計畫書／觀察紀錄表／文獻矩陣）。",
-                    tags: ["AIRED", "課後組裝鷹架"]
+                    title: "十、 Step 4 回顧與繳交",
+                    desc: "修改決定 → AIRED 敘事紀錄 → 時間承諾（課後寫第二～八章）→ ExportButton 複製繳交。",
+                    tags: ["AIRED", "時間承諾"]
                 }
             ]
         }
     ],
     summaries: [
         {
-            icon: "📐",
+            icon: "📋",
             label: "核心產出",
-            text: "三欄對應表 + 題目草稿<br><small style=\"font-size:11px;color:#888;\">5 方法各自分流</small>"
+            text: "計畫書第一章 + W8 建議整合<br><small style=\"font-size:11px;color:#888;\">研究題目／動機／問題／對象定版</small>"
         },
         {
             icon: "🧰",
             label: "診斷能力",
-            text: "兩把尺：三大標準 + 錯誤類型<br><small style=\"font-size:11px;color:#888;\">3 共通 + 5 方法獨家陷阱</small>"
+            text: "診斷尺 + 檢查清單<br><small style=\"font-size:11px;color:#888;\">三大標準 + 3 共通錯誤 + 5 方法獨家陷阱</small>"
         },
         {
             icon: "📦",
             label: "課後任務",
-            text: "組裝工具成品（模板副本）<br><small style=\"font-size:11px;color:#888;\">W10 上課前繳交</small>"
+            text: "計畫書第二～八章<br><small style=\"font-size:11px;color:#888;\">W10 第二節前完成</small>"
         }
     ],
     legends: [

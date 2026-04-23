@@ -459,13 +459,13 @@ const PLAN_AI_PROMPTS = {
 
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    /* Step 3：計畫書組裝工作坊 */
-    { key: 'w9-teacher-feedback-sync', label: 'W8 老師建議與我的修正', question: '老師給了什麼建議？我打算在第一章做什麼修正？' },
-    { key: 'w9-plan-ch1-decisions', label: '第一章關鍵決策', question: '本節最重要的 2-3 個決定（研究題目／主問題／對象等）' },
-    { key: 'w9-plan-ai-check', label: 'AI 檢核第一章判斷紀錄', question: '有用 AI 檢核邏輯一致性才要填：AI 建議、採納與否、理由' },
-    { key: 'w9-plan-ch1-checklist', label: '第一章完成清單（勾選）', question: '8 項全部勾完才算本節過關' },
+    /* Step 1：W8 老師回饋快速讀取 */
+    { key: 'w9-w8-feedback-quick', label: 'W8 老師建議（快速摘要）', question: '第一節看過老師回饋後記的一兩句' },
+    /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
+    { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-3 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
+    { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
     /* Step 4：回顧與繳交 */
-    { key: 'w9-revision-plan', label: 'W10 前必須做的最大修改', question: '整合 W8 建議與三層尺後，計畫書前段要做的最大修改' },
+    { key: 'w9-revision-plan', label: 'W10 前必須做的最大修改', question: '整合 W8 建議與三大標準後，計畫書前段要做的最大修改' },
     { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第二～八章？' },
     { key: 'w9-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
@@ -539,9 +539,29 @@ export const W9Page = () => {
                         W7 你學了 Level 1 掛號判斷（決定用什麼方法）。今天升級到 <strong className="text-[var(--ink)]">Level 2 處方判斷</strong>——工具設計得好不好？哪裡有毒？怎麼解毒？
                     </p>
 
+                    {/* W8 老師回饋快速讀取（5 分鐘暖身） */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[18px]">📬</span>
+                            <span className="font-bold text-[14px] text-[var(--ink)]">開始前：先看老師對 W8 計畫書第一版的回饋（5 分鐘）</span>
+                        </div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            老師已在 <strong>Google Classroom</strong> 發回 W8 計畫書的批改。請先打開看過，把老師<strong className="text-[var(--ink)]">最主要</strong>的一兩句建議記下來——詳細整合留到 Step 3。
+                        </p>
+                        <ThinkRecord
+                            dataKey="w9-w8-feedback-quick"
+                            prompt="老師對我 W8 計畫書最主要的建議是？"
+                            placeholder="例：主題太大、對象要縮小、題目改問「行為」不要問「態度」⋯⋯"
+                            rows={3}
+                        />
+                        <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
+                            💡 還沒拿到回饋？可能老師還在批，或 GC 通知被淹沒。找老師或到 GC 搜 W8 主題。
+                        </p>
+                    </div>
+
                     <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[12px] text-[#92400E] leading-relaxed max-w-[720px]">
                         <strong>⚠️ 為什麼 Step 1 示範都是問卷？</strong><br />
-                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在下一步 <strong>Step 2 診斷工具包 · 尺 2</strong> 切換頁籤就會看到。
+                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在下一步 <strong>Step 2 · 檢查清單</strong> 切換頁籤就會看到。
                     </div>
 
                     {/* ① 老師示範：打開 RxInspector 遊戲，全班共玩 1-2 題 */}
@@ -591,13 +611,13 @@ export const W9Page = () => {
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——兩把尺：<strong>三大標準</strong>（設計原則）+ <strong>錯誤類型清單</strong>（3 共通 + 你的方法獨家）。Step 3 看診、Step 4 做三欄表、Step 5 同儕互評，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
+                        這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——<strong>診斷尺</strong>（三大標準·設計原則）+ <strong>檢查清單</strong>（錯誤類型：3 共通 + 你的方法獨家）。Step 3 整合計畫書時，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
                     </p>
 
-                    {/* 尺 1 · 三大標準 — 手機 1 欄 / 桌機 3 欄（階層：方向 → 精度 → 執行） */}
+                    {/* 診斷尺 · 三大標準 — 手機 1 欄 / 桌機 3 欄（階層：方向 → 精度 → 執行） */}
                     <div>
                         <div className="mb-3">
-                            <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider">尺 1 · 好工具三大標準</div>
+                            <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider">診斷尺 · 好工具三大標準</div>
                             <div className="text-[12px] text-[var(--ink-mid)] mt-1 leading-relaxed">
                                 由根本到細節的三層關卡：<strong className="text-[var(--ink)]">方向 → 精度 → 執行</strong>。<span className="text-[var(--ink-mid)]">越上層錯，越沒救。</span>
                             </div>
@@ -628,7 +648,7 @@ export const W9Page = () => {
 
                     {/* 思考練習：用三層階層自己判斷（拿掉範例，改讓學生判斷） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">階層練習 · 用三層尺自己判斷</div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">階層練習 · 用三大標準自己判斷</div>
                         <div className="space-y-4">
                             {/* 題 1：Layer 1 方向診斷 */}
                             <ThinkChoice
@@ -657,15 +677,29 @@ export const W9Page = () => {
                                 feedback="A 的「近／普通／遠」每個人定義不同——住 1 公里可能叫「近」，住 3 公里也可能叫「近」。同一個人今天心情好答「近」，下雨天答「遠」，結果不穩定。這就是 Layer 2 測不準。B 用分鐘分級、C 用明確類別，精度都可以接受。"
                                 onAnswer={handleChoice('tc-w9-layer2', 'Layer 2 精度診斷')}
                             />
+
+                            {/* 題 3：Layer 3 執行診斷 */}
+                            <ThinkChoice
+                                dataKey="w9-tc-layer3"
+                                prompt="以下三題內容都合理（方向對、精度也足夠），但哪一題犯了 Layer 3（執行）的錯？"
+                                options={[
+                                    { label: 'A', text: '請一位同學每天中午 12:00 主動回報他今天有沒有分心，持續 30 天' },
+                                    { label: 'B', text: '上週你超過 12 點睡的有幾天？（0 / 1-2 / 3-4 / 5+）' },
+                                    { label: 'C', text: '請花 5 分鐘填寫這份 15 題的問卷' },
+                                ]}
+                                answer="A"
+                                feedback="A 的問題不在「問什麼」，而在「做得到嗎」——沒有人會每天主動回報 30 天，這種設計執行率趨近於零。就算題目設計完美，沒有資料等於白做。Layer 3 最好修，只要把規模縮小（例：改成 5 天）或換方法（例：研究者每天下午問一次）就能救。"
+                                onAnswer={handleChoice('tc-w9-layer3', 'Layer 3 執行診斷')}
+                            />
                         </div>
                         <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
-                            💡 做完這兩題你會發現：<strong className="text-[var(--ink-mid)]">「方向錯」和「測不準」要分開看</strong>——方向錯要重寫題目，測不準只要把模糊詞換成具體數字就能救。
+                            💡 做完三題你會發現階層規律：<strong className="text-[var(--ink-mid)]">方向錯 → 重寫；測不準 → 換具體數字；做不到 → 砍規模</strong>。越上層錯，救起來越麻煩。
                         </div>
                     </div>
 
-                    {/* 尺 2 · 錯誤類型（5 方法頁籤統一 3 欄表：類型 / 徵狀 / 怎麼改） */}
+                    {/* 檢查清單 · 錯誤類型（5 方法頁籤統一 3 欄表：類型 / 徵狀 / 怎麼改） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">尺 2 · 錯誤類型（3 條共通 + 你的方法獨家）</div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">檢查清單 · 錯誤類型（3 條共通 + 你的方法獨家）</div>
 
                         {/* 方法頁籤 bar */}
                         <div className="flex flex-wrap gap-2 mb-3">
@@ -738,17 +772,55 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 理解檢核：可靠性 */}
-                    <ThinkChoice
-                        dataKey="w9-tc2"
-                        prompt={THINK_CHOICES[2].prompt}
-                        options={THINK_CHOICES[2].options}
-                        answer={THINK_CHOICES[2].answer}
-                        feedback={THINK_CHOICES[2].feedback}
-                        onAnswer={handleChoice(THINK_CHOICES[2].id, THINK_CHOICES[2].prompt)}
-                    />
+                    {/* 錯誤類型練習：3 題扣合誘導性／雙重／假開放 */}
+                    <div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">錯誤類型練習 · 對照上方三類共通錯誤</div>
+                        <div className="space-y-4">
+                            <ThinkChoice
+                                dataKey="w9-tc-err-inducing"
+                                prompt="以下哪一題犯了「誘導性提問」的錯？"
+                                options={[
+                                    { label: 'A', text: '你認為嚴重影響專注力的手機使用方式是？（請勾選）' },
+                                    { label: 'B', text: '你每天使用手機的時數是？（<1 / 1-3 / 3-6 / 6+ 小時）' },
+                                    { label: 'C', text: '你最常用手機做什麼？（社群 / 遊戲 / 影片 / 通訊 / 其他）' },
+                                ]}
+                                answer="A"
+                                feedback="A 的「嚴重影響」已經預設了「手機有害」的立場，受試者不好意思選「沒有影響」。中性改寫：「你覺得手機使用對專注力有什麼影響？（正面／負面／沒影響）」"
+                                onAnswer={handleChoice('tc-w9-err-inducing', '誘導性提問診斷')}
+                            />
 
-                    {/* 理解檢核：訪談問法 */}
+                            <ThinkChoice
+                                dataKey="w9-tc-err-double"
+                                prompt="以下哪一題犯了「雙重問題」的錯（一題問兩件事）？"
+                                options={[
+                                    { label: 'A', text: '你同意學校應該禁止攜帶手機，並且加強網路過濾嗎？（同意／不同意）' },
+                                    { label: 'B', text: '你一週運動幾次？' },
+                                    { label: 'C', text: '你最常用的學習 App 是？' },
+                                ]}
+                                answer="A"
+                                feedback="A 問了兩件獨立的事（禁止攜帶、加強過濾），受試者可能同意其中一件、反對另一件，但被迫選一個答案。拆成兩題才能精準測到立場。"
+                                onAnswer={handleChoice('tc-w9-err-double', '雙重問題診斷')}
+                            />
+
+                            <ThinkChoice
+                                dataKey="w9-tc-err-fakeopen"
+                                prompt="以下哪一題看似「開放式」但其實「預設了答案方向」？"
+                                options={[
+                                    { label: 'A', text: '你覺得線上學習有什麼缺點？' },
+                                    { label: 'B', text: '你對線上學習的看法是？' },
+                                    { label: 'C', text: '和實體上課相比，線上學習對你而言有什麼不同？' },
+                                ]}
+                                answer="A"
+                                feedback="A 表面開放，實則只問「缺點」——假設受訪者已經認為線上學習有缺點。學生即使覺得沒缺點，也會被迫編一個出來。C 是真開放（問「不同」而非「缺點」），B 是中性。"
+                                onAnswer={handleChoice('tc-w9-err-fakeopen', '假開放真預設診斷')}
+                            />
+                        </div>
+                        <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
+                            💡 這三類是<strong className="text-[var(--ink-mid)]">所有方法都會犯</strong>的共通錯誤，不分問卷／訪談／實驗／觀察／文獻。檢核工具時一定要逐一對照。
+                        </div>
+                    </div>
+
+                    {/* 方法獨家練習：訪談問法（保留作為補充） */}
                     <ThinkChoice
                         dataKey="w9-tc3"
                         prompt={THINK_CHOICES[1].prompt}
@@ -758,14 +830,14 @@ export const W9Page = () => {
                         onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
                     />
 
-                    {/* 分流預告 */}
+                    {/* 下節預告 */}
                     <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6 text-white">
                         <div className="flex items-center gap-2 mb-3">
                             <AlertTriangle size={16} className="text-[var(--gold)]" />
-                            <span className="font-bold text-[14px]">分流準備：Step 4 開始依方法分組</span>
+                            <span className="font-bold text-[14px]">下節準備：Step 3 計畫書組裝工作坊</span>
                         </div>
                         <p className="text-[13px] text-[rgba(255,255,255,0.7)] leading-relaxed mb-4">
-                            依照 W8 決定的方法分流。問卷組坐前半部，訪談組坐後半部，其他組坐側邊。帶著你們的企劃書，準備動手設計！
+                            第二節把今天學到的診斷尺與檢查清單，用來整合 W8 老師給你的建議、填寫計畫書第一章。下課前老師會在 Google Classroom 發你對應方法的計畫書 docx 副本——先打開看結構。
                         </p>
                         <div className="flex flex-wrap gap-2">
                             {METHOD_OPTIONS.map((m) => (
@@ -785,7 +857,7 @@ export const W9Page = () => {
                 <div className="space-y-8 prose-zh">
                     {/* 開場 */}
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        第一節學了<strong className="text-[var(--ink)]">三層尺</strong>與<strong className="text-[var(--ink)]">錯誤類型</strong>——那是「診斷」。第二節回到<strong className="text-[var(--ink)]">實作</strong>：把 W2–W8 寫過的東西整合進研究計畫書。
+                        第一節學了<strong className="text-[var(--ink)]">診斷尺</strong>（三大標準）與<strong className="text-[var(--ink)]">檢查清單</strong>（錯誤類型）——那是「診斷」。第二節回到<strong className="text-[var(--ink)]">實作</strong>：把 W2–W8 寫過的東西整合進研究計畫書。
                     </p>
                     <div className="w7-notice w7-notice-gold">
                         🎯 <strong>本節目標：完成計畫書第一章（研究主題基本資訊）</strong>——W8 老師給的建議就在這一章修。第二章以後課後繼續，W10 定稿。
@@ -921,67 +993,73 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* W8 老師建議整合 */}
-                    <ThinkRecord
-                        dataKey="w9-teacher-feedback-sync"
-                        prompt="W8 老師在你的計畫書第一版上給了什麼建議？這週要怎麼改？"
-                        defaultTemplate={'老師的建議：___\n我打算在第一章做的修正：___'}
-                        rows={6}
-                    />
-
-                    {/* 第一章組裝 */}
+                    {/* 五章地基工程 · 進度分級 */}
                     <div>
-                        <h4 className="font-serif text-[16px] md:text-[18px] font-bold text-[var(--ink)] mb-2">第一章組裝：本節要完成的 6 格</h4>
+                        <h4 className="font-serif text-[16px] md:text-[18px] font-bold text-[var(--ink)] mb-2">
+                            五章地基工程 · 本節要寫到的章節
+                        </h4>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            具體內容<strong className="text-[var(--ink)]">寫在 docx 上</strong>。下方 ThinkRecord 只記「關鍵決策 + 為什麼」——不是重寫計畫書。
+                            <strong className="text-[var(--ink)]">所有內容寫在計畫書 docx 上</strong>，網頁只做進度勾選與 AI 檢核紀錄，不重寫 docx 內容。W8 老師建議直接在 docx 第一章各欄內修正即可。
                         </p>
-                        <ol className="pl-5 mb-4 space-y-1 text-[13px] text-[var(--ink-mid)] list-decimal">
-                            <li>研究題目（主標—副標）</li>
-                            <li>研究動機（兩個引導問題：情境／解決什麼）</li>
-                            <li>研究目的（一句話）</li>
-                            <li>主研究問題（一個問句）</li>
-                            <li>子問題 2–3 條</li>
-                            <li>對象 + 預定時間</li>
-                        </ol>
-                        <ThinkRecord
-                            dataKey="w9-plan-ch1-decisions"
-                            prompt="第一章關鍵決策（docx 填完後，在這裡摘要本節最重要的 2-3 個決定）"
-                            defaultTemplate={'決定 1：研究題目從「___」調整為「___」，因為 ___\n決定 2：主問題縮小到「___」，原本「___」太大\n決定 3：對象從「___」改為「___」，因為 ___'}
-                            rows={7}
-                        />
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-5 space-y-4">
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--success)] uppercase tracking-wider mb-2">✅ 必達（課堂完成）</div>
+                                <ul className="text-[13px] text-[var(--ink-mid)] space-y-1 list-disc pl-5">
+                                    <li><strong className="text-[var(--ink)]">第一章</strong>：題目／動機／目的／主問題／子問題／對象（6 格，整合 W2/W3/W8）</li>
+                                    <li><strong className="text-[var(--ink)]">第二章</strong>：3 個關鍵詞操作定義（剛學完診斷尺正好用）</li>
+                                    <li><strong className="text-[var(--ink)]">第五章</strong>：對象 + 預計人數 + 抽樣方式（搬 W8）</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase tracking-wider mb-2">🔶 骨架即可（課堂起草）</div>
+                                <ul className="text-[13px] text-[var(--ink-mid)] space-y-1 list-disc pl-5">
+                                    <li><strong className="text-[var(--ink)]">第三章</strong>：至少列 2 篇文獻的作者／年份／結論（骨架即可，差異段落課後寫）</li>
+                                    <li><strong className="text-[var(--ink)]">第四章</strong>：變項／主題／維度清單（依方法拆 3-5 個，操作定義課後補）</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--danger)] uppercase tracking-wider mb-2">⚠️ 課後補齊（W10 第一節前必達）</div>
+                                <ul className="text-[13px] text-[var(--ink-mid)] space-y-1 list-disc pl-5">
+                                    <li>第三章文獻補齊 2-3 篇 + 寫「與本研究差異」</li>
+                                    <li>第四章變項／主題／維度定版 + 每個都有操作定義</li>
+                                    <li>跑 AI 檢核 Prompt（見下方）+ 補 W9 AIRED 的 R 欄位</li>
+                                    <li>上傳計畫書到 Google Classroom</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* AI 檢核（可選） */}
+                    {/* AI 檢核第 1-3 章（必做，帶 Prompt 回家跑） */}
                     <AIAssistToggle
                         id="w9-plan-ai"
-                        title="用 AI 檢核計畫書第一章的邏輯一致性（可選）"
-                        reason="第一章是整份研究的地基——動機、目的、主問題三者要邏輯一致。AI 適合檢核「動機是否支撐問題」「目的是否能由問題回答」這類結構性問題。AI 不會替你確立方向，那是人腦的事。"
+                        title="AI 檢核第 1-3 章：帶 Prompt 回家跑 → 補 AIRED R 欄位（必做）"
+                        reason="本節結束前準備好 Prompt，回家貼進 ChatGPT / Claude 跑。AI 會檢核第一章的方向邏輯、第二章關鍵詞定義、第三章文獻對應——抓出你自己看不到的盲點。跑完後把 AI 回覆的重點補到 Step 4 的 AIRED 的 R 欄位。"
                         promptByMethod={PLAN_AI_PROMPTS}
                         method={selectedMethod}
                         recordKey="w9-plan-ai-check"
-                        recordPrompt="AI 給了什麼建議？你採納哪些、不採納哪些？為什麼？"
-                        recordPlaceholder="A: 我用了 ChatGPT-4o&#10;I: 我貼了第一章內容，請它檢查邏輯一致性&#10;E: AI 指出主問題太大，建議縮小&#10;D: 我採納把主問題縮小；不採納 AI 建議改對象（那是 W8 已定）"
+                        recordPrompt="AI 檢核後的判斷紀錄（課後補完）"
+                        recordPlaceholder="AI 指出的主要問題（至少 2-3 點）：&#10;1. ___&#10;2. ___&#10;3. ___&#10;&#10;我的決定：&#10;・採納：___（理由：___）&#10;・不採納：___（理由：___）"
                     />
 
-                    {/* 第一章完成 Checklist */}
+                    {/* 五章進度 checklist */}
                     <Checklist
                         dataKey="w9-plan-ch1-checklist"
-                        prompt="第一章完成清單（全部勾完才算本節過關）"
+                        prompt="本節繳交驗收（勾完才算通過）"
                         items={[
-                            '研究題目（主標—副標）已寫',
-                            '研究動機兩個引導問題都答',
-                            '研究目的一句話已定',
-                            '主研究問題是一個明確問句',
-                            '子問題 2–3 條',
-                            '對象寫得具體',
-                            '預定時間（哪幾週做）',
-                            'W8 老師的建議都已納入修正',
+                            '第一章：6 格全填（docx）',
+                            '第二章：3 個關鍵詞操作定義（docx）',
+                            '第五章：對象／人數／抽樣方式（docx）',
+                            '第三章：至少 2 篇文獻基本資料（docx，骨架）',
+                            '第四章：變項／主題／維度清單（docx，骨架）',
+                            '本節結束前：AI 檢核 Prompt 已複製',
+                            'W8 老師的建議在 docx 上已納入修正',
                         ]}
                     />
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 第一章完成 → 到 <strong>Step 4 回顧與繳交</strong> 做「時間承諾」，規劃課後寫第二到第八章（W10 前完成）。
+                        ✅ 本節完成 → <strong>Step 4 寫 W9 AIRED</strong>（A/I/E/D 先寫預想版、R 回家 AI 跑完再補）+ 規劃課後補齊時程。<br/>
+                        ⚠️ <strong>記得把 AI 檢核 Prompt 複製帶回家跑</strong>，跑完後回 Step 4 補完 AIRED R 欄位。
                     </div>
                 </div>
             ),
@@ -1000,7 +1078,7 @@ export const W9Page = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
-                                '學會三層尺判斷工具品質（方向 / 精度 / 執行）',
+                                '學會三大標準判斷工具品質（方向 / 精度 / 執行）',
                                 '辨識錯誤類型（誘導性、雙重問題、假開放）',
                                 '完成計畫書第一章（研究主題、動機、問題、對象）',
                                 '整合 W8 老師建議到第一章',
@@ -1017,13 +1095,17 @@ export const W9Page = () => {
                     {/* 2. W10 前要做的最大修改 */}
                     <ThinkRecord
                         dataKey="w9-revision-plan"
-                        prompt="整合 W8 老師建議與本節學到的三層尺，W10 之前計畫書前段必須做的最大修改是什麼？"
-                        defaultTemplate={'最大的修改：___\n理由（引用老師建議或三層尺）：___\n預計完成時間：___'}
+                        prompt="整合 W8 老師建議與本節學到的三大標準，W10 之前計畫書前段必須做的最大修改是什麼？"
+                        defaultTemplate={'最大的修改：___\n理由（引用老師建議或三大標準）：___\n預計完成時間：___'}
                         rows={5}
                     />
 
-                    {/* 3. AIRED 敘事紀錄 */}
-                    <AIREDNarrative week="9" hint="工具設計可能用 AI 檢核題目" optional={true} />
+                    {/* 3. AIRED 敘事紀錄（W9 完整一次，預想式填寫：課堂寫 A/I/E/D，R 回家 AI 跑完補） */}
+                    <AIREDNarrative
+                        week="9"
+                        hint="本節結尾預想式填寫 A/I/E/D；R 欄位回家跑 AI 檢核第 1-3 章後再補"
+                        optional={false}
+                    />
 
                     {/* 4. 一鍵複製 */}
                     <ExportButton
