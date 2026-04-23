@@ -431,26 +431,42 @@ const ASSEMBLY_AI_PROMPTS = {
 產出後我會自己改。`,
 };
 
+/* — 計畫書第一章 AI 檢核 Prompt（本週 Step 3 用） — */
+const PLAN_CH1_CHECK_PROMPT = `你是高中專題指導顧問。以下是我計畫書第一章（研究主題基本資訊），請幫我檢查四件事：
+
+1. 研究動機是否能支撐研究問題？（若落差大，指出在哪）
+2. 研究目的與主研究問題是否邏輯一致？
+3. 子問題是否都對應主問題？或有子問題偏離？
+4. 研究對象寫得夠具體嗎？（例：哪所學校哪個年級）
+
+不用替我修改，只要指出問題點。
+
+【研究方法】___
+【研究題目】___
+【研究動機】（1）情境／理由：___（2）能解決什麼：___
+【研究目的】___
+【主研究問題】___
+【子問題】___
+【研究對象】___`;
+
+const PLAN_AI_PROMPTS = {
+    questionnaire: PLAN_CH1_CHECK_PROMPT,
+    interview: PLAN_CH1_CHECK_PROMPT,
+    experiment: PLAN_CH1_CHECK_PROMPT,
+    observation: PLAN_CH1_CHECK_PROMPT,
+    literature: PLAN_CH1_CHECK_PROMPT,
+};
+
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    /* Step 3：組內看診 W8 三題 */
-    { key: 'w9-self-diagnosis', label: '組內看診紀錄：W8 三題診斷與共識', question: '三題分別發現什麼錯誤/不符合哪個原則 → 組內討論修成什麼' },
-    /* Step 4：分流工作坊 — 三欄對應表 */
-    { key: 'w9-my-method', label: '我的分流方法' },
-    { key: 'w9-variable-ai-record', label: 'AI 變項發散判斷紀錄', question: '有用 AI 發散題目才要填：選了哪個版本、刷掉哪個、為什麼' },
-    { key: 'w9-three-col-q1', label: '三欄對應表 1', question: '合題 → 拆解單位（變項/層面/行為/維度）→ 對應產出' },
-    { key: 'w9-three-col-q2', label: '三欄對應表 2', question: '合題 → 拆解單位 → 對應產出' },
-    { key: 'w9-three-col-q3', label: '三欄對應表 3（若有）', question: '合題 → 拆解單位 → 對應產出' },
-    { key: 'w9-basic-checklist', label: '基本結構自查清單（勾選）', question: '依方法逐項確認' },
-    { key: 'w9-basic-info-check', label: '基本規格填答', question: '題數／時間／分組／篩選標準等數字與具體值' },
-    /* Step 5：同儕處方診斷 */
-    { key: 'w9-peer-from', label: '我診斷了哪一組' },
-    { key: 'w9-peer-diagnosis', label: '同儕處方診斷紀錄', question: '在對方的工具初稿中發現什麼問題？' },
-    { key: 'w9-received-feedback', label: '我收到的回饋', question: '別組醫師給我們的處方是什麼？' },
-    /* Step 6：回顧與繳交 */
-    { key: 'w9-revision-plan', label: '修改決定', question: '根據回饋，我們最大的修改方向是什麼？' },
-    { key: 'w9-assembly-ai-record', label: 'AI 組裝樣板判斷紀錄', question: '有用 AI 生樣板文字才要填：改了哪裡、為什麼' },
-    { key: 'w9-homework-commitment', label: '組裝作業時間承諾', question: '我打算什麼時候動手組裝？' },
+    /* Step 3：計畫書組裝工作坊 */
+    { key: 'w9-teacher-feedback-sync', label: 'W8 老師建議與我的修正', question: '老師給了什麼建議？我打算在第一章做什麼修正？' },
+    { key: 'w9-plan-ch1-decisions', label: '第一章關鍵決策', question: '本節最重要的 2-3 個決定（研究題目／主問題／對象等）' },
+    { key: 'w9-plan-ai-check', label: 'AI 檢核第一章判斷紀錄', question: '有用 AI 檢核邏輯一致性才要填：AI 建議、採納與否、理由' },
+    { key: 'w9-plan-ch1-checklist', label: '第一章完成清單（勾選）', question: '8 項全部勾完才算本節過關' },
+    /* Step 4：回顧與繳交 */
+    { key: 'w9-revision-plan', label: 'W10 前必須做的最大修改', question: '整合 W8 建議與三層尺後，計畫書前段要做的最大修改' },
+    { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第二～八章？' },
     { key: 'w9-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
@@ -601,14 +617,49 @@ export const W9Page = () => {
                                             {s.name} · {s.en}
                                         </div>
                                     </div>
-                                    <div className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed">{s.desc}</div>
-                                    <div className="text-[12px] text-[var(--danger)] mb-1 leading-relaxed">❌ {s.bad}</div>
-                                    <div className="text-[12px] text-[var(--success)] mb-3 leading-relaxed">✅ {s.good}</div>
-                                    <div className="mt-auto text-[11px] font-mono text-[var(--ink-light)] border-t border-dashed border-[var(--border)] pt-2 leading-relaxed">
+                                    <div className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed flex-1">{s.desc}</div>
+                                    <div className="text-[11px] font-mono text-[var(--ink-light)] border-t border-dashed border-[var(--border)] pt-2 leading-relaxed">
                                         錯了的代價：<span className="text-[var(--ink-mid)]">{s.stakes}</span>
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* 思考練習：用三層階層自己判斷（拿掉範例，改讓學生判斷） */}
+                    <div>
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">階層練習 · 用三層尺自己判斷</div>
+                        <div className="space-y-4">
+                            {/* 題 1：Layer 1 方向診斷 */}
+                            <ThinkChoice
+                                dataKey="w9-tc-layer1"
+                                prompt="研究問題是「高中生每週運動幾小時？」以下哪一題犯了 Layer 1（方向）的錯？"
+                                options={[
+                                    { label: 'A', text: '你認為運動重要嗎？（非常重要／重要／普通／不重要）' },
+                                    { label: 'B', text: '你每週大約運動幾小時？（0／1-3／4-6／7 小時以上）' },
+                                    { label: 'C', text: '你最常做的運動類型？（球類／跑步／游泳／其他）' },
+                                ]}
+                                answer="A"
+                                feedback="A 問的是「態度」（運動重不重要），但研究問題要的是「行為時數」——方向錯了，就算全班都答「非常重要」，你也得不到任何時數資料。Layer 1 錯了不能修，整題要重寫。B 和 C 雖然都不是「時數」本身，但至少測到行為變項，方向對。"
+                                onAnswer={handleChoice('tc-w9-layer1', 'Layer 1 方向診斷')}
+                            />
+
+                            {/* 題 2：Layer 2 精度診斷 */}
+                            <ThinkChoice
+                                dataKey="w9-tc-layer2"
+                                prompt="以下三題都在問「通勤狀況」（方向 Layer 1 都對），但哪一題因為用詞模糊犯了 Layer 2（精度）的錯？"
+                                options={[
+                                    { label: 'A', text: '你家離學校很近嗎？（近／普通／遠）' },
+                                    { label: 'B', text: '你家到學校的通勤時間？（<15 分／15-30 分／30-60 分／>60 分）' },
+                                    { label: 'C', text: '你主要的通勤方式？（走路／腳踏車／公車／汽車）' },
+                                ]}
+                                answer="A"
+                                feedback="A 的「近／普通／遠」每個人定義不同——住 1 公里可能叫「近」，住 3 公里也可能叫「近」。同一個人今天心情好答「近」，下雨天答「遠」，結果不穩定。這就是 Layer 2 測不準。B 用分鐘分級、C 用明確類別，精度都可以接受。"
+                                onAnswer={handleChoice('tc-w9-layer2', 'Layer 2 精度診斷')}
+                            />
+                        </div>
+                        <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
+                            💡 做完這兩題你會發現：<strong className="text-[var(--ink-mid)]">「方向錯」和「測不準」要分開看</strong>——方向錯要重寫題目，測不準只要把模糊詞換成具體數字就能救。
                         </div>
                     </div>
 
@@ -726,456 +777,217 @@ export const W9Page = () => {
             ),
         },
 
-        /* ─── Step 3：組內看診 W8 三題（逐題診斷：錯誤 + 違反原則 + 組內共識） ─── */
+        /* ─── Step 3：計畫書組裝工作坊（W9 第二節重點：修計畫書第一章） ─── */
         {
-            title: '組內看診 W8 三題',
-            icon: '🔍',
+            title: '計畫書組裝工作坊',
+            icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
+                    {/* 開場 */}
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        把 Step 2 的尺拿出來，對<strong>你們組（或你）</strong>的 W8 三題逐題看診——<strong className="text-[var(--ink)]">發現什麼錯誤？違反哪個原則？組內討論後要改成什麼？</strong>一題一格，直接落筆。忘記尺 → 點回 Step 2。
+                        第一節學了<strong className="text-[var(--ink)]">三層尺</strong>與<strong className="text-[var(--ink)]">錯誤類型</strong>——那是「診斷」。第二節回到<strong className="text-[var(--ink)]">實作</strong>：把 W2–W8 寫過的東西整合進研究計畫書。
                     </p>
-
-                    {/* ① 組內看診實戰 */}
-                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[15px]">🩺</span>
-                            <span className="font-bold text-[13px]">① 組內看診流程：把 W8 的 3 題當病人（10 分鐘）</span>
-                        </div>
-                        <div className="p-5 space-y-4">
-                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">Team 組員</strong>：這不是互評，是<strong>集體手術</strong>——組內共寫的 3 題是共同病人。輪流念題 → 全組用 Step 2 尺挑毒點 → <strong>當場討論怎麼改</strong>（每題 2-3 分鐘）→ 把結論寫進下方 ② 看診紀錄。<br />
-                                <strong className="text-[var(--ink)]">Solo 路線</strong>：與鄰座 2-3 位 Solo 同學組成「診斷圈」，輪念互評（題目各自獨立，這時才是真的互評），再自己落筆。
-                            </p>
-                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">每一題的寫法</strong>：(1) 發現什麼錯誤——用 Step 2 的錯誤類型語言；(2) 違反三大原則哪一個——有效性／可靠性／可行性；(3) 討論後決定修成什麼。
-                            </div>
-                        </div>
+                    <div className="w7-notice w7-notice-gold">
+                        🎯 <strong>本節目標：完成計畫書第一章（研究主題基本資訊）</strong>——W8 老師給的建議就在這一章修。第二章以後課後繼續，W10 定稿。
                     </div>
 
-                    {/* ② W8 三題唯讀卡 + 合併診斷紀錄 */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">RX</span>
-                            <span className="font-bold text-[13px] text-[var(--ink)]">
-                                ② 組內看診紀錄：三題一起診斷 + 討論後共識
-                            </span>
-                        </div>
-
-                        {/* W8 三題唯讀卡 */}
-                        {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
-                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
-                                <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                                    <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W8 ARCHIVE</span>
-                                    <span className="font-bold text-[13px] text-[var(--ink)]">W8 寫的三題初稿（唯讀）</span>
-                                </div>
-                                <div className="divide-y divide-[var(--border)]">
-                                    {[
-                                        { n: 1, text: w8Drafts.q1 },
-                                        { n: 2, text: w8Drafts.q2 },
-                                        { n: 3, text: w8Drafts.q3 },
-                                    ].map((d) => (
-                                        <div key={d.n} className="p-4 px-5 text-[13px] leading-relaxed">
-                                            <span className="font-mono font-bold text-[var(--accent)] mr-2">題 {d.n}：</span>
-                                            <span className="text-[var(--ink)] whitespace-pre-line">
-                                                {d.text || <span className="text-[var(--ink-light)] italic">（W8 這題沒寫）</span>}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
+                    {/* W8 素材狀態：有寫顯示唯讀，沒寫顯示戰情警示 */}
+                    {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                                <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W8 ARCHIVE</span>
+                                <span className="font-bold text-[13px] text-[var(--ink)]">W8 你寫的三題初稿（唯讀）——對照老師給的建議修正</span>
                             </div>
-                        ) : (
-                            <div className="w7-notice w7-notice-gold mb-4">
-                                ⚠️ 讀不到你的 W8 三題初稿。如果 W8 沒寫，可以跳過這題、直接到 Step 4。如果 W8 有寫但這裡讀不到，請回 W8 確認是否已存檔。
-                            </div>
-                        )}
-
-                        <ThinkRecord
-                            dataKey="w9-self-diagnosis"
-                            prompt="三題一起診斷：發現什麼錯誤？違反哪個原則？組內討論後修成什麼？"
-                            scaffold={[
-                                '題 1｜發現的錯誤：___（用 Step 2 錯誤類型語言）｜違反原則：有效性／可靠性／可行性（圈一個）｜組內討論後修成：___',
-                                '題 2｜發現的錯誤：___｜違反原則：___｜修成：___',
-                                '題 3｜發現的錯誤：___｜違反原則：___｜修成：___',
-                            ]}
-                            rows={9}
-                        />
-
-                        <div className="w7-notice w7-notice-gold mt-4">
-                            💡 <strong>看診完就往 Step 4。</strong>這裡的目的是看見「沒方法 vs 有方法」的差別；Step 4 會用三欄對應表從頭系統性產出新題目，不是修這三題。
-                        </div>
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ─── Step 4：分流工作坊 — 三欄對應表 ─── */
-        {
-            title: '三欄對應表實作',
-            icon: '🔧',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    {/* W8→W9 銜接說明 */}
-                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
-                        <p className="text-[14px] text-[var(--ink)] leading-relaxed">
-                            <strong>W8 的 3 題草稿是你的「直覺版」</strong>——想到什麼問什麼。現在要用<strong className="text-[var(--accent)]">三欄對應表</strong>做「系統版」：確保你的每一題，都是為了回答你的研究問題，而不是憑感覺湊題目。
-                        </p>
-                    </div>
-
-                    {/* 操作化對照卡：五方法拆解單位不同 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[15px]">🧩</span>
-                            <span className="font-bold text-[13px]">把合題操作化：依你的方法拆成「可以實際執行的單位」</span>
-                        </div>
-                        <div className="p-5 space-y-4">
-                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                W8 合題後的<strong className="text-[var(--ink)]">研究問題</strong>還太大，不能直接拿去施測。現在要<strong className="text-[var(--ink)]">操作化</strong>——依你的方法拆成可實際執行的小單位。<strong className="text-[var(--ink)]">單位名稱因方法而異</strong>，不是每個方法都叫「變項」：
-                            </p>
-
-                            {/* 方法 × 拆解單位 × 產出 — 桌機表格 */}
-                            <div className="hidden md:block border border-[var(--border)] rounded-[8px] overflow-hidden">
-                                <div className="grid grid-cols-[1fr_2fr_2.2fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
-                                    <div className="px-4 py-2.5">方法</div>
-                                    <div className="px-4 py-2.5 border-l border-[var(--border)]">拆解單位（操作化的對象）</div>
-                                    <div className="px-4 py-2.5 border-l border-[var(--border)]">每個單位要產出什麼</div>
-                                </div>
-                                {OPERATIONALIZE_MAP.map((r, i) => (
-                                    <div key={i} className={`grid grid-cols-[1fr_2fr_2.2fr] text-[12px] ${i % 2 === 1 ? 'bg-[var(--paper-warm)]/30' : 'bg-white'}`}>
-                                        <div className="px-4 py-2.5 font-bold text-[var(--ink)]">{r.method}</div>
-                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--accent)] font-bold leading-relaxed">{r.unit}</div>
-                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{r.output}</div>
+                            <div className="divide-y divide-[var(--border)]">
+                                {[
+                                    { n: 1, text: w8Drafts.q1 },
+                                    { n: 2, text: w8Drafts.q2 },
+                                    { n: 3, text: w8Drafts.q3 },
+                                ].map((d) => (
+                                    <div key={d.n} className="p-4 px-5 text-[13px] leading-relaxed">
+                                        <span className="font-mono font-bold text-[var(--accent)] mr-2">題 {d.n}：</span>
+                                        <span className="text-[var(--ink)] whitespace-pre-line">
+                                            {d.text || <span className="text-[var(--ink-light)] italic">（W8 這題沒寫）</span>}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
-
-                            {/* 手機：卡片版 */}
-                            <div className="md:hidden space-y-2">
-                                {OPERATIONALIZE_MAP.map((r, i) => (
-                                    <div key={i} className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
-                                        <div className="text-[12px] font-bold text-[var(--ink)] mb-1">{r.method}</div>
-                                        <div className="text-[12px] text-[var(--accent)] font-bold leading-relaxed">拆解單位：{r.unit}</div>
-                                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed mt-0.5">產出：{r.output}</div>
-                                    </div>
-                                ))}
+                        </div>
+                    ) : (
+                        <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
+                            <div className="flex items-center gap-2 mb-3">
+                                <ShieldAlert className="text-[var(--danger)]" size={20} />
+                                <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">R.I.B. 戰情示警 · Level 3</span>
                             </div>
-
-                            <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
-                                <strong className="text-[var(--ink)]">邏輯一樣</strong>：合題 → 要測/問/看/比什麼 → 怎麼操作。選下方方法後，會帶出這個方法的範例與工作表；<strong>沒有變項概念的方法</strong>（訪談／觀察／文獻）也能照樣落筆。
+                            <div className="font-bold text-[17px] md:text-[18px] mb-3 leading-tight">
+                                W8 計畫書第一版沒寫 = 本節開不了工
+                            </div>
+                            <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
+                                讀不到你的 W8 三題初稿——代表 W8 計畫書第一版沒寫（或沒存檔）。本節要做的整合都靠它：
                             </p>
-
-                            {/* W4 後門：題目還沒聚焦 */}
-                            <div className="flex items-start gap-2 text-[12px] bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[#92400E]">
-                                <span className="shrink-0">🚨</span>
-                                <div>
-                                    <strong>題目還像「高中生為何拖延？」這種大命題嗎？</strong>
-                                    <p className="mt-1 leading-relaxed">那是 W4 該處理的事。硬上 W9 只會卡住，請先回 <Link to="/w4" className="underline font-bold">W4</Link> 用 5W1H 加工到「對象 + 場域 + 焦點」都具體化，再到 W8 合題。</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 倫理快速提醒（警告框，非教學） */}
-                    <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[#FEF2F2] border border-[var(--danger)]/20 text-[13px]">
-                        <ShieldAlert size={18} className="text-[var(--danger)] shrink-0 mt-0.5" />
-                        <div>
-                            <span className="font-bold text-[var(--danger)]">動手前，倫理四原則快速確認</span>
-                            <div className="mt-1.5 text-[var(--ink-mid)] space-y-0.5">
-                                {ETHICS_PRINCIPLES.map((p, i) => (
-                                    <div key={i} className="flex items-center gap-1.5">
-                                        <span>{p.icon}</span>
-                                        <span><strong className="text-[var(--ink)]">{p.name}</strong> — {p.desc}</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <p className="mt-2 text-[11px] text-[var(--ink-light)] font-mono">W11 會做完整的倫理審查，但設計時就要避開地雷。</p>
-                        </div>
-                    </div>
-
-                    {/* W8 帶入 */}
-                    {(w8Topic || w8Method) && (
-                        <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)] text-[13px]">
-                            <span className="text-[16px]">📎</span>
-                            <div>
-                                <span className="font-bold text-[var(--accent)]">W8 研究檔案帶入</span>
-                                {w8Topic && <p className="text-[var(--ink-mid)] mt-0.5">研究題目：{w8Topic}</p>}
-                                {w8Method && <p className="text-[var(--ink-mid)] mt-0.5">選用方法：{w8Method}</p>}
-                            </div>
+                            <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1 mb-4 pl-4">
+                                <li>・<strong className="text-white">W8 老師建議</strong>：沒草稿 → 老師沒東西可批</li>
+                                <li>・<strong className="text-white">第一章修改</strong>：沒方向 → 無法討論怎麼改</li>
+                                <li>・<strong className="text-white">計畫書組裝</strong>：沒動機／問題／對象 → 第一章全空</li>
+                            </ul>
+                            <p className="text-[13px] text-white/90 leading-[1.9] mb-4">
+                                <strong className="text-[var(--danger)]">本節結束前回 W8 把三題補完</strong>——不然組員無法前進，落掉 W9 會連帶拖到 W10/W11。
+                            </p>
+                            <Link to="/w8" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2.5 rounded font-bold text-[13px] hover:opacity-90 transition-opacity">
+                                <ArrowRight size={15} />
+                                立刻回 W8 補寫三題
+                            </Link>
                         </div>
                     )}
 
-                    {/* 方法選擇 */}
+                    {/* 你的計畫書模板 */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">選擇你的方法</div>
-                        <div className="w9-method-selector">
+                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">你的計畫書模板</h4>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
+                            老師會透過 <strong>Google Classroom</strong> 發你這份 docx 的 Google Docs 副本。對照你的研究方法確認一下：
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-4">
                             {METHOD_OPTIONS.map((m) => (
                                 <button
                                     key={m.id}
-                                    onClick={() => handleMethodSelect(m.id)}
-                                    className={`w9-method-btn ${selectedMethod === m.id ? 'active' : ''}`}
+                                    type="button"
+                                    onClick={() => setSelectedMethod(m.id)}
+                                    className={`text-[12px] font-bold px-3 py-1.5 rounded-[6px] border transition-colors ${selectedMethod === m.id
+                                        ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
+                                        : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink)]'
+                                        }`}
                                 >
                                     {m.label}
                                 </button>
                             ))}
                         </div>
-                    </div>
-
-                    {/* 需要方法獨家陷阱 / 5 錯誤 / 三大標準？→ 滑回 Step 2 診斷工具包 */}
-                    <div className="w7-notice w7-notice-gold">
-                        🧰 設計過程忘記了尺？<strong>三大標準 / 五錯誤類型 / 方法獨家陷阱</strong>全部都在 <strong>Step 2 診斷工具包</strong>——點上方 Step 2 隨時翻。
-                    </div>
-
-                    {/* 分流內容 */}
-                    {currentScaffold ? (
-                        <div className="space-y-6">
-                            {/* 範例 */}
-                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                                <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                                    <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">EXAMPLE</span>
-                                    <span className="font-bold text-[13px] text-[var(--ink)]">{currentScaffold.title} — 範例</span>
-                                </div>
-                                <div className="p-5">
-                                    <div className="w9-three-col-header">
-                                        {currentScaffold.colHeaders.map((h, i) => (
-                                            <div key={i} className="w9-col-head">{h}</div>
-                                        ))}
-                                    </div>
-                                    <div className="w9-three-col-row">
-                                        <div className="w9-col-cell text-[12px] text-[var(--accent)] font-bold">{currentScaffold.example.col1}</div>
-                                        <div className="w9-col-cell text-[12px] text-[var(--ink-mid)] whitespace-pre-line">{currentScaffold.example.col2}</div>
-                                        <div className="w9-col-cell text-[12px] text-[var(--ink-mid)] whitespace-pre-line">{currentScaffold.example.col3}</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* 自檢卡 */}
-                            <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[var(--radius-unified)] p-5">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <ShieldCheck size={16} className="text-[#D97706]" />
-                                    <span className="font-bold text-[13px] text-[#92400E]">自檢卡 — 舉手找老師前先自我檢查</span>
-                                </div>
-                                <div className="space-y-2">
-                                    {currentScaffold.selfCheck.map((item, i) => (
-                                        <div key={i} className="flex items-start gap-2 text-[12px] text-[#92400E]">
-                                            <span className="shrink-0">🛑</span>
-                                            <span>{item}</span>
+                        {selectedMethod ? (
+                            (() => {
+                                const planInfo = {
+                                    questionnaire: { filename: '問卷研究法_計畫書第二版.docx', brief: '量化研究；核心是「變項 → 問卷題目」。第二章起要定變項、做題目設計。' },
+                                    interview: { filename: '訪談研究法_計畫書第二版.docx', brief: '質性研究；核心是「訪談主題框架」。第二章起要拆主題、設計訪綱。' },
+                                    experiment: { filename: '實驗研究法_計畫書第二版.docx', brief: '量化研究；核心是「自變項/依變項/控制變項」。第二章起要定變項、設計實驗流程。' },
+                                    observation: { filename: '觀察研究法_計畫書第二版.docx', brief: '核心是「行為操作型定義」。第二章起要把抽象行為定義到別人可重複觀察。' },
+                                    literature: { filename: '文獻分析法_計畫書第二版.docx', brief: '文獻本身就是對象。第二章起要定搜尋關鍵字組、納入排除準則。' },
+                                }[selectedMethod];
+                                return (
+                                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">你的計畫書</span>
+                                            <span className="font-bold text-[14px] text-[var(--ink)]">{planInfo.filename}</span>
                                         </div>
-                                    ))}
+                                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">{planInfo.brief}</p>
+                                    </div>
+                                );
+                            })()
+                        ) : (
+                            <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[12.5px] text-[var(--ink-light)]">
+                                👆 請先選擇你的研究方法（正常從 W8 帶入；若沒帶入請手動點選）。
+                            </div>
+                        )}
+                    </div>
+
+                    {/* 計畫書章節地圖 */}
+                    <div>
+                        <h4 className="font-serif text-[16px] md:text-[18px] font-bold text-[var(--ink)] mb-2">計畫書章節地圖</h4>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            你不是「從零」寫一本計畫書，是把前幾週的成果<strong className="text-[var(--ink)]">整合</strong>進去。對照一下哪幾章來自哪週：
+                        </p>
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="grid grid-cols-[70px_1fr_auto] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                                <div className="px-4 py-2.5">章</div>
+                                <div className="px-4 py-2.5 border-l border-[var(--border)]">主要內容</div>
+                                <div className="px-4 py-2.5 border-l border-[var(--border)]">來源</div>
+                            </div>
+                            {[
+                                { ch: '一', title: '研究主題基本資訊', src: 'W2 動機 + W3 問題 + W8 對象' },
+                                { ch: '二', title: '關鍵詞／行為操作型定義', src: 'W9 本節' },
+                                { ch: '三', title: '文獻回顧', src: 'W5–W6' },
+                                { ch: '四', title: '變項／主題／維度設計', src: 'W9–W10' },
+                                { ch: '五', title: '對象與抽樣', src: 'W8' },
+                                { ch: '六', title: '工具設計', src: 'W10' },
+                                { ch: '七～九', title: '實施／分析／結論', src: 'W10 定稿' },
+                                { ch: '十', title: '研究倫理', src: 'W9 本節' },
+                                { ch: '十一', title: '時程表 W9–W17', src: '本節' },
+                                { ch: '十二', title: 'AI 使用聲明', src: '本節 + 後續更新' },
+                                { ch: '十三', title: '參考文獻', src: 'W5–W16 逐步補' },
+                            ].map((r, i) => (
+                                <div key={i} className="grid grid-cols-[70px_1fr_auto] border-b border-[var(--border)] last:border-b-0 text-[12px]">
+                                    <div className="px-4 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
+                                    <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink)]">{r.title}</div>
+                                    <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)] font-mono text-[11px] whitespace-nowrap">{r.src}</div>
                                 </div>
-                                <p className="mt-3 text-[11px] text-[#92400E]/70 font-mono">{currentScaffold.tips}</p>
-                            </div>
-
-                            {/* AI 協助（可選）：從變項發散題目 */}
-                            <AIAssistToggle
-                                id="w9-variable-ai"
-                                title="卡在「題目怎麼寫」？讓 AI 幫你發散 3-5 種版本（可選）"
-                                reason="AI 給你多個版本當選項，你挑一個、刷掉其他、留下判斷理由。這是在訓練「診斷好壞題」的能力，不是讓 AI 代寫。"
-                                promptByMethod={VARIABLE_AI_PROMPTS}
-                                method={selectedMethod}
-                                recordKey="w9-variable-ai-record"
-                                recordPrompt="你從 AI 給的 3-5 種版本中選了哪個？刷掉哪個？為什麼？"
-                                recordPlaceholder="我選了第 ___ 版，因為___&#10;我刷掉第 ___ 版，因為___&#10;我把選中版本又改了：___，因為___"
-                            />
-
-                            {/* 填寫區：單位名稱依方法而異（問卷=變項／訪談=探詢層面／實驗=變因／觀察=行為指標／文獻=比較維度） */}
-                            {(() => {
-                                const unitLabel =
-                                    selectedMethod === 'questionnaire' ? '變項'
-                                        : selectedMethod === 'interview' ? '探詢層面'
-                                            : selectedMethod === 'experiment' ? '變因（自/依/控）'
-                                                : selectedMethod === 'observation' ? '行為指標'
-                                                    : selectedMethod === 'literature' ? '比較維度'
-                                                        : '拆解單位';
-                                const outputLabel =
-                                    selectedMethod === 'questionnaire' ? '問卷題目'
-                                        : selectedMethod === 'interview' ? '訪談大問題＋追問'
-                                            : selectedMethod === 'experiment' ? '操作定義/測量方式'
-                                                : selectedMethod === 'observation' ? '紀錄表欄位'
-                                                    : selectedMethod === 'literature' ? '比較矩陣欄位'
-                                                        : '產出';
-                                const measureVerb =
-                                    selectedMethod === 'interview' ? '問什麼經驗/想法'
-                                        : selectedMethod === 'observation' ? '看什麼行為'
-                                            : selectedMethod === 'literature' ? '比什麼'
-                                                : '測什麼';
-                                return (
-                                    <>
-                                        <ThinkRecord
-                                            dataKey="w9-three-col-q1"
-                                            prompt={`三欄對應表 — ${unitLabel} 1`}
-                                            defaultTemplate={`合題（從 W8 帶來）：\n這個${unitLabel}要${measureVerb}：\n對應${outputLabel}：\n1. \n2. \n3. `}
-                                            scaffold={['合題：', `${unitLabel}：`, `${outputLabel}：`]}
-                                            rows={7}
-                                        />
-
-                                        <ThinkRecord
-                                            dataKey="w9-three-col-q2"
-                                            prompt={`三欄對應表 — ${unitLabel} 2`}
-                                            defaultTemplate={`合題：同上\n這個${unitLabel}：\n對應${outputLabel}：\n4. \n5. \n6. `}
-                                            scaffold={['同上合題', `${unitLabel}：`, `${outputLabel}：`]}
-                                            rows={7}
-                                        />
-
-                                        <ThinkRecord
-                                            dataKey="w9-three-col-q3"
-                                            prompt={`三欄對應表 — ${unitLabel} 3（若有）`}
-                                            defaultTemplate={`合題：同上\n這個${unitLabel}：\n對應${outputLabel}：\n7. \n8. `}
-                                            rows={6}
-                                        />
-                                    </>
-                                );
-                            })()}
-
-                            {/* 基本資料與結構確認：上 Checklist（純檢核）＋下 ThinkRecord（填空） */}
-                            {(() => {
-                                const checklistConfig = {
-                                    questionnaire: {
-                                        prompt: '基本資料與知情同意確認',
-                                        items: [
-                                            '開場白已寫好（我是誰、研究目的、保密承諾、需時多久）',
-                                            '基本變項設計完成（年級／性別／類組）',
-                                        ],
-                                        fillPrompt: '題目數量與填答時間',
-                                        fillTemplate: '預計題目數：___ 題\n預計填答時間：___ 分鐘',
-                                    },
-                                    interview: {
-                                        prompt: '訪談結構確認',
-                                        items: [
-                                            '暖身問題準備好了',
-                                            '問題排序合理（從簡單 → 深層）',
-                                            '收尾問題準備好了（「還有什麼想補充的嗎？」）',
-                                        ],
-                                        fillPrompt: '預計訪談時間',
-                                        fillTemplate: '預計訪談時間：___ 分鐘',
-                                    },
-                                    experiment: {
-                                        prompt: '實驗流程確認',
-                                        items: [
-                                            '知情同意步驟已安排',
-                                            '已備妥實驗材料／場地',
-                                        ],
-                                        fillPrompt: '分組、控制變項、時程',
-                                        fillTemplate: '分組方式：___\n控制變項共 ___ 項\n預計 ___ 天完成實驗',
-                                    },
-                                    observation: {
-                                        prompt: '觀察情境設定',
-                                        items: [
-                                            '已決定觀察者定位（參與 or 非參與）',
-                                            '觀察紀錄表欄位已設計好',
-                                        ],
-                                        fillPrompt: '時間、地點、角色',
-                                        fillTemplate: '觀察者定位：□參與觀察  □非參與觀察（擇一圈選）\n觀察時間：每次 ___ 分鐘，共 ___ 次\n觀察地點：___',
-                                    },
-                                    literature: {
-                                        prompt: '文獻篩選標準設定',
-                                        items: [
-                                            '中文關鍵字已列出',
-                                            '英文關鍵字已列出',
-                                            '納入／排除標準已與組員共識',
-                                        ],
-                                        fillPrompt: '年份與具體標準',
-                                        fillTemplate: '年份限制：___\n納入標準：___\n排除標準：___',
-                                    },
-                                };
-                                const cfg = checklistConfig[selectedMethod];
-                                if (!cfg) return null;
-                                return (
-                                    <>
-                                        <Checklist
-                                            dataKey="w9-basic-checklist"
-                                            prompt={cfg.prompt}
-                                            items={cfg.items}
-                                        />
-                                        <ThinkRecord
-                                            dataKey="w9-basic-info-check"
-                                            prompt={cfg.fillPrompt}
-                                            defaultTemplate={cfg.fillTemplate}
-                                            rows={4}
-                                        />
-                                    </>
-                                );
-                            })()}
-                        </div>
-                    ) : (
-                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-8 text-center">
-                            <span className="text-[28px] block mb-3">👆</span>
-                            <p className="text-[14px] text-[var(--ink-mid)]">請先選擇你的研究方法，系統會顯示對應的工作表。</p>
-                        </div>
-                    )}
-                </div>
-            ),
-        },
-
-        /* ─── Step 5：同儕處方診斷 ─── */
-        {
-            title: '同儕處方診斷',
-            icon: '💊',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        兩兩小組互相交換「三欄對應表 + 各題題目草稿」。用錯誤類型卡幫對方把脈——當一個負責任的主治醫師！（完整工具會在課後組裝，W10 帶來。）
-                    </p>
-
-                    {/* 診斷流程 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center gap-2">
-                            <Stethoscope size={16} />
-                            <span className="font-bold text-[13px]">診斷流程</span>
-                        </div>
-                        <div className="p-5 space-y-3 text-[13px] text-[var(--ink-mid)]">
-                            <div className="flex items-start gap-3">
-                                <span className="w9-step-num">1</span>
-                                <span>和隔壁組交換你的<strong className="text-[var(--ink)]">三欄對應表 + 各題題目草稿</strong></span>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <span className="w9-step-num">2</span>
-                                <span>點回 <strong className="text-[var(--ink)]">Step 2 診斷工具包</strong>，用<strong>五錯誤類型</strong>逐題對照：選項重疊？誘導性？雙重問題？</span>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <span className="w9-step-num">3</span>
-                                <span>再用 Step 2 的<strong>三大標準</strong>檢查：<strong className="text-[var(--ink)]">有效嗎？可靠嗎？可行嗎？</strong></span>
-                            </div>
-                            <div className="flex items-start gap-3">
-                                <span className="w9-step-num">4</span>
-                                <span>把脈結果寫在下方的<strong className="text-[var(--ink)]">醫師會診紀錄</strong></span>
-                            </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* 診斷提示 */}
-                    <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[var(--radius-unified)] p-4 text-[13px]">
-                        <strong className="text-[#D97706]">🎯 診斷目標：</strong>
-                        <span className="text-[var(--ink-mid)] ml-1">每個工具初稿至少找出 <strong>2 個</strong>可以改進的地方，並標注是違反了哪條規準或觸發了哪種錯誤類型。</span>
-                    </div>
-
-                    {/* 醫師會診紀錄 */}
+                    {/* W8 老師建議整合 */}
                     <ThinkRecord
-                        dataKey="w9-peer-from"
-                        prompt="我診斷了哪一組？"
-                        placeholder="組名/姓名：___"
-                        rows={1}
-                    />
-
-                    <ThinkRecord
-                        dataKey="w9-peer-diagnosis"
-                        prompt="醫師把脈紀錄：對方的三欄對應表與題目草稿有什麼問題？"
-                        defaultTemplate={'問題 1：第 ___ 題犯了「___」→ 建議改為 ___\n問題 2：子問題 ___ 和題目對不上，因為 ___\n總評：這些題目整體能回答他們的研究問題嗎？___'}
-                        scaffold={['第__題犯了「___」', '建議改為___', '整體評價：___']}
-                        rows={8}
-                    />
-
-                    <ThinkRecord
-                        dataKey="w9-received-feedback"
-                        prompt="我收到的處方：別組醫師給我們的回饋"
-                        defaultTemplate={'醫師說我們的第 ___ 題有 ___ 的問題，建議改為 ___\n醫師的總評是：___'}
-                        scaffold={['第__題需要改___', '醫師建議___', '我們覺得___']}
+                        dataKey="w9-teacher-feedback-sync"
+                        prompt="W8 老師在你的計畫書第一版上給了什麼建議？這週要怎麼改？"
+                        defaultTemplate={'老師的建議：___\n我打算在第一章做的修正：___'}
                         rows={6}
                     />
+
+                    {/* 第一章組裝 */}
+                    <div>
+                        <h4 className="font-serif text-[16px] md:text-[18px] font-bold text-[var(--ink)] mb-2">第一章組裝：本節要完成的 6 格</h4>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            具體內容<strong className="text-[var(--ink)]">寫在 docx 上</strong>。下方 ThinkRecord 只記「關鍵決策 + 為什麼」——不是重寫計畫書。
+                        </p>
+                        <ol className="pl-5 mb-4 space-y-1 text-[13px] text-[var(--ink-mid)] list-decimal">
+                            <li>研究題目（主標—副標）</li>
+                            <li>研究動機（兩個引導問題：情境／解決什麼）</li>
+                            <li>研究目的（一句話）</li>
+                            <li>主研究問題（一個問句）</li>
+                            <li>子問題 2–3 條</li>
+                            <li>對象 + 預定時間</li>
+                        </ol>
+                        <ThinkRecord
+                            dataKey="w9-plan-ch1-decisions"
+                            prompt="第一章關鍵決策（docx 填完後，在這裡摘要本節最重要的 2-3 個決定）"
+                            defaultTemplate={'決定 1：研究題目從「___」調整為「___」，因為 ___\n決定 2：主問題縮小到「___」，原本「___」太大\n決定 3：對象從「___」改為「___」，因為 ___'}
+                            rows={7}
+                        />
+                    </div>
+
+                    {/* AI 檢核（可選） */}
+                    <AIAssistToggle
+                        id="w9-plan-ai"
+                        title="用 AI 檢核計畫書第一章的邏輯一致性（可選）"
+                        reason="第一章是整份研究的地基——動機、目的、主問題三者要邏輯一致。AI 適合檢核「動機是否支撐問題」「目的是否能由問題回答」這類結構性問題。AI 不會替你確立方向，那是人腦的事。"
+                        promptByMethod={PLAN_AI_PROMPTS}
+                        method={selectedMethod}
+                        recordKey="w9-plan-ai-check"
+                        recordPrompt="AI 給了什麼建議？你採納哪些、不採納哪些？為什麼？"
+                        recordPlaceholder="A: 我用了 ChatGPT-4o&#10;I: 我貼了第一章內容，請它檢查邏輯一致性&#10;E: AI 指出主問題太大，建議縮小&#10;D: 我採納把主問題縮小；不採納 AI 建議改對象（那是 W8 已定）"
+                    />
+
+                    {/* 第一章完成 Checklist */}
+                    <Checklist
+                        dataKey="w9-plan-ch1-checklist"
+                        prompt="第一章完成清單（全部勾完才算本節過關）"
+                        items={[
+                            '研究題目（主標—副標）已寫',
+                            '研究動機兩個引導問題都答',
+                            '研究目的一句話已定',
+                            '主研究問題是一個明確問句',
+                            '子問題 2–3 條',
+                            '對象寫得具體',
+                            '預定時間（哪幾週做）',
+                            'W8 老師的建議都已納入修正',
+                        ]}
+                    />
+
+                    {/* 下一步 */}
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 第一章完成 → 到 <strong>Step 4 回顧與繳交</strong> 做「時間承諾」，規劃課後寫第二到第八章（W10 前完成）。
+                    </div>
                 </div>
             ),
         },
 
-        /* ─── Step 6：回顧與繳交 ─── */
+        /* ─── Step 4：回顧與繳交（時間承諾 + 課後計畫書撰寫） ─── */
         {
             title: '回顧與繳交',
             icon: '📋',
@@ -1188,11 +1000,11 @@ export const W9Page = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
-                                '學會 Level 2 處方診斷（用規準找問題）',
-                                '掌握三大標準（有效性、可靠性、可行性）',
-                                '用三欄對應表把研究問題 → 變項 → 題目連起來',
-                                '完成同儕處方診斷（幫別組把脈）',
-                                '記錄收到的回饋與修改方向',
+                                '學會三層尺判斷工具品質（方向 / 精度 / 執行）',
+                                '辨識錯誤類型（誘導性、雙重問題、假開放）',
+                                '完成計畫書第一章（研究主題、動機、問題、對象）',
+                                '整合 W8 老師建議到第一章',
+                                '規劃好 W9 → W10 計畫書撰寫時程',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
@@ -1202,12 +1014,11 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* 2. 修改決定（向前看） */}
+                    {/* 2. W10 前要做的最大修改 */}
                     <ThinkRecord
                         dataKey="w9-revision-plan"
-                        prompt="綜合同學的診斷與老師的建議，下週 W10 之前必須做出的最大修改是什麼？"
-                        defaultTemplate={'我們決定修改的方向是 ___，因為同儕診斷時發現 ___\n具體來說，第 ___ 題要改成 ___'}
-                        scaffold={['最大的修改是___', '因為___', '組裝時會特別注意___']}
+                        prompt="整合 W8 老師建議與本節學到的三層尺，W10 之前計畫書前段必須做的最大修改是什麼？"
+                        defaultTemplate={'最大的修改：___\n理由（引用老師建議或三層尺）：___\n預計完成時間：___'}
                         rows={5}
                     />
 
@@ -1235,100 +1046,29 @@ export const W9Page = () => {
                         </Link>
                     </div>
 
-                    {/* 6. 課後組裝作業鷹架（取代原下週預告） */}
+                    {/* 6. 課後計畫書撰寫鷹架 */}
                     <div className="bg-[#FEF3C7] border-2 border-[#D97706] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-4 bg-[#D97706] text-white flex items-center gap-3">
                             <span className="bg-white text-[#D97706] text-[10px] font-mono font-bold px-2 py-1 rounded-[3px]">HOMEWORK</span>
-                            <h3 className="font-bold text-[14px] leading-tight">W9 → W10 課後組裝作業</h3>
-                            <span className="ml-auto text-[11px] font-mono opacity-90">繳交期限：W10 上課前</span>
+                            <h3 className="font-bold text-[14px] leading-tight">W9 → W10 課後：計畫書第二～第八章</h3>
+                            <span className="ml-auto text-[11px] font-mono opacity-90">W10 第二節前完成</span>
                         </div>
                         <div className="p-5 space-y-4">
                             <p className="text-[13px] text-[#92400E] leading-relaxed">
-                                <strong>現實盤點</strong>：你現在手上有「三欄對應表 + 散落的題目草稿」，還<strong className="text-[var(--danger)]">不是</strong>一份能拿去施測的完整工具。
-                                W10 的 AI 審稿和人工預試都需要一份「成品」，所以這週回家要把散件組裝起來。
+                                <strong>現實盤點</strong>：本節完成了計畫書第一章。第二到第八章要課後寫完，<strong className="text-[var(--danger)]">不要拖到 W10 下課前才趕</strong>——那時還要設計工具。
                             </p>
 
-                            {ASSEMBLY_TASKS[selectedMethod] ? (
-                                (() => {
-                                    const task = ASSEMBLY_TASKS[selectedMethod];
-                                    return (
-                                        <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-4">
-                                            <div className="flex items-start gap-3 pb-3 border-b border-[var(--border)]">
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-1">你的組裝任務</div>
-                                                    <div className="text-[15px] font-bold text-[var(--ink)] mb-0.5">{task.outputName}</div>
-                                                    <div className="text-[12px] text-[var(--ink-mid)]">繳交格式：{task.deliverable}</div>
-                                                    <div className="text-[11px] font-mono text-[var(--ink-light)] mt-1">⏱ {task.timeEstimate}</div>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">必要元件（按順序組裝）</div>
-                                                <div className="space-y-2">
-                                                    {task.components.map((c, i) => (
-                                                        <div key={i} className="flex items-start gap-3 text-[12px]">
-                                                            <span className="shrink-0 bg-[var(--paper-warm)] text-[var(--ink)] w-6 h-6 rounded-full flex items-center justify-center font-mono font-bold text-[11px]">{i + 1}</span>
-                                                            <div className="min-w-0 flex-1">
-                                                                <div className="font-bold text-[var(--ink)]">{c.t}</div>
-                                                                <div className="text-[var(--ink-mid)] leading-relaxed">{c.d}</div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-3">
-                                                <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">繳交前自檢</div>
-                                                <div className="space-y-1">
-                                                    {task.checks.map((c, i) => (
-                                                        <div key={i} className="flex items-start gap-2 text-[12px] text-[var(--ink-mid)]">
-                                                            <span className="shrink-0">□</span>
-                                                            <span>{c}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {task.templateUrl && (
-                                                <a
-                                                    href={task.templateUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center justify-between gap-3 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 transition-colors no-underline"
-                                                >
-                                                    <div className="flex items-center gap-3 min-w-0">
-                                                        <span className="text-[18px]">📋</span>
-                                                        <div className="min-w-0">
-                                                            <div className="text-[13px] font-bold">建立我的模板副本</div>
-                                                            <div className="text-[11px] font-mono opacity-70 truncate">{task.templateName}</div>
-                                                        </div>
-                                                    </div>
-                                                    <ArrowRight size={16} className="shrink-0" />
-                                                </a>
-                                            )}
-                                            <p className="text-[11px] text-[var(--ink-light)] leading-relaxed">
-                                                點上面按鈕 → Google 會跳出「建立副本」視窗 → 副本直接存到<strong className="text-[var(--ink)]">你自己的雲端硬碟</strong>。老師的母版不會被動到。
-                                            </p>
-                                        </div>
-                                    );
-                                })()
-                            ) : (
-                                <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 text-center text-[13px] text-[var(--ink-mid)]">
-                                    ⚠️ 尚未選擇研究方法，請回 Step 4 選擇後，此處會顯示你的組裝清單。
-                                </div>
-                            )}
-
-                            {/* AI 協助（可選）：生成樣板文字（開場白/結尾/知情同意） */}
-                            <AIAssistToggle
-                                id="w9-assembly-ai"
-                                title="組裝時卡在寫樣板文字？讓 AI 生外框，你改核心（可選）"
-                                reason="開場白、指導語、結尾致謝、知情同意聲明——這些「外框文字」AI 寫得比你快，你只要審閱改語氣。但核心題目／行為定義／變項設計絕對要自己做。"
-                                promptByMethod={ASSEMBLY_AI_PROMPTS}
-                                method={selectedMethod}
-                                recordKey="w9-assembly-ai-record"
-                                recordPrompt="你對 AI 生出來的樣板改了哪裡？為什麼？（改越多代表你越清楚自己要什麼）"
-                                recordPlaceholder="開場白：AI 原本寫「___」，我改成「___」，因為___&#10;結尾致謝：AI 原本寫「___」，我改成「___」，因為___"
-                            />
+                            <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-3">
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-1">課後要寫完的章節</div>
+                                <ul className="text-[13px] text-[var(--ink)] space-y-1.5 leading-relaxed">
+                                    <li>・<strong>第二章</strong>：關鍵詞／行為操作型定義（3 個以上）</li>
+                                    <li>・<strong>第三章</strong>：文獻回顧（至少 2–3 篇，從 W5–W6 整合）</li>
+                                    <li>・<strong>第四章</strong>：變項／主題／維度設計（方法特性專屬欄位）</li>
+                                    <li>・<strong>第五章</strong>：對象與抽樣（從 W8 整合）</li>
+                                    <li>・<strong>第六章</strong>：工具設計（W10 第二節完成）</li>
+                                    <li>・<strong>第七～九章</strong>：實施／分析／結論（W10 第二節完成）</li>
+                                </ul>
+                            </div>
 
                             {/* 自我承諾：具體意圖設計（implementation intention） */}
                             <div className="bg-white border border-[#D97706]/30 rounded-[8px] p-5 space-y-3">
@@ -1341,16 +1081,19 @@ export const W9Page = () => {
                                 </p>
                                 <ThinkRecord
                                     dataKey="w9-homework-commitment"
-                                    prompt="我打算什麼時候動手組裝？（越具體越有效）"
-                                    placeholder="例：週三晚上 7:30-9:00，在家裡房間，先寫開場白和基本資料（20 分鐘），再把三欄對應表的題目排進模板（40 分鐘）。&#10;&#10;有隊友的記得附上「誰負責什麼」。"
-                                    scaffold={['時間：', '地點：', '分段／誰負責什麼：']}
-                                    rows={4}
+                                    prompt="我打算什麼時候寫計畫書？（越具體越有效）"
+                                    defaultTemplate={'時段 1：___（日期+時間段），地點：___，預計寫第 ___ 章\n時段 2：___\n時段 3：___'}
+                                    rows={5}
                                 />
                             </div>
 
                             <div className="bg-[var(--ink)] rounded-[6px] p-4 text-white">
                                 <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-1">W10 會做什麼</div>
-                                <p className="text-[13px] leading-relaxed">AI 審稿 + 人工預試（Pilot Test）雙重把關——讓真人試填你的工具，你會發現很多意想不到的問題。沒組裝完成就來上課 = 空手進手術房。</p>
+                                <p className="text-[13px] leading-relaxed">
+                                    第一節：AI 檢核計畫書前段 + 設計工具（問卷題目 / 訪綱 / 實驗流程 / 觀察紀錄表 / 比較矩陣）。<br />
+                                    第二節：計畫書定稿 + 繳交。<br />
+                                    <strong className="text-[var(--danger)]">計畫書沒寫到第五章就來上課 = W10 第一節會卡死</strong>。
+                                </p>
                             </div>
                         </div>
                     </div>
