@@ -69,11 +69,11 @@ const TROUBLE_CARDS = [
     },
 ];
 
-/* — 等待急救包 — */
+/* — 等待急救包（對焦 W11-W12 時序：Pilot 剛完成、施測剛啟動，備案可能要動用） — */
 const RESCUE_TASKS = [
-    { icon: '📝', title: '預寫第三章', desc: '把你這週如何找受訪者、發了幾份、怎麼做實驗的過程，用文字打成草稿。這就是期末報告「研究方法」章節！' },
-    { icon: '📚', title: '整理文獻格式', desc: '把 W6 找的文獻按 APA 格式整理成參考文獻清單，報告末尾直接貼上。' },
-    { icon: '🧹', title: '資料清洗預習', desc: '打開 Google 表單後台，檢查已回收的問卷，辨認並標記「一直線亂填」的無效問卷。' },
+    { icon: '🔎', title: '補跑 Pilot 前測檢查', desc: '重看 W11 Pilot 抓出的工具問題，確認修正版本真的改好了再繼續發（問卷題目順序、訪談問題鬆緊度、實驗指導語）。' },
+    { icon: '📞', title: '啟動備案聯絡清單', desc: '對照你自己在 W11 寫的備案——把還沒回覆的受訪者／受試者列成清單，逐一發 LINE 提醒，超過 24 小時未回就換備案人選。' },
+    { icon: '🧹', title: '初步資料清洗', desc: '打開已回收的問卷／訪談逐字稿／觀察紀錄，先標記可疑樣本（全勾同選項、單字回答、漏填大半），標記好讓 W13 分析時直接用。' },
 ];
 
 /* — AI Prompts — */
@@ -116,6 +116,7 @@ const DIARY_REVIEW_PROMPT = `以下是我這週的三條研究日誌：
 
 /* — ExportButton 欄位（只剩日誌部分） — */
 const EXPORT_FIELDS = [
+    { key: 'w12-feedback-action', label: '讀完 W11 老師回饋後的首要任務', question: '讀完老師回饋後，我今天最該先處理的一件事是？' },
     { key: 'w12-diary-1', label: '關鍵行動 1' },
     { key: 'w12-diary-2', label: '關鍵行動 2' },
     { key: 'w12-diary-3', label: '關鍵行動 3' },
@@ -194,6 +195,11 @@ const W12Page = () => {
     const saved = readRecords();
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
     const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
+    /* W11 施測啟動計畫帶入（讓學生看得到自己上週定的目標/時程/備案） */
+    const w11Target = saved['w11-plan-target']?.trim() || '';
+    const w11Schedule = saved['w11-plan-schedule']?.trim() || '';
+    const w11Backup = saved['w11-plan-backup']?.trim() || '';
+    const hasW11Plan = !!(w11Target || w11Schedule || w11Backup);
 
     return (
         <div className="page-container animate-in-fade-slide">
@@ -217,10 +223,10 @@ const W12Page = () => {
                 accentTitle="自由工作時間"
                 subtitle="這堂課沒有老師台上講課。整堂課是自由工作時間＋個別診所。核心任務只有一個：把資料蒐集回來。"
                 meta={[
-                    { label: '第一節', value: '自由工作時間 + 個別診所掛號' },
+                    { label: '第一節', value: '讀 W11 計畫書回饋 → 三色分診 → 個別診所' },
                     { label: '第二節', value: '研究日誌 + W13 中期報告預備' },
                     { label: '課堂產出', value: '研究日誌 ×3 + 中期報告草稿' },
-                    { label: '前置要求', value: 'W11 工具已設計 + 資料蒐集進行中' },
+                    { label: '前置要求', value: 'W11 倫理通過 + 施測已啟動（工具定稿 + 備案清單）' },
                 ]}
             />
             <CourseArc items={[
@@ -252,11 +258,49 @@ const W12Page = () => {
                 </div>
             )}
 
+            {/* 📬 W11 計畫書回饋必讀區（W12 第一件事） */}
+            <div className="mt-4 p-5 rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
+                <p className="text-[15px] font-bold text-[#991B1B] mb-2">📬 第一件事：讀老師的 W11 計畫書回饋</p>
+                <div className="text-[12.5px] text-[#7F1D1D] leading-relaxed flex flex-col gap-1.5">
+                    <p>老師已針對你們 W11 繳交的計畫書做批改（AI 初審 + 老師補註），回饋已發在 <strong>Google Classroom</strong>。</p>
+                    <p>今天進教室第一件事：<strong>打開 Classroom，讀完老師的回饋</strong>。讀完後在下方記下今天最該處理的一件事。</p>
+                    <p className="mt-1 text-[11.5px] italic">※ 螢幕上會投影「三色分診結果」——老師已依據批改狀況把你們分成 🔴 急診／🟡 門診／🟢 健康，公告看診順序。</p>
+                </div>
+                <div className="mt-4">
+                    <ThinkRecord
+                        dataKey="w12-feedback-action"
+                        prompt="讀完老師回饋後，我今天最該先處理的一件事是？"
+                        defaultTemplate={'（回饋摘要：老師指出我們_______）\n今天最該處理：_______\n我打算怎麼做：_______'}
+                    />
+                </div>
+            </div>
+
+            {/* W11 施測啟動計畫帶入 */}
+            {hasW11Plan && (
+                <div className="mt-4 p-4 rounded-[var(--radius-unified)] bg-[#FEF3C7] border border-[#FCD34D]">
+                    <p className="text-[12px] text-[#92400E] font-bold mb-2">🎯 你在 W11 定下的施測啟動計畫</p>
+                    <div className="flex flex-col gap-2 text-[12.5px] text-[#78350F] leading-relaxed">
+                        {w11Target && (
+                            <p><span className="font-bold">本週目標 ▸</span> {w11Target}</p>
+                        )}
+                        {w11Schedule && (
+                            <p><span className="font-bold">時程 ▸</span> {w11Schedule}</p>
+                        )}
+                        {w11Backup && (
+                            <p><span className="font-bold">備案 ▸</span> {w11Backup}</p>
+                        )}
+                    </div>
+                    <p className="text-[11px] text-[#92400E] mt-2 italic">
+                        → 這是你自己上週的承諾。對照今天的進度：超前、剛好、還是落後？落後就啟動備案。
+                    </p>
+                </div>
+            )}
+
             {/* ═══ 工具區 ═══ */}
 
             {/* ── 1. 三色掛號提醒 ── */}
             <h2 className="text-[15px] font-bold text-[var(--ink)] mt-8 mb-3">✈️ 研究診所掛號板</h2>
-            <p className="text-[12px] text-[var(--ink-mid)] mb-3">在黑板上把組名貼到對應區域，老師從急診區開始看診。</p>
+            <p className="text-[12px] text-[var(--ink-mid)] mb-3">老師已依據 W11 計畫書批改結果把各組分診——<strong>螢幕會投影三色分類與看診順序</strong>。確認你們組在哪一色，再決定這堂課怎麼過。</p>
             <div className="w12-triage-grid">
                 {TRIAGE_ZONES.map(z => (
                     <div key={z.label} className={`w12-triage-card ${z.className}`}>
@@ -267,14 +311,15 @@ const W12Page = () => {
                 ))}
             </div>
 
-            {/* 求助三招 */}
+            {/* 分診後怎麼辦 */}
             <div className="mt-4 p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">
-                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">遇到困難的三個辦法</p>
-                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
-                    <span>🤖 <strong>先問 AI</strong>，讓 AI 給你 3 個選項</span>
-                    <span>🧑‍🤝‍🧑 <strong>問旁邊同學</strong>，看看有沒有一樣的狀況</span>
-                    <span>🙋 <strong>黑板掛號</strong>，老師會來找你</span>
+                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">看你被分到哪一色，決定怎麼過這堂課</p>
+                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1.5">
+                    <span>🔴 <strong>急診組</strong>：原地等老師巡診，先把回饋讀清楚、把問題寫下來。</span>
+                    <span>🟡 <strong>門診組</strong>：先用下方 AI 工具箱自救；真的卡住再舉手，老師看完急診過來。</span>
+                    <span>🟢 <strong>健康組</strong>：直接推進施測／訪談／資料整理，等待回收時做「等待急救包」三件事。</span>
                 </div>
+                <p className="mt-2 text-[11.5px] text-[var(--ink-light)] italic">※ 任何時候遇到新問題：先問 AI → 問同學 → 舉手掛號。</p>
             </div>
 
             {/* ── 2. 困難速查卡 ── */}

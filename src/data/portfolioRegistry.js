@@ -210,6 +210,7 @@ export const PORTFOLIO_REGISTRY = [
     weekLabel: 'W12 執行週 I：研究診所 Open Office',
     weekRoute: '/w12',
     fields: [
+      { key: 'w12-feedback-action', label: '讀完 W11 老師回饋後的首要任務', question: '讀完老師回饋後，我今天最該先處理的一件事是？' },
       { key: 'w12-diary-1', label: '關鍵行動 1' },
       { key: 'w12-diary-2', label: '關鍵行動 2' },
       { key: 'w12-diary-3', label: '關鍵行動 3' },
