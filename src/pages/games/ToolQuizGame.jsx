@@ -243,6 +243,21 @@ export const ToolQuizGame = () => {
                         </div>
                     </div>
 
+                    {/* 🏆 挑戰結束的稱號規則 */}
+                    <div className="bg-amber-950/40 border border-amber-500/30 rounded-sm p-5 mb-6 text-left">
+                        <div className="text-xs font-black tracking-widest text-amber-400 mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>
+                            🏆 挑戰結束的稱號
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                            <div className="flex items-center gap-2"><span className="text-yellow-300 font-black w-14">95%↑</span><span className="text-amber-100 font-bold w-20">軍械總長</span><span className="text-slate-400">五法神兵</span></div>
+                            <div className="flex items-center gap-2"><span className="text-cyan-300 font-black w-14">80%↑</span><span className="text-amber-100 font-bold w-20">軍械士</span><span className="text-slate-400">五法精通</span></div>
+                            <div className="flex items-center gap-2"><span className="text-emerald-300 font-black w-14">60%↑</span><span className="text-amber-100 font-bold w-20">補給兵</span><span className="text-slate-400">過關，記入軍階</span></div>
+                            <div className="flex items-center gap-2"><span className="text-rose-300 font-black w-14">&lt;60%</span><span className="text-amber-100 font-bold w-20">新兵蛋子</span><span className="text-slate-400">建議再訓練</span></div>
+                        </div>
+                        <p className="mt-3 text-[10px] text-slate-400 italic leading-relaxed">※ 60% 為 Dossier 軍階過關門檻。6 款挑戰全過 → 特級調查官；6 款全過 + 連貫劇情十章全完美 → 特務首長。</p>
+                    </div>
+
                     <div className="bg-slate-800/60 rounded-sm p-6 mb-8 text-center border border-slate-700/50 shadow-inner block backdrop-blur-none relative group-hover:border-amber-500/30 transition-colors">
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 px-3 py-1 rounded-sm border border-slate-700 text-xs font-bold text-slate-400 tracking-wider shadow-sm z-10">
                             🕵️‍♂️ 目前登入身分

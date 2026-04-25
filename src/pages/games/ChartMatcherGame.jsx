@@ -584,6 +584,21 @@ export const ChartMatcherGame = () => {
                         你能幫數據找到<span className="text-cyan-400 font-bold mx-1 drop-shadow-[0_0_5px_currentColor]">最適合的圖表</span>來呈現決策嗎？
                     </p>
 
+                    {/* 🏆 挑戰結束的稱號規則 */}
+                    <div className="bg-cyan-950/40 border border-cyan-500/30 rounded-sm p-5 mb-6 text-left">
+                        <div className="text-xs font-black tracking-widest text-cyan-400 mb-3 flex items-center gap-2 font-mono">
+                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block"></span>
+                            🏆 挑戰結束的稱號
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                            <div className="flex items-center gap-2"><span className="text-yellow-300 font-black w-14">95%↑</span><span className="text-cyan-100 font-bold w-20">圖表破譯官</span><span className="text-slate-400">一目即解</span></div>
+                            <div className="flex items-center gap-2"><span className="text-cyan-300 font-black w-14">80%↑</span><span className="text-cyan-100 font-bold w-20">圖像分析師</span><span className="text-slate-400">識讀準確</span></div>
+                            <div className="flex items-center gap-2"><span className="text-emerald-300 font-black w-14">60%↑</span><span className="text-cyan-100 font-bold w-20">雷達兵</span><span className="text-slate-400">過關，記入軍階</span></div>
+                            <div className="flex items-center gap-2"><span className="text-rose-300 font-black w-14">&lt;60%</span><span className="text-cyan-100 font-bold w-20">通訊新手</span><span className="text-slate-400">建議再訓練</span></div>
+                        </div>
+                        <p className="mt-3 text-[10px] text-slate-400 italic leading-relaxed">※ 60% 為 Dossier 軍階過關門檻。6 款挑戰全過 → 特級調查官；6 款全過 + 連貫劇情十章全完美 → 特務首長。</p>
+                    </div>
+
                     <div className="bg-slate-800/60 rounded-sm p-5 mb-6 text-center border border-cyan-500/30 shadow-inner">
                         <label className="block text-sm font-bold text-cyan-500 mb-2 tracking-[0.2em] font-mono">📡 CURRENT OPERATIVE</label>
                         {playerName ? (

@@ -364,6 +364,21 @@ export const QuestionERGame = () => {
                         </div>
                     </div>
 
+                    {/* 🏆 挑戰結束的稱號規則 */}
+                    <div className="bg-teal-950/40 border border-teal-500/30 rounded-sm p-5 mb-4 text-left">
+                        <div className="text-xs font-black tracking-widest text-teal-400 mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 inline-block"></span>
+                            🏆 挑戰結束的稱號
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                            <div className="flex items-center gap-2"><span className="text-yellow-300 font-black w-14">95%↑</span><span className="text-teal-100 font-bold w-20">主治醫師</span><span className="text-slate-400">一眼定病灶</span></div>
+                            <div className="flex items-center gap-2"><span className="text-cyan-300 font-black w-14">80%↑</span><span className="text-teal-100 font-bold w-20">急診醫師</span><span className="text-slate-400">穩定處方</span></div>
+                            <div className="flex items-center gap-2"><span className="text-emerald-300 font-black w-14">60%↑</span><span className="text-teal-100 font-bold w-20">實習醫師</span><span className="text-slate-400">過關，記入軍階</span></div>
+                            <div className="flex items-center gap-2"><span className="text-rose-300 font-black w-14">&lt;60%</span><span className="text-teal-100 font-bold w-20">候診見習生</span><span className="text-slate-400">建議再訓練</span></div>
+                        </div>
+                        <p className="mt-3 text-[10px] text-slate-400 italic leading-relaxed">※ 60% 為 Dossier 軍階過關門檻。6 款挑戰全過 → 特級調查官；6 款全過 + 連貫劇情十章全完美 → 特務首長。</p>
+                    </div>
+
                     {/* 身分 + 按鈕 */}
                     <div className="bg-slate-800/50 rounded-sm p-4 mb-6 text-center border border-slate-600/50 shadow-inner">
                         <label className="block text-sm font-bold text-teal-300 mb-2 tracking-wider">👨‍⚕️ 目前登入身分</label>

@@ -873,6 +873,21 @@ export const DataDetectiveGame = () => {
                         每一份報告都可能藏著「假象」，你的任務就是揭露它們，還原數據的「真相」！
                     </p>
 
+                    {/* 🏆 挑戰結束的稱號規則 */}
+                    <div className="bg-amber-950/40 border border-amber-500/30 rounded-sm p-5 mb-6 text-left">
+                        <div className="text-xs font-black tracking-widest text-amber-400 mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>
+                            🏆 挑戰結束的稱號
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                            <div className="flex items-center gap-2"><span className="text-yellow-300 font-black w-14">95%↑</span><span className="text-amber-100 font-bold w-20">資料偵探長</span><span className="text-slate-400">識破障眼法</span></div>
+                            <div className="flex items-center gap-2"><span className="text-cyan-300 font-black w-14">80%↑</span><span className="text-amber-100 font-bold w-20">鑑識專家</span><span className="text-slate-400">邏輯清晰</span></div>
+                            <div className="flex items-center gap-2"><span className="text-emerald-300 font-black w-14">60%↑</span><span className="text-amber-100 font-bold w-20">一線分析師</span><span className="text-slate-400">過關，記入軍階</span></div>
+                            <div className="flex items-center gap-2"><span className="text-rose-300 font-black w-14">&lt;60%</span><span className="text-amber-100 font-bold w-20">新進助理</span><span className="text-slate-400">建議再訓練</span></div>
+                        </div>
+                        <p className="mt-3 text-[10px] text-slate-400 italic leading-relaxed">※ 60% 為 Dossier 軍階過關門檻。6 款挑戰全過 → 特級調查官；6 款全過 + 連貫劇情十章全完美 → 特務首長。</p>
+                    </div>
+
                     <div className="bg-slate-950/60 rounded-sm p-6 mb-8 text-center border border-amber-500/30 shadow-inner  relative overflow-hidden group hover:border-amber-500/50 transition-colors duration-500">
                         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                         <label className="block text-sm font-black text-amber-500 mb-2 tracking-[0.2em] drop-shadow-[0_0_5px_currentColor]">🕵️ 目前登入身分</label>

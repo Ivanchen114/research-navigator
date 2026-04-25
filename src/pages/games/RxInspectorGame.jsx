@@ -447,6 +447,21 @@ export const RxInspectorGame = () => {
                         身為 Level 2 專科醫師的你，<br />
                         能把所有 <span className="text-cyan-400 font-bold border-b-2 border-cyan-400/50 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]">💊 隱藏病徵 (Bug)</span> 都抓出來嗎？
                     </p>
+                    {/* 🏆 挑戰結束的稱號規則 */}
+                    <div className="bg-cyan-950/40 border border-cyan-500/30 rounded-sm p-5 mb-6 text-left">
+                        <div className="text-xs font-black tracking-widest text-cyan-400 mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block"></span>
+                            🏆 挑戰結束的稱號
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                            <div className="flex items-center gap-2"><span className="text-yellow-300 font-black w-14">95%↑</span><span className="text-cyan-100 font-bold w-20">處方總藥師</span><span className="text-slate-400">滴水不漏</span></div>
+                            <div className="flex items-center gap-2"><span className="text-cyan-300 font-black w-14">80%↑</span><span className="text-cyan-100 font-bold w-20">資深藥師</span><span className="text-slate-400">把關穩健</span></div>
+                            <div className="flex items-center gap-2"><span className="text-emerald-300 font-black w-14">60%↑</span><span className="text-cyan-100 font-bold w-20">配藥員</span><span className="text-slate-400">過關，記入軍階</span></div>
+                            <div className="flex items-center gap-2"><span className="text-rose-300 font-black w-14">&lt;60%</span><span className="text-cyan-100 font-bold w-20">藥房新手</span><span className="text-slate-400">建議再訓練</span></div>
+                        </div>
+                        <p className="mt-3 text-[10px] text-slate-400 italic leading-relaxed">※ 60% 為 Dossier 軍階過關門檻。6 款挑戰全過 → 特級調查官；6 款全過 + 連貫劇情十章全完美 → 特務首長。</p>
+                    </div>
+
                     <div className="bg-slate-800/50 rounded-sm p-6 mb-8 text-center border border-slate-600/50 shadow-inner">
                         <label className="block text-sm font-bold text-cyan-300 mb-2 tracking-wider drop-shadow-sm">👨‍⚕️ 目前登入身分</label>
                         {playerName ? (
