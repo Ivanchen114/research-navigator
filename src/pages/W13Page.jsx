@@ -62,6 +62,7 @@ const RESCUE_PROMPT = `我是高中生，正在做研究專題，資料蒐集快
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     { key: 'w13-pitch-notes', label: '盤點筆記', question: '聽其他組報告時的筆記與啟發' },
+    { key: 'w13-pivot-decision', label: '本週轉向決策', question: '我們這週遇到什麼不如預期？做了什麼調整？這個調整改變了我們的研究問題嗎？' },
     { key: 'w13-surprise', label: '最意外的發現', question: '蒐集過程中最意外的發現' },
     { key: 'w13-diary-1', label: '關鍵行動 1' },
     { key: 'w13-diary-2', label: '關鍵行動 2' },
@@ -212,6 +213,31 @@ const W13Page = () => {
                 </p>
             </div>
 
+            {/* 🏆 研究失敗光榮榜（W13 開場 framing — Pitch 前認知翻轉） */}
+            <details open className="mt-4 p-4 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
+                <summary className="text-[14px] font-bold text-[#5B21B6] cursor-pointer flex items-center justify-between">
+                    <span>🏆 研究失敗光榮榜（先看這個再 Pitch）</span>
+                    <span className="text-[10px] text-[#7C3AED] font-mono">▼</span>
+                </summary>
+                <div className="mt-3 text-[12.5px] text-[#4C1D95] leading-relaxed">
+                    <p className="font-bold mb-2">這 6 個劇本，這週至少有一組會碰到（往年數據）：</p>
+                    <div className="flex flex-col gap-1.5 mb-3 pl-2">
+                        <p>📋 <strong>問卷組</strong>：3 天只發出去 12 份，目標 80 份</p>
+                        <p>🎤 <strong>訪談組</strong>：答應好的學長突然說沒空</p>
+                        <p>🧪 <strong>實驗組</strong>：對照組找不到，只剩實驗組 8 人</p>
+                        <p>👀 <strong>觀察組</strong>：進場後對方行為明顯改變</p>
+                        <p>📚 <strong>文獻組</strong>：找到的論文都是英文專有名詞</p>
+                        <p>⚠️ <strong>通用</strong>：Pilot 跑完發現工具量錯了東西</p>
+                    </div>
+                    <div className="border-t border-[#7C3AED]/30 pt-3 space-y-1.5">
+                        <p className="font-bold text-[13px]">🎓 認知翻轉 — 老師正式宣告：</p>
+                        <p>① 這些<strong>不是失敗</strong>，是「研究被現實校正」。Manu Kapur 在 productive failure 文獻裡稱為「卡關生效」。</p>
+                        <p>② 寫得出「我們為什麼轉向」就是研究貢獻——學長姐期末報告高分組，九成都有寫這段。</p>
+                        <p>③ 等下 Pitch 第四題請務必講「轉向決策」。全班一起聽，你會發現別組也在轉向——<strong>不是只有你在出包。</strong></p>
+                    </div>
+                </div>
+            </details>
+
             {/* ═══ 第一節：中期盤點 Pitch ═══ */}
             <h2 className="text-[15px] font-bold text-[var(--ink)] mt-8 mb-3">🎤 中期盤點 Pitch</h2>
 
@@ -255,6 +281,20 @@ const W13Page = () => {
                     {midPlan && <p className="text-[12px] text-[#0C4A6E]"><strong>計畫：</strong>{midPlan}</p>}
                 </div>
             )}
+
+            {/* ── 第四題：本週轉向決策（B 失敗 framing） ── */}
+            <div className="mt-5 p-4 rounded-[var(--radius-unified)] border-l-4 border-[#7C3AED] bg-[#F5F3FF]">
+                <p className="text-[13px] font-bold text-[#5B21B6] mb-2">🔄 第四題：本週的轉向決策</p>
+                <p className="text-[11.5px] text-[#4C1D95] mb-3 leading-relaxed">
+                    Pitch 報告完三題（現況／缺口／計畫）後，補一題：<strong>我們這週為什麼轉向？</strong>
+                    這 30 秒講出來，全班會發現「不是只有我在出包」——這就是研究社群的真實樣貌。
+                </p>
+                <ThinkRecord
+                    dataKey="w13-pivot-decision"
+                    prompt="我們這週遇到什麼不如預期？做了什麼調整？這個調整改變了我們的研究問題嗎？"
+                    defaultTemplate={'本週遇到：_______\n調整為：_______\n（這個調整有沒有改變研究問題？）_______'}
+                />
+            </div>
 
             {/* 聽講筆記 */}
             <div className="mt-5">

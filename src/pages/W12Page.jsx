@@ -120,6 +120,7 @@ const EXPORT_FIELDS = [
     { key: 'w12-diary-1', label: '關鍵行動 1' },
     { key: 'w12-diary-2', label: '關鍵行動 2' },
     { key: 'w12-diary-3', label: '關鍵行動 3' },
+    { key: 'w12-pivot-record', label: '轉向決策（失敗 framing）', question: '我這週發現了什麼跟原計畫不一樣的事？我打算怎麼調整？' },
     { key: 'w12-midterm-status', label: 'W13 中期報告：現況' },
     { key: 'w12-midterm-gap', label: 'W13 中期報告：缺口' },
     { key: 'w12-midterm-plan', label: 'W13 中期報告：計畫' },
@@ -398,6 +399,15 @@ const W12Page = () => {
                 寫完後可以用底部的「AI 日誌審查」Prompt 請 AI 幫你檢查。
             </p>
 
+            {/* 🔄 失敗 = 轉向訊號（進日誌前的校準） */}
+            <div className="mb-4 p-4 rounded-[var(--radius-unified)] border border-[#7C3AED] bg-[#F5F3FF]">
+                <p className="text-[13px] font-bold text-[#5B21B6] mb-1">🔄 進日誌前先校準：失敗 ≠ 學習失敗</p>
+                <p className="text-[12px] text-[#4C1D95] leading-relaxed">
+                    問卷只回收 12 份、訪談對象放鴿子、Pilot 發現工具量錯東西——這些不是「你做不好」，是「你的研究被現實校正一次」。
+                    真正的研究都會經歷這個。寫日誌時請帶著這個視角：<strong>每一個「不如預期」都是一個研究發現的雛形</strong>。
+                </p>
+            </div>
+
             {/* ── 研究日誌 ── */}
             <div className="flex flex-col gap-4">
                 <ThinkRecord
@@ -414,6 +424,20 @@ const W12Page = () => {
                     dataKey="w12-diary-3"
                     prompt="🔑 關鍵行動 3：日期、做了什麼、結果/困難、下一步"
                     scaffold={['日期：___月___日', '我做了：...', '結果/困難：...', '下一步：...']}
+                />
+            </div>
+
+            {/* ── 轉向決策（A2 失敗 framing） ── */}
+            <div className="mt-4 p-4 rounded-[var(--radius-unified)] border-l-4 border-[#7C3AED] bg-[#F5F3FF]">
+                <p className="text-[13px] font-bold text-[#5B21B6] mb-2">🔄 轉向決策（選填，但寫了會贏）</p>
+                <p className="text-[11.5px] text-[#4C1D95] mb-3 leading-relaxed">
+                    這週發現了「跟原本計畫不一樣」的事嗎？回收太少、工具量錯、樣本招不到、發現別的更有趣現象——把它寫下來。
+                    <strong>這個決策本身就是第三章「研究方法限制」的內容，學長姐高分組九成都有寫這段。</strong>
+                </p>
+                <ThinkRecord
+                    dataKey="w12-pivot-record"
+                    prompt="我這週發現了什麼跟原計畫不一樣的事？我打算怎麼調整？"
+                    defaultTemplate={'我發現：_______（什麼不如預期）\n我的判斷：_______（這代表什麼）\n我打算：_______（A 縮減目標 / B 改方法 / C 改題目 / D 把這個變成新發現）'}
                 />
             </div>
 

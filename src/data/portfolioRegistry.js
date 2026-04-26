@@ -214,6 +214,7 @@ export const PORTFOLIO_REGISTRY = [
       { key: 'w12-diary-1', label: '關鍵行動 1' },
       { key: 'w12-diary-2', label: '關鍵行動 2' },
       { key: 'w12-diary-3', label: '關鍵行動 3' },
+      { key: 'w12-pivot-record', label: '轉向決策（失敗 framing）', question: '我這週發現了什麼跟原計畫不一樣的事？我打算怎麼調整？' },
       { key: 'w12-midterm-status', label: 'W13 中期報告：現況' },
       { key: 'w12-midterm-gap', label: 'W13 中期報告：缺口' },
       { key: 'w12-midterm-plan', label: 'W13 中期報告：計畫' },
@@ -226,6 +227,7 @@ export const PORTFOLIO_REGISTRY = [
     weekRoute: '/w13',
     fields: [
       { key: 'w13-pitch-notes', label: '盤點筆記', question: '聽其他組報告時的筆記與啟發' },
+      { key: 'w13-pivot-decision', label: '本週轉向決策', question: '我們這週遇到什麼不如預期？做了什麼調整？這個調整改變了我們的研究問題嗎？' },
       { key: 'w13-surprise', label: '最意外的發現', question: '蒐集過程中最意外的發現' },
       { key: 'w13-diary-1', label: '關鍵行動 1' },
       { key: 'w13-diary-2', label: '關鍵行動 2' },
