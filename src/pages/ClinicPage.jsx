@@ -691,14 +691,16 @@ export const ClinicPage = () => {
                     <ThinkRecord
                         dataKey="w7-reason"
                         prompt="選擇理由（請引用兩層判斷中的某一條）"
-                        defaultTemplate={'我選___法\n因為我的核心問題問的是___\n對應兩層判斷的第___條'}
+                        placeholder="例：我選訪談法。因為我的核心問題問的是『學生為什麼考前才去圖書館』——要的是深層原因，對應兩層判斷的第 ❶ 條（要原因/脈絡）。"
+                        scaffold={['我選 ___ 法', '因為我的核心問題問的是…', '對應兩層判斷的第 ___ 條']}
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w7-aux-method"
                         prompt="輔助方法（如果需要）"
-                        defaultTemplate={'不需要\n（若需要：需要___法做輔助，因為______）'}
+                        placeholder="例：不需要。  或：需要問卷法做輔助，因為訪談 8 人不夠看分布，先用問卷掃 100 人找趨勢。"
+                        scaffold={['不需要', '（若需要）需要 ___ 法做輔助，因為…']}
                         rows={2}
                     />
 
@@ -723,14 +725,16 @@ export const ClinicPage = () => {
                     <ThinkRecord
                         dataKey="w7-reflect-wrong"
                         prompt="1. 測驗錯題分析"
-                        defaultTemplate={'我錯了第___題\n錯的原因是我搞混了___和___'}
+                        placeholder="例：我錯了第 3 題。錯的原因是我搞混了「問卷法」和「訪談法」——以為大量收答案就一定是問卷，沒注意到題目要的是『深層原因』。"
+                        scaffold={['我錯了第 ___ 題', '錯的原因是我搞混了 ___ 和 ___']}
                         rows={3}
                     />
 
                     <ThinkRecord
                         dataKey="w7-reflect-confused"
                         prompt="2. 最容易搞混的方法"
-                        defaultTemplate={'我最容易搞混___和___\n差別在於______'}
+                        placeholder="例：我最容易搞混觀察法和實驗法。差別在於：實驗會主動操弄變因（給 A 組刺激、B 組不給），觀察只是默默紀錄現有行為，不介入。"
+                        scaffold={['我最容易搞混 ___ 和 ___', '差別在於…']}
                         rows={3}
                     />
 
@@ -744,7 +748,8 @@ export const ClinicPage = () => {
                     <ThinkRecord
                         dataKey="w7-reflect-literature"
                         prompt="4. 文獻法的三種用途"
-                        defaultTemplate={'我的題目有可能用到___（文獻回顧／歷史分析／內容分析）\n因為______'}
+                        placeholder="例：我的題目有可能用到「內容分析」。因為我想分析 IG 貼文裡哪種貼文類型按讚數最高，要把貼文文本分類量化。"
+                        scaffold={['我的題目有可能用到 ___（文獻回顧／歷史分析／內容分析）', '因為…']}
                         rows={3}
                     />
                 </div>

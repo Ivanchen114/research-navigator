@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './TeamFormation.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import LiteratureRecord from '../components/ui/LiteratureRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import AIAssistToggle from '../components/ui/AIAssistToggle';
@@ -75,7 +76,7 @@ const TOOL_DRAFT_EXAMPLES = [
 /* — 交流卡欄位 — */
 const CARD_FIELDS = [
     { emoji: '🎯', label: '我想研究什麼？', desc: '題目' },
-    { emoji: '📚', label: '我的王牌文獻（W6 成果）', desc: '作者/年份 + 為什麼重要' },
+    { emoji: '📚', label: '我的王牌文獻（W6 文獻偵探社成果）', desc: '書目 + 具體發現 + 立場（A/B/C/D） + 應用' },
     { emoji: '🔧', label: '我想用什麼方法（W7）', desc: '問卷/訪談/實驗/觀察/文獻分析' },
     { emoji: '💪', label: '我的優勢技能', desc: '統籌規劃/溝通協調/資訊能力/美編設計/邏輯清晰' },
     { emoji: '🤝', label: '我在找的夥伴', desc: '題目相近/能力互補/想自己做/還在考慮' },
@@ -290,11 +291,9 @@ export const TeamFormation = () => {
                         rows={2}
                     />
 
-                    <ThinkRecord
+                    <LiteratureRecord
                         dataKey="w8-my-ref"
-                        prompt="❷ 我的王牌文獻（W6 成果）"
-                        defaultTemplate="作者（年份）發現______，這和我的研究有關，因為……"
-                        rows={3}
+                        prompt="❷ 我的王牌文獻（W6 文獻偵探社成果）"
                     />
 
                     <ThinkRecord
@@ -552,14 +551,16 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-teammates"
                         prompt="隊友姓名 & 題目"
-                        defaultTemplate={'隊友 1：___，題目：___\n隊友 2：___，題目：___（若有）\n隊友 3：___，題目：___（若有）'}
+                        placeholder={'例：\n隊友 1：王小明，題目：手機使用對睡眠的影響\n隊友 2：李大華，題目：高中生熬夜時數與成績的關係\n隊友 3：（若無就留空）'}
+                        scaffold={['隊友 1：姓名，題目', '隊友 2：姓名，題目（若有）', '隊友 3：姓名，題目（若有）']}
                         rows={4}
                     />
 
                     <ThinkRecord
                         dataKey="w8-merge-discussion"
                         prompt="合題討論：你們的題目有什麼共同核心？合成什麼大主題？"
-                        defaultTemplate={'我們發現______的共同點是______\n所以合題方向是______'}
+                        placeholder="例：我們發現三個題目（手機使用、熬夜、IG 滑動時數）的共同點是『睡前 3C 行為』。所以合題方向是『高中生睡前 3C 行為與睡眠品質的關聯』。"
+                        scaffold={['我們發現 ___ 的共同點是…', '所以合題方向是…']}
                         rows={5}
                     />
 
@@ -667,7 +668,8 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-method-reason"
                         prompt="⑤ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
-                        defaultTemplate={'我選___法\n理由是（引用 W7 兩層判斷中的某一條）______'}
+                        placeholder="例：我選問卷法。理由：W7 兩層判斷第 ❶ 條——我要的是高中生睡眠時數的『比例與趨勢』，不是個別深層原因，問卷較適合。"
+                        scaffold={['我選 ___ 法', '理由（引用 W7 兩層判斷的某一條）：…']}
                         rows={3}
                     />
 
@@ -744,7 +746,8 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-method-reason"
                         prompt="④ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
-                        defaultTemplate={'我們選___法\n理由是（引用兩層判斷中的某一條）______'}
+                        placeholder="例：我們選訪談法。理由：W7 兩層判斷第 ❶ 條——我們要的是『學生為什麼考前才去圖書館』的深層原因/脈絡，訪談較適合。"
+                        scaffold={['我們選 ___ 法', '理由（引用兩層判斷的某一條）：…']}
                         rows={3}
                     />
 

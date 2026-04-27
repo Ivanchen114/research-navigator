@@ -168,23 +168,8 @@ export const W1Page = () => {
                                 rows={3}
                             />
 
-                            <div className="p-4 rounded-[var(--radius-unified)] bg-[var(--success-light)] border border-[var(--success)]/20">
-                                <p className="text-[13px] font-bold text-[var(--success)] mb-2">🌱 下面這題非常重要——它是你整學期研究題目的種子</p>
-                                <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                    觀察你的學校、日常生活、通勤路上、或最近看到的新聞。寫下一個讓你覺得「奇怪」「不合理」或「好想知道為什麼」的現象。不用很學術，寫你真正有感覺的事。
-                                </p>
-                            </div>
-
-                            <ThinkRecord
-                                dataKey="w1-life-observe"
-                                prompt="我觀察到……"
-                                placeholder="例如：每天經過學校福利社，明明有賣便當但幾乎沒人買，大家都跑去全家…"
-                                scaffold={['在（地點/時間），我注意到…', '奇怪的是…', '我想知道…']}
-                                rows={4}
-                            />
-
-                            <div className="p-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)]/15 text-[13px] text-[var(--ink-mid)]">
-                                💡 這個觀察下週 W2 要用——老師會帶你把它變成正式的研究問題。
+                            <div className="p-3 rounded-[var(--radius-unified)] bg-[var(--paper-warm)] border border-dashed border-[var(--border)] text-[12.5px] text-[var(--ink-light)] leading-relaxed">
+                                💡 暖身就這一題。「生活觀察種子」（你下週 W2 要用的）會放在第 5 步——讓你經歷今天的所有刺激（模仿遊戲、AI-RED、人機協作）後再寫，比現在硬擠出來品質更好。
                             </div>
                         </div>
                     ),
@@ -461,7 +446,32 @@ export const W1Page = () => {
                                 </div>
                             </div>
 
-                                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                            {/* 🌱 生活觀察種子（從 Step 1 搬到此處——讓學生經歷完整課程後再寫） */}
+                            <div className="p-5 rounded-[var(--radius-unified)] bg-[var(--success-light)] border-2 border-[var(--success)]/30">
+                                <p className="text-[13px] font-bold text-[var(--success)] mb-2">🌱 你下週 W2 的種子——現在再寫，比上課一開始更有感</p>
+                                <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                                    剛上課時老師問「你好奇什麼」，腦袋是空的很正常。
+                                    現在你經歷了模仿遊戲（看到 AI 多強）、AI-RED 公約（誠實是底線）、人機協作（人做觀察、AI 做翻譯）——
+                                    你已經有「研究者的眼睛」可以借用一下了。
+                                    現在寫下你最近真的有感覺的一個現象，不用學術。
+                                </p>
+                                <ThinkRecord
+                                    dataKey="w1-life-observe"
+                                    prompt="我觀察到一個讓我覺得「奇怪」「不合理」或「好想知道為什麼」的現象……"
+                                    placeholder="例如：每天經過學校福利社，明明有賣便當但幾乎沒人買，大家都跑去全家——奇怪的是，全家比較貴。"
+                                    scaffold={[
+                                        '在（地點/時間），我注意到…',
+                                        '奇怪的是…（對比、矛盾、反直覺）',
+                                        '我想知道…（不要急著問為什麼，先描述你想搞清楚的事）',
+                                    ]}
+                                    rows={4}
+                                />
+                                <p className="text-[11px] text-[var(--ink-light)] mt-2 italic">
+                                    💡 這個觀察下週 W2 一進教室就會自動帶入——老師會帶你把它變成正式的研究問題。
+                                </p>
+                            </div>
+
+                            {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
                             <AIREDNarrative week="1" hint="這週你和 AI 玩模仿遊戲" />
 
                             {/* 一鍵複製 */}

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
+import ThinkRecord from '../components/ui/ThinkRecord';
 import './W17.css';
 import {
     ArrowLeft,
@@ -247,6 +248,46 @@ const W17Page = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* 🤖 30 秒電梯簡報 AI 練稿（開嗓前用） */}
+            <details className="card" style={{ marginTop: 16, padding: 12, borderColor: 'var(--accent)', borderWidth: 2 }}>
+                <summary style={{ cursor: 'pointer', fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>
+                    🎤 30 秒電梯簡報 AI 練稿（緊張的話打開）
+                </summary>
+                <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-mid)', lineHeight: 1.7 }}>
+                    <p>把研究丟給 AI，請它扮演聽眾打回票——你才知道哪些話會卡耳朵。</p>
+                    <pre style={{ background: '#0F172A', color: '#E2E8F0', fontSize: 11, padding: 10, borderRadius: 6, marginTop: 8, whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>{`我要做 30 秒電梯簡報，研究是：
+- 題目：___
+- 用什麼方法：___
+- 主要發現一句話：___
+- 限制一句話：___
+
+請扮演路過攤位 30 秒的同學/家長，告訴我：
+1. 哪一句話聽不懂或被你跳過？
+2. 我這 30 秒最想讓你記住的一件事是什麼？(看你能不能抓對)
+3. 給我一個更吸睛的開場句（不超過 10 個字）。`}</pre>
+                    <p style={{ fontStyle: 'italic', color: 'var(--ink-light)', marginTop: 8 }}>💡 AI 的開場句是參考——上台還是用你自己順口的版本。</p>
+                </div>
+            </details>
+
+            {/* 🎯 學期 AI 協作反思（最後一次 AIRED） */}
+            <div className="card" style={{ marginTop: 16, padding: 16, background: '#FEF3C7', borderColor: '#D97706', borderWidth: 2 }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#92400E', marginBottom: 6 }}>🎯 學期 AI 協作反思（最後一份紀錄）</p>
+                <p style={{ fontSize: 12, color: '#78350F', lineHeight: 1.7, marginBottom: 10 }}>
+                    這 17 週你跟 AI 共事很多次。回頭看：你跟 AI 的關係是怎麼變化的？AI-RED 公約對你來說從「規則」變成什麼？這份反思會比任何成績單都更說明你學到了什麼。
+                </p>
+                <ThinkRecord
+                    dataKey="w17-ai-reflection"
+                    prompt="這學期跟 AI 協作的經驗，最讓你改變想法的是什麼？"
+                    placeholder="例：我原本以為 AI 給的建議都該照單全收，但 W11 那次我的問卷被 AI 改到完全不像我自己的研究——那次之後我才真的懂『AI 給選項，人做選擇』的意思。"
+                    scaffold={[
+                        '我最初對 AI 的看法是…',
+                        '一個讓我改變想法的具體事件：…',
+                        '現在我對「人機協作」的理解是…',
+                    ]}
+                    rows={6}
+                />
             </div>
 
             {/* 全課程旅程 */}

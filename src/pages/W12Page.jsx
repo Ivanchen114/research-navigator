@@ -4,6 +4,7 @@ import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
 import './W12.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import Checklist from '../components/ui/Checklist';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
@@ -116,7 +117,8 @@ const DIARY_REVIEW_PROMPT = `以下是我這週的三條研究日誌：
 
 /* — ExportButton 欄位（只剩日誌部分） — */
 const EXPORT_FIELDS = [
-    { key: 'w12-feedback-action', label: '讀完 W11 老師回饋後的首要任務', question: '讀完老師回饋後，我今天最該先處理的一件事是？' },
+    { key: 'w12-feedback-summary', label: 'W11 老師回饋摘要（用自己的話）', question: '老師指出我們最主要的問題是？' },
+    { key: 'w12-feedback-action', label: '讀完 W11 回饋後的行動轉譯', question: '今天最該先處理的一件事 + 怎麼做？' },
     { key: 'w12-diary-1', label: '關鍵行動 1' },
     { key: 'w12-diary-2', label: '關鍵行動 2' },
     { key: 'w12-diary-3', label: '關鍵行動 3' },
@@ -264,15 +266,31 @@ const W12Page = () => {
                 <p className="text-[15px] font-bold text-[#991B1B] mb-2">📬 第一件事：讀老師的 W11 計畫書回饋</p>
                 <div className="text-[12.5px] text-[#7F1D1D] leading-relaxed flex flex-col gap-1.5">
                     <p>老師已針對你們 W11 繳交的計畫書做批改（AI 初審 + 老師補註），回饋已發在 <strong>Google Classroom</strong>。</p>
-                    <p>今天進教室第一件事：<strong>打開 Classroom，讀完老師的回饋</strong>。讀完後在下方記下今天最該處理的一件事。</p>
+                    <p>今天進教室第一件事：<strong>打開 Classroom，讀完老師的回饋</strong>。讀完後寫下面兩格——這是「我有讀懂」的證據，不能跳過。</p>
                     <p className="mt-1 text-[11.5px] italic">※ 螢幕上會投影「三色分診結果」——老師已依據批改狀況把你們分成 🔴 急診／🟡 門診／🟢 健康，公告看診順序。</p>
                 </div>
-                <div className="mt-4">
-                    <ThinkRecord
-                        dataKey="w12-feedback-action"
-                        prompt="讀完老師回饋後，我今天最該先處理的一件事是？"
-                        defaultTemplate={'（回饋摘要：老師指出我們_______）\n今天最該處理：_______\n我打算怎麼做：_______'}
-                    />
+                {/* 雙欄閉環：① 用自己的話摘要 ② 轉譯成可動行動 */}
+                <div className="mt-4 grid md:grid-cols-2 gap-3">
+                    <div className="p-3 rounded-[var(--radius-unified)] bg-white border border-[#FCA5A5]">
+                        <p className="text-[12px] font-bold text-[#991B1B] mb-1">① 用「自己的話」摘要老師說了什麼</p>
+                        <p className="text-[11px] text-[#7F1D1D] mb-2 italic">不能照抄老師原句——要證明你看懂了。</p>
+                        <ThinkRecord
+                            dataKey="w12-feedback-summary"
+                            prompt="老師指出我們最主要的問題是？"
+                            placeholder="例：老師覺得我們的問卷第 5 題會引導受訪者選某個答案，建議改成中性語氣。"
+                            rows={3}
+                        />
+                    </div>
+                    <div className="p-3 rounded-[var(--radius-unified)] bg-white border border-[#FCA5A5]">
+                        <p className="text-[12px] font-bold text-[#991B1B] mb-1">② 轉譯成今天可動的行動</p>
+                        <p className="text-[11px] text-[#7F1D1D] mb-2 italic">具體到「誰／什麼時候／做什麼」。</p>
+                        <ThinkRecord
+                            dataKey="w12-feedback-action"
+                            prompt="今天最該先處理的一件事 + 怎麼做？"
+                            placeholder="例：今天最該處理：改第 5 題。怎麼做：跟組員討論 10 分鐘 → 改題 → 給老師 30 秒目視確認 → 才繼續發。"
+                            rows={3}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -408,6 +426,22 @@ const W12Page = () => {
                 </p>
             </div>
 
+            {/* 🪞 日誌品質自檢三題（元認知檢核點 — 寫之前先讀，寫之後再回來勾） */}
+            <div className="mb-4 p-4 rounded-[var(--radius-unified)] border-l-4 border-[#0EA5E9] bg-[#F0F9FF]">
+                <p className="text-[13px] font-bold text-[#075985] mb-2">🪞 寫日誌的三個自檢點（寫完回來勾）</p>
+                <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mb-3">
+                    這不是要為難你——是讓你自己判斷「我寫得是不是真的有用」。寫完日誌後回來勾。
+                </p>
+                <Checklist
+                    dataKey="w12-diary-self-check"
+                    items={[
+                        '我寫的是「做了什麼 + 結果／卡點」，不是「今天有發問卷」這種流水帳',
+                        '至少有一條「下一步」是具體到時間、地點、對象的（不是「再努力」「繼續做」）',
+                        '至少有一條跟我 W11 寫的「施測啟動計畫」對得起來——是承諾的兌現或修正，不是另起爐灶',
+                    ]}
+                />
+            </div>
+
             {/* ── 研究日誌 ── */}
             <div className="flex flex-col gap-4">
                 <ThinkRecord
@@ -437,7 +471,8 @@ const W12Page = () => {
                 <ThinkRecord
                     dataKey="w12-pivot-record"
                     prompt="我這週發現了什麼跟原計畫不一樣的事？我打算怎麼調整？"
-                    defaultTemplate={'我發現：_______（什麼不如預期）\n我的判斷：_______（這代表什麼）\n我打算：_______（A 縮減目標 / B 改方法 / C 改題目 / D 把這個變成新發現）'}
+                    placeholder={'例：\n我發現：本來預計 80 份問卷，三天只回收 12 份\n我的判斷：班級信任度不夠，學生覺得這份問卷跟自己無關\n我打算：A 縮減目標到 50 份 + 改用「課堂 5 分鐘集中發放」（這個發現會寫進第三章「研究方法限制」）'}
+                    scaffold={['我發現：什麼不如預期', '我的判斷：這代表什麼', '我打算：A 縮減目標 / B 改方法 / C 改題目 / D 把這個變成新發現']}
                 />
             </div>
 

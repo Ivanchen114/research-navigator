@@ -426,7 +426,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-tool-design-notes"
                         prompt="工具設計的 2-3 個關鍵決策（docx 寫完後在此摘要）"
-                        defaultTemplate={'決策 1：___（例：問卷改用五點量表不用七點，因為___）\n決策 2：___\n決策 3：___'}
+                        placeholder={'例：\n決策 1：問卷改用五點量表不用七點——因為高中生樣本對「中等程度」的辨識度有限，五點較準\n決策 2：訪談大綱從 12 題砍到 6 題——避免每位受訪者超過 30 分鐘\n決策 3：（無）'}
+                        scaffold={['決策 1：做了什麼 / 為什麼', '決策 2：…', '決策 3：…']}
                         rows={6}
                     />
 
@@ -461,7 +462,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-ai-raw-feedback"
                         prompt="AI 回覆原文（開頭先寫 A+I 兩行；貼全文沒關係；有追問也一起貼）"
-                        defaultTemplate={'A: 我用了 ___（例：Gemini Thinking / ChatGPT o1 / Claude Extended Thinking，選深度推理版本）\nI: 我貼了 ___（例：全本計畫書 13 章，請 AI 檢核整體邏輯一致性）\n\n──── AI 完整回覆（以下貼上）────\n'}
+                        placeholder={'例：\nA: 我用了 ChatGPT o1（深度推理版本）\nI: 我貼了全本計畫書 13 章，請 AI 檢核整體邏輯一致性\n\n──── AI 完整回覆（以下貼上）────\n（貼上 AI 給的完整回覆）'}
+                        scaffold={['A: 我用了什麼 AI（要寫深度推理版本）', 'I: 我貼了什麼 + 問了什麼', '下方貼 AI 完整回覆']}
                         rows={14}
                     />
 
@@ -469,7 +471,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-ai-judge"
                         prompt="AI 建議採納判斷（逐條評估）"
-                        defaultTemplate={'建議 1：AI 說___\n→ ✅ 採納 / ❌ 不採納 / 🔶 部分採納\n→ 理由：___\n\n建議 2：___\n→ 判斷：___\n→ 理由：___\n\n建議 3：___\n→ 判斷：___\n→ 理由：___'}
+                        placeholder={'例：\n建議 1：AI 說「第三章應該補上信效度說明」\n→ ✅ 採納\n→ 理由：本來就漏寫了\n\n建議 2：AI 說「樣本應該擴大到三個年級」\n→ ❌ 不採納\n→ 理由：學期時程不夠，會犧牲深度\n\n建議 3：AI 說「應該加上前測」\n→ 🔶 部分採納\n→ 理由：先做小規模 Pilot，不做正式前測'}
+                        scaffold={['建議 N：AI 說什麼', '我的判斷：✅ 採納 / ❌ 不採納 / 🔶 部分採納', '理由（必寫）']}
                         rows={10}
                     />
 
@@ -477,7 +480,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-tool-revision"
                         prompt="根據 AI 建議，整本計畫書要改哪些章節？"
-                        defaultTemplate={'第___章要改：___（改成___）\n第___章要改：___\n第___章要改：___'}
+                        placeholder={'例：\n第 3 章要改：補上信效度說明（改成「採用 Cronbach α 確認量表內部一致性」）\n第 6 章要改：訪談大綱從 12 題砍到 6 題\n第 7 章要改：（無）'}
+                        scaffold={['第 ___ 章要改：要改什麼（改成什麼）', '另一章要改：…']}
                         rows={6}
                     />
 

@@ -442,6 +442,31 @@ const W14Page = () => {
                         </div>
                     )}
 
+                    {/* 📊 AI 圖表顧問（人選圖表前先問 AI，但你做最後決定） */}
+                    <details className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
+                        <summary className="text-[13px] font-bold text-[var(--accent)] cursor-pointer flex items-center justify-between">
+                            <span>🤖 AI 圖表顧問（卡住再開）</span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="mt-3 space-y-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                直接套口訣選不出來？把資料特性貼給 AI 請它建議——但<strong>建議是參考</strong>，最後還是你決定。
+                            </p>
+                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我有一份研究資料：
+- 資料類型：[問卷/訪談/實驗/觀察/文獻]
+- 我想呈現的是：[___ 跟 ___ 的關係/分布/趨勢/比例]
+- 樣本數：N=___
+- 變項是否含「時間順序」？___（是/否）
+- 是否「複選題」？___（是/否）
+
+請建議我用什麼圖表類型，並說明為什麼。
+如果有兩個候選，請列出各自的優缺點，讓我自己選。`}</pre>
+                            <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
+                                💡 AI 給建議後，下方欄位請<strong>用自己的話</strong>寫為什麼選這個——不要照抄 AI。
+                            </p>
+                        </div>
+                    </details>
+
                     {/* 圖表類型選擇 */}
                     <ThinkRecord
                         dataKey="w14-my-chart-type"
@@ -472,6 +497,32 @@ const W14Page = () => {
                             scaffold={['這可能代表...', '因為...']}
                         />
                     </div>
+
+                    {/* 🤖 AI 推論協力（檢查過度推論 + 補充角度） */}
+                    <details className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
+                        <summary className="text-[13px] font-bold text-[var(--accent)] cursor-pointer flex items-center justify-between">
+                            <span>🤖 AI 推論協力（推論寫完再開）</span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="mt-3 space-y-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                推論最容易踩兩個雷：① <strong>過度推論</strong>（從 N=30 推到「全國高中生」）；② <strong>單一原因</strong>（只想到一個解釋就停）。讓 AI 幫你壓力測試。
+                            </p>
+                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我做了一份研究，剛寫完一張圖的描述跟推論：
+
+【描述】___（貼上你的描述句）
+【推論】___（貼上你的推論句）
+【樣本資訊】N=___，對象是 ___
+
+請從研究方法老師的角度幫我檢查兩件事：
+1. 我的推論有沒有「過度推論」？哪些用詞需要加上「可能」「推測」「在 ___ 範圍內」等保留語？
+2. 除了我寫的這個原因，還有哪 2 個合理但我沒想到的解釋？
+請只給檢查與建議，不要替我改寫——改寫由我自己來。`}</pre>
+                            <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
+                                💡 AI 給建議後，回到上方推論欄修——不是貼 AI 改寫版，是你<strong>採納哪些建議再自己改</strong>。
+                            </p>
+                        </div>
+                    </details>
 
                     {/* 教師巡視提醒 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">

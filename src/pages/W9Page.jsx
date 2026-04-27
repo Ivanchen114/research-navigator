@@ -513,6 +513,7 @@ export const W9Page = () => {
     const [w8Method, setW8Method] = useState('');
     const [w8Topic, setW8Topic] = useState('');
     const [w8Drafts, setW8Drafts] = useState({ q1: '', q2: '', q3: '' });
+    const [w8Route, setW8Route] = useState(''); // 'team' | 'solo' | ''
     const [showLessonMap, setShowLessonMap] = useState(false);
     /* Step 2 方法頁籤：預設 W8 選到的方法；無則 questionnaire（最常見） */
     const [pitfallTab, setPitfallTab] = useState('questionnaire');
@@ -524,6 +525,9 @@ export const W9Page = () => {
         const topic = saved['w8-merged-topic']?.trim() || saved['w8-research-question']?.trim() || '';
         if (method) setW8Method(method);
         if (topic) setW8Topic(topic);
+        /* 讀取 W8 路線（Team / Solo）—— 影響 Step 1 互評環節的鷹架 */
+        const route = localStorage.getItem('w8-route') || '';
+        if (route === 'team' || route === 'solo') setW8Route(route);
         /* 讀取 W8 三題初稿：學完三大標準後回頭自我診斷用 */
         setW8Drafts({
             q1: saved['w8-draft-q1']?.trim() || '',
@@ -571,6 +575,32 @@ export const W9Page = () => {
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         W7 你學了 Level 1 掛號判斷（決定用什麼方法）。今天升級到 <strong className="text-[var(--ink)]">Level 2 處方判斷</strong>——工具設計得好不好？哪裡有毒？怎麼解毒？
                     </p>
+
+                    {/* 身份識別卡：Team / Solo 分流提示（讀 W8 路線） */}
+                    {w8Route === 'solo' && (
+                        <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] rounded-r-[var(--radius-unified)] p-4 max-w-[720px]">
+                            <p className="text-[13px] font-bold text-[#92400E] mb-1">🦊 Solo 線專屬提示</p>
+                            <p className="text-[12.5px] text-[#78350F] leading-relaxed mb-2">
+                                你 W8 選了單飛獨行——本節的「組內看診」對你不適用。請改用以下流程：
+                            </p>
+                            <ol className="text-[12.5px] text-[#78350F] leading-[1.9] list-decimal pl-5 space-y-1">
+                                <li><strong>自我看診</strong>：照本節三大標準，先完整自診一輪（每個錯誤類型都自己找一次）。</li>
+                                <li><strong>跨組求援</strong>：找 1-2 位<strong>不同方法組</strong>的同學互看（例如你做問卷，找訪談組同學看你題目）——他們的「外行眼睛」反而能挑出你看不到的盲點。</li>
+                                <li><strong>老師複診</strong>：本節下課前主動找老師 5 分鐘對話，把你最不確定的一條工具決策提出來。</li>
+                            </ol>
+                            <p className="text-[11px] text-[#92400E] italic mt-2">
+                                ※ Solo 不等於單獨——你只是換一種方式取得反饋。研究本來就是社群活動。
+                            </p>
+                        </div>
+                    )}
+                    {w8Route === 'team' && (
+                        <div className="bg-[#ECFDF5] border-l-4 border-[#10B981] rounded-r-[var(--radius-unified)] p-4 max-w-[720px]">
+                            <p className="text-[13px] font-bold text-[#065F46]">🤝 Team 線：組內看診工作坊照常進行</p>
+                            <p className="text-[12.5px] text-[#047857] leading-relaxed mt-1">
+                                各組互看彼此工具初稿，用三大標準互挑問題。組員的判斷不一致時——這就是學習發生的地方，把分歧寫下來帶到老師複診。
+                            </p>
+                        </div>
+                    )}
 
                     {/* W8 老師回饋快速讀取（5 分鐘暖身） */}
                     <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
@@ -1089,7 +1119,8 @@ export const W9Page = () => {
                         <ThinkRecord
                             dataKey="w9-plan-ai-check"
                             prompt="AI 檢核後的判斷紀錄（課後 AI 跑完後補）"
-                            defaultTemplate={'AI 指出的主要問題（至少 3 點）：\n1. ___\n2. ___\n3. ___\n\n我的決定：\n・採納：___（理由：___）\n・不採納：___（理由：___）\n・部分採納：___（怎麼改：___）'}
+                            placeholder={'例：\nAI 指出的主要問題（至少 3 點）：\n1. 變項 X 操作型定義模糊\n2. 抽樣只抓兩班，外部效度不足\n3. 第三章未說明信效度\n\n我的決定：\n・採納：第 1、3 點（理由：本來就是模糊 + 漏寫）\n・不採納：第 2 點（理由：抽樣已是學期極限）\n・部分採納：（無）'}
+                            scaffold={['AI 指出的主要問題（至少 3 點）', '我的決定：採納 / 不採納 / 部分採納', '每項都要寫理由']}
                             rows={10}
                         />
 
@@ -1204,7 +1235,8 @@ export const W9Page = () => {
                         <ThinkRecord
                             dataKey="w9-homework-commitment"
                             prompt="我打算什麼時候把課後三件事做完？"
-                            defaultTemplate={'補第三、四章：___（日期+時段+地點）\n跑 AI 檢核 + 補 AIRED：___\n上傳 docx 到 GC：___'}
+                            placeholder={'例：\n補第三、四章：週四晚 8-10 點，自己房間\n跑 AI 檢核 + 補 AIRED：週五午休，圖書館\n上傳 docx 到 GC：週日晚上 9 點前'}
+                            scaffold={['補第三、四章：日期 + 時段 + 地點', '跑 AI 檢核 + 補 AIRED：…', '上傳 docx 到 GC：…']}
                             rows={4}
                         />
                     </div>

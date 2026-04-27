@@ -410,23 +410,11 @@ export const LiteratureReview = () => {
                         ③ 分析句要解釋這篇研究對你的研究題目<strong>有什麼意義</strong>，不能只是把引用句換個說法再說一遍。
                     </div>
 
-                    {/* W5 帶入提示 */}
-                    {w5Paper && (
-                        <div className="bg-[var(--accent-light)] border border-[var(--accent)]/20 rounded-lg p-4 flex items-start gap-3">
-                            <span className="text-[16px]">📎</span>
-                            <div>
-                                <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">自動帶入 W5 文獻</div>
-                                <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{w5Paper}</p>
-                                <p className="text-[11px] text-[var(--ink-light)] mt-1">如果你想換一篇，可以在下方修改。</p>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 選用文獻 */}
+                    {/* 選用文獻（已在頁頂顯示 W5 文獻；此處讓學生確認或換篇） */}
                     <ThinkRecord
                         dataKey="w6-sandwich-ref"
-                        prompt="我選用的文獻（作者年份）："
-                        scaffold={['我在 W5 找到的那篇是…']}
+                        prompt="我選用的文獻（已自動帶入 W5 那篇；想換可改）"
+                        scaffold={['用 W5 找到的那篇', '或：換一篇來自 ___（標題、作者、年份）']}
                         rows={2}
                     />
 
@@ -760,14 +748,14 @@ export const LiteratureReview = () => {
                 meta={[
                     { label: '本週任務', value: '觀念 3 招 + 改寫偵錯 + 三明治' },
                     { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '演練 1-3 + 同儕會診後修改稿' },
-                    { label: '下週預告', value: 'W7 研究診所：掛號分流' },
+                    { label: '前置要求', value: 'W5 找到的文獻一篇' },
+                    { label: '課堂產出', value: '三明治改寫稿（給 W7-W8 王牌文獻用）' },
                 ]}
             />
             <CourseArc items={W6Data.courseArc} />
 
             {/* 本週簡報 */}
-            <div className="flex justify-end mb-8 -mt-2">
+            <div className="flex justify-end mb-4 -mt-2">
                 <a
                     href="https://canva.link/hb3pdip2k9kvmca"
                     target="_blank"
@@ -777,6 +765,37 @@ export const LiteratureReview = () => {
                     📊 本週簡報 ↗
                 </a>
             </div>
+
+            {/* 📚 W5 偵察成果回顧（W6 開場銜接 — 放在 Step 之前最顯眼處） */}
+            {w5Paper ? (
+                <div className="mb-8 p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[var(--accent-light)]/30">
+                    <div className="flex items-center gap-2 mb-2">
+                        <span className="text-[18px]">📎</span>
+                        <span className="font-bold text-[14px] text-[var(--ink)]">你 W5 的偵察成果——今天會繼續用這篇</span>
+                    </div>
+                    <div className="bg-white border border-[var(--accent)]/30 rounded-[6px] p-3 mb-2">
+                        <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">📑 你找到的那篇</div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{w5Paper}</p>
+                    </div>
+                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                        今天 Step 1 的「三明治改寫練習」會直接拿這篇當素材。<strong>不用重找</strong>——W5 找文獻、W6 寫文獻，是同一條線。
+                    </p>
+                </div>
+            ) : (
+                <div className="mb-8 p-5 rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
+                    <p className="text-[13px] font-bold text-[#991B1B] mb-2">⚠️ 沒讀到你的 W5 文獻——你 W5 沒做完？</p>
+                    <p className="text-[12px] text-[#7F1D1D] leading-relaxed mb-2">
+                        本週要拿你 W5 找到的那篇文獻當改寫練習素材。如果 W5 還沒做完，請先：
+                    </p>
+                    <ul className="text-[12px] text-[#7F1D1D] leading-relaxed list-disc pl-5 space-y-1 mb-3">
+                        <li>回 <Link to="/w5" className="font-bold underline">W5 文獻搜尋入門</Link> 至少找一篇文獻、寫進「找到的第一篇文獻」欄</li>
+                        <li>或：暫時拿課程資料夾／同學手上的文獻當素材，課後補回 W5</li>
+                    </ul>
+                    <p className="text-[11px] text-[#991B1B] italic">
+                        ※ 沒文獻可練 = 今天的三明治改寫練習會空轉，不要硬撐。
+                    </p>
+                </div>
+            )}
 
             {/* STEP ENGINE */}
             <StepEngine

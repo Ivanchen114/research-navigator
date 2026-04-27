@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import CourseArc from '../components/ui/CourseArc';
 import './W11.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import Checklist from '../components/ui/Checklist';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
@@ -458,12 +459,30 @@ export const W11Page = () => {
                     <ThinkRecord
                         dataKey="w11-pilot-findings"
                         prompt="Pilot Test 發現（預試者的回饋 + 你自己觀察到的工具卡點）"
-                        defaultTemplate={'預試者回饋（口頭或書面）：\n1. ___\n2. ___\n3. ___\n\n我自己觀察到的問題（用自己的話）：\n1. ___\n2. ___\n\n【實驗組專用】架設圖被挑出的漏洞：\n・控制變項漏洞：___\n・流程邏輯漏洞：___'}
+                        placeholder={'例：\n預試者回饋（口頭或書面）：\n1. 第 5 題看不懂「自我效能」是什麼意思\n2. 量表 7 點太多，建議改成 5 點\n3. （無）\n\n我自己觀察到的問題：\n1. 預試者填到一半就分心、滑手機\n2. 開放題沒人想寫\n\n【實驗組專用】架設圖被挑出的漏洞：\n・控制變項漏洞：沒控制施測時段（早上/下午專注度差很多）\n・流程邏輯漏洞：兩組的指導語長度不同'}
+                        scaffold={['預試者回饋（口頭或書面）：3 點', '我自己觀察到的問題：用自己的話，2 點', '【實驗組】架設圖漏洞：控制變項 / 流程邏輯']}
                         rows={12}
                     />
 
+                    {/* Pilot 紀錄品質自檢（元認知檢核點） */}
+                    <div className="bg-[#F5F3FF] border-l-4 border-[#7C3AED] rounded-r-[var(--radius-unified)] p-4">
+                        <p className="text-[13px] font-bold text-[#5B21B6] mb-2">🪞 進下一 Step 前：Pilot 紀錄品質自檢</p>
+                        <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-3">
+                            勾完才能進 Step 3 的工具修正——這不是把關，是給你一個機會自己判斷「我寫得夠不夠」。
+                        </p>
+                        <Checklist
+                            dataKey="w11-pilot-self-check"
+                            items={[
+                                '我寫的「預試者回饋」是預試者**真的說過**的話，不是我猜他想說的',
+                                '我自己觀察到的問題用了**自己的話**寫，不是照抄預試者',
+                                '至少有一條問題是「我原本沒想到、預試後才發現」的——如果都是我預期內的，預試可能太流於形式',
+                                '【實驗組】架設圖至少有一個漏洞是別人挑出來的，不是自己挑',
+                            ]}
+                        />
+                    </div>
+
                     <div className="w7-notice w7-notice-teal">
-                        ✅ Pilot 紀錄寫完 → 下節課進入第二輪修正 + 倫理審查 + 施測啟動。
+                        ✅ Pilot 紀錄寫完 + 自檢勾完 → 下節課進入第二輪修正 + 倫理審查 + 施測啟動。
                     </div>
                 </div>
             ),
@@ -486,7 +505,8 @@ export const W11Page = () => {
                         <ThinkRecord
                             dataKey="w11-tool-final-revision"
                             prompt="根據 Pilot 發現要改的地方（對應 docx 第六章）"
-                            defaultTemplate={'修正 1：第___題原本「___」→ 改成「___」（原因：___）\n修正 2：___\n修正 3：___\n\n【實驗組】架設圖要改的地方：\n___'}
+                            placeholder={'例：\n修正 1：第 5 題原本「請評估你的自我效能」→ 改成「你覺得自己能在期末完成這份研究的把握有多高？」（原因：原題太抽象，學生看不懂）\n修正 2：量表從 7 點改 5 點（原因：高中生對中等程度辨識度有限）\n修正 3：（無）\n\n【實驗組】架設圖要改的地方：\n統一兩組指導語為相同字數，並把施測都安排在同一時段（避開早晚差異）'}
+                            scaffold={['修正 N：第幾題原本如何 → 改成什麼（原因）', '【實驗組】架設圖要改的地方']}
                             rows={8}
                         />
                     </div>
@@ -539,7 +559,8 @@ export const W11Page = () => {
                             <ThinkRecord
                                 dataKey="w11-consent-judge"
                                 prompt="AI 建議採納判斷"
-                                defaultTemplate={'建議 1：___ → ✅ 採納 / ❌ 不採納（理由：___）\n建議 2：___ → ___\n建議 3：___ → ___'}
+                                placeholder={'例：\n建議 1：把「您」改成「你」（語氣較親近） → ✅ 採納（理由：對象是同學，不需要敬語）\n建議 2：刪掉「研究結束後您將獲得 50 元獎勵」 → ❌ 不採納（理由：學校允許小額答謝）\n建議 3：補充「您可以隨時退出，不會有任何負面影響」 → ✅ 採納（理由：原本忽略了）'}
+                                scaffold={['建議 N：AI 說什麼', '判斷：✅ 採納 / ❌ 不採納', '理由（必寫）']}
                                 rows={6}
                             />
                             <ThinkRecord
@@ -583,19 +604,22 @@ export const W11Page = () => {
                             <ThinkRecord
                                 dataKey="w11-plan-target"
                                 prompt="施測目標與底線"
-                                defaultTemplate={'目標：收集 ___ 份有效樣本（問卷）／訪談 ___ 位／觀察 ___ 次／分析 ___ 篇文獻\n底線（最低可接受）：___\n預期日期：W___'}
+                                placeholder={'例：\n目標：收集 80 份有效問卷\n底線（最低可接受）：50 份\n預期日期：W13 結束前'}
+                                scaffold={['目標：收集數量（問卷份數／訪談人次／觀察次數／文獻篇數）', '底線（最低可接受）：…', '預期日期：W___']}
                                 rows={5}
                             />
                             <ThinkRecord
                                 dataKey="w11-plan-schedule"
                                 prompt="W12-W13 執行時程"
-                                defaultTemplate={'W12 前半週：___\nW12 後半週：___\nW13 前半週：___\nW13 後半週：___'}
+                                placeholder={'例：\nW12 前半週：發放問卷給高一兩個班\nW12 後半週：催促未填者 + 整理回收名單\nW13 前半週：補發 + 找補充樣本\nW13 後半週：關帳 + 資料初步清洗'}
+                                scaffold={['W12 前半週：…', 'W12 後半週：…', 'W13 前半週：…', 'W13 後半週：…']}
                                 rows={6}
                             />
                             <ThinkRecord
                                 dataKey="w11-plan-backup"
                                 prompt="應急備案（Plan B）"
-                                defaultTemplate={'如果 ___（問題）發生 → 我會 ___（應變）\n例：如果問卷回收率太低（<60%）→ 我會延長時程一週 + 改由課堂發放'}
+                                placeholder={'例：\n如果問卷回收率 < 60% → 我會延長時程一週 + 改由課堂集中發放\n如果某位主要受訪者放鴿子 → 啟動備用受訪者清單，從同樣條件的另外 2 人挑'}
+                                scaffold={['如果 ___ 發生 → 我會 ___', '可以列 1-2 個情境']}
                                 rows={5}
                             />
                             <ThinkRecord

@@ -606,11 +606,11 @@ export const W50Page = () => {
                         choices={choiceResults}
                     />
 
-                    {/* 下週預告 */}
+                    {/* 下週預告（升級：講清楚承接動線，避免 W6 開場斷層） */}
                     <div className="next-week-preview">
                         <div className="next-week-header">
                             <span className="next-week-badge">NEXT WEEK</span>
-                            <h3 className="next-week-title">W6 預告</h3>
+                            <h3 className="next-week-title">W6 預告：用今天找到的文獻來練改寫</h3>
                         </div>
                         <div className="next-week-content">
                             <div className="next-week-col">
@@ -618,9 +618,15 @@ export const W50Page = () => {
                                 <p className="next-week-text">文獻偵探社——識破換字抄襲、文獻堆砌，學會「三明治」寫法把文獻變成自己的論述。</p>
                             </div>
                             <div className="next-week-col">
-                                <div className="next-week-label">你要帶</div>
-                                <p className="next-week-text">這週找到的 <strong>A/B 級文獻</strong>與 APA 書目——W6 要用這些素材練文獻探討寫作。</p>
+                                <div className="next-week-label">你今天的成果會變成什麼</div>
+                                <p className="next-week-text">
+                                    你今天填的「<strong>找到的第一篇文獻</strong>」會在 W6 開場自動帶入——直接拿這篇做<strong>三明治改寫練習</strong>，不用重找。
+                                    所以今天要把這篇填好填滿（標題、作者、年份、跟你題目的關係），下週才接得上。
+                                </p>
                             </div>
+                        </div>
+                        <div className="mt-3 p-3 rounded-[6px] bg-[#FEF3C7] border border-[#D97706]/30 text-[12px] text-[#78350F] leading-relaxed">
+                            🔗 <strong>跨週連結提醒</strong>：W5 找文獻 → W6 寫文獻 → W8 把文獻變成王牌。今天填得越具體，後面三週越輕鬆。
                         </div>
                     </div>
                 </div>
