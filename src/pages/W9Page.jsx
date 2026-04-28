@@ -529,6 +529,7 @@ export const W9Page = () => {
     const [choiceResults, setChoiceResults] = useState([]);
     const [selectedMethod, setSelectedMethod] = useState('');
     const [w8Method, setW8Method] = useState('');
+    const [w8Secondary, setW8Secondary] = useState(''); // W8 補充方法（label 字串）
     const [w8Topic, setW8Topic] = useState('');
     const [w8Drafts, setW8Drafts] = useState({ q1: '', q2: '', q3: '' });
     const [w8Route, setW8Route] = useState(''); // 'team' | 'solo' | ''
@@ -540,8 +541,10 @@ export const W9Page = () => {
     useEffect(() => {
         const saved = readRecords();
         const method = saved['w8-tool-method']?.trim() || saved['w8-method-reason']?.trim() || '';
+        const secondary = saved['w8-tool-method-secondary']?.trim() || '';
         const topic = saved['w8-merged-topic']?.trim() || saved['w8-research-question']?.trim() || '';
         if (method) setW8Method(method);
+        if (secondary) setW8Secondary(secondary);
         if (topic) setW8Topic(topic);
         /* 讀取 W8 路線（Team / Solo）—— 影響 Step 1 互評環節的鷹架 */
         const route = localStorage.getItem('w8-route') || '';
@@ -1074,7 +1077,7 @@ export const W9Page = () => {
                                 <button
                                     key={m.id}
                                     type="button"
-                                    onClick={() => setSelectedMethod(m.id)}
+                                    onClick={() => handleMethodSelect(m.id)}
                                     className={`text-[12px] font-bold px-3 py-1.5 rounded-[6px] border transition-colors ${selectedMethod === m.id
                                         ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
                                         : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink)]'
@@ -1121,6 +1124,13 @@ export const W9Page = () => {
                         {!selectedMethod && (
                             <div className="mt-3 bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[12px] text-[var(--ink-light)]">
                                 👆 還沒選方法？先看 5 種計畫書長什麼樣，再點上方按鈕選自己的。
+                            </div>
+                        )}
+                        {/* 補充方法提示卡（W8 登記過才顯示） */}
+                        {w8Secondary && (
+                            <div className="mt-3 bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-3 text-[12px] text-[#065F46] leading-relaxed">
+                                🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
+                                <strong className="block mt-1">本週計畫書以「主方法」為骨架</strong>——補充方法寫在「第三章 研究方法」段落中說明（例：「主用問卷，輔以 3-5 位深度訪談補質性脈絡」），不另起爐灶。
                             </div>
                         )}
                     </div>

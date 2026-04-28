@@ -368,12 +368,15 @@ const TeacherApprovalBadge = () => {
 export const W11Page = () => {
     const [w9Method, setW9Method] = useState('');
     const [w9Topic, setW9Topic] = useState('');
+    const [w8Secondary, setW8Secondary] = useState('');
 
     useEffect(() => {
         const saved = readRecords();
         const method = saved['w9-my-method']?.trim() || saved['w8-tool-method']?.trim() || '';
+        const secondary = saved['w8-tool-method-secondary']?.trim() || '';
         const topic = saved['w8-merged-topic']?.trim() || saved['w8-research-question']?.trim() || '';
         if (method) setW9Method(method);
+        if (secondary) setW8Secondary(secondary);
         if (topic) setW9Topic(topic);
     }, []);
 
@@ -430,6 +433,19 @@ export const W11Page = () => {
                             ))}
                         </div>
                     </div>
+
+                    {/* 補充方法提示卡（W8 登記過才顯示） */}
+                    {w8Secondary && (
+                        <div className="bg-[#ECFDF5] border-2 border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
+                            🧩 <strong className="text-[#064E3B]">你登記了補充方法：{w8Secondary}</strong>
+                            <p className="mt-2">
+                                <strong>主方法（{w9Method}）強制 Pilot</strong>，這節照走 Step 1 配對指示。<strong>補充方法強烈建議也跑一次 Pilot</strong>——不一定要在課堂內完成，課後找 1-2 人快速試用即可。
+                            </p>
+                            <p className="mt-1">
+                                兩條線的 Pilot 發現都記在 Step 2 的紀錄裡（同一格，標註「主」「補」即可）。
+                            </p>
+                        </div>
+                    )}
 
                     {/* 知情同意提前預告 */}
                     <div className="w7-notice w7-notice-gold">

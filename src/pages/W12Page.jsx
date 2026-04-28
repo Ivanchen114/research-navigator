@@ -197,6 +197,7 @@ const TroubleCard = ({ card }) => {
 const W12Page = () => {
     const saved = readRecords();
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
+    const mySecondary = saved['w8-tool-method-secondary'] || '';
     const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
     /* W11 施測啟動計畫帶入（讓學生看得到自己上週定的目標/時程/備案） */
     const w11Target = saved['w11-plan-target']?.trim() || '';
@@ -257,7 +258,15 @@ const W12Page = () => {
                 <div className="mt-4 p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border border-[#BAE6FD]">
                     <p className="text-[12px] text-[#0369A1] font-bold mb-1">📂 你的研究</p>
                     <p className="text-[13px] text-[#0C4A6E]">{myTopic}</p>
-                    {myMethod && <p className="text-[12px] text-[#0369A1] mt-1">方法：{myMethod}</p>}
+                    {myMethod && <p className="text-[12px] text-[#0369A1] mt-1">主方法：{myMethod}{mySecondary && <span className="text-[#065F46]">　｜　補充：{mySecondary}</span>}</p>}
+                </div>
+            )}
+
+            {/* 補充方法提示卡（蒐集週的核心提醒） */}
+            {mySecondary && (
+                <div className="mt-4 p-4 rounded-[var(--radius-unified)] bg-[#ECFDF5] border-2 border-[#10B981] text-[12.5px] text-[#065F46] leading-relaxed">
+                    🧩 <strong className="text-[#064E3B]">兩條線都要動</strong>——主方法（{myMethod}）的回收照進度跑，補充方法（{mySecondary}）也別擱著。
+                    <p className="mt-1.5">研究日誌建議分兩條線記：「主：今天問卷回收 N 份」「補：今天訪談 1 位」——同一篇日誌兩條紀錄，老師批改時看得到你兩邊都有推進。</p>
                 </div>
             )}
 

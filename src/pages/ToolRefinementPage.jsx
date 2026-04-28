@@ -384,6 +384,7 @@ const PrepStatusCheck = ({ methodId }) => {
 export const ToolRefinementPage = () => {
     const [w9Method, setW9Method] = useState('');
     const [w9Topic, setW9Topic] = useState('');
+    const [w8Secondary, setW8Secondary] = useState(''); // W8 補充方法（label 字串）
     const [detectedMethodId, setDetectedMethodId] = useState('');
     const [showLessonMap, setShowLessonMap] = useState(false);
 
@@ -391,8 +392,10 @@ export const ToolRefinementPage = () => {
     useEffect(() => {
         const saved = readRecords();
         const method = saved['w9-my-method']?.trim() || saved['w8-tool-method']?.trim() || '';
+        const secondary = saved['w8-tool-method-secondary']?.trim() || '';
         const topic = saved['w8-merged-topic']?.trim() || saved['w8-research-question']?.trim() || '';
         if (method) setW9Method(method);
+        if (secondary) setW8Secondary(secondary);
         if (topic) setW9Topic(topic);
 
         const ml = method.toLowerCase();
@@ -535,6 +538,19 @@ export const ToolRefinementPage = () => {
                             </div>
                         );
                     })()}
+
+                    {/* 補充方法提示卡（W8 登記過才顯示） */}
+                    {w8Secondary && (
+                        <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
+                            🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
+                            <p className="mt-1.5">
+                                <strong className="text-[#064E3B]">本節 50 分鐘專注主方法第六章工具雛形</strong>——補充方法的工具設計留到課後（不要兩條線都想擠進這節，會兩邊都做不完）。
+                            </p>
+                            <p className="mt-1">
+                                docx 第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——主工具寫完整、補充工具寫骨架就好。
+                            </p>
+                        </div>
+                    )}
 
                     {/* 工具設計關鍵決策 */}
                     <ThinkRecord

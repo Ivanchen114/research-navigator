@@ -64,6 +64,15 @@ const DRAFT_AI_PROMPTS = {
 我打算用「文獻分析」。請幫我發散 3 組可能的關鍵字組合（中英文各一組）——只給關鍵字，不要幫我做分析。我會從中挑一組自己搜尋。`,
 };
 
+/* — 5 種研究方法（主方法 radio + 補充方法 checkbox 共用） — */
+const METHOD_OPTIONS = [
+    { id: 'questionnaire', label: '問卷法',     emoji: '📋' },
+    { id: 'interview',     label: '訪談法',     emoji: '🎤' },
+    { id: 'experiment',    label: '實驗法',     emoji: '🧪' },
+    { id: 'observation',   label: '觀察法',     emoji: '👀' },
+    { id: 'literature',    label: '文獻分析',   emoji: '📚' },
+];
+
 /* — 工具草稿範例 — */
 const TOOL_DRAFT_EXAMPLES = [
     { method: '問卷法', shape: '一題封閉式問題（含選項）', example: '你每天使用 IG 的時間大約多長？ □ 不到 30 分　□ 30-60 分　□ 1-2 小時　□ 超過 2 小時' },
@@ -142,7 +151,8 @@ const EXPORT_FIELDS = [
     /* 路線選擇 */
     { key: 'w8-route', label: '路線選擇', question: '合題組隊 / 單飛獨行' },
     /* Part D 工具草稿 */
-    { key: 'w8-tool-method', label: '選用的研究方法' },
+    { key: 'w8-tool-method', label: '主要研究方法' },
+    { key: 'w8-tool-method-secondary', label: '補充研究方法（混合方法時填）', question: '有的話列出 1-2 個；沒有就留空' },
     { key: 'w8-draft-ai-record', label: 'AI 協助草稿判斷紀錄', question: '有用 AI 發散題目方向才要填：選了哪個、刷掉哪個、為什麼' },
     { key: 'w8-draft-q1', label: '草稿題目 1' },
     { key: 'w8-draft-q2', label: '草稿題目 2' },
@@ -150,6 +160,137 @@ const EXPORT_FIELDS = [
     { key: 'w8-draft-check', label: '自我檢核', question: '這 3 題和研究問題有關嗎？覺得怪怪的地方？' },
     { key: 'w8-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
+
+/* ══════════════════════════════════════
+ *  內部元件：方法選擇器（主方法 radio + 補充方法 checkbox）
+ *  - 主方法 → w8-tool-method（label 字串，例「問卷法」）
+ *  - 補充方法 → w8-tool-method-secondary（label 字串「、」連接，例「訪談法、文獻分析」）
+ * ══════════════════════════════════════ */
+
+const MethodSelector = ({ route }) => {
+    /* 從 STORAGE_KEY 讀回現有選擇（label 字串），反推 id */
+    const labelToId = (label) => METHOD_OPTIONS.find(m => m.label === (label || '').trim())?.id || '';
+    const [primary, setPrimary] = useState('');
+    const [secondary, setSecondary] = useState([]); // array of method ids
+
+    /* 初始化：從 localStorage 讀 */
+    useEffect(() => {
+        try {
+            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            setPrimary(labelToId(saved['w8-tool-method']));
+            const sec = (saved['w8-tool-method-secondary'] || '').split('、').map(s => s.trim()).filter(Boolean);
+            setSecondary(sec.map(labelToId).filter(Boolean));
+        } catch { /* ignore */ }
+    }, []);
+
+    const writeStorage = useCallback((nextPrimary, nextSecondary) => {
+        try {
+            const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            const primaryLabel = METHOD_OPTIONS.find(m => m.id === nextPrimary)?.label || '';
+            const secondaryLabels = nextSecondary.map(id => METHOD_OPTIONS.find(m => m.id === id)?.label).filter(Boolean);
+            all['w8-tool-method'] = primaryLabel;
+            all['w8-tool-method-secondary'] = secondaryLabels.join('、');
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+        } catch { /* ignore */ }
+    }, []);
+
+    const choosePrimary = (id) => {
+        const nextSecondary = secondary.filter(s => s !== id); // 主方法被選後，從補充清單剔除自己
+        setPrimary(id);
+        setSecondary(nextSecondary);
+        writeStorage(id, nextSecondary);
+    };
+
+    const toggleSecondary = (id) => {
+        if (id === primary) return; // 不能跟主方法重複
+        let next;
+        if (secondary.includes(id)) {
+            next = secondary.filter(s => s !== id);
+        } else {
+            if (secondary.length >= 2) return; // 最多 2 個補充
+            next = [...secondary, id];
+        }
+        setSecondary(next);
+        writeStorage(primary, next);
+    };
+
+    const subjectWord = route === 'solo' ? '我' : '我們組';
+
+    return (
+        <div className="space-y-4">
+            {/* 主方法 */}
+            <div>
+                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">
+                    🎯 {subjectWord}的<span className="text-[var(--accent)]">主方法</span>（必選 1 個 — 整學期主軸跟著它走）
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                    {METHOD_OPTIONS.map((m) => {
+                        const isPrimary = primary === m.id;
+                        return (
+                            <button
+                                key={m.id}
+                                type="button"
+                                onClick={() => choosePrimary(m.id)}
+                                className={`text-[12.5px] font-bold px-3 py-2.5 rounded-[8px] border-2 transition-colors ${
+                                    isPrimary
+                                        ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                                        : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--accent)]'
+                                }`}
+                            >
+                                <span className="text-[14px] mr-1">{m.emoji}</span>
+                                {m.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* 補充方法 */}
+            <div>
+                <p className="text-[12.5px] text-[var(--ink-mid)] mb-2">
+                    🧩 <strong className="text-[var(--ink)]">補充方法</strong>（選填，最多 2 個 — 例如「主問卷＋訪談補深度」）
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                    {METHOD_OPTIONS.map((m) => {
+                        const isSelected = secondary.includes(m.id);
+                        const isDisabled = m.id === primary || (!isSelected && secondary.length >= 2);
+                        return (
+                            <button
+                                key={m.id}
+                                type="button"
+                                onClick={() => toggleSecondary(m.id)}
+                                disabled={isDisabled}
+                                className={`text-[11.5px] px-2.5 py-2 rounded-[6px] border transition-colors ${
+                                    isSelected
+                                        ? 'bg-[#ECFDF5] text-[#065F46] border-[#10B981] font-bold'
+                                        : isDisabled
+                                            ? 'bg-[var(--paper-warm)] text-[var(--ink-light)] border-[var(--border)] opacity-50 cursor-not-allowed'
+                                            : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[#10B981]'
+                                }`}
+                            >
+                                <span className="text-[13px] mr-1">{m.emoji}</span>
+                                {m.label}
+                                {m.id === primary && <span className="text-[10px] ml-1">(主)</span>}
+                            </button>
+                        );
+                    })}
+                </div>
+                {secondary.length > 0 && (
+                    <p className="text-[11px] text-[#065F46] mt-2 leading-relaxed">
+                        ✅ 你登記了補充方法：<strong>{secondary.map(id => METHOD_OPTIONS.find(m => m.id === id)?.label).join('、')}</strong>。
+                        後續 W11 預試、W12 蒐集會提醒「兩條線都要做」——但 W9 計畫書與 W10 工具設計仍以<strong>主方法</strong>為骨架。
+                    </p>
+                )}
+            </div>
+
+            {!primary && (
+                <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[11.5px] text-[var(--ink-light)]">
+                    👆 請先選主方法。沒選的話，下游 W9/W10 自動分流會失準。
+                </div>
+            )}
+        </div>
+    );
+};
 
 /* ══════════════════════════════════════
  *  主元件
@@ -784,12 +925,8 @@ export const TeamFormation = () => {
                         </div>
                     )}
 
-                    <ThinkRecord
-                        dataKey="w8-tool-method"
-                        prompt={route === 'solo' ? '我選用的研究方法' : '我們組選用的研究方法'}
-                        placeholder="問卷法 / 訪談法 / 觀察法 / 實驗法 / 文獻分析"
-                        rows={1}
-                    />
+                    {/* 主方法（單選）+ 補充方法（複選 0-2） */}
+                    <MethodSelector route={route} />
 
                     {/* 工具草稿範例表 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
