@@ -38,7 +38,12 @@ const buildPosterPrompt = (topic) => `我的研究海報需要以下元素：
 2. 把預期發現改寫得更有研究感（加入「可能」「推測」等詞）
 3. 給我 2 個版本讓我選
 
-請保持在我原本的研究範圍內，不要幫我改題目方向。`;
+⚠️ 嚴格規則（請務必遵守）：
+- 不要改我的研究對象（Who）——例如「高一學生」就不能改成「青少年」
+- 不要改我的核心變項（What）——例如「滑手機時數」就不能改成「3C 使用」
+- 不要加我沒寫的變項——例如不要把「家庭背景」「成績」這類我沒提的東西塞進來
+- 如果你覺得需要動 Who/What 或新增變項，請先在回覆開頭說「⚠️ 我建議改方向，請先諮詢老師」，再給建議
+- 你的工作只是「換更好聽的說法」，不是「換研究」`;
 
 const POSTER_FIELDS = [
     { n: '①', l: '吸引人的標題', d: '口語問句，讓人一眼停下來' },
@@ -280,6 +285,34 @@ export const W4Page = () => {
                             </div>
                         </a>
 
+                        {/* ⚠️ 優化 vs 改方向 對比卡（貼 prompt 前先看） */}
+                        <div className="mb-4 p-4 rounded-[var(--radius-unified)] border-2 border-[#D97706] bg-[#FEF3C7]">
+                            <p className="text-[13px] font-bold text-[#92400E] mb-2">⚠️ 貼給 AI 之前：先學會分辨「優化」vs「改方向」</p>
+                            <div className="grid md:grid-cols-2 gap-2 mb-3">
+                                <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[6px] p-3">
+                                    <p className="text-[12px] font-bold text-[#065F46] mb-1">✅ 這叫「優化」（可以接受）</p>
+                                    <ul className="text-[11.5px] text-[#047857] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                        <li>更吸睛的標題措詞</li>
+                                        <li>更精準的量詞（「許多」→「超過 60%」）</li>
+                                        <li>把口語改得更通順</li>
+                                        <li>加「可能」「推測」等保留語</li>
+                                    </ul>
+                                </div>
+                                <div className="bg-[#FEF2F2] border border-[#DC2626] rounded-[6px] p-3">
+                                    <p className="text-[12px] font-bold text-[#991B1B] mb-1">❌ 這叫「改方向」（要拒絕）</p>
+                                    <ul className="text-[11.5px] text-[#7F1D1D] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                        <li>改了研究對象（高一→青少年）</li>
+                                        <li>改了核心變項（滑手機時數→3C 使用）</li>
+                                        <li>加了你沒寫的變項（家庭背景／成績）</li>
+                                        <li>把題目「拓展」變更大（你縮小過了）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p className="text-[11.5px] text-[#78350F] leading-relaxed italic">
+                                💡 AI 違反規則時你<strong>有權拒絕</strong>。如果 AI 給的版本你覺得「跟我原本想做的不一樣」——那就是改方向，回上面看你的 W3 定案題目，重貼一次 prompt 並更明確說「不要動 Who/What」。
+                            </p>
+                        </div>
+
                         {/* Prompt：海報文案優化（研究題目自動帶入 W3 定案） */}
                         <div className="prompt-box mb-6">
                             <div className="prompt-hd">
@@ -295,7 +328,8 @@ export const W4Page = () => {
                                 1. 優化標題，讓它更吸引高中生，保持白話但加一點懸疑感<br />
                                 2. 把預期發現改寫得更有研究感（加入「可能」「推測」等詞）<br />
                                 3. 給我 2 個版本讓我選<br /><br />
-                                請保持在我原本的研究範圍內，不要幫我改題目方向。
+                                ⚠️ 嚴格規則：不要改 Who/What、不要加我沒寫的變項。<br />
+                                如果你覺得需要改，請在回覆開頭說「⚠️ 我建議改方向，請先諮詢老師」。
                             </div>
                         </div>
 
@@ -459,6 +493,40 @@ export const W4Page = () => {
                     <p className="section-desc">
                         看看同學給你的建議，分成三類。不是所有建議都要採納——有判斷力地接受，比什麼都接受更重要。
                     </p>
+
+                    {/* 🚦 建議評估標準（綠/黃/紅燈）— 給學生判斷基準，不是憑直覺 */}
+                    <div className="mb-4 p-4 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF]">
+                        <p className="text-[13px] font-bold text-[#075985] mb-2">🚦 評估標準（先看這個再分類）</p>
+                        <div className="grid md:grid-cols-3 gap-2">
+                            <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#065F46] mb-1">🟢 綠燈（建議幾乎都該接受）</p>
+                                <p className="text-[11.5px] text-[#047857] leading-[1.7]">
+                                    建議涉及把 <strong>Who/What/When/Where/How 變得更具體</strong>
+                                    （例：「Who 從『高中生』縮成『某校高一』」）。
+                                    這類建議不改你的核心興趣，只讓題目更可執行。
+                                </p>
+                            </div>
+                            <div className="bg-[#FEF3C7] border border-[#D97706] rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#92400E] mb-1">🟡 黃燈（要評估再決定）</p>
+                                <p className="text-[11.5px] text-[#78350F] leading-[1.7]">
+                                    建議涉及 <strong>可行性 / 倫理 / 樣本招募</strong>
+                                    （例：「你訪談 30 人會不會做不完？」）。
+                                    這類要評估自己的時間、資源、能力後再決定。
+                                </p>
+                            </div>
+                            <div className="bg-[#FEF2F2] border border-[#DC2626] rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#991B1B] mb-1">🔴 紅燈（建議要拒絕）</p>
+                                <p className="text-[11.5px] text-[#7F1D1D] leading-[1.7]">
+                                    建議要你 <strong>改變核心興趣</strong>
+                                    （例：「我覺得你做別的更有趣」）。
+                                    這是你的研究——別人覺得有趣不代表你也覺得，拒絕。
+                                </p>
+                            </div>
+                        </div>
+                        <p className="text-[11px] text-[#075985] italic leading-relaxed mt-2">
+                            💡 同學憑直覺給建議很快、你憑直覺接受很慢——所以你要用三燈標準把建議過一輪，再寫下面三類。
+                        </p>
+                    </div>
 
                     {/* 三類分法 */}
                     <div className="content-grid grid-cols-1 md:grid-cols-3 mb-6">

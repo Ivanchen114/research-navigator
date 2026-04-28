@@ -41,9 +41,24 @@ const TEMPLATES = {
     literature:    { url: 'https://docs.google.com/spreadsheets/d/11mr5up4hsirhP3LH1qOxzxFAV0w189BIF585mcF8G6Q/copy', name: '05_文獻比較矩陣模板' },
 };
 
+/* — 工具檢核共用前置：進度自評（W10 第一節學生工具還在雛形，給 AI 校準） — */
+const TOOL_CHECK_INTRO = `【我的工具進度自評】（請學生勾選）
+□ 方向（只有概念，題目／流程還沒展開）
+□ 雛形（題目／訪綱寫出來但粗糙）
+□ 精修（題目完整但要打磨用詞）
+□ 定版（要繳交了）
+
+【請依進度給對應深度的回饋】
+- 方向：只檢「設計方向能否回答研究問題」，給「該補什麼」清單，不要挑用詞
+- 雛形：檢「結構＋邏輯」，挑明顯漏洞（漏題、選項不全、雙重問題等）
+- 精修：挑用詞、追問設計、選項邊界等細節
+- 定版：做最後一輪挑刺
+
+`;
+
 /* — 各方法 AI 檢核 Prompt — */
 const AI_PROMPTS = {
-    questionnaire: `我設計了一份問卷，請幫我檢查：
+    questionnaire: TOOL_CHECK_INTRO + `我設計了一份問卷，請幫我檢查：
 1. 有沒有問題不清楚？
 2. 選項是否完整、互斥？
 3. 有沒有雙重否定或雙重問題？
@@ -51,7 +66,7 @@ const AI_PROMPTS = {
 5. 給我具體修改建議。
 
 【貼上你的問卷】`,
-    interview: `我設計了訪談大綱，請幫我檢查：
+    interview: TOOL_CHECK_INTRO + `我設計了訪談大綱，請幫我檢查：
 1. 問題是否開放式？
 2. 追問設計是否合理？
 3. 順序是否流暢（從簡單到深層）？
@@ -59,7 +74,7 @@ const AI_PROMPTS = {
 5. 給我具體修改建議。
 
 【貼上你的訪談大綱】`,
-    experiment: `我設計了一個實驗，請幫我檢查：
+    experiment: TOOL_CHECK_INTRO + `我設計了一個實驗，請幫我檢查：
 1. 自變項與依變項的操作型定義清楚嗎？
 2. 控制變項有遺漏嗎？
 3. 實驗流程有邏輯漏洞嗎？
@@ -67,7 +82,7 @@ const AI_PROMPTS = {
 5. 給我具體修改建議。
 
 【貼上你的實驗設計】`,
-    observation: `我設計了觀察紀錄表，請幫我檢查：
+    observation: TOOL_CHECK_INTRO + `我設計了觀察紀錄表，請幫我檢查：
 1. 觀察行為的定義夠具體嗎？（是外顯行為而非推測？）
 2. 記錄方式來得及嗎？
 3. 觀察時段和地點設定合理嗎？
@@ -75,7 +90,7 @@ const AI_PROMPTS = {
 5. 給我具體修改建議。
 
 【貼上你的觀察紀錄表設計】`,
-    literature: `我設計了文獻分析架構，請幫我檢查：
+    literature: TOOL_CHECK_INTRO + `我設計了文獻分析架構，請幫我檢查：
 1. 搜尋策略（關鍵字、篩選標準）夠精準嗎？
 2. 比較矩陣的欄位能回答研究問題嗎？
 3. 納入／排除標準合理嗎？
@@ -92,6 +107,43 @@ const GENERIC_PROMPT = `我設計了一份研究工具，請幫我檢查：
 4. 給我具體修改建議。
 
 【貼上你的工具內容】`;
+
+/* ── W10 整本計畫書 AI 檢核 Prompt（進度容錯版 — 跨方法通用） ── */
+const PLAN_FULL_CHECK_PROMPT = `【建議使用 AI 的「深度思考／推理模式」】
+（Gemini 的 Thinking 模式、ChatGPT 的 o1 或 Pro、Claude 的 Extended Thinking 等——選你慣用 AI 的深度推理版本。整本檢核值得多等幾分鐘。）
+
+你是高中專題指導顧問。以下是我的整本計畫書，請注意：學生在 W10 課堂剛把第六章工具寫到雛形，「不是每章都到完成度」。我會在開頭告訴你**每章目前的進度階段**，請就「該階段該有的品質」做檢核，不要對草稿用定版的標準苛責。
+
+【我目前的進度自評】（請學生填完再貼進來）
+- 第 1 章（題目／動機／問題）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第 2 章（文獻探討）：□ 方向 / □ 雛形 / □ 精修 / □ 定版（文獻數量：___ 篇）
+- 第 3 章（研究方法）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第 4 章（變項／主題／維度）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第 5 章（研究對象／抽樣）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第 6 章（研究工具）：□ 方向 / □ 雛形 / □ 精修 / □ 定版 ← W10 第一節剛寫
+- 第 7-13 章（執行／時程／倫理／參考文獻等）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+
+【四階段定義 — AI 請依此校準回饋深度】
+- 方向：只有概念句，還沒展開 → 你只檢「方向對不對」，給「該補什麼」清單
+- 雛形：段落寫出來但粗糙 → 你檢「結構＋邏輯一致」，指出明顯漏洞
+- 精修：內容完整但要打磨 → 你檢「精度＋論證強度」，可以挑用詞與引用
+- 定版：要繳交了 → 做最後一輪挑刺
+
+【整本檢核重點 — 跨章一致性比單章品質更重要】
+這是 W10 整本檢核的核心：不是再挑一次每章的單章品質，而是檢查**章與章之間是不是邏輯通**。
+
+1. 【方向 → 方法】第 1-3 章的研究問題，能不能用第 3 章寫的方法回答？（例：問題在問「為什麼」卻選量化問卷 → 方向跟方法不對）
+2. 【方法 → 工具】第 3 章的方法跟第 6 章的工具是否一致？工具能真的測到第 4 章的變項嗎？
+3. 【變項 → 工具】第 4 章每個變項，第 6 章工具裡都有對應題目／訪綱／觀察項？有沒有漏？
+4. 【對象 → 抽樣 → 工具】第 5 章的對象是否能填答／受訪？工具難度跟對象的程度匹配嗎？
+5. 【倫理紅線】整本（特別是第 3、6、7 章）有無倫理風險？知情同意有沒有寫進工具？
+6. 【執行可行性】時程跟樣本量是否可達成？（例：要訪 30 人但時程只 2 週 = 不可行）
+
+【回應格式】
+請依「① 進度判讀（你看到我各章是哪個階段）→ ② 跨章不一致清單（哪幾章邏輯沒通）→ ③ 工具最該優先修的 3 件事（這是 W10 重點）→ ④ 課後優先補完清單」四段回。
+不用替我修改，只要指出問題點與建議方向。
+
+【以下貼上你的計畫書全本（即使是草稿、半成品都貼，並在每章開頭標註自己的進度階段）】`;
 
 /* — AI 的限制 — */
 const AI_LIMITS = [
@@ -387,11 +439,54 @@ export const ToolRefinementPage = () => {
                     {/* Step 1 開場 */}
                     <div>
                         <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                            W9 你已完成計畫書第一~五章地基。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把第六章（工具本體）寫完</strong>。依你的方法，具體產出下方表格指定的內容。
+                            W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把第六章（工具本體）寫到雛形</strong>。依你的方法，具體產出下方表格指定的內容。
                         </p>
                         <div className="w7-notice w7-notice-gold">
-                            🎯 <strong>本節目標：計畫書第六章工具設計完成。</strong>內容寫在 <strong>docx</strong> 上，網頁只記關鍵決策。
+                            🎯 <strong>本節目標：第六章工具設計到雛形。</strong>內容寫在 <strong>docx</strong> 上，網頁只記關鍵決策。第二節做整本檢核 + 定稿。
                         </div>
+                    </div>
+
+                    {/* 🤝 1-4 人分章工作流（第六章工具設計） */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF] max-w-[720px]">
+                        <p className="text-[14px] font-bold text-[#075985] mb-2">🤝 第六章工具設計分工（看你的隊型）</p>
+                        <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed mb-3">
+                            工具是一份大家共寫——但分工要清楚不要全擠著寫題目。<strong>核心三角色：主稿 / 對照 / AI 諮詢</strong>。人多就多一個倫理檢查。
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-2 mb-3">
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">1 人組（Solo）</p>
+                                <p className="text-[11.5px] text-[#0C4A6E] leading-[1.7]">
+                                    自己 50 分鐘只能寫到雛形——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
+                                </p>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">2 人組</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
+                                    <li><strong>B 對照</strong>：拿 W9 三大標準 + 五錯誤類型逐題挑刺</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">3 人組</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
+                                    <li><strong>B 對照</strong>：三大標準 + 錯誤類型逐題挑</li>
+                                    <li><strong>C AI 諮詢</strong>：用工具 prompt 跑 AI，整理建議給組員看</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">4 人組</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li><strong>A 主稿</strong></li>
+                                    <li><strong>B 對照</strong>：方向＋精度（W9 三大標準）</li>
+                                    <li><strong>C AI 諮詢</strong></li>
+                                    <li><strong>D 倫理＋文獻檢查</strong>：工具不踩倫理紅線、跟第二章文獻對得上</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed pt-2 border-t border-[#0EA5E9]/30">
+                            ⏱️ <strong>時間建議</strong>：前 5 分鐘分工 → 各自 35 分鐘做 → 最後 10 分鐘聚回來互讀整合。
+                        </p>
                     </div>
 
                     {/* 方法分流提示 */}
@@ -426,8 +521,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-tool-design-notes"
                         prompt="工具設計的 2-3 個關鍵決策（docx 寫完後在此摘要）"
-                        placeholder={'例：\n決策 1：問卷改用五點量表不用七點——因為高中生樣本對「中等程度」的辨識度有限，五點較準\n決策 2：訪談大綱從 12 題砍到 6 題——避免每位受訪者超過 30 分鐘\n決策 3：（無）'}
-                        scaffold={['決策 1：做了什麼 / 為什麼', '決策 2：…', '決策 3：…']}
+                        defaultTemplate={'決策 1：\n決策 2：\n決策 3：（無就留空）'}
+                        placeholder="例：問卷改用五點量表不用七點——因為高中生對中等程度辨識度有限"
                         rows={6}
                     />
 
@@ -446,15 +541,52 @@ export const ToolRefinementPage = () => {
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        工具設計完了，整本計畫書 13 章都到位。這次 AI 檢核是<strong className="text-[var(--ink)]">最後一次綜合檢查</strong>——比對「方向（第 1-3 章）→ 方法（第 4-5 章）→ 工具（第 6 章）→ 執行（第 7-13 章）」是否邏輯一致。
+                        工具設計完了，整本計畫書整合進來。這次 AI 檢核重點是<strong className="text-[var(--ink)]">跨章一致性</strong>——不是再挑一次每章單章品質，是看「方向（1-3 章）→ 方法（3 章）→ 變項（4 章）→ 對象（5 章）→ 工具（6 章）→ 執行（7-13 章）」之間邏輯有沒有通。
                     </p>
 
-                    {/* AI 檢核 Prompt */}
+                    {/* 🤝 1-4 人分章工作流（整本檢核 + 定稿） */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF] max-w-[720px]">
+                        <p className="text-[13px] font-bold text-[#075985] mb-2">🤝 整本檢核 + 定稿分工（25 min 跑 AI、25 min 定稿）</p>
+                        <div className="grid md:grid-cols-2 gap-2 text-[11.5px] text-[#0C4A6E] leading-[1.7]">
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="font-bold text-[#075985] mb-1">1 人組</p>
+                                自己跑 AI、自己判斷、自己改。<strong>等 AI 思考時別發呆</strong>——同步先翻 W9 老師回饋還沒處理的部分。
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="font-bold text-[#075985] mb-1">2 人組</p>
+                                <ul className="list-disc pl-4 space-y-0.5">
+                                    <li>A 跑 AI（深度推理要等）</li>
+                                    <li>B 同步整理 W9 老師回饋成清單</li>
+                                    <li>AI 回來後一起判斷 → 互換修文字</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="font-bold text-[#075985] mb-1">3 人組</p>
+                                <ul className="list-disc pl-4 space-y-0.5">
+                                    <li>A 跑 AI</li>
+                                    <li>B 寫採納判斷紀錄</li>
+                                    <li>C 整理修改清單／同步檢查 W9 回饋</li>
+                                    <li>三人一起核對最終定稿</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="font-bold text-[#075985] mb-1">4 人組</p>
+                                <ul className="list-disc pl-4 space-y-0.5">
+                                    <li>A 跑 AI</li>
+                                    <li>B 寫採納判斷</li>
+                                    <li>C 整理修改清單</li>
+                                    <li>D 跑 W10 AIRED + 統整繳交</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* AI 檢核 Prompt（整本檢核專用，不是工具檢核） */}
                     <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">第一步：複製 Prompt 貼到 AI</div>
-                        <CopyablePrompt text={currentPrompt || GENERIC_PROMPT} />
+                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">第一步：複製整本檢核 Prompt 貼到 AI</div>
+                        <CopyablePrompt text={PLAN_FULL_CHECK_PROMPT} />
                         <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
-                            💡 把計畫書<strong>全本 13 章（含工具）</strong>貼進 AI 對話框底部的「【貼上你的 XXX】」位置。
+                            💡 把計畫書<strong>全本（即使是草稿、半成品都貼）</strong>，並在每章開頭標註自己的進度階段（方向／雛形／精修／定版）——AI 會依此校準回饋深度。
                         </p>
                     </div>
 
@@ -462,8 +594,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-ai-raw-feedback"
                         prompt="AI 回覆原文（開頭先寫 A+I 兩行；貼全文沒關係；有追問也一起貼）"
-                        placeholder={'例：\nA: 我用了 ChatGPT o1（深度推理版本）\nI: 我貼了全本計畫書 13 章，請 AI 檢核整體邏輯一致性\n\n──── AI 完整回覆（以下貼上）────\n（貼上 AI 給的完整回覆）'}
-                        scaffold={['A: 我用了什麼 AI（要寫深度推理版本）', 'I: 我貼了什麼 + 問了什麼', '下方貼 AI 完整回覆']}
+                        defaultTemplate={'A: \nI: \n\n──── AI 完整回覆（以下貼上）────\n'}
+                        placeholder="例：A: 我用了 ChatGPT o1 深度推理版"
                         rows={14}
                     />
 
@@ -471,8 +603,8 @@ export const ToolRefinementPage = () => {
                     <ThinkRecord
                         dataKey="w10-ai-judge"
                         prompt="AI 建議採納判斷（逐條評估）"
-                        placeholder={'例：\n建議 1：AI 說「第三章應該補上信效度說明」\n→ ✅ 採納\n→ 理由：本來就漏寫了\n\n建議 2：AI 說「樣本應該擴大到三個年級」\n→ ❌ 不採納\n→ 理由：學期時程不夠，會犧牲深度\n\n建議 3：AI 說「應該加上前測」\n→ 🔶 部分採納\n→ 理由：先做小規模 Pilot，不做正式前測'}
-                        scaffold={['建議 N：AI 說什麼', '我的判斷：✅ 採納 / ❌ 不採納 / 🔶 部分採納', '理由（必寫）']}
+                        defaultTemplate={'建議 1：AI 說\n→ 我的判斷：✅ 採納 / ❌ 不採納 / 🔶 部分採納\n→ 理由：\n\n建議 2：AI 說\n→ 我的判斷：\n→ 理由：\n\n建議 3：AI 說\n→ 我的判斷：\n→ 理由：'}
+                        placeholder="例：建議 1 採納，因為原本就漏寫信效度"
                         rows={10}
                     />
 
@@ -589,22 +721,22 @@ export const ToolRefinementPage = () => {
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W10"
                 title="方法深化 II："
-                accentTitle="AI 協助工具精進與預試"
-                subtitle="用 AI 做第一輪品管，再用真人預試做第二輪驗證。AI 能快速找出明顯問題，但看不到真實體驗——兩輪把關，工具才定稿。"
+                accentTitle="AI 協助工具精進 × 整本計畫書檢核"
+                subtitle="第一節寫第六章工具到雛形，第二節做整本計畫書 AI 檢核（跨章一致性）+ 定稿。AI 能找文字邏輯漏洞，但真人 Pilot 留到 W11——兩週分工不重疊。"
                 meta={[
-                    { label: '第一節', value: 'AI 檢核 + 判斷建議 + 第一輪修正' },
-                    { label: '第二節', value: '人工預試 + AI vs 人工比對' },
-                    { label: '課堂產出', value: 'AI 建議判斷表 + 預試紀錄 + 工具修正版' },
-                    { label: '前置要求', value: 'W9 計畫書第 1-5 章（含第四章變項／主題）' },
+                    { label: '第一節', value: '第六章工具設計 + AI 工具檢核（依進度容錯）' },
+                    { label: '第二節', value: '整本計畫書 AI 檢核（跨章一致性）+ AIRED + 定稿' },
+                    { label: '課堂產出', value: '第六章工具雛形 + AI 整本檢核判斷表 + 計畫書定稿' },
+                    { label: '前置要求', value: 'W9 計畫書第 1-5 章雛形（含第四章變項／主題）' },
                 ]}
             />
             <CourseArc items={[
                     { wk: 'W1-W4', name: '探索\n定題', status: 'past' },
                     { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
                     { wk: 'W7-W8', name: '方法選擇\n組隊企劃', status: 'past' },
-                    { wk: 'W9', name: '工具設計\n處方診斷', status: 'past' },
-                    { wk: 'W10', name: 'AI精進\n人工預試', status: 'now' },
-                    { wk: 'W11', name: '倫理審查\n施測準備', status: '' },
+                    { wk: 'W9', name: '計畫書\n地基工程', status: 'past' },
+                    { wk: 'W10', name: '工具設計\n整本檢核', status: 'now' },
+                    { wk: 'W11', name: 'Pilot Test\n倫理審查', status: '' },
                     { wk: 'W12-W15', name: '執行研究\n數據分析', status: '' },
                 ]} />
 

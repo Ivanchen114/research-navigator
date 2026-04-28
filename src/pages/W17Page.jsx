@@ -82,7 +82,7 @@ const W17Page = () => {
             ]} />
 
             {/* ═══ SCROLLING CONTENT ═══ */}
-            <div style={{ maxWidth: 720, margin: '0 auto' }}>
+            <div className="prose-zh" style={{ maxWidth: 720, margin: '0 auto' }}>
 
             {/* A/B 輪替 */}
             <div className="card" style={{ marginTop: 24 }}>

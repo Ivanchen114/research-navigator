@@ -919,6 +919,73 @@ export const Wizard = () => {
                         </p>
                     </div>
 
+                    {/* 📖 示範流程預覽（學生第一次自主跑 AI 協作前先看一遍完整案例） */}
+                    <details className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <summary className="px-5 py-3 bg-[var(--accent-light)]/30 cursor-pointer flex items-center justify-between">
+                            <span className="font-bold text-[13px] text-[var(--accent)]">📖 先看一個完整範例（小華的故事）—— 第一次跑強烈建議展開</span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="p-5 space-y-4 text-[12.5px] leading-[1.85]">
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase mb-1">小華的初稿（Part 4 → Part 5 Step 1）</div>
+                                <div className="bg-[var(--paper-warm)] border-l-4 border-[var(--ink-light)] p-3 rounded-r-[6px] text-[var(--ink)]">
+                                    「本校高一學生段考前的手機使用情形」
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase mb-1">小華自己診斷（Part 5 Step 2 之前）</div>
+                                <div className="bg-[var(--paper-warm)] border-l-4 border-[var(--ink-light)] p-3 rounded-r-[6px]">
+                                    「我覺得是 <strong>C 型（範圍太大）</strong>，因為『使用情形』太空泛，沒講要測什麼。」
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase mb-1">AI 診斷回應（Step 2 跑 AI 後）</div>
+                                <div className="bg-[var(--accent-light)]/20 border-l-4 border-[var(--accent)] p-3 rounded-r-[6px]">
+                                    「主要是 <strong>C 型（範圍太大）+ B 型（雙重題）</strong>。<br />
+                                    C：『使用情形』未定義要測時數、頻率、還是內容。<br />
+                                    B：『段考前』+『手機使用』其實是兩個變項，沒講要看哪個影響哪個。」
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[#D97706] uppercase mb-1">小華比對差異（Step 3）</div>
+                                <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px]">
+                                    「我只看到 C，沒看到 B。AI 抓到我把『時間點』和『行為』混在一起。<strong>這個盲點我自己看不到。</strong>」
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase mb-1">AI 三方案（Step 4）</div>
+                                <div className="bg-[var(--accent-light)]/20 border-l-4 border-[var(--accent)] p-3 rounded-r-[6px] space-y-1">
+                                    <p>方案 A：本校高一段考前一週的<strong>夜間滑手機時數</strong>與<strong>翌日專注力自評</strong>之相關性</p>
+                                    <p>方案 B：本校高一段考前後三週的<strong>每日手機使用時數變化</strong></p>
+                                    <p>方案 C：本校高一<strong>段考週滑社群媒體頻率</strong>對<strong>讀書時間</strong>的影響</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="text-[11px] font-mono font-bold text-[#10B981] uppercase mb-1">小華選擇（Step 5）</div>
+                                <div className="bg-[#ECFDF5] border-l-4 border-[#10B981] p-3 rounded-r-[6px]">
+                                    「我選 <strong>方案 A</strong>。因為：<br />
+                                    ① 我真的好奇『睡前滑手機 vs 隔日專注力』這條因果鏈<br />
+                                    ② 兩個變項都能用問卷量化（時數 + 1-5 分自評）<br />
+                                    ③ B 範圍太大、C 我不太關心社群媒體本身。」
+                                </div>
+                            </div>
+
+                            <div className="bg-[var(--ink)]/5 border border-[var(--ink)]/10 rounded-[6px] p-3">
+                                <p className="font-bold text-[12px] text-[var(--ink)] mb-1">🎓 小華示範告訴你三件事：</p>
+                                <ol className="list-decimal pl-5 text-[12px] text-[var(--ink-mid)] leading-[1.85] space-y-0.5">
+                                    <li><strong>自己診斷不要怕錯</strong>——小華只看到 C 沒看到 B，這正常，AI 才能幫上忙</li>
+                                    <li><strong>比對差異是金礦</strong>——「AI 看到、我沒看到」的東西是你的學習點，要寫下來</li>
+                                    <li><strong>選擇要有研究理由</strong>——不是「比較好聽」，是「我真的想知道、做得到、能測量」</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </details>
+
                     {/* Step 1 */}
                     <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">

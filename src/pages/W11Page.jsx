@@ -459,10 +459,41 @@ export const W11Page = () => {
                     <ThinkRecord
                         dataKey="w11-pilot-findings"
                         prompt="Pilot Test 發現（預試者的回饋 + 你自己觀察到的工具卡點）"
-                        placeholder={'例：\n預試者回饋（口頭或書面）：\n1. 第 5 題看不懂「自我效能」是什麼意思\n2. 量表 7 點太多，建議改成 5 點\n3. （無）\n\n我自己觀察到的問題：\n1. 預試者填到一半就分心、滑手機\n2. 開放題沒人想寫\n\n【實驗組專用】架設圖被挑出的漏洞：\n・控制變項漏洞：沒控制施測時段（早上/下午專注度差很多）\n・流程邏輯漏洞：兩組的指導語長度不同'}
-                        scaffold={['預試者回饋（口頭或書面）：3 點', '我自己觀察到的問題：用自己的話，2 點', '【實驗組】架設圖漏洞：控制變項 / 流程邏輯']}
+                        defaultTemplate={'預試者回饋（口頭或書面）：\n1. \n2. \n3. \n\n我自己觀察到的問題（用自己的話）：\n1. \n2. \n\n【實驗組專用】架設圖被挑出的漏洞：\n・控制變項漏洞：\n・流程邏輯漏洞：'}
+                        placeholder="例：1. 第 5 題看不懂「自我效能」"
                         rows={12}
                     />
+
+                    {/* 📸 拍照存證（實體存在性證據 — 反偽造） */}
+                    <div className="bg-[#F0FDF4] border-l-4 border-[#10B981] rounded-r-[var(--radius-unified)] p-4">
+                        <p className="text-[13px] font-bold text-[#065F46] mb-2">📸 拍照存證（Pilot 進行中順手拍）</p>
+                        <p className="text-[12.5px] text-[#047857] leading-relaxed mb-3">
+                            預試進行時拍 <strong>1-2 張照片</strong>——預試者手在填／互模擬訪談的角度即可。這是你「真的做過 Pilot」的證據。
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-2 mb-3">
+                            <div className="bg-white border border-[#10B981]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#065F46] mb-1">✅ 該拍什麼</p>
+                                <ul className="text-[11.5px] text-[#047857] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li>預試者手在<strong>填問卷</strong>的角度</li>
+                                    <li>訪談現場（拍<strong>桌面紀錄本／錄音裝置</strong>，不拍人臉）</li>
+                                    <li>實驗組架設圖被同學標記漏洞的版本</li>
+                                    <li>觀察組試跑的紀錄表正被填寫</li>
+                                    <li>文獻組互閱矩陣的螢幕／紙本</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#DC2626]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#991B1B] mb-1">⚠️ 倫理底線</p>
+                                <ul className="text-[11.5px] text-[#7F1D1D] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li>拍照前<strong>口頭問</strong>「我可以拍嗎？」——對方說不要就不拍</li>
+                                    <li><strong>不要拍正臉</strong>，不要拍到名牌、學號</li>
+                                    <li>照片<strong>只繳給老師</strong>不公開、不傳群組</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p className="text-[11.5px] text-[#065F46] italic leading-relaxed border-t border-[#10B981]/30 pt-2">
+                            💡 老師看的不是照片美感，是<strong>「事件有真的發生」</strong>。Classroom 繳交本週作業時把照片一起上傳。
+                        </p>
+                    </div>
 
                     {/* Pilot 紀錄品質自檢（元認知檢核點） */}
                     <div className="bg-[#F5F3FF] border-l-4 border-[#7C3AED] rounded-r-[var(--radius-unified)] p-4">
@@ -604,22 +635,22 @@ export const W11Page = () => {
                             <ThinkRecord
                                 dataKey="w11-plan-target"
                                 prompt="施測目標與底線"
-                                placeholder={'例：\n目標：收集 80 份有效問卷\n底線（最低可接受）：50 份\n預期日期：W13 結束前'}
-                                scaffold={['目標：收集數量（問卷份數／訪談人次／觀察次數／文獻篇數）', '底線（最低可接受）：…', '預期日期：W___']}
+                                defaultTemplate={'目標：（問卷份數／訪談人次／觀察次數／文獻篇數）\n底線（最低可接受）：\n預期日期：W'}
+                                placeholder="例：80 份有效問卷 / 底線 50 份 / W13 結束前"
                                 rows={5}
                             />
                             <ThinkRecord
                                 dataKey="w11-plan-schedule"
                                 prompt="W12-W13 執行時程"
-                                placeholder={'例：\nW12 前半週：發放問卷給高一兩個班\nW12 後半週：催促未填者 + 整理回收名單\nW13 前半週：補發 + 找補充樣本\nW13 後半週：關帳 + 資料初步清洗'}
-                                scaffold={['W12 前半週：…', 'W12 後半週：…', 'W13 前半週：…', 'W13 後半週：…']}
+                                defaultTemplate={'W12 前半週：\nW12 後半週：\nW13 前半週：\nW13 後半週：'}
+                                placeholder="例：W12 前半週：發放問卷給高一兩個班"
                                 rows={6}
                             />
                             <ThinkRecord
                                 dataKey="w11-plan-backup"
                                 prompt="應急備案（Plan B）"
-                                placeholder={'例：\n如果問卷回收率 < 60% → 我會延長時程一週 + 改由課堂集中發放\n如果某位主要受訪者放鴿子 → 啟動備用受訪者清單，從同樣條件的另外 2 人挑'}
-                                scaffold={['如果 ___ 發生 → 我會 ___', '可以列 1-2 個情境']}
+                                defaultTemplate={'情境 1：\n→ 應變：\n\n情境 2：\n→ 應變：'}
+                                placeholder="例：情境 1：回收率 < 60% → 應變：延長一週 + 改由課堂發放"
                                 rows={5}
                             />
                             <ThinkRecord

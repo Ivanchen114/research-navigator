@@ -30,19 +30,30 @@ import {
  * ══════════════════════════════════════ */
 
 const ASSEMBLY_STEPS = [
-    { num: 1, chapter: '第一章：引言', source: 'W3-W4 學習單', task: '「我為什麼做這個研究」＋「我的研究問題是什麼」', words: '150-200 字', time: '5 min', color: '#2563EB' },
-    { num: 2, chapter: '第二章：文獻探討', source: 'W6 學習單', task: '3 篇以上文獻摘要與比較＋「目前研究的缺口在於…」', words: '250-350 字', time: '5 min', color: '#7C3AED' },
-    { num: 3, chapter: '第三章：研究方法', source: 'W10 學習單', task: '方法名稱、參與者、工具、流程＋知情同意聲明', words: '150-250 字', time: '5 min', color: '#059669' },
-    { num: 4, chapter: '第四章：研究結果', source: 'W14 學習單', task: '2 個主要發現的客觀描述句＋圖表標注位置', words: '200-300 字', time: '10 min', color: '#D97706' },
-    { num: 5, chapter: '第五章：討論與結論', source: 'W14-W15 學習單', task: '主觀推論句＋研究限制＋未來建議', words: '200-300 字', time: '5 min', color: '#DC2626' },
-    { num: 6, chapter: '參考文獻', source: 'W6 文獻清單', task: '直接複製 APA 格式清單，確認格式統一', words: '—', time: '5 min', color: '#6B7280' },
-    { num: 7, chapter: '摘要 (Abstract)', source: '今天用 AI 生成', task: '用 AI 摘要 Prompt 生成初稿，再人工修改', words: '150-200 字', time: '10 min', color: '#0891B2' },
+    { num: 1, chapter: '第一章：引言', source: 'W3-W4 學習單', task: '「我為什麼做這個研究」＋「我的研究問題是什麼」', words: '150-200 字', time: '8 min', color: '#2563EB' },
+    { num: 2, chapter: '第二章：文獻探討', source: 'W6 學習單', task: '3 篇以上文獻摘要與比較＋「目前研究的缺口在於…」', words: '250-350 字', time: '10 min', color: '#7C3AED' },
+    { num: 3, chapter: '第三章：研究方法', source: 'W10 學習單', task: '方法名稱、參與者、工具、流程＋知情同意聲明', words: '150-250 字', time: '8 min', color: '#059669' },
+    { num: 4, chapter: '第四章：研究結果', source: 'W14 學習單', task: '2 個主要發現的客觀描述句＋圖表標注位置', words: '200-300 字', time: '12 min', color: '#D97706' },
+    { num: 5, chapter: '第五章：討論與結論', source: 'W14-W15 學習單', task: '主觀推論句＋研究限制＋未來建議', words: '200-300 字', time: '8 min', color: '#DC2626' },
+    { num: 6, chapter: '參考文獻', source: 'W6 文獻清單', task: '直接複製 APA 格式清單，確認格式統一', words: '—', time: '4 min', color: '#6B7280' },
+    { num: 7, chapter: '摘要 (Abstract)', source: '課後用 AI 生成', task: '⏰ 課堂時間不夠 — 改為課後作業：用 AI 摘要 Prompt 生成初稿，再人工修改', words: '150-200 字', time: '課後', color: '#0891B2' },
 ];
 
+/* ⏰ 時程修正（W16 實測警告）
+ * 舊版估 60-70 分總合，但實測：
+ *   - 找素材 + 處理「W6 文獻沒做完／W14 圖表還沒做」：+10 min
+ *   - AI 等待 + 改寫不滿意 +重貼：+10 min
+ * 結論：第七步（摘要）課堂做不完，改成課後作業；其他六步壓在 50 分內。
+ * 第二節 50 分鐘改用於：縫合 + 健檢 + 海報文案。
+ */
+
 const ROLES = [
-    { name: '搬運工', emoji: '📦', steps: 'Step 1-3', task: '找 W3-W10 學習單，把引言、文獻、方法貼進去', color: '#EFF6FF', border: '#BFDBFE' },
-    { name: '數據官', emoji: '📊', steps: 'Step 4-5', task: '找 W14-W15 的圖表跟描述句，負責貼到正確位置', color: '#FEF3C7', border: '#FDE68A' },
-    { name: 'AI 溝通師', emoji: '🤖', steps: 'Step 6-7', task: '開 AI 工具，負責潤色、摘要、縫合 Prompt', color: '#F0FDF4', border: '#BBF7D0' },
+    { name: '搬運工', emoji: '📦', steps: 'Step 1-3', task: '找 W3-W10 學習單，把引言、文獻、方法貼進去', color: '#EFF6FF', border: '#BFDBFE',
+      parallel: '可以從一開課就動手——不用等其他角色。先把全部素材找齊，後面數據官需要圖表時直接給。' },
+    { name: '數據官', emoji: '📊', steps: 'Step 4-5', task: '找 W14-W15 的圖表跟描述句，負責貼到正確位置', color: '#FEF3C7', border: '#FDE68A',
+      parallel: '與搬運工同步開工——你管圖表跟描述句，搬運工管引言/文獻/方法，互不干擾。寫完 Step 4-5 直接貼進報告對應位置。' },
+    { name: 'AI 溝通師', emoji: '🤖', steps: 'Step 6-7', task: '開 AI 工具，負責潤色、縫合（Step 7 摘要改課後）', color: '#F0FDF4', border: '#BBF7D0',
+      parallel: '不要乾等！前 20 分鐘先把<strong>各章核心句模板</strong>寫好（讀 W3 / W6 / W10 / W14 / W15 抓重點），等搬運工/數據官弄完，AI 摘要 Prompt 就能直接餵。' },
 ];
 
 const POSTER_RULES = [
@@ -252,12 +263,18 @@ const W16Page = () => {
                         </div>
                     </div>
 
-                    {/* 角色分工 */}
+                    {/* 角色分工（並行作業，不要等別人） */}
                     <div className="card" style={{ marginTop: 16 }}>
                         <div className="card-header">
-                            <Users size={16} /> 三人分工（Solo 全包）
+                            <Users size={16} /> 三人分工（並行作業）／Solo 全包
                         </div>
                         <div className="card-body">
+                            {/* ⚡ 並行作業提醒（避免角色依序等待） */}
+                            <div style={{ marginBottom: 12, padding: 10, background: '#FEF3C7', border: '1px solid #D97706', borderRadius: 6, fontSize: 12, color: '#78350F', lineHeight: 1.7 }}>
+                                ⚡ <strong>關鍵原則：三個角色「同時開工」，不要排隊。</strong>
+                                舊版設計（搬運工 → 數據官 → AI 溝通師）會讓後段角色乾等。
+                                新版設計：三人從第一分鐘就動手，後面只用 5 分鐘做縫合。
+                            </div>
                             <div className="w16-role-grid">
                                 {ROLES.map(r => (
                                     <div className="w16-role-card" key={r.name} style={{ background: r.color, borderColor: r.border }}>
@@ -266,7 +283,10 @@ const W16Page = () => {
                                         </div>
                                         <div className="w16-role-body">
                                             <div style={{ fontWeight: 700, marginBottom: 4 }}>{r.steps}</div>
-                                            {r.task}
+                                            <div style={{ marginBottom: 6 }}>{r.task}</div>
+                                            {r.parallel && (
+                                                <div style={{ marginTop: 6, padding: '6px 8px', background: 'rgba(0,0,0,0.04)', borderRadius: 4, fontSize: 11, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: `🟢 並行：${r.parallel}` }} />
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -276,6 +296,12 @@ const W16Page = () => {
                                 prompt="今天我的角色是？（搬運工／數據官／AI 溝通師／Solo 全包）"
                                 scaffold={['搬運工', '數據官', 'AI 溝通師', 'Solo（全包）']}
                             />
+                            {/* ⏰ 時程修正提醒（避免學生以為「課堂內全部做完」） */}
+                            <div style={{ marginTop: 12, padding: 10, background: '#FEE2E2', border: '1px solid #DC2626', borderRadius: 6, fontSize: 12, color: '#7F1D1D', lineHeight: 1.7 }}>
+                                ⏰ <strong>時程實話告訴你：</strong>
+                                Step 1-6 課堂內 50 分鐘做得完。
+                                <strong>Step 7（摘要）改成課後作業</strong>——AI 摘要要等回應、要改寫，課堂硬塞進去會犧牲縫合與健檢的時間。
+                            </div>
                         </div>
                     </div>
                 </div>

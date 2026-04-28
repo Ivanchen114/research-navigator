@@ -528,8 +528,8 @@ export const ProblemFocus = () => {
                             <ThinkRecord
                                 dataKey="w2-aired-record"
                                 prompt="把你的 AI-RED 記錄寫在這裡（用了什麼 AI、問了什麼 Prompt、你的評估）"
-                                placeholder={'例：\nA: 我用了 ChatGPT\nI: 我把白話初稿給它，請它翻譯成 A 型句型\nR: 它給了 3 個版本\nE: 第 2 個太空泛、第 3 個比較具體\nD: 我選第 3 個並改了主詞'}
-                                scaffold={['A: 我用了…', 'I: 我問了…', 'R: AI 給的原文…', 'E: 我的評估…', 'D: 最終我選了…']}
+                                defaultTemplate={'A: \nI: \nR: \nE: \nD: '}
+                                placeholder="例：D: 我選第 3 個版本並改了主詞，因為原版太抽象"
                                 rows={6}
                             />
                         </div>

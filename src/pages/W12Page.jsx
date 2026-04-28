@@ -243,7 +243,7 @@ const W12Page = () => {
                 ]} />
 
             {/* ═══ SCROLLING CONTENT ═══ */}
-            <div className="mx-auto" style={{ maxWidth: 720 }}>
+            <div className="mx-auto prose-zh" style={{ maxWidth: 720 }}>
 
             <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                 <p className="text-[16px] font-bold text-[var(--ink)] mb-2">🏥 今天的教室是「研究診所」</p>
@@ -405,6 +405,39 @@ const W12Page = () => {
                 ))}
             </div>
 
+            {/* 📸 蒐集進度拍照（每次都拍——一張照片＝一次有發生過） */}
+            <div className="mt-6 p-4 rounded-[var(--radius-unified)] border-l-4 border-[#10B981] bg-[#F0FDF4]">
+                <p className="text-[13px] font-bold text-[#065F46] mb-2">📸 蒐集進度拍照（每次蒐集都拍一張）</p>
+                <p className="text-[12.5px] text-[#047857] leading-relaxed mb-3">
+                    <strong>每次發完問卷／訪完一位／觀察一場後，順手拍一張現場照</strong>——這是你「有真的去做」的證據，也讓你自己回頭時對得上累積進度。
+                </p>
+                <div className="grid md:grid-cols-2 gap-2 mb-3">
+                    <div className="bg-white border border-[#10B981]/30 rounded-[6px] p-3">
+                        <p className="text-[12px] font-bold text-[#065F46] mb-1">📋 該拍什麼（選一個就好）</p>
+                        <ul className="text-[11.5px] text-[#047857] leading-[1.7] list-disc pl-4 space-y-0.5">
+                            <li>Google Form <strong>「已寄出 / 累積回應數」</strong>截圖</li>
+                            <li>紙本問卷收回的<strong>一疊照片</strong></li>
+                            <li>訪談筆記本／逐字稿<strong>螢幕</strong></li>
+                            <li>實驗器材或現場<strong>角落照</strong>（避開人臉）</li>
+                            <li>觀察筆記本當下被填寫的<strong>畫面</strong></li>
+                        </ul>
+                    </div>
+                    <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                        <p className="text-[12px] font-bold text-[#075985] mb-1">🗂️ 怎麼整理</p>
+                        <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                            <li>手機相簿開一個 <strong>「W12-W13 蒐集」</strong>相簿</li>
+                            <li>每張照片檔名加日期（手機自動有時間戳）</li>
+                            <li>本週 Classroom 繳交時<strong>一起上傳</strong>所有照片</li>
+                            <li>老師會比對「<strong>累積照片數 vs 累積樣本數</strong>」是否合理</li>
+                        </ul>
+                    </div>
+                </div>
+                <p className="text-[11.5px] text-[#065F46] italic leading-relaxed border-t border-[#10B981]/30 pt-2">
+                    ⚠️ 倫理底線：拍照前先口頭問「我可以拍嗎？」、不拍正臉、不拍學號名牌。照片只給老師看，不公開不傳群組。<br />
+                    💡 為什麼要拍？因為「拍照存證」是<strong>研究做得真的</strong>最低成本的證明——比寫一千字日誌都有效。
+                </p>
+            </div>
+
             {/* ═══ 分隔線：下方為繳交區 ═══ */}
             <div className="mt-10 mb-6 flex items-center gap-3">
                 <div className="flex-1 h-px bg-[var(--border)]" />
@@ -471,8 +504,8 @@ const W12Page = () => {
                 <ThinkRecord
                     dataKey="w12-pivot-record"
                     prompt="我這週發現了什麼跟原計畫不一樣的事？我打算怎麼調整？"
-                    placeholder={'例：\n我發現：本來預計 80 份問卷，三天只回收 12 份\n我的判斷：班級信任度不夠，學生覺得這份問卷跟自己無關\n我打算：A 縮減目標到 50 份 + 改用「課堂 5 分鐘集中發放」（這個發現會寫進第三章「研究方法限制」）'}
-                    scaffold={['我發現：什麼不如預期', '我的判斷：這代表什麼', '我打算：A 縮減目標 / B 改方法 / C 改題目 / D 把這個變成新發現']}
+                    defaultTemplate={'我發現：\n我的判斷：\n我打算：（A 縮減目標 / B 改方法 / C 改題目 / D 把這個變成新發現）'}
+                    placeholder="例：我發現本來預計 80 份問卷三天只回收 12 份"
                 />
             </div>
 

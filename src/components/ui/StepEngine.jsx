@@ -22,6 +22,14 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
   const isFirst = current === 0;
   const isLast = current === total - 1;
 
+  // 從 to (例 "/w3") 提取簡短週標籤 (例 "W3")，給手機顯示用
+  const extractShortLabel = (to) => {
+    if (!to) return '';
+    const m = String(to).match(/^\/?(w\d+|dossier|home|games?|portfolio)/i);
+    if (!m) return '';
+    return m[1].toUpperCase();
+  };
+
   const goTo = useCallback((idx) => {
     if (idx >= 0 && idx < total) {
       setCurrent(idx);
@@ -95,8 +103,11 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
           <Link
             to={prevWeek.to}
             className="flex items-center gap-1 px-3 py-2 text-[13px] font-mono text-[var(--ink-light)] hover:text-[var(--ink)] transition-colors"
+            title={prevWeek.label}
           >
-            <ChevronLeft size={14} /> {prevWeek.label}
+            <ChevronLeft size={14} />
+            <span className="hidden sm:inline">{prevWeek.label}</span>
+            <span className="sm:hidden">{extractShortLabel(prevWeek.to) || '上週'}</span>
           </Link>
         ) : (
           <button
@@ -133,8 +144,11 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
           <Link
             to={nextWeek.to}
             className="flex items-center gap-2 px-5 py-3 bg-[var(--accent)] text-white text-[13px] font-bold rounded-[8px] hover:brightness-110 transition-all group shadow-md shadow-[var(--accent)]/20"
+            title={nextWeek.label}
           >
-            {nextWeek.label} <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <span className="hidden sm:inline">{nextWeek.label}</span>
+            <span className="sm:hidden">前往 {extractShortLabel(nextWeek.to) || '下週'}</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         ) : (
           <button

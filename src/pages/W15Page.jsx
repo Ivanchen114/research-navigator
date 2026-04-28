@@ -370,6 +370,34 @@ const W15Page = () => {
                             <p className="mt-2 font-bold">沒有完成個資清除就把資料貼給 AI，就是違反你對受訪者的承諾。</p>
                         </div>
                     </div>
+                    {/* 🚦 三層紅線判斷卡（AI 改稿前先讀） */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
+                        <p className="text-[13px] font-bold text-[#991B1B] mb-2">🚦 AI 改稿時——哪些可採納、哪些是紅線（看 prompt 前先讀）</p>
+                        <p className="text-[11.5px] text-[#7F1D1D] leading-relaxed mb-3">
+                            AI 會把建議混在一起送回來，你必須<strong>逐條判斷</strong>。三層各有自己的紅線。
+                        </p>
+                        <div className="grid md:grid-cols-3 gap-2">
+                            <div className="bg-white border border-[#2563EB] rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#1E40AF] mb-1">🔵 描述層（事實）</p>
+                                <p className="text-[11px] text-[#1E3A8A] leading-[1.7] mb-1"><strong>✅ 可採納：</strong>數字錯誤、量詞不精準（「許多」→「62%」）、時態一致</p>
+                                <p className="text-[11px] text-[#991B1B] leading-[1.7]"><strong>❌ 紅線：</strong>AI 加「因為／所以／導致」這些因果詞——那是詮釋層的事，描述層不能有</p>
+                            </div>
+                            <div className="bg-white border border-[#7C3AED] rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#5B21B6] mb-1">🟣 詮釋層（推論）</p>
+                                <p className="text-[11px] text-[#4C1D95] leading-[1.7] mb-1"><strong>✅ 可採納：</strong>補你沒想到的合理解釋、提醒「相關 ≠ 因果」</p>
+                                <p className="text-[11px] text-[#991B1B] leading-[1.7]"><strong>❌ 紅線：</strong>AI 用<strong>你問卷沒問過的變項</strong>當原因（例：你沒問升學壓力，AI 卻寫「因為升學壓力」）——拒絕</p>
+                            </div>
+                            <div className="bg-white border border-[#DC2626] rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#991B1B] mb-1">🔴 回扣層（核心）</p>
+                                <p className="text-[11px] text-[#7F1D1D] leading-[1.7] mb-1"><strong>✅ 可採納：</strong>句子變通順、用詞更學術（「我發現」→「本研究發現」）</p>
+                                <p className="text-[11px] text-[#991B1B] leading-[1.7]"><strong>❌ 紅線：</strong>AI 改了<strong>你的研究問題答案</strong>、加了你沒做的限制、改了結論強度（「有相關」→「有顯著相關」）——這是研究的靈魂，不能讓 AI 動</p>
+                            </div>
+                        </div>
+                        <p className="text-[11px] text-[#991B1B] italic leading-relaxed mt-2">
+                            💡 紅線判斷法：問自己「<strong>這條建議是『換更好聽的說法』還是『換內容』？</strong>」換內容＝拒絕。
+                        </p>
+                    </div>
+
                     <div>
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🗂️ 選擇你的研究方法，取得對應的 Prompt</p>
                         <MethodSelector />

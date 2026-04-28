@@ -57,7 +57,21 @@
   margin-top: 1.75em;
   margin-bottom: 0.5em;
 }
-.prose-zh strong { color: var(--ink); font-weight: 700; }
+/* 標題層級統一：避免各頁面各自用 inline 字級造成跳躍。
+ * 桌機：h2=22px / h3=18px / h4=15px；手機：h2=20px / h3=16px / h4=14px。
+ * inline 樣式（如 HeroBlock 內）會優先，這裡只設 prose-zh 區塊內的 fallback 字級。 */
+.prose-zh h2 { font-size: 22px; font-weight: 700; }
+.prose-zh h3 { font-size: 18px; font-weight: 700; }
+.prose-zh h4 { font-size: 15px; font-weight: 700; }
+@media (max-width: 640px) {
+  .prose-zh h2 { font-size: 20px; }
+  .prose-zh h3 { font-size: 16px; }
+  .prose-zh h4 { font-size: 14px; }
+}
+/* strong 顏色繼承父層——黑底卡片才不會看不見。
+ * 原本是 color: var(--ink)，會強制塗深色，導致 bg-[var(--ink)] 黑卡上的 strong 隱形。
+ * 改成 inherit 後：白底父層 → strong 仍是父層繼承的深色（行為不變）；黑底父層 text-white → strong 自動白色。 */
+.prose-zh strong { color: inherit; font-weight: 700; }
 .prose-zh ul, .prose-zh ol { padding-left: 1.25em; }
 .prose-zh li + li { margin-top: 0.4em; }
 

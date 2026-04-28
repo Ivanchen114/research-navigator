@@ -435,18 +435,36 @@ const ASSEMBLY_AI_PROMPTS = {
 const PLAN_CH1_CHECK_PROMPT = `【建議使用 AI 的「深度思考／推理模式」】
 （Gemini 的 Thinking 模式、ChatGPT 的 o1 或 Pro、Claude 的 Extended Thinking 等——請選你慣用 AI 的深度推理版本。一般對話模式回答太淺，這份檢核值得等它多想幾分鐘。）
 
-你是高中專題指導顧問。以下是我計畫書第一到第五章的內容。請深入檢查以下六件事，找出我自己看不到的盲點：
+你是高中專題指導顧問。以下是我五章計畫書的內容——請注意：學生在 W9 課堂剛寫完雛形，「不是每章都到完成度」。我會在開頭告訴你**每章目前的進度階段**，請就「該階段該有的品質」做檢核，不要對草稿用定版的標準苛責。
+
+【我目前的進度自評】（請學生填完再貼進來）
+- 第一章（題目／動機／問題）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第二章（文獻探討）：□ 方向 / □ 雛形 / □ 精修 / □ 定版（文獻數量：___ 篇；W8 合題後可能需重查）
+- 第三章（研究方法）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第四章（變項／主題／維度）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+- 第五章（研究對象／抽樣）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+
+【四階段定義 — AI 請依此校準回饋深度】
+- 方向：只有概念句，還沒展開 → 你只檢「方向對不對」，給「該補什麼」清單，不要挑語法
+- 雛形：段落寫出來但粗糙 → 你檢「結構＋邏輯一致」，指出明顯漏洞，不要挑用詞
+- 精修：內容完整但要打磨 → 你檢「精度＋論證強度」，這時可以挑用詞與引用
+- 定版：要繳交了 → 你做最後一輪挑刺，找任何不一致
+
+【請深入檢查以下六件事，依各章進度給對應深度的回饋】
 
 1. 【方向】研究動機是否能支撐研究問題？（若落差大，指出在哪）
 2. 【一致】研究目的與主研究問題是否邏輯一致？子問題是否都對應主問題？
 3. 【定義】第二章的關鍵詞操作定義，是否足以讓第六章的工具「測得到」那個概念？（若定義太抽象會讓後續工具設計失準）
 4. 【文獻】第三章的文獻是否真的支持（或挑戰）我的研究問題？還是只是有關鍵字相關？
+   ※ 若我標註「W8 合題後文獻待重查」——請只就「目前文獻方向」給建議，並列出我合題後該補的「3 個關鍵字組合」幫我課後分頭找。
 5. 【變項／主題】第四章的變項／主題／維度，是否每一個都能對應到研究問題的某個子問題？有沒有遺漏或多餘？
 6. 【對象】第五章的對象與抽樣，是否能真正回答研究問題？樣本數／招募方式合理嗎？
 
-不用替我修改，只要指出問題點與建議修改方向。
+【回應格式】
+請依「① 進度判讀（你看到我各章是哪個階段）→ ② 各章主要盲點（依進度深度給）→ ③ 課後優先補完清單（哪三件事最該先做）」三段回。
+不用替我修改，只要指出問題點與建議方向。
 
-【以下貼上你的計畫書第 1-5 章內容】`;
+【以下貼上你的計畫書第 1-5 章內容（即使是草稿、半成品都貼，並在每章開頭標註自己的進度階段）】`;
 
 const PLAN_AI_PROMPTS = {
     questionnaire: PLAN_CH1_CHECK_PROMPT,
@@ -476,8 +494,8 @@ const W9AiCheckPromptBox = () => {
     }, []);
     return (
         <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-            <div className="px-5 py-3 bg-[var(--ink)] text-white flex items-center justify-between gap-3">
-                <span className="font-mono text-[11px] uppercase tracking-wider">AI 檢核 Prompt · 點右邊複製</span>
+            <div className="px-5 py-3 bg-[var(--ink)] flex items-center justify-between gap-3" style={{ color: '#fff' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fff' }}>AI 檢核 Prompt · 點右邊複製</span>
                 <button
                     onClick={handleCopy}
                     className="text-[12px] font-bold bg-white text-[var(--ink)] px-3 py-1 rounded hover:bg-[var(--paper-warm)] transition-colors flex-shrink-0"
@@ -496,7 +514,7 @@ const EXPORT_FIELDS = [
     /* Step 1：W8 老師回饋快速讀取 */
     { key: 'w9-w8-feedback-quick', label: 'W8 老師建議（快速摘要）', question: '第一節看過老師回饋後記的一兩句' },
     /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
-    { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-3 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
+    { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-5 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
     { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 AI 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
     /* Step 4：回顧與繳交 */
@@ -923,7 +941,77 @@ export const W9Page = () => {
                         第一節學了<strong className="text-[var(--ink)]">診斷尺</strong>（三大標準）與<strong className="text-[var(--ink)]">檢查清單</strong>（錯誤類型）——那是「診斷」。第二節回到<strong className="text-[var(--ink)]">實作</strong>：把 W2–W8 寫過的東西整合進研究計畫書。
                     </p>
                     <div className="w7-notice w7-notice-gold">
-                        🎯 <strong>本節目標：完成計畫書第一章（研究主題基本資訊）</strong>——W8 老師給的建議就在這一章修。第二章以後課後繼續，W10 定稿。
+                        🎯 <strong>本節目標：完成計畫書第 1-5 章雛形</strong>（五章地基工程）——把 W2-W8 寫過的東西整合進來，W8 老師回饋同步修進去。第六章以後留到 W10 做工具設計。
+                    </div>
+
+                    {/* 🤝 小組分章工作流（避免全組擠在第一章、解決時間不夠的真實問題） */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF] max-w-[720px]">
+                        <p className="text-[14px] font-bold text-[#075985] mb-2">🤝 50 分鐘要寫五章——分章工作流（不要全組擠著寫第一章）</p>
+                        <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed mb-3">
+                            每章寫到「<strong>雛形</strong>」就 OK——能看出方向、邏輯通順但還粗糙。<strong>不用追求完美</strong>，下節 W10 還會再修一輪。
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-2 mb-3">
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">1 人組（Solo）</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li>第 1、3 章先寫到雛形（最關鍵）</li>
+                                    <li>第 2、4、5 章列大綱</li>
+                                    <li>下節 W10 前找老師個別對焦</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">2 人組</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li>A：第 1-3 章（題目／文獻／方法）</li>
+                                    <li>B：第 4-5 章（變項／對象） + 統整</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">3 人組</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li>A：第 1-2 章（題目 + 文獻）</li>
+                                    <li>B：第 3-4 章（方法 + 變項）</li>
+                                    <li>C：第 5 章 + 統整／同步檢查邏輯一致</li>
+                                </ul>
+                            </div>
+                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
+                                <p className="text-[12px] font-bold text-[#075985] mb-1">4 人組</p>
+                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                    <li>A：第 1 章（題目／動機／問題）</li>
+                                    <li>B：第 2 章（文獻探討）</li>
+                                    <li>C：第 3-4 章（方法 + 變項）</li>
+                                    <li>D：第 5 章 + 統整／跨章邏輯檢查</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mt-2 pt-2 border-t border-[#0EA5E9]/30">
+                            ⏱️ <strong>時間建議</strong>：前 5 分鐘分工 + 對齊整體方向 → 各自寫 30 分鐘 → 最後 10 分鐘互讀統整。
+                        </p>
+                    </div>
+
+                    {/* 📚 文獻策略卡（承認 W8 合題後 W5/W6 文獻可能失效） */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#D97706] bg-[#FEF3C7] max-w-[720px]">
+                        <p className="text-[14px] font-bold text-[#92400E] mb-2">📚 第二章文獻怎麼處理？（W8 合題後 W5/W6 找的文獻可能要重查）</p>
+                        <p className="text-[12.5px] text-[#78350F] leading-relaxed mb-3">
+                            如果你 W8 合題後題目跟原本差很多，W5/W6 找的文獻就**對不上新題目**了。這是合理現象——但<strong>課堂時間 50 分鐘塞不下「重新查文獻」</strong>。
+                        </p>
+                        <div className="bg-white border border-[#D97706]/30 rounded-[6px] p-3 mb-2">
+                            <p className="text-[12px] font-bold text-[#92400E] mb-1">⏱️ 課堂內怎麼辦？</p>
+                            <ul className="text-[11.5px] text-[#78350F] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                <li>用 W5/W6 既有文獻先寫第二章「方向骨架」（哪怕只 1 篇也行）</li>
+                                <li>不夠的部分標註「待補」<strong>不要硬擠時間查</strong></li>
+                                <li>進度自評勾「方向」或「雛形」即可，AI 檢核會給對應深度的回饋</li>
+                            </ul>
+                        </div>
+                        <div className="bg-white border border-[#D97706]/30 rounded-[6px] p-3">
+                            <p className="text-[12px] font-bold text-[#92400E] mb-1">🏠 課後分工查文獻（W10 前完成）</p>
+                            <ul className="text-[11.5px] text-[#78350F] leading-[1.7] list-disc pl-4 space-y-0.5">
+                                <li><strong>3 人組</strong>：每人查 1 篇符合新題目的 A/B 級文獻 → 共 3 篇</li>
+                                <li><strong>2 人組</strong>：每人查 1-2 篇 → 共 2-4 篇</li>
+                                <li><strong>Solo</strong>：自己查 2 篇 + 帶到下次老師對焦</li>
+                                <li>關鍵字參考 AI 檢核回覆裡會給的「3 個搜尋組合」（在 Prompt 第 4 條已要求 AI 列）</li>
+                            </ul>
+                        </div>
                     </div>
 
                     {/* W8 素材狀態：有寫顯示唯讀，沒寫顯示戰情警示 */}
@@ -1092,22 +1180,22 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* AI 檢核（必做）· AI 思考模式審第 1-5 章 */}
+                    {/* AI 檢核（必做）· AI 思考模式審第 1-5 章（黑底用 inline style 強制白字，避免 prose-zh cascade） */}
                     <div className="space-y-4">
-                        <div className="bg-[var(--ink)] text-white rounded-[var(--radius-unified)] overflow-hidden">
-                            <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2">
-                                <span className="text-[11px] font-mono font-bold tracking-[0.12em] uppercase">AI 檢核 · 必做</span>
-                                <span className="font-bold text-[14px] ml-1">🤖 用 AI 思考模式檢核第 1-5 章</span>
+                        <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] overflow-hidden" style={{ color: '#fff' }}>
+                            <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2" style={{ color: '#fff' }}>
+                                <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff' }}>AI 檢核 · 必做</span>
+                                <span style={{ fontWeight: 700, fontSize: 14, marginLeft: 4, color: '#fff' }}>🤖 用 AI 思考模式檢核第 1-5 章</span>
                             </div>
-                            <div className="p-5 space-y-3">
-                                <p className="text-[13px] text-white/90 leading-[1.9]">
-                                    本節結束前複製下方 Prompt，回家貼進<strong className="text-white">你慣用的 AI（開啟深度思考／推理模式）</strong>。把 docx 第 1-5 章內容填進 Prompt 的【___】位置後送出。AI 會深入找出你自己看不到的盲點。
+                            <div className="p-5" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.9)' }}>
+                                    本節結束前複製下方 Prompt，回家貼進<strong style={{ color: '#fff', fontWeight: 700 }}>你慣用的 AI（開啟深度思考／推理模式）</strong>。把 docx 第 1-5 章內容填進 Prompt 的【___】位置後送出。AI 會深入找出你自己看不到的盲點。
                                 </p>
-                                <p className="text-[12px] text-white/70 leading-[1.9]">
-                                    💡 <strong>為什麼要用思考模式？</strong>深度推理模式會花更多時間檢核，揪出一般對話抓不到的邏輯盲點——地基工程一次定勝負，值得等它多想幾分鐘。
+                                <p style={{ fontSize: 12, lineHeight: 1.9, color: 'rgba(255,255,255,0.7)' }}>
+                                    💡 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>為什麼要用思考模式？</strong>深度推理模式會花更多時間檢核，揪出一般對話抓不到的邏輯盲點——地基工程一次定勝負，值得等它多想幾分鐘。
                                 </p>
-                                <p className="text-[12px] text-white/70 leading-[1.9]">
-                                    📝 <strong>流程：</strong>複製 Prompt → 回家貼入計畫書內容 → 等 AI 思考完成 → 讀回覆後在下方記錄判斷 → 補完 AIRED 的 R 欄位。
+                                <p style={{ fontSize: 12, lineHeight: 1.9, color: 'rgba(255,255,255,0.7)' }}>
+                                    📝 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>流程：</strong>複製 Prompt → 回家貼入計畫書內容 → 等 AI 思考完成 → 讀回覆後在下方記錄判斷 → 補完 AIRED 的 R 欄位。
                                 </p>
                             </div>
                         </div>
@@ -1119,8 +1207,8 @@ export const W9Page = () => {
                         <ThinkRecord
                             dataKey="w9-plan-ai-check"
                             prompt="AI 檢核後的判斷紀錄（課後 AI 跑完後補）"
-                            placeholder={'例：\nAI 指出的主要問題（至少 3 點）：\n1. 變項 X 操作型定義模糊\n2. 抽樣只抓兩班，外部效度不足\n3. 第三章未說明信效度\n\n我的決定：\n・採納：第 1、3 點（理由：本來就是模糊 + 漏寫）\n・不採納：第 2 點（理由：抽樣已是學期極限）\n・部分採納：（無）'}
-                            scaffold={['AI 指出的主要問題（至少 3 點）', '我的決定：採納 / 不採納 / 部分採納', '每項都要寫理由']}
+                            defaultTemplate={'AI 指出的主要問題：\n1. \n2. \n3. \n\n我的決定：\n・採納：\n・不採納：\n・部分採納：\n（每項記得寫理由）'}
+                            placeholder="例：採納第 1、3 點因為本來就漏寫；不採納第 2 點因為抽樣已是學期極限"
                             rows={10}
                         />
 
@@ -1171,8 +1259,8 @@ export const W9Page = () => {
                             {[
                                 '學會三大標準判斷工具品質（方向 / 精度 / 執行）',
                                 '辨識錯誤類型（誘導性、雙重問題、假開放）',
-                                '完成計畫書第一章（研究主題、動機、問題、對象）',
-                                '整合 W8 老師建議到第一章',
+                                '完成計畫書第 1-5 章雛形（五章地基工程）',
+                                '整合 W8 老師建議到對應章節',
                                 '規劃好 W9 → W10 計畫書撰寫時程',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
@@ -1190,35 +1278,35 @@ export const W9Page = () => {
                         choices={choiceResults}
                     />
 
-                    {/* 5. 遊戲彩蛋 */}
-                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
-                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                    {/* 5. 遊戲彩蛋（黑底用 inline style 確保白字勝過 prose-zh cascade） */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg shadow-xl" style={{ color: '#fff' }}>
+                        <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8, color: '#fff' }}>
                             <ShieldAlert className="text-[var(--danger)]" size={20} />
                             R.I.B. 單元挑戰：行動代號防線
                         </h3>
-                        <p className="text-[var(--ink-light)] text-sm mb-4">
+                        <p style={{ fontSize: 14, marginBottom: 16, color: 'rgba(255,255,255,0.85)' }}>
                             10 個充滿致命設計缺陷的研究病例。揪出錯誤並開立正確處方，確保研究方法無懈可擊。
                         </p>
-                        <Link to="/game/rx-inspector" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
+                        <Link to="/game/rx-inspector" className="inline-flex items-center gap-2 bg-[var(--danger)] px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors" style={{ color: '#fff' }}>
                             進入防線 <ArrowRight size={14} />
                         </Link>
                     </div>
 
-                    {/* 6. W10 預告 + 輕量課後提示 */}
-                    <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6 text-white">
-                        <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-2">W10 會做什麼</div>
-                        <p className="text-[13px] leading-[1.9] mb-4">
-                            第一節：<strong className="text-white">工具設計（第六章）</strong>——問卷題目／訪綱／實驗流程／觀察紀錄表／比較矩陣，依你方法分流。<br />
-                            第二節：<strong className="text-white">整本計畫書 AI 檢核 → 定稿繳交</strong>。
+                    {/* 6. W10 預告 + 輕量課後提示（黑底要 inline style 強制白字，避免 prose-zh cascade 把 strong 變回深色） */}
+                    <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6" style={{ color: '#fff' }}>
+                        <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, color: '#fff' }}>W10 會做什麼</div>
+                        <p style={{ fontSize: 13, lineHeight: 1.9, marginBottom: 16, color: '#fff' }}>
+                            第一節：<strong style={{ color: '#fff', fontWeight: 700 }}>工具設計（第六章）</strong>——問卷題目／訪綱／實驗流程／觀察紀錄表／比較矩陣，依你方法分流。<br />
+                            第二節：<strong style={{ color: '#fff', fontWeight: 700 }}>整本計畫書 AI 檢核 → 定稿繳交</strong>。
                         </p>
-                        <div className="text-[11px] font-mono opacity-70 uppercase tracking-wider mb-2">W10 之前的輕量任務</div>
-                        <ul className="text-[13px] leading-[1.9] space-y-1 list-disc pl-5 mb-4">
+                        <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, color: '#fff' }}>W10 之前的輕量任務</div>
+                        <ul style={{ fontSize: 13, lineHeight: 1.9, listStyle: 'disc', paddingLeft: 20, marginBottom: 16, color: '#fff' }}>
                             <li>第三章文獻補到 2-3 篇 + 差異段</li>
                             <li>第四章變項／主題／維度定版 + 操作定義</li>
                             <li>跑 AI 思考模式檢核第 1-5 章（用上方複製的 Prompt）→ 補完 AIRED 的 R 欄位</li>
                             <li>docx 上傳 Google Classroom</li>
                         </ul>
-                        <p className="text-[12px] text-white/70 leading-[1.85]">
+                        <p style={{ fontSize: 12, lineHeight: 1.85, color: 'rgba(255,255,255,0.7)' }}>
                             💡 大部分已在課堂完成，課後只是「補細節 + 跑 AI + 繳交」。若要幫自己規劃具體時間，下方可以寫。
                         </p>
                     </div>
@@ -1235,8 +1323,8 @@ export const W9Page = () => {
                         <ThinkRecord
                             dataKey="w9-homework-commitment"
                             prompt="我打算什麼時候把課後三件事做完？"
-                            placeholder={'例：\n補第三、四章：週四晚 8-10 點，自己房間\n跑 AI 檢核 + 補 AIRED：週五午休，圖書館\n上傳 docx 到 GC：週日晚上 9 點前'}
-                            scaffold={['補第三、四章：日期 + 時段 + 地點', '跑 AI 檢核 + 補 AIRED：…', '上傳 docx 到 GC：…']}
+                            defaultTemplate={'補第三、四章：\n跑 AI 檢核 + 補 AIRED：\n上傳 docx 到 GC：'}
+                            placeholder="例：週四晚 8-10 點，自己房間"
                             rows={4}
                         />
                     </div>

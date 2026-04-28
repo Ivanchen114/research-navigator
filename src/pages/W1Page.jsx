@@ -286,7 +286,7 @@ export const W1Page = () => {
                             </div>
 
                             {/* AI-RED 五格 */}
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-[var(--border)] border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-[1px] bg-[var(--border)] border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                                 {AIRED_STEPS.map(step => (
                                     <div key={step.letter} className="p-4 bg-white">
                                         <div className="text-[22px] font-bold font-mono mb-1 text-[var(--accent)]">{step.letter}</div>

@@ -551,8 +551,8 @@ export const TeamFormation = () => {
                     <ThinkRecord
                         dataKey="w8-teammates"
                         prompt="隊友姓名 & 題目"
-                        placeholder={'例：\n隊友 1：王小明，題目：手機使用對睡眠的影響\n隊友 2：李大華，題目：高中生熬夜時數與成績的關係\n隊友 3：（若無就留空）'}
-                        scaffold={['隊友 1：姓名，題目', '隊友 2：姓名，題目（若有）', '隊友 3：姓名，題目（若有）']}
+                        defaultTemplate={'隊友 1：\n題目：\n\n隊友 2：\n題目：\n\n隊友 3：（若無就留空）\n題目：'}
+                        placeholder="例：王小明 / 高中生熬夜時數與成績的關係"
                         rows={4}
                     />
 

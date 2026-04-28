@@ -24,22 +24,22 @@ export const Discovery = () => {
     return (
         <div className="page-container animate-in-fade-slide">
 
-            {/* TOP BAR */}
-            <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
-                <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / <span className="text-[#1a1a2e] font-bold">前導課程 W0</span>
+            {/* TOP BAR — 對齊全站標準（var(--*) 取代 hardcoded color） */}
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
+                <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
+                    <span className="hidden md:inline">研究方法與專題 / 前導 / </span><span className="text-[var(--ink)] font-bold">偵探特訓班 W0</span>
                 </div>
-                <div className="flex items-center gap-4">
-                    <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
                 </div>
             </div>
 
             {/* HEADER */}
-            <div className="text-[11px] font-mono text-[#2d5be3] mb-3 tracking-wider">🕵️ W0 · 前導課程</div>
-            <h1 className="font-serif text-4xl font-bold leading-tight text-[#1a1a2e] mb-2 tracking-tight">
-                偵探特訓班：<span className="text-[#2d5be3] italic not-serif">The Detective Camp</span>
+            <div className="text-[11px] font-mono text-[var(--accent)] mb-3 tracking-wider">🕵️ W0 · 前導課程</div>
+            <h1 className="font-serif text-4xl font-bold leading-tight text-[var(--ink)] mb-2 tracking-tight">
+                偵探特訓班：<span className="text-[var(--accent)] italic not-serif">The Detective Camp</span>
             </h1>
-            <p className="text-[15px] text-[#4a4a6a] leading-relaxed mb-8 max-w-[600px]">
+            <p className="text-[15px] text-[var(--ink-mid)] leading-relaxed mb-8 max-w-[600px]">
                 研究不是死讀書，研究是現場辦案。今天你不是學生，你是偵探——三個試煉，三把劍，找出真相。
             </p>
 
