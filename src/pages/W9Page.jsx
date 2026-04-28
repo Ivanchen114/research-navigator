@@ -437,12 +437,12 @@ const PLAN_CH1_CHECK_PROMPT = `【建議使用 AI 的「深度思考／推理模
 
 你是高中專題指導顧問。以下是我五章計畫書的內容——請注意：學生在 W9 課堂剛寫完雛形，「不是每章都到完成度」。我會在開頭告訴你**每章目前的進度階段**，請就「該階段該有的品質」做檢核，不要對草稿用定版的標準苛責。
 
-【我目前的進度自評】（請學生填完再貼進來）
-- 第一章（題目／動機／問題）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
-- 第二章（文獻探討）：□ 方向 / □ 雛形 / □ 精修 / □ 定版（文獻數量：___ 篇；W8 合題後可能需重查）
-- 第三章（研究方法）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
-- 第四章（變項／主題／維度）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
-- 第五章（研究對象／抽樣）：□ 方向 / □ 雛形 / □ 精修 / □ 定版
+【我目前的進度自評】（請學生填完再貼進來；每章從「方向／雛形／精修／定版」擇一填入）
+- 第一章（題目／動機／問題）：___
+- 第二章（文獻探討）：___（文獻數量：___ 篇；W8 合題後可能需重查）
+- 第三章（研究方法）：___
+- 第四章（變項／主題／維度）：___
+- 第五章（研究對象／抽樣）：___
 
 【四階段定義 — AI 請依此校準回饋深度】
 - 方向：只有概念句，還沒展開 → 你只檢「方向對不對」，給「該補什麼」清單，不要挑語法
@@ -1063,11 +1063,11 @@ export const W9Page = () => {
                         </div>
                     )}
 
-                    {/* 你的計畫書模板 */}
+                    {/* 5 種計畫書模板：自己的粗藍框，其他作「也認識一下」 */}
                     <div>
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">你的計畫書模板</h4>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
-                            老師會透過 <strong>Google Classroom</strong> 發你這份 docx 的 Google Docs 副本。對照你的研究方法確認一下：
+                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">5 種研究方法的計畫書模板</h4>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            老師會在 <strong>Google Classroom</strong> 發你<strong className="text-[var(--ink)]">自己方法</strong>的 docx 副本（粗藍框那份）。但這是研究方法課——下方 5 種都列出，<strong className="text-[var(--ink)]">看別組用什麼模板，是這節該做的事</strong>。手動切換可點下方按鈕變更主框。
                         </p>
                         <div className="flex flex-wrap gap-2 mb-4">
                             {METHOD_OPTIONS.map((m) => (
@@ -1084,28 +1084,43 @@ export const W9Page = () => {
                                 </button>
                             ))}
                         </div>
-                        {selectedMethod ? (
-                            (() => {
-                                const planInfo = {
-                                    questionnaire: { filename: '問卷研究法_計畫書第二版.docx', brief: '量化研究；核心是「變項 → 問卷題目」。第二章起要定變項、做題目設計。' },
-                                    interview: { filename: '訪談研究法_計畫書第二版.docx', brief: '質性研究；核心是「訪談主題框架」。第二章起要拆主題、設計訪綱。' },
-                                    experiment: { filename: '實驗研究法_計畫書第二版.docx', brief: '量化研究；核心是「自變項/依變項/控制變項」。第二章起要定變項、設計實驗流程。' },
-                                    observation: { filename: '觀察研究法_計畫書第二版.docx', brief: '核心是「行為操作型定義」。第二章起要把抽象行為定義到別人可重複觀察。' },
-                                    literature: { filename: '文獻分析法_計畫書第二版.docx', brief: '文獻本身就是對象。第二章起要定搜尋關鍵字組、納入排除準則。' },
-                                }[selectedMethod];
-                                return (
-                                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">你的計畫書</span>
-                                            <span className="font-bold text-[14px] text-[var(--ink)]">{planInfo.filename}</span>
-                                        </div>
-                                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">{planInfo.brief}</p>
-                                    </div>
-                                );
-                            })()
-                        ) : (
-                            <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[12.5px] text-[var(--ink-light)]">
-                                👆 請先選擇你的研究方法（正常從 W8 帶入；若沒帶入請手動點選）。
+                        {(() => {
+                            const ALL_PLANS = [
+                                { id: 'questionnaire', filename: '問卷研究法_計畫書第二版.docx', brief: '量化研究；核心是「變項 → 問卷題目」。第二章起要定變項、做題目設計。' },
+                                { id: 'interview',     filename: '訪談研究法_計畫書第二版.docx', brief: '質性研究；核心是「訪談主題框架」。第二章起要拆主題、設計訪綱。' },
+                                { id: 'experiment',    filename: '實驗研究法_計畫書第二版.docx', brief: '量化研究；核心是「自變項/依變項/控制變項」。第二章起要定變項、設計實驗流程。' },
+                                { id: 'observation',   filename: '觀察研究法_計畫書第二版.docx', brief: '核心是「行為操作型定義」。第二章起要把抽象行為定義到別人可重複觀察。' },
+                                { id: 'literature',    filename: '文獻分析法_計畫書第二版.docx', brief: '文獻本身就是對象。第二章起要定搜尋關鍵字組、納入排除準則。' },
+                            ];
+                            return (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    {ALL_PLANS.map((p) => {
+                                        const isMine = p.id === selectedMethod;
+                                        return (
+                                            <div
+                                                key={p.id}
+                                                className={
+                                                    isMine
+                                                        ? 'bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-4 md:col-span-2'
+                                                        : 'bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 opacity-80'
+                                                }
+                                            >
+                                                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                                                    {isMine && (
+                                                        <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">你的計畫書</span>
+                                                    )}
+                                                    <span className={isMine ? 'font-bold text-[14px] text-[var(--ink)]' : 'font-bold text-[12.5px] text-[var(--ink-mid)]'}>{p.filename}</span>
+                                                </div>
+                                                <p className={isMine ? 'text-[12.5px] text-[var(--ink-mid)] leading-relaxed' : 'text-[11.5px] text-[var(--ink-light)] leading-[1.6]'}>{p.brief}</p>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })()}
+                        {!selectedMethod && (
+                            <div className="mt-3 bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[12px] text-[var(--ink-light)]">
+                                👆 還沒選方法？先看 5 種計畫書長什麼樣，再點上方按鈕選自己的。
                             </div>
                         )}
                     </div>

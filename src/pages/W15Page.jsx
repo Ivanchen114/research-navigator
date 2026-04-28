@@ -296,9 +296,21 @@ const W15Page = () => {
                                     「本研究原本想了解<u>背景音樂是否影響記憶力測驗表現</u>。實驗結果顯示，安靜組的平均分數（82.3）高於音樂組（74.1），差異達統計顯著。因此，<strong>背景音樂對短期記憶有負面影響</strong>。但本實驗僅測試了流行音樂，<strong>無法確定</strong>古典音樂或白噪音是否有相同效果。」
                                 </p>
                             </div>
+                            <div className="p-3 rounded-[var(--radius-unified)] bg-[#FDF2F8] border border-[#FBCFE8]">
+                                <p className="text-[11px] font-bold text-[#9D174D] mb-1">👀 觀察研究</p>
+                                <p className="text-[12px] text-[#9D174D] leading-relaxed">
+                                    「本研究原本想了解<u>高中生在自習課的專注行為樣貌</u>。觀察 4 節自習課共 132 次取樣，發現「滑手機」與「組內聊天」分別佔 38% 與 22%，遠高於「閱讀／書寫」的 28%。因此，<strong>自習課的實際專注比例低於課表預期</strong>。但本結論僅來自單一班級的觀察樣本，<strong>不宜推論至</strong>不同年級或不同教師管理風格的班級。」
+                                </p>
+                            </div>
+                            <div className="p-3 rounded-[var(--radius-unified)] bg-[#F5F3FF] border border-[#DDD6FE]">
+                                <p className="text-[11px] font-bold text-[#5B21B6] mb-1">📚 文獻研究</p>
+                                <p className="text-[12px] text-[#5B21B6] leading-relaxed">
+                                    「本研究原本想了解<u>近 10 年高中生數位學習成效的研究取向變化</u>。比較 12 篇期刊論文後，發現 2014–2018 年聚焦「載具普及率」，2019 年後轉向「自主學習能力」。因此，<strong>研究焦點已從硬體進入學習者主體性</strong>。但本回顧僅納入中文期刊，<strong>無法確定</strong>英文文獻是否呈現相同走向。」
+                                </p>
+                            </div>
                         </div>
                         <p className="text-[11px] text-[var(--ink-mid)] mt-3">
-                            注意共同結構：「原本想了解___」→「根據結果，___」→「因此答案是___」→「但只能說明___，無法確定___」
+                            注意共同結構：「原本想了解___」→「根據結果，___」→「因此答案是___」→「但只能說明___，無法確定___」。<strong>5 種方法都遵循同一架構</strong>——這是研究方法課的核心：方法不同，邏輯共通。
                         </p>
                     </div>
 
@@ -400,6 +412,9 @@ const W15Page = () => {
 
                     <div>
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🗂️ 選擇你的研究方法，取得對應的 Prompt</p>
+                        <p className="text-[11.5px] text-[var(--ink-mid)] mb-3 leading-relaxed">
+                            預設帶入<strong className="text-[var(--ink)]">你 W9 選的方法</strong>，但 5 個分頁都可以點——這是研究方法課，<strong className="text-[var(--ink)]">看一下別組的 Prompt 怎麼下，是這節課該做的事</strong>。
+                        </p>
                         <MethodSelector />
                     </div>
                     <ThinkRecord dataKey="w15-ai-feedback" prompt="AI 提供了哪些建議？分別記錄描述層、詮釋層、回扣層潤飾、研究限制的建議重點。" scaffold={['描述層建議：...', '詮釋層建議：...', '回扣層潤飾：...', '研究限制建議：1.__ 2.__ 3.__']} />
