@@ -884,10 +884,48 @@ export const TeamFormation = () => {
                     />
 
                     {/* ④ 研究方法 */}
+                    {/* W7 兩層判斷複習收合區（學生大概忘了，點開看） */}
+                    <details className="border border-[var(--border)] rounded-[var(--radius-unified)] bg-[var(--paper-warm)] overflow-hidden">
+                        <summary className="cursor-pointer px-4 py-3 text-[12.5px] font-bold text-[var(--ink)] hover:bg-[var(--paper)] flex items-center justify-between">
+                            <span>🔄 忘了 W7 兩層判斷？點開快速複習（30 秒）</span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="px-5 py-4 bg-white border-t border-[var(--border)] space-y-4 text-[12.5px]">
+                            {/* 第一層 */}
+                            <div>
+                                <p className="font-bold text-[var(--ink)] mb-1.5">第一層　資料從哪來？</p>
+                                <ul className="text-[var(--ink-mid)] leading-[1.85] list-disc pl-5 space-y-0.5">
+                                    <li>要自己收集（去問人、去觀察、去做實驗）→ <strong>進入第二層</strong></li>
+                                    <li>分析已有文本（論文、史料、報導、書籍…）→ <strong>📚 文獻分析</strong></li>
+                                </ul>
+                            </div>
+                            {/* 第二層 */}
+                            <div>
+                                <p className="font-bold text-[var(--ink)] mb-1.5">第二層　自己收集的話，你要問什麼？</p>
+                                <ul className="text-[var(--ink-mid)] leading-[1.85] list-none space-y-1.5">
+                                    <li>
+                                        <strong className="text-[var(--accent)]">❶</strong> 要「比例、數量、趨勢」還是「原因、脈絡、故事」？
+                                        <br /><span className="text-[11.5px] text-[var(--ink-light)] pl-5">比例趨勢 → 📋 問卷　｜　原因脈絡 → 🎤 訪談</span>
+                                    </li>
+                                    <li>
+                                        <strong className="text-[var(--accent)]">❷</strong> 能不能主動改變其中一個條件，然後量另一個怎麼變？
+                                        <br /><span className="text-[11.5px] text-[var(--ink-light)] pl-5">能操控 → 🧪 實驗　｜　不能 → 其他（問卷、觀察等）</span>
+                                    </li>
+                                    <li>
+                                        <strong className="text-[var(--accent)]">❸</strong> 要「記錄真實行為」還是「了解想法態度」？
+                                        <br /><span className="text-[11.5px] text-[var(--ink-light)] pl-5">真實行為 → 👀 觀察　｜　想法態度 → 📋 問卷 / 🎤 訪談</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p className="text-[11.5px] text-[var(--ink-light)] italic pt-1 border-t border-[var(--border)]">
+                                💡 三題不用全答，挑最貼近你研究目的的那一題。可以「主方法 + 輔助方法」（這就是 Step 4 補充方法的概念）。
+                            </p>
+                        </div>
+                    </details>
                     <ThinkRecord
                         dataKey="w8-method-reason"
-                        prompt="④ 預計使用的研究方法（方法名稱 + 理由，參考 W7 兩層判斷）"
-                        placeholder="例：我們選訪談法。理由：W7 兩層判斷第 ❶ 條——我們要的是『學生為什麼考前才去圖書館』的深層原因/脈絡，訪談較適合。"
+                        prompt="④ 預計使用的研究方法（方法名稱 + 理由，引用 W7 兩層判斷的某一條）"
+                        placeholder="例：我們選訪談法。理由：兩層判斷第 ❶ 條——我們要的是『學生為什麼考前才去圖書館』的深層原因/脈絡，訪談較適合。"
                         scaffold={['我們選 ___ 法', '理由（引用兩層判斷的某一條）：…']}
                         rows={3}
                     />

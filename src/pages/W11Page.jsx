@@ -124,12 +124,13 @@ const PILOT_INSTRUCTIONS = {
     },
     literature: {
         label: '📚 文獻組',
-        format: '互閱比較矩陣',
+        format: '互閱分析架構',
         steps: [
-            '把你的比較矩陣（至少 3 篇文獻、7+ 欄）給同學看',
-            '同學讀 10 分鐘後回答三問：欄位看得懂嗎？有沒有欄位多餘或遺漏？能回答研究問題嗎？',
-            '角色互換',
-            '互相把發現寫下來',
+            '把你的分析架構（依子類型而異：時間軸／編碼表／框架軸線／情節結構）給同學看',
+            '【內容/論述分析】拿 1-2 個樣本資料，請同學依你的編碼表獨立編碼一次',
+            '對照雙方編碼結果，計算一致率（≥80% 才能正式編碼，否則回頭調整定義）',
+            '【歷史/敘事分析】請同學依你的架構讀 1-2 份資料，問他：單位看得懂嗎？能歸納出你預期的模式嗎？',
+            '角色互換 + 互相把發現寫下來',
         ],
     },
 };
@@ -157,7 +158,6 @@ const EXPORT_FIELDS = [
     { key: 'w11-ethics-voluntary', label: '倫理 · 自願性' },
     { key: 'w11-consent-ai', label: 'AI 知情同意書審查回覆' },
     { key: 'w11-consent-judge', label: 'AI 建議採納判斷' },
-    { key: 'w11-consent-final', label: '知情同意書最終版' },
     /* Step 4：施測啟動 + AIRED */
     { key: 'w11-plan-target', label: '施測目標與底線' },
     { key: 'w11-plan-schedule', label: 'W12-W13 執行時程' },
@@ -494,7 +494,7 @@ export const W11Page = () => {
                                     <li>訪談現場（拍<strong>桌面紀錄本／錄音裝置</strong>，不拍人臉）</li>
                                     <li>實驗組架設圖被同學標記漏洞的版本</li>
                                     <li>觀察組試跑的紀錄表正被填寫</li>
-                                    <li>文獻組互閱矩陣的螢幕／紙本</li>
+                                    <li>文獻組互閱分析架構的螢幕／紙本</li>
                                 </ul>
                             </div>
                             <div className="bg-white border border-[#DC2626]/30 rounded-[6px] p-3">
@@ -610,12 +610,9 @@ export const W11Page = () => {
                                 scaffold={['建議 N：AI 說什麼', '判斷：✅ 採納 / ❌ 不採納', '理由（必寫）']}
                                 rows={6}
                             />
-                            <ThinkRecord
-                                dataKey="w11-consent-final"
-                                prompt="知情同意書最終版（改好的完整版）"
-                                placeholder="貼上修訂後的完整知情同意說明——正式施測時就用這版"
-                                rows={10}
-                            />
+                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mt-2 p-3 bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)]">
+                                💡 <strong className="text-[var(--ink)]">最終版直接寫在 docx 第十章倫理</strong>——網頁不重複。AI 採納判斷紀錄在上方就好（這是 AIRED 的 E/D）。
+                            </p>
                         </div>
                     </div>
 

@@ -241,20 +241,21 @@ const METHOD_SCAFFOLDS = {
         tips: '預計每次觀察 20-30 分鐘，觀察 3-5 次。用代號保護隱私。',
     },
     literature: {
-        title: '文獻分析架構工作表',
-        colHeaders: ['我的研究問題', '搜尋策略（關鍵字＋篩選標準）', '比較矩陣欄位設計'],
+        title: '文獻分析架構工作表（依子類型分流）',
+        colHeaders: ['我的研究問題', '我的子類型 + 分析對象', '對應的分析架構'],
         example: {
-            col1: '社群媒體對青少年焦慮的影響',
-            col2: '關鍵字：「青少年 + 社群媒體 + 焦慮」\n篩選：近5年、中英文期刊、排除內容農場',
-            col3: '欄位：作者/年份 / 研究對象 / 核心發現 / 支持或反對 / 研究限制',
+            col1: '近五年總統演講中「民主」概念的論述變化',
+            col2: '子類型：④ 論述分析\n分析對象：2020-2025 總統演講稿（雙十/元旦/重大議題演說）共 30 篇',
+            col3: '兩條軸線：自由 vs 平等、個人 vs 集體\n話語策略欄：誰在說／為誰說／怎麼說',
         },
         selfCheck: [
-            '關鍵字夠精準嗎？（不是只搜「AI」或「教育」）',
-            '有明確的納入/排除標準嗎？',
-            '比較欄位能幫我回答研究問題嗎？（不只是摘要）',
-            '來源等級 OK 嗎？（不是內容農場或維基百科）',
+            '⚠️ 我選的是「分析法」不是「文獻回顧」嗎？（文獻回顧是所有方法第三章都要做的，不算文獻組）',
+            '我的子類型（②歷史／③內容／④論述／⑤敘事）跟研究問題對得上嗎？',
+            '我的分析架構（時間軸／編碼表／軸線／情節結構）能回答研究問題嗎？',
+            '【內容/論述分析】有規劃雙人編碼一致率（≥80%）嗎？',
+            '分析對象寫得夠具體嗎？（什麼來源、時間範圍、規模都寫清楚）',
         ],
-        tips: '至少比較 5 篇以上文獻。用矩陣整理後，才能寫出有比較、有分析的文獻探討。',
+        tips: '⚠️ 文獻分析 ≠ 文獻回顧：文獻分析是把文獻當「研究對象」來分析，不是整理前人研究。4 子類型各有專屬分析架構，挑你計畫書勾的那種寫雛形。',
     },
 };
 
@@ -264,17 +265,17 @@ const OPERATIONALIZE_MAP = [
     { method: '訪談', unit: '探詢層面', output: '每個層面 1 大問題 + 追問' },
     { method: '實驗', unit: '自變項／依變項／控制變項', output: '操作定義 + 實驗流程' },
     { method: '觀察', unit: '具體行為指標', output: '紀錄表欄位（時間/代號/行為/時長）' },
-    { method: '文獻', unit: '比較維度', output: '篩選標準 + 比較矩陣欄位' },
+    { method: '文獻', unit: '分析單位（事件／編碼類別／論述軸線／情節節點）', output: '搜尋策略 + 子類型對應分析架構' },
 ];
 
-/* — 課後組裝作業：各方法的工具元件清單 — */
+/* — 各方法的第六章工具元件清單（W10 第一節寫，不是 W9 課後組裝） — */
 const ASSEMBLY_TASKS = {
     questionnaire: {
         outputName: '完整問卷',
         deliverable: 'Google Doc（可再轉 Google Form）',
-        timeEstimate: '週間自行組裝，約 60-90 分鐘',
-        templateUrl: 'https://docs.google.com/document/d/1J72qYFrcvG_0jvYc27j4xS2pBGa3cMQy_tuhf2bPZ4U/copy',
-        templateName: '01_問卷模板',
+        timeEstimate: 'W10 第一節寫主架構（不是 W9 課後做）',
+        templateUrl: 'https://docs.google.com/document/d/1tu-WF_JitJIwBZBHrrgm3MeFMDykpm_gGZoyrB4UkOI/copy',
+        templateName: '01_問卷_工具',
         components: [
             { t: '開場白', d: '我是誰、研究目的、預計填答時間、保密承諾、隨時可退出' },
             { t: '基本資料區', d: '年級 / 性別 / 類組（3-5 題，避免姓名學號）' },
@@ -286,9 +287,9 @@ const ASSEMBLY_TASKS = {
     interview: {
         outputName: '完整訪綱',
         deliverable: 'Google Doc（A4 一到兩頁）',
-        timeEstimate: '週間自行組裝，約 60 分鐘',
-        templateUrl: 'https://docs.google.com/document/d/1PB7S91j73YIIUnBQapBAeCPKK2e7yOFwod83ZTYuMs0/copy',
-        templateName: '02_訪綱模板',
+        timeEstimate: 'W10 第一節寫主架構（不是 W9 課後做）',
+        templateUrl: 'https://docs.google.com/document/d/1BU6XyNxdwng6I15pwYXfRs-zwKgDDyF_EVc2T6uUCrs/copy',
+        templateName: '02_訪綱_工具',
         components: [
             { t: '開場白', d: '自我介紹、錄音同意、預計時間、保密承諾' },
             { t: '暖身問題', d: '1-2 題輕鬆話題，讓受訪者開口' },
@@ -301,9 +302,9 @@ const ASSEMBLY_TASKS = {
     experiment: {
         outputName: '實驗計畫書',
         deliverable: 'Google Doc',
-        timeEstimate: '週間自行組裝，約 90 分鐘（比其他方法稍重）',
-        templateUrl: 'https://docs.google.com/document/d/1HQ6KutZIUXrfLEuBCs88le116HVgefvfSMdEfL_s0II/copy',
-        templateName: '03_實驗計畫書模板',
+        timeEstimate: 'W10 第一節寫主架構（不是 W9 課後做）',
+        templateUrl: 'https://docs.google.com/document/d/1evcQ6-97mhkhsLz4RHDEGp9P_LkjAeIKUcvusBtc0d8/copy',
+        templateName: '03_實驗_工具設計表',
         components: [
             { t: '研究目的與假設', d: '「我預測 A 會導致 B」' },
             { t: '變項定義', d: '自變項（操作）/ 依變項（測量）/ 控制變項（列 3+）' },
@@ -316,9 +317,9 @@ const ASSEMBLY_TASKS = {
     observation: {
         outputName: '觀察紀錄表（含觀察計畫）',
         deliverable: 'Google Sheets（三分頁：計畫 / 紀錄表 / 自檢）',
-        timeEstimate: '週間自行組裝，約 60 分鐘',
-        templateUrl: 'https://docs.google.com/spreadsheets/d/1VwhCcHdpHPCX_YzVKIU98QrDQuXVup8h_ERcnm9R-D4/copy',
-        templateName: '04_觀察紀錄表模板',
+        timeEstimate: 'W10 第一節寫主架構（不是 W9 課後做）',
+        templateUrl: 'https://docs.google.com/spreadsheets/d/1QMqW2AAlc1s_gNfiY3jkFCy0CHpYz2GX9ZmgpShUm7s/copy',
+        templateName: '04_觀察紀錄表_工具',
         components: [
             { t: '觀察目的', d: '要回答什麼研究問題' },
             { t: '時間 / 地點', d: '每次 20-30 分鐘、共 3-5 次、具體地點' },
@@ -329,19 +330,20 @@ const ASSEMBLY_TASKS = {
         checks: ['只記外顯行為（不是「他在想事情」）', '記錄方式來得及寫', '觀察者定位明確'],
     },
     literature: {
-        outputName: '文獻分析矩陣',
-        deliverable: 'Google Sheets（四分頁：搜尋計畫 / 矩陣 / 預選清單 / 自檢）',
-        timeEstimate: '週間自行組裝，約 60 分鐘（不含實際讀文獻）',
-        templateUrl: 'https://docs.google.com/spreadsheets/d/11mr5up4hsirhP3LH1qOxzxFAV0w189BIF585mcF8G6Q/copy',
-        templateName: '05_文獻比較矩陣模板',
+        outputName: '文獻分析架構雛形（依你計畫書勾的子類型）',
+        deliverable: 'Google Sheets：依子類型挑對應模板（時間軸／編碼表／軸線／情節結構）',
+        timeEstimate: 'W10 第一節寫主架構（不是 W9 課後做；不含實際分析資料）',
+        templateUrl: 'https://drive.google.com/drive/folders/1-UtVZM8dyo20s2vbnx3UCWm-lR8YROU6',
+        templateName: '05_文獻分析_工具（資料夾，依計畫書勾選的子類型挑 05a 歷史／05b 內容／05c 論述／05d 敘事 之一）',
         components: [
-            { t: '研究問題', d: '要回答的核心問題' },
-            { t: '搜尋策略', d: '資料庫：華藝 / Google Scholar；中英文關鍵字；年份範圍' },
-            { t: '納入排除標準', d: '近 5 年、中英文期刊、排除內容農場與維基' },
-            { t: '比較矩陣欄位', d: '作者年份 / 對象 / 方法 / 發現 / 支持或反對 / 限制' },
-            { t: '預選清單', d: '已搜到至少 5 篇候選文獻的標題與來源' },
+            { t: '⚠️ 第 0 步：先確認是「分析」不是「回顧」', d: '文獻分析 = 把文獻當研究對象；文獻回顧 = 整理前人研究（在計畫書第三章做，所有方法共用）。如果你只想整理前人研究，請改主方法。' },
+            { t: '研究問題 + 子類型', d: '從 W8 帶入研究問題；子類型挑 ② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事 其中一種' },
+            { t: '分析對象', d: '具體寫：什麼來源／時間範圍／規模（例：2020-2024 IG 健身貼文前 200 則）' },
+            { t: '搜尋策略', d: '資料庫 + 關鍵字 + 納入排除標準（近 5 年／中英文／排除內容農場與維基）' },
+            { t: '分析架構（核心）', d: '依子類型填：時間軸（歷史）／編碼表（內容）／軸線+話語策略（論述）／情節結構（敘事）' },
+            { t: '【內容/論述】編碼者一致率', d: '雙人獨立編碼 10-20% 樣本，計算一致率，≥80% 才正式編碼' },
         ],
-        checks: ['關鍵字夠精準', '比較欄位能回答研究問題', '5 篇以上文獻'],
+        checks: ['子類型跟研究問題對得上', '分析架構能回答研究問題（不是只整理前人說法）', '【內容/論述】有規劃雙人編碼'],
     },
 };
 
@@ -380,14 +382,19 @@ const VARIABLE_AI_PROMPTS = {
 請幫我發散 3-5 種可能的操作型定義（用具體看得到的動作描述——例如「視線離開課本連續 X 秒」）。每一版請註明它的判斷難度。
 
 我會從中挑一個最容易即時記錄的版本。不要替我決定最佳版。`,
-    literature: `我是高中生在做研究方法課的專題（文獻分析）。
+    literature: `我是高中生在做研究方法課的專題（文獻分析法）。請注意：「文獻分析」是把文獻當研究對象來分析它，不是整理前人研究（後者叫文獻回顧）。
 
-我要比較的分析維度是：【貼上維度名稱，例如「研究對象」「研究方法」「核心發現」】
+我的子類型：【② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事 — 擇一填】
 研究問題：【貼上你的研究問題】
+分析對象：【什麼來源、時間範圍、規模】
 
-請幫我發散 3-5 種可能的比較矩陣欄位設計。每一版請註明它能回答研究問題的哪個面向。
+請依我的子類型，幫我發散 3-5 種可能的分析架構：
+- 歷史 → 時間軸切割方式 + 關鍵事件挑選原則
+- 內容 → 編碼類別 + 操作型定義 + 計數單位
+- 論述 → 兩條軸線設計 + 話語策略類別
+- 敘事 → 情節結構單位 + 角色功能類別
 
-我會從中挑一個最貼合研究問題的版本，並說明為什麼刷掉其他版本。`,
+每一版請註明它能回答研究問題的哪個面向。我會從中挑一個最貼合的版本，並說明為什麼刷掉其他版本。`,
 };
 
 /* — 組裝樣板文字 AI Prompt（每個方法各自的 boilerplate） — */
@@ -1089,11 +1096,41 @@ export const W9Page = () => {
                         </div>
                         {(() => {
                             const ALL_PLANS = [
-                                { id: 'questionnaire', filename: '問卷研究法_計畫書第二版.docx', brief: '量化研究；核心是「變項 → 問卷題目」。第二章起要定變項、做題目設計。' },
-                                { id: 'interview',     filename: '訪談研究法_計畫書第二版.docx', brief: '質性研究；核心是「訪談主題框架」。第二章起要拆主題、設計訪綱。' },
-                                { id: 'experiment',    filename: '實驗研究法_計畫書第二版.docx', brief: '量化研究；核心是「自變項/依變項/控制變項」。第二章起要定變項、設計實驗流程。' },
-                                { id: 'observation',   filename: '觀察研究法_計畫書第二版.docx', brief: '核心是「行為操作型定義」。第二章起要把抽象行為定義到別人可重複觀察。' },
-                                { id: 'literature',    filename: '文獻分析法_計畫書第二版.docx', brief: '文獻本身就是對象。第二章起要定搜尋關鍵字組、納入排除準則。' },
+                                {
+                                    id: 'questionnaire', filename: '01_問卷研究法_計畫書',
+                                    brief: '量化研究；核心是「變項 → 問卷題目」。第二章起要定變項、做題目設計。',
+                                    planUrl: 'https://docs.google.com/document/d/1wIRi36FEn2LEEesU4rb24IhSEMxpFHGs_K-hId5tHxA/copy',
+                                    toolUrl: 'https://docs.google.com/document/d/1tu-WF_JitJIwBZBHrrgm3MeFMDykpm_gGZoyrB4UkOI/copy',
+                                    toolName: '01_問卷_工具',
+                                },
+                                {
+                                    id: 'interview', filename: '02_訪談研究法_計畫書',
+                                    brief: '質性研究；核心是「訪談主題框架」。第二章起要拆主題、設計訪綱。',
+                                    planUrl: 'https://docs.google.com/document/d/18t_rBWbwZoHfkq871ObgTV1qtNp-TZ9RMJJ6MQOfwtI/copy',
+                                    toolUrl: 'https://docs.google.com/document/d/1BU6XyNxdwng6I15pwYXfRs-zwKgDDyF_EVc2T6uUCrs/copy',
+                                    toolName: '02_訪綱_工具',
+                                },
+                                {
+                                    id: 'experiment', filename: '03_實驗研究法_計畫書',
+                                    brief: '量化研究；核心是「自變項/依變項/控制變項」。第二章起要定變項、設計實驗流程。',
+                                    planUrl: 'https://docs.google.com/document/d/1IBfMJCuPZ_2sezzs2xdAgvFJq1WcHcbssaBnbTyv14o/copy',
+                                    toolUrl: 'https://docs.google.com/document/d/1evcQ6-97mhkhsLz4RHDEGp9P_LkjAeIKUcvusBtc0d8/copy',
+                                    toolName: '03_實驗_工具設計表',
+                                },
+                                {
+                                    id: 'observation', filename: '04_觀察研究法_計畫書',
+                                    brief: '核心是「行為操作型定義」。第二章起要把抽象行為定義到別人可重複觀察。',
+                                    planUrl: 'https://docs.google.com/document/d/1PHC3w--zJ8yUw2gSwWkO7rMjQoYSmj9fj46h_-GX4bI/copy',
+                                    toolUrl: 'https://docs.google.com/spreadsheets/d/1QMqW2AAlc1s_gNfiY3jkFCy0CHpYz2GX9ZmgpShUm7s/copy',
+                                    toolName: '04_觀察紀錄表_工具',
+                                },
+                                {
+                                    id: 'literature', filename: '05_文獻分析法_計畫書',
+                                    brief: '文獻本身就是對象。第一章必選 4 子類型（歷史／內容／論述／敘事），第六章工具依子類型分流。',
+                                    planUrl: 'https://docs.google.com/document/d/1q-nBzHJoeFvyBX8YG2rZgOcmiQAyJ69_S0PaP2uvPaY/copy',
+                                    toolUrl: 'https://drive.google.com/drive/folders/1-UtVZM8dyo20s2vbnx3UCWm-lR8YROU6',
+                                    toolName: '05_文獻分析_工具（資料夾，依子類型挑 05a-d）',
+                                },
                             ];
                             return (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -1110,11 +1147,21 @@ export const W9Page = () => {
                                             >
                                                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                                                     {isMine && (
-                                                        <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">你的計畫書</span>
+                                                        <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">你的方法</span>
                                                     )}
                                                     <span className={isMine ? 'font-bold text-[14px] text-[var(--ink)]' : 'font-bold text-[12.5px] text-[var(--ink-mid)]'}>{p.filename}</span>
                                                 </div>
-                                                <p className={isMine ? 'text-[12.5px] text-[var(--ink-mid)] leading-relaxed' : 'text-[11.5px] text-[var(--ink-light)] leading-[1.6]'}>{p.brief}</p>
+                                                <p className={isMine ? 'text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3' : 'text-[11.5px] text-[var(--ink-light)] leading-[1.6]'}>{p.brief}</p>
+                                                {isMine && (
+                                                    <a
+                                                        href={p.planUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center justify-center gap-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[8px] px-4 py-2.5 no-underline transition-opacity text-[12.5px] font-bold"
+                                                    >
+                                                        📄 開啟計畫書副本（Make a copy）→
+                                                    </a>
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -1321,7 +1368,7 @@ export const W9Page = () => {
                     <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6" style={{ color: '#fff' }}>
                         <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, color: '#fff' }}>W10 會做什麼</div>
                         <p style={{ fontSize: 13, lineHeight: 1.9, marginBottom: 16, color: '#fff' }}>
-                            第一節：<strong style={{ color: '#fff', fontWeight: 700 }}>工具設計（第六章）</strong>——問卷題目／訪綱／實驗流程／觀察紀錄表／比較矩陣，依你方法分流。<br />
+                            第一節：<strong style={{ color: '#fff', fontWeight: 700 }}>工具設計（第六章）</strong>——問卷題目／訪綱／實驗流程／觀察紀錄表／文獻分析架構（4 子類型擇一），依你方法分流。<br />
                             第二節：<strong style={{ color: '#fff', fontWeight: 700 }}>整本計畫書 AI 檢核 → 定稿繳交</strong>。
                         </p>
                         <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, color: '#fff' }}>W10 之前的輕量任務</div>

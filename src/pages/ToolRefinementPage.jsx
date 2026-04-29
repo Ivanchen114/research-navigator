@@ -32,13 +32,86 @@ const METHOD_OPTIONS = [
     { id: 'literature', label: '📚 文獻組' },
 ];
 
+/* — 文獻分析法 4 子類型（對齊 W9 計畫書第一章勾選） — */
+const LIT_SUBTYPES = [
+    {
+        id: 'history',
+        label: '② 歷史分析',
+        icon: '📜',
+        defn: '用史料推論過去事件的脈絡、原因、演變',
+        deliverable: '時間軸 + 關鍵事件清單 + 事件因果鏈',
+        archExample: '1945 → 接收 → 1947 衝突 → 1949 清鄉，標註事件間的因果鏈',
+        steps: [
+            'Step 1：建立時間軸（依年份／事件排列）',
+            'Step 2：標註關鍵事件（哪些是轉折點？）',
+            'Step 3：推論事件間的因果關係',
+            'Step 4：對照不同史料檢驗推論',
+            'Step 5：（如有）寫出歷史敘事段落',
+        ],
+        templateUrl: 'https://docs.google.com/spreadsheets/d/1vvtTwR2_9F293I0GozYZc6zsGluTcfIY1NlHb2TpdgA/copy',
+        templateName: '05a_文獻_歷史分析_工具',
+    },
+    {
+        id: 'content',
+        label: '③ 內容分析',
+        icon: '📊',
+        defn: '統計文本中的詞頻、類別、主題比例（量化為主）',
+        deliverable: '編碼表（類別 × 操作型定義 × 計數單位）+ 雙人編碼一致率 ≥80%',
+        archExample: '主角性別（男/女/其他）× 職業類型（專業/家庭/無）× 年份',
+        steps: [
+            'Step 1：訓練編碼員（2 人以上，最好是組員互相）',
+            'Step 2：雙人獨立編碼 10–20% 樣本',
+            'Step 3：計算編碼者一致率（≥80% 才正式編碼）',
+            'Step 4：完成全樣本編碼',
+            'Step 5：統計結果（次數／比例／關聯）',
+        ],
+        templateUrl: 'https://docs.google.com/spreadsheets/d/1C_McYlh5zqyS216cAdSvorMzOZ4U8W56_bQFpYHlEdY/copy',
+        templateName: '05b_文獻_內容分析_工具',
+    },
+    {
+        id: 'discourse',
+        label: '④ 論述分析',
+        icon: '🗣️',
+        defn: '解讀文本背後的意識形態、話語策略、權力關係',
+        deliverable: '框架／軸線分類表 + 話語策略清單（誰說／為誰說／怎麼說）',
+        archExample: '「民主」的兩條軸線：自由 vs 平等、個人 vs 集體；用哪種修辭讓某軸線看起來更自然',
+        steps: [
+            'Step 1：通讀標註代表性段落',
+            'Step 2：用架構（軸線／框架）分類段落',
+            'Step 3：辨識話語策略（誰在說／為誰說／怎麼說）',
+            'Step 4：歸納意識形態模式',
+            'Step 5：（如有）對比不同文本的論述差異',
+        ],
+        templateUrl: 'https://docs.google.com/spreadsheets/d/1p4RCHe_uXwGs0NkwLoz_7XOrmAX35d3mhad7DmxBQjQ/copy',
+        templateName: '05c_文獻_論述分析_工具',
+    },
+    {
+        id: 'narrative',
+        label: '⑤ 敘事分析',
+        icon: '📖',
+        defn: '分析故事的結構、角色、敘事聲音與模式',
+        deliverable: '情節結構圖 + 角色功能表 + 敘事聲音標註',
+        archExample: '開端／衝突／轉折／結局；受害者 vs 加害者立場切換；第一／第三人稱',
+        steps: [
+            'Step 1：拆解每則故事的情節結構（開端／衝突／轉折／結局）',
+            'Step 2：標註角色功能（推動者／反對者／旁觀者）',
+            'Step 3：比對敘事模式的異同',
+            'Step 4：歸納常見模式',
+            'Step 5：（如有）解讀模式背後的文化意涵',
+        ],
+        templateUrl: 'https://docs.google.com/spreadsheets/d/1h5qymclzSox-t-gKvjL9iU8d48N4ORMxcPFX2hkQ70g/copy',
+        templateName: '05d_文獻_敘事分析_工具',
+    },
+];
+
 /* — W9 組裝模板（與 W9 ASSEMBLY_TASKS 同步） — */
 const TEMPLATES = {
-    questionnaire: { url: 'https://docs.google.com/document/d/1J72qYFrcvG_0jvYc27j4xS2pBGa3cMQy_tuhf2bPZ4U/copy',    name: '01_問卷模板' },
-    interview:     { url: 'https://docs.google.com/document/d/1PB7S91j73YIIUnBQapBAeCPKK2e7yOFwod83ZTYuMs0/copy',    name: '02_訪綱模板' },
-    experiment:    { url: 'https://docs.google.com/document/d/1HQ6KutZIUXrfLEuBCs88le116HVgefvfSMdEfL_s0II/copy',    name: '03_實驗計畫書模板' },
-    observation:   { url: 'https://docs.google.com/spreadsheets/d/1VwhCcHdpHPCX_YzVKIU98QrDQuXVup8h_ERcnm9R-D4/copy', name: '04_觀察紀錄表模板' },
-    literature:    { url: 'https://docs.google.com/spreadsheets/d/11mr5up4hsirhP3LH1qOxzxFAV0w189BIF585mcF8G6Q/copy', name: '05_文獻比較矩陣模板' },
+    questionnaire: { url: 'https://docs.google.com/document/d/1tu-WF_JitJIwBZBHrrgm3MeFMDykpm_gGZoyrB4UkOI/copy',    name: '01_問卷_工具' },
+    interview:     { url: 'https://docs.google.com/document/d/1BU6XyNxdwng6I15pwYXfRs-zwKgDDyF_EVc2T6uUCrs/copy',    name: '02_訪綱_工具' },
+    experiment:    { url: 'https://docs.google.com/document/d/1evcQ6-97mhkhsLz4RHDEGp9P_LkjAeIKUcvusBtc0d8/copy',    name: '03_實驗_工具設計表' },
+    observation:   { url: 'https://docs.google.com/spreadsheets/d/1QMqW2AAlc1s_gNfiY3jkFCy0CHpYz2GX9ZmgpShUm7s/copy', name: '04_觀察紀錄表_工具' },
+    /* 文獻組依 litSubtype 動態選 URL，見 LIT_SUBTYPE_TEMPLATES 與 W10 選擇器的下載按鈕 */
+    literature:    { url: 'https://drive.google.com/drive/folders/1-UtVZM8dyo20s2vbnx3UCWm-lR8YROU6',                name: '05_文獻分析_工具（資料夾，依子類型挑）' },
 };
 
 /* — 工具檢核共用前置：進度自評（W10 第一節學生工具還在雛形，給 AI 校準） — */
@@ -92,12 +165,13 @@ const AI_PROMPTS = {
 5. 給我具體修改建議。
 
 【貼上你的觀察紀錄表設計】`,
-    literature: TOOL_CHECK_INTRO + `我設計了文獻分析架構，請幫我檢查：
+    literature: TOOL_CHECK_INTRO + `我設計了文獻分析架構（依我的子類型，可能是時間軸／編碼表／框架軸線／情節結構），請幫我檢查：
 1. 搜尋策略（關鍵字、篩選標準）夠精準嗎？
-2. 比較矩陣的欄位能回答研究問題嗎？
+2. 我的分析架構（編碼類別／軸線／時序／情節單位）能回答研究問題嗎？
 3. 納入／排除標準合理嗎？
 4. 來源品質分級方式合適嗎？
-5. 給我具體修改建議。
+5. 【內容/論述分析適用】編碼者一致率怎麼確保？
+6. 給我具體修改建議。
 
 【貼上你的文獻分析架構】`,
 };
@@ -160,7 +234,7 @@ const PAIRING_INSTRUCTIONS = {
     interview: '兩人一組互相模擬訪談。一人當訪談者、一人當受訪者，訪完後交換。注意：哪個問題讓你卡住？哪個追問太尬？',
     experiment: '找同學實際跑一遍實驗流程。記錄：指令清楚嗎？需要多久？有沒有突發狀況？',
     observation: '去實際場域試觀察 10 分鐘。記錄：來得及嗎？分類明確嗎？有沒有行為你歸不了類？',
-    literature: '請同學看你的比較矩陣。問他：看得懂嗎？欄位有沒有多餘或遺漏？能回答你的研究問題嗎？',
+    literature: '請同學看你的分析架構（時間軸／編碼表／框架軸線／情節結構）。問他：架構看得懂嗎？單位／類別有沒有多餘或遺漏？能回答你的研究問題嗎？',
 };
 
 /* — ExportButton 欄位 — */
@@ -169,7 +243,6 @@ const EXPORT_FIELDS = [
     { key: 'w10-entry-self-report', label: '入場自報（W9 docx 完成度）', question: '第二~五章章節完成狀況' },
     { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
-    { key: 'w10-tool-text', label: '工具文字版', question: '設計完成的工具本體（若已整合在 docx 第六章則留空）' },
     /* Step 2：整本 AI 檢核（含 AIRED 五要素：A/I 前置 + R/E/D 分欄） */
     { key: 'w10-ai-raw-feedback', label: 'AI 回覆原文（含 A+I 前置）', question: 'A: 用什麼 AI | I: 問了什麼 | R: AI 完整回覆' },
     { key: 'w10-ai-judge', label: 'AI 建議採納判斷（E: Evaluation）', question: '採納／不採納／部分採納的決定與理由' },
@@ -386,6 +459,7 @@ export const ToolRefinementPage = () => {
     const [w9Topic, setW9Topic] = useState('');
     const [w8Secondary, setW8Secondary] = useState(''); // W8 補充方法（label 字串）
     const [detectedMethodId, setDetectedMethodId] = useState('');
+    const [litSubtype, setLitSubtype] = useState(''); // 文獻組 4 子類型 id
     const [showLessonMap, setShowLessonMap] = useState(false);
 
     /* W9 資料帶入 */
@@ -404,6 +478,17 @@ export const ToolRefinementPage = () => {
         else if (ml.includes('實驗')) setDetectedMethodId('experiment');
         else if (ml.includes('觀察')) setDetectedMethodId('observation');
         else if (ml.includes('文獻')) setDetectedMethodId('literature');
+
+        /* 文獻組：讀子類型（W9 計畫書勾選後同步寫入 localStorage） */
+        try {
+            const sub = localStorage.getItem('w10-lit-subtype') || '';
+            if (sub) setLitSubtype(sub);
+        } catch { /* ignore */ }
+    }, []);
+
+    const chooseLitSubtype = useCallback((id) => {
+        setLitSubtype(id);
+        try { localStorage.setItem('w10-lit-subtype', id); } catch { /* ignore */ }
     }, []);
 
     /* ── 五步驟 ──────────────────────────────────────── */
@@ -441,10 +526,23 @@ export const ToolRefinementPage = () => {
                     {/* Step 1 開場 */}
                     <div>
                         <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                            W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把第六章（工具本體）寫到雛形</strong>。依你的方法，具體產出下方表格指定的內容。
+                            W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把第六章（工具本體）寫到「主架構」</strong>。
                         </p>
                         <div className="w7-notice w7-notice-gold">
-                            🎯 <strong>本節目標：第六章工具設計到雛形。</strong>內容寫在 <strong>docx</strong> 上，網頁只記關鍵決策。第二節做整本檢核 + 定稿。
+                            🎯 <strong>本節目標：第六章工具「主架構」（不是定稿）。</strong>結構完整 + 主要欄位有內容即可，<strong>W11 Pilot 後再修</strong>——這就是 Pilot 的目的。
+                        </div>
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 max-w-[720px] mt-3">
+                            <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">📐 「主架構」量化標準（依方法）</p>
+                            <ul className="text-[12px] text-[var(--ink-mid)] leading-[1.85] space-y-1 list-disc pl-5">
+                                <li><strong>📋 問卷</strong>：開場 + 基本資料 + <strong>每變項先寫 2-3 題粗稿</strong>（不是 5 題精修）+ 結尾</li>
+                                <li><strong>🎤 訪談</strong>：開場 + 暖身 + <strong>5 個大問題粗稿</strong>（追問先想 1 個）+ 收尾</li>
+                                <li><strong>🧪 實驗</strong>：自變項／依變項操作定義 + 控制變項 3+ + <strong>流程 Step 1-5 骨架</strong>（細節 W11 修）</li>
+                                <li><strong>👀 觀察</strong>：行為操作定義 ×3 + <strong>紀錄表欄位骨架</strong> + 時段地點</li>
+                                <li><strong>📚 文獻</strong>：分析架構主軸（時間軸／編碼表／軸線／情節結構選一）+ <strong>3-5 個分析單位</strong>（內容/論述後續再補一致率測試）</li>
+                            </ul>
+                            <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 pt-2 border-t border-[var(--border)]">
+                                💡 不要追求 W10 就寫到精修——50 分鐘做不到。寫到「結構出來、主欄位有東西」就推到 W11，那時 Pilot 會幫你抓細節。
+                            </p>
                         </div>
                     </div>
 
@@ -458,7 +556,7 @@ export const ToolRefinementPage = () => {
                             <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
                                 <p className="text-[12px] font-bold text-[#075985] mb-1">1 人組（Solo）</p>
                                 <p className="text-[11.5px] text-[#0C4A6E] leading-[1.7]">
-                                    自己 50 分鐘只能寫到雛形——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
+                                    自己 50 分鐘只能寫到主架構——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
                                 </p>
                             </div>
                             <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
@@ -498,7 +596,7 @@ export const ToolRefinementPage = () => {
                             { id: 'interview',     label: '🎤 訪談組', out: '每個主題 1 主問題 + 2–3 追問（第四章主題 × 第六章大綱）' },
                             { id: 'experiment',    label: '🧪 實驗組', out: '實驗流程 Step 1–5 + 數據記錄表（第四章變項 × 第六章流程）' },
                             { id: 'observation',   label: '👀 觀察組', out: '觀察紀錄表欄位 + 時段採樣方式（第四章維度 × 第六章紀錄表）' },
-                            { id: 'literature',    label: '📚 文獻組', out: '比較矩陣欄位（至少 7 欄）+ 分析流程 Step 1–5' },
+                            { id: 'literature',    label: '📚 文獻組', out: '依你 W9 計畫書勾選的子類型，產出對應的「分析架構」+「分析流程 Step 1–5」（4 子類型各不同——下方展開可選）' },
                         ];
                         return (
                             <div className="space-y-3 max-w-[720px]">
@@ -508,6 +606,14 @@ export const ToolRefinementPage = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     {ALL_TOOLS.map((t) => {
                                         const isMine = t.id === detectedMethodId;
+                                        /* 對齊新 GDrive：4 個非文獻方法直接給下載 URL；文獻組由下方 4 子類型選擇器處理 */
+                                        const TOOL_URL_MAP = {
+                                            questionnaire: { url: 'https://docs.google.com/document/d/1tu-WF_JitJIwBZBHrrgm3MeFMDykpm_gGZoyrB4UkOI/copy',     name: '01_問卷_工具' },
+                                            interview:     { url: 'https://docs.google.com/document/d/1BU6XyNxdwng6I15pwYXfRs-zwKgDDyF_EVc2T6uUCrs/copy',     name: '02_訪綱_工具' },
+                                            experiment:    { url: 'https://docs.google.com/document/d/1evcQ6-97mhkhsLz4RHDEGp9P_LkjAeIKUcvusBtc0d8/copy',     name: '03_實驗_工具設計表' },
+                                            observation:   { url: 'https://docs.google.com/spreadsheets/d/1QMqW2AAlc1s_gNfiY3jkFCy0CHpYz2GX9ZmgpShUm7s/copy',  name: '04_觀察紀錄表_工具' },
+                                        };
+                                        const myTool = TOOL_URL_MAP[t.id];
                                         return (
                                             <div
                                                 key={t.id}
@@ -523,9 +629,24 @@ export const ToolRefinementPage = () => {
                                                         <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">← 你選這個</span>
                                                     )}
                                                 </div>
-                                                <p className={isMine ? 'text-[13px] text-[var(--ink-mid)] leading-relaxed' : 'text-[11.5px] text-[var(--ink-light)] leading-[1.6]'}>
+                                                <p className={isMine ? 'text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3' : 'text-[11.5px] text-[var(--ink-light)] leading-[1.6]'}>
                                                     {isMine ? <><strong className="text-[var(--ink)]">本節要產出：</strong>{t.out}</> : t.out}
                                                 </p>
+                                                {isMine && myTool && (
+                                                    <a
+                                                        href={myTool.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center justify-center gap-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[8px] px-4 py-2 no-underline transition-opacity text-[12.5px] font-bold"
+                                                    >
+                                                        📦 開啟「{myTool.name}」副本 →
+                                                    </a>
+                                                )}
+                                                {isMine && t.id === 'literature' && (
+                                                    <p className="text-[11.5px] text-[var(--ink-light)] italic">
+                                                        👇 文獻組請先到下方「4 子類型選擇器」選自己的子類型，會給對應的工具模板下載連結。
+                                                    </p>
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -539,12 +660,95 @@ export const ToolRefinementPage = () => {
                         );
                     })()}
 
+                    {/* 文獻組專屬：4 子類型選擇器（只當主方法是文獻分析才顯示） */}
+                    {detectedMethodId === 'literature' && (
+                        <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">文獻組專屬</span>
+                                <span className="font-bold text-[14px] text-[var(--ink)]">你做的是哪一種文獻分析？</span>
+                            </div>
+                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                                <strong className="text-[var(--ink)]">「文獻分析」≠「文獻回顧」</strong>——文獻分析法是把文獻本身當「研究對象」來分析它，不是整理前人研究。請對照你 W9 計畫書第一章勾選的子類型，點選下方對應按鈕：
+                            </p>
+                            {/* 4 子類型按鈕 */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                                {LIT_SUBTYPES.map((s) => {
+                                    const isMine = litSubtype === s.id;
+                                    return (
+                                        <button
+                                            key={s.id}
+                                            type="button"
+                                            onClick={() => chooseLitSubtype(s.id)}
+                                            className={`text-left px-3 py-2.5 rounded-[8px] border-2 transition-colors ${
+                                                isMine
+                                                    ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
+                                                    : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--accent)]'
+                                            }`}
+                                        >
+                                            <span className="text-[14px] block">{s.icon} <strong className="text-[12.5px]">{s.label}</strong></span>
+                                            <span className={`text-[10.5px] leading-[1.5] block mt-0.5 ${isMine ? 'text-white/85' : 'text-[var(--ink-light)]'}`}>{s.defn}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {/* 子類型選定後：顯示對應分析架構 + 流程 */}
+                            {litSubtype ? (
+                                (() => {
+                                    const s = LIT_SUBTYPES.find(x => x.id === litSubtype);
+                                    return (
+                                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 space-y-3 text-[12.5px]">
+                                            <div>
+                                                <p className="font-bold text-[var(--ink)] mb-1">📦 本節要產出（第六章工具設計部分）</p>
+                                                <p className="text-[var(--ink-mid)] leading-relaxed">{s.deliverable}</p>
+                                                <p className="text-[11.5px] text-[var(--ink-light)] mt-1.5 italic">範例：{s.archExample}</p>
+                                            </div>
+                                            <div className="border-t border-[var(--border)] pt-3">
+                                                <p className="font-bold text-[var(--ink)] mb-2">🔬 分析流程（第七章執行寫進去）</p>
+                                                <ol className="text-[var(--ink-mid)] leading-[1.85] space-y-0.5 list-none pl-0">
+                                                    {s.steps.map((step, i) => (
+                                                        <li key={i}>{step}</li>
+                                                    ))}
+                                                </ol>
+                                            </div>
+                                            {/* 下載對應模板 */}
+                                            <div className="border-t border-[var(--border)] pt-3 flex flex-col md:flex-row gap-2 items-stretch md:items-center justify-between">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[11.5px] text-[var(--ink-mid)]">📥 對應模板：</p>
+                                                    <p className="text-[12px] font-bold text-[var(--ink)] truncate">{s.templateName}</p>
+                                                </div>
+                                                <a
+                                                    href={s.templateUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center justify-center gap-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[8px] px-4 py-2 no-underline transition-opacity text-[12.5px] font-bold whitespace-nowrap"
+                                                >
+                                                    開啟模板副本 →
+                                                </a>
+                                            </div>
+                                            {(s.id === 'content' || s.id === 'discourse') && (
+                                                <div className="border-t border-[var(--border)] pt-3 bg-[#FEF3C7] -mx-4 -mb-4 px-4 py-3 rounded-b-[var(--radius-unified)]">
+                                                    <p className="text-[11.5px] text-[#92400E] leading-relaxed">
+                                                        ⚠️ <strong>{s.label}必做：</strong>找另一位組員（或同學）做雙人編碼，計算<strong>編碼者一致率</strong>。一致率 ≥80% 才能正式編碼，否則要先討論定義不一致的地方。
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })()
+                            ) : (
+                                <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[12px] text-[var(--ink-light)]">
+                                    👆 還沒選子類型？回頭翻你的 W9 計畫書第一章——「本研究的子類型（必選一種）」那格勾的是哪個。
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* 補充方法提示卡（W8 登記過才顯示） */}
                     {w8Secondary && (
                         <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
                             🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
                             <p className="mt-1.5">
-                                <strong className="text-[#064E3B]">本節 50 分鐘專注主方法第六章工具雛形</strong>——補充方法的工具設計留到課後（不要兩條線都想擠進這節，會兩邊都做不完）。
+                                <strong className="text-[#064E3B]">本節 50 分鐘專注主方法第六章工具主架構</strong>——補充方法的工具設計留到課後（不要兩條線都想擠進這節，會兩邊都做不完）。
                             </p>
                             <p className="mt-1">
                                 docx 第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——主工具寫完整、補充工具寫骨架就好。
@@ -757,11 +961,11 @@ export const ToolRefinementPage = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W10"
                 title="方法深化 II："
                 accentTitle="AI 協助工具精進 × 整本計畫書檢核"
-                subtitle="第一節寫第六章工具到雛形，第二節做整本計畫書 AI 檢核（跨章一致性）+ 定稿。AI 能找文字邏輯漏洞，但真人 Pilot 留到 W11——兩週分工不重疊。"
+                subtitle="第一節寫第六章工具到「主架構」（W11 Pilot 後再修），第二節做整本計畫書 AI 檢核（跨章一致性）+ 定稿。AI 能找文字邏輯漏洞，但真人 Pilot 留到 W11——兩週分工不重疊。"
                 meta={[
                     { label: '第一節', value: '第六章工具設計 + AI 工具檢核（依進度容錯）' },
                     { label: '第二節', value: '整本計畫書 AI 檢核（跨章一致性）+ AIRED + 定稿' },
-                    { label: '課堂產出', value: '第六章工具雛形 + AI 整本檢核判斷表 + 計畫書定稿' },
+                    { label: '課堂產出', value: '第六章工具主架構 + AI 整本檢核判斷表 + 計畫書定稿' },
                     { label: '前置要求', value: 'W9 計畫書第 1-5 章雛形（含第四章變項／主題）' },
                 ]}
             />
