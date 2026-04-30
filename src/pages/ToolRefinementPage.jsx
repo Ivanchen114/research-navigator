@@ -32,6 +32,261 @@ const METHOD_OPTIONS = [
     { id: 'literature', label: '📚 文獻組' },
 ];
 
+/* — W10 第六章「填具體題目」工具包：5 種方法各一份範例 + AI 啟動 prompt — */
+const TOOL_DESC_KIT = {
+    questionnaire: {
+        label: '📋 問卷組',
+        example: `【示範主題】高中生睡眠時數與學業表現的關係
+
+(一) 問卷結構
+| 部分 | 主題 | 題數 |
+| 第 1 部分 | 開場與知情同意 | 簡介段 |
+| 第 2 部分 | 基本資料 | 3 題 |
+| 第 3 部分 | 變項 1：睡眠時數 | 3 題 |
+| 第 4 部分 | 變項 2：學業表現 | 3 題 |
+| 第 5 部分 | 結尾致謝 | 1 題 |
+
+(二) 題目類型：☑ 單選題 ☑ 量表題
+
+(三) 基本資料題
+B1. 你目前的年級是？（單選：高一 / 高二 / 高三）
+B2. 你的生理性別是？（單選：男 / 女 / 不願透露）
+B3. 你的類組是？（單選：一類 / 二類 / 三類 / 四類 / 尚未分類）
+
+(四) 主要研究題
+【變項 1：睡眠時數】
+Q1-1. 過去一週你大約幾點上床睡覺？（單選：22:00 前 / 22-23 / 23-24 / 24-01 / 01 後）
+Q1-2. 過去一週你大約幾點起床？（單選同上時段）
+Q1-3. 你覺得自己平均每天睡幾小時？（單選：< 5 / 5-6 / 6-7 / 7-8 / > 8）
+
+【變項 2：學業表現】
+Q2-1. 你最近一次段考的總平均分數大約是？（單選：< 60 / 60-69 / 70-79 / 80-89 / 90+）
+Q2-2. 你覺得這次成績比上次（單選：進步 / 持平 / 退步）
+Q2-3. 你覺得這次成績有多少受睡眠影響？（5 點量表：完全沒影響 → 影響很大）
+
+(五) 自檢
+☑ 每題對應到第四章某個變項
+☑ 用具體時段／量表，沒用「常常」「偶爾」這類模糊詞
+☑ 總題數 10 題，5 分鐘內可填完`,
+        prompt: `我是高中研究方法課的學生（問卷組），要在計畫書 docx 第六章填具體題目。
+
+我的研究問題：[貼上你的研究問題]
+我的第四章變項：[列出你的 2-4 個變項]
+研究對象：[貼上 W8 寫的研究對象]
+
+請依我的變項，給我以下幫助：
+
+1. 建議問卷的整體結構（幾個部分、各部分主題、預計題數）
+2. 基本資料題 3-5 題的【方向】（單選題格式提示）
+3. 每個變項建議 3-5 題的【方向】（不要寫完整題幹，給我具體可問的角度）
+4. 提醒哪個變項最容易掉進「雙重問題」「誘導性」「選項不互斥」三個陷阱
+
+⚠️ 第 3 點給「方向」就好，不要替我寫完整題目——我自己照方向寫到 docx 第六章。寫完後我會再貼給你檢查。`,
+    },
+    interview: {
+        label: '🎤 訪談組',
+        example: `【示範主題】高中生選擇補習的決策歷程
+
+(一) 訪綱結構
+開場（含錄音同意）→ 暖身 1-2 題 → 核心大問題 5 題 → 收尾
+
+(二) 開場逐字念
+您好，感謝接受訪談。我是 ___ 年級的 ___，正在研究「高中生補習決策歷程」。
+本次訪談預計 30-40 分鐘，為了完整紀錄想徵求您同意全程錄音（僅用於本研究、結束後刪除）。
+過程您可以隨時拒答或結束，不會有影響。可以開始嗎？
+
+(三) 暖身問題（2 題）
+1. 可以分享你目前的補習狀況嗎？哪幾科、補了多久？
+2. 你還記得最一開始決定補習是什麼時候嗎？
+
+(四) 核心大問題（5 題，由淺入深）
+Q1：當初決定補習的契機是什麼？
+   ‧ 追問：誰先提的？爸媽 / 同學 / 自己？
+   ‧ 追問：可以舉個具體場景嗎？
+Q2：選哪間補習班是怎麼決定的？
+   ‧ 追問：考慮了哪些因素？哪個最重要？
+Q3：補習的過程跟你原本預期一樣嗎？
+   ‧ 追問：有什麼出乎意料的？
+Q4：如果可以重來一次，你會用同樣方式做決定嗎？
+   ‧ 追問：什麼因素讓你想改？
+Q5：對學弟妹要決定補不補習，你會給什麼建議？
+   ‧ 追問：跟你當初被建議的有什麼不同？
+
+(五) 收尾
+還有什麼想補充的嗎？感謝您的時間。`,
+        prompt: `我是高中研究方法課的學生（訪談組），要在計畫書 docx 第六章填訪綱具體題目。
+
+我的研究問題：[貼上]
+第四章訪談主題：[列出 2-4 個主題]
+研究對象：[貼上]
+
+請幫我：
+
+1. 建議訪綱的整體結構（暖身、核心、收尾各幾題）
+2. 暖身問題 1-2 題的【方向】
+3. 每個訪談主題建議 1-2 個大問題的【方向】（不要寫完整題幹，給開放式提問的角度即可）
+4. 提醒哪個主題最容易掉進「封閉式提問」「雙重問題」「預設立場」陷阱
+5. 給我每題可用的 1-2 個追問模板
+
+⚠️ 第 3 點給「方向」就好，我自己照方向寫到 docx 第六章。寫完再貼給你檢查。`,
+    },
+    experiment: {
+        label: '🧪 實驗組',
+        example: `【示範主題】背景音樂（古典樂 vs 安靜）對短期記憶測驗表現的影響
+
+(一) 研究假設
+聽 60 BPM 古典樂的學生，短期記憶測驗分數會比安靜環境組高。
+
+(二) 變項定義
+‧ 自變項：背景音樂類型
+   操作定義：實驗組播放 60 BPM 古典樂（莫札特 K.448）15 分鐘；對照組安靜 15 分鐘。
+   分組：隨機分配，每組 15 人。
+‧ 依變項：短期記憶分數
+   測量：標準化 30 題單字記憶測驗，每題 1 分（共 30 分）。
+‧ 控制變項：
+   1. 同一時段（下午 14:00-14:30）
+   2. 同一教室（光線、溫度一致）
+   3. 同一份測驗（題目順序固定）
+   4. 同一指導語（用錄音播放避免老師口氣差異）
+
+(三) 實驗流程（Step 1-5）
+Step 1：發放知情同意書，受試者簽名（5 min）
+Step 2：隨機分組（抽籤），實驗組進 A 教室、對照組進 B 教室（5 min）
+Step 3：A 教室播放古典樂 / B 教室安靜，兩組同時開始記憶 30 個英文單字（15 min）
+Step 4：兩組同時做測驗（10 min）
+Step 5：回收測驗、致謝、解釋研究意義（5 min）
+
+(四) 數據紀錄表
+| 受試者代號 | 組別 | 測驗分數 | 備註 |`,
+        prompt: `我是高中研究方法課的學生（實驗組），要在計畫書 docx 第六章填實驗計畫具體內容。
+
+我的研究問題：[貼上]
+研究假設：[「A 會影響 B」格式]
+研究對象：[受試者描述]
+
+請幫我：
+
+1. 把假設拆成具體的自變項與依變項，給【操作型定義方向】
+2. 控制變項建議列 4 項（哪些跨組要保持一致）
+3. 流程 Step 1-5 的【方向】（每步要做什麼，不要寫指導語細節）
+4. 數據紀錄表建議欄位
+5. 提醒最容易出現「混淆變項」「霍桑效應」「樣本偏差」的陷阱在哪
+
+⚠️ 操作型定義給方向就好，我自己照寫到 docx。指導語逐字稿不要寫——那是 W11 才做。`,
+    },
+    observation: {
+        label: '👀 觀察組',
+        example: `【示範主題】高中生自習課專注行為觀察
+
+(一) 觀察目的
+紀錄高一學生在自習課的專注／分心行為頻率與型態，分析自習課的實際使用狀況。
+
+(二) 觀察情境
+‧ 時段：每週三 12:30-13:00（午休自習時間）
+‧ 地點：高一某班教室（取得導師同意）
+‧ 對象：30 位學生（用代號 S01-S30）
+‧ 觀察者位置：教室後方角落，不參與互動
+
+(三) 行為操作型定義（3 個指標）
+1. 專注：視線停留書本／作業 ≥ 30 秒
+   正例：寫筆記、翻書頁
+   反例：抬頭看別人不算
+2. 滑手機：手中握有手機 ≥ 5 秒
+   正例：滑、看、打字
+   反例：只是放在桌上不算
+3. 組內聊天：對話超過 1 句
+   正例：討論作業 / 閒聊
+   反例：單句問借東西不算
+
+(四) 紀錄方式
+時間取樣：每 5 分鐘一筆紀錄（共 6 筆 / 場）
+選擇理由：30 人同時觀察，事件取樣會來不及記。
+
+(五) 紀錄表欄位
+| 時間 | 代號 | 行為類別 | 持續時間 | 備註 |
+| 12:30 | S01 | 專注 | 持續中 | - |
+| 12:35 | S02 | 滑手機 | 約 3 分鐘 | 看影片 |
+
+(六) 倫理保護
+‧ 取得導師同意 + 全班口頭知情同意
+‧ 用代號不寫姓名、不拍照、不錄影
+‧ 結束後告知班級研究結果`,
+        prompt: `我是高中研究方法課的學生（觀察組），要在計畫書 docx 第六章填觀察具體內容。
+
+我的研究問題：[貼上]
+要觀察的行為／現象：[貼上]
+觀察情境：[時段、地點]
+
+請幫我：
+
+1. 觀察目的的清楚陳述（連結到研究問題）
+2. 觀察情境的具體設定建議（對象人數、觀察者位置）
+3. 行為操作型定義 3 個指標的【方向】（每個給「正例 vs 反例」的提示，不要替我下定義）
+4. 紀錄方式建議（時間取樣 vs 事件取樣，為什麼）
+5. 紀錄表欄位建議
+6. 倫理保護需要做哪幾件事
+
+⚠️ 操作型定義給方向 + 正反例方向，我自己照寫到 docx。`,
+    },
+    literature: {
+        label: '📚 文獻組',
+        example: `【示範主題】近 5 年總統雙十演說中「民主」概念的論述變化（④ 論述分析）
+
+⚠️ 文獻分析 ≠ 文獻回顧：本研究是把演說稿當「研究對象」分析，不是整理前人論文。
+
+(一) 子類型：④ 論述分析
+選擇理由：研究問題要解讀「民主」這個概念在不同時期的論述如何變化，論述分析最適合解讀意識形態與話語策略。
+
+(二) 分析對象
+2020-2024 年總統雙十演說 5 篇，全文（每篇約 5,000 字）。
+
+(三) 資料來源
+總統府官網「歷年國慶文告」、聯合報資料庫。
+
+(四) 納入排除標準
+‧ 時間：2020-2024
+‧ 文本：完整演說稿（去除互動橋段）
+‧ 排除：媒體轉述版
+
+(五) 分析架構
+本研究用「論述分析」，架構如下：
+
+軸線設計（兩條對立軸線）：
+‧ 軸線 1：自由 vs 平等（自由偏向個人權利、平等偏向社會公平）
+‧ 軸線 2：個人 vs 集體（個人公民個體 vs 國家民族）
+
+話語策略類別（4 類）：
+‧ 訴諸共同體（用「我們」消彌歧異）
+‧ 訴諸歷史（援引過往事件）
+‧ 訴諸權威（引用憲法／領袖）
+‧ 訴諸對立（建立內外敵我）
+
+(六) 雙人編碼一致率規劃
+本研究為論述分析，需要 2 位編碼者獨立編碼前 1 篇演說（20% 樣本），計算軸線與策略分類的一致率。要求 ≥80% 才能正式編碼，否則回頭調整定義。`,
+        prompt: `我是高中研究方法課的學生（文獻分析組）。
+
+⚠️ 「文獻分析」是把文獻當研究對象，不是「文獻回顧」。
+
+我的研究問題：[貼上]
+我的子類型（必選 1 種）：[② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事]
+分析對象：[什麼來源、時間範圍、規模]
+
+請依我的子類型，幫我：
+
+1. 子類型選擇的理由（連結研究問題）
+2. 分析對象的具體列出方向（來源／時間／規模）
+3. 資料來源建議（2 個資料庫）+ 納入排除標準
+4. 分析架構的【方向】（依子類型）：
+   - 歷史：時間軸切割原則 + 關鍵事件選法
+   - 內容：3-5 個編碼類別的方向（不要寫操作定義）
+   - 論述：兩條軸線設計方向 + 話語策略類別
+   - 敘事：情節結構單位 + 角色功能類別
+5. 【內容／論述適用】雙人編碼一致率怎麼規劃
+
+⚠️ 給「方向」就好，我自己照寫到 docx 第六章對應欄位。完整編碼表細節是 W11 才做。`,
+    },
+};
+
 /* — 文獻分析法 4 子類型（對齊 W9 計畫書第一章勾選） — */
 const LIT_SUBTYPES = [
     {
@@ -239,14 +494,13 @@ const PAIRING_INSTRUCTIONS = {
 
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    /* Step 1：入場 + 工具設計 */
+    /* Step 1：第六章填具體題目 */
     { key: 'w10-entry-self-report', label: '入場自報（W9 docx 完成度）', question: '第二~五章章節完成狀況' },
     { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
-    /* Step 2：整本 AI 檢核（含 AIRED 五要素：A/I 前置 + R/E/D 分欄） */
-    { key: 'w10-ai-raw-feedback', label: 'AI 回覆原文（含 A+I 前置）', question: 'A: 用什麼 AI | I: 問了什麼 | R: AI 完整回覆' },
-    { key: 'w10-ai-judge', label: 'AI 建議採納判斷（E: Evaluation）', question: '採納／不採納／部分採納的決定與理由' },
-    { key: 'w10-tool-revision', label: '整本修正紀錄（D: Decision）', question: '根據 AI 建議修改了哪些章節？' },
+    /* Step 2：七到十三章 + AIRED + 課後待補 */
+    { key: 'w10-aired-record', label: 'W10 完整 AIRED 敘事', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w10-postclass-todo', label: '課後待補清單', question: '哪幾章還想再動，配 W11 老師回饋對照' },
 ];
 
 /* ══════════════════════════════════════
@@ -526,23 +780,10 @@ export const ToolRefinementPage = () => {
                     {/* Step 1 開場 */}
                     <div>
                         <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                            W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把第六章（工具本體）寫到「主架構」</strong>。
+                            W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把計畫書 1-5 章補完 + 第六章填具體題目</strong>。
                         </p>
                         <div className="w7-notice w7-notice-gold">
-                            🎯 <strong>本節目標：第六章工具「主架構」（不是定稿）。</strong>結構完整 + 主要欄位有內容即可，<strong>W11 Pilot 後再修</strong>——這就是 Pilot 的目的。
-                        </div>
-                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 max-w-[720px] mt-3">
-                            <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">📐 「主架構」量化標準（依方法）</p>
-                            <ul className="text-[12px] text-[var(--ink-mid)] leading-[1.85] space-y-1 list-disc pl-5">
-                                <li><strong>📋 問卷</strong>：開場 + 基本資料 + <strong>每變項先寫 2-3 題粗稿</strong>（不是 5 題精修）+ 結尾</li>
-                                <li><strong>🎤 訪談</strong>：開場 + 暖身 + <strong>5 個大問題粗稿</strong>（追問先想 1 個）+ 收尾</li>
-                                <li><strong>🧪 實驗</strong>：自變項／依變項操作定義 + 控制變項 3+ + <strong>流程 Step 1-5 骨架</strong>（細節 W11 修）</li>
-                                <li><strong>👀 觀察</strong>：行為操作定義 ×3 + <strong>紀錄表欄位骨架</strong> + 時段地點</li>
-                                <li><strong>📚 文獻</strong>：分析架構主軸（時間軸／編碼表／軸線／情節結構選一）+ <strong>3-5 個分析單位</strong>（內容/論述後續再補一致率測試）</li>
-                            </ul>
-                            <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 pt-2 border-t border-[var(--border)]">
-                                💡 不要追求 W10 就寫到精修——50 分鐘做不到。寫到「結構出來、主欄位有東西」就推到 W11，那時 Pilot 會幫你抓細節。
-                            </p>
+                            🎯 <strong>本節目標：計畫書 1-5 章定稿 + 第六章「填具體題目」</strong>（不是工具實體——實體 W11 第一節做）。內容寫在 <strong>docx</strong> 上，網頁只記過程紀錄與 AIRED。
                         </div>
                     </div>
 
@@ -589,339 +830,210 @@ export const ToolRefinementPage = () => {
                         </p>
                     </div>
 
-                    {/* 方法分流提示 — 5 種方法並排，自己的方法粗藍框強調，其他作「也認識一下」 */}
-                    {(() => {
-                        const ALL_TOOLS = [
-                            { id: 'questionnaire', label: '📋 問卷組', out: '每個變項 3–5 題問卷題目（第四章變項 × 第六章題目）' },
-                            { id: 'interview',     label: '🎤 訪談組', out: '每個主題 1 主問題 + 2–3 追問（第四章主題 × 第六章大綱）' },
-                            { id: 'experiment',    label: '🧪 實驗組', out: '實驗流程 Step 1–5 + 數據記錄表（第四章變項 × 第六章流程）' },
-                            { id: 'observation',   label: '👀 觀察組', out: '觀察紀錄表欄位 + 時段採樣方式（第四章維度 × 第六章紀錄表）' },
-                            { id: 'literature',    label: '📚 文獻組', out: '依你 W9 計畫書勾選的子類型，產出對應的「分析架構」+「分析流程 Step 1–5」（4 子類型各不同——下方展開可選）' },
-                        ];
-                        return (
-                            <div className="space-y-3 max-w-[720px]">
-                                <div className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
-                                    📚 <strong className="text-[var(--ink)]">研究方法課的核心</strong>：5 種你都該認識——你選的方法會做、其他你會分辨。下方<strong className="text-[var(--accent)]">粗藍框</strong>是你的方法（會在第六章執行），其他是「也看一下」。
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    {ALL_TOOLS.map((t) => {
-                                        const isMine = t.id === detectedMethodId;
-                                        /* 對齊新 GDrive：4 個非文獻方法直接給下載 URL；文獻組由下方 4 子類型選擇器處理 */
-                                        const TOOL_URL_MAP = {
-                                            questionnaire: { url: 'https://docs.google.com/document/d/1tu-WF_JitJIwBZBHrrgm3MeFMDykpm_gGZoyrB4UkOI/copy',     name: '01_問卷_工具' },
-                                            interview:     { url: 'https://docs.google.com/document/d/1BU6XyNxdwng6I15pwYXfRs-zwKgDDyF_EVc2T6uUCrs/copy',     name: '02_訪綱_工具' },
-                                            experiment:    { url: 'https://docs.google.com/document/d/1evcQ6-97mhkhsLz4RHDEGp9P_LkjAeIKUcvusBtc0d8/copy',     name: '03_實驗_工具設計表' },
-                                            observation:   { url: 'https://docs.google.com/spreadsheets/d/1QMqW2AAlc1s_gNfiY3jkFCy0CHpYz2GX9ZmgpShUm7s/copy',  name: '04_觀察紀錄表_工具' },
-                                        };
-                                        const myTool = TOOL_URL_MAP[t.id];
-                                        return (
-                                            <div
-                                                key={t.id}
-                                                className={
-                                                    isMine
-                                                        ? 'bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-4 md:col-span-2'
-                                                        : 'bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 opacity-80'
-                                                }
-                                            >
-                                                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                                                    <span className={`font-bold ${isMine ? 'text-[14px] text-[var(--ink)]' : 'text-[12.5px] text-[var(--ink-mid)]'}`}>{t.label}</span>
-                                                    {isMine && (
-                                                        <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">← 你選這個</span>
-                                                    )}
-                                                </div>
-                                                <p className={isMine ? 'text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3' : 'text-[11.5px] text-[var(--ink-light)] leading-[1.6]'}>
-                                                    {isMine ? <><strong className="text-[var(--ink)]">本節要產出：</strong>{t.out}</> : t.out}
-                                                </p>
-                                                {isMine && myTool && (
-                                                    <a
-                                                        href={myTool.url}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex items-center justify-center gap-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[8px] px-4 py-2 no-underline transition-opacity text-[12.5px] font-bold"
-                                                    >
-                                                        📦 開啟「{myTool.name}」副本 →
-                                                    </a>
-                                                )}
-                                                {isMine && t.id === 'literature' && (
-                                                    <p className="text-[11.5px] text-[var(--ink-light)] italic">
-                                                        👇 文獻組請先到下方「4 子類型選擇器」選自己的子類型，會給對應的工具模板下載連結。
-                                                    </p>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                {!detectedMethodId && (
-                                    <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[12px] text-[var(--ink-light)]">
-                                        👆 未偵測到你的研究方法。可先看看 5 種長什麼樣，然後回 W9 完成方法選擇。
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })()}
-
-                    {/* 文獻組專屬：4 子類型選擇器（只當主方法是文獻分析才顯示） */}
-                    {detectedMethodId === 'literature' && (
-                        <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
-                            <div className="flex items-center gap-2 mb-2 flex-wrap">
-                                <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">文獻組專屬</span>
-                                <span className="font-bold text-[14px] text-[var(--ink)]">你做的是哪一種文獻分析？</span>
-                            </div>
-                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                                <strong className="text-[var(--ink)]">「文獻分析」≠「文獻回顧」</strong>——文獻分析法是把文獻本身當「研究對象」來分析它，不是整理前人研究。請對照你 W9 計畫書第一章勾選的子類型，點選下方對應按鈕：
-                            </p>
-                            {/* 4 子類型按鈕 */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-                                {LIT_SUBTYPES.map((s) => {
-                                    const isMine = litSubtype === s.id;
-                                    return (
-                                        <button
-                                            key={s.id}
-                                            type="button"
-                                            onClick={() => chooseLitSubtype(s.id)}
-                                            className={`text-left px-3 py-2.5 rounded-[8px] border-2 transition-colors ${
-                                                isMine
-                                                    ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
-                                                    : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--accent)]'
-                                            }`}
-                                        >
-                                            <span className="text-[14px] block">{s.icon} <strong className="text-[12.5px]">{s.label}</strong></span>
-                                            <span className={`text-[10.5px] leading-[1.5] block mt-0.5 ${isMine ? 'text-white/85' : 'text-[var(--ink-light)]'}`}>{s.defn}</span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                            {/* 子類型選定後：顯示對應分析架構 + 流程 */}
-                            {litSubtype ? (
-                                (() => {
-                                    const s = LIT_SUBTYPES.find(x => x.id === litSubtype);
-                                    return (
-                                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 space-y-3 text-[12.5px]">
-                                            <div>
-                                                <p className="font-bold text-[var(--ink)] mb-1">📦 本節要產出（第六章工具設計部分）</p>
-                                                <p className="text-[var(--ink-mid)] leading-relaxed">{s.deliverable}</p>
-                                                <p className="text-[11.5px] text-[var(--ink-light)] mt-1.5 italic">範例：{s.archExample}</p>
-                                            </div>
-                                            <div className="border-t border-[var(--border)] pt-3">
-                                                <p className="font-bold text-[var(--ink)] mb-2">🔬 分析流程（第七章執行寫進去）</p>
-                                                <ol className="text-[var(--ink-mid)] leading-[1.85] space-y-0.5 list-none pl-0">
-                                                    {s.steps.map((step, i) => (
-                                                        <li key={i}>{step}</li>
-                                                    ))}
-                                                </ol>
-                                            </div>
-                                            {/* 下載對應模板 */}
-                                            <div className="border-t border-[var(--border)] pt-3 flex flex-col md:flex-row gap-2 items-stretch md:items-center justify-between">
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-[11.5px] text-[var(--ink-mid)]">📥 對應模板：</p>
-                                                    <p className="text-[12px] font-bold text-[var(--ink)] truncate">{s.templateName}</p>
-                                                </div>
-                                                <a
-                                                    href={s.templateUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center justify-center gap-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[8px] px-4 py-2 no-underline transition-opacity text-[12.5px] font-bold whitespace-nowrap"
-                                                >
-                                                    開啟模板副本 →
-                                                </a>
-                                            </div>
-                                            {(s.id === 'content' || s.id === 'discourse') && (
-                                                <div className="border-t border-[var(--border)] pt-3 bg-[#FEF3C7] -mx-4 -mb-4 px-4 py-3 rounded-b-[var(--radius-unified)]">
-                                                    <p className="text-[11.5px] text-[#92400E] leading-relaxed">
-                                                        ⚠️ <strong>{s.label}必做：</strong>找另一位組員（或同學）做雙人編碼，計算<strong>編碼者一致率</strong>。一致率 ≥80% 才能正式編碼，否則要先討論定義不一致的地方。
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })()
-                            ) : (
-                                <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[12px] text-[var(--ink-light)]">
-                                    👆 還沒選子類型？回頭翻你的 W9 計畫書第一章——「本研究的子類型（必選一種）」那格勾的是哪個。
-                                </div>
-                            )}
+                    {/* 第六章在 docx 直接填題目（W11 才把題目轉成施測載具） */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">第六章 · 填具體題目</span>
+                            <span className="font-bold text-[14px] text-[var(--ink)]">直接在 docx 第六章填題目</span>
                         </div>
-                    )}
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-2">
+                            計畫書 docx 第六章本來就有完整的填空表格（結構／題目類型／基本資料／變項題目／自檢）——本節 W10 直接<strong className="text-[var(--ink)]">在 docx 把題目都填到位</strong>。網頁不重複 docx 內容；下方範例 + AI 啟動 prompt 是給你**對照寫**用的。
+                        </p>
+                        <p className="text-[12.5px] text-[var(--ink-light)] leading-relaxed bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
+                            💡 W10 vs W11 分工：<strong className="text-[var(--ink)]">W10 在 docx 裡寫題目本身</strong>（紙上設計）；<strong className="text-[var(--ink)]">W11 把題目轉成施測載具</strong>（Google Form／紙本訪綱／印出觀察表）+ 跨班 Pilot 真人測試。
+                        </p>
+                    </div>
+
+                    {/* 5 種方法的 L1+L2 工具包：5 法都呈現，自己的預設展開、其他點開可看 */}
+                    <div className="space-y-3 max-w-[720px]">
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                            📚 <strong className="text-[var(--ink)]">5 種方法都有範例</strong>——預設展開你選的方法（粗藍框），其他點開可以看（研究方法課的核心：你選的會做、其他你會分辨）。
+                        </p>
+                        {Object.entries(TOOL_DESC_KIT).map(([id, kit]) => {
+                            const isMine = id === detectedMethodId;
+                            return (
+                                <details
+                                    key={id}
+                                    open={isMine}
+                                    className={
+                                        isMine
+                                            ? 'bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden'
+                                            : 'bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden'
+                                    }
+                                >
+                                    <summary className={`px-4 py-3 cursor-pointer flex items-center gap-2 flex-wrap hover:bg-[var(--paper)] ${isMine ? 'bg-[var(--accent-light)]' : 'bg-[var(--paper-warm)]'}`}>
+                                        <span className="font-bold text-[13.5px] text-[var(--ink)]">{kit.label}的第六章填寫示範</span>
+                                        {isMine && (
+                                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">← 你選這個</span>
+                                        )}
+                                    </summary>
+                                    <div className="p-4 space-y-4 border-t border-[var(--border)]">
+                                        {/* L1：示範範例 */}
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span className="text-[10px] font-mono font-bold bg-[#0EA5E9] text-white px-2 py-0.5 rounded-[3px]">範例</span>
+                                                <span className="text-[12px] font-bold text-[var(--ink-mid)]">填寫示範（學生對照寫到自己的 docx）</span>
+                                            </div>
+                                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] whitespace-pre-line font-mono bg-[#F8FAFC] border border-[var(--border)] rounded-[6px] p-3">{kit.example}</p>
+                                            <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">
+                                                💡 這是示範主題——你用自己的研究問題、變項、對象替換對應的內容寫到 docx 第六章。
+                                            </p>
+                                        </div>
+
+                                        {/* L2：AI 啟動 prompt（預設摺疊） */}
+                                        <details className="border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                            <summary className="px-3 py-2 bg-[var(--paper-warm)] cursor-pointer flex items-center gap-2 flex-wrap hover:bg-[var(--paper)]">
+                                                <span className="text-[10px] font-mono font-bold bg-[var(--success)] text-white px-2 py-0.5 rounded-[3px]">AI 啟動</span>
+                                                <span className="text-[12px] font-bold text-[var(--ink)]">不知怎麼開始？點開複製這段 Prompt 給 AI</span>
+                                            </summary>
+                                            <div className="p-3 border-t border-[var(--border)]">
+                                                <CopyablePrompt text={kit.prompt} />
+                                                <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed mt-2 italic">
+                                                    💡 把 [方括號] 裡的內容換成你的東西再貼給 AI。<strong>AI 給「方向」就好——不要它替你寫完整題目（自己寫到 docx 才有教學意義）。</strong>
+                                                </p>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </details>
+                            );
+                        })}
+                    </div>
 
                     {/* 補充方法提示卡（W8 登記過才顯示） */}
                     {w8Secondary && (
                         <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
                             🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
                             <p className="mt-1.5">
-                                <strong className="text-[#064E3B]">本節 50 分鐘專注主方法第六章工具主架構</strong>——補充方法的工具設計留到課後（不要兩條線都想擠進這節，會兩邊都做不完）。
-                            </p>
-                            <p className="mt-1">
-                                docx 第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——主工具寫完整、補充工具寫骨架就好。
+                                docx 第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——兩個都填到，但<strong className="text-[#064E3B]">主工具寫完整、補充工具寫骨架就好</strong>。
                             </p>
                         </div>
                     )}
 
-                    {/* 工具設計關鍵決策 */}
-                    <ThinkRecord
-                        dataKey="w10-tool-design-notes"
-                        prompt="工具設計的 2-3 個關鍵決策（docx 寫完後在此摘要）"
-                        defaultTemplate={'決策 1：\n決策 2：\n決策 3：（無就留空）'}
-                        placeholder="例：問卷改用五點量表不用七點——因為高中生對中等程度辨識度有限"
-                        rows={6}
-                    />
-
                     {/* 下節預告 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 第六章完成 → 第二節做 <strong>整本 AI 檢核 + 定稿繳交</strong>。中場休息時可以先準備整本 docx（13 章都到齊才能給 AI 整體檢核）。
+                        ✅ 第六章填具體題目完成 → 第二節 <strong>補七到十三章 + 整本繳交</strong>。<br />
+                        💡 <strong>第七、八章先寫草稿即可</strong>——老師上課會講，等你 W11 做完工具實體跑過 Pilot 之後再回頭精修最有效。第十章倫理／第十一章時程／第十二章 AI 聲明都是模板套用，最快搞定。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 2：整本計畫書 AI 檢核 — 第二節前半 25 min ─── */
+        /* ─── Step 2：第七~十三章補完 + 整本繳交 — 第二節 50 min ─── */
         {
-            title: '整本計畫書 AI 檢核',
-            icon: '🤖',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        工具設計完了，整本計畫書整合進來。這次 AI 檢核重點是<strong className="text-[var(--ink)]">跨章一致性</strong>——不是再挑一次每章單章品質，是看「方向（1-3 章）→ 方法（3 章）→ 變項（4 章）→ 對象（5 章）→ 工具（6 章）→ 執行（7-13 章）」之間邏輯有沒有通。
-                    </p>
-
-                    {/* 🤝 1-4 人分章工作流（整本檢核 + 定稿） */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF] max-w-[720px]">
-                        <p className="text-[13px] font-bold text-[#075985] mb-2">🤝 整本檢核 + 定稿分工（25 min 跑 AI、25 min 定稿）</p>
-                        <div className="grid md:grid-cols-2 gap-2 text-[11.5px] text-[#0C4A6E] leading-[1.7]">
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="font-bold text-[#075985] mb-1">1 人組</p>
-                                自己跑 AI、自己判斷、自己改。<strong>等 AI 思考時別發呆</strong>——同步先翻 W9 老師回饋還沒處理的部分。
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="font-bold text-[#075985] mb-1">2 人組</p>
-                                <ul className="list-disc pl-4 space-y-0.5">
-                                    <li>A 跑 AI（深度推理要等）</li>
-                                    <li>B 同步整理 W9 老師回饋成清單</li>
-                                    <li>AI 回來後一起判斷 → 互換修文字</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="font-bold text-[#075985] mb-1">3 人組</p>
-                                <ul className="list-disc pl-4 space-y-0.5">
-                                    <li>A 跑 AI</li>
-                                    <li>B 寫採納判斷紀錄</li>
-                                    <li>C 整理修改清單／同步檢查 W9 回饋</li>
-                                    <li>三人一起核對最終定稿</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="font-bold text-[#075985] mb-1">4 人組</p>
-                                <ul className="list-disc pl-4 space-y-0.5">
-                                    <li>A 跑 AI</li>
-                                    <li>B 寫採納判斷</li>
-                                    <li>C 整理修改清單</li>
-                                    <li>D 跑 W10 AIRED + 統整繳交</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* AI 檢核 Prompt（整本檢核專用，不是工具檢核） */}
-                    <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">第一步：複製整本檢核 Prompt 貼到 AI</div>
-                        <CopyablePrompt text={PLAN_FULL_CHECK_PROMPT} />
-                        <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
-                            💡 把計畫書<strong>全本（即使是草稿、半成品都貼）</strong>，並在每章開頭標註自己的進度階段（方向／雛形／精修／定版）——AI 會依此校準回饋深度。
-                        </p>
-                    </div>
-
-                    {/* AI 回覆原文 + AIRED 的 A/I 前置 */}
-                    <ThinkRecord
-                        dataKey="w10-ai-raw-feedback"
-                        prompt="AI 回覆原文（開頭先寫 A+I 兩行；貼全文沒關係；有追問也一起貼）"
-                        defaultTemplate={'A: \nI: \n\n──── AI 完整回覆（以下貼上）────\n'}
-                        placeholder="例：A: 我用了 ChatGPT o1 深度推理版"
-                        rows={14}
-                    />
-
-                    {/* 採納判斷 */}
-                    <ThinkRecord
-                        dataKey="w10-ai-judge"
-                        prompt="AI 建議採納判斷（逐條評估）"
-                        defaultTemplate={'建議 1：AI 說\n→ 我的判斷：✅ 採納 / ❌ 不採納 / 🔶 部分採納\n→ 理由：\n\n建議 2：AI 說\n→ 我的判斷：\n→ 理由：\n\n建議 3：AI 說\n→ 我的判斷：\n→ 理由：'}
-                        placeholder="例：建議 1 採納，因為原本就漏寫信效度"
-                        rows={10}
-                    />
-
-                    {/* 整本修正紀錄 */}
-                    <ThinkRecord
-                        dataKey="w10-tool-revision"
-                        prompt="根據 AI 建議，整本計畫書要改哪些章節？"
-                        placeholder={'例：\n第 3 章要改：補上信效度說明（改成「採用 Cronbach α 確認量表內部一致性」）\n第 6 章要改：訪談大綱從 12 題砍到 6 題\n第 7 章要改：（無）'}
-                        scaffold={['第 ___ 章要改：要改什麼（改成什麼）', '另一章要改：…']}
-                        rows={6}
-                    />
-
-                    <div className="w7-notice w7-notice-teal">
-                        ✅ 修正紀錄寫完 → 下一個 Step 寫 W10 AIRED + 定稿繳交。
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ─── Step 3：W10 AIRED + 定稿繳交 — 第二節後半 25 min ─── */
-        {
-            title: 'W10 AIRED + 定稿繳交',
+            title: '七到十三章 × 整本繳交',
             icon: '📤',
             content: (
                 <div className="space-y-8 prose-zh">
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        最後 25 分鐘：完整記錄 W10 AIRED（本週最重要的 AI 互動），上傳定稿，預告 W11 Pilot Test 與倫理審查。
+                        本節 50 分鐘把計畫書七到十三章補完，整本繳交 GC。<strong className="text-[var(--ink)]">整本 AI 檢核交給老師跑</strong>——你寫好繳出去，老師會用整本檢核 prompt 跑你的版本，在 GC 寫個別回饋（含星號等級）。下週 W11 你拿到回饋再修，然後填工具實體。
                     </p>
 
-                    {/* W10 定稿驗收 checklist */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
-                            ✅ W10 定稿前驗收
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                    {/* 老師會做整本檢核（學生不用） */}
+                    <div className="bg-[#F0F9FF] border-l-4 border-[#0EA5E9] p-4 max-w-[720px]">
+                        <p className="text-[13px] font-bold text-[#075985] mb-1">📨 為什麼整本 AI 檢核交給老師？</p>
+                        <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed">
+                            你的第六章工具設計時已經跟 AI 互動過（記在 W10 AIRED）——這部分夠了。<strong>整本檢核要看「跨章一致性」</strong>，這個老師有全班視角、可以批量跑、再加自己判斷給你回饋。<strong className="text-[#064E3B]">你的時間花在把整本寫到位</strong>，不要再跑一次 AI。
+                        </p>
+                    </div>
+
+                    {/* 七到十三章內容引導 */}
+                    <div>
+                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
+                            第七到十三章內容對照
+                        </h4>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            多數章節是「<strong>模板套用 + 微調</strong>」，不需要從零想。<strong className="text-[var(--ink)]">第七、八章先寫草稿即可——老師上課會講</strong>，等實際做出工具實體（W11）跟跑過 Pilot 後再回頭精修。
+                        </p>
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="grid grid-cols-[60px_1fr_70px] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                                <div className="px-3 py-2.5">章</div>
+                                <div className="px-3 py-2.5 border-l border-[var(--border)]">內容</div>
+                                <div className="px-3 py-2.5 border-l border-[var(--border)]">本節到</div>
+                            </div>
                             {[
-                                '第六章工具設計已完成（docx）',
-                                '整本計畫書 13 章都有內容（docx）',
-                                'AI 檢核回覆已讀完、判斷已做',
-                                '整本修正紀錄已寫',
-                                'W10 AIRED 敘事完整填寫',
-                                '計畫書 docx 已上傳 Google Classroom',
-                            ].map((item, i) => (
-                                <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
-                                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
-                                    <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>
+                                { ch: '七', t: '研究實施（時程／地點／流程）', stage: '草稿' },
+                                { ch: '八', t: '資料分析方式', stage: '草稿' },
+                                { ch: '九', t: '預期結論與貢獻', stage: '雛形' },
+                                { ch: '十', t: '研究倫理（抄通用＋微調）', stage: '雛形' },
+                                { ch: '十一', t: '時程表 W9-W17（套模板）', stage: '雛形' },
+                                { ch: '十二', t: 'AI 使用聲明（套通用）', stage: '雛形' },
+                                { ch: '十三', t: '參考文獻（列 W5-W6 文獻）', stage: '雛形' },
+                            ].map((r, i) => (
+                                <div key={i} className="grid grid-cols-[60px_1fr_70px] border-b border-[var(--border)] last:border-b-0 text-[12.5px]">
+                                    <div className="px-3 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
+                                    <div className="px-3 py-2.5 border-l border-[var(--border)] text-[var(--ink)]">{r.t}</div>
+                                    <div className="px-3 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)] font-mono text-[11px]">{r.stage}</div>
                                 </div>
                             ))}
                         </div>
+                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">
+                            💡 第十一章時程表照課表填、第十二章 AI 聲明貼通用版、第十三章把 W5-W6 文獻整理一下——這三章最快。
+                        </p>
                     </div>
 
-                    {/* W10 的 A/I/R/E/D 已分散在 Step 1（w10-w9-feedback-quick = Action/Intent 前置）與 Step 2（w10-ai-raw-feedback/judge/revision = R/E/D）四個欄位，不再重複寫完整敘事 */}
+                    {/* W10 完整 AIRED */}
+                    <AIREDNarrative
+                        dataKey="w10-aired-record"
+                        weekLabel="W10"
+                    />
+
+                    {/* 繳交驗收 + 課後待補清單 */}
+                    <div>
+                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
+                            繳交驗收 + 寫課後待補清單
+                        </h4>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            檢查整本 docx 13 章都到本節要求的進度，上傳 Google Classroom W10 作業區。寫一份「課後待補清單」——你自己知道哪些章還粗、哪幾題還想動的，記下來，W11 拿到老師回饋時可以對照。
+                        </p>
+                        <ThinkRecord
+                            dataKey="w10-postclass-todo"
+                            prompt="課後待補清單（你自己知道哪幾章還想再動）"
+                            placeholder={'例：\n第七章流程還沒寫完，等 W11 確定工具實體後再補\n第八章資料分析方式只寫一句話，要再展開\n第十章倫理「不傷害」這條我還不確定要怎麼寫'}
+                            scaffold={['還想動的章節：要做什麼（為什麼）']}
+                            rows={5}
+                        />
+                    </div>
+
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 整本繳交完成 → W11 第一節讀老師 GC 回饋 → 修星號項 → 拿模板填工具實體。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：繳交確認 + W11 預告 ─── */
+        {
+            title: '繳交確認 + W11 預告',
+            icon: '🔔',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        本節最後一段：把整本計畫書匯出資料、確認 GC 已上傳，讀 W11 預告。<strong className="text-[var(--ink)]">老師會在 W11 上課前把整本檢核回饋發到 GC（含★星號等級）</strong>——你下週進教室第一件事就是讀回饋。
+                    </p>
 
                     {/* ExportButton */}
                     <ExportButton
-                        weekLabel="W10 工具設計 + 整本 AI 檢核"
+                        weekLabel="W10 計畫書整本"
                         fields={EXPORT_FIELDS}
                     />
 
-                    {/* W11 預告（Pilot + 倫理） */}
+                    {/* W11 預告（新流程：第一節工具實體 + 第二節 Pilot+倫理+施測） */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
                         <div className="flex items-center gap-2 mb-3">
                             <Users size={20} className="text-[var(--danger)]" />
-                            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">W11 預告 · Pilot Test + 倫理審查</span>
+                            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">W11 預告 · 工具實體 × 跨班 Pilot × 倫理 × 施測啟動</span>
                         </div>
                         <div className="font-bold text-[17px] md:text-[18px] mb-3 leading-tight">
-                            下週帶定稿工具來做真人預試
+                            下週兩節分明：第一節做工具實體、第二節做跨班 Pilot
                         </div>
                         <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
-                            AI 檢核已經是第一輪把關——但 AI 看不到「填答者的臉」。W11 要做<strong className="text-white">真人預試</strong>：找 2-3 人實際填／答／測你的工具，看出 AI 沒抓到的問題。
+                            <strong className="text-white">第一節（50 min）</strong>：讀老師 GC 回饋 → 修星號項 → 拿模板填**工具實體完整版**（依方法：問卷／訪綱／實驗／觀察／文獻分析架構）。
                         </p>
-                        <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1 mb-4 pl-4">
-                            <li>・<strong className="text-white">倫理審查</strong>：知情同意書、隱私保護、退出機制最後確認</li>
-                            <li>・<strong className="text-white">預試對象聯絡</strong>：W10 課後先約好 2-3 位預試者</li>
-                            <li>・<strong className="text-white">工具形式準備</strong>：問卷轉 Google Form、訪綱印紙本、觀察表印紙本</li>
-                        </ul>
+                        <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
+                            <strong className="text-white">第二節（50 min）</strong>：跨班 Pilot 互測 20 min（座位圖配對）→ 雙向紀錄 5 min → 倫理快速 10 min → 施測啟動 10 min。
+                        </p>
                         <p className="text-[12.5px] text-white/70 leading-[1.9] font-mono">
-                            課後任務：約預試對象 + 準備工具實體形式（印出或線上版）
+                            課後任務：對照「課後待補清單」，把七、八章草稿先補一輪（W11 拿到回饋會更清楚要怎麼寫）
                         </p>
                     </div>
                 </div>
@@ -934,7 +1046,7 @@ export const ToolRefinementPage = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">AI 工具精進 W10</span>
+                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">計畫書·整本定稿 W10</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -959,13 +1071,13 @@ export const ToolRefinementPage = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W10"
-                title="方法深化 II："
-                accentTitle="AI 協助工具精進 × 整本計畫書檢核"
-                subtitle="第一節寫第六章工具到「主架構」（W11 Pilot 後再修），第二節做整本計畫書 AI 檢核（跨章一致性）+ 定稿。AI 能找文字邏輯漏洞，但真人 Pilot 留到 W11——兩週分工不重疊。"
+                title="計畫書 · "
+                accentTitle="整本定稿"
+                subtitle="W10 目標 = 把整本計畫書寫到定稿級。第一節：W9 沒寫完的 1-5 章補完 + 在 docx 第六章填具體題目（結構／基本資料／變項題目／自檢）。第二節：第七~十三章補完 + 整本 AIRED + 繳交。整本 AI 檢核交給老師跑，W11 拿到 GC 回饋再修工具，並把題目轉成施測載具（Google Form／紙本）+ 跨班 Pilot。"
                 meta={[
-                    { label: '第一節', value: '第六章工具設計 + AI 工具檢核（依進度容錯）' },
-                    { label: '第二節', value: '整本計畫書 AI 檢核（跨章一致性）+ AIRED + 定稿' },
-                    { label: '課堂產出', value: '第六章工具主架構 + AI 整本檢核判斷表 + 計畫書定稿' },
+                    { label: '第一節', value: '補完 1-5 章 + 第六章填題目 + AIRED' },
+                    { label: '第二節', value: '第七~十三章補完 + 完整 AIRED + 整本繳交 GC' },
+                    { label: '課堂產出', value: '計畫書 docx 整本（13 章；7-8 章草稿即可）' },
                     { label: '前置要求', value: 'W9 計畫書第 1-5 章雛形（含第四章變項／主題）' },
                 ]}
             />

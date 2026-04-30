@@ -1410,7 +1410,7 @@ export const W9Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">工具設計基礎 W9</span>
+                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">計畫書·五章地基 W9</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -1435,8 +1435,8 @@ export const W9Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W9"
-                title="診斷語言 × "
-                accentTitle="五章地基工程"
+                title="計畫書 · "
+                accentTitle="五章地基"
                 subtitle="第一節學診斷尺與檢查清單——認清什麼是好工具、什麼是毒題。第二節把 W2–W8 累積的成果整合為計畫書第一到第五章——工具設計之前，地基必須先打穩。"
                 meta={[
                     { label: '第一節', value: '讀 W8 回饋 + 診斷尺 + 檢查清單 + 6 題練習' },

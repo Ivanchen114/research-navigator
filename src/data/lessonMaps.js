@@ -1607,7 +1607,7 @@ export const W10Data = {
 
 export const W11Data = {
     id: "W11",
-    title: "Pilot Test × 倫理審查 × 施測啟動",
+    title: "工具實體 × 跨方法 Pilot × 倫理 × 施測啟動",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: baseCourseArc.map((item, idx) => ({
@@ -1618,30 +1618,37 @@ export const W11Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "Pilot Test（方法組內輪轉）",
-            subtitle: "真人預試抓工具毛病",
-            desc: "問卷互填／訪談模擬／實驗審架設圖／觀察試紀錄／文獻互閱分析架構",
+            title: "工具實體（題目轉載具）",
+            subtitle: "Google Form / 訪綱卡 / 紀錄表",
+            desc: "W10 寫題目，W11 把題目搬到能施測的載具上；含關鍵呈現決策",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "倫理審查 + 教師蓋章",
-            subtitle: "四問自查 + AI 審知情同意書",
-            desc: "知情同意／隱私／不傷害／自願，秘密按鈕（⚖ 點 5 次）觸發教師審查",
+            title: "座位表 1 對 1 跨方法 Pilot",
+            subtitle: "雙向紀錄 + 自我檢核",
+            desc: "對方不一定同方法，模擬真實受測者；4 件事每組都要做（知情/計時/觀察/雙向紀錄）",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "施測啟動 + W12 預告",
-            subtitle: "目標、時程、備案、啟動宣告",
-            desc: "W11 AIRED 本週最重要 AI 互動：知情同意書 AI 審",
+            title: "倫理審查 + 教師蓋章",
+            subtitle: "四問自查 + AI 審知情同意書",
+            desc: "知情/隱私/不傷害/自願；秘密按鈕（⚖ 點 5 次）觸發教師審查",
             colorConfig: "g"
+        },
+        {
+            prefix: "④",
+            title: "施測啟動 + AIRED",
+            subtitle: "目標、時程、備案、啟動宣告",
+            desc: "W11 AIRED 本週重點 AI 互動：知情同意書 AI 審",
+            colorConfig: "y"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "讀 W10 回饋 × Pilot Test 實戰",
+            title: "讀 W10 回饋 × 修星號項 × 把題目轉成施測載具",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1652,7 +1659,7 @@ export const W11Data = {
                     colorClass: "c2",
                     icon: "📬",
                     title: "一、 Step 1 開場：讀 W10 老師回饋",
-                    desc: "打開 Google Classroom 看 W10 計畫書定稿批改，把老師最主要的一兩句建議記下來。",
+                    desc: "打開 Google Classroom 看 W10 整本計畫書批改，把老師最主要的建議記下來。",
                     tags: ["W10 回饋", "快速讀取"]
                 },
                 {
@@ -1660,107 +1667,112 @@ export const W11Data = {
                     timeEnd: "0:15",
                     duration: "10 min",
                     colorClass: "c4",
-                    icon: "🗺",
-                    title: "二、 Step 1 Pilot 配對指示 + 知情同意預告",
-                    desc: "方法組內輪轉：問卷組 A→B→C 互填／訪談組兩人模擬／實驗組審架設圖／觀察組試跑紀錄表／文獻組互閱分析架構（內容/論述分析做雙人編碼一致率）。預試前先讀一段知情同意給預試者聽。",
-                    tags: ["方法分流", "配對指示"]
-                },
-                {
-                    timeStart: "0:15",
-                    timeEnd: "0:45",
-                    duration: "30 min",
-                    colorClass: "c5",
-                    icon: "🧪",
-                    title: "三、 Step 2 Pilot Test 實戰",
-                    desc: "依方法分流執行預試：真人填／真人訪／互審架設圖／試跑觀察／文獻組互閱分析架構。過程中隨時記工具卡點。",
-                    tags: ["Pilot 實戰", "5 方法分流"]
-                },
-                {
-                    timeStart: "0:45",
-                    timeEnd: "0:50",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "📝",
-                    title: "四、 Step 2 預試者口頭回饋 + 紀錄",
-                    desc: "預試者 3 分鐘口頭回饋「哪題卡住／哪個選項不會選／填多久」；研究者把發現寫進 w11-pilot-findings。",
-                    tags: ["回饋整理"]
-                }
-            ]
-        },
-        {
-            badge: "第二節",
-            title: "工具修正 × 倫理審查 × 施測啟動",
-            duration: 50,
-            hasBreakAfter: false,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeEnd: "0:15",
-                    duration: "15 min",
-                    colorClass: "c2",
-                    icon: "🔧",
-                    title: "五、 Step 3 第二輪工具修正",
-                    desc: "根據 Pilot 發現直接改 docx 第六章——這是工具最後一版，從現在開始不再大改。實驗組改架設圖。",
-                    tags: ["docx 修正", "最後一版"]
+                    icon: "⭐",
+                    title: "二、 Step 1 修補 ★★★ 必改項",
+                    desc: "依老師標的星號等級分流：★★★ 今天必修、★★ 有空再修、★ 提醒。把 ★★★ 項目寫成具體修補計畫並動手改 docx。",
+                    tags: ["星號分級", "聚焦必改"]
                 },
                 {
                     timeStart: "0:15",
                     timeEnd: "0:25",
                     duration: "10 min",
-                    colorClass: "c4",
-                    icon: "⚖",
-                    title: "六、 Step 3 倫理四問自查",
-                    desc: "知情同意（怎麼告知）／隱私（會不會收到可識別資料）／不傷害（有沒有敏感題）／自願（有沒有壓力）逐一具體回答。",
-                    tags: ["四問自查", "倫理底線"]
+                    colorClass: "c1",
+                    icon: "🛠️",
+                    title: "三、 Step 2 拿模板 + W10 vs W11 分工說明",
+                    desc: "依主方法／補充方法／文獻子類型，下載對應的工具實體模板（Google Form 範本／訪綱／紀錄表）。明確：今天不改題目內容，只把寫好的題目搬上載具。",
+                    tags: ["GDrive 模板", "5 法分流"]
                 },
                 {
                     timeStart: "0:25",
-                    timeEnd: "0:30",
+                    timeEnd: "0:50",
+                    duration: "25 min",
+                    colorClass: "c5",
+                    icon: "🧱",
+                    title: "四、 Step 2 把題目搬上載具",
+                    desc: "問卷轉 Form／訪綱印卡／紀錄表設欄位／文獻編碼表填類別。載具本體留在學生手上（不在網頁填連結），下節 Pilot 直接用，改完再隨計畫書一起繳到 GC。",
+                    tags: ["工具實體", "5 法分流"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "座位表 1 對 1 Pilot × 倫理 × 施測啟動",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:05",
                     duration: "5 min",
-                    colorClass: "c1",
-                    icon: "🤖",
-                    title: "七、 Step 3 知情同意書 AI 審查",
-                    desc: "複製 CONSENT_PROMPT 貼 AI，請 AI 從 16-18 歲高中生角度找看不懂／有壓力的詞句，寫出定稿版。",
-                    tags: ["AI 審", "知情同意"]
+                    colorClass: "c4",
+                    icon: "🗺",
+                    title: "五、 Step 3 配對指示 + 4 件事說明",
+                    desc: "老師投影座位表 1 對 1 跨方法配對。讀「當作真的施測 4 件事」：知情同意短版／計時／專注觀察／雙向紀錄。",
+                    tags: ["座位表", "跨方法"]
+                },
+                {
+                    timeStart: "0:05",
+                    timeEnd: "0:30",
+                    duration: "25 min",
+                    colorClass: "c5",
+                    icon: "🧪",
+                    title: "六、 Step 3 Pilot 互測 + 雙向紀錄",
+                    desc: "前 12 分鐘 A 當研究者測 B、後 12 分鐘 B 當研究者測 A。各自寫 partner / findings / as-subject 三格紀錄；過程拍 1-2 張不露臉照存證。",
+                    tags: ["Pilot 實戰", "雙向紀錄"]
                 },
                 {
                     timeStart: "0:30",
                     timeEnd: "0:35",
                     duration: "5 min",
-                    colorClass: "c5",
-                    icon: "✅",
-                    title: "八、 Step 3 教師倫理審查（秘密按鈕）",
-                    desc: "老師當面看完學生計畫書，用秘密按鈕審查通過：連續點 ⚖ 圖示 5 次 → 輸入老師姓名 → 學生端顯示「已通過」綠色卡片。",
-                    tags: ["⚖ 點 5 次", "教師蓋章"]
+                    colorClass: "c2",
+                    icon: "🔧",
+                    title: "七、 Step 4 工具第二輪修正",
+                    desc: "依 Pilot 發現整理具體修改清單：題目改用詞、量表改點數、載具版面調整、實驗組架設圖補洞——直接寫進 w11-tool-final-revision，並回 docx 改。",
+                    tags: ["最後一版", "依 Pilot 改"]
                 },
                 {
                     timeStart: "0:35",
+                    timeEnd: "0:42",
+                    duration: "7 min",
+                    colorClass: "c4",
+                    icon: "⚖",
+                    title: "八、 Step 4 倫理四問 + 知情同意 AI 審",
+                    desc: "知情同意／隱私／不傷害／自願逐一具體答；複製 CONSENT_PROMPT 貼 AI，把採納/不採納判斷寫下（即 AIRED 的 E/D）。",
+                    tags: ["四問", "AI 審", "AIRED"]
+                },
+                {
+                    timeStart: "0:42",
                     timeEnd: "0:45",
-                    duration: "10 min",
-                    colorClass: "c2",
-                    icon: "🛫",
-                    title: "九、 Step 4 施測啟動：目標 + 時程 + 備案 + 宣告",
-                    desc: "w11-plan-target（樣本數目標/底線）+ w11-plan-schedule（W12-W13 時程）+ w11-plan-backup（Plan B）+ w11-launch（啟動宣告）。",
-                    tags: ["施測啟動"]
+                    duration: "3 min",
+                    colorClass: "c4",
+                    icon: "✅",
+                    title: "九、 Step 4 教師倫理審查（秘密按鈕）",
+                    desc: "老師當面看完計畫書 + 倫理紀錄，連續點 ⚖ 5 次 → 輸入姓名 → 學生端顯示「已通過」。",
+                    tags: ["⚖ 點 5 次", "教師蓋章"]
                 },
                 {
                     timeStart: "0:45",
                     timeEnd: "0:50",
                     duration: "5 min",
                     colorClass: "c3",
-                    icon: "📤",
-                    title: "十、 Step 4 W11 AIRED + ExportButton + W12 預告",
-                    desc: "AIREDNarrative（本週主要 AI 互動：知情同意 AI 審）→ 一鍵匯出繳交 → W12 預告（正式施測）。",
-                    tags: ["AIRED", "繳交", "W12 預告"]
+                    icon: "🛫",
+                    title: "十、 Step 4 施測啟動 + AIRED + ExportButton + W12 預告",
+                    desc: "Plan B 觸發條件具體化 + 動員宣告（樣本/時程已在計畫書，這裡不重填）→ AIREDNarrative → 一鍵匯出繳交 → W12 預告（正式施測）。",
+                    tags: ["Plan B 觸發", "動員宣告", "繳交"]
                 }
             ]
         }
     ],
     summaries: [
         {
+            icon: "🛠️",
+            label: "工具實體",
+            text: "題目搬上施測載具<br><small style=\"font-size:11px;color:#888;\">Google Form／訪綱卡／紀錄表</small>"
+        },
+        {
             icon: "🧪",
             label: "Pilot 發現",
-            text: "方法組內輪轉預試紀錄<br><small style=\"font-size:11px;color:#888;\">抓到 AI 看不到的工具毛病</small>"
+            text: "座位表 1 對 1 跨方法雙向紀錄<br><small style=\"font-size:11px;color:#888;\">當研究者 + 當受測者反思</small>"
         },
         {
             icon: "⚖",
@@ -1771,6 +1783,148 @@ export const W11Data = {
             icon: "🛫",
             label: "施測啟動",
             text: "目標／時程／備案／啟動宣告<br><small style=\"font-size:11px;color:#ccc;\">W12 正式蒐集資料</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 講解" },
+        { colorClass: "lm-c2", label: "實作 / 計畫" },
+        { colorClass: "lm-c4", label: "修正 / 許可" },
+        { colorClass: "lm-c5", label: "互動 / 報告" },
+        { colorClass: "lm-c3", label: "說明 / 收束" }
+    ]
+};
+
+export const W12Data = {
+    id: "W12",
+    title: "期中進度短報 × 13 組同儕擋板",
+    duration: 100,
+    durationDesc: "2 節課",
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 5,
+        now: idx === 5
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "13 組期中短報",
+            subtitle: "3 min Pitch + 1 min QA",
+            desc: "5 段內容：題目+動機 / 方法+工具 / Pilot 共識 / 進度 / 預期+Plan B",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "全班同儕回饋 Form",
+            subtitle: "5 漏洞選擇 + 30 字建議 + 30 字學到什麼",
+            desc: "每位同學聽 12 組各填一次；老師當場投影回饋分布",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "老師當場評分（5 維 × 4 級 = 20 分）",
+            subtitle: "計畫書 / 工具 / Pilot / Plan B / 報告",
+            desc: "≤12 分組 W13 前要找老師談；公開壓力槓桿督促進度",
+            colorConfig: "g"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "開場 + Round 1（6 組短報）",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:05",
+                    duration: "5 min",
+                    colorClass: "c1",
+                    icon: "📢",
+                    title: "一、 開場 + 規則說明",
+                    desc: "短報 5 段模板回顧、3 min 計時器示範、同儕 Form 填寫示範（dummy 假人示範一次）",
+                    tags: ["規則", "示範"]
+                },
+                {
+                    timeStart: "0:05",
+                    timeEnd: "0:35",
+                    duration: "30 min",
+                    colorClass: "c5",
+                    icon: "🎤",
+                    title: "二、 Round 1：6 組短報（每組 3+1）",
+                    desc: "每組 3 min 短報（投影輪播） + 1 min 老師選題提問。聽眾邊聽邊填同儕 Form（QA 1 min 內完成）",
+                    tags: ["短報×6", "同儕 Form"]
+                },
+                {
+                    timeStart: "0:35",
+                    timeEnd: "0:40",
+                    duration: "5 min",
+                    colorClass: "c2",
+                    icon: "☕",
+                    title: "三、 中場休息",
+                    desc: "舒緩 + 補填漏掉的同儕 Form 那組",
+                    tags: ["休息"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "Round 2（7 組短報）+ 老師總評",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:40",
+                    timeEnd: "1:15",
+                    duration: "35 min",
+                    colorClass: "c5",
+                    icon: "🎤",
+                    title: "四、 Round 2：7 組短報（每組 3+1）",
+                    desc: "同 Round 1 流程；老師持續記分（5 維 × 4 級 = 20 分）",
+                    tags: ["短報×7", "老師評分"]
+                },
+                {
+                    timeStart: "1:15",
+                    timeEnd: "1:30",
+                    duration: "15 min",
+                    colorClass: "c4",
+                    icon: "🏁",
+                    title: "五、 老師總評 + 評分公告",
+                    desc: "(1) 集體痛點：全班最常出現的漏洞 (2) W13 督促名單：≤ 12 分組要找老師談 (3) 評分張貼",
+                    tags: ["總評", "W13 督促"]
+                },
+                {
+                    timeStart: "1:30",
+                    timeEnd: "1:40",
+                    duration: "10 min",
+                    colorClass: "c3",
+                    icon: "⏱",
+                    title: "六、 Buffer（彈性緩衝）",
+                    desc: "萬一拖時間用；或學生填網頁課後反思（聽完 12 組學到什麼 + 我們組 W13 要修什麼）+ AIRED",
+                    tags: ["Buffer", "課後反思"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "🎤",
+            label: "13 組短報",
+            text: "施測前最後一道擋板<br><small style=\"font-size:11px;color:#888;\">3 min Pitch + 1 min QA</small>"
+        },
+        {
+            icon: "✏️",
+            label: "同儕回饋",
+            text: "全班 30 人填 Google Form<br><small style=\"font-size:11px;color:#888;\">漏洞 5 選 1 + 建議 + 學到</small>"
+        },
+        {
+            icon: "⭐",
+            label: "老師評分",
+            text: "5 維 × 4 級 = 20 分<br><small style=\"font-size:11px;color:#888;\">當場給分；督促 W13 前修正</small>"
+        },
+        {
+            icon: "📤",
+            label: "課後反思",
+            text: "聽完學到什麼 + 自組要改什麼<br><small style=\"font-size:11px;color:#ccc;\">W13 進入最後衝刺</small>"
         }
     ],
     legends: [

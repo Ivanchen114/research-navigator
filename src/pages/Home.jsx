@@ -555,10 +555,10 @@ export const Home = () => {
               <span className="ph-range">W9 – W13</span>
             </div>
             <div className="week-grid wg-5">
-              <WeekCard num="W9" icon={<Wrench size={18} className="text-[#9090b0]" />} title="工具設計" desc="問卷、訪談、實驗各組深化工具設計。" path="/w9" mission={{ tag: 'MISSION', name: '行動代號：防線', path: '/game/rx-inspector' }} />
-              <WeekCard num="W10" icon={<Microscope size={18} className="text-[#9090b0]" />} title="工具精進" desc="AI 審稿 + 人工預試雙重把關，工具定稿。" path="/w10" />
-              <WeekCard num="W11" icon={<FlaskConical size={18} className="text-[#9090b0]" />} title="倫理審查" desc="四問自查、知情同意書 AI 審查、蓋章出發。" path="/w11" />
-              <WeekCard num="W12" icon={<Rocket size={18} className="text-[#9090b0]" />} title="研究執行 I" desc="Open Office 執行週，資料蒐集第一週。" path="/w12" />
+              <WeekCard num="W9" icon={<Wrench size={18} className="text-[#9090b0]" />} title="計畫書 1-5 章" desc="五種方法分流，計畫書地基工程：題目／方法／變項／對象。" path="/w9" mission={{ tag: 'MISSION', name: '行動代號：防線', path: '/game/rx-inspector' }} />
+              <WeekCard num="W10" icon={<Microscope size={18} className="text-[#9090b0]" />} title="計畫書整本定稿" desc="補完 1-13 章 + 第六章填具體題目 + 整本繳交，老師批改。" path="/w10" />
+              <WeekCard num="W11" icon={<FlaskConical size={18} className="text-[#9090b0]" />} title="工具實體 × 預試 × 倫理" desc="拿模板填工具 + 座位表 1 對 1 預試 + 倫理 + 施測啟動。" path="/w11" />
+              <WeekCard num="W12" icon={<Rocket size={18} className="text-[#9090b0]" />} title="期中進度短報" desc="13 組 × 3min Pitch + 1min QA，全班同儕回饋當擋板。" path="/w12" />
               <WeekCard num="W13" icon={<Rocket size={18} className="text-[#9090b0]" />} title="研究執行 II" desc="中期進度盤點，最後衝刺，資料收齊。" path="/w13" />
             </div>
           </div>

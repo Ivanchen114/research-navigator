@@ -71,15 +71,15 @@ export const Layout = () => {
         {
             sublabel: '裝備與執行',
             items: [
-                { name: '工具設計基礎', path: '/w9', week: 'W9', status: 'locked' },
-                { name: '工具精進與預試', path: '/w10', week: 'W10', status: 'locked' },
-                { name: '倫理審查 · 施測啟動', path: '/w11', week: 'W11', status: 'locked' }
+                { name: '計畫書·五章地基', path: '/w9', week: 'W9', status: 'locked' },
+                { name: '計畫書·整本定稿', path: '/w10', week: 'W10', status: 'locked' },
+                { name: '工具實體×預試×倫理', path: '/w11', week: 'W11', status: 'locked' }
             ]
         },
         {
             sublabel: '分析與報告',
             items: [
-                { name: '研究診所 Open Office', path: '/w12', week: 'W12', status: 'locked' },
+                { name: '期中進度短報', path: '/w12', week: 'W12', status: 'locked' },
                 { name: '中期盤點 · 資料關帳', path: '/w13', week: 'W13', status: 'locked' },
                 { name: '圖表與圖說', path: '/w14', week: 'W14', status: 'locked' },
                 { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
