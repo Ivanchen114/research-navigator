@@ -594,15 +594,23 @@ export const W9Page = () => {
     /* ── 五步驟 ──────────────────────────────────────── */
 
     const steps = [
-        /* ─── Step 1：處方診斷熱身 ─── */
+        /* ─── Step 1：讀 W8 回饋 + 1-5 章診斷地圖（第一節 15 min）─── */
         {
-            title: '處方診斷熱身',
-            icon: '🩺',
+            title: '讀 W8 回饋 + 1-5 章診斷地圖',
+            icon: '📬',
             content: (
                 <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        W7 你學了 Level 1 掛號判斷（決定用什麼方法）。今天升級到 <strong className="text-[var(--ink)]">Level 2 處方判斷</strong>——工具設計得好不好？哪裡有毒？怎麼解毒？
-                    </p>
+                    {/* 本週主軸：兩節都拿來寫 1-5 章 */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🎯 本週兩節 100 分鐘做一件事：寫計畫書 1-5 章雛形</p>
+                        <ul className="text-[13px] text-[var(--ink-mid)] leading-[1.85] list-disc pl-5 space-y-1">
+                            <li><strong>第一節</strong>：讀 W8 回饋（5 min）+ 看 1-5 章診斷地圖（10 min）+ 開工寫前半（35 min）</li>
+                            <li><strong>第二節</strong>：寫後半 + AI 檢核 + 互看整合（45 min）+ 繳交（5 min）</li>
+                        </ul>
+                        <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed mt-3 pt-3 border-t border-[var(--border)]">
+                            💡 工具品質判斷（三大標準 / 五錯誤類型 / RxInspector）已搬到 W10——那是寫第六章工具時要用的能力。本週專心寫 1-5 章地基就好。
+                        </p>
+                    </div>
 
                     {/* 身份識別卡：Team / Solo 分流提示（讀 W8 路線） */}
                     {w8Route === 'solo' && (
@@ -650,46 +658,42 @@ export const W9Page = () => {
                         </p>
                     </div>
 
-                    <div className="bg-[#FEF3C7] border border-[#D97706]/30 rounded-[6px] p-3 text-[12px] text-[#92400E] leading-relaxed max-w-[720px]">
-                        <strong>⚠️ 為什麼 Step 1 示範都是問卷？</strong><br />
-                        問卷把錯誤 concretize 成文字最好看，當「共通入門」效率高。但<strong>誘導性 / 雙重 / 假開放</strong>三種陷阱<strong>五方法共通</strong>；<strong>訪談 / 觀察 / 實驗 / 文獻</strong>的獨家陷阱在下一步 <strong>Step 2 · 檢查清單</strong> 切換頁籤就會看到。
+                    {/* 1-5 章觀念複習地圖（不是個人素材清單，是觀念口訣）*/}
+                    <div>
+                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
+                            📐 1-5 章觀念複習地圖（5 分鐘掃過）
+                        </h4>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            W2-W8 學過的東西，6-7 週後幾乎都忘光了——這 5 章每章一句話濃縮，<strong>5 秒復現觀念</strong>，再回 docx 寫。<strong className="text-[var(--ink)]">這是觀念口訣、不是個人素材</strong>——W8 重新組隊、題目換了也適用。
+                        </p>
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="grid grid-cols-[60px_140px_1fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                                <div className="px-3 py-2.5">章</div>
+                                <div className="px-3 py-2.5 border-l border-[var(--border)]">內容</div>
+                                <div className="px-3 py-2.5 border-l border-[var(--border)]">核心觀念（30 秒複習）</div>
+                            </div>
+                            {[
+                                { ch: '一', t: '題目／動機／問題', key: '8 病症速記：太大／太抽象／百科／玄學／太私／無聊／個案／無範圍。題目要避開這 8 條。' },
+                                { ch: '二', t: '操作型定義', key: '三件事：可測量、有正反例、前後一致。「壓力大」不行、「每週超過 3 次熬夜過 12 點」可以。' },
+                                { ch: '三', t: '文獻探討', key: '文獻不是擺著、要對話：他怎麼說 → 我怎麼接 → 我怎麼補。最少 2-3 篇 A/B 級。' },
+                                { ch: '四', t: '變項／主題／維度', key: '從題目拆出來。題目沒明說、但會影響結果的——就是控制變項。' },
+                                { ch: '五', t: '抽樣／對象', key: '三件都要寫：為什麼是這群人？幾人？怎麼找？「方便抽樣」要老實寫不要假裝隨機。' },
+                            ].map((r, i) => (
+                                <div key={i} className="grid grid-cols-[60px_140px_1fr] border-b border-[var(--border)] last:border-b-0 text-[12px]">
+                                    <div className="px-3 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
+                                    <div className="px-3 py-2.5 border-l border-[var(--border)] text-[var(--ink)] font-bold">{r.t}</div>
+                                    <div className="px-3 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)] leading-[1.85]">{r.key}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">
+                            💡 沒復現的觀念可以回對應週次翻一下：W3 題目八病症 / W5-W6 文獻 / W7 方法 / W8 變項。雛形級＝方向對、邏輯通順、還粗糙——不追求完美，W10 還會再修。
+                        </p>
                     </div>
 
-                    {/* ① 老師示範：打開 RxInspector 遊戲，全班共玩 1-2 題 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--danger)] text-white flex items-center gap-2">
-                            <Stethoscope size={16} />
-                            <span className="font-bold text-[13px]">① 老師帶全班共玩：RxInspector 防線（2-7 分鐘）</span>
-                        </div>
-                        <div className="p-5 space-y-4">
-                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                                老師現場打開「防線」遊戲，帶全班共同診斷 1-2 題壞題。<strong className="text-[var(--ink)]">重點不是破關，是學會用診斷語言</strong>——誘導性？選項重疊？雙重問題？先把這套「醫生用語」聽熟。
-                            </p>
-                            <Link
-                                to="/game/rx-inspector"
-                                className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded-[6px] font-bold text-[13px] hover:opacity-90 transition-opacity"
-                            >
-                                <Stethoscope size={14} />
-                                打開 RxInspector 防線遊戲
-                                <ArrowRight size={14} />
-                            </Link>
-                            <div className="text-[11px] text-[var(--ink-light)]">建議老師示範：從 X 型病例 Q1-Q2 挑一題，全班口頭診斷後再揭曉答案。</div>
-                        </div>
-                    </div>
-
-                    {/* 理解檢核 1（老師示範後做，確認大家跟上） */}
-                    <ThinkChoice
-                        dataKey="w9-tc1"
-                        prompt={THINK_CHOICES[0].prompt}
-                        options={THINK_CHOICES[0].options}
-                        answer={THINK_CHOICES[0].answer}
-                        feedback={THINK_CHOICES[0].feedback}
-                        onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
-                    />
-
-                    {/* 前往下一步：診斷工具包 */}
+                    {/* 進到 Step 3 提示 */}
                     <div className="w7-notice w7-notice-gold">
-                        ➡️ 老師示範完，先到 <strong>Step 2 診斷工具包</strong>——把「診斷用的尺」看清楚，再到 Step 3 拿自己的 W8 三題來練。
+                        ➡️ 看完地圖、知道每章對應素材在哪 → <strong>Step 2 診斷工具包</strong>是 W10 工具品質教學的預習（可快掃）→ <strong>Step 3 計畫書組裝工作坊</strong>開工寫 1-5 章。
                     </div>
                 </div>
             ),

@@ -14,7 +14,6 @@ import {
     ArrowRight,
     ArrowLeft,
     AlertCircle,
-    ExternalLink,
     Clock,
     Star,
     Map,
@@ -24,9 +23,9 @@ import {
  *  外部連結 — 老師部署完 Apps Script / Google Form 後在這裡填入
  *  部署 SOP 見 outputs/W12_期中短報_部署SOP.docx
  * ══════════════════════════════════════ */
-const REPORT_FORM_URL = '';        // 短報 Google Form（學生 W11 結束課後填）
-const PEER_FEEDBACK_FORM_URL = ''; // 同儕回饋 Google Form（W12 課堂填）
-const PRESENTATION_WEB_APP_URL = ''; // Apps Script Web App（老師投影）
+/* ⚠️ 注意：本網頁是全校統一頁面，每班老師獨立部署自己的系統。
+ *    Form / Web App 連結由各班老師透過 Google Classroom 發給自己班學生，
+ *    不寫死在此頁，避免兩班錯亂。 */
 
 /* ══════════════════════════════════════
  *  資料常數
@@ -113,24 +112,16 @@ const EXPORT_FIELDS = [
 ];
 
 /* ══════════════════════════════════════
- *  外部連結卡
+ *  工具卡（不含連結 — 每班老師獨立部署，連結走 GC）
  * ══════════════════════════════════════ */
-const ExternalLinkCard = ({ url, title, desc, icon, color }) => {
-    const isReady = !!url;
+const ToolInfoCard = ({ title, desc, icon }) => {
     return (
-        <div className={`p-4 rounded-[var(--radius-unified)] border-2 ${isReady ? `border-[${color}]` : 'border-dashed border-[var(--border)]'} ${isReady ? 'bg-white' : 'bg-[var(--paper-warm)]'}`}>
+        <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
             <div className="flex items-start gap-3">
                 <span className="text-[24px] flex-shrink-0">{icon}</span>
                 <div className="flex-1 min-w-0">
                     <p className="font-bold text-[14px] text-[var(--ink)] mb-1">{title}</p>
-                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-2">{desc}</p>
-                    {isReady ? (
-                        <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[12px] font-bold text-[var(--accent)] no-underline hover:underline">
-                            開啟連結 <ExternalLink size={12} />
-                        </a>
-                    ) : (
-                        <p className="text-[11.5px] text-[var(--ink-light)] italic">⏳ 老師尚未部署完成；上課前會在 Google Classroom 公告連結。</p>
-                    )}
+                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{desc}</p>
                 </div>
             </div>
         </div>
@@ -226,30 +217,32 @@ const W12Page = () => {
                     </div>
                 )}
 
-                {/* 三大課堂連結 */}
+                {/* 三大課堂工具（每班老師獨立部署，連結走 GC）*/}
                 <div>
-                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">🔗 今天會用到的三個連結</h3>
+                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">🔗 今天會用到的三個工具</h3>
+
+                    <div className="bg-[#FEF3C7] border-2 border-[#D97706] rounded-[var(--radius-unified)] p-4 mb-4">
+                        <p className="text-[13px] font-bold text-[#92400E] mb-1.5">⚠️ 連結要找你「自己班老師」發的</p>
+                        <p className="text-[12.5px] text-[#78350F] leading-relaxed">
+                            這個網頁全校共用，<strong>每班老師會建立自己班的 Form 和投影系統</strong>（避免兩班資料混在一起）。具體連結請到<strong className="text-[#92400E]">你自己班的 Google Classroom</strong> 找老師公告——<u>不要點別班同學分享的連結</u>，會填到別班老師的 Sheet。
+                        </p>
+                    </div>
+
                     <div className="space-y-3">
-                        <ExternalLinkCard
+                        <ToolInfoCard
                             icon="📝"
                             title="① 短報 Google Form（W11 結束 → W12 上課前 8:00 截止）"
-                            desc="組長代填。5 段內容：題目+動機 / 方法+工具 / Pilot 共識 / 進度 / 預期+Plan B。"
-                            url={REPORT_FORM_URL}
-                            color="#0284C7"
+                            desc="組長代填。5 段內容：題目+動機 / 方法+工具 / Pilot 共識 / 進度 / 預期+Plan B。連結到自己班 GC 找。"
                         />
-                        <ExternalLinkCard
+                        <ToolInfoCard
                             icon="🖥️"
                             title="② 投影 Web App（老師上課時投影）"
-                            desc="13 組短報內容輪播 + 計時器 + 即時同儕回饋彙整。報告者上台對著自己那頁講。"
-                            url={PRESENTATION_WEB_APP_URL}
-                            color="#7C3AED"
+                            desc="13 組短報內容輪播 + 計時器 + 即時同儕回饋彙整。報告者上台對著自己那頁講。連結老師上課會投影、不用學生點。"
                         />
-                        <ExternalLinkCard
+                        <ToolInfoCard
                             icon="✏️"
                             title="③ 同儕回饋 Form（W12 課堂中填，每組 1 分鐘）"
-                            desc="3 題：漏洞勾選（5 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。每位同學要填 12 次（不評自己）。"
-                            url={PEER_FEEDBACK_FORM_URL}
-                            color="#10B981"
+                            desc="3 題：漏洞勾選（5 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。每位同學要填 12 次（不評自己）。連結到自己班 GC 找。"
                         />
                     </div>
                 </div>
