@@ -708,6 +708,7 @@ export const W4Page = () => {
                 title="題目定案："
                 accentTitle="規格化 → 海報 → 壓力測試"
                 subtitle="先用 5W1H 把模糊的題目切成可執行的規格，讓 AI 包裝成學術標題，做海報公開展示，再接受同學的 Gallery Walk 壓力測試。撐過去了才是真正定案。"
+                chain="題目過篩了——但『手機影響學業』要怎麼研究？哪些人、哪個時段、看什麼？這週要把它拆出規格。"
                 meta={[
                     { label: '本週任務', value: '5W1H 規格化 + 海報 + Gallery Walk' },
                     { label: '時長', value: '100 MINS' },

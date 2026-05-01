@@ -973,7 +973,7 @@ export const W7Data = {
     periods: [
         {
             badge: "第一節",
-            title: "建立診斷標準 + 小組實戰",
+            title: "認識方法 → 驗收 → 套自己題目",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -983,87 +983,97 @@ export const W7Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🏥",
-                    title: "一、 開場定位",
-                    desc: "歡迎來到研究診所！今天你們是實習醫師，要學會判斷研究問題該「掛哪一科」才不會白費努力。",
-                    tags: ["情境營造", "目標建立"]
+                    title: "一、 開場 — 為什麼這週是現在",
+                    desc: "題目 / 拆解 / 文獻三件齊了——這週做兩個決定：用哪種方法收答案 + 把好奇變成可以測的東西。",
+                    tags: ["連貫鏈", "目標建立"]
                 },
                 {
                     timeStart: "0:05",
-                    timeEnd: "0:12",
-                    duration: "7 min",
+                    timeEnd: "0:18",
+                    duration: "13 min",
                     colorClass: "c1",
                     icon: "⚖️",
-                    title: "二、 Level 1 掛號診斷標準",
-                    desc: "講解分科三問：1.比例vs原因 2.因果vs現象 3.行為vs想法。帶出五大方法（問卷、訪談、實驗、觀察、文獻）。",
+                    title: "二、 Step 1 五種方法 + 兩層判斷",
+                    desc: "Level 1 認識五大方法（問卷／訪談／實驗／觀察／文獻），Level 2 兩層判斷架構（要原因還比例、要因果還現象）。含 ThinkChoice 暖身一題。",
                     tags: ["概念講解", "標準建立"]
                 },
                 {
-                    timeStart: "0:12",
-                    timeEnd: "0:20",
-                    duration: "8 min",
-                    colorClass: "c4",
-                    icon: "⏱️",
-                    title: "三、 急診分流練習",
-                    desc: "全班搶答！舉牌判斷單一方法與複合方法，並用分科三問說明理由。",
-                    tags: ["全班互動", "快速演練"]
-                },
-                {
-                    timeStart: "0:20",
+                    timeStart: "0:18",
                     timeEnd: "0:30",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "👨‍🏫",
-                    title: "四、 全班示範掛號診斷",
-                    desc: "看病例 YQ1，示範如何拆解研究目的並用分科三問抓出錯誤掛號。",
-                    tags: ["教師示範", "流程拆解"]
+                    duration: "12 min",
+                    colorClass: "c4",
+                    icon: "🎯",
+                    title: "三、 Step 2 分科判斷測驗",
+                    desc: "10 題選擇題個別作答，自動跳題，現場驗收兩層判斷的理解。錯題會在 Step 5 反思時用到。",
+                    tags: ["個人測驗", "即時驗收"]
                 },
                 {
                     timeStart: "0:30",
-                    timeEnd: "0:50",
-                    duration: "20 min",
+                    timeEnd: "0:45",
+                    duration: "15 min",
                     colorClass: "c2",
-                    icon: "🧠",
-                    title: "五、 發病例 + 小組掛號診斷",
-                    desc: "每組領取 3 份 Y 型病例，全組討論判斷是否掛錯科，並寫下應掛科別與理由。",
-                    tags: ["小組挑戰", "實機操作"]
+                    icon: "🩺",
+                    title: "四、 Step 3 幫自己的題目掛號",
+                    desc: "讀入 W4 定案題目 → 個人選方法 + 寫理由（引用兩層判斷某條）+ 寫輔助方法（如需要）。",
+                    tags: ["個人應用", "理由表態"]
+                },
+                {
+                    timeStart: "0:45",
+                    timeEnd: "0:50",
+                    duration: "5 min",
+                    colorClass: "c5",
+                    icon: "🗣️",
+                    title: "五、 Step 3 同儕挑戰",
+                    desc: "跟旁邊人說一遍：「我用 ___ 法因為 ___」。讓對方挑戰：「真的要的是比例還是原因？」「資料是自己收的還是分析別人的？」",
+                    tags: ["同儕對話", "口頭驗證"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "互動遊戲 + 口頭會診",
+            title: "把概念變可測（操作型定義）→ 反思 → 繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:15",
-                    duration: "15 min",
-                    colorClass: "c4",
-                    icon: "🎮",
-                    title: "六、 互動遊戲挑戰",
-                    desc: "使用《辦案工具大考驗》遊戲，11 個情境全班搶答，考驗直覺反應。",
-                    tags: ["遊戲驗收", "快速複習"]
+                    timeEnd: "0:08",
+                    duration: "8 min",
+                    colorClass: "c1",
+                    icon: "📐",
+                    title: "六、 Step 4 開場 + 鏡子卡",
+                    desc: "選了方法不等於知道怎麼測——操作型定義是這個橋樑。讀取 W2 好奇（鏡子卡）+ 三點軸：W3 具體疫苗 → W4 5W1H What → W7 操作型定義。",
+                    tags: ["連貫鏈", "概念定錨"]
                 },
                 {
-                    timeStart: "0:15",
+                    timeStart: "0:08",
+                    timeEnd: "0:18",
+                    duration: "10 min",
+                    colorClass: "c1",
+                    icon: "🧬",
+                    title: "七、 Step 4 範例 + 5 法策略 + 3 件事",
+                    desc: "「高中生壓力」三方法的操作型定義對照範例。5 法各自的操作型定義策略（問卷=題目選項、訪談=訪綱+編碼、實驗=自/依/控制變項、觀察=行為類別、文獻=分析單位）。三件事：可測量／有正反例／前後一致。",
+                    tags: ["範例對照", "策略講解"]
+                },
+                {
+                    timeStart: "0:18",
                     timeEnd: "0:30",
-                    duration: "15 min",
-                    colorClass: "c5",
-                    icon: "🗣️",
-                    title: "七、 口頭會診",
-                    desc: "兩組輪流報告病例判斷結果，並互相提出挑戰與補充。",
-                    tags: ["同儕交流", "批判思考"]
+                    duration: "12 min",
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "八、 Step 4 寫自己題目操作型定義",
+                    desc: "ThinkRecord：你的題目核心概念是什麼？對應的操作型定義？（會在 W8/W9/W10 用三次。）寫完同儕挑戰：「正例反例分得開嗎？」",
+                    tags: ["個人產出", "兌現點"]
                 },
                 {
                     timeStart: "0:30",
                     timeEnd: "0:40",
                     duration: "10 min",
-                    colorClass: "c2",
-                    icon: "📝",
-                    title: "八、 整理病例 + 拍照上傳",
-                    desc: "確認 3 份病例判斷完整、全員簽名，拍照上傳至 Google Classroom結案。",
-                    tags: ["成果產出", "任務收斂"]
+                    colorClass: "c5",
+                    icon: "💭",
+                    title: "九、 Step 5 反思",
+                    desc: "回顧測驗錯題 + 判斷過程 4 題反思（後設認知）。重點：你今天從「不知道用什麼方法」走到「方法+操作型定義都有了」。",
+                    tags: ["後設認知", "整理收束"]
                 },
                 {
                     timeStart: "0:40",
@@ -1071,28 +1081,28 @@ export const W7Data = {
                     duration: "10 min",
                     colorClass: "c3",
                     icon: "🏁",
-                    title: "九、 收束與預告",
-                    desc: "總結分科三問。說明課後作業（後設認知學習單與 AI 補漏），並預告 W7/W8 分組與處方診斷。",
-                    tags: ["課程總結", "下週預告"]
+                    title: "十、 Step 6 回顧與繳交 + 預告",
+                    desc: "確認所有 ThinkRecord 已填、ExportButton 匯出 → 上傳 Google Classroom。預告 W8 組隊：你的方法 + 操作型定義會在合題時用到。",
+                    tags: ["成果繳交", "下週預告"]
                 }
             ]
         }
     ],
     summaries: [
         {
-            icon: "📋",
+            icon: "🩺",
             label: "課堂產出",
-            text: "3 份 Y 型病例診斷<br><small style=\"font-size:11px;color:#888;\">含判定理由</small>"
+            text: "方法選擇 + 操作型定義<br><small style=\"font-size:11px;color:#888;\">寫一次、用三次（W8/W9/W10）</small>"
         },
         {
-            icon: "🎮",
-            label: "遊戲驗收",
-            text: "辦案工具大考驗<br><small style=\"font-size:11px;color:#888;\">11 題情境闖關</small>"
+            icon: "🎯",
+            label: "技能驗收",
+            text: "分科判斷 10 題測驗<br><small style=\"font-size:11px;color:#888;\">兩層判斷理解</small>"
         },
         {
-            icon: "🗣️",
-            label: "能力養成",
-            text: "會診交流<br><small style=\"font-size:11px;color:#ccc;\">論述與挑戰能力</small>"
+            icon: "📐",
+            label: "兌現點",
+            text: "W2 好奇 → W7 可測<br><small style=\"font-size:11px;color:#ccc;\">把模糊變成可數可看可記</small>"
         }
     ],
     legends: [

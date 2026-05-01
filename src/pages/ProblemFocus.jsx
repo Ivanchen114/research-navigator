@@ -142,6 +142,7 @@ export const ProblemFocus = () => {
                 title="問題意識的覺醒："
                 accentTitle="把好奇心變成好問題"
                 subtitle="「為什麼」是爛問題——太大、太空、太發散。今天你要學四段式思考框架。第一節靠自己，第二節用 AI 協助翻譯。"
+                chain="研究是從『我想知道』開始的——但光想還不能研究。這週要把腦中的好奇，變成『可以拿來研究』的問題。"
                 meta={[
                     { label: '本週任務', value: '練「品味」' },
                     { label: '時長', value: '100 MINS' },

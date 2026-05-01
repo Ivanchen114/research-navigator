@@ -594,9 +594,9 @@ export const W9Page = () => {
     /* ── 五步驟 ──────────────────────────────────────── */
 
     const steps = [
-        /* ─── Step 1：讀 W8 回饋 + 1-5 章診斷地圖（第一節 15 min）─── */
+        /* ─── Step 1：讀 W8 回饋 + 1-5 章觀念複習地圖（第一節 15 min）─── */
         {
-            title: '讀 W8 回饋 + 1-5 章診斷地圖',
+            title: '讀 W8 回饋 + 1-5 章觀念複習',
             icon: '📬',
             content: (
                 <div className="space-y-8 prose-zh">
@@ -604,7 +604,7 @@ export const W9Page = () => {
                     <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🎯 本週兩節 100 分鐘做一件事：寫計畫書 1-5 章雛形</p>
                         <ul className="text-[13px] text-[var(--ink-mid)] leading-[1.85] list-disc pl-5 space-y-1">
-                            <li><strong>第一節</strong>：讀 W8 回饋（5 min）+ 看 1-5 章診斷地圖（10 min）+ 開工寫前半（35 min）</li>
+                            <li><strong>第一節</strong>：讀 W8 回饋（5 min）+ 1-5 章觀念複習地圖（10 min）+ 開工寫前半（35 min）</li>
                             <li><strong>第二節</strong>：寫後半 + AI 檢核 + 互看整合（45 min）+ 繳交（5 min）</li>
                         </ul>
                         <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed mt-3 pt-3 border-t border-[var(--border)]">
@@ -667,27 +667,35 @@ export const W9Page = () => {
                             W2-W8 學過的東西，6-7 週後幾乎都忘光了——這 5 章每章一句話濃縮，<strong>5 秒復現觀念</strong>，再回 docx 寫。<strong className="text-[var(--ink)]">這是觀念口訣、不是個人素材</strong>——W8 重新組隊、題目換了也適用。
                         </p>
                         <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                            <div className="grid grid-cols-[60px_140px_1fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
+                            <div className="grid grid-cols-[60px_140px_1fr_90px] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
                                 <div className="px-3 py-2.5">章</div>
                                 <div className="px-3 py-2.5 border-l border-[var(--border)]">內容</div>
                                 <div className="px-3 py-2.5 border-l border-[var(--border)]">核心觀念（30 秒複習）</div>
+                                <div className="px-3 py-2.5 border-l border-[var(--border)]">忘了？跳回去</div>
                             </div>
                             {[
-                                { ch: '一', t: '題目／動機／問題', key: '8 病症速記：太大／太抽象／百科／玄學／太私／無聊／個案／無範圍。題目要避開這 8 條。' },
-                                { ch: '二', t: '操作型定義', key: '三件事：可測量、有正反例、前後一致。「壓力大」不行、「每週超過 3 次熬夜過 12 點」可以。' },
-                                { ch: '三', t: '文獻探討', key: '文獻不是擺著、要對話：他怎麼說 → 我怎麼接 → 我怎麼補。最少 2-3 篇 A/B 級。' },
-                                { ch: '四', t: '變項／主題／維度', key: '從題目拆出來。題目沒明說、但會影響結果的——就是控制變項。' },
-                                { ch: '五', t: '抽樣／對象', key: '三件都要寫：為什麼是這群人？幾人？怎麼找？「方便抽樣」要老實寫不要假裝隨機。' },
+                                { ch: '一', t: '題目／動機／問題', key: '8 病症速記：太大／太抽象／百科／玄學／太私／無聊／個案／無範圍。題目要避開這 8 條。', back: [{ to: '/w3', label: 'W3 八病症' }] },
+                                { ch: '二', t: '操作型定義', key: '三件事：可測量、有正反例、前後一致。「壓力大」不行、「每週超過 3 次熬夜過 12 點」可以。同一條技能：W3→W4→W7 越拆越細。', back: [{ to: '/w3', label: 'W3 具體化' }, { to: '/w4', label: 'W4 5W1H' }, { to: '/w7', label: 'W7 定義' }] },
+                                { ch: '三', t: '文獻探討', key: '文獻不是擺著、要對話：他怎麼說 → 我怎麼接 → 我怎麼補。最少 2-3 篇 A/B 級。', back: [{ to: '/w5', label: 'W5 華藝' }, { to: '/w6', label: 'W6 引用' }] },
+                                { ch: '四', t: '變項／主題／維度', key: '從題目拆出來。題目沒明說、但會影響結果的——就是控制變項。', back: [{ to: '/w7', label: 'W7 方法' }, { to: '/w8', label: 'W8 變項' }] },
+                                { ch: '五', t: '抽樣／對象', key: '三件都要寫：為什麼是這群人？幾人？怎麼找？「方便抽樣」要老實寫不要假裝隨機。', back: [{ to: '/w8', label: 'W8 對象' }] },
                             ].map((r, i) => (
-                                <div key={i} className="grid grid-cols-[60px_140px_1fr] border-b border-[var(--border)] last:border-b-0 text-[12px]">
+                                <div key={i} className="grid grid-cols-[60px_140px_1fr_90px] border-b border-[var(--border)] last:border-b-0 text-[12px]">
                                     <div className="px-3 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
                                     <div className="px-3 py-2.5 border-l border-[var(--border)] text-[var(--ink)] font-bold">{r.t}</div>
                                     <div className="px-3 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)] leading-[1.85]">{r.key}</div>
+                                    <div className="px-3 py-2.5 border-l border-[var(--border)] flex flex-col gap-1">
+                                        {r.back.map((b, j) => (
+                                            <Link key={j} to={b.to} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[10.5px] font-mono text-[var(--accent)] hover:underline no-underline">
+                                                ↗ {b.label}
+                                            </Link>
+                                        ))}
+                                    </div>
                                 </div>
                             ))}
                         </div>
                         <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">
-                            💡 沒復現的觀念可以回對應週次翻一下：W3 題目八病症 / W5-W6 文獻 / W7 方法 / W8 變項。雛形級＝方向對、邏輯通順、還粗糙——不追求完美，W10 還會再修。
+                            💡 點「↗」連結會在新分頁打開那一週——掃一眼就回來繼續寫。雛形級＝方向對、邏輯通順、還粗糙；不追求完美，W10 還會再修。
                         </p>
                     </div>
 
@@ -1442,6 +1450,7 @@ export const W9Page = () => {
                 title="計畫書 · "
                 accentTitle="五章地基"
                 subtitle="第一節學診斷尺與檢查清單——認清什麼是好工具、什麼是毒題。第二節把 W2–W8 累積的成果整合為計畫書第一到第五章——工具設計之前，地基必須先打穩。"
+                chain="題目方法都定了——這週兩節 100 分鐘做一件事：把腦中的研究想法寫成『可繳交』的計畫書 1-5 章。"
                 meta={[
                     { label: '第一節', value: '讀 W8 回饋 + 診斷尺 + 檢查清單 + 6 題練習' },
                     { label: '第二節', value: '計畫書五章地基工程 + AI 檢核 Prompt + 預想 AIRED' },

@@ -64,6 +64,7 @@ const W17Page = () => {
                 title="最終發表 Gallery Walk · "
                 accentTitle="策展日"
                 subtitle="今天每個人都是知識的生產者，也是知識的接收者。紙本學習單發表時填寫，這頁只是行前說明。"
+                chain="報告海報都好了——這週做最後一件事：站出去說。其他組也會站出去——你會聽到 12 種完全不同的研究故事。"
                 meta={[
                     { label: '第一節', value: 'Gallery Walk 第一輪（A 守攤 / B 走動）' },
                     { label: '第二節', value: 'Gallery Walk 第二輪 + 學術投資統計' },

@@ -262,6 +262,8 @@ export const ClinicPage = () => {
 
     /* W4 題目帶入 */
     const [w4Topic, setW4Topic] = useState('');
+    /* W2 好奇帶入（讓 W7 操作型定義顯示「兌現點」）*/
+    const [w2Curiosity, setW2Curiosity] = useState('');
 
     useEffect(() => {
         const saved = readRecords();
@@ -275,6 +277,11 @@ export const ClinicPage = () => {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
             }
         }
+        // W2 好奇：優先讀最終探究意圖，fallback 到核心疑問
+        const intent = saved['w2-final-intent']?.trim();
+        const question = saved['w2-step3-question']?.trim();
+        if (intent) setW2Curiosity(intent);
+        else if (question) setW2Curiosity(question);
     }, []);
 
     /* ThinkChoice callback */
@@ -704,15 +711,120 @@ export const ClinicPage = () => {
                         rows={2}
                     />
 
-                    {/* 同儕挑戰提示 */}
+                    {/* 同儕挑戰：對 Step 3 的方法選擇做挑戰 */}
                     <div className="w6-notice w6-notice-gold">
-                        🎯 寫完之後，跟旁邊的人說一遍你的選擇和理由。讓對方用這幾個問題挑戰你：「你要的真的是比例，還是其實是原因？」「你的資料是自己收集的，還是分析別人寫的？」「如果你選問卷，你的題目問的是什麼，問卷能回答嗎？」
+                        🎯 寫完方法選擇後，跟旁邊的人說一遍：「我用 ___ 法，因為 ___」。讓對方挑戰你：「你要的真的是比例還是原因？」「資料是自己收集還是分析別人寫的？」「如果是問卷，題目問的是什麼，問卷能回答嗎？」
+                    </div>
+
+                    {/* ➡️ 下一步預告 */}
+                    <div className="w7-notice w7-notice-gold">
+                        ➡️ 方法選好了，但選了方法不等於知道「怎麼問／怎麼測」——<strong>下一個 Step</strong>學「把核心概念變成可實際蒐集的指標」，這是這週的兌現點。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 4：反思 ─── */
+        /* ─── Step 4：把概念變可測（操作型定義）─── */
+        {
+            title: '把概念變可測',
+            icon: '📐',
+            content: (
+                <div className="space-y-6 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        Step 3 你選了方法、寫了理由。但選了方法不等於知道「怎麼問／怎麼測」——這個 Step 把題目裡的<strong className="text-[var(--ink)]">抽象概念</strong>（壓力、學習效果、動機……）變成<strong className="text-[var(--ink)]">具體、可觀察、可測量</strong>的指標。
+                    </p>
+
+                    {/* 📐 操作型定義教學（選方法之後立即用）*/}
+                    <div className="bg-white border-2 border-[var(--gold)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
+                        <div className="px-5 py-3 bg-[var(--gold)] text-white flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-white text-[var(--gold)] px-2 py-0.5 rounded-[3px]">關鍵概念</span>
+                            <span className="font-bold text-[14px]">📐 操作型定義 — 把抽象概念變成可測量</span>
+                        </div>
+
+                        <div className="p-5 space-y-4">
+                            {/* 🪞 鏡子卡：把 W2 好奇調出來，明示這是兌現點 */}
+                            {w2Curiosity ? (
+                                <div className="bg-[#FEF3C7] border-l-3 border-[#D97706] p-3 rounded-r-[6px]">
+                                    <p className="text-[12px] font-bold text-[#92400E] mb-1.5">🪞 還記得 W2 你寫過的好奇嗎？</p>
+                                    <p className="text-[12.5px] text-[#78350F] leading-[1.85] italic mb-2 whitespace-pre-wrap">
+                                        「{w2Curiosity}」
+                                    </p>
+                                    <p className="text-[11.5px] text-[#92400E] leading-relaxed">
+                                        👉 從那一週到現在過了 5 週——你 W3 篩了題目、W4 拆了 5W1H、W5/W6 看了文獻、剛剛選了方法。<strong>這週要做的事</strong>就是把這份好奇變成「下週可以開始量／開始問／開始觀察」的具體動作——這就是<strong>操作型定義</strong>。從一句模糊的好奇 → 一個可以蒐集答案的機制。
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--ink-light)] p-3 rounded-r-[6px]">
+                                    <p className="text-[12px] font-bold text-[var(--ink-mid)] mb-1">🪞 W2 沒寫到也沒關係——現在花 30 秒想：</p>
+                                    <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
+                                        你的題目背後，最一開始想搞清楚的「我想知道」是什麼？這週就是要把那個好奇變成<strong>「可以實際蒐集答案」</strong>的具體動作。
+                                    </p>
+                                </div>
+                            )}
+
+                            <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--accent)] p-3 rounded-r-[6px]">
+                                <p className="text-[12px] font-bold text-[var(--ink)] mb-1.5">🧬 這不是新東西——是兩件舊事的合體進階版</p>
+                                <ul className="text-[12px] text-[var(--ink-mid)] leading-[1.8] list-none space-y-0.5">
+                                    <li>· <strong>W3 具體疫苗（空→實）</strong>：題目層做粗具體化（「壓力對學生影響」→「高一段考前手機使用時數」）</li>
+                                    <li>· <strong>W4 5W1H 的 What</strong>：把題目拆出「變項／可測量的指標」雛形</li>
+                                    <li>· <strong>W7 操作型定義（本格）</strong>：把每個變項精細化到「誰來測都得到一樣的數字／類別」</li>
+                                </ul>
+                                <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">底層邏輯一樣：把模糊換成可數可看可記。差別只在抽象層級越來越細。</p>
+                            </div>
+
+                            <div className="bg-[var(--gold-light)] border-l-3 border-[var(--gold)] p-3 rounded-r-[6px]">
+                                <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">範例（同一個概念，不同方法的操作型定義）</p>
+                                <div className="space-y-1.5 text-[12.5px] text-[var(--ink-mid)] leading-[1.8]">
+                                    <p>抽象概念：<strong className="text-[var(--ink)]">「高中生壓力」</strong></p>
+                                    <p>📋 量化（問卷）：<strong>「過去一週熬夜超過 12 點的次數」+「PSS-10 量表分數」</strong></p>
+                                    <p>🎤 質性（訪談）：<strong>「請描述最近一次你覺得『壓力大』的具體事件」</strong>（口述事件編碼）</p>
+                                    <p>👀 行為（觀察）：<strong>「自習課滑手機 ≥ 5 秒、發呆 ≥ 30 秒、頻繁站起的次數」</strong></p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📋 5 法的操作型定義策略</p>
+                                <div className="space-y-1.5 text-[12px] text-[var(--ink-mid)] leading-[1.8]">
+                                    <p>📋 <strong>問卷</strong>：題目選項 ＝ 操作型定義（每題對應一個指標、用具體量表/時段/頻次）</p>
+                                    <p>🎤 <strong>訪談</strong>：訪綱大問 + 編碼類別 ＝ 操作型定義（事後從口述抓主題）</p>
+                                    <p>🧪 <strong>實驗</strong>：自/依/控制變項都要寫操作型定義（最嚴格）</p>
+                                    <p>👀 <strong>觀察</strong>：行為類別 + 正反例 ＝ 操作型定義（誰看都能歸同一類）</p>
+                                    <p>📚 <strong>文獻</strong>：分析單位 + 編碼類別 ＝ 操作型定義（什麼算「民主論述」）</p>
+                                </div>
+                            </div>
+
+                            <div className="bg-[#FEF2F2] border-l-3 border-[var(--danger)] p-3 rounded-r-[6px]">
+                                <p className="text-[12px] font-bold text-[#7F1D1D] mb-1">⚠️ 操作型定義要做到 3 件事</p>
+                                <ol className="text-[12px] text-[#7F1D1D] leading-[1.8] list-decimal pl-5">
+                                    <li><strong>可測量</strong>：「壓力大」不行，「熬夜次數」可以</li>
+                                    <li><strong>有正反例</strong>：什麼算 / 什麼不算，要講清楚</li>
+                                    <li><strong>前後一致</strong>：整個研究都用同一個定義，不能換來換去</li>
+                                </ol>
+                            </div>
+
+                            <ThinkRecord
+                                dataKey="w7-operational-definition"
+                                prompt="✍️ 你的題目最關鍵的概念是什麼？對應的操作型定義？"
+                                defaultTemplate={'我題目的核心概念：\n  例：「學習效果」「動機」「壓力」「行為改變」⋯⋯\n\n我用 ___ 法，這個概念的操作型定義是：\n  例：段考數學科分數／問卷 5 點量表／觀察自習行為頻率\n\n（如有第二個概念）：'}
+                                placeholder="例：核心概念『學習動機』 → 訪談法 → 操作型定義：『最近一次主動學習的具體事件』"
+                                rows={6}
+                            />
+
+                            <p className="text-[11.5px] text-[var(--ink-light)] italic leading-relaxed">
+                                💡 這格寫的會在 <strong>W8 組隊企劃</strong>用到（拆變項時要套用）；<strong>W9 寫第二章</strong>時直接複製過去；<strong>W10 寫第六章工具</strong>時每題都要對應。<strong className="text-[var(--ink)]">寫一次、用三次。</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* 同儕挑戰：對操作型定義做挑戰 */}
+                    <div className="w6-notice w6-notice-gold">
+                        🎯 寫完之後，跟旁邊的人說一遍你的核心概念跟操作型定義。讓對方用這個問題挑戰你：<strong>「你的『核心概念』有沒有可測量的操作型定義？正例反例分得開嗎？」</strong>分不開的話回頭再修一次。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 5：反思 ─── */
         {
             title: '反思',
             icon: '💭',
@@ -756,7 +868,7 @@ export const ClinicPage = () => {
             ),
         },
 
-        /* ─── Step 5：回顧與繳交 ─── */
+        /* ─── Step 6：回顧與繳交 ─── */
         {
             title: '回顧與繳交',
             icon: '📋',
@@ -872,6 +984,7 @@ export const ClinicPage = () => {
                 title="研究診所："
                 accentTitle="從掛號到判斷"
                 subtitle="你的題目適合用什麼方法？今天先認識五種方法，再用兩層判斷架構找出答案，最後用 AI 測驗驗收——結束前你要能說出：我的題目適合用 ___ 法，因為 ___。"
+                chain="題目／拆解／文獻三件齊了——這週做兩個決定：用哪種方法收答案 + 你的好奇怎麼變成『可以測』的東西。"
                 meta={[
                     { label: '課堂節奏', value: '講義導覽 → AI 測驗 → 判斷題目' },
                     { label: '時長', value: '50 MINS' },

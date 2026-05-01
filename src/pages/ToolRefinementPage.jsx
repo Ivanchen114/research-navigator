@@ -55,10 +55,12 @@ const TOOL_DESC_KIT = {
             '總題數 10-25 題、可在 5 分鐘內填完—超過會掉答率',
         ],
         traps: [
+            '誘導性：用「嚴重／非常好」暗示答案 → 改中性「你覺得 X 對 Y 的影響是？」搭雙向量表',
+            '雙重問題：一題問兩件事「你的家庭跟壓力如何？」→ 拆兩題',
+            '假開放：看似開放實已預設方向 → 改真正開放或完全中性、不暗示立場',
+            '選項不互斥（重疊）：年齡選項「15-17」和「17-19」← 17 歲選哪個 → 改邊界清楚：0、1-2、3-4、5+',
+            '選項不全：受訪者找不到自己的答案 → 加「其他：___」或範圍補完整',
             '量表方向反轉沒提示：第 5 題「越同意越好」第 6 題突然「越同意越糟」→ 受訪者沒注意到',
-            '預設答案：「請寫下你『遇到困難』時的處理方式」← 預設一定有困難，沒困難的人不會填',
-            '選項不互斥：年齡選項「15-17」和「17-19」← 17 歲選哪個',
-            '未提供「其他/不知道」：強迫受訪者亂選一個 → 資料失真',
             '量表級距太細：11 點量表會讓受訪者選不出來，5-7 點是甜蜜點',
         ],
         example: `【示範主題】高中生睡眠時數與學業表現的關係
@@ -129,7 +131,9 @@ Q2-3. 你覺得這次成績有多少受睡眠影響？（5 點量表：完全沒
             '訪談者反應要中性—不點頭、不說「對對對」，避免誘導',
         ],
         traps: [
-            '預設立場：「你覺得這個政策很糟對吧？」← 預設受訪者立場',
+            '誘導性（語氣／用詞）：「你覺得這個政策很糟對吧？」← 預設受訪者立場 → 改中性「你對這政策的感受是？」',
+            '雙重問題：一題問兩件事「你的家庭跟壓力如何？」→ 拆兩題',
+            '假開放（預設方向）：「你覺得補習有用嗎？」← 已預設「應該有用」這個方向 → 改「補習對你有什麼影響？」',
             '太抽象：「你的學習動機強嗎？」← 對方答不出來，要改具體事件題',
             '一問就答完（封閉化失敗）：「你補習嗎？」← 改「補習的決定是怎麼做的？」',
             '連續追「為什麼」：「為什麼？」「為什麼？」「為什麼？」← 像審問，改成「能多說一點嗎」',
@@ -942,7 +946,7 @@ export const ToolRefinementPage = () => {
                                 <p className="text-[12px] font-bold text-[#075985] mb-1">2 人組</p>
                                 <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
                                     <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
-                                    <li><strong>B 對照</strong>：拿 W9 三大標準 + 五錯誤類型逐題挑刺</li>
+                                    <li><strong>B 對照</strong>：拿本週工具品質基礎（三大標準 + 5 大錯誤）逐題挑刺</li>
                                 </ul>
                             </div>
                             <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
@@ -957,7 +961,7 @@ export const ToolRefinementPage = () => {
                                 <p className="text-[12px] font-bold text-[#075985] mb-1">4 人組</p>
                                 <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
                                     <li><strong>A 主稿</strong></li>
-                                    <li><strong>B 對照</strong>：方向＋精度（W9 三大標準）</li>
+                                    <li><strong>B 對照</strong>：方向＋精度（本週三大標準）</li>
                                     <li><strong>C AI 諮詢</strong></li>
                                     <li><strong>D 倫理＋文獻檢查</strong>：工具不踩倫理紅線、跟第二章文獻對得上</li>
                                 </ul>
@@ -998,14 +1002,14 @@ export const ToolRefinementPage = () => {
                 <div className="space-y-8 prose-zh">
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 max-w-[760px]">
                         <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed mb-2">
-                            <strong className="text-[var(--ink)]">看完這頁能回 docx 第六章寫題目</strong>。先看「工具品質基礎」（5 法共通）→ 再看自己方法的 4 區塊（題型結構 → 設計原則 → 獨家陷阱 → 完整範例）。
+                            <strong className="text-[var(--ink)]">看完這頁能回 docx 第六章寫題目</strong>。先看「工具品質基礎」（三大標準，5 法共通）→ 再看自己方法的 4 區塊（題型結構 → 設計原則 → 常見錯誤 → 完整範例）。
                         </p>
                         <p className="text-[12.5px] text-[var(--ink-light)] leading-relaxed">
                             💡 用法：①讀工具品質基礎（5 法共通的判準 + 5 大錯誤）→ ②看自己方法 A→B→C→D → ③回 docx 對照寫題目 → ④寫完回頭看別組（學會分辨＝真的懂）。
                         </p>
                     </div>
 
-                    {/* ━━━ 工具品質基礎（5 法共通）— W9 學過的可快速複習；沒印象的看這裡 ━━━ */}
+                    {/* ━━━ 工具品質基礎（5 法共通）— 寫題目前必看的判準與紅線 ━━━ */}
                     <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
                         <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
                             <span className="text-[10px] font-mono font-bold bg-white text-[var(--accent)] px-2 py-0.5 rounded-[3px]">基礎</span>
@@ -1015,7 +1019,7 @@ export const ToolRefinementPage = () => {
 
                         <div className="p-5 space-y-5">
                             <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85]">
-                                寫第六章題目前先確認你會用這兩套尺：<strong className="text-[var(--ink)]">三大標準</strong>（判工具是好是壞）+ <strong className="text-[var(--ink)]">5 大共通錯誤</strong>（5 法都會踩的雷）。每個方法獨家的陷阱在下方 tab 各自的 C 區塊。
+                                寫第六章題目前先看這把尺：<strong className="text-[var(--ink)]">三大標準（V→R→F）</strong>——判工具是好是壞，5 法都通用。具體會踩什麼坑因方法而異，下方 tab 切到你的方法看 <strong className="text-[var(--ink)]">C · 常見錯誤</strong>。
                             </p>
 
                             {/* 三大標準速查 */}
@@ -1040,27 +1044,8 @@ export const ToolRefinementPage = () => {
                                 </div>
                             </div>
 
-                            {/* 5 大共通錯誤 */}
-                            <div>
-                                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">⚠️ 5 大共通錯誤（5 法都會踩）</p>
-                                <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded-[6px] overflow-hidden">
-                                    <div className="grid grid-cols-[80px_1fr] text-[12px] divide-y divide-[#FCA5A5]/50">
-                                        <div className="px-3 py-2 bg-[#FEE2E2] font-bold text-[#7F1D1D] border-r border-[#FCA5A5]/50">誘導性</div>
-                                        <div className="px-3 py-2 text-[#7F1D1D] leading-[1.7]">用「嚴重／非常好」暗示答案 → 改中性語氣「你覺得 X 對 Y 的影響是？」搭雙向量表</div>
-                                        <div className="px-3 py-2 bg-[#FEE2E2] font-bold text-[#7F1D1D] border-r border-[#FCA5A5]/50">雙重問題</div>
-                                        <div className="px-3 py-2 text-[#7F1D1D] leading-[1.7]">一題問兩件事「你的家庭跟壓力如何？」→ 拆兩題</div>
-                                        <div className="px-3 py-2 bg-[#FEE2E2] font-bold text-[#7F1D1D] border-r border-[#FCA5A5]/50">假開放</div>
-                                        <div className="px-3 py-2 text-[#7F1D1D] leading-[1.7]">看似開放實已預設方向 → 改真正開放或完全中性</div>
-                                        <div className="px-3 py-2 bg-[#FEE2E2] font-bold text-[#7F1D1D] border-r border-[#FCA5A5]/50">選項重疊</div>
-                                        <div className="px-3 py-2 text-[#7F1D1D] leading-[1.7]">「1-3 次／3-5 次」← 3 次選哪個 → 改邊界清楚：0、1-2、3-4、5+</div>
-                                        <div className="px-3 py-2 bg-[#FEE2E2] font-bold text-[#7F1D1D] border-r border-[#FCA5A5]/50">選項不全</div>
-                                        <div className="px-3 py-2 text-[#7F1D1D] leading-[1.7]">受訪者找不到自己的答案 → 加「其他：___」或範圍補完整</div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--gold)] rounded-r-[6px] p-3 text-[11.5px] text-[var(--ink-mid)] leading-[1.85]">
-                                💡 <strong>方法獨家陷阱</strong>不在這——下方 tab 切到你的方法看「<strong className="text-[var(--ink)]">C · 獨家陷阱</strong>」區塊。例如訪談的「封閉化失敗」、實驗的「霍桑效應」、觀察的「觀察者偏誤」、文獻的「子類型混搭」。
+                                💡 <strong>具體錯誤類型</strong>因方法而異——下方 tab 切到你的方法看 <strong className="text-[var(--ink)]">C · 常見錯誤</strong> 區塊。問卷／訪談主要踩「題目用詞」的雷（誘導性、雙重、假開放）；觀察／文獻主要踩「類別設計」的雷（重疊、不全）；實驗則踩「變項設計」的雷（混淆變項、操作定義不精確、前後測污染）。
                             </div>
                         </div>
                     </div>
@@ -1145,7 +1130,7 @@ export const ToolRefinementPage = () => {
                                         {/* 區塊 C：獨家陷阱 */}
                                         <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded-[var(--radius-unified)] p-4">
                                             <div className="flex items-center gap-2 mb-3">
-                                                <span className="text-[10px] font-mono font-bold bg-[#DC2626] text-white px-2 py-0.5 rounded-[3px]">C · 獨家陷阱</span>
+                                                <span className="text-[10px] font-mono font-bold bg-[#DC2626] text-white px-2 py-0.5 rounded-[3px]">C · 常見錯誤</span>
                                                 <span className="text-[13px] font-bold text-[#7F1D1D]">這個方法最容易踩的雷（不在 W9 八病症裡）</span>
                                             </div>
                                             <ul className="text-[12.5px] text-[#7F1D1D] leading-[1.85] list-disc pl-5 space-y-1.5">
@@ -1407,6 +1392,7 @@ export const ToolRefinementPage = () => {
                 title="計畫書 · "
                 accentTitle="整本定稿"
                 subtitle="W10 目標 = 把整本計畫書寫到定稿級。第一節：W9 沒寫完的 1-5 章補完 + 在 docx 第六章填具體題目（結構／基本資料／變項題目／自檢）。第二節：第七~十三章補完 + 整本 AIRED + 繳交。整本 AI 檢核交給老師跑，W11 拿到 GC 回饋再修工具，並把題目轉成施測載具（Google Form／紙本）+ 跨班 Pilot。"
+                chain="計畫書骨架立起來了——但工具細節還沒寫到能執行的程度。這週把訪綱／問卷題／實驗流程寫到位。"
                 meta={[
                     { label: '第一節 ① + ②', value: '開場 + 第六章流程提醒 → 工具書自學教案（5 法 4 區塊）→ 回 docx 寫題目' },
                     { label: '第二節 ③ + ④', value: '七到十三章 × 整本繳交 → 繳交確認 + W11 預告' },
