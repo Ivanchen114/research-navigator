@@ -77,12 +77,11 @@ const W16Page = () => {
                     {/* 開場：為什麼用海報 */}
                     <div className="card">
                         <div className="card-header">
-                            <Target size={16} /> 為什麼今年用海報，不寫 Word 報告？
+                            <Target size={16} /> 為什麼用海報當期末成果？
                         </div>
                         <div className="card-body">
                             <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
-                                海報是一份能在 <strong>3 秒內被讀懂的研究報告</strong>。
-                                Word 報告靠長度堆出嚴謹感，海報逼你<strong>抓出最重要的</strong>——這才是研究功力。
+                                海報是一份能在 <strong>3 秒內被讀懂的研究報告</strong>——逼你從一學期的研究裡<strong>抓出最重要的東西</strong>。能在兩張 A1 內把研究說清楚，這本身就是研究功力。
                             </p>
                             <p style={{ fontSize: 13, lineHeight: 1.85, color: 'var(--ink-mid)' }}>
                                 W17 Gallery Walk 你會親自顧攤分享，海報就是你的「招牌」。<br />
@@ -177,25 +176,25 @@ const W16Page = () => {
                                 <div>
                                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 6, textAlign: 'center' }}>A1 #1（左 · 故事與方法）</div>
                                     <img
-                                        src="/images/w16/poster-sample-left.jpg"
+                                        src="/images/w16/poster-sample-left.png"
                                         alt="A1 #1 範本：研究標題 + 動機 + 研究問題 + 文獻發現 + 研究方法"
                                         style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 'var(--radius-unified)', border: '1px solid var(--border)', background: '#F8FAFC' }}
                                         onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'block'; }}
                                     />
                                     <div style={{ display: 'none', padding: 24, border: '2px dashed var(--border)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12, color: 'var(--ink-light)' }}>
-                                        圖片載入中⋯⋯<br />路徑：/images/w16/poster-sample-left.jpg
+                                        圖片載入中⋯⋯<br />路徑：/images/w16/poster-sample-left.png
                                     </div>
                                 </div>
                                 <div>
                                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 6, textAlign: 'center' }}>A1 #2（右 · 發現與意義）</div>
                                     <img
-                                        src="/images/w16/poster-sample-right.jpg"
+                                        src="/images/w16/poster-sample-right.png"
                                         alt="A1 #2 範本：核心呈現 + 主要發現 + 結論 + 限制 + 參考文獻 + QR Code"
                                         style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 'var(--radius-unified)', border: '1px solid var(--border)', background: '#F8FAFC' }}
                                         onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'block'; }}
                                     />
                                     <div style={{ display: 'none', padding: 24, border: '2px dashed var(--border)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12, color: 'var(--ink-light)' }}>
-                                        圖片載入中⋯⋯<br />路徑：/images/w16/poster-sample-right.jpg
+                                        圖片載入中⋯⋯<br />路徑：/images/w16/poster-sample-right.png
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +225,7 @@ const W16Page = () => {
                                 </div>
                             </a>
                             <p style={{ fontSize: 11.5, color: 'var(--ink-mid)', marginTop: 12, fontStyle: 'italic', lineHeight: 1.7 }}>
-                                💡 完成後匯出 PDF 給老師印 A1。學生不用下載「教學版」——上方視覺範本已經呈現含規準角標的樣子，看著做就好。
+                                💡 完成後匯出 PDF 給老師印 A1。
                             </p>
                         </div>
                     </div>
