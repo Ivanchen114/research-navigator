@@ -1,619 +1,1031 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './ClinicPage.css';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
-import CopyButton from '../components/ui/CopyButton';
-import { readRecords } from '../components/ui/ThinkRecord';
+import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     Map,
+    ArrowRight,
     CheckCircle2,
-    Users2,
-    Lightbulb,
-    MessageSquare,
+    ShieldAlert,
+    ChevronDown,
+    ChevronUp,
+    Trophy,
+    RefreshCw,
+    Activity,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
+import BackfillField from '../components/ui/BackfillField';
 import { W4Data } from '../data/lessonMaps';
 
-/* ── 資料常數 ── */
+/* ══════════════════════════════════════
+ *  資料常數
+ * ══════════════════════════════════════ */
 
-const W5H1_ITEMS = [
-    { w: 'Who', l: '對象', q: '研究的是誰？要具體到一個可接觸的群體。' },
-    { w: 'Where', l: '場域', q: '在哪個地點或範圍內進行？' },
-    { w: 'What', l: '變項', q: '核心概念是什麼？要能測量。' },
-    { w: 'When', l: '時間', q: '有特定的時間點或情境嗎？' },
-    { w: 'How', l: '方法', q: '用問卷？訪談？觀察？文獻？實驗？' },
+const METHODS = [
+    {
+        icon: '📋', name: '問卷調查法', id: 'survey', color: 'var(--accent)', bg: 'var(--accent-light)',
+        purpose: '了解大量樣本的分布、比例、趨勢，或收集大量人的態度數據。',
+        strength: '效率高，可量化，可比較不同群體的差異。',
+        weakness: '深度不足。就算有開放題，答案通常很淺，難以深挖原因。',
+        when: '「有多少人」「什麼比例」「哪個年級比較___」「滿意度差異」',
+        note: '如果核心問題是「為什麼」，問卷只能得到表面答案，訪談才能挖到深層原因。'
+    },
+    {
+        icon: '🎤', name: '訪談法', id: 'interview', color: '#7c3aed', bg: '#f3f0ff',
+        purpose: '深入理解個人的想法、經驗、動機與背後脈絡。',
+        strength: '可以彈性追問，挖掘預期外的答案，適合複雜或敏感的問題。',
+        weakness: '樣本少，耗時，難量化，受訪者可能不說真話。',
+        when: '「為什麼這樣做」「背後的故事是什麼」「怎麼想的」「經歷過什麼」',
+        note: '訪談不是「隨便聊聊」，需要事先設計好訪談大綱，問題要有層次。'
+    },
+    {
+        icon: '🧪', name: '實驗法', id: 'experiment', color: '#d97706', bg: '#fef3c7',
+        purpose: '在你能主動操控某個條件（自變項）的前提下，測量另一個結果（依變項）是否改變，以提供因果關係的強力證據。',
+        strength: '控制變因後，是最強的因果推論設計——但要注意，這是「強力證據」，不是哲學意義上的「證明」。',
+        weakness: '需要控制組、操弄變項，高中生執行困難（倫理、時間、場地限制）。',
+        when: '「如果我讓A組___、B組不___，結果會不一樣嗎？」——你能設計這種對照的題目。',
+        note: '大多數高中研究題目不適合實驗法，不需要硬套。無法操控自變項的題目，請選其他方法。'
+    },
+    {
+        icon: '👀', name: '觀察法', id: 'observation', color: 'var(--success)', bg: 'var(--success-light)',
+        purpose: '記錄真實發生的行為，不依賴受試者自我報告。',
+        strength: '結果比較客觀，不會因為「人說的跟實際做的不一樣」而失真。',
+        weakness: '只能看到外在行為，看不到內心想法。另外，如果受試者知道自己被觀察，行為可能會變得不自然。',
+        when: '「真實行為是什麼（不是人們說自己做了什麼）」「頻率、時間、空間分布」',
+        note: '觀察法需要設計觀察表（記什麼、怎麼記、記多久），不是「隨便去看看」。'
+    },
+    {
+        icon: '📚', name: '文獻分析法', id: 'literature', color: '#6b21a8', bg: '#f5f3ff',
+        purpose: '把現成文本（論文、史料、報導、書籍、貼文）當成「研究對象」分析它本身——不是自己出去收一手資料。',
+        strength: 'W9 會分 4 個子類型細講：② 歷史文獻分析（時間軸推因）／③ 內容分析（編碼計次）／④ 論述分析（話語立場）／⑤ 敘事分析（情節結構）。',
+        weakness: '入門最常見的坑是把「文獻分析」和「文獻回顧」搞混——回顧是整理前人說法（每個方法第三章都做，不是主方法）。',
+        when: '你的研究材料就是「別人已產生的文本」，而你要分析的是這些文本本身的模式、立場、結構或變化。',
+        note: '⚠️ 文獻分析 ≠ 文獻回顧。如果你只想整理前人研究，請把主方法改成問卷／訪談／實驗／觀察，把回顧放第三章。'
+    },
 ];
 
-const buildPosterPrompt = (topic) => `我的研究海報需要以下元素：
-- 研究題目：「${topic || '【貼上 W3 定案題目】'}」
-- 吸引人的標題草稿：【貼上你的草稿】
-- 預期發現草稿：【貼上你的預測】
+/* — 兩層判斷架構（互動決策樹用）— */
+const DECISION_TREE = {
+    l1: {
+        question: 'L1 第一層　你的資料，要自己去收集，還是分析已存在的文本？',
+        options: [
+            {
+                id: 'collect',
+                icon: '🔍',
+                label: '自己去收集',
+                sub: '你的資料目前還不存在，要自己出門問人／觀察／做實驗。',
+                next: 'l2',
+            },
+            {
+                id: 'literature',
+                icon: '📚',
+                label: '分析已有文本',
+                sub: '把文獻當「研究對象」來分析它（不是整理前人說法）。',
+                terminal: true,
+                method: { name: '文獻分析法', icon: '📚', color: '#6b21a8' },
+                subtypes: [
+                    { num: '②', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」' },
+                    { num: '③', name: '內容分析', when: '統計文本中詞彙／主題的頻率（量化）' },
+                    { num: '④', name: '論述分析', when: '看話語怎麼建構立場、誰被說／怎麼被說' },
+                    { num: '⑤', name: '敘事分析', when: '從文本抓情節結構、角色、轉折' },
+                ],
+            },
+        ],
+    },
+    l2: {
+        question: 'L2 第二層　自己收集的話，三題獨立判斷（挑最貼近你題目的那條）',
+        items: [
+            {
+                id: 'q1',
+                num: '❶',
+                q: '你想知道的是「比例／數量／趨勢」，還是「原因／脈絡／故事」？',
+                options: [
+                    { label: '比例／數量／趨勢', method: { name: '問卷', icon: '📋', color: 'var(--accent)' } },
+                    { label: '原因／脈絡／故事', method: { name: '訪談', icon: '🎤', color: '#7c3aed' } },
+                ],
+            },
+            {
+                id: 'q2',
+                num: '❷',
+                q: '你能不能主動改變一個條件，然後量另一個怎麼變？',
+                options: [
+                    { label: '能操控（A 組做、B 組不做）', method: { name: '實驗', icon: '🧪', color: '#d97706' } },
+                    { label: '不能操控', method: { name: '排除實驗 → 回 ❶ 或 ❸ 判斷', icon: '↩️', color: 'var(--ink-light)', isFallback: true } },
+                ],
+            },
+            {
+                id: 'q3',
+                num: '❸',
+                q: '你想抓「真實行為／自然現象」，還是「人的想法態度」？',
+                options: [
+                    { label: '真實行為／自然現象', method: { name: '觀察', icon: '👀', color: 'var(--success)' } },
+                    { label: '想法態度', method: { name: '📋 問卷 / 🎤 訪談（回 ❶）', icon: '🔁', color: 'var(--ink-light)', isFallback: true } },
+                ],
+            },
+        ],
+        note: '一個題目可以有主方法 + 輔助方法。三題不必都答——挑最貼近你研究目的的那一條。',
+    },
+    scienceNote: {
+        icon: '🌱',
+        title: '自然科學分流（理化、生物、地科…）',
+        body: '研究對象不是人——例如「球從多高落下回彈高度」「植物澆水量對生長的影響」——L2 ❸ 的「真實行為／自然現象」就是這類。常見組合：👀 觀察（記錄真實現象）+ 🧪 實驗（主動操控條件，量另一個怎麼變）。',
+    },
+};
 
-請幫我：
-1. 優化標題，讓它更吸引高中生，保持白話但加一點懸疑感
-2. 把預期發現改寫得更有研究感（加入「可能」「推測」等詞）
-3. 給我 2 個版本讓我選
-
-⚠️ 嚴格規則（請務必遵守）：
-- 不要改我的研究對象（Who）——例如「高一學生」就不能改成「青少年」
-- 不要改我的核心變項（What）——例如「滑手機時數」就不能改成「3C 使用」
-- 不要加我沒寫的變項——例如不要把「家庭背景」「成績」這類我沒提的東西塞進來
-- 如果你覺得需要動 Who/What 或新增變項，請先在回覆開頭說「⚠️ 我建議改方向，請先諮詢老師」，再給建議
-- 你的工作只是「換更好聽的說法」，不是「換研究」`;
-
-const POSTER_FIELDS = [
-    { n: '①', l: '吸引人的標題', d: '口語問句，讓人一眼停下來' },
-    { n: '②', l: '正式研究題目', d: 'W3 定案版本（副標）' },
-    { n: '③', l: '研究動機', d: '為什麼想研究這個？' },
-    { n: '④', l: '製作人資訊', d: '姓名 / 班級 / 座號' },
+const QUIZ_QUESTIONS = [
+    {
+        q: '「我想知道全校高一同學每天平均使用手機幾小時」→ 適合哪種方法？',
+        options: [
+            { label: 'A', text: '訪談' },
+            { label: 'B', text: '問卷' },
+            { label: 'C', text: '實驗' },
+            { label: 'D', text: '觀察' },
+        ],
+        answer: 'B',
+        hint: '要的是「多少人、幾小時」→ 比例趨勢 → 問卷'
+    },
+    {
+        q: '「我想了解為什麼同學在課堂上容易分心」→ 適合哪種方法？',
+        options: [
+            { label: 'A', text: '問卷' },
+            { label: 'B', text: '文獻' },
+            { label: 'C', text: '訪談' },
+            { label: 'D', text: '實驗' },
+        ],
+        answer: 'C',
+        hint: '要的是「為什麼」→ 原因脈絡 → 訪談'
+    },
+    {
+        q: '「我想知道播放古典音樂是否能提升短期記憶力」→ 適合哪種方法？',
+        options: [
+            { label: 'A', text: '問卷' },
+            { label: 'B', text: '觀察' },
+            { label: 'C', text: '文獻' },
+            { label: 'D', text: '實驗' },
+        ],
+        answer: 'D',
+        hint: '能操控自變項（音樂）→ 實驗法'
+    },
+    {
+        q: '「我想記錄圖書館午休時，同學實際起身走動的次數與時機」→ 適合哪種方法？',
+        options: [
+            { label: 'A', text: '問卷' },
+            { label: 'B', text: '觀察' },
+            { label: 'C', text: '訪談' },
+            { label: 'D', text: '文獻' },
+        ],
+        answer: 'B',
+        hint: '要記錄「真實行為」，不靠自我報告 → 觀察法'
+    },
+    {
+        q: '「我想整理過去十年台灣高中生課業壓力研究的主要發現」→ 適合哪種方法？',
+        options: [
+            { label: 'A', text: '實驗' },
+            { label: 'B', text: '問卷' },
+            { label: 'C', text: '文獻' },
+            { label: 'D', text: '觀察' },
+        ],
+        answer: 'C',
+        hint: '分析已存在的研究文本 → 第一層直接導向文獻法（文獻回顧）'
+    },
+    {
+        q: '下列哪個題目「最不適合」用問卷？',
+        options: [
+            { label: 'A', text: '全校有幾成同學每天超過10點睡覺？' },
+            { label: 'B', text: '同學覺得最難的科目是哪個？' },
+            { label: 'C', text: '為什麼有些同學晚上睡不著？' },
+            { label: 'D', text: '多少人曾因壓力影響睡眠？' },
+        ],
+        answer: 'C',
+        hint: '「為什麼睡不著」要挖深層原因，問卷選項只能得到表面，應用訪談'
+    },
+    {
+        q: '「從日治時期史料分析台灣土地政策為何引發農民抗爭」→ 適合哪種方法？',
+        options: [
+            { label: 'A', text: '問卷' },
+            { label: 'B', text: '實驗' },
+            { label: 'C', text: '觀察' },
+            { label: 'D', text: '文獻' },
+        ],
+        answer: 'D',
+        hint: '資料是已有史料 → 文獻法；回答「為什麼」是歷史文獻分析用途'
+    },
+    {
+        q: '一份研究同時想知道「使用頻率」和「使用的心理動機」，最適合？',
+        options: [
+            { label: 'A', text: '只用問卷' },
+            { label: 'B', text: '只用訪談' },
+            { label: 'C', text: '問卷（主）+ 訪談（輔）' },
+            { label: 'D', text: '實驗 + 觀察' },
+        ],
+        answer: 'C',
+        hint: '頻率 → 問卷；動機 → 訪談；兩者互補最適合'
+    },
+    {
+        q: '「分析近五年台灣各大報對 AI 教育新聞的報導角度與用詞趨勢」→ 適合？',
+        options: [
+            { label: 'A', text: '問卷' },
+            { label: 'B', text: '觀察' },
+            { label: 'C', text: '文獻' },
+            { label: 'D', text: '實驗' },
+        ],
+        answer: 'C',
+        hint: '分析已有媒體文本中詞彙/主題的模式 → 文獻法（內容分析）'
+    },
+    {
+        q: '以下哪個研究問題需要「觀察法」而非問卷？',
+        options: [
+            { label: 'A', text: '你覺得下課時間夠嗎？' },
+            { label: 'B', text: '課堂上同學實際起身走動的次數' },
+            { label: 'C', text: '你最喜歡的休閒活動？' },
+            { label: 'D', text: '你認為學校環境對學習有幫助嗎？' },
+        ],
+        answer: 'B',
+        hint: '「走動次數」是直接觀察的行為，問卷靠自我報告，容易不準確'
+    },
 ];
 
+/* — 理解檢核（穿插在觀念段落之間的 ThinkChoice） — */
+const THINK_CHOICES = [
+    {
+        id: 'tc1',
+        prompt: '同學想研究「高一生每天喝多少杯手搖飲」，你建議用什麼方法？',
+        options: [
+            { label: 'A', text: '訪談——可以追問為什麼想喝' },
+            { label: 'B', text: '問卷——量化收集數量比例' },
+            { label: 'C', text: '觀察——偷偷數他買幾杯' },
+        ],
+        answer: 'B',
+        feedback: '核心問的是「多少杯」＝ 數量比例，問卷最適合。觀察不切實際（你不能全天跟蹤），訪談太沒效率。',
+    },
+    {
+        id: 'tc2',
+        prompt: '研究問「為什麼學生不愛用學校圖書館」，問卷和訪談哪個更適合當主方法？',
+        options: [
+            { label: 'A', text: '問卷——可以大量收集各年級意見' },
+            { label: 'B', text: '訪談——深挖背後的原因和脈絡' },
+        ],
+        answer: 'B',
+        feedback: '核心問的是「為什麼」＝ 原因脈絡。問卷能得到表面選項（如「太遠」「書太舊」），但訪談才能追問「你說太遠，多遠才算遠？以前會去嗎？是什麼讓你不再去的？」',
+    },
+];
+
+/* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
-    { key: 'w4-5w1h-who', label: '5W1H — Who（對象）', question: '研究的是誰？要具體到一個可接觸的群體。' },
-    { key: 'w4-5w1h-where', label: '5W1H — Where（場域）', question: '在哪個地點或範圍內進行？' },
-    { key: 'w4-5w1h-what', label: '5W1H — What（變項）', question: '核心概念是什麼？要能測量。' },
-    { key: 'w4-5w1h-when', label: '5W1H — When（時間）', question: '有特定的時間點或情境嗎？' },
-    { key: 'w4-5w1h-how', label: '5W1H — How（方法）', question: '用問卷？訪談？觀察？文獻？實驗？' },
-    { key: 'w4-initial-topic', label: 'W4 起跑題目（5W1H 對齊後）', question: '5W1H 切完後，你帶進海報的起跑題目是什麼？' },
-    { key: 'w4-aired-record', label: 'AI-RED 記錄（海報文案優化）', question: '這次請 AI 優化海報文案時，AI-RED 五欄分別記了什麼？' },
-    { key: 'w4-motivation-raw', label: '白話版動機（自己寫的）', question: '用跟朋友聊天的方式，說說你為什麼想研究這個題目？' },
-    { key: 'w4-title-draft', label: '標題草稿', question: '用口語問句寫一個吸引人的標題' },
-    { key: 'w4-prediction', label: '預期發現', question: '你預測這個研究可能發現什麼？大膽猜 2-3 個' },
-    { key: 'w4-feedback-accept', label: 'Gallery Walk：我接受的建議', question: '同學給的建議中，你接受了哪些？怎麼改？' },
-    { key: 'w4-feedback-reject', label: 'Gallery Walk：我不接受的建議', question: '你不採納哪些建議？理由是？' },
-    { key: 'w4-final-topic', label: 'W4 最終定案題目', question: '經過壓力測試後，你的最終定案題目是什麼？' },
-    { key: 'w4-final-motivation', label: 'W4 最終研究動機', question: '你的最終研究動機是什麼？' },
+    { key: 'w4-my-topic', label: '我的 W4 定案題目' },
+    { key: 'w4-layer1', label: '第一層判斷', question: '我的資料要自己收集，還是分析已有文本？' },
+    { key: 'w4-layer2', label: '第二層判斷', question: '最關鍵的那一條分科問題，以及我的回答' },
+    { key: 'w4-main-method', label: '我選定的主要方法', question: '問卷/訪談/實驗/觀察/文獻？' },
+    { key: 'w4-reason', label: '選擇理由', question: '為什麼選這個方法？請引用兩層判斷中的某一條' },
+    { key: 'w4-aux-method', label: '輔助方法', question: '需要輔助方法嗎？是什麼？為什麼？' },
+    { key: 'w4-reflect-confused', label: '反思 1：最易搞混的方法', question: '你最容易搞混的兩種方法是哪兩個？關鍵差別在哪一條兩層判斷？' },
+    { key: 'w4-reflect-literature', label: '反思 2：文獻 vs 文獻分析', question: '「文獻回顧」與「文獻分析法」的差別是什麼？你的題目會走哪一條？' },
+    { key: 'w4-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
-/* ── 主組件 ── */
+/* ══════════════════════════════════════
+ *  互動決策樹組件
+ * ══════════════════════════════════════ */
+
+const DecisionTree = () => {
+    const [l1Choice, setL1Choice] = useState(null);
+    const [l2Picks, setL2Picks] = useState({}); // { q1: 0|1, q2: 0|1, q3: 0|1 }
+
+    const reset = () => {
+        setL1Choice(null);
+        setL2Picks({});
+    };
+
+    const pickL2 = (qid, idx) => {
+        setL2Picks(prev => ({ ...prev, [qid]: idx }));
+    };
+
+    /* 統整推薦：找出有效（非 fallback）的方法 */
+    const synthesis = (() => {
+        if (l1Choice === 'literature') {
+            return { primary: { name: '文獻分析法', icon: '📚' }, support: [], note: '主方法 = 📚 文獻分析法。W9 會挑一個子類型細講（② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事）。' };
+        }
+        if (l1Choice === 'collect') {
+            const valids = [];
+            DECISION_TREE.l2.items.forEach(item => {
+                const idx = l2Picks[item.id];
+                if (idx === undefined) return;
+                const m = item.options[idx].method;
+                if (!m.isFallback) valids.push(m);
+            });
+            if (valids.length === 0) return null;
+            const [primary, ...rest] = valids;
+            const seen = new Set([primary.name]);
+            const support = rest.filter(m => !seen.has(m.name) && (seen.add(m.name), true));
+            return {
+                primary,
+                support,
+                note: support.length
+                    ? `主方法 ${primary.icon} ${primary.name}　+ 輔助方法 ${support.map(m => m.icon + ' ' + m.name).join('、')}`
+                    : `建議方法：${primary.icon} ${primary.name}`,
+            };
+        }
+        return null;
+    })();
+
+    /* SVG 樹高亮邏輯 */
+    const dimLeft = l1Choice === 'literature';
+    const dimRight = l1Choice === 'collect';
+
+    /* L2 葉節點（SVG 子組件）*/
+    const Leaf = ({ qid, idx, x, y, w, h, label, method, color, fallback }) => {
+        const picked = l2Picks[qid];
+        const isPicked = picked === idx;
+        const dimmed = picked !== undefined && !isPicked;
+        return (
+            <g
+                style={{ cursor: 'pointer' }}
+                onClick={() => pickL2(qid, idx)}
+                opacity={dimmed ? 0.35 : 1}
+            >
+                <rect
+                    x={x} y={y} width={w} height={h} rx={6}
+                    fill={isPicked ? '#fff' : (fallback ? '#f5f3f0' : '#fff')}
+                    stroke={isPicked ? color : '#bbb'}
+                    strokeWidth={isPicked ? 2.5 : 1.5}
+                />
+                <text x={x + 12} y={y + 17} fontSize="11" fill="#666">{label}</text>
+                <text x={x + 12} y={y + 34} fontSize="12.5" fontWeight="bold" fill={color}>→ {method}</text>
+            </g>
+        );
+    };
+
+    return (
+        <div className="rounded-[var(--radius-unified)] border-2 border-[var(--ink)] overflow-hidden bg-white">
+            {/* Header */}
+            <div className="flex items-center gap-3 px-5 py-3 bg-[var(--ink)] text-white">
+                <Activity size={18} />
+                <span className="font-bold text-[14px]">🌳 兩層判斷　·　決策樹</span>
+                <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)] hidden sm:inline">點選節點 → 看路徑</span>
+                {(l1Choice || Object.keys(l2Picks).length > 0) && (
+                    <button
+                        onClick={reset}
+                        className="ml-2 text-[11px] text-[var(--ink-light)] hover:text-white flex items-center gap-1 font-mono"
+                    >
+                        <RefreshCw size={11} /> 重來
+                    </button>
+                )}
+            </div>
+
+            {/* SVG 視覺樹 */}
+            <div className="bg-[var(--paper-warm)] p-4 overflow-x-auto">
+                <svg
+                    viewBox="0 0 880 620"
+                    className="block mx-auto"
+                    style={{ width: '100%', minWidth: '720px', maxWidth: '900px', height: 'auto' }}
+                >
+                    {/* ============ 連線 ============ */}
+                    <path d="M 440 60 C 440 95, 270 100, 270 130" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
+                    <path d="M 440 60 C 440 95, 610 100, 610 130" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
+                    <line x1="270" y1="180" x2="270" y2="200" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" />
+                    <line x1="610" y1="180" x2="610" y2="200" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" />
+                    {[267, 381, 495].map((qy, i) => (
+                        <g key={i} opacity={dimLeft ? 0.3 : 1}>
+                            <line x1="130" y1={qy} x2="130" y2={qy + 19} stroke="#999" strokeWidth="1.5" />
+                            <line x1="370" y1={qy} x2="370" y2={qy + 19} stroke="#999" strokeWidth="1.5" />
+                        </g>
+                    ))}
+                    <line x1="610" y1="252" x2="610" y2="266" stroke={dimRight ? '#ddd' : '#6b21a8'} strokeWidth="2" />
+
+                    {/* ============ ROOT ============ */}
+                    <g>
+                        <rect x={345} y={15} width={190} height={48} rx={10} fill="var(--ink)" />
+                        <text x={440} y={45} fontSize="14" fill="white" fontWeight="bold" textAnchor="middle">
+                            📍 你的資料要哪來？
+                        </text>
+                    </g>
+
+                    {/* ============ L1 左：自蒐 ============ */}
+                    <g
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => { setL1Choice(l1Choice === 'collect' ? null : 'collect'); setL2Picks({}); }}
+                        opacity={dimLeft ? 0.4 : 1}
+                    >
+                        <rect
+                            x={170} y={130} width={200} height={50} rx={8}
+                            fill={l1Choice === 'collect' ? 'var(--accent-light)' : 'white'}
+                            stroke={l1Choice === 'collect' ? 'var(--accent)' : '#666'}
+                            strokeWidth={l1Choice === 'collect' ? 2.5 : 1.5}
+                        />
+                        <text x={270} y={155} fontSize="14" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
+                            🔍 自己收集
+                        </text>
+                        <text x={270} y={172} fontSize="10.5" textAnchor="middle" fill="#666">
+                            問人 / 觀察 / 做實驗
+                        </text>
+                    </g>
+
+                    {/* ============ L1 右：文獻 ============ */}
+                    <g
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => { setL1Choice(l1Choice === 'literature' ? null : 'literature'); setL2Picks({}); }}
+                        opacity={dimRight ? 0.4 : 1}
+                    >
+                        <rect
+                            x={510} y={130} width={200} height={50} rx={8}
+                            fill={l1Choice === 'literature' ? '#f5f3ff' : 'white'}
+                            stroke={l1Choice === 'literature' ? '#6b21a8' : '#666'}
+                            strokeWidth={l1Choice === 'literature' ? 2.5 : 1.5}
+                        />
+                        <text x={610} y={155} fontSize="14" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
+                            📚 分析現成文本
+                        </text>
+                        <text x={610} y={172} fontSize="10.5" textAnchor="middle" fill="#666">
+                            把文本當研究對象
+                        </text>
+                    </g>
+
+                    {/* ============ L2 三題分流（左半）============ */}
+                    <g opacity={dimLeft ? 0.35 : 1}>
+                        <text x={20} y={216} fontSize="11" fontWeight="bold" fill="#999" letterSpacing="0.5">
+                            L2 第二層 — 三題獨立分流（挑最貼近你題目的那條）
+                        </text>
+
+                        {/* Q1 */}
+                        <rect x={20} y={234} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
+                        <text x={32} y={255} fontSize="12.5" fontWeight="bold" fill="var(--ink)">
+                            ❶ 比例／數量／趨勢　vs　原因／脈絡／故事？
+                        </text>
+                        <Leaf qid="q1" idx={0} x={20} y={286} w={220} h={42} label="比例／數量／趨勢" method="📋 問卷" color="var(--accent)" />
+                        <Leaf qid="q1" idx={1} x={260} y={286} w={220} h={42} label="原因／脈絡／故事" method="🎤 訪談" color="#7c3aed" />
+
+                        {/* Q2 */}
+                        <rect x={20} y={348} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
+                        <text x={32} y={369} fontSize="12.5" fontWeight="bold" fill="var(--ink)">
+                            ❷ 能不能主動改一個條件，量另一個怎麼變？
+                        </text>
+                        <Leaf qid="q2" idx={0} x={20} y={400} w={220} h={42} label="能操控（A 做、B 不做）" method="🧪 實驗" color="#d97706" />
+                        <Leaf qid="q2" idx={1} x={260} y={400} w={220} h={42} label="不能操控" method="↩ 回 ❶／❸" color="#888" fallback />
+
+                        {/* Q3 */}
+                        <rect x={20} y={462} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
+                        <text x={32} y={483} fontSize="12.5" fontWeight="bold" fill="var(--ink)">
+                            ❸ 真實行為／自然現象　vs　想法態度？
+                        </text>
+                        <Leaf qid="q3" idx={0} x={20} y={514} w={220} h={42} label="真實行為／自然現象" method="👀 觀察" color="var(--success)" />
+                        <Leaf qid="q3" idx={1} x={260} y={514} w={220} h={42} label="想法態度" method="📋／🎤（回 ❶）" color="#888" fallback />
+                    </g>
+
+                    {/* ============ 文獻分支（右半）============ */}
+                    <g opacity={dimRight ? 0.35 : 1}>
+                        <rect x={500} y={210} width={220} height={42} rx={8}
+                              fill={l1Choice === 'literature' ? '#f5f3ff' : 'white'}
+                              stroke="#6b21a8" strokeWidth="2" />
+                        <text x={610} y={236} fontSize="13" fontWeight="bold" textAnchor="middle" fill="#6b21a8">
+                            📚 文獻分析法（主方法）
+                        </text>
+
+                        <rect x={460} y={266} width={400} height={48} rx={6} fill="#FEF3C7" stroke="#D97706" strokeWidth="1.5" />
+                        <text x={476} y={286} fontSize="11.5" fontWeight="bold" fill="#7F1D1D">
+                            ⚠️ 文獻「分析」≠ 文獻「回顧」
+                        </text>
+                        <text x={476} y={303} fontSize="10.5" fill="#7F1D1D">
+                            回顧 = 整理前人說法（每個方法第三章都做，不算主方法）
+                        </text>
+
+                        {[
+                            { num: '②', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」', y: 326 },
+                            { num: '③', name: '內容分析',     when: '統計文本中詞彙／主題的頻率（量化）', y: 380 },
+                            { num: '④', name: '論述分析',     when: '看話語怎麼建構立場、誰被說／怎麼被說', y: 434 },
+                            { num: '⑤', name: '敘事分析',     when: '從文本抓情節結構、角色、轉折', y: 488 },
+                        ].map(s => (
+                            <g key={s.num}>
+                                <rect x={460} y={s.y} width={400} height={44} rx={6} fill="white" stroke="#e0d5f5" strokeWidth="1.5" />
+                                <text x={476} y={s.y + 22} fontSize="14" fontWeight="bold" fill="#6b21a8">{s.num}</text>
+                                <text x={500} y={s.y + 22} fontSize="13" fontWeight="bold" fill="#6b21a8">{s.name}</text>
+                                <text x={476} y={s.y + 38} fontSize="10.5" fill="#666">→ {s.when}</text>
+                            </g>
+                        ))}
+                        <text x={460} y={560} fontSize="10" fill="#999" fontStyle="italic">
+                            （W9 計畫書與工具會挑一個子類型細講分析架構）
+                        </text>
+                    </g>
+                </svg>
+            </div>
+
+            {/* 自然科學分流卡 + 統整推薦（HTML） */}
+            <div className="px-5 py-4 space-y-3 border-t border-[var(--border)]">
+                <div className="bg-[#ecfdf5] border-l-4 border-[var(--success)] p-3 rounded-r-[6px]">
+                    <p className="text-[12px] font-bold text-[#065f46] mb-1">
+                        🌱 自然科學分流（理化、生物、地科…）
+                    </p>
+                    <p className="text-[12px] text-[#065f46] leading-relaxed">
+                        研究對象不是人——例如「球從多高落下回彈高度」「植物澆水量對生長的影響」——L2 ❸ 走「真實行為／自然現象」。常見組合：👀 觀察（記錄真實現象）+ 🧪 實驗（主動操控條件，量另一個怎麼變）。
+                    </p>
+                </div>
+
+                {synthesis && (
+                    <div className="animate-in slide-in-from-top-2 duration-200 bg-[var(--ink)] text-white rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Trophy size={16} className="text-[var(--gold)]" />
+                            <span className="font-bold text-[13px]">建議方法（依你目前點選）</span>
+                        </div>
+                        <p className="text-[13.5px] text-white leading-relaxed">{synthesis.note}</p>
+                        {l1Choice === 'collect' && Object.keys(l2Picks).length === 0 && (
+                            <p className="text-[11px] text-[var(--ink-light)] mt-2">
+                                還沒選 L2 任一葉節點——點圖上 L2 三題裡最貼近你題目的那條兩個方塊之一。
+                            </p>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+/* ══════════════════════════════════════
+ *  主元件
+ * ══════════════════════════════════════ */
 
 export const W4Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
+    const [expandedMethod, setExpandedMethod] = useState(null);
     const [choiceResults, setChoiceResults] = useState([]);
 
-    /* 帶入上週題目：優先 W3 Part 4 白話版（5W1H 真的切得開），退回 Part 5 定案，再退回 W2 意圖 */
-    const [w2Intent, setW2Intent] = useState('');
-    const [w2Source, setW2Source] = useState('w2'); // 'w3-revised' | 'w3-final' | 'w2'
+    /* Quiz state */
+    const [quizStarted, setQuizStarted] = useState(false);
+    const [currentQ, setCurrentQ] = useState(0);
+    const [selections, setSelections] = useState({});
+    const [quizDone, setQuizDone] = useState(false);
+
+    /* W3 定案題目帶入（讓 W4 把它放上方法地圖）*/
+    const [w3Topic, setW3Topic] = useState('');
+
     useEffect(() => {
-        const records = readRecords();
-        const w3Revised = (records['w3-own-revised'] || '').trim();  // Part 4 白話版
-        const w3Final = (records['w3-final-topic'] || '').trim();     // Part 5 AI 優化定案
-        const w2Final = (records['w2-final-intent'] || '').trim();    // W2 意圖句
-        if (w3Revised) {
-            setW2Intent(w3Revised);
-            setW2Source('w3-revised');
-        } else if (w3Final) {
-            setW2Intent(w3Final);
-            setW2Source('w3-final');
-        } else {
-            setW2Intent(w2Final);
-            setW2Source('w2');
-        }
+        const refresh = () => {
+            const saved = readRecords();
+            const topic = saved['w3-final-topic']?.trim();
+            if (topic) {
+                setW3Topic(topic);
+                // auto-fill w4-my-topic if empty
+                if (!saved['w4-my-topic']?.trim()) {
+                    const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                    all['w4-my-topic'] = topic;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+                }
+            } else {
+                setW3Topic('');
+            }
+        };
+        refresh();
+        window.addEventListener('focus', refresh);
+        return () => window.removeEventListener('focus', refresh);
     }, []);
 
-    const trackChoice = useCallback((question, selected, correct) => {
+    /* ThinkChoice callback */
+    const handleChoice = useCallback((id, prompt) => (label, isCorrect) => {
         setChoiceResults(prev => {
-            const idx = prev.findIndex(c => c.question === question);
-            const entry = { question, selected, correct };
-            if (idx >= 0) { const next = [...prev]; next[idx] = entry; return next; }
-            return [...prev, entry];
+            const filtered = prev.filter(r => r.id !== id);
+            return [...filtered, { id, question: prompt, selected: label, correct: isCorrect }];
         });
     }, []);
 
-    /* ── 五個步驟 ── */
+    /* Quiz handlers */
+    const handleSelect = (optLabel) => {
+        if (selections[currentQ] !== undefined) return;
+        const newSelections = { ...selections, [currentQ]: optLabel };
+        setSelections(newSelections);
+        if (currentQ < QUIZ_QUESTIONS.length - 1) {
+            setTimeout(() => setCurrentQ(prev => prev + 1), 900);
+        } else {
+            setTimeout(() => setQuizDone(true), 900);
+        }
+    };
+
+    const resetQuiz = () => {
+        setCurrentQ(0);
+        setSelections({});
+        setQuizDone(false);
+        setQuizStarted(true);
+    };
+
+    const score = Object.entries(selections).filter(([i, v]) => v === QUIZ_QUESTIONS[i].answer).length;
+
+    /* ── 五步驟 ──────────────────────────────────────── */
 
     const steps = [
-        /* ──────────────────────────────────────
-         * STEP 1: 5W1H 規格化 + AI 包裝
-         * ────────────────────────────────────── */
+        /* ─── Step 1：五種方法 + 兩層判斷 ─── */
         {
-            title: '5W1H 規格化',
-            icon: '🔪',
+            title: '五種方法 + 兩層判斷',
+            icon: '🩺',
             content: (
-                <div className="space-y-10 prose-zh">
-                    {/* W1-W4 旅程回顧 */}
-                    <div>
-                        <div className="section-head"><h2>從 W3 到 W4</h2><div className="line"></div><span className="mono">WARM-UP</span></div>
-                        <p className="section-desc">
-                            W3 你學會了診斷 8 種爛題型。但光會挑毛病不夠——今天要把你自己的題目切開、規格化、讓 AI 包裝，再做成海報接受同學的壓力測試。
-                        </p>
+                <div className="space-y-8 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        認識五種研究方法的目的與限制，再用「兩層判斷架構」決定你的題目該用哪種。
+                    </p>
 
-                        <div className="content-grid mb-8" style={{ '--cols': 4 }}>
-                            {[
-                                { wk: 'W1', icon: '👀', title: '找到畫面', desc: '什麼讓你好奇？', past: true },
-                                { wk: 'W2', icon: '❓', title: '形成問題', desc: '把畫面轉成問題', past: true },
-                                { wk: 'W3', icon: '🏥', title: '題目健檢', desc: '診斷病症 + AI 練手', past: true },
-                                { wk: 'W4', icon: '🎯', title: '定案 + 壓測', desc: '5W1H → 海報 → Gallery Walk', now: true },
-                            ].map(item => (
-                                <div key={item.wk} className={`p-5 flex flex-col gap-2 ${item.now ? 'bg-[var(--ink)] text-white' : 'bg-white'}`}>
-                                    <div className={`font-mono text-xl font-bold ${item.now ? 'text-[var(--gold)]' : 'text-[var(--accent)]'}`}>{item.wk}</div>
-                                    <div className="text-xl">{item.icon}</div>
-                                    <div className={`font-bold text-[13px] ${item.now ? 'text-white' : 'text-[var(--ink)]'}`}>{item.title}</div>
-                                    <div className={`text-[11px] leading-relaxed ${item.now ? 'text-white/60' : 'text-[var(--ink-light)]'}`}>{item.desc}</div>
+                    {/* 量化 vs 質性 */}
+                    <div className="rounded-[var(--radius-unified)] overflow-hidden border border-[var(--border)]">
+                        <div className="bg-[var(--ink)] px-5 py-3 flex items-center gap-2">
+                            <span className="text-[16px]">🌳</span>
+                            <span className="text-white font-bold text-[13px]">所有方法的兩條根</span>
+                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">先有這個，再看五種方法</span>
+                        </div>
+                        <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
+                            <div className="p-5 bg-[var(--accent-light)]">
+                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase tracking-wider mb-2">📊 量化研究</div>
+                                <p className="text-[13px] text-[var(--ink)] font-medium mb-3">把世界轉換成數字，找規律、比較差異</p>
+                                <div className="space-y-1.5">
+                                    {[
+                                        '想知道「有多少人」「什麼比例」「哪個高」',
+                                        '結果可以統計、可以圖表呈現',
+                                        '對應方法：📋 問卷、🧪 實驗、📚 內容分析',
+                                    ].map((t, i) => (
+                                        <div key={i} className="flex items-start gap-2 text-[12px] text-[var(--ink-mid)]">
+                                            <span className="text-[var(--accent)] mt-0.5 shrink-0">→</span>{t}
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
+                            <div className="p-5 bg-[#f5f3ff]">
+                                <div className="text-[11px] font-mono font-bold text-[#7c3aed] uppercase tracking-wider mb-2">📖 質性研究</div>
+                                <p className="text-[13px] text-[var(--ink)] font-medium mb-3">理解人的意義、經驗與脈絡，挖深層原因</p>
+                                <div className="space-y-1.5">
+                                    {[
+                                        '想知道「為什麼」「怎麼想的」「背後故事」',
+                                        '結果是文字描述、主題、洞察',
+                                        '對應方法：🎤 訪談、👀 觀察、📚 歷史文獻分析',
+                                    ].map((t, i) => (
+                                        <div key={i} className="flex items-start gap-2 text-[12px] text-[var(--ink-mid)]">
+                                            <span className="text-[#7c3aed] mt-0.5 shrink-0">→</span>{t}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-5 py-3 bg-[#fef3c7] border-t border-[var(--border)] text-[12px] text-[#92400e]">
+                            💡 <strong>混合方法</strong>：一個研究可以兩條路都走。例如：用問卷收集比例（量化），再用訪談挖原因（質性）。分科三問 ❶ 其實就是在問你想走哪條根。
                         </div>
                     </div>
 
-                    {/* 5W1H 規格化 */}
-                    <div>
-                        <div className="section-head"><h2>5W1H 規格化</h2><div className="line"></div><span className="mono">不准用 AI · 15 分鐘</span></div>
-                        <p className="section-desc">
-                            拿出你帶進來的題目（優先 W3 最終定案，沒做 W3 就用 W2 最終探究意圖），用 5W1H 再切一次。Gallery Walk 會有人挑戰你，現在多磨一刀。
-                        </p>
+                    {/* 五種方法卡 */}
+                    <div className="space-y-3">
+                        {METHODS.map((m) => {
+                            const isOpen = expandedMethod === m.id;
+                            return (
+                                <div key={m.id} className="border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden bg-white">
+                                    <button
+                                        onClick={() => setExpandedMethod(isOpen ? null : m.id)}
+                                        className="w-full flex items-center gap-4 px-5 py-4 hover:bg-[var(--paper)] transition-colors text-left"
+                                    >
+                                        <span className="text-[22px] shrink-0">{m.icon}</span>
+                                        <div className="flex-1 min-w-0">
+                                            <span className="font-bold text-[14px] text-[var(--ink)]">{m.name}</span>
+                                            <span className="text-[12px] text-[var(--ink-light)] ml-3">{m.purpose.slice(0, 40)}…</span>
+                                        </div>
+                                        {isOpen
+                                            ? <ChevronUp size={16} className="text-[var(--ink-light)] shrink-0" />
+                                            : <ChevronDown size={16} className="text-[var(--ink-light)] shrink-0" />
+                                        }
+                                    </button>
 
-                        {w2Intent && (
-                            <div className="bg-[var(--accent-light)] border border-[var(--accent)]/20 rounded-lg p-4 flex items-start gap-3 mb-6">
-                                <span className="text-[16px]">📎</span>
-                                <div>
-                                    <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">
-                                        {w2Source === 'w3-revised'
-                                            ? 'W3 Part 4 修改版題目（白話版，最適合切 5W1H）'
-                                            : w2Source === 'w3-final'
-                                                ? 'W3 Part 5 最終定案題目（AI 包裝版）'
-                                                : 'W2 最終探究意圖（你還沒做 W3，建議先回 W3）'}
-                                    </div>
-                                    <p className="text-[13px] text-[var(--ink)] leading-relaxed font-medium">{w2Intent}</p>
-                                    <p className="text-[11px] text-[var(--ink-light)] mt-1">
-                                        {w2Source === 'w3-revised'
-                                            ? '這是你 Part 4 自己改的白話版，最適合拿來切 5W1H。'
-                                            : w2Source === 'w3-final'
-                                                ? '這版已經 AI 包裝過，5W1H 可能很好切。重點放在確認研究範圍跟題目一致。'
-                                                : '建議先回 W3 做完 Part 4+5 再來，這裡會順很多。'}
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6">
-                            {W5H1_ITEMS.map(item => (
-                                <div className="bg-white border border-[var(--border)] rounded-xl p-4 flex flex-col gap-2" key={item.w}>
-                                    <div className="font-mono font-bold text-[var(--accent)] text-[16px]">{item.w}</div>
-                                    <div className="font-bold text-[13px] text-[var(--ink)]">{item.l}</div>
-                                    <div className="text-[11px] text-[var(--ink-light)] leading-relaxed">{item.q}</div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="p-4 bg-[var(--danger-light)] rounded-[6px] border border-[var(--danger)]/20 mb-6">
-                            <strong className="text-[var(--danger)] text-[13px] block mb-2">⚡ 殘酷的可行性快篩</strong>
-                            <p className="text-[12px] text-[var(--ink-mid)]">檢查你選的方法做不做得到：發得完問卷嗎？約得到人訪談嗎？有設備做實驗嗎？只要一項不行，馬上退件重修。</p>
-                        </div>
-
-                        <div className="space-y-3">
-                            <div className="text-[12px] font-bold font-mono text-[var(--ink-light)] tracking-wider mb-1">✏️ 把你的題目切開填入</div>
-                            {W5H1_ITEMS.map(item => (
-                                <ThinkRecord
-                                    key={item.w}
-                                    dataKey={`w4-5w1h-${item.w.toLowerCase()}`}
-                                    prompt={`${item.w}（${item.l}）${item.w === 'When' ? '　⸺ 選填' : ''}`}
-                                    placeholder={item.q}
-                                    rows={1}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* W4 起跑題目確認 */}
-                    <div>
-                        <div className="section-head"><h2>W4 起跑題目確認</h2><div className="line"></div><span className="mono">不准用 AI · 5 分鐘</span></div>
-                        <p className="section-desc">
-                            5W1H 切完後，回頭對照你帶進來的題目。如果發現題目寫的 Who／What 跟你 5W1H 不一致，趁現在調整——這是你帶進海報與 Gallery Walk 的起跑版本。
-                        </p>
-
-                        <div className="notice notice-gold text-[12px] mb-4">
-                            💡 <strong>這個版本不用追求「學術包裝」。</strong>W3 已經練過 AI 句型優化了，這邊只要確認 5W1H 跟題目一致、寫得出來就好。真正的文案優化，留到下一步的海報。
-                        </div>
-
-                        <ThinkRecord
-                            dataKey="w4-initial-topic"
-                            prompt="對照 5W1H 後，你帶進海報的起跑題目是什麼？"
-                            scaffold={[
-                                '我的起跑題目是：…',
-                                '5W1H 對齊檢查：Who／What／Where／How 都跟題目描述一致（有不一致的話，我已經調過了）',
-                            ]}
-                            rows={3}
-                        />
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ──────────────────────────────────────
-         * STEP 2: 海報製作
-         * ────────────────────────────────────── */
-        {
-            title: '海報製作',
-            icon: '🎨',
-            content: (
-                <div className="space-y-10 prose-zh">
-                    {/* 自主草稿：研究動機 + 標題草稿 */}
-                    <div>
-                        <div className="section-head"><h2>自主草稿</h2><div className="line"></div><span className="mono">不准用 AI · 10 分鐘</span></div>
-                        <p className="section-desc">
-                            拿著剛才定案的題目，靠自己寫出白話版動機和吸引人的海報標題草稿。
-                        </p>
-
-                        <ThinkRecord
-                            dataKey="w4-motivation-raw"
-                            prompt="用跟朋友聊天的方式，說說你為什麼想研究這個題目？"
-                            scaffold={['我最早是從…注意到這件事', '讓我覺得奇怪的是…', '我最想知道的答案是…']}
-                            rows={4}
-                        />
-
-                        <div className="mt-4">
-                            <ThinkRecord
-                                dataKey="w4-title-draft"
-                                prompt="用口語問句寫一個吸引人的標題（讓路過的同學想停下來問你）"
-                                placeholder="例如：滑手機真的讓你睡更差嗎？"
-                                scaffold={['…真的會…嗎？', '為什麼…？', '你有沒有發現…']}
-                                rows={2}
-                            />
-                        </div>
-
-                        <div className="mt-4">
-                            <ThinkRecord
-                                dataKey="w4-prediction"
-                                prompt="你預測這個研究可能發現什麼？大膽猜 2-3 個（猜錯不扣分）"
-                                scaffold={['我猜最可能的結果是…', '如果出乎意料的話…', '另一個可能是…']}
-                                rows={3}
-                            />
-                        </div>
-                    </div>
-
-                    {/* AI 優化 + 海報製作 */}
-                    <div>
-                        <div className="section-head"><h2>AI 優化 + 手寫海報</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
-
-                        {/* 研究動機教練 */}
-                        <a
-                            href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-start gap-4 p-5 border border-[var(--border)] rounded-xl hover:border-[var(--accent)] hover:shadow-lg transition-all bg-white mb-4"
-                        >
-                            <div className="w-10 h-10 rounded-lg bg-[var(--paper-warm)] flex items-center justify-center text-xl shrink-0 group-hover:bg-[var(--accent)] transition-colors">🤖</div>
-                            <div className="flex-1 min-w-0">
-                                <div className="font-bold text-[var(--ink)] text-[13px] mb-0.5">研究動機教練</div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">Gemini Gem · 對話式審核</div>
-                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">幫你審核動機三要素（有畫面、有困惑、說得清楚想知道什麼），告訴你哪裡可以更強。</div>
-                                <div className="mt-2 text-[11px] font-mono font-bold text-[var(--accent)]">開啟 Gemini Gem ↗</div>
-                            </div>
-                        </a>
-
-                        {/* ⚠️ 優化 vs 改方向 對比卡（貼 prompt 前先看） */}
-                        <div className="mb-4 p-4 rounded-[var(--radius-unified)] border-2 border-[#D97706] bg-[#FEF3C7]">
-                            <p className="text-[13px] font-bold text-[#92400E] mb-2">⚠️ 貼給 AI 之前：先學會分辨「優化」vs「改方向」</p>
-                            <div className="grid md:grid-cols-2 gap-2 mb-3">
-                                <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[6px] p-3">
-                                    <p className="text-[12px] font-bold text-[#065F46] mb-1">✅ 這叫「優化」（可以接受）</p>
-                                    <ul className="text-[11.5px] text-[#047857] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                        <li>更吸睛的標題措詞</li>
-                                        <li>更精準的量詞（「許多」→「超過 60%」）</li>
-                                        <li>把口語改得更通順</li>
-                                        <li>加「可能」「推測」等保留語</li>
-                                    </ul>
-                                </div>
-                                <div className="bg-[#FEF2F2] border border-[#DC2626] rounded-[6px] p-3">
-                                    <p className="text-[12px] font-bold text-[#991B1B] mb-1">❌ 這叫「改方向」（要拒絕）</p>
-                                    <ul className="text-[11.5px] text-[#7F1D1D] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                        <li>改了研究對象（高一→青少年）</li>
-                                        <li>改了核心變項（滑手機時數→3C 使用）</li>
-                                        <li>加了你沒寫的變項（家庭背景／成績）</li>
-                                        <li>把題目「拓展」變更大（你縮小過了）</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <p className="text-[11.5px] text-[#78350F] leading-relaxed italic">
-                                💡 AI 違反規則時你<strong>有權拒絕</strong>。如果 AI 給的版本你覺得「跟我原本想做的不一樣」——那就是改方向，回上面看你的 W3 定案題目，重貼一次 prompt 並更明確說「不要動 Who/What」。
-                            </p>
-                        </div>
-
-                        {/* Prompt：海報文案優化（研究題目自動帶入 W3 定案） */}
-                        <div className="prompt-box mb-6">
-                            <div className="prompt-hd">
-                                <span>PROMPT · 海報文案優化</span>
-                                <CopyButton text={buildPosterPrompt(w2Intent)} label="複製" />
-                            </div>
-                            <div className="prompt-body">
-                                我的研究海報需要以下元素：<br />
-                                - 研究題目：「{w2Intent || <span className="text-[var(--ink-light)]">【請先回 Step 1 帶入 W3 定案題目】</span>}」<br />
-                                - 吸引人的標題草稿：【貼上你的草稿】<br />
-                                - 預期發現草稿：【貼上你的預測】<br /><br />
-                                請幫我：<br />
-                                1. 優化標題，讓它更吸引高中生，保持白話但加一點懸疑感<br />
-                                2. 把預期發現改寫得更有研究感（加入「可能」「推測」等詞）<br />
-                                3. 給我 2 個版本讓我選<br /><br />
-                                ⚠️ 嚴格規則：不要改 Who/What、不要加我沒寫的變項。<br />
-                                如果你覺得需要改，請在回覆開頭說「⚠️ 我建議改方向，請先諮詢老師」。
-                            </div>
-                        </div>
-
-                        <div className="notice notice-accent text-[12px] mb-6">
-                            ⚠️ AI 的角色是幫你把已經想好的東西<strong>說得更好聽</strong>，不是幫你重新想。如果 AI 改了你的研究方向，告訴它：「請不要改我的範圍，只優化表達方式。」
-                        </div>
-
-                        {/* 海報四格 */}
-                        <div className="text-[12px] font-bold font-mono text-[var(--ink-light)] mb-2 tracking-wider">海報必備四格</div>
-                        <div className="content-grid mb-4" style={{ '--cols': 4 }}>
-                            {POSTER_FIELDS.map((item, i) => (
-                                <div key={item.n} className={`p-5 flex flex-col gap-2 ${i === 3 ? 'bg-[var(--ink)] text-white' : 'bg-[var(--paper)]'}`}>
-                                    <div className={`font-mono text-xl font-bold ${i === 3 ? 'text-[var(--gold)]' : 'text-[var(--accent)]'}`}>{item.n}</div>
-                                    <div className={`font-bold text-[13px] ${i === 3 ? 'text-white' : 'text-[var(--ink)]'}`}>{item.l}</div>
-                                    <div className={`text-[11px] leading-relaxed ${i === 3 ? 'text-white/50' : 'text-[var(--ink-light)]'}`}>{item.d}</div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* 範例海報 */}
-                        <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white">
-                            <div className="p-3 px-4 bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono text-[var(--ink-light)] tracking-wider">
-                                範例海報（同學真實作品）
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="border border-[var(--border)] rounded-xl overflow-hidden w-full">
-                                        <img src="/images/user_research_poster.png" alt="同學手寫海報範例" className="w-full object-cover" />
-                                    </div>
-                                    <div className="text-[10px] font-mono text-[var(--ink-light)]">▲ 實體手寫版</div>
-                                </div>
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white w-full">
-                                        <div className="p-5 space-y-3">
-                                            <div>
-                                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-1">① 標題</div>
-                                                <div className="font-bold text-[18px] leading-tight text-[var(--ink)]">「機」不可失眠——<br />滑手機真的讓你睡更差嗎？</div>
+                                    {isOpen && (
+                                        <div className="px-5 pb-5 border-t border-[var(--border)] animate-in slide-in-from-top-2 duration-150">
+                                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-3 mt-4 text-[13px]">
+                                                {[
+                                                    { label: '目的', val: m.purpose },
+                                                    { label: '強項', val: m.strength },
+                                                    { label: '弱點', val: m.weakness },
+                                                    { label: '適用情境', val: m.when },
+                                                ].map(({ label, val }) => (
+                                                    <div key={label}>
+                                                        <div className="text-[10px] font-mono font-bold uppercase tracking-wider mb-1"
+                                                            style={{ color: m.color }}>{label}</div>
+                                                        <p className="text-[var(--ink-mid)] leading-relaxed">{val}</p>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div>
-                                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-1">② 正式題目</div>
-                                                <div className="text-[12px] text-[var(--ink-mid)]">本校高一生睡前手機使用內容類型與睡眠品質之差異研究</div>
-                                            </div>
-                                            <div>
-                                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-1">③ 研究動機</div>
-                                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">每次說好「滑一下就睡」，結果一抬頭已經快12點。我不確定是睡太晚的問題，還是滑手機本身讓大腦沒辦法關機。</div>
-                                            </div>
-                                            <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]">
-                                                <div className="text-[10px] font-mono text-[var(--ink-light)]">④ 製作人</div>
-                                                <div className="text-[12px] font-bold text-[var(--ink)]">王小明 101-15</div>
+                                            <div className="mt-4 px-4 py-3 rounded-[var(--radius-unified)] text-[12px] text-[var(--ink-mid)] flex gap-2"
+                                                style={{ background: m.bg }}>
+                                                <span className="text-[14px] shrink-0">⚠️</span>
+                                                <span>{m.note}</span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="text-[10px] font-mono text-[var(--ink-light)]">▲ 數位對照版</div>
+                                    )}
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="notice notice-success text-[12px] mt-4">
-                            ✏️ <strong>手寫海報（5 分鐘）</strong>——在 A4 紙上完成四格。不用美工，字跡清楚就好。
-                        </div>
-
-                        {/* AI-RED：這是 W4 唯一一次真正找 AI 生產內容，一定要記 */}
-                        <div className="mt-8">
-                            <ThinkRecord
-                                dataKey="w4-aired-record"
-                                prompt="剛才請 AI 優化海報文案，你的 AI-RED 五欄分別記了什麼？"
-                                scaffold={[
-                                    'A (歸屬)：我用了哪個 AI、做什麼…',
-                                    'I (提問)：我問了什麼、為什麼這樣問…',
-                                    'R (引用)：AI 這次沒有給文獻來源，我用什麼方式判斷 AI 的建議合不合理？',
-                                    'E (評估)：AI 改的標題／預測，我覺得哪裡好、哪裡要修掉？',
-                                    'D (記錄)：我最後採用了哪個版本？哪些是我自己的決定？',
-                                ]}
-                                rows={6}
-                            />
-                        </div>
+                            );
+                        })}
                     </div>
+
+                    {/* 兩層判斷　·　互動決策樹 */}
+                    <DecisionTree />
+
+                    {/* 理解檢核 1 */}
+                    <ThinkChoice
+                        dataKey="w4-tc1"
+                        prompt={THINK_CHOICES[0].prompt}
+                        options={THINK_CHOICES[0].options}
+                        answer={THINK_CHOICES[0].answer}
+                        feedback={THINK_CHOICES[0].feedback}
+                        onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
+                    />
                 </div>
             ),
         },
 
-        /* ──────────────────────────────────────
-         * STEP 3: Gallery Walk
-         * ────────────────────────────────────── */
+        /* ─── Step 2：分科判斷測驗 ─── */
         {
-            title: 'Gallery Walk',
-            icon: '🚶',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <div className="section-head"><h2>Gallery Walk 四輪走讀</h2><div className="line"></div><span className="mono">23 分鐘</span></div>
-                    <p className="section-desc">
-                        每組 4 人。一個人留在海報旁報告，另外三個人去逛別人的。聽完給具體建議，不能只寫「很好」。
-                    </p>
-
-                    {/* 分組規則 */}
-                    <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-white mb-4">
-                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-3">
-                            <Users2 size={15} className="text-[var(--ink)]" />
-                            <span className="font-bold text-[13px] text-[var(--ink)]">分配場次</span>
-                        </div>
-                        <div className="p-5">
-                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
-                                每組 4 人先分配報告場次。每人只報告 1 次，但會聆聽 3 次。
-                            </p>
-                            <div className="bg-[var(--paper)] rounded-lg border border-[var(--border)] overflow-hidden">
-                                <div className="grid grid-cols-3 bg-[var(--ink)] text-white text-[10px] font-mono uppercase tracking-wider">
-                                    <div className="px-4 py-2">場次</div>
-                                    <div className="px-4 py-2 border-l border-white/10">誰坐鎮報告</div>
-                                    <div className="px-4 py-2 border-l border-white/10">其他人</div>
-                                </div>
-                                {[
-                                    { round: '第 1 場', stay: 'A 坐鎮報告', move: 'B、C、D 聆聽' },
-                                    { round: '第 2 場', stay: 'B 坐鎮報告', move: 'A、C、D 聆聽' },
-                                    { round: '第 3 場', stay: 'C 坐鎮報告', move: 'A、B、D 聆聽' },
-                                    { round: '第 4 場', stay: 'D 坐鎮報告', move: 'A、B、C 聆聽' },
-                                ].map((row, i) => (
-                                    <div key={i} className={`grid grid-cols-3 text-[12px] border-t border-[var(--border)] ${i % 2 === 0 ? 'bg-white' : 'bg-[var(--paper)]'}`}>
-                                        <div className="px-4 py-2.5 font-mono font-bold text-[var(--accent)]">{row.round}</div>
-                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink)] font-bold">{row.stay}</div>
-                                        <div className="px-4 py-2.5 border-l border-[var(--border)] text-[var(--ink-mid)]">{row.move}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* 評論規則 */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        {[
-                            { icon: <CheckCircle2 size={16} className="text-[var(--success)]" />, label: '具體肯定', desc: '說出哪裡好，例如「研究動機有畫面，讓人想繼續聽」' },
-                            { icon: <Lightbulb size={16} className="text-[var(--gold)]" />, label: '具體建議', desc: '例如「Who 太大，縮到本校比較可行」「問卷樣本建議至少 50 人」' },
-                            { icon: <MessageSquare size={16} className="text-[var(--accent)]" />, label: '好奇提問', desc: '例如「你預測的結果如果反過來呢？」「你打算怎麼找受試者？」' },
-                        ].map((rule, idx) => (
-                            <div key={idx} className="bg-white border border-[var(--border)] rounded-xl p-5 flex flex-col gap-3">
-                                <div className="flex items-center gap-2 font-bold text-[var(--ink)]">{rule.icon}<span>{rule.label}</span></div>
-                                <p className="text-[11px] text-[var(--ink-light)] leading-relaxed">{rule.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="notice notice-gold text-[12px] mb-4">
-                        💡 <strong>建議怎麼寫：說具體的。</strong>不要只寫「很好」或「加油」——這種不算，會被請你重寫。
-                    </div>
-
-                    <div className="notice notice-accent text-[12px]">
-                        🔔 <strong>計時提醒</strong>：每一場 5 分鐘，鈴聲響立刻移動。四輪結束，你會收到大概 12 張建議，這是你今天最重要的資產。
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ──────────────────────────────────────
-         * STEP 4: 題目最終定案
-         * ────────────────────────────────────── */
-        {
-            title: '題目最終定案',
+            title: '分科判斷測驗',
             icon: '🎯',
             content: (
-                <div className="space-y-8 prose-zh">
-                    <div className="section-head"><h2>整理建議 → 最終定案</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
-                    <p className="section-desc">
-                        看看同學給你的建議，分成三類。不是所有建議都要採納——有判斷力地接受，比什麼都接受更重要。
+                <div className="space-y-6 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        10 題選擇題，驗收你對兩層判斷架構的理解。做完之後注意自己錯在哪幾題——Step 4 反思會用到。
                     </p>
 
-                    {/* 🚦 建議評估標準（綠/黃/紅燈）— 給學生判斷基準，不是憑直覺 */}
-                    <div className="mb-4 p-4 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF]">
-                        <p className="text-[13px] font-bold text-[#075985] mb-2">🚦 評估標準（先看這個再分類）</p>
-                        <div className="grid md:grid-cols-3 gap-2">
-                            <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#065F46] mb-1">🟢 綠燈（建議幾乎都該接受）</p>
-                                <p className="text-[11.5px] text-[#047857] leading-[1.7]">
-                                    建議涉及把 <strong>Who/What/When/Where/How 變得更具體</strong>
-                                    （例：「Who 從『高中生』縮成『某校高一』」）。
-                                    這類建議不改你的核心興趣，只讓題目更可執行。
-                                </p>
+                    {/* 理解檢核 2（在測驗前暖身） */}
+                    <ThinkChoice
+                        dataKey="w4-tc2"
+                        prompt={THINK_CHOICES[1].prompt}
+                        options={THINK_CHOICES[1].options}
+                        answer={THINK_CHOICES[1].answer}
+                        feedback={THINK_CHOICES[1].feedback}
+                        onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
+                    />
+
+                    {!quizStarted ? (
+                        <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-8 text-center text-white">
+                            <div className="text-[40px] mb-4">🎯</div>
+                            <h3 className="text-[18px] font-bold mb-2">分科判斷測驗</h3>
+                            <p className="text-[var(--ink-light)] text-[13px] mb-6">10 題 · 每題選一個答案 · 選完自動跳下題</p>
+                            <button
+                                onClick={() => setQuizStarted(true)}
+                                className="bg-[var(--accent)] hover:opacity-90 text-white font-bold px-8 py-3 rounded-[var(--radius-unified)] transition-colors text-[14px] flex items-center gap-2 mx-auto"
+                            >
+                                開始測驗 <ArrowRight size={16} />
+                            </button>
+                        </div>
+                    ) : quizDone ? (
+                        /* 結果頁 */
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            <div className="bg-[var(--ink)] p-6 text-center text-white">
+                                <Trophy className="mx-auto mb-3 text-[#f59e0b]" size={36} />
+                                <div className="text-[32px] font-black mb-1">{score} / 10</div>
+                                <div className="text-[var(--ink-light)] text-[13px]">
+                                    {score === 10 ? '完美！全對通關 🎉' : score >= 8 ? '非常好！小瑕疵而已' : score >= 6 ? '還不錯，複習一下錯題' : '建議重看兩層判斷架構再試一次'}
+                                </div>
                             </div>
-                            <div className="bg-[#FEF3C7] border border-[#D97706] rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#92400E] mb-1">🟡 黃燈（要評估再決定）</p>
-                                <p className="text-[11.5px] text-[#78350F] leading-[1.7]">
-                                    建議涉及 <strong>可行性 / 倫理 / 樣本招募</strong>
-                                    （例：「你訪談 30 人會不會做不完？」）。
-                                    這類要評估自己的時間、資源、能力後再決定。
-                                </p>
+                            <div className="divide-y divide-[var(--border)]">
+                                {QUIZ_QUESTIONS.map((q, i) => {
+                                    const correct = selections[i] === q.answer;
+                                    return (
+                                        <div key={i} className={`p-4 px-5 ${correct ? 'bg-[var(--success-light)]' : 'bg-[var(--danger-light)]'}`}>
+                                            <div className="flex items-start gap-3">
+                                                <span className={`shrink-0 text-[12px] font-bold mt-0.5 ${correct ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+                                                    {correct ? '✓' : '✗'} Q{i + 1}
+                                                </span>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[12px] text-[var(--ink)] mb-1 font-medium">{q.q}</p>
+                                                    {!correct && (
+                                                        <p className="text-[11px] text-[var(--danger)] mb-1">
+                                                            你選了：{q.options.find(o => o.label === selections[i])?.text}　正解：{q.options.find(o => o.label === q.answer)?.text}
+                                                        </p>
+                                                    )}
+                                                    <p className="text-[11px] text-[var(--ink-light)] italic">{q.hint}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
-                            <div className="bg-[#FEF2F2] border border-[#DC2626] rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#991B1B] mb-1">🔴 紅燈（建議要拒絕）</p>
-                                <p className="text-[11.5px] text-[#7F1D1D] leading-[1.7]">
-                                    建議要你 <strong>改變核心興趣</strong>
-                                    （例：「我覺得你做別的更有趣」）。
-                                    這是你的研究——別人覺得有趣不代表你也覺得，拒絕。
-                                </p>
+                            <div className="p-5 text-center border-t border-[var(--border)]">
+                                <button onClick={resetQuiz} className="flex items-center gap-2 text-[13px] text-[var(--accent)] font-bold hover:underline mx-auto">
+                                    <RefreshCw size={14} /> 重新作答
+                                </button>
                             </div>
                         </div>
-                        <p className="text-[11px] text-[#075985] italic leading-relaxed mt-2">
-                            💡 同學憑直覺給建議很快、你憑直覺接受很慢——所以你要用三燈標準把建議過一輪，再寫下面三類。
-                        </p>
-                    </div>
-
-                    {/* 三類分法 */}
-                    <div className="content-grid grid-cols-1 md:grid-cols-3 mb-6">
-                        {[
-                            { tag: '✅ 我接受，我要改', desc: '同學說得對，我的題目需要調整', color: 'bg-[var(--success-light)]' },
-                            { tag: '❌ 我不接受，有理由', desc: '我考慮過了，有充分理由維持原設計', color: 'bg-[var(--danger-light)]' },
-                            { tag: '❓ 我不確定', desc: '需要再想想，或者問老師', color: 'bg-[var(--gold-light)]' },
-                        ].map((cat, i) => (
-                            <div key={i} className={`p-5 rounded-xl ${cat.color}`}>
-                                <div className="font-bold text-[13px] text-[var(--ink)] mb-2">{cat.tag}</div>
-                                <p className="text-[12px] text-[var(--ink-mid)]">{cat.desc}</p>
+                    ) : (
+                        /* 作答頁 */
+                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                            {/* 進度條 */}
+                            <div className="h-1.5 bg-[var(--paper-warm)]">
+                                <div
+                                    className="h-full bg-[var(--accent)] transition-all duration-300"
+                                    style={{ width: `${((currentQ + (selections[currentQ] !== undefined ? 1 : 0)) / 10) * 100}%` }}
+                                />
                             </div>
-                        ))}
+                            <div className="p-6">
+                                <div className="flex items-center justify-between mb-5">
+                                    <span className="text-[11px] font-mono text-[var(--ink-light)]">Q {currentQ + 1} / 10</span>
+                                    <span className="text-[11px] font-mono text-[var(--accent)]">
+                                        {Object.entries(selections).filter(([idx, v]) => v === QUIZ_QUESTIONS[idx]?.answer).length} 正確
+                                    </span>
+                                </div>
+                                <p className="text-[15px] font-bold text-[var(--ink)] leading-snug mb-6">
+                                    {QUIZ_QUESTIONS[currentQ].q}
+                                </p>
+                                <div className="space-y-2.5">
+                                    {QUIZ_QUESTIONS[currentQ].options.map((opt) => {
+                                        const selected = selections[currentQ];
+                                        const isCorrect = opt.label === QUIZ_QUESTIONS[currentQ].answer;
+                                        const isSelected = selected === opt.label;
+                                        let style = 'border-[var(--border)] bg-white hover:border-[var(--accent)] hover:bg-[var(--accent-light)] cursor-pointer';
+                                        if (selected !== undefined) {
+                                            if (isCorrect) style = 'border-[var(--success)] bg-[var(--success-light)] cursor-default';
+                                            else if (isSelected) style = 'border-[var(--danger)] bg-[var(--danger-light)] cursor-default';
+                                            else style = 'border-[var(--border)] bg-[var(--paper)] cursor-default opacity-50';
+                                        }
+                                        return (
+                                            <button
+                                                key={opt.label}
+                                                onClick={() => handleSelect(opt.label)}
+                                                disabled={selected !== undefined}
+                                                className={`w-full text-left px-4 py-3 rounded-[var(--radius-unified)] border-2 text-[13px] transition-all ${style}`}
+                                            >
+                                                <span className="font-mono text-[11px] font-bold mr-3 text-[var(--ink-light)]">{opt.label}.</span>
+                                                {opt.text}
+                                                {selected !== undefined && isCorrect && <span className="float-right text-[var(--success)] font-bold">✓</span>}
+                                                {selected !== undefined && isSelected && !isCorrect && <span className="float-right text-[var(--danger)] font-bold">✗</span>}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                {selections[currentQ] !== undefined && (
+                                    <div className={`mt-4 px-4 py-3 rounded-[var(--radius-unified)] text-[12px] animate-in zoom-in-95 ${selections[currentQ] === QUIZ_QUESTIONS[currentQ].answer ? 'bg-[var(--success-light)] text-[var(--success)]' : 'bg-[var(--danger-light)] text-[var(--danger)]'}`}>
+                                        💡 {QUIZ_QUESTIONS[currentQ].hint}
+                                        {currentQ < 9 && (
+                                            <span className="text-[var(--ink-light)] ml-2">（自動跳題中…）</span>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：為自己題目選路 ─── */
+        {
+            title: '為自己題目選路',
+            icon: '🧭',
+            content: (
+                <div className="space-y-6 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        把剛學到的兩層判斷用在你真實的研究題目上。這才是今天最重要的事。
+                    </p>
+
+                    {/* W3 帶入卡（有 → 自動帶入；沒 → 現場補上）*/}
+                    {w3Topic ? (
+                        <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)] text-[13px]">
+                            <span className="text-[16px]">📎</span>
+                            <div>
+                                <span className="font-bold text-[var(--accent)]">自動帶入 W3 定案題目</span>
+                                <p className="text-[var(--ink-mid)] mt-0.5">{w3Topic}</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <BackfillField
+                            dataKey="w3-final-topic"
+                            label="⚠️ 沒偵測到你 W3 的定案題目——把你上週寫的研究題目貼這裡，下方自動帶入。"
+                            placeholder="例：本校高一段考前一週的夜間滑手機時數與翌日專注力自評之相關性"
+                            buttonLabel="補上 W3 題目"
+                        />
+                    )}
+
+                    {/* 我的本週題目（從 W3 帶入，可微調）*/}
+                    <ThinkRecord
+                        dataKey="w4-my-topic"
+                        prompt="我這週要選方法的題目"
+                        placeholder="貼上或輸入你在 W3 定案的研究題目…"
+                        rows={2}
+                    />
+
+                    {/* 第一層判斷 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="font-mono text-[10px] font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">L1</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">第一層判斷：資料從哪來？</span>
+                        </div>
+                        <div className="p-5 text-[13px] text-[var(--ink-mid)] space-y-2">
+                            <p>□ 我要自己收集新資料（去問人、去觀察、去做實驗）→ 繼續第二層</p>
+                            <p>□ 我要分析已有的文本/資料 → 文獻法</p>
+                        </div>
                     </div>
 
                     <ThinkRecord
-                        dataKey="w4-feedback-accept"
-                        prompt="你接受了哪些建議？打算怎麼改？"
-                        scaffold={['同學說…', '我覺得他說得對，因為…', '我打算把…改成…']}
-                        rows={4}
+                        dataKey="w4-layer1"
+                        prompt="第一層判斷"
+                        placeholder="我的資料要自己收集，因為……（或）我要分析已有文本，因為……"
+                        rows={2}
                     />
 
-                    <div className="mt-4">
-                        <ThinkRecord
-                            dataKey="w4-feedback-reject"
-                            prompt="你不採納哪些建議？理由是？"
-                            scaffold={['有人說…', '但我不改，因為…', '我的考量是…']}
-                            rows={3}
-                        />
-                    </div>
-
-                    {/* 最終定案框 */}
-                    <div className="mt-6 p-5 bg-[var(--paper)] rounded-xl border-2 border-dashed border-[var(--success)]/40">
-                        <div className="text-[11px] font-mono text-[var(--success)] uppercase mb-4 tracking-wider">🎯 W4 個人最終定案</div>
-                        <div className="space-y-4">
-                            <ThinkRecord
-                                dataKey="w4-final-topic"
-                                prompt="你的 W4 最終定案題目（這個跟著你走一整個學期）"
-                                scaffold={['我的最終題目是：…']}
-                                rows={2}
-                            />
-                            <ThinkRecord
-                                dataKey="w4-final-motivation"
-                                prompt="你的最終研究動機"
-                                scaffold={['我想研究這個是因為…', '我最想知道的是…']}
-                                rows={3}
-                            />
+                    {/* 第二層判斷 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
+                            <span className="font-mono text-[10px] font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">L2</span>
+                            <span className="font-bold text-[13px] text-[var(--ink)]">第二層判斷：問的是什麼？</span>
+                        </div>
+                        <div className="p-5 text-[13px] text-[var(--ink-mid)] space-y-2">
+                            <p>❶ 比例趨勢 vs 原因脈絡？我要的是：</p>
+                            <p>❷ 能否操控自變項？我要的是：</p>
+                            <p>❸ 真實行為 vs 想法態度？我要的是：</p>
                         </div>
                     </div>
 
-                    <ThinkChoice
-                        dataKey="w4-tc1"
-                        prompt="你的 W4 定案跟 W3 比，有改變嗎？"
-                        options={[
-                            { label: 'A', text: '有改，根據同學建議調整了' },
-                            { label: 'B', text: '微調，小地方修一修' },
-                            { label: 'C', text: '維持 W3 原版，同學的建議不夠有說服力' },
-                        ]}
-                        answer="A"
-                        feedback="不管選哪個都沒有對錯！重要的是你有理由。能清楚說出「為什麼改」或「為什麼不改」，才是這堂課的核心。"
-                        onAnswer={(sel, ok) => trackChoice('你的 W4 定案跟 W3 比，有改變嗎？', sel, ok)}
+                    <ThinkRecord
+                        dataKey="w4-layer2"
+                        prompt="第二層判斷"
+                        placeholder="最關鍵的那一條分科問題是 ❶/❷/❸，我的回答是……"
+                        rows={3}
+                    />
+
+                    {/* 主要方法 */}
+                    <ThinkRecord
+                        dataKey="w4-main-method"
+                        prompt="我選定的主要方法"
+                        placeholder="問卷/訪談/實驗/觀察/文獻（如果是文獻，請寫明用途：文獻回顧/歷史分析/內容分析）"
+                        rows={2}
+                    />
+
+                    <ThinkRecord
+                        dataKey="w4-reason"
+                        prompt="選擇理由（請引用兩層判斷中的某一條）"
+                        placeholder="例：我選訪談法。因為我的核心問題問的是『學生為什麼考前才去圖書館』——要的是深層原因，對應兩層判斷的第 ❶ 條（要原因/脈絡）。"
+                        scaffold={['我選 ___ 法', '因為我的核心問題問的是…', '對應兩層判斷的第 ___ 條']}
+                        rows={3}
+                    />
+
+                    <ThinkRecord
+                        dataKey="w4-aux-method"
+                        prompt="輔助方法（如果需要）"
+                        placeholder="例：不需要。  或：需要問卷法做輔助，因為訪談 8 人不夠看分布，先用問卷掃 100 人找趨勢。"
+                        scaffold={['不需要', '（若需要）需要 ___ 法做輔助，因為…']}
+                        rows={2}
+                    />
+
+                    {/* 同儕挑戰：對 Step 3 的方法選擇做挑戰 */}
+                    <div className="w6-notice w6-notice-gold">
+                        🎯 寫完方法選擇後，跟旁邊的人說一遍：「我用 ___ 法，因為 ___」。讓對方挑戰你：「你要的真的是比例還是原因？」「資料是自己收集還是分析別人寫的？」「如果是問卷，題目問的是什麼，問卷能回答嗎？」
+                    </div>
+
+                    {/* ➡️ 下週預告：W5 操作型定義 */}
+                    <div className="w6-notice w6-notice-gold">
+                        ➡️ 方法選好了——但選了方法不等於知道「怎麼問／怎麼測」。<strong>下週 W5</strong> 會教你把抽象概念（壓力、學習效果、動機……）變成「誰來測都得到一樣的數字／類別」的<strong>操作型定義</strong>，那是這週題目→下週工具的橋。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 4：反思（兩題最關鍵的） ─── */
+        {
+            title: '反思',
+            icon: '💭',
+            content: (
+                <div className="space-y-6 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        這週只回答兩題——但都要寫到「自己也能說服自己」為止。這兩題是這週能不能真的會選方法的分水嶺。
+                    </p>
+
+                    <ThinkRecord
+                        dataKey="w4-reflect-confused"
+                        prompt="1. 你最容易搞混的兩種方法是哪兩個？關鍵差別在哪一條兩層判斷？"
+                        placeholder="例：我最容易搞混觀察法和實驗法。差別在 L2 ❷——實驗會主動改變一個條件再量結果，觀察只是默默紀錄真實行為，不介入。"
+                        scaffold={['我最容易搞混 ___ 和 ___', '關鍵差別在 L2 第 ___ 條（❶／❷／❸）', '具體是…']}
+                        rows={4}
+                    />
+
+                    <ThinkRecord
+                        dataKey="w4-reflect-literature"
+                        prompt="2. 「文獻回顧」與「文獻分析法」的差別是什麼？你的題目會走哪一條？"
+                        placeholder="例：文獻回顧是整理前人研究（每個方法第三章都做），文獻分析是把文本當研究對象。我的題目走『文獻分析』，因為我想分析 IG 貼文標題的用詞模式，會走 ③ 內容分析子類型。"
+                        scaffold={['「文獻回顧」是 ___（用途）', '「文獻分析」是 ___（用途）', '我的題目走 ___（回顧 / 分析）', '（若走分析）子類型可能是 ___（② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事）']}
+                        rows={5}
                     />
                 </div>
             ),
         },
 
-        /* ──────────────────────────────────────
-         * STEP 5: 回顧與繳交
-         * ────────────────────────────────────── */
+        /* ─── Step 5：回顧與繳交 ─── */
         {
             title: '回顧與繳交',
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
                     {/* 檢核清單 */}
-                    <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
                             ✅ 本週結束，你應該要會
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
-                                '用 5W1H 把模糊題目切成可執行的規格',
-                                '通過可行性快篩，確認研究方法做得到',
-                                '用 AI 包裝出專業學術標題，並記錄 AI-RED',
-                                '完成手寫海報（四格）並接受 Gallery Walk 壓力測試',
-                                '分類同學建議（接受 / 不接受 / 不確定）',
-                                '確認 W4 最終定案題目與研究動機',
+                                '說出五種研究方法各自的目的與適用情境',
+                                '用兩層判斷架構為任何研究題目選定方法',
+                                '分得出「文獻回顧」與「文獻分析法」的差別（W9 細講 4 子類型）',
+                                '為你的 W3 定案題目選出主要方法並說清楚理由',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
@@ -623,35 +1035,28 @@ export const W4Page = () => {
                         </div>
                     </div>
 
+                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="4" hint="判斷研究方法時可能用 AI 測驗" optional={true} />
+
                     {/* 一鍵複製 */}
                     <ExportButton
-                        weekLabel="W4 題目博覽會"
+                        weekLabel="W4 認識 5 法 + 選方法"
                         fields={EXPORT_FIELDS}
                         choices={choiceResults}
                     />
 
-                    {/* AI 教練連結 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="https://gemini.google.com/gem/1ujK5kRzW8QFNEtWa8F5mq0b_9JL4iDFx?usp=sharing" target="_blank" rel="noopener noreferrer"
-                            className="group p-5 border border-[var(--border)] rounded-xl hover:border-[var(--accent)] transition-all bg-white">
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-lg bg-[var(--paper-warm)] flex items-center justify-center text-xl shrink-0 group-hover:bg-[var(--accent)] transition-colors">🤖</div>
-                                <div>
-                                    <div className="font-bold text-[var(--ink)] text-[13px]">研究動機教練</div>
-                                    <div className="text-[11px] font-mono text-[var(--accent)] mt-1">開啟 Gemini Gem ↗</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="https://gemini.google.com/gem/1yF7FqRoQWUQGBtFLrGvbuul61OMGbgAv?usp=sharing" target="_blank" rel="noopener noreferrer"
-                            className="group p-5 border border-[var(--border)] rounded-xl hover:border-[var(--accent)] transition-all bg-white">
-                            <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-lg bg-[var(--paper-warm)] flex items-center justify-center text-xl shrink-0 group-hover:bg-[var(--accent)] transition-colors">💬</div>
-                                <div>
-                                    <div className="font-bold text-[var(--ink)] text-[13px]">Q-Coach 問題意識教練</div>
-                                    <div className="text-[11px] font-mono text-[var(--accent)] mt-1">開啟 Gemini Gem ↗</div>
-                                </div>
-                            </div>
-                        </a>
+                    {/* 遊戲彩蛋 */}
+                    <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
+                        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+                            <ShieldAlert className="text-[var(--danger)]" size={20} />
+                            R.I.B. 單元挑戰：行動代號裝備
+                        </h3>
+                        <p className="text-[var(--ink-light)] text-sm mb-4">
+                            研究方法是探員的裝備——你能在時限內分辨每種方法的適用場景嗎？
+                        </p>
+                        <Link to="/game/tool-quiz" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
+                            進入裝備 <ArrowRight size={14} />
+                        </Link>
                     </div>
 
                     {/* 下週預告 */}
@@ -663,11 +1068,11 @@ export const W4Page = () => {
                         <div className="next-week-content">
                             <div className="next-week-col">
                                 <div className="next-week-label">W5 主題</div>
-                                <p className="next-week-text">文獻搜尋——學會用華藝資料庫找論文、辨別文獻等級、練習 APA 格式。</p>
+                                <p className="next-week-text">操作型定義專週——把這週選定的方法接到「具體可測的指標」。學「壓力／動機／學習效果」這類抽象概念怎麼變成「誰來測都得到一樣數字」的測量項目，是這週題目→下週博覽會的橋。</p>
                             </div>
                             <div className="next-week-col">
-                                <div className="next-week-label">你要確認</div>
-                                <p className="next-week-text">帶著你的<strong>最終定案題目</strong>來，下週要用它拆關鍵字搜尋文獻。</p>
+                                <div className="next-week-label">你要帶來</div>
+                                <p className="next-week-text">這週寫下的<strong>主要方法 + 選擇理由</strong>，下週要把核心概念拆成可測指標。沒選好方法的同學請先回頭把 Step 3 完成。</p>
                             </div>
                         </div>
                     </div>
@@ -681,10 +1086,10 @@ export const W4Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">題目博覽會 W4</span>
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">方法地圖 W4</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
-                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
                     <ResetWeekButton weekPrefix="w4-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
@@ -705,36 +1110,33 @@ export const W4Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W4"
-                title="題目定案："
-                accentTitle="規格化 → 海報 → 壓力測試"
-                subtitle="先用 5W1H 把模糊的題目切成可執行的規格，讓 AI 包裝成學術標題，做海報公開展示，再接受同學的 Gallery Walk 壓力測試。撐過去了才是真正定案。"
-                chain="題目過篩了——但『手機影響學業』要怎麼研究？哪些人、哪個時段、看什麼？這週要把它拆出規格。"
+                title="方法地圖："
+                accentTitle="從題目找方法"
+                subtitle="你的題目適合用什麼方法？今天先認識五種方法，再用兩層判斷的互動決策樹推理，最後用 10 題 AI 測驗驗收——結束前你要能說出：我的題目適合用 ___ 法，因為 ___。"
+                chain="W3 你決定了題目——但「題目」不會自動變成「資料」。這週把你的題目放上方法地圖，做一個決定：要用哪一種方法去收／去問／去看？"
                 meta={[
-                    { label: '本週任務', value: '5W1H 規格化 + 海報 + Gallery Walk' },
-                    { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '最終定案題目 + 研究動機' },
-                    { label: '下週預告', value: 'W5 文獻搜尋' },
+                    { label: '課堂節奏', value: '五種方法 → 互動決策樹 → AI 測驗 → 為自己題目選路' },
+                    { label: '時長', value: '50 MINS' },
+                    { label: '課堂產出', value: '為題目選定主要方法（+ 輔助方法）並寫出理由' },
+                    { label: '帶去 W5', value: '主要方法 + 選擇理由（W5 操作型定義要用）' },
                 ]}
             />
-            <CourseArc items={W4Data.courseArc} />
-
-            {/* 本週簡報 */}
-            <div className="flex justify-end mb-8 -mt-2">
-                <a
-                    href="https://canva.link/hdvnkubddcklm56"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[var(--ink-light)] hover:text-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--paper-warm)] border border-[var(--border)] hover:border-[var(--ink)]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                >
-                    📊 本週簡報 ↗
-                </a>
-            </div>
+            <CourseArc items={[
+                    { wk: 'W1-W2', name: '探索階段\nRED 公約', status: 'past' },
+                    { wk: 'W3', name: '題目決定\n8 病症會診', status: 'past' },
+                    { wk: 'W4', name: '認識方法\n兩層判斷', status: 'now' },
+                    { wk: 'W5', name: '操作型定義\n概念變可測' },
+                    { wk: 'W6', name: '博覽會\n組隊（含 Solo）' },
+                    { wk: 'W7-W8', name: '文獻偵探\n引用寫作' },
+                    { wk: 'W9-W11', name: '工具設計\n倫理審查' },
+                    { wk: 'W13-W17', name: '數據解讀\n發表' }
+                ]} />
 
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
-                prevWeek={{ label: '回 W3 題目健檢', to: '/w3' }}
-                nextWeek={{ label: '前往 W5 文獻搜尋入門', to: '/w5' }}
+                prevWeek={{ label: '回 W3 題目決定', to: '/w3' }}
+                nextWeek={{ label: '前往 W5 操作型定義', to: '/w5' }}
             flat
             />
         </div>

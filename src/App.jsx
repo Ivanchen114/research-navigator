@@ -6,18 +6,20 @@ import { Wizard } from './pages/Wizard';
 import { Discovery } from './pages/Discovery';
 import { W1Page } from './pages/W1Page';
 import { ProblemFocus } from './pages/ProblemFocus';
-import { ClinicPage } from './pages/ClinicPage';
+// ClinicPage / TeamFormation 已歸檔（v2 內容已搬到 W4 / W6）；保留 import 註解避免未來誤刪 ClinicPage.css
 import { W9Page } from './pages/W9Page';
 import { ToolRefinementPage } from './pages/ToolRefinementPage';
 import { W11Page } from './pages/W11Page';
 import { W12Page } from './pages/W12Page';
-import { W13Page } from './pages/W13Page';
+import { W13AutonomyPage } from './pages/W13AutonomyPage';
 import { W14Page } from './pages/W14Page';
 import { W15Page } from './pages/W15Page';
 import { W16Page } from './pages/W16Page';
 import { W17Page } from './pages/W17Page';
 import { W4Page } from './pages/W4Page';
 import { W50Page } from './pages/W50Page';
+import { W5MeasurePage } from './pages/W5MeasurePage';
+import { W6PosterTeamPage } from './pages/W6PosterTeamPage';
 import { GameHub } from './pages/games/GameHub';
 import { ToolQuizGame } from './pages/games/ToolQuizGame';
 import { CitationDetectiveGame } from './pages/games/CitationDetectiveGame';
@@ -26,7 +28,7 @@ import { RxInspectorGame } from './pages/games/RxInspectorGame';
 import { DataDetectiveGame } from './pages/games/DataDetectiveGame';
 import { ChartMatcherGame } from './pages/games/ChartMatcherGame';
 import { LiteratureReview } from './pages/LiteratureReview';
-import { TeamFormation } from './pages/TeamFormation';
+// TeamFormation 已歸檔（v2 組隊功能已併入 W6 海報博覽會）
 import { PromptLab } from './pages/PromptLab';
 import { DataAnalysisStation } from './pages/DataAnalysisStation';
 import { Dossier } from './pages/Dossier';
@@ -59,15 +61,15 @@ function App() {
           <Route path="wizard" element={<Wizard />} />
           <Route path="w3" element={<Wizard />} />
           <Route path="w4" element={<W4Page />} />
-          <Route path="w5" element={<W50Page />} />
-          <Route path="w6" element={<LiteratureReview />} />
-          <Route path="w7" element={<ClinicPage />} />
-          <Route path="w8" element={<TeamFormation />} />
+          <Route path="w5" element={<W5MeasurePage />} />
+          <Route path="w6" element={<W6PosterTeamPage />} />
+          <Route path="w7" element={<W50Page />} />
+          <Route path="w8" element={<LiteratureReview />} />
           <Route path="w9" element={<W9Page />} />
           <Route path="w10" element={<ToolRefinementPage />} />
           <Route path="w11" element={<W11Page />} />
           <Route path="w12" element={<W12Page />} />
-          <Route path="w13" element={<W13Page />} />
+          <Route path="w13" element={<W13AutonomyPage />} />
           <Route path="w14" element={<W14Page />} />
           <Route path="w15" element={<W15Page />} />
           <Route path="w16" element={<W16Page />} />

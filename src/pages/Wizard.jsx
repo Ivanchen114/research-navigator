@@ -10,6 +10,7 @@ import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import CopyButton from '../components/ui/CopyButton';
 import AIAssistToggle from '../components/ui/AIAssistToggle';
+import BackfillField from '../components/ui/BackfillField';
 import {
     Map,
     ArrowRight,
@@ -49,6 +50,79 @@ const MANTRA_MAP = [
     { id: 'F', m: '遠 → 近（換找得到的）' },
     { id: 'G', m: '難 → 易（形→可觀察）' },
     { id: 'H', m: '大→小 + 難→易' },
+];
+
+/* 4 把刀的下刀心路歷程（看示範怎麼想、再做自己題目） */
+const CUT_MENTAL_FLOWS = [
+    {
+        id: 'small',
+        name: '範圍縮小',
+        arrow: '大 → 小',
+        icon: '🔍',
+        sampleTopic: '探討追星文化',
+        monologue: [
+            '咦……「追星文化」太大了，到底是說什麼？',
+            '是「追誰」？K-POP？J-POP？台灣藝人？歐美？　🤔 要挑一類',
+            '是「誰在追」？所有人？高中生？我們學校？哪一年級？　🤔 要縮對象',
+            '是「哪個面向」？消費（買周邊）？應援（集資、演唱會）？情感投入？資訊追蹤？　🤔 要鎖一個',
+            '是「什麼時候」？常態？新專輯發行期？　🤔 看你關心哪段',
+        ],
+        revised: '本校高一學生對 K-POP 偶像的「應援行為」（買周邊／集資／演唱會）',
+        bottomLine: '縮的不是研究的價值，是「我有辦法做到的範圍」。三層篩到「四週收得到資料」就停。',
+    },
+    {
+        id: 'concrete',
+        name: '抽象具體化',
+        arrow: '空 → 實',
+        icon: '💡',
+        sampleTopic: '探討高中生的快樂感',
+        monologue: [
+            '等等……「快樂感」是什麼？我看不見、摸不到，怎麼測？',
+            '我能不能換個說法——「什麼東西出現了」代表他「快樂」？　🤔',
+            '是「笑得多」？「主動找朋友聊天」？「願意去活動」？　🤔 這些可以看到',
+            '還是用「問卷」測？有沒有現成的「滿意度量表」「幸福感量表」？　🤔 站在巨人肩上比較穩',
+            '還是用「數字」？「每週開心時刻次數」？「自陳分數 1-5 分」？　🤔 可以量化',
+            '最後問自己：換誰來測都會得到一樣的結果嗎？',
+        ],
+        revised: '本校高一追星族「每週投入時間」（看影片／買周邊／應援次數）＋「主觀幸福感量表分數」',
+        bottomLine: '抽象詞像影子——你抓不到影子，要先找到影子代表的「看得到的東西」。',
+    },
+    {
+        id: 'near',
+        name: '對象可及化',
+        arrow: '遠 → 近',
+        icon: '🚪',
+        sampleTopic: '2030 年最熱門的職業',
+        monologue: [
+            '等等……2030 年還沒到，我怎麼研究還沒發生的事？',
+            '我能找誰預測？產業專家？　🤔 太遠了，找不到',
+            '我能查哪些「現在正在成長」的職業推測未來？　🤔 可以但是二手資料',
+            '那我「真的能做的」是什麼？',
+            '「現在的學生」對 2030 年的「想像」？　🤔 拉回現在的人',
+            '「現在學長姐」怎麼看自己職涯？　🤔 找得到的人',
+            '最後問自己：4 週內聯絡得到、訪到、收得到回應嗎？',
+        ],
+        revised: '本校高一學生「目前最嚮往的職涯方向」＋為什麼（拉回現在 + 找得到的人）',
+        bottomLine: '高一只有 4-6 週執行——再有意義的題目，找不到人 = 做不出來。',
+    },
+    {
+        id: 'easy',
+        name: '方法可行化',
+        arrow: '難 → 易',
+        icon: '🔪',
+        sampleTopic: '探討高中生課堂的專注度',
+        monologue: [
+            '等等……我要問學生「你專心嗎」？',
+            '對方會誠實講嗎？　🤔 多半會說「我有專心」（社會期許）',
+            '改個方向——我能「看」到什麼？',
+            '看「視線」：眼睛停留書本秒數',
+            '看「行為」：滑手機、發呆、抬頭次數',
+            '看「頻率」：每 5 分鐘一筆紀錄',
+            '最後問自己：兩個觀察員看同一場面，記錄會一樣嗎？',
+        ],
+        revised: '觀察晚自習 30 分鐘內，學生「視線停留書本 ≥ 30 秒次數」＋「滑手機 ≥ 5 秒次數」',
+        bottomLine: '不是所有事都該用「問」——有些事「動作比話可信」。問不出來、改觀察。',
+    },
 ];
 
 const PATIENTS = [
@@ -125,15 +199,6 @@ const MY_FIX3_PROMPT = `謝謝你的診斷。
 3. 每個版本保持在 30 字以內，確保高中生做得到
 4. 不要幫我選，讓我自己決定`;
 
-const MY_OPTIMIZE_PROMPT = `我的研究題目初稿是：【請貼上你剛剛選擇的方案】
-
-請幫我優化成更專業的版本：
-1. 加上學術關鍵字（如：相關性、差異分析、影響、探討）
-2. 讓 Who/What 更具體
-3. 保持在 30 字以內，確保高中生做得到
-
-請給我 3 個優化版本。`;
-
 const HINT_ITEMS = [
     { f: '大 → 小', t: '範圍太廣 → 縮到本校/年級/某班' },
     { f: '空 → 實', t: '太抽象 → 換成可測量指標' },
@@ -144,6 +209,8 @@ const HINT_ITEMS = [
 const EXPORT_FIELDS = [
     { key: 'w3-obstacle-feel', label: '碰壁體驗', question: '看完兩題碰壁情境後，你覺得「題目生病」是什麼感覺？' },
     { key: 'w3-disease-quiz', label: '病症快問快答', question: '選一個你覺得最難判斷的病症，說說為什麼難。' },
+    { key: 'w3-cut-practice-cut', label: '練手題：選用的處方', question: '對「探討高中生使用社群媒體的影響」你選哪一把刀？' },
+    { key: 'w3-cut-practice', label: '練手題：你的改寫', question: '用你選的刀，下刀改寫一次' },
     { key: 'w3-drill-personal', label: '人腦練習（個人）', question: '自選一題爛題目，診斷是什麼病？用心法怎麼改？' },
     { key: 'w3-drill-group', label: '小組診斷', question: '小組選了哪一題？一起怎麼改的？' },
     { key: 'w3-ai-collab-compare', label: 'AI 協作練手：比對差異', question: '你的診斷 vs AI 的診斷，哪裡不同？' },
@@ -152,15 +219,15 @@ const EXPORT_FIELDS = [
     { key: 'w3-own-diagnose', label: 'Part 4 自己題目診斷', question: '把 W2 最終探究意圖當病人，你的診斷是？用什麼心法改？' },
     { key: 'w3-own-5w1h', label: 'Part 4 5W1H 規格化', question: '用 Who/Where/What/How/When 切開你的題目' },
     { key: 'w3-own-revised', label: 'Part 4 修改版題目', question: '用 5W1H 規格化後，你的修正版題目是？' },
-    /* Part 5：AI 協作磨定案 */
+    /* Part 5：AI 協作磨定案（4 步精簡版）*/
     { key: 'w3-p5-draft', label: 'Part 5 Step 1 初稿', question: '根據 Part 4，我修改後的題目初稿是？' },
-    { key: 'w3-p5-diagnose-ai-record', label: 'Part 5 Step 2 AI 診斷記錄', question: '（AI 協作開關）' },
-    { key: 'w3-p5-compare', label: 'Part 5 Step 3 比對差異', question: '我的診斷 vs AI 的診斷，差在哪？' },
-    { key: 'w3-p5-fix3-ai-record', label: 'Part 5 Step 4 AI 三方案記錄', question: '（AI 協作開關）' },
-    { key: 'w3-p5-choose', label: 'Part 5 Step 5 我的選擇', question: 'AI 三個方案我選了哪個？理由？' },
-    { key: 'w3-p5-optimize-ai-record', label: 'Part 5 Step 6 AI 優化記錄', question: '（AI 協作開關）' },
-    { key: 'w3-final-topic', label: 'Part 5 Step 7 W3 最終定案題目', question: '這就是你這學期的研究起點' },
+    { key: 'w3-p5-diagnose-ai-record', label: 'Part 5 Step 2 AI 診斷 + 我的比對', question: 'AI 診斷出什麼？跟我 Part 4 的診斷哪裡不一樣？我更認同誰？' },
+    { key: 'w3-p5-fix3-ai-record', label: 'Part 5 Step 3 AI 三方案記錄', question: 'AI 給的三個方向分別是？第一眼覺得哪個最有希望？' },
+    { key: 'w3-final-topic', label: 'Part 5 Step 4 W3 最終定案題目', question: '我選哪個方向、最終定案題目、理由——這就是你這學期的研究起點' },
+    { key: 'w3-motivation', label: 'Part 5 Step 4 研究動機（為什麼想研究這個）', question: '一句話講清楚——這個題目對誰有意義？為什麼你願意花一學期做？' },
     { key: 'w3-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w3-reflect-misdiagnosis', label: '反思：最易誤診的病症', question: '8 病症裡，你最容易誤診的是哪一個？為什麼？' },
+    { key: 'w3-reflect-cuts', label: '反思：你走過幾把刀', question: '你的題目走過哪幾把刀（縮小／具體化／可及化／可行化）？最後落點為什麼是這裡？' },
 ];
 
 /* ── Part 5 Step 3：顯示 Part 4 Section A 的診斷作 reference，讓學生不用回頭翻 ── */
@@ -182,7 +249,7 @@ function P5CompareRef() {
 
     return (
         <div className="mb-4 p-4 bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)]">
-            <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">📎 你 Part 4 Section A 的自診（不用再寫一次）</div>
+            <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-2">📎 你 Part 4 的自診（不用再寫一次）</div>
             <p className="text-[13px] text-[var(--ink)] whitespace-pre-wrap leading-relaxed">{ownDiagnose}</p>
         </div>
     );
@@ -226,7 +293,7 @@ function P5DraftField() {
             {ownRevised ? (
                 <div className="mb-4 p-4 bg-[var(--accent-light)]/40 border border-[var(--accent)]/30 rounded-[var(--radius-unified)]">
                     <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider">📎 已帶入你 Part 4 Section C 的修改版題目</div>
+                        <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider">📎 已帶入你 Part 4 的修改版題目</div>
                         <button
                             onClick={forceInject}
                             className="text-[11px] px-2 py-1 bg-white border border-[var(--accent)]/40 text-[var(--accent)] rounded hover:bg-[var(--accent)] hover:text-white transition-all font-bold flex-shrink-0"
@@ -237,8 +304,13 @@ function P5DraftField() {
                     <p className="text-[13px] text-[var(--ink)] font-medium leading-relaxed">{ownRevised}</p>
                 </div>
             ) : (
-                <div className="mb-4 p-4 bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] text-[12px] text-[var(--ink-light)]">
-                    ⚠️ 還沒偵測到 Part 4 Section C 的修改版題目。請先回上一步（Step 4 魔王戰 Part 4）完成 Section C，或直接在下方欄位打字。
+                <div className="mb-4">
+                    <BackfillField
+                        dataKey="w3-own-revised"
+                        label="⚠️ 還沒偵測到 Part 4 的修改版題目——把你前面寫的修改版題目貼這裡，下方初稿欄會自動帶入；或直接跳過、在下方欄位打字。"
+                        placeholder="例：本校高一學生在段考前一週的夜間手機使用時數，與隔日上午第一節專注力自評之間的相關性。"
+                        buttonLabel="補上修改版"
+                    />
                 </div>
             )}
             <ThinkRecord
@@ -250,6 +322,188 @@ function P5DraftField() {
                 rows={3}
             />
         </>
+    );
+}
+
+/* ── 4 把刀心路歷程展開卡（學生先想 30 秒、再點開看示範）── */
+function CutFlowCard({ flow }) {
+    const [open, setOpen] = useState(false);
+    return (
+        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-4 flex flex-col">
+            <div className="flex items-center gap-2 mb-2.5">
+                <span className="text-[22px]">{flow.icon}</span>
+                <div>
+                    <p className="text-[13px] font-bold text-[var(--ink)] leading-tight">{flow.name}</p>
+                    <p className="text-[11px] font-mono text-[var(--gold)] mt-0.5">{flow.arrow}</p>
+                </div>
+            </div>
+            <div className="bg-[#FEF2F2] border-l-3 border-[#DC2626] p-2.5 rounded-r-[6px] mb-2">
+                <p className="text-[10px] font-mono text-[#7F1D1D] mb-0.5 uppercase tracking-wider">原題（爛版本）</p>
+                <p className="text-[12.5px] font-bold text-[#7F1D1D]">{flow.sampleTopic}</p>
+            </div>
+            <p className="text-[11px] italic text-[var(--ink-light)] mb-2 leading-relaxed">💭 先自己想 30 秒：「這題哪裡卡？該下哪一刀？」</p>
+            <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                className="w-full text-[11.5px] font-bold text-[var(--accent)] py-1.5 border border-dashed border-[var(--accent)]/50 rounded-[6px] hover:bg-[var(--accent)]/5 transition-colors mb-2"
+            >
+                {open ? '▲ 收起心路歷程' : '▼ 點開看下刀心路歷程'}
+            </button>
+            {open && (
+                <div className="space-y-2.5">
+                    <div className="bg-[#FEF3C7] border-l-3 border-[#D97706] p-3 rounded-r-[6px]">
+                        <p className="text-[11px] font-bold text-[#92400E] mb-1.5">🧠 老練研究者腦中該這樣想</p>
+                        <ul className="text-[11.5px] text-[#78350F] leading-[1.85] space-y-0.5 list-none pl-0">
+                            {flow.monologue.map((line, i) => (
+                                <li key={i}>{line}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="bg-[#ECFDF5] border-l-3 border-[#10B981] p-3 rounded-r-[6px]">
+                        <p className="text-[11px] font-bold text-[#065F46] mb-1">✓ 收斂後（示範改寫）</p>
+                        <p className="text-[12px] text-[var(--ink)] font-bold leading-[1.7]">{flow.revised}</p>
+                    </div>
+                    <p className="text-[10.5px] italic text-[var(--ink-light)] leading-relaxed">
+                        💡 <strong>{flow.bottomLine}</strong>
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* ── 練手題：學生自己下刀 + 強制比對示範 ── */
+const PRACTICE_TOPIC = '探討高中生使用社群媒體的影響';
+const PRACTICE_SAMPLE = '本校高一學生「睡前 30 分鐘 IG／TikTok 使用時數」對「隔日第一節課精神狀態（自評 1-5 分）」的影響';
+const PRACTICE_ANALYSIS = '主要用了「範圍縮小」（高中生→本校高一、社群媒體→IG/TikTok、任何時候→睡前 30 分鐘）+「抽象具體化」（影響→隔日精神狀態自評分數）。其實不只一刀——複雜題目通常要組合下刀。';
+
+const CUT_OPTIONS = [
+    { id: 'small', name: '範圍縮小', arrow: '大→小' },
+    { id: 'concrete', name: '抽象具體化', arrow: '空→實' },
+    { id: 'near', name: '對象可及化', arrow: '遠→近' },
+    { id: 'easy', name: '方法可行化', arrow: '難→易' },
+];
+
+function CutPractice() {
+    const [selectedCut, setSelectedCut] = useState('');
+    const [showSample, setShowSample] = useState(false);
+
+    // 從 localStorage 讀取已選的刀（讓重新整理也保留）
+    useEffect(() => {
+        const saved = readRecords();
+        const cut = saved['w3-cut-practice-cut']?.trim();
+        if (cut) setSelectedCut(cut);
+    }, []);
+
+    // 選刀時即時寫入 localStorage
+    const handleCutChange = useCallback((cutId) => {
+        setSelectedCut(cutId);
+        const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        all['w3-cut-practice-cut'] = cutId;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    }, []);
+
+    const handleShowSample = () => {
+        if (!selectedCut) {
+            alert('請先選一把刀！');
+            return;
+        }
+        const records = readRecords();
+        const myRewrite = records['w3-cut-practice']?.trim() || '';
+        if (myRewrite.length < 15) {
+            alert(`改寫至少要 15 字以上才能看示範～目前只有 ${myRewrite.length} 字，再想想看`);
+            return;
+        }
+        setShowSample(true);
+    };
+
+    return (
+        <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 mt-6 max-w-[760px]">
+            <h4 className="text-[15px] font-bold text-[var(--ink)] mb-1 flex items-center gap-1.5">
+                <span>✏️</span> 練手題：你來下刀
+            </h4>
+            <p className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed">
+                看完示範後，輪到你動手——選一把刀、改寫一次、再對照示範。<strong className="text-[var(--ink)]">寫完才能看示範</strong>（先想再看）。
+            </p>
+
+            <div className="bg-[#FEF2F2] border-l-3 border-[#DC2626] p-3 rounded-r-[6px] mb-4">
+                <p className="text-[10px] font-mono text-[#7F1D1D] mb-0.5 uppercase tracking-wider">爛題目</p>
+                <p className="text-[14px] font-bold text-[#7F1D1D]">{PRACTICE_TOPIC}</p>
+            </div>
+
+            <div className="mb-4">
+                <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">Step 1：你覺得這題該下哪一把刀？</p>
+                <div className="grid grid-cols-2 gap-2">
+                    {CUT_OPTIONS.map(c => (
+                        <label
+                            key={c.id}
+                            className={`flex items-center gap-2 px-3 py-2 border rounded-[6px] cursor-pointer transition-colors ${
+                                selectedCut === c.id
+                                    ? 'border-[var(--accent)] bg-[var(--accent)]/5'
+                                    : 'border-[var(--border)] hover:border-[var(--accent)]/50'
+                            }`}
+                        >
+                            <input
+                                type="radio"
+                                name="cut-practice"
+                                value={c.id}
+                                checked={selectedCut === c.id}
+                                onChange={() => handleCutChange(c.id)}
+                                className="accent-[var(--accent)]"
+                            />
+                            <span className="text-[12.5px] text-[var(--ink)]">
+                                <strong>{c.name}</strong>
+                                <span className="text-[10px] font-mono text-[var(--gold)] ml-1">（{c.arrow}）</span>
+                            </span>
+                        </label>
+                    ))}
+                </div>
+                <p className="text-[10.5px] italic text-[var(--ink-light)] mt-2">💡 也可以多選——複雜題目通常要組合下刀，但先選一把主刀</p>
+            </div>
+
+            <div className="mb-4">
+                <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">Step 2：用你選的刀，下刀改寫</p>
+                <ThinkRecord
+                    dataKey="w3-cut-practice"
+                    prompt="寫一個你覺得「能研究」的版本（至少 15 字）"
+                    placeholder="例：本校高一學生睡前 30 分鐘 IG 使用時數對隔日精神的影響"
+                    scaffold={['本校 / 本年級 ___ 學生', '在 ___ 時段／場景', '的 ___（具體可測指標）']}
+                    rows={3}
+                />
+            </div>
+
+            {!showSample ? (
+                <button
+                    type="button"
+                    onClick={handleShowSample}
+                    className="w-full bg-[var(--accent)] hover:opacity-90 text-white font-bold py-2.5 rounded-[6px] text-[13px] transition-opacity"
+                >
+                    ✅ 寫完了！看示範對照
+                </button>
+            ) : (
+                <div className="space-y-3">
+                    <div className="bg-[#ECFDF5] border-l-3 border-[#10B981] p-3 rounded-r-[6px]">
+                        <p className="text-[10px] font-mono text-[#065F46] mb-1 uppercase tracking-wider">示範改寫</p>
+                        <p className="text-[13px] font-bold text-[var(--ink)] leading-[1.7]">{PRACTICE_SAMPLE}</p>
+                    </div>
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] p-3 rounded-[6px]">
+                        <p className="text-[11px] font-bold text-[var(--ink-mid)] mb-1">📝 示範用了什麼刀</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">{PRACTICE_ANALYSIS}</p>
+                    </div>
+                    <div className="bg-[#FEF3C7] border-l-3 border-[#D97706] p-3 rounded-r-[6px]">
+                        <p className="text-[11px] font-bold text-[#92400E] mb-1">💭 想想：你跟示範差在哪？</p>
+                        <p className="text-[11.5px] text-[#78350F] leading-[1.85]">沒對錯——你的版本可能更貼合自己關心的角度（例如關心『心理健康』vs『學業』）。但要問自己：<strong>我的版本，4 週內收得到資料嗎？</strong>收不到、就再下一刀。</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setShowSample(false)}
+                        className="w-full text-[11.5px] text-[var(--accent)] py-1.5 border border-dashed border-[var(--accent)]/40 rounded-[6px] hover:bg-[var(--accent)]/5"
+                    >
+                        ▲ 收起示範（想再改寫一次）
+                    </button>
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -271,17 +525,22 @@ export const Wizard = () => {
     // Part 4：帶入 W2 最終探究意圖
     const [w2Intent, setW2Intent] = useState('');
     useEffect(() => {
-        const records = readRecords();
-        setW2Intent((records['w2-final-intent'] || '').trim());
+        const refresh = () => {
+            const records = readRecords();
+            setW2Intent((records['w2-final-intent'] || '').trim());
 
-        // 跨 session 自動帶入：若 Part 4 已寫了修改版、Part 5 Step 1 還空，
-        // 就把 Part 4 Section C 複製到 Part 5 Step 1（避免學生重打一次）
-        const ownRev = (records['w3-own-revised'] || '').trim();
-        const draft = (records['w3-p5-draft'] || '').trim();
-        if (ownRev && !draft) {
-            records['w3-p5-draft'] = ownRev;
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); } catch { /* ignore */ }
-        }
+            // 跨 session 自動帶入：若 Part 4 已寫了修改版、Part 5 Step 1 還空，
+            // 就把 Part 4 修改版複製到 Part 5 Step 1（避免學生重打一次）
+            const ownRev = (records['w3-own-revised'] || '').trim();
+            const draft = (records['w3-p5-draft'] || '').trim();
+            if (ownRev && !draft) {
+                records['w3-p5-draft'] = ownRev;
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); } catch { /* ignore */ }
+            }
+        };
+        refresh();
+        window.addEventListener('focus', refresh);
+        return () => window.removeEventListener('focus', refresh);
     }, []);
 
     const DRILL_POOLS = { green: DRILL_GREEN, yellow: DRILL_YELLOW, red: DRILL_RED };
@@ -325,10 +584,10 @@ export const Wizard = () => {
 
     const steps = [
         /* ──────────────────────────────────────
-         * STEP 1: 碰壁 + 觀念
+         * STEP 1: 碰壁體驗
          * ────────────────────────────────────── */
         {
-            title: '碰壁 + 觀念',
+            title: '碰壁體驗',
             icon: '🏥',
             content: (
                 <div className="space-y-10 prose-zh">
@@ -412,42 +671,11 @@ export const Wizard = () => {
                         />
                     </div>
 
-                    {/* 萬用急救心法 */}
-                    <div>
-                        <div className="w3-mantra-box">
-                            <div className="w3-mantra-hd"><div className="title">萬用急救心法：把「大、空、遠、難」變成「小、實、近、易」</div></div>
-                            <div className="w3-mantra-core">
-                                <div className="w3-mantra-rows">
-                                    {MANTRA_ROWS.map(m => (
-                                        <div className="w3-mantra-row-item" key={m.f}>
-                                            <div className="w3-mantra-from">{m.f}</div>
-                                            <div className="w3-mantra-arrow-sm">↓</div>
-                                            <div className="w3-mantra-to">{m.t}</div>
-                                            <div className="w3-mantra-desc">{m.d}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div style={{ fontSize: '10px', fontFamily: 'DM Mono', color: 'var(--ink-light)', marginTop: '16px', marginBottom: '8px' }}>8 種病對應心法</div>
-                                <div className="w3-mantra-map">
-                                    {MANTRA_MAP.map(item => (
-                                        <div className="w3-mantra-map-item" key={item.id}>
-                                            <strong>{item.id} 病對應</strong>
-                                            {item.m}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w3-notice w3-notice-gold">
-                            💡 如果你的題目太大、太空、太遠、太難——回頭用萬用心法修！
-                        </div>
-
-                        <ThinkRecord
-                            dataKey="w3-disease-quiz"
-                            prompt="選一個你覺得最難判斷的病症，說說為什麼難？"
-                            scaffold={['我覺得最容易搞混的是…和…', '因為這兩種病的差別在於…', '判斷的關鍵是…']}
-                            rows={3}
-                        />
+                    {/* ➡️ 轉場：進 Step 2 急診室 */}
+                    <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--gold)] rounded-r-[6px] p-3 mt-4 max-w-[760px]">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            💡 看完碰壁體驗——「題目會生病」這個感覺有了。下個 Step 進<strong className="text-[var(--ink)]">急診室</strong>，認識 8 種題目病症 + 練習配對診斷。
+                        </p>
                     </div>
                 </div>
             ),
@@ -698,106 +926,133 @@ export const Wizard = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            ),
-        },
 
-        /* ──────────────────────────────────────
-         * STEP 3: AI 協作練手
-         * ────────────────────────────────────── */
-        {
-            title: 'AI 協作練手',
-            icon: '🤖',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <div className="w3-task-block">
-                        <div className="w3-task-hd">
-                            <span className="w3-task-badge">PART 3</span>
-                            <span className="w3-task-title">🤖 AI 協作工作坊（練手感）</span>
-                        </div>
-                        <div className="w3-task-body">
-                            <div className="w3-notice" style={{ marginBottom: '24px' }}>
-                                選 1 題爛題目來練手。重點不是 AI 改得多好，而是<strong>你怎麼選、為什麼選</strong>。
-                            </div>
-                            <div className="w3-collab-steps">
-                                {COLLAB_STEPS_PRACTICE.map(step => (
-                                    <div className="w3-collab-step" key={step.n}>
-                                        <div className={step.s.includes('step-num') ? step.s : `w3-collab-step-num ${step.s}`}>{step.n}</div>
-                                        <div className="w3-collab-step-content">
-                                            <div className="w3-collab-step-title">
-                                                {step.t} {step.badge && <span className="w3-core-badge">{step.badge}</span>}
-                                            </div>
-                                            <div className="w3-collab-step-desc">{step.d}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                    {/* 配對診斷後反思 */}
+                    <ThinkRecord
+                        dataKey="w3-disease-quiz"
+                        prompt="選一個你覺得最難判斷的病症，說說為什麼難？"
+                        scaffold={['我覺得最容易搞混的是…和…', '因為這兩種病的差別在於…', '判斷的關鍵是…']}
+                        rows={3}
+                    />
 
-                            {/* Prompt 工具箱 */}
-                            <div className="mt-6 space-y-3">
-                                {drillLocked && drillTopic && (
-                                    <div className="flex items-center gap-2 px-3 py-2 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)]/15 text-[12px] text-[var(--accent)] font-mono">
-                                        🎯 你的練習題目已自動帶入：「{drillTopic}」
-                                    </div>
-                                )}
-
-                                <div className="prompt-box">
-                                    <div className="prompt-hd">
-                                        <span>PROMPT · Step 2 用：問 AI 診斷</span>
-                                        <CopyButton text={buildPromptDiagnose(drillLocked ? drillTopic : null)} label="複製" />
-                                    </div>
-                                    <div className="prompt-body">
-                                        以下是一個高中生寫的研究題目：<br /><br />
-                                        「{drillLocked && drillTopic ? <strong>{drillTopic}</strong> : '【請貼上你選的爛題目】'}」<br /><br />
-                                        請幫我診斷這個題目有什麼問題？<br />
-                                        1. 它可能犯了什麼錯誤？（例如：太抽象、範圍太大、無法驗證、帶有主觀立場等）<br />
-                                        2. 具體說明為什麼這個題目做不下去。
-                                    </div>
-                                </div>
-
-                                <div className="prompt-box">
-                                    <div className="prompt-hd">
-                                        <span>PROMPT · Step 4 用：問 AI 給 3 個改法</span>
-                                        <CopyButton text={buildPromptFix3(drillLocked ? drillTopic : null)} label="複製" />
-                                    </div>
-                                    <div className="prompt-body">
-                                        以下是一個有問題的高中生研究題目：<br /><br />
-                                        「{drillLocked && drillTopic ? <strong>{drillTopic}</strong> : '【請貼上你選的爛題目】'}」<br /><br />
-                                        請給我 3 個不同方向的修改版本，每個版本需要：<br />
-                                        1. 說明你改了什麼、為什麼這樣改<br />
-                                        2. 確保修改後的題目是高中生可以執行的（能用問卷、訪談、觀察等方法）<br />
-                                        3. 題目要具體、可測量、範圍明確
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 space-y-4">
-                                <ThinkRecord
-                                    dataKey="w3-ai-collab-compare"
-                                    prompt="你的診斷 vs AI 的診斷，哪裡不同？"
-                                    scaffold={['我判斷是…病，AI 說是…', '差異在於…', '我覺得比較準的是…因為…']}
-                                    rows={4}
-                                />
-                                <ThinkRecord
-                                    dataKey="w3-ai-collab-choose"
-                                    prompt="AI 給了 3 個改法，你選了哪個？為什麼？"
-                                    scaffold={['AI 的三個改法分別是…', '我選了第…個', '理由是這個最…']}
-                                    rows={4}
-                                />
-
-                                {/* Part 3 的 AIRED 會在 Part 5 之後一起記錄（避免重複） */}
-                            </div>
-                        </div>
+                    {/* ➡️ 轉場：進 Step 3 學下刀 */}
+                    <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--gold)] rounded-r-[6px] p-3 mt-4 max-w-[760px]">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            💡 8 病症都認得了——下個 Step 進<strong className="text-[var(--ink)]">下刀工坊</strong>，學 4 把刀心法、看示範、自己對範例題下刀練手。
+                        </p>
                     </div>
                 </div>
             ),
         },
 
         /* ──────────────────────────────────────
-         * STEP 4: 魔王戰 Part 4 — 5W1H 規格化（自己的題目）
+         * STEP 3: 下刀工坊 — 學心法 + 看示範 + 自己下刀
          * ────────────────────────────────────── */
         {
-            title: '魔王戰 Part 4',
+            title: '下刀工坊',
+            icon: '🔪',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed">
+                        8 病症都認得了——下一步學「<strong className="text-[var(--ink)]">下刀</strong>」：用 4 把刀的心法把爛題目改成可研究版本。看示範→自己練手→Step 4 對自己題目下刀。
+                    </p>
+
+                    {/* 萬用急救心法 */}
+                    <div>
+                        <div className="w3-mantra-box">
+                            <div className="w3-mantra-hd"><div className="title">萬用急救心法：把「大、空、遠、難」變成「小、實、近、易」</div></div>
+                            <div className="w3-mantra-core">
+                                <div className="w3-mantra-rows">
+                                    {MANTRA_ROWS.map(m => (
+                                        <div className="w3-mantra-row-item" key={m.f}>
+                                            <div className="w3-mantra-from">{m.f}</div>
+                                            <div className="w3-mantra-arrow-sm">↓</div>
+                                            <div className="w3-mantra-to">{m.t}</div>
+                                            <div className="w3-mantra-desc">{m.d}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div style={{ fontSize: '10px', fontFamily: 'DM Mono', color: 'var(--ink-light)', marginTop: '16px', marginBottom: '8px' }}>8 種病對應心法</div>
+                                <div className="w3-mantra-map">
+                                    {MANTRA_MAP.map(item => (
+                                        <div className="w3-mantra-map-item" key={item.id}>
+                                            <strong>{item.id} 病對應</strong>
+                                            {item.m}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w3-notice w3-notice-gold">
+                            💡 如果你的題目太大、太空、太遠、太難——回頭用萬用心法修！
+                        </div>
+
+                        {/* 🎮 遊戲暱稱對映卡：學生玩「靶心」遊戲時會看到醫療隱喻版本，建立對映 */}
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 mt-4 max-w-[760px]">
+                            <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2.5 flex items-center gap-1.5">
+                                <span>🎮</span>
+                                <span>進到「靶心」遊戲後會看到這四把處方的暱稱</span>
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[12px]">
+                                <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
+                                    <span className="text-[16px]">💊</span>
+                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">範圍縮小</strong>　＝　縮小藥丸</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
+                                    <span className="text-[16px]">💉</span>
+                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">抽象具體化</strong>　＝　具體疫苗</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
+                                    <span className="text-[16px]">🚪</span>
+                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">對象可及化</strong>　＝　任意門探測儀</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
+                                    <span className="text-[16px]">🔪</span>
+                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">方法可行化</strong>　＝　降維手術刀</span>
+                                </div>
+                            </div>
+                            <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed mt-2.5">
+                                💡 同一件事的兩種說法——主頁面用「正式技能名」幫你記下動作；遊戲用「醫療隱喻」讓練習有趣。看到任何一個都認得出對方。
+                            </p>
+                        </div>
+
+                        {/* 📖 4 把刀的下刀心路歷程（互動展開）*/}
+                        <div className="mt-6">
+                            <h4 className="text-[14px] font-bold text-[var(--ink)] mb-2 flex items-center gap-1.5">
+                                <span>📖</span> 4 把刀的下刀心路歷程：看別人怎麼想
+                            </h4>
+                            <p className="text-[12px] text-[var(--ink-mid)] mb-3 max-w-[760px] leading-relaxed">
+                                看到一個爛題目，老練的研究者腦中會自動冒出問題——「咦，這太大、太抽象、太遠、太難……到底是哪一個？」<strong className="text-[var(--ink)]">先自己想 30 秒</strong>，再點開看示範——比直接看答案學得深兩倍。
+                            </p>
+                            <div className="grid md:grid-cols-2 gap-3">
+                                {CUT_MENTAL_FLOWS.map(flow => (
+                                    <CutFlowCard key={flow.id} flow={flow} />
+                                ))}
+                            </div>
+                            <p className="text-[11px] italic text-[var(--ink-light)] mt-3 leading-relaxed">
+                                ⚠️ 這些示範是「方向對」、不是「最終定案」。你也只要做到方向對就好——剩下 W4-W5 還會繼續修。
+                            </p>
+                        </div>
+
+                        {/* ✏️ 練手題：學生實際下刀 + 強制比對示範 */}
+                        <CutPractice />
+                    </div>
+
+                    {/* ➡️ 轉場：進 Step 4 對自己題目下刀 */}
+                    <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--gold)] rounded-r-[6px] p-3 mt-4 max-w-[760px]">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            💡 看完心法、練完手感——下個 Step 換真槍實彈：<strong className="text-[var(--ink)]">對自己題目下刀</strong>。
+                        </p>
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ──────────────────────────────────────
+         * STEP 4: 對自己題目下刀 — 自診 + 5W1H 規格化（原 Part 4）
+         * ────────────────────────────────────── */
+        {
+            title: '對自己題目下刀',
             icon: '⚔️',
             content: (
                 <div className="space-y-8 prose-zh">
@@ -818,22 +1073,22 @@ export const Wizard = () => {
                             <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-2">📎 你上週的 W2 最終探究意圖（意圖句，尚未成題）</div>
                             <p className="text-[14px] text-[var(--ink)] font-medium leading-relaxed">{w2Intent}</p>
                             <p className="text-[11px] text-[var(--ink-light)] mt-2 leading-relaxed">
-                                💡 下方 Section A 第一格，請先把這段意圖改寫成題目句型，再開始診斷。
+                                💡 下方第一格「診斷」，請先把這段意圖改寫成題目句型，再開始診斷。
                             </p>
                         </div>
                     ) : (
-                        <div className="border border-[var(--danger)]/40 bg-[var(--danger-light)] rounded-[var(--radius-unified)] p-5">
-                            <div className="text-[12px] font-bold text-[var(--danger)] mb-1">⚠️ 沒偵測到你 W2 的最終探究意圖</div>
-                            <p className="text-[12px] text-[var(--ink)] leading-relaxed">
-                                如果你 W2 沒做／換裝置／清過快取，請<Link to="/w2" className="text-[var(--accent)] font-bold underline">回 W2</Link> 把題目補上。或者，把你紙本學習單 W2 的「最終探究意圖」抄到下方診斷欄位開頭。
-                            </p>
-                        </div>
+                        <BackfillField
+                            dataKey="w2-final-intent"
+                            label="⚠️ 沒偵測到你 W2 的最終探究意圖——把你上週寫的「探究意圖句」貼這裡，下方診斷會立即接通。"
+                            placeholder="例：我想探究「考試壓力」如何影響「學生對圖書館空間使用」的選擇。"
+                            buttonLabel="補上 W2 意圖"
+                        />
                     )}
 
                     {/* Section A：診斷 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                            <span className="text-[11px] font-mono font-bold text-[var(--ink-mid)]">SECTION A · 診斷</span>
+                            <span className="text-[11px] font-mono font-bold text-[var(--ink-mid)]">診斷</span>
                         </div>
                         <div className="p-5 space-y-4">
                             <ThinkRecord
@@ -853,7 +1108,7 @@ export const Wizard = () => {
                     {/* Section B：5W1H 規格化 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                            <span className="text-[11px] font-mono font-bold text-[var(--ink-mid)]">SECTION B · 5W1H 規格化</span>
+                            <span className="text-[11px] font-mono font-bold text-[var(--ink-mid)]">5W1H 規格化</span>
                             <span className="ml-auto text-[10px] font-mono text-[var(--danger)]">至少填 4 格（Who/Where/What/How 必備）</span>
                         </div>
                         <div className="p-5 space-y-4">
@@ -886,7 +1141,7 @@ export const Wizard = () => {
                     {/* Section C：修改版題目 */}
                     <div className="bg-white border-2 border-[var(--gold)]/50 rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--gold)]/10 border-b border-[var(--gold)]/30 flex items-center gap-2">
-                            <span className="text-[11px] font-mono font-bold text-[var(--ink)]">SECTION C · 修改版題目（Part 5 起跑線）</span>
+                            <span className="text-[11px] font-mono font-bold text-[var(--ink)]">修改版題目（Part 5 起跑線）</span>
                         </div>
                         <div className="p-5">
                             <ThinkRecord
@@ -903,19 +1158,19 @@ export const Wizard = () => {
         },
 
         /* ──────────────────────────────────────
-         * STEP 5: 魔王戰 Part 5 — AI 協作磨定案
+         * STEP 5: AI 共診定案 — AI 4 步協作磨定案（原 Part 5）
          * ────────────────────────────────────── */
         {
-            title: '魔王戰 Part 5',
+            title: 'AI 共診定案',
             icon: '🎯',
             content: (
                 <div className="space-y-8 prose-zh">
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
-                        <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">FINAL BOSS · AI 協作 7 步驟</div>
+                        <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">FINAL BOSS · AI 協作 4 步驟</div>
                         <h2 className="text-[18px] font-bold text-[var(--ink)] mb-2">把你的題目從初稿磨成定案</h2>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
                             重點不是 AI 改得多好，而是<strong>你怎麼選、為什麼選</strong>。Step 1 先自己寫，再開 AI。
-                            給自己 15 分鐘做到 Step 7——那個最後定案框就是你這學期的研究起點。
+                            給自己 12 分鐘做到 Step 4——那個最後定案框就是你這學期的研究起點。
                         </p>
                     </div>
 
@@ -927,21 +1182,21 @@ export const Wizard = () => {
                         </summary>
                         <div className="p-5 space-y-4 text-[12.5px] leading-[1.85]">
                             <div>
-                                <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase mb-1">小華的初稿（Part 4 → Part 5 Step 1）</div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase mb-1">小華的初稿（Step 1）</div>
                                 <div className="bg-[var(--paper-warm)] border-l-4 border-[var(--ink-light)] p-3 rounded-r-[6px] text-[var(--ink)]">
                                     「本校高一學生段考前的手機使用情形」
                                 </div>
                             </div>
 
                             <div>
-                                <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase mb-1">小華自己診斷（Part 5 Step 2 之前）</div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase mb-1">小華自己診斷（開 AI 之前）</div>
                                 <div className="bg-[var(--paper-warm)] border-l-4 border-[var(--ink-light)] p-3 rounded-r-[6px]">
                                     「我覺得是 <strong>C 型（範圍太大）</strong>，因為『使用情形』太空泛，沒講要測什麼。」
                                 </div>
                             </div>
 
                             <div>
-                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase mb-1">AI 診斷回應（Step 2 跑 AI 後）</div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase mb-1">AI 診斷回應（Step 2 開 AI 後）</div>
                                 <div className="bg-[var(--accent-light)]/20 border-l-4 border-[var(--accent)] p-3 rounded-r-[6px]">
                                     「主要是 <strong>C 型（範圍太大）+ B 型（雙重題）</strong>。<br />
                                     C：『使用情形』未定義要測時數、頻率、還是內容。<br />
@@ -950,14 +1205,14 @@ export const Wizard = () => {
                             </div>
 
                             <div>
-                                <div className="text-[11px] font-mono font-bold text-[#D97706] uppercase mb-1">小華比對差異（Step 3）</div>
+                                <div className="text-[11px] font-mono font-bold text-[#D97706] uppercase mb-1">小華比對差異（Step 2 同框）</div>
                                 <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px]">
                                     「我只看到 C，沒看到 B。AI 抓到我把『時間點』和『行為』混在一起。<strong>這個盲點我自己看不到。</strong>」
                                 </div>
                             </div>
 
                             <div>
-                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase mb-1">AI 三方案（Step 4）</div>
+                                <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase mb-1">AI 三方案（Step 3）</div>
                                 <div className="bg-[var(--accent-light)]/20 border-l-4 border-[var(--accent)] p-3 rounded-r-[6px] space-y-1">
                                     <p>方案 A：本校高一段考前一週的<strong>夜間滑手機時數</strong>與<strong>翌日專注力自評</strong>之相關性</p>
                                     <p>方案 B：本校高一段考前後三週的<strong>每日手機使用時數變化</strong></p>
@@ -966,9 +1221,10 @@ export const Wizard = () => {
                             </div>
 
                             <div>
-                                <div className="text-[11px] font-mono font-bold text-[#10B981] uppercase mb-1">小華選擇（Step 5）</div>
+                                <div className="text-[11px] font-mono font-bold text-[#10B981] uppercase mb-1">小華最終定案（Step 4）</div>
                                 <div className="bg-[#ECFDF5] border-l-4 border-[#10B981] p-3 rounded-r-[6px]">
-                                    「我選 <strong>方案 A</strong>。因為：<br />
+                                    「我選 <strong>方案 A</strong>。最終題目就用 AI 給的方案 A：『本校高一段考前一週的夜間滑手機時數與翌日專注力自評之相關性』。<br />
+                                    理由：<br />
                                     ① 我真的好奇『睡前滑手機 vs 隔日專注力』這條因果鏈<br />
                                     ② 兩個變項都能用問卷量化（時數 + 1-5 分自評）<br />
                                     ③ B 範圍太大、C 我不太關心社群媒體本身。」
@@ -986,7 +1242,7 @@ export const Wizard = () => {
                         </div>
                     </details>
 
-                    {/* Step 1 */}
+                    {/* Step 1 — 自己先寫初稿 */}
                     <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[12px] font-bold font-mono">1</span>
@@ -998,53 +1254,32 @@ export const Wizard = () => {
                         </div>
                     </section>
 
-                    {/* Step 2 */}
+                    {/* Step 2 — 問 AI 診斷 + 你的比對判斷（合併原 2+3） */}
                     <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[12px] font-bold font-mono">2</span>
-                            <span className="font-bold text-[13px]">問 AI 診斷</span>
-                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">AI 做</span>
+                            <span className="font-bold text-[13px]">問 AI 診斷 + 你的比對判斷</span>
+                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">AI 給 → 你判斷</span>
                         </div>
-                        <div className="p-5">
+                        <div className="p-5 space-y-4">
+                            <P5CompareRef />
                             <AIAssistToggle
                                 id="w3-p5-diagnose"
-                                title="要用 AI 幫你診斷題目嗎？"
-                                reason="只問診斷、不問改法。Prompt 已鎖定用 A-H 8 病症語言，讓 AI 跟你講同一種話。"
+                                title="問 AI 診斷你的題目"
+                                reason="只問診斷、不問改法——Prompt 已鎖定用 A-H 8 病症語言，讓 AI 跟你講同一種話。拿到 AI 診斷後，下方記錄欄要同時寫『AI 診斷 + 你 Part 4 自診的差異判斷』，這是這一步的核心。"
                                 prompt={MY_DIAGNOSE_PROMPT}
                                 recordKey="w3-p5-diagnose-ai-record"
-                                recordPrompt="AI 診斷出哪幾種病？你覺得哪些準、哪些不準？"
-                                recordPlaceholder="AI 診斷：___ 病（可複選，標代碼）&#10;我覺得 ___ 病準，因為 ___&#10;我覺得 ___ 病不準，因為 ___"
+                                recordPrompt="AI 診斷出哪幾種病？跟你 Part 4 的自診差在哪？你更認同誰？"
+                                recordPlaceholder={'AI 診斷：___ 病（可複選，標代碼 A-H）\n我 Part 4 自診：___ 病\n一致／不一致：\n我更認同 ___ 的版本，因為 ___'}
+                                forceAI
                             />
                         </div>
                     </section>
 
-                    {/* Step 3 */}
+                    {/* Step 3 — 問 AI 給 3 個修改方向 */}
                     <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[12px] font-bold font-mono">3</span>
-                            <span className="font-bold text-[13px]">比對差異（人的判斷）</span>
-                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">你決定</span>
-                        </div>
-                        <div className="p-5">
-                            <P5CompareRef />
-                            <ThinkRecord
-                                dataKey="w3-p5-compare"
-                                prompt="你 Part 4 的診斷 vs AI 的診斷，哪裡一樣、哪裡不一樣？你更認同哪個？"
-                                scaffold={[
-                                    '我 Part 4 診斷出：___ 病',
-                                    'AI 診斷出：___ 病',
-                                    '一致／不一致：',
-                                    '我更認同 ___ 的版本，因為：',
-                                ]}
-                                rows={5}
-                            />
-                        </div>
-                    </section>
-
-                    {/* Step 4 */}
-                    <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[12px] font-bold font-mono">4</span>
                             <span className="font-bold text-[13px]">問 AI 給 3 個修改方向</span>
                             <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">AI 做</span>
                         </div>
@@ -1056,82 +1291,60 @@ export const Wizard = () => {
                                 prompt={MY_FIX3_PROMPT}
                                 recordKey="w3-p5-fix3-ai-record"
                                 recordPrompt="AI 給的三個方向分別是？你第一眼覺得哪個最有希望？"
-                                recordPlaceholder="方向 A：___&#10;方向 B：___&#10;方向 C：___&#10;第一眼覺得 ___ 最有希望，因為 ___"
+                                recordPlaceholder={'方向 A：___\n方向 B：___\n方向 C：___\n第一眼覺得 ___ 最有希望，因為 ___'}
+                                forceAI
                             />
                         </div>
                     </section>
 
-                    {/* Step 5 */}
-                    <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--gold)] text-[var(--ink)] flex items-center justify-center text-[12px] font-bold font-mono">5</span>
-                            <span className="font-bold text-[13px]">我選一個（核心！AI 做不到的）</span>
-                            <span className="ml-auto text-[10px] font-mono font-bold text-[var(--danger)]">不能跳過</span>
+                    {/* Step 4 · 最終定案（合併原 5+7：選方向＝寫定案） */}
+                    <section className="bg-[var(--accent-light)]/30 border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-[var(--accent)] flex items-center justify-center text-[12px] font-bold font-mono">4</span>
+                            <span className="font-bold text-[13px]">🎯 我選一個 → 寫成最終定案題目（AI 做不到的！）</span>
+                            <span className="ml-auto text-[10px] font-mono font-bold text-white">不能跳過</span>
                         </div>
-                        <div className="p-5">
+                        <div className="p-5 space-y-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                從 Step 3 的 AI 三方向、自己 Part 4 的版本、或綜合改寫中，<strong>用你的判斷</strong>做最終決定。
+                                這題就是你這學期的研究起點，會帶到 W4 為它選研究方法。
+                            </p>
                             <ThinkRecord
-                                dataKey="w3-p5-choose"
-                                prompt="你選了哪個方向？至少說 2 個理由"
+                                dataKey="w3-final-topic"
+                                prompt="🎯 我的 W3 最終定案題目"
+                                placeholder="把你決定的題目完整寫出來。會帶到 W4 方法地圖。"
                                 scaffold={[
-                                    '我選：☐ AI 方向 A  ☐ AI 方向 B  ☐ AI 方向 C  ☐ 我 Part 4 的版本最準  ☐ 都不好',
-                                    '理由 1（勾至少 2 項）：',
+                                    '我選：☐ AI 方向 A  ☐ AI 方向 B  ☐ AI 方向 C  ☐ 我 Part 4 的版本最準  ☐ 綜合改成自己的',
+                                    '最終定案題目：',
+                                    '選擇理由（至少勾 2 項 + 一句話補充）：',
                                     '  ☐ 這個題目我做得到（對象找得到、資源夠）',
                                     '  ☐ 我有興趣（真的想知道答案）',
                                     '  ☐ 這個方法我比較會用',
                                     '  ☐ 這個題目符合萬用心法（小實近易）',
                                     '  ☐ 其他：',
-                                    '補充理由：',
+                                    '補充說明：',
                                 ]}
-                                rows={8}
+                                rows={9}
                             />
-                        </div>
-                    </section>
 
-                    {/* Step 6 */}
-                    <section className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[12px] font-bold font-mono">6</span>
-                            <span className="font-bold text-[13px]">請 AI 優化選中的方案</span>
-                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">AI 做</span>
-                        </div>
-                        <div className="p-5">
-                            <AIAssistToggle
-                                id="w3-p5-optimize"
-                                title="讓 AI 把你選的那一個再磨精細"
-                                reason="加上學術關鍵字、讓 Who/What 更具體。再拿 3 個版本回來選。"
-                                prompt={MY_OPTIMIZE_PROMPT}
-                                recordKey="w3-p5-optimize-ai-record"
-                                recordPrompt="AI 給的三個優化版本是？有沒有過度學術化、反而偏離你想做的？"
-                                recordPlaceholder="優化 A：___&#10;優化 B：___&#10;優化 C：___&#10;我的評估：___"
-                            />
-                        </div>
-                    </section>
-
-                    {/* Step 7 · 最終定案 */}
-                    <section className="bg-[var(--accent-light)]/30 border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-[var(--accent)] flex items-center justify-center text-[12px] font-bold font-mono">7</span>
-                            <span className="font-bold text-[13px]">🎯 W3 最終定案題目（AI 做不到的！）</span>
-                        </div>
-                        <div className="p-5 space-y-3">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                從初稿、AI 三方向、AI 三優化版本中，<strong>用你的判斷</strong>做最後決定。
-                                可以選任一個、也可以綜合改成自己的版本。這題就是你這學期的研究起點。
-                            </p>
+                            {/* 🔥 研究動機——題目剛訂下來最有溫度，這時候寫 */}
+                            <div className="bg-[var(--gold-light)] border-l-4 border-[var(--gold)] p-4 rounded-r-[8px] mt-3">
+                                <p className="text-[12.5px] font-bold text-[#7a6020] mb-1">🔥 趁熱寫——為什麼想研究這個</p>
+                                <p className="text-[11.5px] text-[#7a6020] leading-relaxed">
+                                    題目剛訂下來、你的腦袋最熱——這時候寫研究動機最真誠。<strong>一句話</strong>講清楚就好。會帶去 W6 海報直接抄上去，下半學期擋風遮雨的就是這句話。
+                                </p>
+                            </div>
                             <ThinkRecord
-                                dataKey="w3-final-topic"
-                                prompt="🎯 我的 W3 最終定案題目"
-                                placeholder="把你決定的題目完整寫出來。會帶到 W4 海報與 Gallery Walk。"
-                                scaffold={[
-                                    '我選：☐ 初稿  ☐ 優化 A  ☐ 優化 B  ☐ 優化 C  ☐ 綜合改成自己的',
-                                    '最終定案題目：',
-                                    '選擇理由（至少 2 項）：',
-                                ]}
-                                rows={5}
+                                dataKey="w3-motivation"
+                                prompt="🔥 一句話：為什麼這個題目值得我花一學期研究？"
+                                placeholder="例：我自己段考前每次熬夜滑手機隔天念書效率超差——想證明這個感覺是真的，幫之後想戒手機的同學多一份具體數據。"
+                                scaffold={['我想研究這個是因為 ___', '這個答案對 ___（誰）有意義']}
+                                rows={3}
                             />
+
                             <div className="bg-white border border-[var(--accent)]/20 rounded-[6px] p-3 text-[11px] text-[var(--ink-mid)] leading-relaxed">
                                 <strong className="text-[var(--danger)]">出院檢核：</strong>
-                                5W1H 至少 4 格 ✓　小實近易 ≥ 2 項 ✓　兩週內能蒐集到資料 ✓　—— 三項都打勾才算「急救成功」。
+                                5W1H 至少 4 格 ✓　小實近易 ≥ 2 項 ✓　兩週內能蒐集到資料 ✓　動機寫了 ✓　—— 四項都打勾才算「急救成功」。
                             </div>
                         </div>
                     </section>
@@ -1162,7 +1375,7 @@ export const Wizard = () => {
                                 '靠自己完成配對診斷與抽題練習（不靠 AI）',
                                 '用 AI 協作練手一題（Part 3 · 別人的題目）',
                                 '用 5W1H 切開自己 W2 的題目（Part 4）',
-                                '透過 AI 協作 7 步，產出 W3 最終定案題目（Part 5）',
+                                '透過 AI 協作 4 步，產出 W3 最終定案題目（Part 5）',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
@@ -1170,6 +1383,25 @@ export const Wizard = () => {
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    {/* 反思 — 兩題最關鍵：誤診觀察 + 修法路徑回顧 */}
+                    <div className="space-y-4">
+                        <ThinkRecord
+                            dataKey="w3-reflect-misdiagnosis"
+                            prompt="✍️ 反思 1：8 病症裡，你最容易誤診的是哪一個？為什麼那個容易跟其他病搞混？"
+                            placeholder="例：我最容易誤診『大』和『空』。題目寫『高中生壓力』我以為只是太大，但其實是『壓力』本身太抽象（空）——分不清關鍵在『誰』太廣還是『測什麼』沒講清楚。"
+                            scaffold={['我最容易誤診 ___', '它容易跟 ___ 搞混', '差別其實在…']}
+                            rows={4}
+                        />
+
+                        <ThinkRecord
+                            dataKey="w3-reflect-cuts"
+                            prompt="✍️ 反思 2：你的題目走過哪幾把刀（縮小／具體化／可及化／可行化）？最後落點為什麼是這裡？"
+                            placeholder="例：我走了縮小（從『高中生』→『松山高一』）+ 具體化（從『壓力』→『段考前手機使用時數』）。沒動可及化（我自己就是高一、樣本拿得到）跟可行化（兩週內能做）。落這裡是因為再切下去就會失真——『松山高一段考前手機時數』剛好可以兩週內問到。"
+                            scaffold={['我走了 ___ 把刀（縮小／具體化／可及化／可行化）', '沒動 ___ 是因為…', '最後落這裡是因為…']}
+                            rows={5}
+                        />
                     </div>
 
                     {/* 一鍵複製 */}
@@ -1202,11 +1434,11 @@ export const Wizard = () => {
                         <div className="next-week-content">
                             <div className="next-week-col">
                                 <div className="next-week-label">W4 主題</div>
-                                <p className="next-week-text">Gallery Walk 題目博覽會 → 海報壓力測試 → 同儕挑戰 → 最終定案。</p>
+                                <p className="next-week-text">方法地圖——認識五種研究方法（問卷／訪談／實驗／觀察／文獻分析），用兩層判斷的互動決策樹幫你的題目找出主方法。</p>
                             </div>
                             <div className="next-week-col">
                                 <div className="next-week-label">你要準備</div>
-                                <p className="next-week-text">帶著你 Part 5 Step 7 的「W3 最終定案題目」，製作海報（題目 + Who + How + 為什麼想研究這個）。</p>
+                                <p className="next-week-text">帶著你 <strong className="text-white">Part 5 Step 7 的「W3 最終定案題目」</strong>——下週要為它選一個主要方法 + 寫出選擇理由。</p>
                             </div>
                         </div>
                     </div>
@@ -1246,7 +1478,7 @@ export const Wizard = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W3"
                 title="題目健檢："
                 accentTitle="碰壁→診斷→救活→定案"
-                subtitle="好的研究不是「想出來」的，是「磨出來」的。今天先碰壁、學診斷 8 種題目病症、再用 AI 協作練手。最後回到你自己的 W2 題目，用 5W1H 切開、AI 協作 7 步，產出你這學期的研究起點。"
+                subtitle="好的研究不是「想出來」的，是「磨出來」的。今天先碰壁、學診斷 8 種題目病症、再用 AI 協作練手。最後回到你自己的 W2 題目，用 5W1H 切開、AI 協作 4 步，產出你這學期的研究起點。"
                 chain="上週你列了一堆『我想知道』——但有些根本沒辦法研究（太大、太私、要等十年）。這週做的事很簡單：篩。"
                 meta={[
                     { label: '本週任務', value: '8 病症 + 練手 + 自己題目定案' },
@@ -1257,23 +1489,11 @@ export const Wizard = () => {
             />
             <CourseArc items={W3Data.courseArc} />
 
-            {/* 本週簡報 */}
-            <div className="flex justify-end mb-8 -mt-2">
-                <a
-                    href="https://canva.link/frxal53w5unrq9h"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[var(--ink-light)] hover:text-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--paper-warm)] border border-[var(--border)] hover:border-[var(--ink)]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                >
-                    📊 本週簡報 ↗
-                </a>
-            </div>
-
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
                 prevWeek={{ label: '回 W2 問題意識', to: '/w2' }}
-                nextWeek={{ label: '前往 W4 題目博覽會', to: '/w4' }}
+                nextWeek={{ label: '前往 W4 方法地圖', to: '/w4' }}
             flat
             />
         </div>

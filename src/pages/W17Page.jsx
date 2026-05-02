@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import GroupSizeSelector from '../components/ui/GroupSizeSelector';
 import './W17.css';
 import {
     ArrowLeft,
@@ -11,22 +12,34 @@ import {
     BookOpen,
     Clock,
     Award,
-    Star,
     MessageCircle,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
- *  資料常數
+ *  資料常數（對齊真實簡報 + 學習單 + 教案）
  * ══════════════════════════════════════ */
 
+/* 90 分鐘活動主流程 + 5 分準備 + 5 分收尾 = 100 分鐘 */
 const SCHEDULE = [
-    { time: '0:00-0:10', activity: '場地布置 + A/B 輪替規則說明', mode: '全班', icon: '🪑' },
-    { time: '0:10-0:12', activity: '30 秒電梯簡報開嗓', mode: '全班', icon: '🎙️' },
-    { time: '0:12-0:45', activity: '第一輪 Gallery Walk（A 報告，B 聆聽）', mode: 'A 守攤 / B 走動', icon: '🚶' },
-    { time: '0:45-0:50', activity: '中場換位', mode: '全班', icon: '🔄' },
-    { time: '0:50-1:25', activity: '第二輪 Gallery Walk（B 報告，A 聆聽）', mode: 'B 守攤 / A 走動', icon: '🚶' },
-    { time: '1:25-1:33', activity: '填完兩份學習單最後欄位', mode: '個人', icon: '✍️' },
-    { time: '1:33-1:40', activity: '學術投資統計 + AI 最佳提問獎 + 結語', mode: '全班', icon: '🏆' },
+    { time: '0:00-0:05', activity: '場地布置 + 輪值規則確認', mode: '全班', icon: '🪑' },
+    { time: '0:05-0:50', activity: '上半場 Gallery Walk（45 分鐘）', mode: '依組數輪值', icon: '🎨' },
+    { time: '0:50-0:55', activity: '中場休息（換水 / 上廁所）', mode: '休息', icon: '☕' },
+    { time: '0:55-1:40', activity: '下半場 Gallery Walk（45 分鐘）', mode: '依組數輪值', icon: '🎨' },
+    { time: '1:40-1:45', activity: '收尾：填完兩份學習單最後欄位 + 老師結語', mode: '個人', icon: '🏆' },
+];
+
+/* 評分 4 向度（B 方案：完整度=門檻、其餘三向度合佔 100%）*/
+const RUBRIC_LISTENER = [
+    { dim: '✅ 完整度', weight: '門檻', desc: '聽滿 4 組 + 4 張筆記卡無空白。未達標 → 整份直接降一級。' },
+    { dim: '📝 內容具體度', weight: '35%', desc: '能具體描述各組的研究問題、方法、發現。例（A）「他們用問卷比較段考前/平時，發現借書區人數差 3 倍」；例（C）「研究很有趣」。' },
+    { dim: '❓ 提問品質', weight: '30%', desc: '針對方法、結論或延伸應用提問。例（A）「為什麼樣本只取 1 個班？」；例（C）「為什麼選這個題目？」。' },
+    { dim: '💡 反思深度', weight: '35%', desc: '連結自身經驗或學習，提出獨到見解。例（A）「這組讓我想到我自己研究的盲點，下次想複製他們的編碼方式」；例（C）「我覺得他做得很棒」。' },
+];
+const RUBRIC_PRESENTER = [
+    { dim: '✅ 完整度', weight: '門檻', desc: '分享滿 4 場 + 反思 4 題無空白。未達標 → 整份直接降一級。' },
+    { dim: '📋 問題記錄', weight: '35%', desc: '具體記錄聽眾提問內容（不是「有人問問題」而是「他問 ___」）。例（A）「他問：你怎麼處理只填一直線的無效問卷？」；例（C）「有人問樣本」。' },
+    { dim: '🔁 應答反思', weight: '30%', desc: '反思自己的回應好不好、哪題答不出來。例（A）「第 2 場我答不出『信效度』，因為我自己也不太懂——回家要補」；例（C）「都答得不錯」。' },
+    { dim: '💡 反思深度', weight: '35%', desc: '從聽眾提問與互動，提出對研究的具體改進方向。例（A）「3 個聽眾都問樣本太小，下次要擴大到 3 個班」；例（C）「研究還可以更好」。' },
 ];
 
 const JOURNEY_MAP = [
@@ -39,8 +52,25 @@ const JOURNEY_MAP = [
     { weeks: 'W16-W17', ability: '溝通力', desc: '向他人清楚表達自己的發現' },
 ];
 
+const DOS_AND_DONTS = {
+    dos: [
+        '認真聆聽每一組的分享',
+        '主動提問，展現好奇心',
+        '邊聽邊記，即時寫下',
+        '尊重報告者，給予回饋',
+        '準時換班，攤位有人',
+    ],
+    donts: [
+        '只聽朋友那組',
+        '滑手機、聊天',
+        '活動結束才補寫',
+        '提出攻擊性問題',
+        '學習單抄襲敷衍',
+    ],
+};
+
 /* ══════════════════════════════════════
- *  主元件（純說明頁，無互動填寫）
+ *  主元件
  * ══════════════════════════════════════ */
 const W17Page = () => {
     useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -50,7 +80,8 @@ const W17Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 成果發表 / </span><span className="text-[var(--ink)] font-bold">Gallery Walk W17</span>
+                    <span className="hidden md:inline">研究方法與專題 / 成果發表 / </span>
+                    <span className="text-[var(--ink)] font-bold">Gallery Walk W17</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -63,20 +94,20 @@ const W17Page = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W17"
                 title="最終發表 Gallery Walk · "
                 accentTitle="策展日"
-                subtitle="今天每個人都是知識的生產者，也是知識的接收者。紙本學習單發表時填寫，這頁只是行前說明。"
-                chain="報告海報都好了——這週做最後一件事：站出去說。其他組也會站出去——你會聽到 12 種完全不同的研究故事。"
+                subtitle="像逛美術館一樣，自由走動聆聽各組的研究成果。每個人都有兩個身分——上半場顧攤分享、下半場走動聆聽（依組人數輪值）。紙本學習單兩份在課堂上填，這頁是行前說明 + 評分規準。"
+                chain="W16 報告海報都好了——這週做最後一件事：站出去說、坐下來聽。其他組也會站出去——你會聽到 12 種完全不同的研究故事。"
                 meta={[
-                    { label: '第一節', value: 'Gallery Walk 第一輪（A 守攤 / B 走動）' },
-                    { label: '第二節', value: 'Gallery Walk 第二輪 + 學術投資統計' },
-                    { label: '課堂產出', value: '報告者 + 聆聽者學習單（紙本）' },
-                    { label: '前置要求', value: '列印好的海報 + 報告定稿' },
+                    { label: '活動時長', value: '90 分鐘（含 5 分休息）' },
+                    { label: '報告者任務', value: '至少分享 4 場（每場 5-8 分鐘）' },
+                    { label: '聆聽者任務', value: '至少聆聽 4 組 + 主動提問' },
+                    { label: '繳交', value: '兩份紙本學習單（個人作業）' },
                 ]}
             />
             <CourseArc items={[
                 { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
-                { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
-                { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
+                { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
+                { wk: 'W5-W8', name: '操作型定義\n海報／文獻', past: true },
+                { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
                 { wk: 'W11-W13', name: '執行階段\n自主研究', past: true },
                 { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
                 { wk: 'W16-W17', name: '成果簡報\n博覽發表', now: true },
@@ -85,63 +116,28 @@ const W17Page = () => {
             {/* ═══ SCROLLING CONTENT ═══ */}
             <div className="prose-zh" style={{ maxWidth: 720, margin: '0 auto' }}>
 
-            {/* A/B 輪替 */}
+            {/* 活動概述 */}
             <div className="card" style={{ marginTop: 24 }}>
                 <div className="card-header">
-                    <Users size={16} /> A/B 輪替機制
+                    <Users size={16} /> 什麼是 Gallery Walk？
                 </div>
                 <div className="card-body">
-                    <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 16 }}>
-                        全班分成 A、B 兩組。<strong>每個人都有兩個身分</strong>——報告者和聆聽者，兩份紙本學習單都要填。
+                    <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                        像逛美術館一樣，自由走動聆聽各組的研究成果。<strong>每個人都有兩個身分</strong>，兩份紙本學習單都要填。
                     </p>
-                    <div className="w17-rotation-grid">
-                        <div className="w17-rotation-cell w17-rotation-header" />
-                        <div className="w17-rotation-cell w17-rotation-header">第一輪（35 min）</div>
-                        <div className="w17-rotation-cell w17-rotation-header">第二輪（35 min）</div>
-                        <div className="w17-rotation-cell w17-rotation-header">A 組</div>
-                        <div className="w17-rotation-cell" style={{ background: '#FEF3C7' }}>🎤 守攤報告</div>
-                        <div className="w17-rotation-cell" style={{ background: '#EFF6FF' }}>📚 走動聆聽</div>
-                        <div className="w17-rotation-cell w17-rotation-header">B 組</div>
-                        <div className="w17-rotation-cell" style={{ background: '#EFF6FF' }}>📚 走動聆聽</div>
-                        <div className="w17-rotation-cell" style={{ background: '#FEF3C7' }}>🎤 守攤報告</div>
-                    </div>
-                </div>
-            </div>
-
-            {/* 雙提示卡 */}
-            <div className="w17-hint-grid" style={{ marginTop: 16 }}>
-                <div className="w17-hint-card" style={{ background: '#FEF3C7', border: '1px solid #FDE68A' }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#92400E' }}>
-                        <Mic size={14} style={{ verticalAlign: -2 }} /> 報告者提示
-                    </div>
-                    <div style={{ color: '#92400E', fontSize: 12, lineHeight: 1.7 }}>
-                        先說研究的「為什麼」，再說「發現什麼」<br />
-                        每場 2-3 分鐘，不是念海報，是說故事<br />
-                        聽眾問的問題記在<strong>報告者學習單</strong>
-                    </div>
-                </div>
-                <div className="w17-hint-card" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#1E40AF' }}>
-                        <BookOpen size={14} style={{ verticalAlign: -2 }} /> 聆聽者提示
-                    </div>
-                    <div style={{ color: '#1E40AF', fontSize: 12, lineHeight: 1.7 }}>
-                        目標：至少聽 4 組 → 填 4 張筆記卡<br />
-                        每組聽完馬上記，不要等到最後<br />
-                        你有 <strong>3 張圓點貼紙</strong>（學術投資），投給最好的組
-                    </div>
-                </div>
-            </div>
-
-            {/* 30 秒電梯簡報 */}
-            <div className="card" style={{ marginTop: 16 }}>
-                <div className="card-header">
-                    <Mic size={16} /> 30 秒電梯簡報公式
-                </div>
-                <div className="card-body">
-                    <div className="w17-pitch-formula">
-                        「你有沒有遇過<span className="w17-pitch-blank">某個生活痛點</span>？<br />
-                        我們發現其實是因為<span className="w17-pitch-blank">核心發現</span>！<br />
-                        我們是怎麼證實的呢？<span className="w17-pitch-blank">一句話帶過方法</span>」
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginTop: 12 }}>
+                        <div style={{ padding: '12px', background: 'var(--paper-warm)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12 }}>
+                            <div style={{ fontSize: 22, marginBottom: 4 }}>🎤</div>
+                            <strong>分享 ≥ 4 場</strong>
+                        </div>
+                        <div style={{ padding: '12px', background: 'var(--paper-warm)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12 }}>
+                            <div style={{ fontSize: 22, marginBottom: 4 }}>👂</div>
+                            <strong>聆聽 ≥ 4 組</strong>
+                        </div>
+                        <div style={{ padding: '12px', background: 'var(--paper-warm)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12 }}>
+                            <div style={{ fontSize: 22, marginBottom: 4 }}>📝</div>
+                            <strong>兩份學習單</strong>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -149,7 +145,7 @@ const W17Page = () => {
             {/* 時程表 */}
             <div className="card" style={{ marginTop: 16 }}>
                 <div className="card-header">
-                    <Clock size={16} /> 今日時程
+                    <Clock size={16} /> 今日時程（100 分鐘）
                 </div>
                 <div className="card-body">
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
@@ -165,44 +161,156 @@ const W17Page = () => {
                 </div>
             </div>
 
-            {/* 學術投資機制 */}
-            <div className="w17-sticker-card" style={{ marginTop: 16 }}>
-                <div className="w17-sticker-header">
-                    <Award size={16} /> 學術投資機制
-                </div>
-                <div className="w17-sticker-body">
-                    聆聽者每人有 <strong>3 張圓點貼紙</strong>。聽完報告後，如果覺得這組「方法很嚴謹」或「發現超有趣」，在他們海報角落貼一張。不能投自己組，也不能 3 張全投同一組。最後統計哪一組最受學術投資人青睞！
-                </div>
-            </div>
-
-            {/* AI 最佳提問獎 */}
+            {/* 輪值表（依組數） — 用 GroupSizeSelector 共用組件 */}
             <div className="card" style={{ marginTop: 16 }}>
                 <div className="card-header">
-                    <Star size={16} /> AI 最佳提問獎
+                    <Users size={16} /> 你的輪值時間（依組人數）
                 </div>
-                <div className="card-body" style={{ fontSize: 12, lineHeight: 1.8, color: 'var(--ink-mid)' }}>
-                    如果你用 AI 幫你想出了一個連報告者都答不出來、但又非常有深度的「神問題」，在聆聽者學習單上打一個 ⭐。下課前老師會抽幾位分享——最棒的神問題可以加分！
+                <div className="card-body">
+                    <p style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.8, marginBottom: 12 }}>
+                        <strong>請各組事先協調好輪值時間</strong>，確保攤位隨時有人。先選你的隊型：
+                    </p>
+                    <GroupSizeSelector
+                        items={{
+                            1: {
+                                title: '1 人（Solo）',
+                                content: (
+                                    <div>
+                                        <p style={{ marginBottom: 6 }}><strong>上半場 45 分</strong>：顧攤（分享 4-5 場，每場 5-8 分鐘）</p>
+                                        <p style={{ marginBottom: 6 }}><strong>中場休息 5 分</strong></p>
+                                        <p style={{ marginBottom: 6 }}><strong>下半場 45 分</strong>：聆聽（聽 4-5 組）</p>
+                                        <p style={{ fontSize: 11, color: '#92400E', marginTop: 8 }}>💡 Solo 比較吃力，建議下半場集中聽 4 組就好，留時間填學習單。</p>
+                                    </div>
+                                ),
+                            },
+                            2: {
+                                title: '2 人組',
+                                content: (
+                                    <ul className="list-disc pl-4 space-y-1">
+                                        <li><strong>A：上半場 45 分顧攤</strong>，下半場 45 分聆聽</li>
+                                        <li><strong>B：上半場 45 分聆聽</strong>，下半場 45 分顧攤</li>
+                                    </ul>
+                                ),
+                            },
+                            3: {
+                                title: '3 人組',
+                                content: (
+                                    <div>
+                                        <p style={{ marginBottom: 6 }}>每人輪值 30 分鐘顧攤，其他時間聆聽：</p>
+                                        <ul className="list-disc pl-4 space-y-1">
+                                            <li><strong>A 顧攤</strong>：0:05–0:35（上半場前 30 分）</li>
+                                            <li><strong>B 顧攤</strong>：0:35–1:05（橫跨中場）</li>
+                                            <li><strong>C 顧攤</strong>：1:05–1:40（下半場後 35 分）</li>
+                                        </ul>
+                                    </div>
+                                ),
+                            },
+                            4: {
+                                title: '4 人組',
+                                content: (
+                                    <ul className="list-disc pl-4 space-y-1">
+                                        <li><strong>A、B：上半場 45 分顧攤</strong>，下半場 45 分聆聽</li>
+                                        <li><strong>C、D：上半場 45 分聆聽</strong>，下半場 45 分顧攤</li>
+                                    </ul>
+                                ),
+                            },
+                        }}
+                    />
                 </div>
             </div>
 
-            {/* 紙本學習單提醒 */}
+            {/* 雙角色任務卡 */}
+            <div className="w17-hint-grid" style={{ marginTop: 16 }}>
+                <div className="w17-hint-card" style={{ background: '#FEF3C7', border: '1px solid #FDE68A' }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#92400E' }}>
+                        <Mic size={14} style={{ verticalAlign: -2 }} /> 🎤 報告者任務
+                    </div>
+                    <div style={{ color: '#92400E', fontSize: 12, lineHeight: 1.85 }}>
+                        <strong>你的任務</strong>：向來訪的同學介紹你的研究<br />
+                        <strong>每場 5-8 分鐘</strong>：研究動機 → 方法過程 → 主要發現<br />
+                        <strong>至少分享 4 場</strong>才算完成任務<br />
+                        <strong>記錄聽眾提問</strong>到「報告者學習單」
+                    </div>
+                </div>
+                <div className="w17-hint-card" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#1E40AF' }}>
+                        <BookOpen size={14} style={{ verticalAlign: -2 }} /> 👂 聆聽者任務
+                    </div>
+                    <div style={{ color: '#1E40AF', fontSize: 12, lineHeight: 1.85 }}>
+                        <strong>你的任務</strong>：走動聆聽其他組的研究<br />
+                        <strong>至少聆聽 4 組</strong>，填 4 張筆記卡<br />
+                        <strong>每組聽完馬上記</strong>，不要等到最後<br />
+                        <strong>主動提問</strong>，展現好奇心
+                    </div>
+                </div>
+            </div>
+
+            {/* 評分規準（B 方案：完整度=門檻、三向度共 100%）*/}
+            <div className="card" style={{ marginTop: 16 }}>
+                <div className="card-header">
+                    <Award size={16} /> 學習單評分規準
+                </div>
+                <div className="card-body">
+                    <p style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.8, marginBottom: 12 }}>
+                        ⚠️ <strong>期末研究報告（組別分數）跟兩份學習單（個人分數）分開算。</strong>下方是學習單規準，每份各 100 分。
+                    </p>
+
+                    {/* 聆聽者 */}
+                    <div style={{ marginBottom: 16 }}>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: '#1E40AF', marginBottom: 8 }}>👂 聆聽者學習單規準</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
+                            {RUBRIC_LISTENER.map((r, i) => (
+                                <div key={i} style={{ padding: '10px 14px', background: '#fff', fontSize: 12, lineHeight: 1.7 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 }}>
+                                        <strong style={{ color: 'var(--ink)' }}>{r.dim}</strong>
+                                        <span style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700 }}>{r.weight}</span>
+                                    </div>
+                                    <p style={{ color: 'var(--ink-mid)', margin: 0 }}>{r.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 報告者 */}
+                    <div>
+                        <p style={{ fontSize: 13, fontWeight: 700, color: '#92400E', marginBottom: 8 }}>🎤 報告者學習單規準</p>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
+                            {RUBRIC_PRESENTER.map((r, i) => (
+                                <div key={i} style={{ padding: '10px 14px', background: '#fff', fontSize: 12, lineHeight: 1.7 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 }}>
+                                        <strong style={{ color: 'var(--ink)' }}>{r.dim}</strong>
+                                        <span style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 700 }}>{r.weight}</span>
+                                    </div>
+                                    <p style={{ color: 'var(--ink-mid)', margin: 0 }}>{r.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <p style={{ fontSize: 11.5, color: 'var(--ink-light)', lineHeight: 1.8, marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--border)', fontStyle: 'italic' }}>
+                        💡「完整度」是門檻條件——沒交滿（不到 4 組／4 場、欄位多處空白）整份學習單直接降一級。其他 3 向度的具體程度才是分數主軸。
+                    </p>
+                </div>
+            </div>
+
+            {/* 紙本學習單預覽 */}
             <div className="card" style={{ marginTop: 16, background: '#1a1a2e', border: 'none' }}>
                 <div className="card-body" style={{ color: '#e2e8f0' }}>
                     <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
                         <MessageCircle size={14} style={{ verticalAlign: -2 }} /> 紙本學習單提醒
                     </div>
-                    <div style={{ fontSize: 12, lineHeight: 1.8, opacity: 0.85 }}>
-                        <strong style={{ color: '#FDE68A' }}>報告者版：</strong>記錄 4 場被問的問題 + 你的回答 + 分享後反思 4 題<br />
-                        <strong style={{ color: '#93C5FD' }}>聆聽者版：</strong>至少聽 4 組，填 4 張筆記卡 + 綜合反思 3 題<br /><br />
-                        兩份都要填！A/B 輪替，每個人兩個身分都要做。
+                    <div style={{ fontSize: 12, lineHeight: 1.85, opacity: 0.85 }}>
+                        <strong style={{ color: '#FDE68A' }}>報告者版：</strong>記錄 4 場被問的問題 + 我的回答 + 反思 4 題<br />
+                        <strong style={{ color: '#93C5FD' }}>聆聽者版：</strong>4 張研究筆記卡（題目／問題與發現／做得好／我的提問／給我的啟發）+ 綜合反思 3 題<br /><br />
+                        兩份都要填！每個人都同時是報告者跟聆聽者。
                     </div>
                 </div>
             </div>
 
-            {/* 紙本學習單預覽 */}
-            <div className="card" style={{ marginTop: 16 }}>
+            {/* 紙本學習單預覽 - 報告者 */}
+            <div className="card" style={{ marginTop: 12 }}>
                 <div className="card-header" style={{ background: '#FEF3C7' }}>
-                    <Mic size={16} /> 報告者版 — 攤位分享紀錄
+                    <Mic size={16} /> 報告者版預覽 — 攤位分享紀錄
                 </div>
                 <div className="card-body">
                     <div style={{ fontSize: 12, color: 'var(--ink-mid)', lineHeight: 1.8 }}>
@@ -227,9 +335,10 @@ const W17Page = () => {
                 </div>
             </div>
 
+            {/* 紙本學習單預覽 - 聆聽者 */}
             <div className="card" style={{ marginTop: 12 }}>
                 <div className="card-header" style={{ background: '#EFF6FF' }}>
-                    <BookOpen size={16} /> 聆聽者版 — 研究聆聽筆記
+                    <BookOpen size={16} /> 聆聽者版預覽 — 研究聆聽筆記
                 </div>
                 <div className="card-body">
                     <div style={{ fontSize: 12, color: 'var(--ink-mid)', lineHeight: 1.8 }}>
@@ -251,32 +360,35 @@ const W17Page = () => {
                 </div>
             </div>
 
-            {/* 🤖 30 秒電梯簡報 AI 練稿（開嗓前用） */}
-            <details className="card" style={{ marginTop: 16, padding: 12, borderColor: 'var(--accent)', borderWidth: 2 }}>
-                <summary style={{ cursor: 'pointer', fontSize: 13, fontWeight: 700, color: 'var(--accent)' }}>
-                    🎤 30 秒電梯簡報 AI 練稿（緊張的話打開）
-                </summary>
-                <div style={{ marginTop: 10, fontSize: 12, color: 'var(--ink-mid)', lineHeight: 1.7 }}>
-                    <p>把研究丟給 AI，請它扮演聽眾打回票——你才知道哪些話會卡耳朵。</p>
-                    <pre style={{ background: '#0F172A', color: '#E2E8F0', fontSize: 11, padding: 10, borderRadius: 6, marginTop: 8, whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>{`我要做 30 秒電梯簡報，研究是：
-- 題目：___
-- 用什麼方法：___
-- 主要發現一句話：___
-- 限制一句話：___
-
-請扮演路過攤位 30 秒的同學/家長，告訴我：
-1. 哪一句話聽不懂或被你跳過？
-2. 我這 30 秒最想讓你記住的一件事是什麼？(看你能不能抓對)
-3. 給我一個更吸睛的開場句（不超過 10 個字）。`}</pre>
-                    <p style={{ fontStyle: 'italic', color: 'var(--ink-light)', marginTop: 8 }}>💡 AI 的開場句是參考——上台還是用你自己順口的版本。</p>
+            {/* 注意事項：請這樣做 vs 請避免 */}
+            <div className="w17-hint-grid" style={{ marginTop: 16 }}>
+                <div className="w17-hint-card" style={{ background: '#F0FDF4', border: '1px solid #86EFAC' }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#15803D' }}>
+                        ✅ 請這樣做
+                    </div>
+                    <ul style={{ color: '#166534', fontSize: 12, lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                        {DOS_AND_DONTS.dos.map((x, i) => (
+                            <li key={i} style={{ marginBottom: 3 }}>👍 {x}</li>
+                        ))}
+                    </ul>
                 </div>
-            </details>
+                <div className="w17-hint-card" style={{ background: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#B91C1C' }}>
+                        ❌ 請避免
+                    </div>
+                    <ul style={{ color: '#991B1B', fontSize: 12, lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
+                        {DOS_AND_DONTS.donts.map((x, i) => (
+                            <li key={i} style={{ marginBottom: 3 }}>👎 {x}</li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
 
-            {/* 🎯 學期 AI 協作反思（最後一次 AIRED） */}
+            {/* 學期 AI 協作反思（個人，不是繳交範圍）*/}
             <div className="card" style={{ marginTop: 16, padding: 16, background: '#FEF3C7', borderColor: '#D97706', borderWidth: 2 }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: '#92400E', marginBottom: 6 }}>🎯 學期 AI 協作反思（最後一份紀錄）</p>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#92400E', marginBottom: 6 }}>🎯 學期 AI 協作反思（個人記錄，不交）</p>
                 <p style={{ fontSize: 12, color: '#78350F', lineHeight: 1.7, marginBottom: 10 }}>
-                    這 17 週你跟 AI 共事很多次。回頭看：你跟 AI 的關係是怎麼變化的？AI-RED 公約對你來說從「規則」變成什麼？這份反思會比任何成績單都更說明你學到了什麼。
+                    這 17 週你跟 AI 共事很多次。回頭看：你跟 AI 的關係是怎麼變化的？AI-RED 公約對你來說從「規則」變成什麼？這份反思不影響成績——是給你自己的學期回望。
                 </p>
                 <ThinkRecord
                     dataKey="w17-ai-reflection"
@@ -289,6 +401,26 @@ const W17Page = () => {
                     ]}
                     rows={6}
                 />
+            </div>
+
+            {/* 本週結束，你應該要會 — B 標準格式 */}
+            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4" style={{ marginTop: 24 }}>
+                <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                    ✅ 本週結束，你應該要會
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                    {[
+                        '顧攤分享至少 4 場：清楚說出研究動機、方法、主要發現',
+                        '走動聆聽至少 4 組：填完 4 張筆記卡，內容具體不空泛',
+                        '提出至少 1 個有深度的問題（針對方法、結論或延伸應用）',
+                        '從別組研究中帶走 1 個能應用到自己研究的具體做法',
+                    ].map((item, i) => (
+                        <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                            <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                            <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             {/* 全課程旅程 */}

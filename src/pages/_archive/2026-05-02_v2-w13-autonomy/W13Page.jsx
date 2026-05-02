@@ -194,9 +194,9 @@ const W13Page = () => {
             />
             <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                    { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
-                    { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
-                    { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
+                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
+                    { wk: 'W5-W8', name: '操作型定義／海報／文獻', past: true },
+                    { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
                     { wk: 'W11-W13', name: '執行階段\n自主研究', now: true },
                     { wk: 'W14-W15', name: '數據轉譯\n圖表結論' },
                     { wk: 'W16-W17', name: '成果簡報\n博覽發表' },

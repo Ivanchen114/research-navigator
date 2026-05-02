@@ -52,7 +52,10 @@
 
 .prose-zh p { line-height: var(--leading-reading); }
 .prose-zh h2, .prose-zh h3, .prose-zh h4 {
-  color: var(--ink);
+  /* 顏色繼承父層——黑底卡片內 h3 才不會被強制塗深色而看不見。
+   * 例：W1/W2 next-week-preview 黑底、W3/W4 遊戲彩蛋黑底，外層已有 text-white，
+   * h3 之前因 .prose-zh h3 { color: var(--ink) } 蓋過而變深色看不到。 */
+  color: inherit;
   line-height: var(--leading-tight);
   margin-top: 1.75em;
   margin-bottom: 0.5em;
@@ -389,6 +392,9 @@ h3,
 /* Next Week Preview */
 .next-week-preview {
   background: var(--ink);
+  color: #fff;
+  /* ↑ 容器設白色，所有子元素（h3 標題等）都會繼承白；避免 prose-zh 包住時 h3
+   *   繼承到 ink-mid（深灰）撞深底看不見。badge/label/text 各自還是用 rgba 覆蓋。 */
   border-radius: 12px;
   overflow: hidden;
   margin: 48px 0;

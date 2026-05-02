@@ -9,7 +9,7 @@ import React from 'react';
  *   title        string — 主標黑色部分，如 "問題意識的覺醒："
  *   accentTitle  string — 金色斜體重點，如 "把好奇心變成好問題"
  *   subtitle     string — 副標內文
- *   chain        string — 「為什麼這週是現在」邏輯鏈接續句（與上週連貫，可選）
+ *   chain        string — 「為什麼是這週」邏輯鏈接續句（與上週連貫，可選）
  *   meta         array  — [{ label, value }, ...]，底部四欄統計條（可選）
  *   className    string
  */
@@ -62,10 +62,10 @@ export default function HeroBlock({
                     </p>
                 )}
 
-                {/* CHAIN — 為什麼這週是現在（與上週連貫） */}
+                {/* CHAIN — 為什麼是這週（與上週連貫） */}
                 {chain && (
                     <div className="mt-7 pt-5 border-t border-[#c9a84c]/25 max-w-[680px]">
-                        <div className="text-[10px] font-mono text-[#c9a84c]/80 uppercase tracking-[0.15em] mb-2">為什麼這週是現在</div>
+                        <div className="text-[10px] font-mono text-[#c9a84c]/80 uppercase tracking-[0.15em] mb-2">為什麼是這週</div>
                         <p className="text-[13px] md:text-[14px] text-white/85 leading-[1.85] italic">
                             {chain}
                         </p>

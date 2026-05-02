@@ -49,38 +49,43 @@ export const Layout = () => {
             ]
         },
         {
-            label: '探索階段',
-            sublabel: '問題意識',
+            label: '課程進度',
+            sublabel: '階段一·問題意識',
             items: [
                 { name: '偵探特訓班', path: '/w0', week: 'W0', status: 'done' },
                 { name: '模仿遊戲', path: '/w1', week: 'W1', status: 'done' },
-                { name: '問題意識', path: '/w2', week: 'W2', status: 'done' },
+                { name: '四段式框架', path: '/w2', week: 'W2', status: 'done' },
                 { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
-                { name: '題目博覽會', path: '/w4', week: 'W4', status: 'done' },
             ]
         },
         {
-            sublabel: '研究規劃',
+            sublabel: '階段二·研究規劃',
             items: [
-                { name: '文獻搜尋入門', path: '/w5', week: 'W5', status: 'done' },
-                { name: '文獻偵探社', path: '/w6', week: 'W6', status: 'done' },
-                { name: '研究診所', path: '/w7', week: 'W7', status: 'done' },
-                { name: '研究博覽會', path: '/w8', week: 'W8', status: 'active' },
+                { name: '方法地圖', path: '/w4', week: 'W4', status: 'done' },
+                { name: '操作型定義', path: '/w5', week: 'W5', status: 'done' },
+                { name: '海報博覽會', path: '/w6', week: 'W6', status: 'done' },
+                { name: '文獻搜尋', path: '/w7', week: 'W7', status: 'done' },
+                { name: '文獻偵探社', path: '/w8', week: 'W8', status: 'active' },
             ]
         },
         {
-            sublabel: '裝備與執行',
+            sublabel: '階段三·計畫定稿',
             items: [
                 { name: '計畫書·五章地基', path: '/w9', week: 'W9', status: 'locked' },
                 { name: '計畫書·整本定稿', path: '/w10', week: 'W10', status: 'locked' },
-                { name: '工具實體×預試×倫理', path: '/w11', week: 'W11', status: 'locked' }
             ]
         },
         {
-            sublabel: '分析與報告',
+            sublabel: '階段四·執行檢核',
             items: [
-                { name: '期中進度短報', path: '/w12', week: 'W12', status: 'locked' },
-                { name: '中期盤點 · 資料關帳', path: '/w13', week: 'W13', status: 'locked' },
+                { name: '預試與倫理', path: '/w11', week: 'W11', status: 'locked' },
+                { name: '期中短報', path: '/w12', week: 'W12', status: 'locked' },
+            ]
+        },
+        {
+            sublabel: '階段五·分析與發表',
+            items: [
+                { name: '自主進度', path: '/w13', week: 'W13', status: 'locked' },
                 { name: '圖表與圖說', path: '/w14', week: 'W14', status: 'locked' },
                 { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
                 { name: '報告與海報', path: '/w16', week: 'W16', status: 'locked' },

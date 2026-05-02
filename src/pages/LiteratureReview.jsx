@@ -17,7 +17,7 @@ import {
     EyeOff,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
-import { W6Data } from '../data/lessonMaps';
+import { W8Data } from '../data/lessonMaps';
 import '../pages/LiteratureReview.css';
 
 /* ══════════════════════════════════════
@@ -134,16 +134,16 @@ const PEER_REVIEW_ITEMS = [
 
 /* — 匯出欄位 — */
 const EXPORT_FIELDS = [
-    { key: 'w6-detect-a', label: '學生甲偵錯', question: '學生甲的改寫有什麼問題？你勾了哪些、理由是什麼？' },
-    { key: 'w6-detect-b', label: '學生乙偵錯', question: '學生乙的改寫有什麼問題？你勾了哪些、理由是什麼？' },
-    { key: 'w6-my-rewrite', label: '我的改寫', question: '把原文遮住，用自己的話改寫王大明（2022）的研究發現' },
-    { key: 'w6-sandwich-ref', label: '三明治引用：選用文獻', question: '你用哪篇文獻來練三明治引用？（作者年份）' },
-    { key: 'w6-sandwich-claim', label: '三明治：觀點句', question: '第 1 層觀點句——你的主張是什麼？' },
-    { key: 'w6-sandwich-evidence', label: '三明治：引用句', question: '第 2 層引用句——某某（年份）發現了什麼？' },
-    { key: 'w6-sandwich-analysis', label: '三明治：分析句', question: '第 3 層分析句——這個證據說明了什麼？跟你的研究有什麼關係？' },
-    { key: 'w6-lit-review', label: '文獻探討段落（演練3）', question: '用三篇文獻寫出至少 5 句的文獻探討，最後一句連回你的研究題目' },
-    { key: 'w6-peer-review', label: '同儕幫我審查的結果', question: '同儕幫你審查演練 3 後，給了什麼具體建議？你根據建議修改了什麼？' },
-    { key: 'w6-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w8-detect-a', label: '學生甲偵錯', question: '學生甲的改寫有什麼問題？你勾了哪些、理由是什麼？' },
+    { key: 'w8-detect-b', label: '學生乙偵錯', question: '學生乙的改寫有什麼問題？你勾了哪些、理由是什麼？' },
+    { key: 'w8-my-rewrite', label: '我的改寫', question: '把原文遮住，用自己的話改寫王大明（2022）的研究發現' },
+    { key: 'w8-sandwich-ref', label: '三明治引用：選用文獻', question: '你用哪篇文獻來練三明治引用？（作者年份）' },
+    { key: 'w8-sandwich-claim', label: '三明治：觀點句', question: '第 1 層觀點句——你的主張是什麼？' },
+    { key: 'w8-sandwich-evidence', label: '三明治：引用句', question: '第 2 層引用句——某某（年份）發現了什麼？' },
+    { key: 'w8-sandwich-analysis', label: '三明治：分析句', question: '第 3 層分析句——這個證據說明了什麼？跟你的研究有什麼關係？' },
+    { key: 'w8-lit-review', label: '文獻探討段落（演練3）', question: '用三篇文獻寫出至少 5 句的文獻探討，最後一句連回你的研究題目' },
+    { key: 'w8-peer-review', label: '同儕幫我審查的結果', question: '同儕幫你審查演練 3 後，給了什麼具體建議？你根據建議修改了什麼？' },
+    { key: 'w8-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -172,11 +172,12 @@ export const LiteratureReview = () => {
 
     useEffect(() => {
         const records = readRecords();
-        const w5Val = records['w5-found-paper'] || '';
+        // v2 鏈：W7 找文獻搬到的 dataKey；舊鍵 w5-found-paper fallback 容錯
+        const w5Val = (records['w7-found-paper'] || records['w5-found-paper'] || '').trim();
         setW5Paper(w5Val);
         // 如果 w6-sandwich-ref 還是空的，自動帶入 W5 的文獻
-        if (w5Val && !records['w6-sandwich-ref']) {
-            records['w6-sandwich-ref'] = w5Val;
+        if (w5Val && !records['w8-sandwich-ref']) {
+            records['w8-sandwich-ref'] = w5Val;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
         }
     }, []);
@@ -281,7 +282,7 @@ export const LiteratureReview = () => {
                                 ))}
                             </div>
                             <ThinkRecord
-                                dataKey="w6-detect-a"
+                                dataKey="w8-detect-a"
                                 prompt="說明：學生甲的改寫哪裡有問題？"
                                 scaffold={['學生甲的問題在於…', '結構上…']}
                                 rows={3}
@@ -311,7 +312,7 @@ export const LiteratureReview = () => {
                                 ))}
                             </div>
                             <ThinkRecord
-                                dataKey="w6-detect-b"
+                                dataKey="w8-detect-b"
                                 prompt="說明：學生乙的改寫哪裡有問題？"
                                 scaffold={['學生乙的問題在於…', '缺少了…']}
                                 rows={3}
@@ -329,7 +330,7 @@ export const LiteratureReview = () => {
                                 💡 把原文遮住，憑你的理解寫。用<strong>遮蓋測試</strong>驗證：沒有原文，這段話能不能獨立成立？
                             </div>
                             <ThinkRecord
-                                dataKey="w6-my-rewrite"
+                                dataKey="w8-my-rewrite"
                                 prompt="用你自己的話改寫王大明（2022）的研究發現："
                                 scaffold={['王大明（2022）的研究指出…', '其結果顯示…', '這意味著…']}
                                 rows={5}
@@ -338,7 +339,7 @@ export const LiteratureReview = () => {
                     </div>
 
                     <ThinkChoice
-                        dataKey="w6-tc1"
+                        dataKey="w8-tc1"
                         question="以下哪個是「遮蓋測試」的核心判斷標準？"
                         options={[
                             { label: 'A', text: '看改寫有沒有用到跟原文不一樣的詞彙' },
@@ -386,7 +387,7 @@ export const LiteratureReview = () => {
                     </div>
 
                     <ThinkChoice
-                        dataKey="w6-tc2"
+                        dataKey="w8-tc2"
                         question="三明治引用法的第 3 層（分析句）的功能是什麼？"
                         options={[
                             { label: 'A', text: '重複第 2 層的引用內容，換個說法再說一遍' },
@@ -412,7 +413,7 @@ export const LiteratureReview = () => {
 
                     {/* 選用文獻（已在頁頂顯示 W5 文獻；此處讓學生確認或換篇） */}
                     <ThinkRecord
-                        dataKey="w6-sandwich-ref"
+                        dataKey="w8-sandwich-ref"
                         prompt="我選用的文獻（已自動帶入 W5 那篇；想換可改）"
                         scaffold={['用 W5 找到的那篇', '或：換一篇來自 ___（標題、作者、年份）']}
                         rows={2}
@@ -564,7 +565,7 @@ export const LiteratureReview = () => {
 
                     {/* 作答區 */}
                     <ThinkRecord
-                        dataKey="w6-lit-review"
+                        dataKey="w8-lit-review"
                         prompt="我的文獻探討（演練 3 作答區）："
                         scaffold={['關於…，已有不少研究進行探討。', '首先，…（年份）發現…', '綜合以上研究可見，…這也與本研究想探討的…']}
                         rows={10}
@@ -628,7 +629,7 @@ export const LiteratureReview = () => {
                     </div>
 
                     <ThinkRecord
-                        dataKey="w6-peer-review"
+                        dataKey="w8-peer-review"
                         prompt="同儕幫你審查後，給了什麼具體建議？你根據建議修改了什麼？"
                         scaffold={['同儕指出的問題是…', '我修改了…', '修改後的差異在於…']}
                         rows={5}
@@ -668,11 +669,11 @@ export const LiteratureReview = () => {
                     </div>
 
                                         {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="6" hint="寫文獻探討可能用 AI 幫忙潤稿" optional={true} />
+                    <AIREDNarrative week="8" hint="寫文獻探討可能用 AI 幫忙潤稿" optional={true} />
 
                     {/* 一鍵複製 */}
                     <ExportButton
-                        weekLabel="W6 文獻偵探社"
+                        weekLabel="W8 文獻偵探社"
                         fields={EXPORT_FIELDS}
                         choices={choiceResults}
                     />
@@ -718,11 +719,11 @@ export const LiteratureReview = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">文獻偵探社 W6</span>
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">文獻偵探社 W8</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <ResetWeekButton weekPrefix="w6-" />
+                    <ResetWeekButton weekPrefix="w8-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
@@ -735,17 +736,17 @@ export const LiteratureReview = () => {
 
             {showLessonMap && (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W6Data} />
+                    <LessonMap data={W8Data} />
                 </div>
             )}
 
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
-                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W6"
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W8"
                 title="文獻偵探社："
                 accentTitle="識破假改寫，寫出真文獻"
                 subtitle="偵探社的工作只有一件事——找出文獻裡的問題，然後寫出一份任何人都挑不出毛病的文獻探討。今天要學會識破兩種常見犯罪手法：換字抄襲與文獻堆砌，並親手寫出合格的文獻探討段落。"
-                chain="W5 找到一堆文獻——但要怎麼用？這週教你『接話』：別人說 X，你怎麼順著接到自己的研究上。"
+                chain="W7 找到一堆文獻——但要怎麼用？這週教你『接話』：別人說 X，你怎麼順著接到自己的研究上。"
                 meta={[
                     { label: '本週任務', value: '觀念 3 招 + 改寫偵錯 + 三明治' },
                     { label: '時長', value: '100 MINS' },
@@ -753,21 +754,9 @@ export const LiteratureReview = () => {
                     { label: '課堂產出', value: '三明治改寫稿（給 W7-W8 王牌文獻用）' },
                 ]}
             />
-            <CourseArc items={W6Data.courseArc} />
+            <CourseArc items={W8Data.courseArc} />
 
-            {/* 本週簡報 */}
-            <div className="flex justify-end mb-4 -mt-2">
-                <a
-                    href="https://canva.link/hb3pdip2k9kvmca"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[var(--ink-light)] hover:text-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--paper-warm)] border border-[var(--border)] hover:border-[var(--ink)]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                >
-                    📊 本週簡報 ↗
-                </a>
-            </div>
-
-            {/* 📚 W5 偵察成果回顧（W6 開場銜接 — 放在 Step 之前最顯眼處） */}
+            {/* 📚 W7 偵察成果回顧（W8 開場銜接 — 放在 Step 之前最顯眼處） */}
             {w5Paper ? (
                 <div className="mb-8 p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[var(--accent-light)]/30">
                     <div className="flex items-center gap-2 mb-2">
@@ -779,7 +768,7 @@ export const LiteratureReview = () => {
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{w5Paper}</p>
                     </div>
                     <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                        今天 Step 1 的「三明治改寫練習」會直接拿這篇當素材。<strong>不用重找</strong>——W5 找文獻、W6 寫文獻，是同一條線。
+                        今天 Step 1 的「三明治改寫練習」會直接拿這篇當素材。<strong>不用重找</strong>——W7 找文獻、W8 寫文獻，是同一條線。
                     </p>
                 </div>
             ) : (
@@ -789,7 +778,7 @@ export const LiteratureReview = () => {
                         本週要拿你 W5 找到的那篇文獻當改寫練習素材。如果 W5 還沒做完，請先：
                     </p>
                     <ul className="text-[12px] text-[#7F1D1D] leading-relaxed list-disc pl-5 space-y-1 mb-3">
-                        <li>回 <Link to="/w5" className="font-bold underline">W5 文獻搜尋入門</Link> 至少找一篇文獻、寫進「找到的第一篇文獻」欄</li>
+                        <li>回 <Link to="/w7" className="font-bold underline">W7 文獻搜尋入門</Link> 至少找一篇文獻、寫進「找到的第一篇文獻」欄</li>
                         <li>或：暫時拿課程資料夾／同學手上的文獻當素材，課後補回 W5</li>
                     </ul>
                     <p className="text-[11px] text-[#991B1B] italic">
@@ -801,8 +790,8 @@ export const LiteratureReview = () => {
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
-                prevWeek={{ label: '回 W5 文獻搜尋入門', to: '/w5' }}
-                nextWeek={{ label: '前往 W7 研究診所', to: '/w7' }}
+                prevWeek={{ label: '回 W7 文獻搜尋入門', to: '/w7' }}
+                nextWeek={{ label: '前往 W9 計畫書', to: '/w9' }}
             flat
             />
         </div>

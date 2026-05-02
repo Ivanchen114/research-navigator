@@ -325,11 +325,13 @@ export const TeamFormation = () => {
 
     useEffect(() => {
         const saved = readRecords();
-        const topic = saved['w4-final-topic']?.trim();
-        const method = saved['w7-main-method']?.trim();
+        /* v2：W3 定案題目 → W4 帶入並儲存為 w4-my-topic；W4 選方法 → w4-main-method。
+         * 舊鍵 w4-final-topic / w7-main-method 已在 v2 廢棄，這裡讀新鍵；保留 fallback 容錯舊資料。 */
+        const topic = (saved['w4-my-topic'] || saved['w3-final-topic'] || saved['w4-final-topic'])?.trim();
+        const method = (saved['w4-main-method'] || saved['w7-main-method'])?.trim();
         const intent = saved['w2-final-intent']?.trim();
         if (intent) setW2Intent(intent);
-        /* 嘗試從 w7-main-method 或 w8-tool-method 推斷 method id */
+        /* 嘗試從 w4-main-method 或 w8-tool-method 推斷 method id */
         const rawMethod = (method || saved['w8-tool-method'] || saved['w8-my-method'] || '').toLowerCase();
         if (rawMethod.includes('問卷')) setDetectedMethodId('questionnaire');
         else if (rawMethod.includes('訪談')) setDetectedMethodId('interview');
@@ -1153,7 +1155,7 @@ export const TeamFormation = () => {
             />
             <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
-                    { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
+                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', status: 'past' },
                     { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
                     { wk: 'W7', name: '認識方法\n兩層判斷', status: 'past' },
                     { wk: 'W8', name: '組隊決策\n企劃定案', status: 'now' },

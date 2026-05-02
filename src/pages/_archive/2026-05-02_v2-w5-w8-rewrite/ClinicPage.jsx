@@ -994,7 +994,7 @@ export const ClinicPage = () => {
             />
             <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
-                    { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
+                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', status: 'past' },
                     { wk: 'W5', name: '文獻搜尋\n入門', status: 'past' },
                     { wk: 'W6', name: '文獻偵探\n引用寫作', status: 'past' },
                     { wk: 'W7', name: '認識方法\n兩層判斷', status: 'now' },

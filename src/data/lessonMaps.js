@@ -1,12 +1,12 @@
 export const baseCourseArc = [
-    { wk: 'W1-W2', name: '探索階段\nRED公約' },
-    { wk: 'W3-W4', name: '題目診斷\n博覽會' },
-    { wk: 'W5-W7', name: '規劃分流\n企劃定案' },
-    { wk: 'W8-W10', name: '工具設計\n倫理審查' },
-    { wk: 'W11-W12', name: '執行階段\n自主研究' },
-    { wk: 'W13', name: '數據轉譯\n圖表製作' },
-    { wk: 'W14', name: '研究結論\n四層整合' },
-    { wk: 'W15-W16', name: '成果簡報\n博覽發表' }
+    { wk: 'W1-W2', name: '探索階段\nRED 公約' },
+    { wk: 'W3-W4', name: '題目診斷\n方法地圖' },
+    { wk: 'W5-W6', name: '操作型定義\n海報博覽會' },
+    { wk: 'W7-W8', name: '文獻偵探\n引用寫作' },
+    { wk: 'W9-W11', name: '工具設計\n倫理審查' },
+    { wk: 'W12', name: '期中短報\n進度檢核' },
+    { wk: 'W13-W14', name: '數據轉譯\n結論寫作' },
+    { wk: 'W15-W17', name: '成果簡報\n博覽發表' }
 ];
 
 export const W3Data = {
@@ -33,7 +33,7 @@ export const W3Data = {
     periods: [
         {
             badge: "第一節",
-            title: "診斷・心法・人的練習",
+            title: "看病 + 練識別（Step 1-2）",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -43,123 +43,141 @@ export const W3Data = {
                     duration: "4 min",
                     colorClass: "c3",
                     icon: "🧱",
-                    title: "階段 0｜碰壁體驗：你真的做得到嗎？",
-                    desc: "不先講道理，直接投影兩個看似合理但其實做不動的題目，追問學生第一步要怎麼做，讓他們親身感受『題目生病』的卡住感。",
+                    title: "Step 1｜碰壁體驗",
+                    desc: "投影兩個看似合理但其實做不動的題目，追問學生第一步要怎麼做，讓他們親身感受『題目生病』的卡住感。",
                     tags: ["直接對決", "碰壁體驗"]
                 },
                 {
                     timeStart: "0:04",
-                    timeEnd: "0:09",
-                    duration: "5 min",
+                    timeEnd: "0:08",
+                    duration: "4 min",
                     colorClass: "c3",
                     icon: "🌉",
-                    title: "階段 1｜暖身：從 W2 走到 W3",
-                    desc: "回顧上週的探究意圖，說明 W2 產出的只是『原石』，今天要做的是題目健檢、急救與修正。",
-                    tags: ["回扣 W2", "課程定位"]
+                    title: "Step 2 暖身｜W2 → W3 銜接 + 8 病症介紹",
+                    desc: "回顧 W2 探究意圖（『原石』），介紹 8 種題目病症（A 抽象哲學／B 算命占卜／C 百科全書／D 個案／E 太私／F 玄學／G 無聊／H 無範圍）。",
+                    tags: ["回扣 W2", "病症觀念"]
                 },
                 {
-                    timeStart: "0:09",
-                    timeEnd: "0:21",
+                    timeStart: "0:08",
+                    timeEnd: "0:20",
                     duration: "12 min",
                     colorClass: "c1",
                     icon: "🏥",
-                    title: "階段 2a-b｜Part 1 題目健檢大作戰：小組會診",
+                    title: "Step 2 PART 1｜題目健檢大作戰：小組會診",
                     desc: "4–5 人一組，討論投影幕上的 8 個病題目，依據病例選單判斷各題生了什麼病，填入學習單 Part 1。",
                     tags: ["小組討論", "學習單 Part 1"]
                 },
                 {
-                    timeStart: "0:21",
-                    timeEnd: "0:29",
+                    timeStart: "0:20",
+                    timeEnd: "0:28",
                     duration: "8 min",
                     colorClass: "c1",
                     icon: "🩺",
-                    title: "階段 2c｜總醫師巡房：揭曉 8 題答案",
+                    title: "Step 2 揭曉｜總醫師巡房 8 題答案",
                     desc: "逐題揭曉診斷結果，重點說明『為什麼這題生病』，先建立病感，不急著教怎麼改。",
                     tags: ["老師解說", "建立病感"],
                     additionalNotes: "📌 題1→H　題2→A　題3→F　題4→D　題5→E　題6→C　題7→G　題8→B"
                 },
                 {
-                    timeStart: "0:29",
-                    timeEnd: "0:34",
-                    duration: "5 min",
-                    colorClass: "c2",
-                    icon: "💊",
-                    title: "階段 3｜萬用急救心法：大空遠難 → 小實近易",
-                    desc: "發放急救寶典，講解四大轉換。讓學生知道 8 種病不用死背，核心其實都回到四個轉換方向。",
-                    tags: ["核心心法", "急救寶典"]
-                },
-                {
-                    timeStart: "0:34",
-                    timeEnd: "0:44",
-                    duration: "10 min",
+                    timeStart: "0:28",
+                    timeEnd: "0:40",
+                    duration: "12 min",
                     colorClass: "c4",
                     icon: "💪",
-                    title: "階段 4｜Part 2 個人診斷練習（禁用 AI）",
-                    desc: "學生從 30 題爛題目中自行選 2 題，不准用 AI，先靠自己診斷、套用心法、寫出修正版題目。",
+                    title: "Step 2｜個人診斷練習（30 題選 2，禁用 AI）",
+                    desc: "學生從 30 題爛題目中自行選 2 題，不准用 AI，先靠自己診斷、寫出修正版題目。",
                     tags: ["個人練習", "學習單 Part 2", "🚫 禁用 AI"]
                 },
                 {
-                    timeStart: "0:44",
-                    timeEnd: "0:50",
-                    duration: "6 min",
+                    timeStart: "0:40",
+                    timeEnd: "0:48",
+                    duration: "8 min",
                     colorClass: "c5",
                     icon: "🧠",
-                    title: "階段 5｜Part 2 小組討論：黃卡／紅卡會診",
-                    desc: "每組從黃卡或紅卡中選 1 題，不准用 AI，一起診斷、一起急救，練習把個人判斷說出來並與組員協商。",
-                    tags: ["小組共作", "高階挑戰", "學習單 Part 2 第二表格"],
-                    keyPoint: "🎯 第一節收在『人的判斷力』，先練自己會看病，再進入第二節的人機協作。"
-                }
-            ]
-        },
-        {
-            badge: "第二節",
-            title: "AI 協作・規格化・最終定案",
-            duration: 50,
-            hasBreakAfter: false,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeEnd: "0:18",
-                    duration: "18 min",
-                    colorClass: "c2",
-                    icon: "🤖",
-                    title: "階段 6｜Part 3 AI 協作工作坊：先用別人的題目練兵",
-                    desc: "學生從剛才個人練習的題目中選 1 題，依照學習單流程操作：先自己診斷，再問 AI，接著比較差異、請 AI 提出三個版本，最後由自己做選擇。",
-                    tags: ["AI 協作", "學習單 Part 3", "人機協作"],
-                    additionalNotes: "Step 1 人先診斷 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 個方案 → Step 5 自己選並說明理由",
-                    keyPoint: "⚠️ 教學重點：不是『叫 AI 幫我改』，長度不是重點，重點是『我判斷 AI 給的哪個版本比較值得選』。"
-                },
-                {
-                    timeStart: "0:18",
-                    timeEnd: "0:30",
-                    duration: "12 min",
-                    colorClass: "c4",
-                    icon: "🔪",
-                    title: "階段 7｜Part 4 回到自己的題目：5W1H 規格化",
-                    desc: "回到自己 W2 的最終探究意圖，先不靠 AI，利用 5W1H 把題目切開，確認對象、場域、變項、方法與條件是否足夠清楚。",
-                    tags: ["學習單 Part 4", "5W1H", "規格化"],
-                    additionalNotes: "必備四格：Who／Where／What／How；若寫不出來，表示題目仍然不夠小、不夠實、不夠近、或不夠易。"
-                },
-                {
-                    timeStart: "0:30",
-                    timeEnd: "0:48",
-                    duration: "18 min",
-                    colorClass: "c1",
-                    icon: "✨",
-                    title: "階段 8｜Part 5 AI 協作自己的題目：從初稿磨到定案",
-                    desc: "先根據 Part 4 自己寫出專屬初稿，再請 AI 進行診斷、提供三個修改方向、在做優化。學生最後必須自己選出最終定案版本，並完成 AI-RED 記錄。",
-                    tags: ["學習單 Part 5", "最終定案", "AI-RED"],
-                    additionalNotes: "Step 1 自寫初稿 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 方案 → Step 5 自己選 → Step 6 問 AI 優化 → Step 7 最終定案 + AI-RED",
-                    keyPoint: "🎯 最重要的不是 AI 生出幾句漂亮話，而是學生能不能說出：『我為什麼選這個版本，因為它做得到。』"
+                    title: "Step 2 小組｜黃卡／紅卡會診",
+                    desc: "每組從黃卡或紅卡中選 1 題，不准用 AI，一起診斷、把個人判斷說出來並與組員協商。",
+                    tags: ["小組共作", "高階挑戰", "學習單 Part 2 第二表格"]
                 },
                 {
                     timeStart: "0:48",
                     timeEnd: "0:50",
                     duration: "2 min",
                     colorClass: "c3",
+                    icon: "💭",
+                    title: "Step 2 末｜disease-quiz 反思",
+                    desc: "ThinkRecord：選一個你覺得最難判斷的病症，說說為什麼難。",
+                    tags: ["反思", "ThinkRecord"],
+                    keyPoint: "🎯 第一節收在『識別』——先練自己會看病，第二節才教怎麼下刀。"
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "下刀工坊 + 自己題目（Step 3-6）",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00",
+                    timeEnd: "0:05",
+                    duration: "5 min",
+                    colorClass: "c2",
+                    icon: "💊",
+                    title: "Step 3｜萬用急救心法 + 暱稱對映卡",
+                    desc: "4 把刀（範圍縮小／抽象具體化／對象可及化／方法可行化）+ 8 病對應心法 + 遊戲暱稱對映（縮小藥丸／具體疫苗／任意門探測儀／降維手術刀）。",
+                    tags: ["核心心法", "4 把刀", "暱稱對映"]
+                },
+                {
+                    timeStart: "0:05",
+                    timeEnd: "0:13",
+                    duration: "8 min",
+                    colorClass: "c2",
+                    icon: "📖",
+                    title: "Step 3｜4 把刀心路歷程展開卡",
+                    desc: "看 4 個爛題目範例（追星文化／快樂感／2030 職業／課堂專注度），對應 4 把刀。每張卡先自己想 30 秒、再點開看老練研究者的心路獨白。",
+                    tags: ["互動展開", "心路歷程", "看示範"]
+                },
+                {
+                    timeStart: "0:13",
+                    timeEnd: "0:20",
+                    duration: "7 min",
+                    colorClass: "c4",
+                    icon: "✏️",
+                    title: "Step 3｜練手題（自己對社群媒體題下刀）",
+                    desc: "固定爛題目「探討高中生使用社群媒體的影響」——選一把主刀、寫自己的改寫版（≥15 字）、寫完才解鎖示範對照。",
+                    tags: ["練手", "下刀實作", "productive struggle"]
+                },
+                {
+                    timeStart: "0:20",
+                    timeEnd: "0:32",
+                    duration: "12 min",
+                    colorClass: "c4",
+                    icon: "🔪",
+                    title: "Step 4｜對自己題目下刀（Part 4）",
+                    desc: "回到自己 W2 探究意圖：自診（病症 + 心法）→ 5W1H 規格化（Who/Where/What/How/When）→ 修正版題目。",
+                    tags: ["自己題目", "5W1H", "Part 4"],
+                    additionalNotes: "必備四格：Who／Where／What／How；若寫不出來，表示題目仍然不夠小、不夠實、不夠近、或不夠易。"
+                },
+                {
+                    timeStart: "0:32",
+                    timeEnd: "0:45",
+                    duration: "13 min",
+                    colorClass: "c1",
+                    icon: "✨",
+                    title: "Step 5｜AI 共診定案（Part 5 AI 7 步）",
+                    desc: "先根據 Part 4 自己寫出專屬初稿 → 請 AI 診斷 → 比對差異 → AI 提供 3 方案 → 自己選 → AI 優化 → 最終定案 + AIRED。",
+                    tags: ["AI 7 步", "最終定案", "AIRED"],
+                    additionalNotes: "Step 1 自寫初稿 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 方案 → Step 5 自己選 → Step 6 問 AI 優化 → Step 7 最終定案 + AIRED",
+                    keyPoint: "🎯 最重要的不是 AI 生出幾句漂亮話，而是學生能不能說出：『我為什麼選這個版本，因為它做得到。』"
+                },
+                {
+                    timeStart: "0:45",
+                    timeEnd: "0:50",
+                    duration: "5 min",
+                    colorClass: "c3",
                     icon: "🏁",
-                    title: "階段 9｜總結：急救出院標準確認",
-                    desc: "總結今天從碰壁、診斷、急救、協作，到題目定案的流程。確認學生手上的 W3 題目已能帶往 W4 題目博覽會。",
+                    title: "Step 6｜回顧繳交 + 出院標準確認",
+                    desc: "總結今天從碰壁→識別→下刀→自己題目→AI 共診的流程。確認學生手上的 W3 題目已能帶往 W4。",
                     tags: ["總結收束", "W4 預告"],
                     additionalNotes: "出院標準：5W1H 至少能填 4 格、符合小實近易至少 2 項、兩週內能蒐集到資料。"
                 }
@@ -185,7 +203,7 @@ export const W3Data = {
         {
             icon: "🎯",
             label: "最終產出",
-            text: "W3 最終定案題目<br><small style=\"font-size:11px;color:#ccc;\">帶去 W4 題目博覽會</small>"
+            text: "W3 最終定案題目<br><small style=\"font-size:11px;color:#ccc;\">帶去 W4 方法地圖</small>"
         }
     ],
     legends: [
@@ -362,75 +380,65 @@ export const W2Data = {
         {
             prefix: "①",
             title: "四段式思考框架",
-            subtitle: "現象 → 落差 → 核心疑問 → 探究意圖",
-            desc: "不再問空泛的「為什麼」",
+            subtitle: "觀察 → 落差 → 展開假設 → 鎖定研究問題",
+            desc: "不再問空泛的「為什麼」，逼自己先發散再收斂",
             colorConfig: "r"
         },
         {
             prefix: "②",
             title: "ABC 探究句型",
-            subtitle: "影響型 / 比較型 / 原因型",
-            desc: "把白話文變成學術研究",
+            subtitle: "影響型 / 比較型 / 深究型",
+            desc: "把選定的假設翻譯成研究問題",
             colorConfig: "b"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "四段式思考 ＆ 發現落差",
+            title: "四段式思考 ＆ 發散假設",
             duration: 50,
             hasBreakAfter: true,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:08",
-                    duration: "8 min",
+                    timeEnd: "0:05",
+                    duration: "5 min",
                     colorClass: "c3",
                     icon: "🌉",
-                    title: "一、 暖身概念",
-                    desc: "回扣 W1 的現象紀錄，點出「問為什麼」是爛問題，導入把好奇心變成好問題的需求。",
+                    title: "一、 暖身概念（Step 1 觀念建立 · 前段）",
+                    desc: "回扣 W1 生活觀察種子，點出「問為什麼」是爛問題，導入把好奇心變成好問題的需求。",
                     tags: ["舊證連結", "點出盲點"]
                 },
                 {
-                    timeStart: "0:08",
-                    timeEnd: "0:23",
+                    timeStart: "0:05",
+                    timeEnd: "0:20",
                     duration: "15 min",
                     colorClass: "c1",
                     icon: "🧠",
-                    title: "二、 四段式思考框架與示範",
-                    desc: "講解現象、落差、核心疑問、探究意圖。以圖書館現象示範拆解過程。",
+                    title: "二、 四段式思考框架與示範（Step 1 觀念建立 · 後段）",
+                    desc: "講解觀察、落差、展開假設、鎖定研究問題。以圖書館現象示範完整拆解。",
                     tags: ["概念講解", "教師示範"],
-                    keyPoint: "⚠️ 步驟 3（核心疑問）就是真實的好奇心，用白話文說出來即可。"
+                    keyPoint: "⚠️ 步驟 3（展開假設）必須列 3-5 個，不能只想一個就鎖死——研究的起點是承認「答案可能不只一個」。"
                 },
                 {
-                    timeStart: "0:23",
-                    timeEnd: "0:30",
-                    duration: "7 min",
+                    timeStart: "0:20",
+                    timeEnd: "0:35",
+                    duration: "15 min",
                     colorClass: "c4",
                     icon: "🖼️",
-                    title: "三、 圖片轉化戰（先練手感）",
-                    desc: "看兩組圖片（例如熱食部 vs 福利社），快速練習寫出現象、落差、和核心疑問。",
-                    tags: ["情境練習", "快速實作"]
+                    title: "三、 圖片轉化戰（Step 2 暖身練習）",
+                    desc: "看合成圖兩個場景（垃圾爆滿 / 課堂失序），用 Tab 切換各做一輪「現象 → 落差 → 展開假設」。",
+                    tags: ["情境練習", "快速實作", "🚫 禁用 AI"]
                 },
                 {
-                    timeStart: "0:30",
-                    timeEnd: "0:45",
+                    timeStart: "0:35",
+                    timeEnd: "0:50",
                     duration: "15 min",
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "四、 練習 0：改寫你的觀察",
-                    desc: "拿出自己的 W1 原石現象，用前三步驟改寫。(禁止使用 AI)",
+                    title: "四、 改寫你的 W1 觀察（Step 3 人腦練習）",
+                    desc: "拿 W1 自己的生活觀察種子，用四段框架的前三步重寫。這是後面所有 step 的起點。",
                     tags: ["個人創作", "聚焦核心", "🚫 禁用 AI"]
-                },
-                {
-                    timeStart: "0:45",
-                    timeEnd: "0:50",
-                    duration: "5 min",
-                    colorClass: "c5",
-                    icon: "🤖",
-                    title: "五、 AI 協作示範：落差擴充器",
-                    desc: "老師示範如何把現象餵給 AI，讓 AI 幫忙從不同角度找出自己沒注意到的「矛盾點」。",
-                    tags: ["AI 應用示範"]
                 }
             ]
         },
@@ -444,32 +452,23 @@ export const W2Data = {
                     timeStart: "0:00",
                     timeEnd: "0:10",
                     duration: "10 min",
-                    colorClass: "c5",
-                    icon: "🤖",
-                    title: "六、 AI 協作 1：實作落差擴充器",
-                    desc: "學生自己操作 Prompt 讓 AI 給 5 個矛盾點，並判斷選出最真實、最感興趣的。(學習單 Part 2.5)",
-                    tags: ["AI 實作", "人類判斷"],
-                    keyPoint: "🎯 AI 是放大鏡，但我是眼睛！ AI 給選項，人做選擇。"
+                    colorClass: "c1",
+                    icon: "🧩",
+                    title: "五、 ABC 探究句型 + 拍 1 自選假設（Step 4 AI 協作 · 前段）",
+                    desc: "介紹影響型 (A)、比較型 (B)、深究型 (C)。學生從上一段的 3-5 個假設挑一個、寫選它的理由、判斷 ABC 型。全程禁用 AI。",
+                    tags: ["概念講解", "人腦先行", "🚫 拍 1 禁 AI"],
+                    keyPoint: "🎯 「挑哪個假設」「定哪一型」是研究設計決定，必須由你做。"
                 },
                 {
                     timeStart: "0:10",
-                    timeEnd: "0:20",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "🧩",
-                    title: "七、 介紹 ABC 探究句型",
-                    desc: "介紹影響型(A)、比較型(B)、深究型(C)。讓學生用自己的「核心疑問」去選擇對應的入口方向。(學習單 Part 3 Step 0)",
-                    tags: ["概念講解", "方向定位"]
-                },
-                {
-                    timeStart: "0:20",
                     timeEnd: "0:35",
-                    duration: "15 min",
-                    colorClass: "c2",
+                    duration: "25 min",
+                    colorClass: "c5",
                     icon: "✨",
-                    title: "八、 AI 協作 2：探究意圖生成器",
-                    desc: "將白話文餵給 AI 翻譯成 A/B/C 三種學術方向。學生自行挑選一種作為最終意圖，並記錄 AI-RED。",
-                    tags: ["AI 實作", "最終產出", "AI-RED 紀錄"]
+                    title: "六、 探究意圖生成器（Step 4 AI 協作 · 三拍）",
+                    desc: "拍 2：學生餵 Prompt 給 AI，請 AI 把選定假設翻譯成 A/B/C 三種句型。拍 3：學生比對自判 vs AI 建議，選一個真正打動的。",
+                    tags: ["AI 實作", "三拍流程", "AI-RED 紀錄"],
+                    keyPoint: "🔍 AI 是放大鏡，你才是眼睛——AI 給選項，人做最終裁奪。"
                 },
                 {
                     timeStart: "0:35",
@@ -477,9 +476,9 @@ export const W2Data = {
                     duration: "15 min",
                     colorClass: "c3",
                     icon: "🏆",
-                    title: "九、 總結與預告",
-                    desc: "複習人與 AI 各自擅長的事。預告 W3 的「題目健檢」。",
-                    tags: ["總結收斂", "下週預告"]
+                    title: "七、 探究意圖定案 + 反思 + 繳交（Step 5 + Step 6）",
+                    desc: "寫最終探究意圖完整句（帶去 W3 的版本）→ 反思卡在四段哪一段 → 一鍵匯出貼到 Google Classroom。預告 W3 題目健檢。",
+                    tags: ["最終產出", "反思", "繳交"]
                 }
             ]
         }
@@ -487,18 +486,18 @@ export const W2Data = {
     summaries: [
         {
             icon: "📝",
-            label: "練習產出",
-            text: "四段式思考草稿<br><small style=\"font-size:11px;color:#888;\">白話文核心疑問</small>"
+            label: "暖身 + 主練習產出",
+            text: "圖片 ① 垃圾 / ② 課堂 暖身×6 格<br>+ W1 觀察主練習 ×3 格<br><small style=\"font-size:11px;color:#888;\">用四段框架走完前三步</small>"
         },
         {
             icon: "🤖",
-            label: "協作紀錄",
-            text: "AI-RED 記錄表<br><small style=\"font-size:11px;color:#888;\">落差補充 / 句型生成</small>"
+            label: "AI 協作紀錄",
+            text: "AI-RED 敘事紀錄<br><small style=\"font-size:11px;color:#888;\">本週唯一 AI 工具：探究意圖生成器</small>"
         },
         {
             icon: "🎯",
             label: "最終產出",
-            text: "W2 最終探究意圖<br><small style=\"font-size:11px;color:#ccc;\">帶到 W3 作為病人</small>"
+            text: "W2 最終探究意圖<br><small style=\"font-size:11px;color:#ccc;\">帶到 W3 作為「病人」做題目健檢</small>"
         }
     ],
     legends: [
@@ -512,14 +511,14 @@ export const W2Data = {
 
 export const W4Data = {
     id: "W4",
-    title: "題目博覽會與研究動機定案",
+    title: "方法地圖：認識方法 + 兩層判斷",
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
-        { label: '第一節', value: '研究動機整理 + 海報製作' },
-        { label: '第二節', value: 'Gallery Walk + 題目最終定案' },
-        { label: '課後產出', value: 'W4 最終定案題目 + 研究動機' },
-        { label: '帶去 W5', value: '定案題目與研究動機' }
+        { label: '第一節', value: '五種方法 → 互動決策樹 → 10 題測驗' },
+        { label: '第二節', value: '為自己題目選路 + 反思 + 繳交' },
+        { label: '課堂產出', value: '主要方法 + 選擇理由（+ 輔助方法）' },
+        { label: '帶去 W5', value: '主要方法選擇（W5 操作型定義要用）' }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
         ...item,
@@ -529,83 +528,30 @@ export const W4Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "研究動機",
-            subtitle: "說得出來才算真的懂",
-            desc: "把三週的好奇心整理成一段說得出口的話",
+            title: "兩層判斷",
+            subtitle: "L1 自蒐／文獻 → L2 三題分流",
+            desc: "用互動決策樹幫題目挑出主方法",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "先人後 AI",
-            subtitle: "自己先寫，再讓 AI 審核",
-            desc: "動機整理與標題優化的核心原則",
-            colorConfig: "g"
+            title: "10 題驗收",
+            subtitle: "分科判斷測驗",
+            desc: "把兩層判斷套到別人題目上，立即看懂錯在哪",
+            colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "同儕驗證",
-            subtitle: "Gallery Walk 走讀驗收",
-            desc: "透過報告與聆聽確認題目可行性",
+            title: "為自己題目選路",
+            subtitle: "為 W3 定案題目選方法",
+            desc: "寫出方法 + 引用兩層判斷哪一條 + 是否需要輔助",
             colorConfig: "c"
         }
     ],
-    galleryWalkRounds: [
-        { n: '第 1 場', time: '00:03–00:08', who: 'A 坐鎮', d: 'A 回到自己的桌子報告，B、C、D 順時針移到下一組聆聽', r: 'present' },
-        { n: '第 2 場', time: '00:08–00:13', who: 'B 坐鎮', d: 'B 回來坐鎮報告，C、D 繼續移，A 也追過去', r: 'present' },
-        { n: '第 3 場', time: '00:13–00:18', who: 'C 坐鎮', d: 'C 回來坐鎮報告，D 繼續移，A、B 也追過去', r: 'present' },
-        { n: '第 4 場', time: '00:18–00:23', who: 'D 坐鎮', d: 'D 回來坐鎮報告，A、B、C 繼續往下走', r: 'present' }
-    ],
-    commentRules: [
-        { type: 'positive', label: '粉紅色：我認可的地方', desc: '動機有畫面、標題吸引人、題目本身有社會意義——說具體是哪裡打動你。' },
-        { type: 'suggestion', label: '黃色：具體建議 / 點子', desc: '「研究對象可以縮小」、「動機這句話可以再補一個畫面」、「標題建議改為...」。' },
-        { type: 'question', label: '藍色：我想問的問題', desc: '「你為什麼會想做這個？」、「你的專注度要怎麼測量？」——讓報告者感受到哪裡還說不清楚。' }
-    ],
-    tasks: [
-        {
-            badge: 'PART 0',
-            title: '研究動機整理（先人後 AI）',
-            steps: [
-                'Step 0：翻出 W3 定案題目，自己回答三個問題（限時 3 分鐘，不准開 AI）',
-                'Step 1：根據三個問題，用白話文寫出研究動機 3–5 句（限時 5 分鐘，不准開 AI）',
-                'Step 2：打開「研究動機教練」，把定案題目和白話版動機一起貼給它，收到回饋後自己決定要不要修改',
-                '確認：把定案版動機填進靶心框，唸給旁邊同學聽，30 秒內能理解就完成'
-            ],
-            note: '⚠️ 順序不能顛倒：先自己寫，再開 AI。'
-        },
-        {
-            badge: 'PART 1',
-            title: '海報製作（先人後 AI）',
-            steps: [
-                'Step 0：自己先想一個口語標題（3 分鐘，不用完美）',
-                'Step 2：把標題草稿和正式題目貼給 AI 優化，選一個版本或自己改',
-                'Step 3：在 A4 紙上手寫四格海報（標題 / 副標 / 研究動機 / 製作人）'
-            ],
-            note: '💡 研究動機那格：把靶心框裡的定案版本直接抄過去。'
-        },
-        {
-            badge: 'PART 2',
-            title: '題目最終定案',
-            steps: [
-                '看海報上同學給的建議，決定要不要採納',
-                '在學習單 Part 2 填入 W4 最終題目與研究動機',
-                '舉手確認：「我的題目和研究動機都定案了」'
-            ],
-            note: '🏆 從 W1 到 W4，你完成了問題形成的完整旅程。這個題目和動機是真正屬於你的。',
-            noteColor: 'success'
-        }
-    ],
-    homework: {
-        deadline: '下次上課前',
-        items: [
-            { p: '學習單', n: 'W4 學習單（Part 0–Part Z 全部完成）上傳 Google Classroom' },
-            { p: '定案確認', n: 'W4 最終研究題目與研究動機（已填入 Part 2 定案框）' }
-        ],
-        footer: '學習單在 Google Classroom 下載'
-    },
     periods: [
         {
             badge: "第一節",
-            title: "研究動機整理與海報製作",
+            title: "認識 5 種方法 → 互動決策樹 → 10 題驗收",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -614,114 +560,460 @@ export const W4Data = {
                     timeEnd: "0:05",
                     duration: "5 min",
                     colorClass: "c3",
-                    icon: "🔁",
-                    title: "一、 回扣與定位",
-                    desc: "回顧 W3 定案題目，引導學生感受「說不出動機」的問題。",
-                    tags: ["回扣", "問題意識"]
+                    icon: "🩺",
+                    title: "一、 開場 — 為什麼是這週",
+                    desc: "W3 你決定了題目——但「題目」不會自動變成「資料」。這週做一個決定：你的題目要用哪一種方法去收／去問／去看？",
+                    tags: ["連貫鏈", "目標建立"]
                 },
                 {
                     timeStart: "0:05",
-                    timeEnd: "0:35",
-                    duration: "30 min",
+                    timeEnd: "0:13",
+                    duration: "8 min",
                     colorClass: "c1",
-                    icon: "💡",
-                    title: "二、 Part 0：研究動機整理",
-                    desc: "三步走：自己回答三問題（3 min）→ 自己寫白話版（5 min）→ 研究動機教練審核（14 min）→ 確認定案（5 min）",
-                    tags: ["先人後 AI", "動機整理", "Gemini Gem"],
-                    keyPoint: "⚠️ 先自己寫，再開 AI。順序不能顛倒。"
+                    icon: "📋",
+                    title: "二、 Step 1A 五種方法卡牌導覽",
+                    desc: "問卷／訪談／實驗／觀察／文獻——各自的目的、強項、弱點、適用情境。先給「量化 vs 質性」兩條根的概念。",
+                    tags: ["概念講解", "標準建立"]
+                },
+                {
+                    timeStart: "0:13",
+                    timeEnd: "0:23",
+                    duration: "10 min",
+                    colorClass: "c1",
+                    icon: "🌳",
+                    title: "三、 Step 1B 互動決策樹（兩層判斷）",
+                    desc: "L1 點選「自蒐 vs 文獻」→ L2 三題獨立分流：❶ 比例還是原因 ❷ 能否操控 ❸ 真實行為／自然現象 vs 想法態度。含自然科學分流卡 + ThinkChoice 暖身。",
+                    tags: ["互動操作", "判斷推理"],
+                    keyPoint: "⚠️ L2 三題不必都答，挑最貼近題目的那條。"
+                },
+                {
+                    timeStart: "0:23",
+                    timeEnd: "0:35",
+                    duration: "12 min",
+                    colorClass: "c4",
+                    icon: "🎯",
+                    title: "四、 Step 2 分科判斷 10 題測驗",
+                    desc: "個別作答，自動跳題，現場驗收兩層判斷的理解。錯題會在 Step 4 反思時用到。",
+                    tags: ["個人測驗", "即時驗收"]
                 },
                 {
                     timeStart: "0:35",
                     timeEnd: "0:50",
                     duration: "15 min",
-                    colorClass: "c2",
-                    icon: "🎨",
-                    title: "三、 Part 1：海報製作",
-                    desc: "草稿標題（3 min）→ AI 優化標題（5 min）→ 手寫 A4 海報四格（5 min）",
-                    tags: ["海報製作", "先人後 AI"]
+                    colorClass: "c4",
+                    icon: "💬",
+                    title: "五、 測驗講評 + 易混淆方法澄清",
+                    desc: "挑 3 題易錯題現場講解（特別是訪談 vs 問卷、實驗 vs 觀察、文獻三用途）；老師補充自然科學題的觀察+實驗組合。",
+                    tags: ["教師講評", "概念澄清"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "Gallery Walk 與題目最終定案",
+            title: "為自己題目選路 → 反思 → 繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:03",
-                    duration: "3 min",
+                    timeEnd: "0:05",
+                    duration: "5 min",
                     colorClass: "c3",
-                    icon: "📋",
-                    title: "一、 Gallery Walk 規則說明",
-                    desc: "說明四輪走讀規則（ABCD 輪流坐鎮、順時針移動），分配場次。",
-                    tags: ["同儕互評", "規則說明"]
+                    icon: "📎",
+                    title: "六、 Step 3 開場 + 帶入 W3 題目",
+                    desc: "讀入 W3 定案題目（自動帶入卡）。重申：剛才是練習別人題目，現在是真槍實彈。",
+                    tags: ["連貫鏈", "目標聚焦"]
                 },
                 {
-                    timeStart: "0:03",
-                    timeEnd: "0:23",
-                    duration: "20 min",
-                    colorClass: "c1",
-                    icon: "🗣️",
-                    title: "二、 四輪走讀",
-                    desc: "每場 5 分鐘，報告者說研究動機與題目，聆聽者在海報上留下建議。",
-                    tags: ["走讀", "發表練習"],
-                    keyPoint: "⚠️ 重點：說出「你為什麼要研究這個」。"
-                },
-                {
-                    timeStart: "0:23",
-                    timeEnd: "0:33",
-                    duration: "10 min",
-                    colorClass: "c4",
-                    icon: "💬",
-                    title: "三、 回座位 + 教師點評",
-                    desc: "挑 2–3 個海報點評研究動機品質，示範「有畫面的動機」vs「只說結論的動機」。",
-                    tags: ["教師示範", "動機品質"]
-                },
-                {
-                    timeStart: "0:33",
-                    timeEnd: "0:48",
+                    timeStart: "0:05",
+                    timeEnd: "0:20",
                     duration: "15 min",
                     colorClass: "c2",
-                    icon: "🎯",
-                    title: "四、 Part 2：題目最終定案",
-                    desc: "根據同學建議，決定修改或保留，填入 W4 最終定案框。",
-                    tags: ["最終定案", "批判思考"]
+                    icon: "🩺",
+                    title: "七、 Step 3 為題目選路 — 兩層判斷 + 方法 + 理由",
+                    desc: "ThinkRecord 連寫 5 格：L1 判斷／L2 判斷／主要方法／選擇理由（必引用兩層判斷某條）／輔助方法（如需）。",
+                    tags: ["個人應用", "理由表態"]
                 },
                 {
-                    timeStart: "0:48",
-                    timeEnd: "0:50",
-                    duration: "2 min",
+                    timeStart: "0:20",
+                    timeEnd: "0:25",
+                    duration: "5 min",
                     colorClass: "c5",
-                    icon: "📢",
-                    title: "五、 總結與預告",
-                    desc: "W1→W4 旅程總結，預告 W5 文獻搜尋入門。",
-                    tags: ["總結", "預告"]
+                    icon: "🗣️",
+                    title: "八、 Step 3 同儕挑戰",
+                    desc: "兩人一組互念：「我用 ___ 法因為 ___」。對方挑戰：「真的要的是比例還是原因？」「資料是自己收還是分析別人寫的？」",
+                    tags: ["同儕對話", "口頭驗證"]
+                },
+                {
+                    timeStart: "0:25",
+                    timeEnd: "0:38",
+                    duration: "13 min",
+                    colorClass: "c5",
+                    icon: "💭",
+                    title: "九、 Step 4 反思 4 題",
+                    desc: "兩題核心反思：最易搞混的方法（含 L2 對齊）、文獻回顧 vs 文獻分析法——後設認知收束。",
+                    tags: ["後設認知", "整理收束"]
+                },
+                {
+                    timeStart: "0:38",
+                    timeEnd: "0:50",
+                    duration: "12 min",
+                    colorClass: "c3",
+                    icon: "🏁",
+                    title: "十、 Step 5 回顧繳交 + W5 預告",
+                    desc: "AI-RED 敘事紀錄（optional）→ ExportButton 匯出 → 上傳 Google Classroom。預告 W5 操作型定義：把方法接到「可實際蒐集」的指標。",
+                    tags: ["成果繳交", "下週預告"]
                 }
             ]
         }
     ],
-    legendColors: [
-        { colorClass: "lm-c1", label: "主要活動" },
-        { colorClass: "lm-c2", label: "AI 輔助實作" },
-        { colorClass: "lm-c3", label: "開場 / 說明" },
-        { colorClass: "lm-c4", label: "評量 / 點評" },
-        { colorClass: "lm-c5", label: "總結 / 預告" }
+    summaries: [
+        {
+            icon: "🌳",
+            label: "課堂產出",
+            text: "主要方法 + 選擇理由<br><small style=\"font-size:11px;color:#888;\">（+ 輔助方法如需要）</small>"
+        },
+        {
+            icon: "🎯",
+            label: "技能驗收",
+            text: "10 題分科判斷測驗<br><small style=\"font-size:11px;color:#888;\">兩層判斷理解</small>"
+        },
+        {
+            icon: "🌉",
+            label: "兌現點",
+            text: "W3 題目 → W4 方法 → W5 操作型定義<br><small style=\"font-size:11px;color:#ccc;\">題目→測量的橋</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 示範" },
+        { colorClass: "lm-c4", label: "快速演練 / 測驗" },
+        { colorClass: "lm-c2", label: "個人寫作 / 應用" },
+        { colorClass: "lm-c5", label: "同儕交流 / 反思" },
+        { colorClass: "lm-c3", label: "開場 / 總結" }
     ]
 };
 
 
 export const W5Data = {
     id: "W5",
-    title: "文獻偵探的入門訓練",
+    title: "操作型定義：把好奇變可測",
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
-        { label: '第一節', value: '檔案室的純手工調查' },
-        { label: '第二節', value: '證物鑑識與 APA 格式' },
-        { label: '小組任務', value: '證物 A–E 鑑識與查核' },
-        { label: '最終產出', value: '1 篇真實證物文獻' }
+        { label: '第一節', value: '概念建立 + 5 法策略分流' },
+        { label: '第二節', value: '為自己題目寫 + 同儕挑戰 + 反思' },
+        { label: '課堂產出', value: '核心概念 + 操作型定義 + 正反例（三格）' },
+        { label: '帶去 W6', value: '操作型定義（海報必填內容）' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 2,
+        now: idx === 2
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "操作型定義",
+            subtitle: "把抽象變可測",
+            desc: "「壓力／動機／效果」這類抽象概念變成「誰來測都得到一樣的數字／類別」",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "5 法策略",
+            subtitle: "對齊 W4 主方法",
+            desc: "問卷／訪談／實驗／觀察／文獻分析各自的操作化公式不同",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "三件事",
+            subtitle: "可測量／正反例／一致",
+            desc: "操作型定義要做到的 3 個檢核點，缺一都會出問題",
+            colorConfig: "c"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "概念建立 → 5 法策略分流",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00", timeEnd: "0:05", duration: "5 min",
+                    colorClass: "c3", icon: "📎",
+                    title: "一、 開場 + 連貫鏈定位",
+                    desc: "W3 題目 / W4 方法 / 這週把好奇變可測——三件齊了，這週是把方法接到「可實際蒐集」的橋。",
+                    tags: ["連貫鏈", "目標建立"]
+                },
+                {
+                    timeStart: "0:05", timeEnd: "0:15", duration: "10 min",
+                    colorClass: "c1", icon: "📐",
+                    title: "二、 操作型定義是什麼 + 「壓力」三方法對照範例",
+                    desc: "概念講解：把抽象變成可測。展示「高中生壓力」用問卷／訪談／觀察各自的操作型定義。",
+                    tags: ["概念講解", "範例對照"]
+                },
+                {
+                    timeStart: "0:15", timeEnd: "0:25", duration: "10 min",
+                    colorClass: "c1", icon: "⚠️",
+                    title: "三、 三件事檢核（三大卡）+ 對錯例討論",
+                    desc: "可測量／有正反例／前後一致——三大卡並列，每張對／錯例配對，挑 1-2 張現場討論。",
+                    tags: ["關鍵原則", "對錯例"],
+                    keyPoint: "⚠️ 三件事缺一都會讓研究數據打架，這是後面寫工具的地基。"
+                },
+                {
+                    timeStart: "0:25", timeEnd: "0:45", duration: "20 min",
+                    colorClass: "c4", icon: "🧰",
+                    title: "四、 5 法操作型定義策略——學生分流自學",
+                    desc: "5 法 tabs：學生點開自己 W4 主方法那張深讀（公式 + 描述 + 範例），再看 1 張輔助方法（如有）。文獻分析學生看 4 子類型範例。",
+                    tags: ["互動 tabs", "個別分流"]
+                },
+                {
+                    timeStart: "0:45", timeEnd: "0:50", duration: "5 min",
+                    colorClass: "c5", icon: "🔁",
+                    title: "五、 換場 + 第二節預告",
+                    desc: "「下半節你的題目要動手了」——預告 Step 4 三格寫作。",
+                    tags: ["換場", "預告"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "個人實作 → 同儕挑戰 → 反思繳交",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00", timeEnd: "0:05", duration: "5 min",
+                    colorClass: "c3", icon: "🎯",
+                    title: "六、 暖機 + 帶入卡再次調出",
+                    desc: "讀一遍 W4 帶入的「題目 + 主方法」，確認三格要寫什麼。",
+                    tags: ["連貫鏈", "目標聚焦"]
+                },
+                {
+                    timeStart: "0:05", timeEnd: "0:25", duration: "20 min",
+                    colorClass: "c2", icon: "✍️",
+                    title: "七、 寫三格——核心概念 + 操作型定義 + 正反例",
+                    desc: "ThinkRecord 連寫三格。placeholder/scaffold 會根據 W4 方法動態切換對應範例。",
+                    tags: ["個人實作", "兌現點"],
+                    keyPoint: "⚠️ 寫一次、用三次：W7-W8 計畫書、W9 工具設計都會用到。"
+                },
+                {
+                    timeStart: "0:25", timeEnd: "0:32", duration: "7 min",
+                    colorClass: "c5", icon: "🗣️",
+                    title: "八、 同儕挑戰——正反例分得開嗎",
+                    desc: "兩兩交換唸自己的核心概念 + 操作型定義。對方用「正反例分得開嗎？」挑戰。分不開就回頭修。",
+                    tags: ["同儕對話", "口頭驗證"]
+                },
+                {
+                    timeStart: "0:32", timeEnd: "0:40", duration: "8 min",
+                    colorClass: "c5", icon: "💭",
+                    title: "九、 反思——模糊→可測最難的轉化",
+                    desc: "1 題反思：把抽象變可測，最難的是什麼？怎麼克服？（後設認知收束）",
+                    tags: ["後設認知", "反思"]
+                },
+                {
+                    timeStart: "0:40", timeEnd: "0:48", duration: "8 min",
+                    colorClass: "c5", icon: "🤖",
+                    title: "十、 AIRED（optional）+ 檢核清單走讀",
+                    desc: "AI-RED 敘事紀錄（操作型定義可能用 AI 發散候選版本）+ 本週檢核清單 4 項打勾。",
+                    tags: ["AIRED", "檢核"]
+                },
+                {
+                    timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
+                    colorClass: "c3", icon: "🏁",
+                    title: "十一、 ExportButton 匯出 + W6 預告",
+                    desc: "一鍵複製本週紀錄貼 Google Classroom。預告 W6 海報博覽會 + 組隊（操作型定義是海報必填內容）。",
+                    tags: ["成果繳交", "下週預告"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "📐",
+            label: "課堂產出",
+            text: "核心概念 + 操作型定義 + 正反例<br><small style=\"font-size:11px;color:#888;\">三格寫一次、用三次（W7-W8/W9）</small>"
+        },
+        {
+            icon: "🧰",
+            label: "技能驗收",
+            text: "為自己題目寫操作型定義<br><small style=\"font-size:11px;color:#888;\">同儕挑戰：正反例分得開嗎</small>"
+        },
+        {
+            icon: "🌉",
+            label: "兌現點",
+            text: "W4 方法 → W5 可測指標 → W6 海報<br><small style=\"font-size:11px;color:#ccc;\">把好奇變可實際蒐集</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 示範" },
+        { colorClass: "lm-c4", label: "互動操作 / 分流" },
+        { colorClass: "lm-c2", label: "個人寫作 / 應用" },
+        { colorClass: "lm-c5", label: "同儕交流 / 反思" },
+        { colorClass: "lm-c3", label: "開場 / 總結" }
+    ]
+};
+
+export const W6Data = {
+    id: "W6",
+    title: "海報博覽會 + 組隊（含 Solo）",
+    duration: 100,
+    durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '海報製作 + Gallery Walk 走讀' },
+        { label: '第二節', value: '找合題夥伴 + 路線決定 + 反思' },
+        { label: '課堂產出', value: 'A4 海報 + 走讀回饋 + 路線（Team / Solo）' },
+        { label: '帶去 W7', value: '題目／方法／路線——文獻搜尋的起點' }
+    ],
+    courseArc: baseCourseArc.map((item, idx) => ({
+        ...item,
+        past: idx < 2,
+        now: idx === 2
+    })),
+    coreConcepts: [
+        {
+            prefix: "①",
+            title: "三件齊一張",
+            subtitle: "題目+方法+操作型定義",
+            desc: "把 W3-W5 三週累積的東西塞進 A4 四格手寫海報",
+            colorConfig: "r"
+        },
+        {
+            prefix: "②",
+            title: "三色便利貼",
+            subtitle: "粉紅 / 黃 / 藍",
+            desc: "認可 / 具體建議 / 想問的問題——回饋要可執行",
+            colorConfig: "b"
+        },
+        {
+            prefix: "③",
+            title: "Solo 嚴格 5 項",
+            subtitle: "理由+工作量+風險+求援+Plan B",
+            desc: "Solo 不是不想合作，是題目客觀只能你一人——5 項全寫才算合格",
+            colorConfig: "c"
+        }
+    ],
+    periods: [
+        {
+            badge: "第一節",
+            title: "海報製作 → Gallery Walk 走讀",
+            duration: 50,
+            hasBreakAfter: true,
+            stages: [
+                {
+                    timeStart: "0:00", timeEnd: "0:02", duration: "2 min",
+                    colorClass: "c3", icon: "📎",
+                    title: "一、 開場 + 帶入卡",
+                    desc: "三週累積一次調出：W3 題目 / W4 方法 / W5 操作型定義——這張海報的硬內容。",
+                    tags: ["連貫鏈", "目標建立"]
+                },
+                {
+                    timeStart: "0:02", timeEnd: "0:27", duration: "25 min",
+                    colorClass: "c2", icon: "🎨",
+                    title: "二、 Step 1 海報製作（A4 紙本手寫）",
+                    desc: "四格範本：① 題目 ② 主方法 ③ 核心概念+操作型定義 ④ 為什麼想研究這個。動機格在網頁寫，標題優化可選 AI。",
+                    tags: ["紙本手寫", "先人後 AI"],
+                    keyPoint: "⚠️ 不准用 AI 寫內容——只有最後標題優化可以開 AI。"
+                },
+                {
+                    timeStart: "0:27", timeEnd: "0:30", duration: "3 min",
+                    colorClass: "c3", icon: "📋",
+                    title: "三、 Gallery Walk 規則說明",
+                    desc: "ABCD 四輪走讀（每輪 5 min）+ 三色便利貼規則：粉紅認可 / 黃建議 / 藍提問。",
+                    tags: ["規則說明", "走讀準備"]
+                },
+                {
+                    timeStart: "0:30", timeEnd: "0:50", duration: "20 min",
+                    colorClass: "c5", icon: "👀",
+                    title: "四、 Step 2 四輪走讀（每輪 5 min）",
+                    desc: "ABCD 輪流坐鎮報告，其他人移動聆聽 + 貼便利貼。重點挑戰問題：「正反例分得開嗎？」",
+                    tags: ["走讀", "同儕回饋"]
+                }
+            ]
+        },
+        {
+            badge: "第二節",
+            title: "找合題夥伴 → 路線決定 → 反思繳交",
+            duration: 50,
+            hasBreakAfter: false,
+            stages: [
+                {
+                    timeStart: "0:00", timeEnd: "0:08", duration: "8 min",
+                    colorClass: "c2", icon: "📝",
+                    title: "五、 走讀回饋紀錄",
+                    desc: "回到座位讀自己海報蒐集的便利貼，挑最重要 3 條寫進 ThinkRecord。",
+                    tags: ["個人寫作", "回饋整理"]
+                },
+                {
+                    timeStart: "0:08", timeEnd: "0:23", duration: "15 min",
+                    colorClass: "c4", icon: "🤝",
+                    title: "六、 Step 3 找合題夥伴 / 確認 Solo",
+                    desc: "看走讀回饋判斷：題目近 + 方法互補的同學湊合題；題目核心只能自己做的選 Solo。雙路線判斷指引並列。",
+                    tags: ["路線判斷", "個別決策"]
+                },
+                {
+                    timeStart: "0:23", timeEnd: "0:43", duration: "20 min",
+                    colorClass: "c2", icon: "🛤️",
+                    title: "七、 Step 4 路線決定",
+                    desc: "Team 線：3 人合題 + 隊員分工 + 合題理由（3 格）。Solo 線：嚴格 5 項全寫——非 Solo 不可的理由 / 4 章工作量規劃 / 三大風險 / 求援計畫 / Plan B。",
+                    tags: ["個人實作", "雙路線"],
+                    keyPoint: "⚠️ Solo 5 項不全會在 W12 中期短報被退件——這是契約。"
+                },
+                {
+                    timeStart: "0:43", timeEnd: "0:48", duration: "5 min",
+                    colorClass: "c5", icon: "💭",
+                    title: "八、 Step 5 反思",
+                    desc: "1 題反思：走讀蒐集的便利貼裡，最戳到你的 1 條是什麼？怎麼處理？",
+                    tags: ["後設認知", "回饋處理"]
+                },
+                {
+                    timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
+                    colorClass: "c3", icon: "🏁",
+                    title: "九、 ExportButton 匯出 + W7 預告",
+                    desc: "一鍵複製本週紀錄貼 Google Classroom。預告 W7 文獻搜尋入門（A-D 證據分級＋華藝四步）。",
+                    tags: ["成果繳交", "下週預告"]
+                }
+            ]
+        }
+    ],
+    summaries: [
+        {
+            icon: "🎨",
+            label: "課堂產出",
+            text: "A4 海報 + 走讀回饋 + 路線決定<br><small style=\"font-size:11px;color:#888;\">三週累積一次驗收</small>"
+        },
+        {
+            icon: "👀",
+            label: "同儕驗收",
+            text: "Gallery Walk 4 輪 + 三色便利貼<br><small style=\"font-size:11px;color:#888;\">收到別人才看得到的盲點</small>"
+        },
+        {
+            icon: "🛤️",
+            label: "路線決定",
+            text: "Team 合題 / Solo 嚴格 5 項<br><small style=\"font-size:11px;color:#ccc;\">下半學期的工作型態定案</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 示範" },
+        { colorClass: "lm-c4", label: "走讀 / 互動" },
+        { colorClass: "lm-c2", label: "個人寫作 / 應用" },
+        { colorClass: "lm-c5", label: "同儕交流 / 反思" },
+        { colorClass: "lm-c3", label: "開場 / 總結" }
+    ]
+};
+
+export const W7Data = {
+    id: "W7",
+    title: "文獻搜尋入門：A-D 證據分級 + 華藝四步",
+    duration: 100,
+    durationDesc: "2 節課",
+    metaCards: [
+        { label: '第一節', value: '檔案室手動搜尋 + APA 格式' },
+        { label: '第二節', value: '證物 A-D 等級鑑識 + 小組任務' },
+        { label: '課堂產出', value: '1 篇真實證物文獻 + APA 書目' },
+        { label: '帶去 W8', value: '找到的文獻——下週寫成文獻探討段落' }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
         ...item,
@@ -732,116 +1024,136 @@ export const W5Data = {
         {
             prefix: "①",
             title: "手動搜索",
-            subtitle: "不准用 AI",
-            desc: "學習如何下關鍵字，在華藝資料庫中找到真實文獻",
+            subtitle: "不准用 AI 一鍵幫找",
+            desc: "華藝四步：關鍵字 → 搜尋 → 限縮 → 標題摘要全文",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "APA格式",
-            subtitle: "標準證物標籤",
-            desc: "正確紀錄作者與年份，學會法庭標準格式",
-            colorConfig: "g"
+            title: "證物 A-D 分級",
+            subtitle: "鑑識文獻可信度",
+            desc: "A 主要證據 / B 輔助 / C 找方向用 / D 不能用",
+            colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "文獻等級",
-            subtitle: "A到D的鑑識",
-            desc: "識別哪些是主要證據，哪些是不能用在報告的廢料",
+            title: "APA 格式",
+            subtitle: "標準證物標籤",
+            desc: "作者(年份). 標題. 期刊／出版社. DOI",
             colorConfig: "c"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "檔案室的手動搜索",
+            title: "檔案室手動搜尋 → APA 標籤",
             duration: 50,
             hasBreakAfter: true,
             stages: [
                 {
                     timeStart: "0:00", timeEnd: "0:05", duration: "5 min",
                     colorClass: "c3", icon: "🏛️",
-                    title: "階段 0｜開場與定位",
-                    desc: "帶上前一週定案題目，進入資料庫檔案室，不依賴 AI 靠自己搜尋。",
-                    tags: ["純手工", "題目延續"]
+                    title: "一、 開場 + W6 帶入",
+                    desc: "從 W6 海報博覽會 / 組隊定的題目帶入——你要為這個題目找文獻。",
+                    tags: ["連貫鏈", "目標建立"]
                 },
                 {
                     timeStart: "0:05", timeEnd: "0:15", duration: "10 min",
                     colorClass: "c4", icon: "🗺️",
-                    title: "階段 1｜擬定搜索策略",
-                    desc: "填寫搜尋計畫書，列出3組關鍵字，設定年份與範圍限制。",
-                    tags: ["規劃策略", "關鍵字"]
+                    title: "二、 擬定搜尋策略",
+                    desc: "列 3 組關鍵字、設定年份／資料庫／文件類型限制——填搜尋計畫書。",
+                    tags: ["關鍵字策略"]
                 },
                 {
                     timeStart: "0:15", timeEnd: "0:40", duration: "25 min",
                     colorClass: "c1", icon: "👀",
-                    title: "階段 2｜實戰搜尋找到第一件證物",
-                    desc: "登入碩博系統找到 1 篇符合的文獻，說明它與自己題目的關聯。",
-                    tags: ["華藝實戰", "獨立找尋"]
+                    title: "三、 華藝實戰：找到第一篇",
+                    desc: "登入碩博士論文系統，獨立找出 1 篇符合題目的文獻——不准用 AI 幫找。",
+                    tags: ["華藝實戰", "獨立找尋"],
+                    keyPoint: "⚠️ AI 找文獻容易給虛構書目（內容農場、捏造作者）——這週訓練學生自己找。"
                 },
                 {
                     timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
                     colorClass: "c2", icon: "🏷️",
-                    title: "階段 3｜APA 標籤製作練習",
-                    desc: "對照 APA 規範清單，幫找到的文獻貼上標準格式標籤。",
-                    tags: ["APA 格式", "細節檢視"]
+                    title: "四、 APA 格式標籤練習",
+                    desc: "對照 APA 規範清單，幫找到的文獻貼上標準格式書目。",
+                    tags: ["APA 格式"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "證物鑑識大賽——等級判定",
+            title: "證物 A-D 鑑識大賽 → 反思繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00", timeEnd: "0:10", duration: "10 min",
                     colorClass: "c1", icon: "⚖️",
-                    title: "階段 4｜文獻等級定義(A-D)",
-                    desc: "說明 A 級到 D 級差別，並介紹 AI 捏造的學術文獻陷阱。",
-                    tags: ["證據等級", "防禦偽證"]
+                    title: "五、 證物等級定義",
+                    desc: "A 主要證據（碩博論文／同儕審查期刊）、B 輔助（官方報告／專書）、C 找方向（科普／維基）、D 不能用（內容農場／AI 偽造）。",
+                    tags: ["證據分級"]
                 },
                 {
                     timeStart: "0:10", timeEnd: "0:40", duration: "30 min",
                     colorClass: "c2", icon: "🔬",
-                    title: "階段 5｜小組鑑識任務",
-                    desc: "發放 A–E 神秘證物卡，調查是名校碩論還是內容農場，寫下查核路徑。",
+                    title: "六、 小組鑑識任務（證物 A-E）",
+                    desc: "發放 5 張神秘證物卡——調查是名校碩論還是內容農場，寫下查核路徑。",
                     tags: ["小組合作", "查核實戰"]
                 },
                 {
-                    timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
+                    timeStart: "0:40", timeEnd: "0:48", duration: "8 min",
+                    colorClass: "c5", icon: "💭",
+                    title: "七、 反思 + AIRED",
+                    desc: "1 題反思：今天最容易誤判的是哪張證物？AIRED 紀錄（optional）。",
+                    tags: ["後設認知"]
+                },
+                {
+                    timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
                     colorClass: "c3", icon: "🏁",
-                    title: "階段 6｜總結與下週預告",
-                    desc: "總結偽證判定，預告下週學習如何將 A 級文獻「寫入」報告中。",
-                    tags: ["總結", "下週預告"]
+                    title: "八、 ExportButton + W8 預告",
+                    desc: "預告 W8 文獻偵探社：把今天找到的 A 級文獻寫進文獻探討段落。",
+                    tags: ["成果繳交", "下週預告"]
                 }
             ]
         }
     ],
-    tasks: [],
-    homework: { 
-        deadline: '下次上課前', 
-        items: [ 
-            { p: 'Part 0', n: '確認 W4 定案題目' },
-            { p: 'Part 1', n: '資料庫搜尋紀錄 (關鍵字、搜尋策略與首篇文獻)' },
-            { p: 'APA 格式', n: '第 1 篇文獻之標準引註練習' },
-            { p: '證物鑑識', n: '證物 A–E 等級判斷、理由與查核路徑 (小組共作)' },
-            { p: '小組總結', n: '記錄組內最難判斷之證物與原因' }
-        ], 
-        footer: '學習單完成後請上傳至 Google Classroom' 
-    }
+    summaries: [
+        {
+            icon: "📚",
+            label: "課堂產出",
+            text: "1 篇真實 A 級文獻 + APA 書目<br><small style=\"font-size:11px;color:#888;\">下週直接拿來寫</small>"
+        },
+        {
+            icon: "🔬",
+            label: "技能驗收",
+            text: "5 張證物 A-D 等級鑑識<br><small style=\"font-size:11px;color:#888;\">能說出查核路徑</small>"
+        },
+        {
+            icon: "🌉",
+            label: "兌現點",
+            text: "W6 題目 → W7 找文獻 → W8 寫文獻<br><small style=\"font-size:11px;color:#ccc;\">三週連動</small>"
+        }
+    ],
+    legends: [
+        { colorClass: "lm-c1", label: "概念 / 示範" },
+        { colorClass: "lm-c4", label: "規劃 / 演練" },
+        { colorClass: "lm-c2", label: "個人寫作 / 應用" },
+        { colorClass: "lm-c5", label: "同儕交流 / 反思" },
+        { colorClass: "lm-c3", label: "開場 / 總結" }
+    ]
 };
 
-export const W6Data = {
-    id: "W6",
-    title: "文獻偵探社 (Sherlock Edition)",
+export const W8Data = {
+    id: "W8",
+    title: "文獻偵探社：寫出真正的文獻探討",
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
-        { label: '第一節', value: '識破換字抄襲與三明治引用' },
-        { label: '第二節', value: '多文獻整合與同儕會診' },
-        { label: '小組任務', value: '互相驗屍 (同儕審查)' },
-        { label: '最終產出', value: '五句話結案報告' }
+        { label: '第一節', value: '識破換字抄襲 + 三明治引用法' },
+        { label: '第二節', value: '多文獻整合 + 同儕審查' },
+        { label: '課堂產出', value: '5 句以上文獻探討段落（連回題目）' },
+        { label: '帶去 W9', value: '文獻探討段落（計畫書第二章地基）' }
     ],
     courseArc: baseCourseArc.map((item, idx) => ({
         ...item,
@@ -853,236 +1165,101 @@ export const W6Data = {
             prefix: "①",
             title: "遮蓋測試",
             subtitle: "識破換字抄襲",
-            desc: "遮住原文自己寫，確認結構是否自己掌握",
+            desc: "遮住原文自己寫——確認結構是自己掌握、不是抄改",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "三明治法",
-            subtitle: "觀點＋引用＋分析",
-            desc: "頭中尾三層結構，讓讀者知道引用目的",
-            colorConfig: "g"
+            title: "三明治引用",
+            subtitle: "觀點 + 引用 + 分析",
+            desc: "頭中尾三層——讓讀者知道你引這篇要說什麼",
+            colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "整合文獻",
-            subtitle: "提煉故事",
-            desc: "拒絕堆砌列點，將三篇文章寫成有方向的故事",
+            title: "多文獻整合",
+            subtitle: "提煉故事、不堆砌",
+            desc: "三篇文獻寫成有方向的段落——最後一句連回題目",
             colorConfig: "c"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "犯罪鑑識與工具訓練",
+            title: "犯罪鑑識 + 三明治引用工具",
             duration: 50,
             hasBreakAfter: true,
             stages: [
                 {
                     timeStart: "0:00", timeEnd: "0:10", duration: "10 min",
                     colorClass: "c3", icon: "🕵️",
-                    title: "入社儀式",
-                    desc: "認識兩種常見報告犯罪：換字抄襲與文獻堆砌。",
-                    tags: ["情境導入", "釐清盲點"]
+                    title: "一、 W7 偵察成果回顧 + 入社儀式",
+                    desc: "把 W7 找到的 A 級文獻調出來——這週要把它寫成文獻探討段落。介紹兩種報告犯罪：換字抄襲、文獻堆砌。",
+                    tags: ["連貫鏈", "情境導入"]
                 },
                 {
                     timeStart: "0:10", timeEnd: "0:25", duration: "15 min",
                     colorClass: "c1", icon: "🚫",
-                    title: "犯罪現場一：換字抄襲",
-                    desc: "比較兩個版本差異，推廣「遮蓋測試」偵查工具。",
-                    tags: ["遮蓋測試", "結構破解"]
+                    title: "二、 犯罪現場一：換字抄襲 + 遮蓋測試",
+                    desc: "比較兩個版本差異，介紹「遮蓋測試」偵查工具——遮住原文自己寫，看結構是不是自己的。",
+                    tags: ["遮蓋測試"]
                 },
                 {
                     timeStart: "0:25", timeEnd: "0:40", duration: "15 min",
                     colorClass: "c4", icon: "🍔",
-                    title: "偵探工具：三明治引用法",
-                    desc: "學習將文獻夾在觀點與分析之間，使引用具有結論。",
+                    title: "三、 偵探工具：三明治引用法",
+                    desc: "頭（觀點）→ 中（引用）→ 尾（分析）三層結構——讓引用有結論。",
                     tags: ["三層結構", "寫作格式"]
                 },
                 {
                     timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
                     colorClass: "c2", icon: "📚",
-                    title: "偵探工具：多文獻整合",
-                    desc: "教導如何將三篇不同的文獻用邏輯串連而非條列堆砌。",
+                    title: "四、 偵探工具：多文獻整合",
+                    desc: "教三篇文獻怎麼用邏輯串連而非條列堆砌——同意 / 補充 / 反駁 三種關係。",
                     tags: ["多文獻", "串連語感"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "實地偵辦與互相驗屍",
+            title: "實戰演練 + 同儕互審",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00", timeEnd: "0:15", duration: "15 min",
                     colorClass: "c1", icon: "🔍",
-                    title: "演練一：改寫偵錯",
-                    desc: "找出甲乙學生的犯罪手法並自己實作正確的改寫。",
+                    title: "五、 演練一：偵錯改寫",
+                    desc: "找出甲乙學生的犯罪手法（換字抄襲 / 堆砌）並自己實作正確改寫。",
                     tags: ["實地演練", "糾錯"]
                 },
                 {
                     timeStart: "0:15", timeEnd: "0:25", duration: "10 min",
                     colorClass: "c2", icon: "🍔",
-                    title: "演練二：三明治實戰",
-                    desc: "使用 W5 找尋的文獻，實地撰寫一個三層完整引用。",
-                    tags: ["自有文獻應用", "實戰"]
+                    title: "六、 演練二：三明治實戰",
+                    desc: "用 W7 找到的文獻，實地撰寫一個三層完整引用——觀點 + 引用 + 分析。",
+                    tags: ["自有文獻應用"]
                 },
                 {
                     timeStart: "0:25", timeEnd: "0:40", duration: "15 min",
                     colorClass: "c4", icon: "📑",
-                    title: "演練三：結案報告",
-                    desc: "小組選材包撰寫多文獻整合，最後一句一定要呼應自身題目。",
-                    tags: ["整合實作", "連回題目"]
+                    title: "七、 演練三：文獻探討段落",
+                    desc: "用三篇文獻寫一個 ≥ 5 句的段落——最後一句一定要連回自己的研究題目。",
+                    tags: ["核心產出"],
+                    keyPoint: "⚠️ 最後一句連回題目 = 文獻探討的「地基檢核」——沒連回就是堆砌。"
                 },
                 {
-                    timeStart: "0:40", timeEnd: "0:50", duration: "10 min",
-                    colorClass: "c3", icon: "⚖️",
-                    title: "同儕審查：互相驗屍",
-                    desc: "交換文字作品，使用檢核表提供具體修改建議，不接受含糊評論。",
-                    tags: ["同儕審查", "具體建議"]
-                }
-            ]
-        }
-    ],
-    tasks: [],
-    homework: { deadline: '下次上課前', items: [ { p: '繳交', n: '修改演練報告並上傳' } ], footer: '' }
-};
-
-export const W7Data = {
-    id: "W7",
-    title: "研究診所：掛號判斷工作坊",
-    duration: 100,
-    durationDesc: "2 節課",
-    coreConcepts: [
-        {
-            prefix: "①",
-            title: "掛號診斷",
-            subtitle: "Level 1 研究方法判定",
-            desc: "這個問題該用問卷、訪談、實驗還是觀察？",
-            colorConfig: "r"
-        },
-        {
-            prefix: "②",
-            title: "分流判斷",
-            subtitle: "分科三問十字準星",
-            desc: "要比例還是原因？要因果還是現象？",
-            colorConfig: "b"
-        }
-    ],
-    periods: [
-        {
-            badge: "第一節",
-            title: "認識方法 → 驗收 → 套自己題目",
-            duration: 50,
-            hasBreakAfter: true,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeEnd: "0:05",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "🏥",
-                    title: "一、 開場 — 為什麼這週是現在",
-                    desc: "題目 / 拆解 / 文獻三件齊了——這週做兩個決定：用哪種方法收答案 + 把好奇變成可以測的東西。",
-                    tags: ["連貫鏈", "目標建立"]
+                    timeStart: "0:40", timeEnd: "0:48", duration: "8 min",
+                    colorClass: "c5", icon: "⚖️",
+                    title: "八、 同儕審查 + 反思",
+                    desc: "交換段落用檢核表互審：① 三明治三層完整？ ② 最後一句連回題目？ ③ 不是換字抄襲？1 題反思。",
+                    tags: ["同儕審查", "後設認知"]
                 },
                 {
-                    timeStart: "0:05",
-                    timeEnd: "0:18",
-                    duration: "13 min",
-                    colorClass: "c1",
-                    icon: "⚖️",
-                    title: "二、 Step 1 五種方法 + 兩層判斷",
-                    desc: "Level 1 認識五大方法（問卷／訪談／實驗／觀察／文獻），Level 2 兩層判斷架構（要原因還比例、要因果還現象）。含 ThinkChoice 暖身一題。",
-                    tags: ["概念講解", "標準建立"]
-                },
-                {
-                    timeStart: "0:18",
-                    timeEnd: "0:30",
-                    duration: "12 min",
-                    colorClass: "c4",
-                    icon: "🎯",
-                    title: "三、 Step 2 分科判斷測驗",
-                    desc: "10 題選擇題個別作答，自動跳題，現場驗收兩層判斷的理解。錯題會在 Step 5 反思時用到。",
-                    tags: ["個人測驗", "即時驗收"]
-                },
-                {
-                    timeStart: "0:30",
-                    timeEnd: "0:45",
-                    duration: "15 min",
-                    colorClass: "c2",
-                    icon: "🩺",
-                    title: "四、 Step 3 幫自己的題目掛號",
-                    desc: "讀入 W4 定案題目 → 個人選方法 + 寫理由（引用兩層判斷某條）+ 寫輔助方法（如需要）。",
-                    tags: ["個人應用", "理由表態"]
-                },
-                {
-                    timeStart: "0:45",
-                    timeEnd: "0:50",
-                    duration: "5 min",
-                    colorClass: "c5",
-                    icon: "🗣️",
-                    title: "五、 Step 3 同儕挑戰",
-                    desc: "跟旁邊人說一遍：「我用 ___ 法因為 ___」。讓對方挑戰：「真的要的是比例還是原因？」「資料是自己收的還是分析別人的？」",
-                    tags: ["同儕對話", "口頭驗證"]
-                }
-            ]
-        },
-        {
-            badge: "第二節",
-            title: "把概念變可測（操作型定義）→ 反思 → 繳交",
-            duration: 50,
-            hasBreakAfter: false,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeEnd: "0:08",
-                    duration: "8 min",
-                    colorClass: "c1",
-                    icon: "📐",
-                    title: "六、 Step 4 開場 + 鏡子卡",
-                    desc: "選了方法不等於知道怎麼測——操作型定義是這個橋樑。讀取 W2 好奇（鏡子卡）+ 三點軸：W3 具體疫苗 → W4 5W1H What → W7 操作型定義。",
-                    tags: ["連貫鏈", "概念定錨"]
-                },
-                {
-                    timeStart: "0:08",
-                    timeEnd: "0:18",
-                    duration: "10 min",
-                    colorClass: "c1",
-                    icon: "🧬",
-                    title: "七、 Step 4 範例 + 5 法策略 + 3 件事",
-                    desc: "「高中生壓力」三方法的操作型定義對照範例。5 法各自的操作型定義策略（問卷=題目選項、訪談=訪綱+編碼、實驗=自/依/控制變項、觀察=行為類別、文獻=分析單位）。三件事：可測量／有正反例／前後一致。",
-                    tags: ["範例對照", "策略講解"]
-                },
-                {
-                    timeStart: "0:18",
-                    timeEnd: "0:30",
-                    duration: "12 min",
-                    colorClass: "c2",
-                    icon: "✍️",
-                    title: "八、 Step 4 寫自己題目操作型定義",
-                    desc: "ThinkRecord：你的題目核心概念是什麼？對應的操作型定義？（會在 W8/W9/W10 用三次。）寫完同儕挑戰：「正例反例分得開嗎？」",
-                    tags: ["個人產出", "兌現點"]
-                },
-                {
-                    timeStart: "0:30",
-                    timeEnd: "0:40",
-                    duration: "10 min",
-                    colorClass: "c5",
-                    icon: "💭",
-                    title: "九、 Step 5 反思",
-                    desc: "回顧測驗錯題 + 判斷過程 4 題反思（後設認知）。重點：你今天從「不知道用什麼方法」走到「方法+操作型定義都有了」。",
-                    tags: ["後設認知", "整理收束"]
-                },
-                {
-                    timeStart: "0:40",
-                    timeEnd: "0:50",
-                    duration: "10 min",
-                    colorClass: "c3",
-                    icon: "🏁",
-                    title: "十、 Step 6 回顧與繳交 + 預告",
-                    desc: "確認所有 ThinkRecord 已填、ExportButton 匯出 → 上傳 Google Classroom。預告 W8 組隊：你的方法 + 操作型定義會在合題時用到。",
+                    timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
+                    colorClass: "c3", icon: "🏁",
+                    title: "九、 ExportButton + W9 預告",
+                    desc: "預告 W9 計畫書 1-5 章——這段文獻探討會直接搬進計畫書第二章。",
                     tags: ["成果繳交", "下週預告"]
                 }
             ]
@@ -1090,166 +1267,27 @@ export const W7Data = {
     ],
     summaries: [
         {
-            icon: "🩺",
+            icon: "📑",
             label: "課堂產出",
-            text: "方法選擇 + 操作型定義<br><small style=\"font-size:11px;color:#888;\">寫一次、用三次（W8/W9/W10）</small>"
+            text: "≥ 5 句文獻探討段落<br><small style=\"font-size:11px;color:#888;\">三明治結構 + 連回題目</small>"
         },
         {
-            icon: "🎯",
+            icon: "⚖️",
             label: "技能驗收",
-            text: "分科判斷 10 題測驗<br><small style=\"font-size:11px;color:#888;\">兩層判斷理解</small>"
+            text: "同儕互審通過 3 項檢核<br><small style=\"font-size:11px;color:#888;\">不是換字抄襲</small>"
         },
         {
-            icon: "📐",
+            icon: "🌉",
             label: "兌現點",
-            text: "W2 好奇 → W7 可測<br><small style=\"font-size:11px;color:#ccc;\">把模糊變成可數可看可記</small>"
-        }
-    ],
-    legends: [
-        { colorClass: "lm-c1", label: "概念 / 示範" },
-        { colorClass: "lm-c4", label: "快速演練 / 遊戲" },
-        { colorClass: "lm-c2", label: "小組討論 / 產出" },
-        { colorClass: "lm-c5", label: "同儕交流" },
-        { colorClass: "lm-c3", label: "情境 / 總結" }
-    ]
-};
-
-export const W8Data = {
-    id: "W8",
-    title: "研究博覽會：組隊 × 合題 × 企劃書",
-    duration: 100,
-    durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
-        ...item,
-        past: idx < 2,
-        now: idx === 2
-    })),
-    coreConcepts: [
-        {
-            prefix: "①",
-            title: "合題能力",
-            subtitle: "找到共同核心",
-            desc: "三種情境判斷、合題規則與禁忌",
-            colorConfig: "r"
-        },
-        {
-            prefix: "②",
-            title: "企劃書撰寫",
-            subtitle: "研究的地圖",
-            desc: "主題、問題、方法、對象、分工、時程",
-            colorConfig: "b"
-        }
-    ],
-    periods: [
-        {
-            badge: "第一節",
-            title: "博覽會 ＆ 組隊合題",
-            duration: 50,
-            hasBreakAfter: true,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeStartFormatted: "00:00",
-                    duration: 5,
-                    colorClass: "c3",
-                    icon: "📢",
-                    title: "一、 開場回顧",
-                    desc: "回顧 W7 研究診所成果，說明本節三大任務：找隊友、合題、寫企劃書。"
-                },
-                {
-                    timeStart: "0:05",
-                    timeStartFormatted: "00:05",
-                    duration: 20,
-                    colorClass: "c5",
-                    icon: "🔭",
-                    title: "二、 研究博覽會",
-                    desc: "每人 1 分鐘展示三件事：想研究什麼、研究問題、打算用什麼方法。邊聽邊記潛在隊友。",
-                    tags: ["個人展示", "聆聽紀錄"]
-                },
-                {
-                    timeStart: "0:25",
-                    timeStartFormatted: "00:25",
-                    duration: 10,
-                    colorClass: "c1",
-                    icon: "🧩",
-                    title: "三、 合題規則講解",
-                    desc: "三種情境：同一現象不同角度（可合）、因果鏈相連（可合）、主題差距過大（重新搭配）。",
-                    tags: ["合題判斷"]
-                },
-                {
-                    timeStart: "0:35",
-                    timeStartFormatted: "00:35",
-                    duration: 15,
-                    colorClass: "c4",
-                    icon: "🤝",
-                    title: "四、 組隊確認 ＆ 初步合題",
-                    desc: "每組 2-4 人。填寫學習單 Part B 合題結果，教師記錄分組名單。",
-                    tags: ["分組確認"]
-                }
-            ]
-        },
-        {
-            badge: "第二節",
-            title: "企劃書 ＆ 工具草稿",
-            duration: 50,
-            hasBreakAfter: false,
-            stages: [
-                {
-                    timeStart: "0:00",
-                    timeStartFormatted: "00:00",
-                    duration: 35,
-                    colorClass: "c4",
-                    icon: "📄",
-                    title: "五、 企劃書撰寫",
-                    desc: "每組共同完成 Part C：研究主題、問題（因果/相關/描述型）、方法、對象、分工表、時程。",
-                    tags: ["核心產出"]
-                },
-                {
-                    timeStart: "0:35",
-                    timeStartFormatted: "00:35",
-                    duration: 10,
-                    colorClass: "c2",
-                    icon: "🔧",
-                    title: "六、 預寫 3 題工具草稿",
-                    desc: "對照五種方法範例表，寫出 3 題草稿（問卷題/訪談問題/觀察指標/實驗步驟/搜尋策略）。",
-                    tags: ["銜接 W9"]
-                },
-                {
-                    timeStart: "0:45",
-                    timeStartFormatted: "00:45",
-                    duration: 5,
-                    colorClass: "c3",
-                    icon: "🎙️",
-                    title: "七、 各組簡報 ＆ 收束",
-                    desc: "每組 30 秒電梯簡報：研究主題和研究對象。預告 W9 帶草稿進診所。",
-                    tags: ["鞏固回饋"]
-                }
-            ]
-        }
-    ],
-    summaries: [
-        {
-            icon: "📋",
-            label: "核心產出",
-            text: "研究企劃書初稿<br><small style=\"font-size:11px;color:#888;\">含分工表與時程</small>"
-        },
-        {
-            icon: "🔧",
-            label: "銜接準備",
-            text: "3 題工具草稿<br><small style=\"font-size:11px;color:#888;\">W9 診所的掛號單</small>"
-        },
-        {
-            icon: "👥",
-            label: "組隊成果",
-            text: "分組名單 ＆ 合題結果<br><small style=\"font-size:11px;color:#888;\">從個人到團隊</small>"
+            text: "W7 找文獻 → W8 寫文獻 → W9 第二章<br><small style=\"font-size:11px;color:#ccc;\">寫一次、用一學期</small>"
         }
     ],
     legends: [
         { colorClass: "lm-c1", label: "概念講解" },
-        { colorClass: "lm-c4", label: "企劃 / 決策" },
-        { colorClass: "lm-c2", label: "個人產出" },
-        { colorClass: "lm-c5", label: "互動 / 展示" },
-        { colorClass: "lm-c3", label: "說明 / 收束" }
+        { colorClass: "lm-c4", label: "演練 / 實作" },
+        { colorClass: "lm-c2", label: "個人寫作" },
+        { colorClass: "lm-c5", label: "同儕審查 / 反思" },
+        { colorClass: "lm-c3", label: "開場 / 總結" }
     ]
 };
 
@@ -1736,7 +1774,7 @@ export const W11Data = {
                     duration: "5 min",
                     colorClass: "c2",
                     icon: "🔧",
-                    title: "七、 Step 4 工具第二輪修正",
+                    title: "七、 Step 4 工具第二輪修正（依 Pilot 改）",
                     desc: "依 Pilot 發現整理具體修改清單：題目改用詞、量表改點數、載具版面調整、實驗組架設圖補洞——直接寫進 w11-tool-final-revision，並回 docx 改。",
                     tags: ["最後一版", "依 Pilot 改"]
                 },
@@ -1746,7 +1784,7 @@ export const W11Data = {
                     duration: "7 min",
                     colorClass: "c4",
                     icon: "⚖",
-                    title: "八、 Step 4 倫理四問 + 知情同意 AI 審",
+                    title: "八、 Step 5 倫理四問 + 知情同意 AI 審",
                     desc: "知情同意／隱私／不傷害／自願逐一具體答；複製 CONSENT_PROMPT 貼 AI，把採納/不採納判斷寫下（即 AIRED 的 E/D）。",
                     tags: ["四問", "AI 審", "AIRED"]
                 },
@@ -1756,7 +1794,7 @@ export const W11Data = {
                     duration: "3 min",
                     colorClass: "c4",
                     icon: "✅",
-                    title: "九、 Step 4 教師倫理審查（秘密按鈕）",
+                    title: "九、 Step 5 教師倫理審查（秘密按鈕）",
                     desc: "老師當面看完計畫書 + 倫理紀錄，連續點 ⚖ 5 次 → 輸入姓名 → 學生端顯示「已通過」。",
                     tags: ["⚖ 點 5 次", "教師蓋章"]
                 },
@@ -1766,7 +1804,7 @@ export const W11Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🛫",
-                    title: "十、 Step 4 施測啟動 + AIRED + ExportButton + W12 預告",
+                    title: "十、 Step 6 施測啟動 + AIRED + ExportButton + W12 預告",
                     desc: "Plan B 觸發條件具體化 + 動員宣告（樣本/時程已在計畫書，這裡不重填）→ AIREDNarrative → 一鍵匯出繳交 → W12 預告（正式施測）。",
                     tags: ["Plan B 觸發", "動員宣告", "繳交"]
                 }
@@ -1806,7 +1844,7 @@ export const W11Data = {
 
 export const W12Data = {
     id: "W12",
-    title: "期中進度短報 × 13 組同儕擋板",
+    title: "期中進度短報 · 同儕擋板",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: baseCourseArc.map((item, idx) => ({
@@ -1817,7 +1855,7 @@ export const W12Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "13 組期中短報",
+            title: "各組期中短報",
             subtitle: "3 min Pitch + 1 min QA",
             desc: "5 段內容：題目+動機 / 方法+工具 / Pilot 共識 / 進度 / 預期+Plan B",
             colorConfig: "r"
@@ -1918,7 +1956,7 @@ export const W12Data = {
     summaries: [
         {
             icon: "🎤",
-            label: "13 組短報",
+            label: "全班短報",
             text: "施測前最後一道擋板<br><small style=\"font-size:11px;color:#888;\">3 min Pitch + 1 min QA</small>"
         },
         {

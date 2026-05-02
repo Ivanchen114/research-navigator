@@ -464,6 +464,26 @@ const W15Page = () => {
                                         {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
                     <AIREDNarrative week="15" hint="這週用 AI 檢核四層結論" />
 
+                    {/* 本週結束，你應該要會 — B 標準格式 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                                '寫出四層次結論（描述／詮釋／回扣／批判）',
+                                                '用 AI 檢核但保留自己的最終裁奪權',
+                                                '識別 AI 說不出的脈絡（你才知道的研究現場細節）',
+                                                '反思「完全相信 AI 會犯的錯」並用紅線守住',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                    <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                    <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <ExportButton weekLabel="W15 從圖的說明到研究結論：四層次寫作工作坊" fields={EXPORT_FIELDS} />
 
                     {/* 遊戲彩蛋 */}

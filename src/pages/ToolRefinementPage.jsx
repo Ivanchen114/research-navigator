@@ -8,6 +8,7 @@ import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
+import GroupSizeSelector from '../components/ui/GroupSizeSelector';
 import { W10Data } from '../data/lessonMaps';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
@@ -935,39 +936,49 @@ export const ToolRefinementPage = () => {
                         <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed mb-3">
                             工具是一份大家共寫——但分工要清楚不要全擠著寫題目。<strong>核心三角色：主稿 / 對照 / AI 諮詢</strong>。人多就多一個倫理檢查。
                         </p>
-                        <div className="grid md:grid-cols-2 gap-2 mb-3">
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">1 人組（Solo）</p>
-                                <p className="text-[11.5px] text-[#0C4A6E] leading-[1.7]">
-                                    自己 50 分鐘只能寫到主架構——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
-                                </p>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">2 人組</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
-                                    <li><strong>B 對照</strong>：拿本週工具品質基礎（三大標準 + 5 大錯誤）逐題挑刺</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">3 人組</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
-                                    <li><strong>B 對照</strong>：三大標準 + 錯誤類型逐題挑</li>
-                                    <li><strong>C AI 諮詢</strong>：用工具 prompt 跑 AI，整理建議給組員看</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">4 人組</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li><strong>A 主稿</strong></li>
-                                    <li><strong>B 對照</strong>：方向＋精度（本週三大標準）</li>
-                                    <li><strong>C AI 諮詢</strong></li>
-                                    <li><strong>D 倫理＋文獻檢查</strong>：工具不踩倫理紅線、跟第二章文獻對得上</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed pt-2 border-t border-[#0EA5E9]/30">
+                        <GroupSizeSelector
+                            items={{
+                                1: {
+                                    title: '1 人（Solo）',
+                                    content: (
+                                        <p className="leading-relaxed">
+                                            自己 50 分鐘只能寫到主架構——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
+                                        </p>
+                                    ),
+                                },
+                                2: {
+                                    title: '2 人組',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
+                                            <li><strong>B 對照</strong>：拿本週工具品質基礎（三大標準 + 5 大錯誤）逐題挑刺</li>
+                                        </ul>
+                                    ),
+                                },
+                                3: {
+                                    title: '3 人組',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
+                                            <li><strong>B 對照</strong>：三大標準 + 錯誤類型逐題挑</li>
+                                            <li><strong>C AI 諮詢</strong>：用工具 prompt 跑 AI，整理建議給組員看</li>
+                                        </ul>
+                                    ),
+                                },
+                                4: {
+                                    title: '4 人組',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li><strong>A 主稿</strong></li>
+                                            <li><strong>B 對照</strong>：方向＋精度（本週三大標準）</li>
+                                            <li><strong>C AI 諮詢</strong></li>
+                                            <li><strong>D 倫理＋文獻檢查</strong>：工具不踩倫理紅線、跟第二章文獻對得上</li>
+                                        </ul>
+                                    ),
+                                },
+                            }}
+                        />
+                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mt-3 pt-2 border-t border-[#0EA5E9]/30">
                             ⏱️ <strong>時間建議</strong>：前 5 分鐘分工 → 各自 35 分鐘做 → 最後 10 分鐘聚回來互讀整合。
                         </p>
                     </div>
@@ -1218,7 +1229,7 @@ export const ToolRefinementPage = () => {
                     {/* 下節預告 */}
                     <div className="w7-notice w7-notice-teal">
                         ✅ 工具書自學完 + docx 第六章題目寫到定位 → 下一頁 Step 3：<strong>補七到十三章 + 整本繳交</strong>。<br />
-                        💡 <strong>第七、八章 + 第九章(三) 限制改進 — 草稿即可、不花時間</strong>。理由：你還沒做完研究、不會分析。等 W14 數據出來再回頭補才寫得到位。第十章倫理／第十一章時程／第十二章 AI 聲明都是模板套用，最快搞定。
+                        💡 <strong>第八章 + 第九章(三) 限制改進 — 草稿即可、不花時間</strong>。理由：你還沒做完研究、不會分析。等 W14 數據出來再回頭補才寫得到位。第十章倫理／第十一章時程／第十二章 AI 聲明都是模板套用，最快搞定。
                     </div>
                 </div>
             ),
@@ -1248,7 +1259,7 @@ export const ToolRefinementPage = () => {
                             第七到十三章內容對照
                         </h4>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            多數章節是「<strong>模板套用 + 微調</strong>」，不需要從零想。<strong className="text-[var(--ink)]">第七、八章 + 第九章(三) 草稿即可——不要花太多時間</strong>。理由：你還沒做完研究、不會分析、沒看過真實數據。等 W14 跑完數據再回頭補才寫得到位。
+                            多數章節是「<strong>模板套用 + 微調</strong>」，不需要從零想。<strong className="text-[var(--ink)]">第八章 + 第九章(三) 草稿即可——不要花太多時間</strong>。理由：你還沒做完研究、不會分析、沒看過真實數據。等 W14 跑完數據再回頭補才寫得到位。
                         </p>
 
                         <div className="bg-[#FFFBEB] border-l-4 border-[#D97706] rounded-r-[8px] p-4 mb-3 max-w-[760px]">
@@ -1330,6 +1341,26 @@ export const ToolRefinementPage = () => {
                     </p>
 
                     {/* ExportButton */}
+                    {/* 本週結束，你應該要會 — B 標準格式 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                                '把計畫書 1-5 章從雛形修到定稿（W9 老師回饋已整合）',
+                                                '在第六章把研究問題轉成具體工具題目',
+                                                '為每個工具設計決策說清楚「為什麼這樣設計」',
+                                                '列出課後 W10→W11 之間要補的事（不要拖）',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                    <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                    <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <ExportButton
                         weekLabel="W10 計畫書整本"
                         fields={EXPORT_FIELDS}
@@ -1351,7 +1382,7 @@ export const ToolRefinementPage = () => {
                             <strong className="text-white">第二節（50 min）</strong>：跨班 Pilot 互測 20 min（座位圖配對）→ 雙向紀錄 5 min → 倫理快速 10 min → 施測啟動 10 min。
                         </p>
                         <p className="text-[12.5px] text-white/70 leading-[1.9] font-mono">
-                            課後任務：對照「課後待補清單」，把七、八章草稿先補一輪（W11 拿到回饋會更清楚要怎麼寫）
+                            課後任務：對照「課後待補清單」，把第八章草稿先補一輪（W11 拿到回饋會更清楚要怎麼寫）
                         </p>
                     </div>
                 </div>
@@ -1396,14 +1427,14 @@ export const ToolRefinementPage = () => {
                 meta={[
                     { label: '第一節 ① + ②', value: '開場 + 第六章流程提醒 → 工具書自學教案（5 法 4 區塊）→ 回 docx 寫題目' },
                     { label: '第二節 ③ + ④', value: '七到十三章 × 整本繳交 → 繳交確認 + W11 預告' },
-                    { label: '課堂產出', value: '計畫書 docx 整本（13 章；7、8、9-(三) 草稿即可）' },
+                    { label: '課堂產出', value: '計畫書 docx 整本（13 章；8、9-(三) 草稿即可）' },
                     { label: '前置要求', value: 'W9 計畫書第 1-5 章雛形（含第四章變項／主題）' },
                 ]}
             />
             <CourseArc items={[
                     { wk: 'W1-W4', name: '探索\n定題', status: 'past' },
-                    { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
-                    { wk: 'W7-W8', name: '方法選擇\n組隊企劃', status: 'past' },
+                    { wk: 'W5-W6', name: '操作型定義\n海報博覽會', status: 'past' },
+                    { wk: 'W7-W8', name: '文獻偵探\n引用寫作', status: 'past' },
                     { wk: 'W9', name: '計畫書\n地基工程', status: 'past' },
                     { wk: 'W10', name: '工具設計\n整本檢核', status: 'now' },
                     { wk: 'W11', name: 'Pilot Test\n倫理審查', status: '' },

@@ -18,7 +18,7 @@ import {
     ShieldAlert,
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
-import { W5Data } from '../data/lessonMaps';
+import { W7Data } from '../data/lessonMaps';
 
 /* ── 資料常數 ── */
 
@@ -155,18 +155,18 @@ const APA_FORMATS = [
 ];
 
 const EXPORT_FIELDS = [
-    { key: 'w5-topic', label: 'W4 定案題目（帶入）', question: '你的 W4 最終定案題目是什麼？' },
-    { key: 'w5-search-keywords', label: '搜尋關鍵字', question: '你用了哪些關鍵字去華藝搜尋？' },
-    { key: 'w5-search-strategy', label: '搜尋策略', question: '你用了什麼搜尋策略？（搜尋位置、限制條件、資料庫）' },
-    { key: 'w5-found-paper', label: '找到的第一篇文獻', question: '你找到哪篇論文？標題、作者、年份、跟你的題目有什麼關係？' },
-    { key: 'w5-apa-practice', label: 'APA 格式練習', question: '用 APA 格式寫出你找到的那篇論文的書目' },
-    { key: 'w5-forensic-a', label: '證物 A 鑑識', question: '證物 A 你判定什麼等級？理由和查核路徑是？' },
-    { key: 'w5-forensic-b', label: '證物 B 鑑識', question: '證物 B 你判定什麼等級？理由和查核路徑是？' },
-    { key: 'w5-forensic-c', label: '證物 C 鑑識', question: '證物 C 你判定什麼等級？理由和查核路徑是？' },
-    { key: 'w5-forensic-d', label: '證物 D 鑑識', question: '證物 D 你判定什麼等級？理由和查核路徑是？' },
-    { key: 'w5-forensic-e', label: '證物 E 鑑識', question: '證物 E 你判定什麼等級？理由和查核路徑是？' },
-    { key: 'w5-hardest', label: '小組總結：最難判斷的證物', question: '你們組覺得最難判斷的是哪一張？為什麼？' },
-    { key: 'w5-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w7-topic', label: '本週題目（從前面週次帶入）', question: '你帶到 W7 找文獻的題目是什麼？（W6 合題 / W4 個人題目）' },
+    { key: 'w7-search-keywords', label: '搜尋關鍵字', question: '你用了哪些關鍵字去華藝搜尋？' },
+    { key: 'w7-search-strategy', label: '搜尋策略', question: '你用了什麼搜尋策略？（搜尋位置、限制條件、資料庫）' },
+    { key: 'w7-found-paper', label: '找到的第一篇文獻', question: '你找到哪篇論文？標題、作者、年份、跟你的題目有什麼關係？' },
+    { key: 'w7-apa-practice', label: 'APA 格式練習', question: '用 APA 格式寫出你找到的那篇論文的書目' },
+    { key: 'w7-forensic-a', label: '證物 A 鑑識', question: '證物 A 你判定什麼等級？理由和查核路徑是？' },
+    { key: 'w7-forensic-b', label: '證物 B 鑑識', question: '證物 B 你判定什麼等級？理由和查核路徑是？' },
+    { key: 'w7-forensic-c', label: '證物 C 鑑識', question: '證物 C 你判定什麼等級？理由和查核路徑是？' },
+    { key: 'w7-forensic-d', label: '證物 D 鑑識', question: '證物 D 你判定什麼等級？理由和查核路徑是？' },
+    { key: 'w7-forensic-e', label: '證物 E 鑑識', question: '證物 E 你判定什麼等級？理由和查核路徑是？' },
+    { key: 'w7-hardest', label: '小組總結：最難判斷的證物', question: '你們組覺得最難判斷的是哪一張？為什麼？' },
+    { key: 'w7-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ── 主組件 ── */
@@ -179,10 +179,11 @@ export const W50Page = () => {
     const [w4Topic, setW4Topic] = useState('');
     useEffect(() => {
         const records = readRecords();
-        const prev = records['w4-final-topic'] || '';
+        // v2 鏈：W6 合題題目 > W4 我的題目 > W3 定案；舊鍵 w4-final-topic fallback 容錯
+        const prev = (records['w6-team-topic'] || records['w4-my-topic'] || records['w3-final-topic'] || records['w4-final-topic'] || '').trim();
         setW4Topic(prev);
-        if (prev && !records['w5-topic']) {
-            records['w5-topic'] = prev;
+        if (prev && !records['w7-topic']) {
+            records['w7-topic'] = prev;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
         }
     }, []);
@@ -232,7 +233,7 @@ export const W50Page = () => {
                             </div>
                         )}
                         <ThinkRecord
-                            dataKey="w5-topic"
+                            dataKey="w7-topic"
                             prompt="我的 W4 最終定案題目"
                             placeholder="例如：本校高一生睡前手機使用內容類型與睡眠品質之差異研究"
                             rows={2}
@@ -306,7 +307,7 @@ export const W50Page = () => {
                         </div>
 
                         <ThinkChoice
-                            dataKey="w5-tc1"
+                            dataKey="w7-tc1"
                             prompt="以下哪一種來源可以寫進你的研究報告？"
                             options={[
                                 { label: 'A', text: '維基百科上的「睡眠品質」條目' },
@@ -349,7 +350,7 @@ export const W50Page = () => {
 
                     {/* 搜尋關鍵字 */}
                     <ThinkRecord
-                        dataKey="w5-search-keywords"
+                        dataKey="w7-search-keywords"
                         prompt="你的搜尋關鍵字是什麼？（從題目中拆出 2-3 個核心名詞）"
                         scaffold={['關鍵字 1：…', '關鍵字 2：…', '關鍵字 3（選填）：…']}
                         rows={3}
@@ -421,7 +422,7 @@ export const W50Page = () => {
                         </p>
 
                         <ThinkRecord
-                            dataKey="w5-found-paper"
+                            dataKey="w7-found-paper"
                             prompt="記下你找到的文獻：標題、作者、年份、來源、跟你的題目有什麼關係？"
                             scaffold={['標題：…', '作者：…', '年份：…', '來源（期刊/學校）：…', '跟我的題目相關的地方是：…']}
                             rows={6}
@@ -470,7 +471,7 @@ export const W50Page = () => {
                         </div>
 
                         <ThinkRecord
-                            dataKey="w5-apa-practice"
+                            dataKey="w7-apa-practice"
                             prompt="照 APA 格式，試寫你找到的那篇論文的書目（寫錯沒關係，重點是試）"
                             scaffold={['作者（年份）。', '篇名。', '學校研究所所名：碩（博）士論文。']}
                             rows={3}
@@ -556,7 +557,7 @@ export const W50Page = () => {
                     <div className="mt-6 p-5 bg-[var(--paper)] rounded-xl border-2 border-dashed border-[var(--accent)]/40">
                         <div className="text-[11px] font-mono text-[var(--accent)] uppercase mb-4 tracking-wider">🔬 小組總結</div>
                         <ThinkRecord
-                            dataKey="w5-hardest"
+                            dataKey="w7-hardest"
                             prompt="你們組覺得最難判斷的是哪一張？為什麼？"
                             scaffold={['最難判斷的是證物…', '因為…', '我們最後的判斷依據是…']}
                             rows={4}
@@ -597,11 +598,11 @@ export const W50Page = () => {
                     </div>
 
                                         {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="5" hint="華藝搜尋可能遇到 AI 輔助" optional={true} />
+                    <AIREDNarrative week="7" hint="華藝搜尋可能遇到 AI 輔助" optional={true} />
 
                     {/* 一鍵複製 */}
                     <ExportButton
-                        weekLabel="W5 文獻搜尋入門"
+                        weekLabel="W7 文獻搜尋入門"
                         fields={EXPORT_FIELDS}
                         choices={choiceResults}
                     />
@@ -626,7 +627,7 @@ export const W50Page = () => {
                             </div>
                         </div>
                         <div className="mt-3 p-3 rounded-[6px] bg-[#FEF3C7] border border-[#D97706]/30 text-[12px] text-[#78350F] leading-relaxed">
-                            🔗 <strong>跨週連結提醒</strong>：W5 找文獻 → W6 寫文獻 → W8 把文獻變成王牌。今天填得越具體，後面三週越輕鬆。
+                            🔗 <strong>跨週連結提醒</strong>：W7 找文獻 → W8 寫文獻 → W9 把文獻變成王牌。今天填得越具體，後面三週越輕鬆。
                         </div>
                     </div>
                 </div>
@@ -639,11 +640,11 @@ export const W50Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">文獻搜尋入門 W5</span>
+                    <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">文獻搜尋入門 W7</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <ResetWeekButton weekPrefix="w5-" />
+                    <ResetWeekButton weekPrefix="w7-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
@@ -656,13 +657,13 @@ export const W50Page = () => {
 
             {showLessonMap && (
                 <div className="animate-in slide-in-from-top-4 duration-300">
-                    <LessonMap data={W5Data} />
+                    <LessonMap data={W7Data} />
                 </div>
             )}
 
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
-                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W5"
+                kicker="R.I.B. 調查檔案 · 研究方法與專題 · W7"
                 title="文獻搜尋入門："
                 accentTitle="找對資料，打好地基"
                 subtitle="W4 完成了題目定案。現在往前走一步：為你的研究找到文獻基礎。這週不用 AI——靠自己在華藝搜尋、練 APA 格式，最後進行證物鑑識大賽，學會辨別文獻真偽。"
@@ -674,25 +675,13 @@ export const W50Page = () => {
                     { label: '下週預告', value: 'W6 文獻偵探社' },
                 ]}
             />
-            <CourseArc items={W5Data.courseArc} />
-
-            {/* 本週簡報 */}
-            <div className="flex justify-end mb-8 -mt-2">
-                <a
-                    href="https://canva.link/uxnn3h5uxwzloy7"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[var(--ink-light)] hover:text-[var(--ink)] bg-[var(--paper)] hover:bg-[var(--paper-warm)] border border-[var(--border)] hover:border-[var(--ink)]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                >
-                    📊 本週簡報 ↗
-                </a>
-            </div>
+            <CourseArc items={W7Data.courseArc} />
 
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
-                prevWeek={{ label: '回 W4 題目定案', to: '/w4' }}
-                nextWeek={{ label: '前往 W6 文獻偵探社', to: '/w6' }}
+                prevWeek={{ label: '回 W6 海報博覽會', to: '/w6' }}
+                nextWeek={{ label: '前往 W8 文獻偵探社', to: '/w8' }}
             flat
             />
         </div>

@@ -10,6 +10,9 @@ import ThinkRecord from './ThinkRecord';
  *   選「用」 → 展開可複製 Prompt + 強制記錄 ThinkRecord
  *   選「跳」 → 摺疊為一行提示，使用者直接進下面的填寫區
  *
+ * 強制模式（forceAI=true）：
+ *   跳過 toggle UI，直接展開 Prompt + ThinkRecord。用於那些「就是要問 AI」的步驟。
+ *
  * Props:
  *   id                (string, required) — 用來當 localStorage key（ai-toggle::{id}）
  *   title             (string)           — 標題文字
@@ -20,6 +23,7 @@ import ThinkRecord from './ThinkRecord';
  *   recordKey         (string, required) — ThinkRecord 的 dataKey
  *   recordPrompt      (string)           — ThinkRecord 題目
  *   recordPlaceholder (string)           — ThinkRecord placeholder
+ *   forceAI           (boolean)          — true 時跳過 toggle，直接顯示 Prompt + 記錄
  */
 
 const CopyBox = ({ text }) => {
@@ -69,9 +73,11 @@ export default function AIAssistToggle({
     recordKey,
     recordPrompt = '你從 AI 給的版本中選了什麼？刷掉什麼？為什麼？',
     recordPlaceholder = '我選了___版本，因為___\n我刷掉___版本，因為___',
+    forceAI = false,
 }) {
     const storageKey = `ai-toggle::${id}`;
     const [choice, setChoice] = useState(() => {
+        if (forceAI) return 'use';
         try { return localStorage.getItem(storageKey) || null; } catch { return null; }
     });
 
@@ -91,8 +97,8 @@ export default function AIAssistToggle({
             <div className="px-4 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                 <span className="text-[14px]">🤖</span>
                 <span className="font-bold text-[13px] text-[var(--ink)] flex-1">{title}</span>
-                <span className="text-[10px] font-mono text-[var(--ink-light)] hidden md:inline">OPT-IN</span>
-                {choice && (
+                <span className="text-[10px] font-mono text-[var(--ink-light)] hidden md:inline">{forceAI ? 'AI 必跑' : 'OPT-IN'}</span>
+                {choice && !forceAI && (
                     <button
                         onClick={reset}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors"
@@ -103,6 +109,12 @@ export default function AIAssistToggle({
                     </button>
                 )}
             </div>
+
+            {forceAI && reason && (
+                <div className="px-4 pt-4 pb-0">
+                    <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{reason}</p>
+                </div>
+            )}
 
             {!choice && (
                 <div className="p-4 space-y-3">

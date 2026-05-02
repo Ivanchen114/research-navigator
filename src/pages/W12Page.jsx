@@ -170,22 +170,22 @@ const W12Page = () => {
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W12"
                 title="期中進度短報 · "
-                accentTitle="13 組 × 同儕擋板"
+                accentTitle="同儕擋板"
                 subtitle="正式施測前的最後一道擋板。每組 3 分鐘短報 + 1 分鐘老師選題提問。同學透過 Google Form 即時回饋你的計畫漏洞——你看不到的，30 個聽眾總有人看出。"
                 chain="W11 工具上線、要開始施測了——但別急。先把計畫拉出來給全班看，你想不到的漏洞，30 雙眼睛總有人看到。"
                 meta={[
                     { label: '第一節', value: '開場 5 + Round 1 六組短報 30 + 中場 5（共 40 min，後 10 min 銜接 R2）' },
                     { label: '第二節', value: 'Round 2 七組短報 35 + 老師總評 15' },
-                    { label: '課堂產出', value: '13 組短報投影 + 全班同儕回饋 Form + 老師當場評分' },
+                    { label: '課堂產出', value: '各組短報投影 + 全班同儕回饋 Form + 老師當場評分' },
                     { label: '前置要求', value: 'W11 結束 7 天內全組合議 + 組長已填短報 Form（W12 上課前 8:00 截止）' },
                 ]}
             />
 
             <CourseArc items={[
                 { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
-                { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
-                { wk: 'W8-W11', name: '工具設計\n預試倫理', past: true },
+                { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
+                { wk: 'W5-W8', name: '操作型定義／海報／文獻', past: true },
+                { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
                 { wk: 'W12', name: '期中短報\n同儕擋板', now: true },
                 { wk: 'W13-W14', name: '執行 + 數據\n圖表結論' },
                 { wk: 'W15-W17', name: '成果簡報\n博覽發表' },
@@ -238,7 +238,7 @@ const W12Page = () => {
                         <ToolInfoCard
                             icon="🖥️"
                             title="② 投影 Web App（老師上課時投影）"
-                            desc="13 組短報內容輪播 + 計時器 + 即時同儕回饋彙整。報告者上台對著自己那頁講。連結老師上課會投影、不用學生點。"
+                            desc="各組短報內容輪播 + 計時器 + 即時同儕回饋彙整。報告者上台對著自己那頁講。連結老師上課會投影、不用學生點。"
                         />
                         <ToolInfoCard
                             icon="✏️"
@@ -383,6 +383,26 @@ const W12Page = () => {
 
                 {/* AIRED */}
                 <AIREDNarrative week="12" hint="本週重點 AI 互動：W11→W12 之間 AI 反向質問（如有用）／合議時 AI 輔助整理共識" optional={false} />
+
+                {/* 本週結束，你應該要會 — B 標準格式 */}
+                <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                    <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                        ✅ 本週結束，你應該要會
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                        {[
+                                            '上台 3 分鐘短報自己的研究進度（題目+方法+Pilot+進度+Plan B）',
+                                            '聽完 12 組短報並用 Form 給每組具體回饋',
+                                            '整理「聽別組學到什麼」並轉成自己組要改的事',
+                                            '接住老師當場 5 維 × 4 級評分，識別自己的弱項',
+                        ].map((item, i) => (
+                            <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 <ExportButton
                     weekLabel="W12 期中進度短報"

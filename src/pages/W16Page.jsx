@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import CourseArc from '../components/ui/CourseArc';
 import './W16.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
@@ -9,298 +9,113 @@ import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
 import { W16Data } from '../data/lessonMaps';
-import { readRecords } from '../components/ui/ThinkRecord';
 import {
-    ArrowRight,
-    Bot,
-    Copy,
-    Check,
-    Package,
-    PenTool,
     Layout,
-    Users,
-    FileText,
+    PenTool,
     Eye,
-    CheckSquare,
+    Download,
+    Award,
+    FileText,
     Map,
+    BookOpen,
+    Target,
+    AlertTriangle,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
  *  資料常數
  * ══════════════════════════════════════ */
 
-const ASSEMBLY_STEPS = [
-    { num: 1, chapter: '第一章：引言', source: 'W3-W4 學習單', task: '「我為什麼做這個研究」＋「我的研究問題是什麼」', words: '150-200 字', time: '8 min', color: '#2563EB' },
-    { num: 2, chapter: '第二章：文獻探討', source: 'W6 學習單', task: '3 篇以上文獻摘要與比較＋「目前研究的缺口在於…」', words: '250-350 字', time: '10 min', color: '#7C3AED' },
-    { num: 3, chapter: '第三章：研究方法', source: 'W10 學習單', task: '方法名稱、參與者、工具、流程＋知情同意聲明', words: '150-250 字', time: '8 min', color: '#059669' },
-    { num: 4, chapter: '第四章：研究結果', source: 'W14 學習單', task: '2 個主要發現的客觀描述句＋圖表標注位置', words: '200-300 字', time: '12 min', color: '#D97706' },
-    { num: 5, chapter: '第五章：討論與結論', source: 'W14-W15 學習單', task: '主觀推論句＋研究限制＋未來建議', words: '200-300 字', time: '8 min', color: '#DC2626' },
-    { num: 6, chapter: '參考文獻', source: 'W6 文獻清單', task: '直接複製 APA 格式清單，確認格式統一', words: '—', time: '4 min', color: '#6B7280' },
-    { num: 7, chapter: '摘要 (Abstract)', source: '課後用 AI 生成', task: '⏰ 課堂時間不夠 — 改為課後作業：用 AI 摘要 Prompt 生成初稿，再人工修改', words: '150-200 字', time: '課後', color: '#0891B2' },
+/* 7 項評分規準（對齊「期末研究報告_評分規準_2026海報版」）*/
+const RUBRIC_7 = [
+    { num: '一', title: '前言（動機與目的）',     weight: 15, area: 'A1 #1  ① ② 動機 + 研究問題' },
+    { num: '二', title: '文獻探討',                weight: 15, area: 'A1 #1  ③ 文獻發現（3 篇 + 缺口）' },
+    { num: '三', title: '研究方法',                weight: 10, area: 'A1 #1  ④ 方法／對象／工具／流程' },
+    { num: '四', title: '研究分析與詮釋',          weight: 20, area: 'A1 #2  核心呈現 + ⑤ 主要發現' },
+    { num: '五', title: '研究資料完整性',          weight: 10, area: 'A1 #2  QR Code（連結原始資料 zip）' },
+    { num: '六', title: '結論與建議',              weight: 20, area: 'A1 #2  ⑥ 結論 + ⑦ 限制與建議' },
+    { num: '七', title: '參考文獻、格式、倫理',    weight: 10, area: 'A1 #2  參考文獻 + 整體排版' },
 ];
 
-/* ⏰ 時程修正（W16 實測警告）
- * 舊版估 60-70 分總合，但實測：
- *   - 找素材 + 處理「W6 文獻沒做完／W14 圖表還沒做」：+10 min
- *   - AI 等待 + 改寫不滿意 +重貼：+10 min
- * 結論：第七步（摘要）課堂做不完，改成課後作業；其他六步壓在 50 分內。
- * 第二節 50 分鐘改用於：縫合 + 健檢 + 海報文案。
- */
-
-const ROLES = [
-    { name: '搬運工', emoji: '📦', steps: 'Step 1-3', task: '找 W3-W10 學習單，把引言、文獻、方法貼進去', color: '#EFF6FF', border: '#BFDBFE',
-      parallel: '可以從一開課就動手——不用等其他角色。先把全部素材找齊，後面數據官需要圖表時直接給。' },
-    { name: '數據官', emoji: '📊', steps: 'Step 4-5', task: '找 W14-W15 的圖表跟描述句，負責貼到正確位置', color: '#FEF3C7', border: '#FDE68A',
-      parallel: '與搬運工同步開工——你管圖表跟描述句，搬運工管引言/文獻/方法，互不干擾。寫完 Step 4-5 直接貼進報告對應位置。' },
-    { name: 'AI 溝通師', emoji: '🤖', steps: 'Step 6-7', task: '開 AI 工具，負責潤色、縫合（Step 7 摘要改課後）', color: '#F0FDF4', border: '#BBF7D0',
-      parallel: '不要乾等！前 20 分鐘先把<strong>各章核心句模板</strong>寫好（讀 W3 / W6 / W10 / W14 / W15 抓重點），等搬運工/數據官弄完，AI 摘要 Prompt 就能直接餵。' },
-];
-
+/* 海報視覺四字訣 */
 const POSTER_RULES = [
-    { word: '大', icon: '🔍', desc: '主標題要大，最重要的發現要大', color: '#EFF6FF', textColor: '#1E40AF' },
-    { word: '少', icon: '✂️', desc: '字越少越好，每區塊不超過三行', color: '#FEF2F2', textColor: '#991B1B' },
-    { word: '準', icon: '🎯', desc: '只放最重要的一個發現，不是全部', color: '#F0FDF4', textColor: '#166534' },
-    { word: '亮', icon: '💡', desc: '圖表是武器，放中間，放最大', color: '#FEF9C3', textColor: '#854D0E' },
+    { word: '大', icon: '🔍', desc: '主標題要大、最重要的發現要大',     color: '#EFF6FF', textColor: '#1E40AF' },
+    { word: '少', icon: '✂️', desc: '字越少越好、每區塊不超過 3 行',    color: '#FEF2F2', textColor: '#991B1B' },
+    { word: '準', icon: '🎯', desc: '只放最重要的 1 個發現，不是全部',  color: '#F0FDF4', textColor: '#166534' },
+    { word: '亮', icon: '💡', desc: '圖表是武器，放中間放最大',         color: '#FEF9C3', textColor: '#854D0E' },
 ];
 
-const PROMPTS = {
-    polish: `我寫了一段研究報告的草稿，請幫我：
-1. 在「不改變我的核心發現」的前提下，讓這段話更有學術嚴謹感
-2. 指出有沒有邏輯不通的地方
-3. 修正語法錯誤
-⚠️ 不可以自己捏造我沒有的數據，如果要舉例請先告訴我
+/* 海報排版規範（規準七 50%）*/
+const FORMAT_RULES = [
+    { rule: '對齊',     desc: '所有區塊文字左對齊或居中對齊「擇一」一致' },
+    { rule: '字級層次', desc: '標題 ≥ 96pt、區塊小標 ≥ 30pt、內文 ≥ 18pt（A1 印出後遠看 1m 可讀）' },
+    { rule: '配色',     desc: '主色 + 強調色 + 中性灰，最多 3 色' },
+    { rule: '字體',     desc: '建議思源黑體 / 思源宋體；禁用標楷體（遠看糊）；不混用 ≥ 3 種字體' },
+];
 
-以下是我的草稿：
-【貼上你的文字片段】`,
-    abstract: `我的研究標題是「＿＿＿」，以下是各章的核心句子：
-
-引言核心：研究問題是…
-文獻核心：目前文獻指出…
-方法核心：本研究使用……蒐集了……的資料
-結果核心：主要發現是…
-結論核心：此研究說明了…
-
-請幫我寫一段 150-200 字的中文研究摘要。
-格式：目的 → 方法 → 主要發現 → 結論。
-語氣：學術、簡潔、第三人稱為主。`,
-    stitch: `我把小論文的不同章節拼在一起了。
-請幫我閱讀以下【第 __ 章結尾】與【第 __ 章開頭】的段落：
-
-【貼上兩段文字】
-
-請：
-1. 不要改變我的原意與任何數據
-2. 幫我在兩段之間加上 1-2 句「過渡句（Transition）」
-3. 把語氣統一成客觀的學術第三人稱
-讓這兩段讀起來像同一篇文章。`,
-    checkup: `我是高中生，剛完成一份研究小論文。
-請你扮演「論文健檢醫生」，閱讀我上傳的 PDF 報告，然後只做診斷、不動刀修改。
-
-請依以下五項逐一檢查，每項給「✅ 通過」或「⚠️ 需注意」，並用一句話說明理由：
-
-1.【結構完整】五章（引言、文獻、方法、結果、討論）＋摘要＋參考文獻，有沒有缺少的？
-2.【前後一致】研究問題、方法、結果、結論之間的邏輯鏈有沒有斷掉？
-3.【結論回扣】第五章的結論有沒有直接回答第一章提出的研究問題？
-4.【描述 vs. 推論】第四章有沒有偷渡主觀推論？第五章有沒有把推論當事實寫？
-5.【參考文獻】格式是否統一（APA）？文中引用和文末清單有沒有對不上的？
-
-⚠️ 規則：
-- 你只能「指出問題」，不可以幫我改寫任何一句話
-- 如果某項通過，也請告訴我為什麼通過
-- 最後給一個 0-5 的「健康指數」（5 = 非常健康）`,
-};
-
+/* 輕量化 Export 4 欄 */
 const EXPORT_FIELDS = [
-    { key: 'w16-role', label: '我的角色' },
-    { key: 'w16-abstract-cores', label: '各章核心句' },
-    { key: 'w16-abstract-ai', label: 'AI 摘要初稿' },
-    { key: 'w16-abstract-edit', label: '我修改的部分' },
-    { key: 'w16-abstract-final', label: '最終摘要' },
-    { key: 'w16-polish-chapter', label: 'AI 潤色紀錄（哪一章）' },
-    { key: 'w16-polish-diff', label: 'AI 潤色差異' },
-    { key: 'w16-polish-judge', label: '保留/刪掉/改回去' },
-    { key: 'w16-checkup-result', label: 'AI 健檢結果' },
-    { key: 'w16-checkup-action', label: '我決定改什麼' },
-    { key: 'w16-poster-title', label: '海報大標題' },
-    { key: 'w16-poster-finding', label: '最核心發現' },
-    { key: 'w16-poster-chart', label: '關鍵圖表' },
-    { key: 'w16-poster-conclusion', label: '海報結論' },
-    { key: 'w16-peer-memory', label: '同儕 3 秒記住的' },
-    { key: 'w16-peer-reflect', label: '互評反思' },
+    { key: 'w16-poster-progress', label: '製作進度自評', question: '線框圖 / 雛形 / 細節調整 / 已定稿（四選一）' },
+    { key: 'w16-poster-tradeoff', label: '內容取捨紀錄', question: '因為海報空間限制，我刪掉/簡化了什麼？為什麼？' },
+    { key: 'w16-rubric-self-check', label: '7 項規準自查', question: '我最沒把握的是哪一項？打算 W17 前怎麼補？' },
     { key: 'w16-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
-
-/* ══════════════════════════════════════
- *  CopyablePrompt 元件
- * ══════════════════════════════════════ */
-const CopyablePrompt = ({ text, label }) => {
-    const [copied, setCopied] = useState(false);
-    const handleCopy = useCallback(() => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        }).catch(() => {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        });
-    }, [text]);
-
-    return (
-        <div style={{ borderRadius: 'var(--radius-unified)', overflow: 'hidden', background: '#1a1a2e' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', background: '#16213e', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-mono)' }}>
-                    <Bot size={14} /> {label || 'AI Prompt — 複製後貼到 AI 對話窗'}
-                </span>
-                <button onClick={handleCopy} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 10px', fontSize: 11, fontWeight: 700, color: '#fff', background: 'var(--accent)', border: 'none', borderRadius: 4, cursor: 'pointer' }}>
-                    {copied ? <><Check size={12} /> 已複製</> : <><Copy size={12} /> 複製</>}
-                </button>
-            </div>
-            <pre style={{ margin: 0, padding: 16, fontSize: 12, color: '#e2e8f0', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7, fontFamily: 'var(--font-mono)' }}>
-                {text}
-            </pre>
-        </div>
-    );
-};
-
-/* ══════════════════════════════════════
- *  互動式自查清單
- * ══════════════════════════════════════ */
-const AssemblyChecklist = () => {
-    const [checked, setChecked] = useState(() => {
-        try { return JSON.parse(localStorage.getItem('w16-assembly-check') || '{}'); } catch { return {}; }
-    });
-    const toggle = (key) => {
-        const next = { ...checked, [key]: !checked[key] };
-        setChecked(next);
-        localStorage.setItem('w16-assembly-check', JSON.stringify(next));
-    };
-    const items = [
-        { key: 'ch1', label: 'Step 1 — 第一章：引言（W3-W4 素材整合）' },
-        { key: 'ch2', label: 'Step 2 — 第二章：文獻探討（W6 文獻摘要整合）' },
-        { key: 'ch3', label: 'Step 3 — 第三章：研究方法（W10 方法說明整合）' },
-        { key: 'ch4', label: 'Step 4 — 第四章：研究結果（W14 客觀描述整合＋圖表）' },
-        { key: 'ch5', label: 'Step 5 — 第五章：討論與結論（W14-W15 推論＋限制）' },
-        { key: 'ch6', label: 'Step 6 — 參考文獻（W6 APA 格式清單）' },
-        { key: 'stitch', label: '縫合檢查 — 各章節之間的過渡句已確認' },
-    ];
-    const allDone = items.every(i => checked[i.key]);
-
-    return (
-        <div>
-            <div className="w16-checklist">
-                {items.map(item => (
-                    <div key={item.key} className="w16-check-item" onClick={() => toggle(item.key)}>
-                        <div className={`w16-check-box ${checked[item.key] ? 'checked' : ''}`}>
-                            {checked[item.key] && <Check size={14} />}
-                        </div>
-                        <span>{item.label}</span>
-                    </div>
-                ))}
-            </div>
-            {allDone && (
-                <div style={{ marginTop: 12, padding: '10px 16px', borderRadius: 'var(--radius-unified)', background: '#F0FDF4', border: '1px solid #BBF7D0', fontSize: 12, fontWeight: 700, color: '#166534', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Check size={16} /> 七步組裝全數完成！可以進入 Step 7 摘要了
-                </div>
-            )}
-        </div>
-    );
-};
 
 /* ══════════════════════════════════════
  *  主元件
  * ══════════════════════════════════════ */
 const W16Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
-    /* 讀取前週資料 */
-    const prev = readRecords(['w15-draft-describe', 'w15-draft-interpret', 'w15-draft-anchor', 'w15-draft-critique', 'w14-my-chart-type', 'w14-my-description', 'w14-my-inference']);
-    const topic = localStorage.getItem('w4-initial-topic') || '';
-    const method = localStorage.getItem('w8-method') || localStorage.getItem('w7-method') || '';
 
     const steps = [
-        /* ── Step 1 ── */
+        /* ── Step 1 海報入門 + 7 項規準 ── */
         {
-            title: '組裝出發',
-            icon: <Package size={18} />,
+            title: '海報入門',
+            icon: <BookOpen size={18} />,
             content: (
                 <div className="prose-zh">
+                    {/* 開場：為什麼用海報 */}
                     <div className="card">
                         <div className="card-header">
-                            <FileText size={16} /> 報告 = 你已經寫好的碎片
+                            <Target size={16} /> 為什麼今年用海報，不寫 Word 報告？
                         </div>
-                        <div className="card-body" style={{ fontSize: 13, lineHeight: 1.8 }}>
-                            好消息：<strong>你已經寫完 80%</strong>。前 15 週每份學習單都藏著報告的原料，現在只需要「搬運 → 縫合 → 潤色」三步組裝。
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                海報是一份能在 <strong>3 秒內被讀懂的研究報告</strong>。
+                                Word 報告靠長度堆出嚴謹感，海報逼你<strong>抓出最重要的</strong>——這才是研究功力。
+                            </p>
+                            <p style={{ fontSize: 13, lineHeight: 1.85, color: 'var(--ink-mid)' }}>
+                                W17 Gallery Walk 你會親自顧攤分享，海報就是你的「招牌」。<br />
+                                <strong>本週目標</strong>：兩張 A1 海報，老師印出來，下週直接上場。
+                            </p>
                         </div>
                     </div>
 
-                    {/* 七步組裝清單 */}
+                    {/* 7 項評分規準（對齊期末規準）*/}
                     <div className="card" style={{ marginTop: 16 }}>
                         <div className="card-header">
-                            <CheckSquare size={16} /> 七步組裝清單
+                            <Award size={16} /> 海報怎麼被評分？— 7 項規準（總分 100）
                         </div>
                         <div className="card-body">
-                            <div className="w16-assembly-grid">
-                                {ASSEMBLY_STEPS.map(s => (
-                                    <div className="w16-assembly-row" key={s.num}>
-                                        <div className="w16-assembly-num" style={{ background: s.color }}>{s.num}</div>
-                                        <div className="w16-assembly-body">
-                                            <div className="w16-assembly-title">{s.chapter}</div>
-                                            <div>{s.task}</div>
-                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
-                                                <span className="w16-assembly-source">來源：{s.source}</span>
-                                                <span className="w16-assembly-time">{s.time}</span>
-                                                {s.words !== '—' && <span className="w16-assembly-time">{s.words}</span>}
-                                            </div>
-                                        </div>
-                                    </div>
+                            <p style={{ fontSize: 12.5, color: 'var(--ink-mid)', marginBottom: 12, lineHeight: 1.8 }}>
+                                這份就是<strong>期末研究報告的評分規準</strong>（去年版本 + 海報版註腳）。先看清楚每一項對應海報哪個區塊，後面製作時就知道哪格不能漏。
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 60px 1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>項</div>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>評分項目</div>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>權重</div>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>對應海報區塊</div>
+                                {RUBRIC_7.map(r => (
+                                    <React.Fragment key={r.num}>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12, fontWeight: 700, color: 'var(--accent)' }}>{r.num}</div>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12, color: 'var(--ink)' }}>{r.title}</div>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12, fontWeight: 700, color: 'var(--ink)' }}>{r.weight}%</div>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 11.5, color: 'var(--ink-mid)' }}>{r.area}</div>
+                                    </React.Fragment>
                                 ))}
                             </div>
-                        </div>
-                    </div>
-
-                    {/* 角色分工（並行作業，不要等別人） */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Users size={16} /> 三人分工（並行作業）／Solo 全包
-                        </div>
-                        <div className="card-body">
-                            {/* ⚡ 並行作業提醒（避免角色依序等待） */}
-                            <div style={{ marginBottom: 12, padding: 10, background: '#FEF3C7', border: '1px solid #D97706', borderRadius: 6, fontSize: 12, color: '#78350F', lineHeight: 1.7 }}>
-                                ⚡ <strong>關鍵原則：三個角色「同時開工」，不要排隊。</strong>
-                                舊版設計（搬運工 → 數據官 → AI 溝通師）會讓後段角色乾等。
-                                新版設計：三人從第一分鐘就動手，後面只用 5 分鐘做縫合。
-                            </div>
-                            <div className="w16-role-grid">
-                                {ROLES.map(r => (
-                                    <div className="w16-role-card" key={r.name} style={{ background: r.color, borderColor: r.border }}>
-                                        <div className="w16-role-header" style={{ background: 'rgba(255,255,255,0.5)' }}>
-                                            {r.emoji} {r.name}
-                                        </div>
-                                        <div className="w16-role-body">
-                                            <div style={{ fontWeight: 700, marginBottom: 4 }}>{r.steps}</div>
-                                            <div style={{ marginBottom: 6 }}>{r.task}</div>
-                                            {r.parallel && (
-                                                <div style={{ marginTop: 6, padding: '6px 8px', background: 'rgba(0,0,0,0.04)', borderRadius: 4, fontSize: 11, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: `🟢 並行：${r.parallel}` }} />
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            <ThinkRecord
-                                dataKey="w16-role"
-                                prompt="今天我的角色是？（搬運工／數據官／AI 溝通師／Solo 全包）"
-                                scaffold={['搬運工', '數據官', 'AI 溝通師', 'Solo（全包）']}
-                            />
-                            {/* ⏰ 時程修正提醒（避免學生以為「課堂內全部做完」） */}
-                            <div style={{ marginTop: 12, padding: 10, background: '#FEE2E2', border: '1px solid #DC2626', borderRadius: 6, fontSize: 12, color: '#7F1D1D', lineHeight: 1.7 }}>
-                                ⏰ <strong>時程實話告訴你：</strong>
-                                Step 1-6 課堂內 50 分鐘做得完。
-                                <strong>Step 7（摘要）改成課後作業</strong>——AI 摘要要等回應、要改寫，課堂硬塞進去會犧牲縫合與健檢的時間。
+                            <div style={{ marginTop: 12, padding: '10px 14px', background: '#FFFBEB', borderLeft: '3px solid #F59E0B', borderRadius: 4, fontSize: 12, color: '#92400E', lineHeight: 1.8 }}>
+                                ⚠️ <strong>規準五（資料完整性 10%）海報放不下原始資料</strong>——組長要把問卷原稿／訪談逐字稿／實驗紀錄壓成 zip，上傳到 GC（檔名：<code>組別_原始資料.zip</code>）。<strong>沒交直接 D。</strong>
                             </div>
                         </div>
                     </div>
@@ -308,139 +123,219 @@ const W16Page = () => {
             ),
         },
 
-        /* ── Step 2 ── */
+        /* ── Step 2 海報架構 + 模板下載 ── */
         {
-            title: '報告組裝 + AI 潤色',
-            icon: <PenTool size={18} />,
-            content: (
-                <div className="prose-zh">
-                    {/* 組裝進度追蹤 */}
-                    <div className="card">
-                        <div className="card-header">
-                            <CheckSquare size={16} /> 組裝進度（完成就打勾）
-                        </div>
-                        <div className="card-body">
-                            <AssemblyChecklist />
-                        </div>
-                    </div>
-
-                    {/* Step 7 摘要 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <FileText size={16} /> Step 7 — 摘要生成（最後做）
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 12 }}>
-                                先填入各章核心句，再用下方 Prompt 讓 AI 幫你生成摘要初稿：
-                            </p>
-                            <ThinkRecord
-                                dataKey="w16-abstract-cores"
-                                prompt="各章核心句（一章一句）"
-                                scaffold={[
-                                    '引言核心：',
-                                    '文獻核心：',
-                                    '方法核心：',
-                                    '結果核心：',
-                                    '結論核心：',
-                                ]}
-                            />
-                            <div style={{ marginTop: 12 }}>
-                                <CopyablePrompt text={PROMPTS.abstract} label="摘要生成 Prompt" />
-                            </div>
-                            <ThinkRecord
-                                dataKey="w16-abstract-ai"
-                                prompt="AI 生成的摘要初稿（貼上）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-abstract-edit"
-                                prompt="我修改了哪些部分？AI 哪裡說錯了？語氣哪裡不對？"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-abstract-final"
-                                prompt="最終確定的摘要（150-200 字）"
-                            />
-                        </div>
-                    </div>
-
-                    {/* AI 潤色 Prompt */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Bot size={16} /> AI 文字潤色（至少做一次）
-                        </div>
-                        <div className="card-body">
-                            <CopyablePrompt text={PROMPTS.polish} label="學術語言優化 Prompt" />
-                            <ThinkRecord
-                                dataKey="w16-polish-chapter"
-                                prompt="我選的段落來自第___章，AI 改了哪些東西？（用自己的話描述）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-polish-diff"
-                                prompt="AI 潤色後的版本有哪些改動？"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-polish-judge"
-                                prompt="我保留的／我刪掉的／我改回去的"
-                            />
-                        </div>
-                    </div>
-
-                    {/* 縫合 Prompt */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Bot size={16} /> 章節縫合手術（選用）
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 12, color: 'var(--ink-mid)', marginBottom: 12 }}>
-                                如果你把不同章節拼在一起後，讀起來像「不同人寫的」——用這個 Prompt 做縫合手術：
-                            </p>
-                            <CopyablePrompt text={PROMPTS.stitch} label="章節縫合 Prompt" />
-                        </div>
-                    </div>
-
-                    {/* 完稿健檢 */}
-                    <div className="card" style={{ marginTop: 16, border: '2px solid var(--accent)' }}>
-                        <div className="card-header" style={{ background: 'var(--accent)', color: '#fff' }}>
-                            <FileText size={16} /> 完稿健檢（組裝完成後用）
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 12 }}>
-                                報告在 Canva 排版完成後，<strong>匯出 PDF → 上傳給 AI</strong>。AI 只做診斷、不動刀——你拿到「健檢報告」後自己決定改什麼。
-                            </p>
-                            <div style={{ padding: '10px 16px', background: '#FEF3C7', borderRadius: 'var(--radius-unified)', fontSize: 12, color: '#92400E', lineHeight: 1.7, marginBottom: 12 }}>
-                                <strong>操作步驟：</strong>Canva → 右上角「分享」→「下載」→ 選 PDF → 上傳到 ChatGPT 或 Claude → 貼上下方 Prompt
-                            </div>
-                            <CopyablePrompt text={PROMPTS.checkup} label="完稿健檢 Prompt（上傳 PDF 後使用）" />
-                            <ThinkRecord
-                                dataKey="w16-checkup-result"
-                                prompt="AI 健檢結果（貼上 AI 的五項診斷＋健康指數）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-checkup-action"
-                                prompt="我決定改什麼？哪些 AI 說的有道理？哪些我選擇不改？為什麼？"
-                                scaffold={[
-                                    '我決定修改的：',
-                                    '我選擇不改的（原因）：',
-                                ]}
-                            />
-                        </div>
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ── Step 3 ── */
-        {
-            title: '海報規劃',
+            title: '海報架構',
             icon: <Layout size={18} />,
             content: (
                 <div className="prose-zh">
                     <div className="card">
                         <div className="card-header">
-                            <Eye size={16} /> 3 秒吸引力法則：大、少、準、亮
+                            <Layout size={16} /> 兩張 A1 = 一張 A0（並排呈現）
                         </div>
                         <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 16 }}>
-                                下週 Gallery Walk，沒有聽眾會讀你的論文。他們在走過來的 <strong>3 秒內</strong> 決定要不要停下來聽你說話。那 3 秒，靠的是你的海報。
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                海報故事流向「左 → 右」：<strong>左 A1 講為什麼跟怎麼做、右 A1 講發現跟意義</strong>。下方是 7 個區塊的分配，跟 7 項規準完全對應。
+                            </p>
+
+                            {/* 兩張 A1 區塊圖 */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 12 }}>
+                                <div style={{ background: '#EFF6FF', border: '2px solid #1E40AF', borderRadius: 'var(--radius-unified)', padding: 14 }}>
+                                    <div style={{ fontSize: 14, fontWeight: 700, color: '#1E40AF', marginBottom: 8 }}>A1 #1（左 · 故事與方法）</div>
+                                    <div style={{ fontSize: 12, lineHeight: 2, color: '#1E40AF' }}>
+                                        <div><strong>大標題</strong> + 作者班級日期</div>
+                                        <div>① 為什麼研究這個（規準一）</div>
+                                        <div>② 研究問題（規準一）</div>
+                                        <div>③ 文獻發現（規準二）</div>
+                                        <div>④ 研究方法（規準三）</div>
+                                    </div>
+                                </div>
+                                <div style={{ background: '#F0FDF4', border: '2px solid #166534', borderRadius: 'var(--radius-unified)', padding: 14 }}>
+                                    <div style={{ fontSize: 14, fontWeight: 700, color: '#166534', marginBottom: 8 }}>A1 #2（右 · 發現與意義）</div>
+                                    <div style={{ fontSize: 12, lineHeight: 2, color: '#166534' }}>
+                                        <div>★ <strong>核心呈現</strong>（規準四）</div>
+                                        <div>⑤ 主要發現（規準四）</div>
+                                        <div>⑥ 結論（規準六）</div>
+                                        <div>⑦ 限制與建議（規準六）</div>
+                                        <div>參考文獻 + QR（規準七 + 五）</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 視覺範本參考圖（GPT 設計版）*/}
+                    <div className="card" style={{ marginTop: 16 }}>
+                        <div className="card-header">
+                            <Eye size={16} /> 視覺範本參考（看完整海報長什麼樣）
+                        </div>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                下方兩張是<strong>已加上規準角標</strong>的視覺範本——你做的時候對照這個樣子，知道每個區塊長怎樣才合格。實際下載的是「乾淨版」，學生製作後印 A1 用。
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                <div>
+                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 6, textAlign: 'center' }}>A1 #1（左 · 故事與方法）</div>
+                                    <img
+                                        src="/images/w16/poster-sample-left.jpg"
+                                        alt="A1 #1 範本：研究標題 + 動機 + 研究問題 + 文獻發現 + 研究方法"
+                                        style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 'var(--radius-unified)', border: '1px solid var(--border)', background: '#F8FAFC' }}
+                                        onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'block'; }}
+                                    />
+                                    <div style={{ display: 'none', padding: 24, border: '2px dashed var(--border)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12, color: 'var(--ink-light)' }}>
+                                        圖片載入中⋯⋯<br />路徑：/images/w16/poster-sample-left.jpg
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 6, textAlign: 'center' }}>A1 #2（右 · 發現與意義）</div>
+                                    <img
+                                        src="/images/w16/poster-sample-right.jpg"
+                                        alt="A1 #2 範本：核心呈現 + 主要發現 + 結論 + 限制 + 參考文獻 + QR Code"
+                                        style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 'var(--radius-unified)', border: '1px solid var(--border)', background: '#F8FAFC' }}
+                                        onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'block'; }}
+                                    />
+                                    <div style={{ display: 'none', padding: 24, border: '2px dashed var(--border)', borderRadius: 'var(--radius-unified)', textAlign: 'center', fontSize: 12, color: 'var(--ink-light)' }}>
+                                        圖片載入中⋯⋯<br />路徑：/images/w16/poster-sample-right.jpg
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 模板下載（只剩乾淨版）*/}
+                    <div className="card" style={{ marginTop: 16, border: '2px solid var(--accent)' }}>
+                        <div className="card-header" style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
+                            <Download size={16} /> 海報 PPT 模板下載
+                        </div>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                這份就是你要動手改的<strong>乾淨版 PPT</strong>。版面已對齊 7 項規準，你只負責替換文字 + 貼上自己的核心呈現視覺，最後匯出 PDF 給老師印 A1。
+                            </p>
+                            <a
+                                href="/templates/research-poster-template-clean.pptx"
+                                download
+                                style={{
+                                    display: 'block', padding: 16,
+                                    background: '#F0FDF4', border: '2px solid #166534',
+                                    borderRadius: 'var(--radius-unified)', textDecoration: 'none',
+                                }}
+                            >
+                                <div style={{ fontSize: 14, fontWeight: 700, color: '#166534', marginBottom: 4 }}>📥 research-poster-template-clean.pptx</div>
+                                <div style={{ fontSize: 12, color: '#14532D', lineHeight: 1.7 }}>
+                                    含兩張 A1 投影片（左：故事與方法 / 右：發現與意義）。可用 PowerPoint / Google 簡報 / Keynote / Canva 開啟編輯。
+                                </div>
+                            </a>
+                            <p style={{ fontSize: 11.5, color: 'var(--ink-mid)', marginTop: 12, fontStyle: 'italic', lineHeight: 1.7 }}>
+                                💡 完成後匯出 PDF 給老師印 A1。學生不用下載「教學版」——上方視覺範本已經呈現含規準角標的樣子，看著做就好。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ── Step 3 海報製作（直接開模板改）── */
+        {
+            title: '海報製作',
+            icon: <PenTool size={18} />,
+            content: (
+                <div className="prose-zh">
+                    {/* 直接開模板：兩條路 */}
+                    <div className="card">
+                        <div className="card-header">
+                            <PenTool size={16} /> 第一步：打開模板，兩條路
+                        </div>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                你已經在 Step 2 下載 <strong>乾淨版 PPT</strong>。直接開來改，不必從零畫——版面已經對齊 7 項規準。
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                <div style={{ background: '#FEF3C7', border: '2px solid #F59E0B', borderRadius: 'var(--radius-unified)', padding: 14 }}>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#92400E', marginBottom: 8 }}>路線 A · PowerPoint / Google 簡報 / Keynote</div>
+                                    <div style={{ fontSize: 12, lineHeight: 1.85, color: '#78350F' }}>
+                                        雙擊 PPT 檔，直接編輯。<br />
+                                        Google 簡報：上傳到 Drive 後右鍵「以 Google 簡報開啟」。<br />
+                                        Keynote：拖進 Keynote 自動轉檔。
+                                    </div>
+                                </div>
+                                <div style={{ background: '#EFF6FF', border: '2px solid #3B82F6', borderRadius: 'var(--radius-unified)', padding: 14 }}>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#1E40AF', marginBottom: 8 }}>路線 B · Canva（推薦給已有 Canva 帳號）</div>
+                                    <div style={{ fontSize: 12, lineHeight: 1.85, color: '#1E3A8A' }}>
+                                        登入 Canva → 建立新設計 → 「上傳」標籤頁 → 把 PPT 拖進去。<br />
+                                        Canva 自動轉成可編輯的圖文，每張 slide 變一頁設計。
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{ marginTop: 12, padding: '12px 16px', background: 'var(--paper-warm)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', fontSize: 12, color: 'var(--ink-mid)', lineHeight: 1.85 }}>
+                                💡 <strong>不論哪條路</strong>，做完匯出 <strong>PDF</strong> 給老師印 A1。Canva 也支援匯出 PDF（File → Download → PDF Print）。
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 替換內容流程 */}
+                    <div className="card" style={{ marginTop: 16 }}>
+                        <div className="card-header">
+                            <FileText size={16} /> 第二步：替換內容（不改版面）
+                        </div>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                模板的 7 個區塊位置已對齊規準，<strong>不要改動版面</strong>。你只做兩件事：
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
+                                <div style={{ padding: '10px 14px', background: '#fff', fontSize: 12.5, lineHeight: 1.85 }}>
+                                    <strong style={{ color: 'var(--accent)' }}>① 替換每格的文字</strong>——把「請置換」的 placeholder 換成你的研究內容（題目、動機、文獻、方法、結論）
+                                </div>
+                                <div style={{ padding: '10px 14px', background: '#fff', fontSize: 12.5, lineHeight: 1.85 }}>
+                                    <strong style={{ color: 'var(--accent)' }}>② 替換 A1 #2 的核心呈現</strong>——把示範圖刪掉，貼上你 W14 做的最關鍵的那張圖（複製貼上即可，置中對齊）
+                                </div>
+                            </div>
+                            <p style={{ fontSize: 12, color: 'var(--ink-light)', marginTop: 12, fontStyle: 'italic' }}>
+                                ⚠️ 千萬不要重新調整文字框位置或改色塊邊框——除非你很確定要做什麼。模板的對齊跟配色都是「規準七 50%」的依據。
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* 5 種方法核心呈現對照表 */}
+                    <div className="card" style={{ marginTop: 16 }}>
+                        <div className="card-header">
+                            <FileText size={16} /> 第三步：你的方法該放什麼到「核心呈現」？
+                        </div>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                A1 #2 的「核心呈現」位置是 <strong>規準四（20%）</strong>的關鍵——但 5 種方法該放的東西不一樣。對照下表找你那種：
+                            </p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '110px 150px 1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>方法</div>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>核心呈現該放什麼</div>
+                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>具體範例</div>
+                                {[
+                                    { m: '📋 問卷', show: '量化圖表',     ex: '長條圖（人次比較）／圓餅圖（比例）／量表平均值分布／交叉表' },
+                                    { m: '🧪 實驗', show: '前後測比較',   ex: '實驗組 vs 對照組柱狀圖／折線圖（時間變化）／效應量標註' },
+                                    { m: '👀 觀察', show: '行為頻率統計', ex: '行為類別 × 次數柱狀圖／時間分布熱圖／空間分布示意圖' },
+                                    { m: '🎤 訪談', show: '主題編碼 + Quote', ex: '主題分類矩陣（主題 × 受訪者）／3 個關鍵 quote 卡（含受訪者代號 P1/P2/P3）' },
+                                    { m: '📚 文獻分析',  show: '依子類型而異',  ex: '② 歷史：時間軸／因果鏈圖｜③ 內容：編碼計次表／詞頻長條圖／共現矩陣｜④ 論述：立場光譜圖／話語對照表／框架分類｜⑤ 敘事：情節結構圖／角色關係圖' },
+                                ].map((r, i) => (
+                                    <React.Fragment key={i}>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12.5, fontWeight: 700, color: 'var(--ink)' }}>{r.m}</div>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12, fontWeight: 700, color: 'var(--accent)' }}>{r.show}</div>
+                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 11.5, color: 'var(--ink-mid)', lineHeight: 1.7 }}>{r.ex}</div>
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                            <p style={{ fontSize: 11.5, color: 'var(--ink-mid)', marginTop: 12, fontStyle: 'italic', lineHeight: 1.7 }}>
+                                💡 訪談組／文獻組常見錯誤：硬塞長條圖（強行量化質性資料）→ 規準四 D。<strong>找對的呈現方式比硬塞圖表重要。</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* 視覺四字訣 */}
+                    <div className="card" style={{ marginTop: 16 }}>
+                        <div className="card-header">
+                            <Eye size={16} /> 第四步：3 秒吸引力法則（大、少、準、亮）
+                        </div>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                                W17 Gallery Walk 沒有聽眾會讀你的論文。他們在 <strong>3 秒內</strong>決定要不要停下來。決定停下來的不是「字多」，是這 4 件事：
                             </p>
                             <div className="w16-poster-grid">
                                 {POSTER_RULES.map(r => (
@@ -454,106 +349,35 @@ const W16Page = () => {
                         </div>
                     </div>
 
-                    {/* 海報文字規劃 */}
+                    {/* 排版規範（規準七 50%）*/}
                     <div className="card" style={{ marginTop: 16 }}>
                         <div className="card-header">
-                            <PenTool size={16} /> 海報文字規劃（先想好再排版）
+                            <Award size={16} /> 排版規範（規準七 50% · 模板已內建）
                         </div>
                         <div className="card-body">
-                            <ThinkRecord
-                                dataKey="w16-poster-title"
-                                prompt="大標題（要吸引人停下來！建議用問句或驚人數字）"
-                                scaffold={['試試問句：「為什麼___？」', '或驚人數字：「___% 的高中生竟然___」']}
-                            />
-                            <ThinkRecord
-                                dataKey="w16-poster-finding"
-                                prompt="最核心的一個發現（一句話，可以是數字）"
-                            />
-                            <ThinkRecord
-                                dataKey="w16-poster-chart"
-                                prompt="關鍵圖表——你打算放哪一張？（W14 或 W15 做的哪一個？）"
-                            />
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 8 }}>
-                                <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 4 }}>左區：研究動機（一句話）</div>
-                                    <ThinkRecord dataKey="w16-poster-motive" prompt="一句話說清楚為什麼做這個研究" />
-                                </div>
-                                <div>
-                                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-mid)', marginBottom: 4 }}>右區：研究方法（一句話）</div>
-                                    <ThinkRecord dataKey="w16-poster-method" prompt="一句話說清楚你用什麼方法" />
-                                </div>
-                            </div>
-                            <ThinkRecord
-                                dataKey="w16-poster-conclusion"
-                                prompt="結論（不超過三點，每點一行）"
-                                scaffold={['1.', '2.', '3.']}
-                            />
-                        </div>
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ── Step 4 ── */
-        {
-            title: '海報製作',
-            icon: <Layout size={18} />,
-            content: (
-                <div className="prose-zh">
-                    {/* 紙筆線框圖 */}
-                    <div className="card" style={{ border: '2px solid #DC2626' }}>
-                        <div className="card-header" style={{ background: '#FEF2F2', color: '#991B1B' }}>
-                            ⚠️ 先畫紙筆線框圖！禁止打開電腦
-                        </div>
-                        <div className="card-body" style={{ background: '#FEF2F2' }}>
-                            <p style={{ fontSize: 13, lineHeight: 1.8, color: '#991B1B', fontWeight: 600, marginBottom: 12 }}>
-                                前 15 分鐘嚴禁打開電腦。先在紙上畫好版面配置——哪裡放標題、哪裡放圖表、重點在哪裡。<br />
-                                沒有拿給老師（或組長）看的，不准打開 Canva！
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12, color: 'var(--ink-mid)' }}>
+                                這 4 條<strong>會被打分</strong>。模板已經做好，你只要<strong>不亂改色塊跟字型</strong>就 OK。
                             </p>
-                            <div style={{
-                                background: '#fff',
-                                border: '2px dashed #FECACA',
-                                borderRadius: 'var(--radius-unified)',
-                                padding: 20,
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: 11,
-                                color: '#6B7280',
-                                lineHeight: 2,
-                                whiteSpace: 'pre-line',
-                            }}>
-{`┌─────────────────────────────────────┐
-│          【研究大標題】               │
-│                                     │
-│ [左上：研究動機]   [右上：研究方法]     │
-│  一句話            一句話             │
-│                                     │
-│       [ 中央：最強圖表展現區 ]         │
-│       （全海報最顯眼的位置）           │
-│                                     │
-│ [左下：關鍵發現]   [右下：結論]        │
-│  1.                摘要一句最震撼重點   │
-│  2.                                 │
-│  3.               [QR Code]          │
-└─────────────────────────────────────┘`}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
+                                {FORMAT_RULES.map((f, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 14px', background: '#fff', fontSize: 12 }}>
+                                        <span style={{ fontWeight: 700, color: 'var(--accent)', minWidth: 70, fontSize: 13 }}>{f.rule}</span>
+                                        <span style={{ color: 'var(--ink-mid)', lineHeight: 1.7 }}>{f.desc}</span>
+                                    </div>
+                                ))}
                             </div>
-                            <p style={{ fontSize: 11, color: '#991B1B', marginTop: 8 }}>
-                                海報的重點是排版邏輯，不是漂亮的花邊。先確認最重要的發現有沒有放中間，再考慮美化。
-                            </p>
                         </div>
                     </div>
 
-                    {/* 製作提示 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <Layout size={16} /> 數位版製作提示
-                        </div>
-                        <div className="card-body" style={{ fontSize: 12, lineHeight: 1.8, color: 'var(--ink-mid)' }}>
-                            <p>線框圖確認後才可以打開電腦（Canva / Google 簡報 / 手繪皆可）。</p>
-                            <p style={{ marginTop: 8 }}><strong>常見陷阱提醒：</strong></p>
-                            <div style={{ marginTop: 8, padding: '12px 16px', background: 'var(--paper-warm)', borderRadius: 'var(--radius-unified)', fontSize: 12, lineHeight: 1.8 }}>
-                                「我想換一個很漂亮的背景」→ 先確認最重要發現有沒有放中間、字數有沒有控制。花邊是最後一步！<br />
-                                「內容很多，刪掉覺得少了」→ 完整內容在報告裡，海報只需讓人走過來問「這是什麼？」<br />
-                                「標題太學術了」→ 試改成問句：「為什麼高中生越補習反而越焦慮？」
+                    {/* AI 用法提示（不放 prompt 模板，只說怎麼用）*/}
+                    <div className="card" style={{ marginTop: 16, background: '#FAFAF7', border: '1px dashed var(--border)' }}>
+                        <div className="card-body">
+                            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>💡 想用 AI 幫忙？可以這樣用</p>
+                            <div style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.95 }}>
+                                · <strong>標題吸睛改寫</strong>：把你研究題目原版貼給 AI，請它「保持原意，改成更吸引人的問句或驚人數字版」<br />
+                                · <strong>結論句精簡</strong>：把 W15 寫的結論貼給 AI，請它「壓縮成 2 句話的海報結論」<br />
+                                · <strong>圖示／配色建議</strong>：直接問 AI「這個研究主題適合什麼配色和圖示」<br />
+                                <span style={{ color: 'var(--ink-light)', fontStyle: 'italic' }}>⚠️ 不要叫 AI 從零生成整張海報內容——你的研究內容只有你才知道對不對。AI 只能修飾，不能取代。</span>
                             </div>
                         </div>
                     </div>
@@ -561,58 +385,99 @@ const W16Page = () => {
             ),
         },
 
-        /* ── Step 5 ── */
+        /* ── Step 4 收尾繳交 ── */
         {
-            title: '回顧繳交',
+            title: '收尾繳交',
             icon: <FileText size={18} />,
             content: (
                 <div className="prose-zh">
-                    {/* 同儕 3 秒互評 */}
-                    <div className="w16-review-card">
-                        <div className="w16-review-header">
-                            <Eye size={16} /> 同儕 3 秒互評
+                    {/* 上課紀錄 3 欄 */}
+                    <div className="card">
+                        <div className="card-header">
+                            <Target size={16} /> 上課紀錄（3 格 + AIRED）
                         </div>
-                        <div className="w16-review-body">
-                            <p style={{ marginBottom: 12 }}>
-                                把你的海報草稿給旁邊的同學看 <strong>3 秒</strong>，然後問他：「你記住了什麼？」
+                        <div className="card-body">
+                            <p style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.85, marginBottom: 16 }}>
+                                海報本身才是<strong>期末分數的主軸</strong>（依 7 項規準評）。網頁這 3 格是<strong>製作過程的紀錄</strong>——記下今天做的判斷與選擇，讓老師知道你的思考歷程。
                             </p>
+
                             <ThinkRecord
-                                dataKey="w16-peer-memory"
-                                prompt="同學看了 3 秒後，他記得的是什麼？"
+                                dataKey="w16-poster-progress"
+                                prompt="① 製作進度自評（請填一個）"
+                                placeholder="線框圖完成 / 雛形完成 / 細節調整中 / 已定稿"
+                                rows={2}
                             />
                             <ThinkRecord
-                                dataKey="w16-peer-reflect"
-                                prompt="我最重要的東西有被記住嗎？如果沒有，我打算怎麼調整？"
+                                dataKey="w16-poster-tradeoff"
+                                prompt="② 內容取捨：因為海報空間限制，我刪掉/簡化了什麼？為什麼是這個不是那個？"
+                                placeholder="例：我把 5 篇文獻砍到 3 篇，因為剩下 2 篇主要在補背景、不是核心發現的依據——把空間留給更重要的研究方法說明。"
                                 scaffold={[
-                                    '有被記住 → 不需要大改',
-                                    '沒有被記住 → 我打算把「___」放更大',
+                                    '我刪掉 / 簡化的是 ___',
+                                    '保留的是 ___',
+                                    '取捨理由：因為 ___',
                                 ]}
+                                rows={4}
+                            />
+                            <ThinkRecord
+                                dataKey="w16-rubric-self-check"
+                                prompt="③ 7 項規準自查：我最沒把握的是哪一項？打算 W17 前怎麼補？"
+                                placeholder="例：我最沒把握規準五（資料完整性），因為我還沒整理問卷原稿——本週末前要弄成 zip 上傳 GC。"
+                                scaffold={[
+                                    '我最沒把握第 ___ 項（一/二/三/四/五/六/七）',
+                                    '原因：___',
+                                    'W17 前我要 ___（具體動作 + 期限）',
+                                ]}
+                                rows={4}
                             />
                         </div>
                     </div>
+
+                    {/* AIRED */}
+                    <div style={{ marginTop: 16 }}>
+                        <AIREDNarrative
+                            week="16"
+                            hint="本週可能用 AI 做的事：寫海報標題、潤色 3 個發現的句子、生成示意圖"
+                            optional={true}
+                        />
+                    </div>
+
+                    {/* 本週結束，你應該要會 — B 標準格式 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4" style={{ marginTop: 16 }}>
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                '看懂期末 7 項規準，知道海報哪一格對應哪一項評分',
+                                '在兩張 A1 海報內把 7 個區塊填齊，不漏任何規準項目',
+                                '依視覺技巧（大／少／準／亮）做取捨——不是塞越多越好',
+                                '依排版規範（對齊／字級／3 色／字體）製作海報——這也是評分項',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                    <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                    <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <ExportButton
+                        weekLabel="W16 海報製作（製作過程紀錄）"
+                        fields={EXPORT_FIELDS}
+                    />
 
                     {/* W17 預告 */}
                     <div className="card" style={{ marginTop: 16, background: '#1a1a2e', border: 'none' }}>
                         <div className="card-body" style={{ color: '#e2e8f0' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                                <ArrowRight size={16} style={{ color: 'var(--accent)' }} />
-                                <span style={{ fontSize: 13, fontWeight: 700 }}>下週 W17 最終戰：Gallery Walk 發表會</span>
+                            <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, color: '#FCD34D' }}>
+                                🎨 W17 預告 · Gallery Walk 策展日
                             </div>
-                            <div style={{ fontSize: 12, lineHeight: 1.8, opacity: 0.8 }}>
-                                必須攜帶：海報（紙本或電子）＋ 2 分鐘宣傳話術<br />
-                                你是報告者，也是聆聽者！A/B 組輪替，每個人兩個身分都要做。
+                            <div style={{ fontSize: 12, lineHeight: 1.85, opacity: 0.9 }}>
+                                本週 PDF 匯出後傳給老師，老師會在 W17 前印好 A1 海報。<br />
+                                W17 上半場顧攤分享、下半場走動聆聽，每個人都會填兩份紙本學習單。<br />
+                                <strong style={{ color: '#FCD34D' }}>記得：原始資料壓縮檔（規準五）由組長代繳到 GC，沒交直接 D！</strong>
                             </div>
                         </div>
-                    </div>
-
-                    <div style={{ marginTop: 20 }}>
-                                                {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                        <AIREDNarrative week="16" hint="這週用 AI 組裝研究報告" />
-
-                        <ExportButton
-                            weekLabel="W16 報告撰寫與海報製作"
-                            fields={EXPORT_FIELDS}
-                        />
                     </div>
                 </div>
             ),
@@ -624,7 +489,7 @@ const W16Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 分析與報告 / </span><span className="text-[var(--ink)] font-bold">報告與海報 W16</span>
+                    <span className="hidden md:inline">研究方法與專題 / 分析與報告 / </span><span className="text-[var(--ink)] font-bold">海報製作 W16</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -649,25 +514,25 @@ const W16Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W16"
-                title="報告撰寫與海報製作 · "
-                accentTitle="從數據到故事"
-                subtitle="好消息：你已經寫完 80%。前 15 週每份學習單都藏著報告的原料，現在只需要「搬運 → 縫合 → 潤色」三步組裝。"
-                chain="結論寫好了——還差最後一步：把這 16 週累積的東西組裝成『報告 + 海報』。前 15 週的學習單裡都藏著原料，只剩搬運跟縫合。"
+                title="海報製作 · "
+                accentTitle="兩張 A1 把研究說清楚"
+                subtitle="期末成果不是 Word 報告，是兩張 A1 海報。本週把 W1-W15 累積的內容塞進 7 個區塊，下週 W17 上場。海報本身就是期末研究報告——依 7 項規準打分。"
+                chain="W15 你寫完四層次結論——是時候把整份研究壓縮成兩張海報，讓 3 秒內路過的同學就能 get 你的核心發現。"
                 meta={[
-                    { label: '第一節', value: '七步組裝清單 + AI 組裝 Prompt + 人工校對' },
-                    { label: '第二節', value: '海報製作 + 發表預演 + 繳交報告' },
-                    { label: '課堂產出', value: '研究報告初稿 + A1 海報' },
-                    { label: '帶去 W17', value: '列印好的海報 + 報告定稿' },
+                    { label: '第一節', value: '海報入門 + 7 項規準 + 兩張 A1 架構' },
+                    { label: '第二節', value: '線框圖 + 視覺技巧 + 製作 + 收尾繳交' },
+                    { label: '課堂產出', value: '兩張 A1 海報雛形（PPT 檔）+ 製作紀錄' },
+                    { label: '帶去 W17', value: '匯出 PDF 給老師印 A1，組長另繳原始資料 zip 至 GC' },
                 ]}
             />
             <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                    { wk: 'W3-W4', name: '題目診斷\n博覽會', past: true },
-                    { wk: 'W5-W7', name: '規劃分流\n企劃定案', past: true },
-                    { wk: 'W8-W10', name: '工具設計\n倫理審查', past: true },
-                    { wk: 'W11-W12', name: '執行階段\n自主研究', past: true },
-                    { wk: 'W13-W14', name: '數據轉譯\n圖表結論', past: true },
-                    { wk: 'W15-W16', name: '成果簡報\n博覽發表', now: true },
+                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
+                    { wk: 'W5-W8', name: '操作型定義／海報／文獻', past: true },
+                    { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
+                    { wk: 'W11-W13', name: '執行階段\n自主研究', past: true },
+                    { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
+                    { wk: 'W16-W17', name: '海報製作\nGallery Walk', now: true },
                 ]} />
 
             {/* STEP ENGINE */}

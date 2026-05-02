@@ -1,5 +1,33 @@
 /* W17 — 最終發表：Gallery Walk 策展 */
 
+/* ── card 統一樣式（覆蓋 App.css 全域 .card padding: 2em，避免 icon 跑到框外）── */
+.page-container .card {
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-unified);
+    overflow: hidden;
+    background: #fff;
+}
+.page-container .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+}
+.page-container .card-body {
+    padding: 16px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-mid);
+}
+
+
 /* A/B 輪替表 */
 .w17-rotation-grid {
     display: grid;

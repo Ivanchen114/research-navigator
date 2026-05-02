@@ -565,6 +565,26 @@ const W14Page = () => {
                                         {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
                     <AIREDNarrative week="14" hint="選圖表、寫圖說可能用 AI 建議" optional={true} />
 
+                    {/* 本週結束，你應該要會 — B 標準格式 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                                '為自己的數據選對圖表類型並說清楚理由',
+                                                '寫出符合格式的圖說（圖號／題目／單位／資料來源）',
+                                                '區分「描述」（藍筆）和「推論」（紅筆），避免推論失控',
+                                                '識別三大常見圖表錯誤（誤導比例／截斷座標／樣本失衡）',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                    <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                    <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <ExportButton
                         weekLabel="W14 讓數據自己說話：圖表選擇與圖的說明"
                         fields={EXPORT_FIELDS}

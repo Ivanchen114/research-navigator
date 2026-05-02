@@ -128,18 +128,6 @@ export const W1Page = () => {
             />
             <CourseArc items={W1Data.courseArc} />
 
-            {/* 本週簡報 */}
-            <div className="flex justify-end mb-8 -mt-2">
-                <a
-                    href="https://canva.link/o1izdmpclpoy1t0"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                >
-                    📊 本週簡報 ↗
-                </a>
-            </div>
-
             {/* ══════════ STEP ENGINE ══════════ */}
             <StepEngine
               prevWeek={{ label: '回 W0 偵探特訓班', to: '/w0' }}
@@ -426,22 +414,20 @@ export const W1Page = () => {
                     icon: '📋',
                     content: (
                         <div className="flex flex-col gap-6 prose-zh">
-                            <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em] mb-2">WRAP-UP</div>
-                                <h3 className="font-serif text-[20px] font-bold text-[var(--ink)] mb-3">本週結束，你應該要會</h3>
-                            </div>
-
                             <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                                    ✅ 本週結束，你應該要會
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                                     {[
                                         '說出為什麼「看不出來」反而讓誠實更重要',
                                         '用自己的話解釋 AI-RED 每個字母的意思',
                                         '說明人與 AI 在研究中各自負責什麼',
-                                        '寫下一個讓你好奇的生活現象（下週要帶來）'
+                                        '寫下一個讓你好奇的生活現象（下週要帶來）',
                                     ].map((item, i) => (
                                         <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
-                                            <span className="text-[var(--success)] mt-0.5">✓</span>
-                                            <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>
+                                            <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                            <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
                                         </div>
                                     ))}
                                 </div>

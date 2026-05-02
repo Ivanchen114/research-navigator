@@ -3,7 +3,7 @@
 /* 圖表卡片網格 */
 .w14-chart-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
 }
 .w14-chart-card {
@@ -142,8 +142,13 @@
     line-height: 1.7;
 }
 
-/* 響應式 */
-@media (max-width: 768px) {
+/* 響應式：桌機 4 欄 → 平板 2 欄 → 手機 1 欄 */
+@media (max-width: 1024px) {
+    .w14-chart-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px) {
     .w14-chart-grid {
         grid-template-columns: 1fr;
     }

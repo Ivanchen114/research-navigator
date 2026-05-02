@@ -913,8 +913,8 @@ export const W11Page = () => {
 
         /* ─── Step 4：工具修正 + 倫理 + 施測啟動 + AIRED（第二節 20 min）─── */
         {
-            title: '工具修正 + 倫理 + 施測啟動',
-            icon: '⚖',
+            title: '工具修正',
+            icon: '🔧',
             content: (
                 <div className="space-y-8 prose-zh">
                     {/* 第二輪工具修正 */}
@@ -933,7 +933,14 @@ export const W11Page = () => {
                             rows={8}
                         />
                     </div>
-
+                </div>
+            ),
+        },
+        {
+            title: '倫理審查',
+            icon: '⚖',
+            content: (
+                <div className="space-y-8 prose-zh">
                     {/* 倫理四問自查 */}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
@@ -1027,7 +1034,14 @@ export const W11Page = () => {
                         </p>
                         <TeacherApprovalBadge />
                     </div>
-
+                </div>
+            ),
+        },
+        {
+            title: '施測啟動 + 繳交',
+            icon: '🚀',
+            content: (
+                <div className="space-y-8 prose-zh">
                     {/* 施測啟動：承諾 + Plan B 觸發條件 + 動員宣告 */}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
@@ -1103,6 +1117,26 @@ export const W11Page = () => {
                     </div>
 
                     {/* ExportButton */}
+                    {/* 本週結束，你應該要會 — B 標準格式 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                                '把計畫書題目轉成真的能施測的載具（Form／訪綱／紀錄表）',
+                                                '透過 1 對 1 跨方法 Pilot 找出 AI 看不到的工具毛病',
+                                                '完成倫理四問自查 + AI 審知情同意書 + 教師蓋章',
+                                                '寫出 Plan B 觸發條件 + 施測啟動動員宣告',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                    <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                    <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <ExportButton
                         weekLabel="W11 Pilot Test + 倫理審查 + 施測啟動"
                         fields={EXPORT_FIELDS}
@@ -1115,7 +1149,7 @@ export const W11Page = () => {
                             <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--accent)] uppercase">W12 預告 · 期中進度短報</span>
                         </div>
                         <div className="font-bold text-[17px] md:text-[18px] mb-3 leading-tight">
-                            W12：13 組期中短報 + 同儕回饋（每組 3 min + 1 min QA）
+                            W12：期中短報 + 同儕回饋（每組 3 min + 1 min QA）
                         </div>
                         <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
                             正式施測前的<strong className="text-[var(--accent)]">最後一道擋板</strong>。每組 3 分鐘短報、老師選題提問 1 分鐘。同學透過 Google Form 即時回饋你的計畫漏洞。
@@ -1162,7 +1196,7 @@ export const W11Page = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-8 md:mb-12 gap-3">
                 <div className="text-[11px] font-mono text-[var(--ink-light)] flex items-center gap-2 min-w-0">
-                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">工具實體×預試×倫理 W11</span>
+                    <span className="hidden md:inline">研究方法與專題 / 資料蒐集 / </span><span className="text-[var(--ink)] font-bold">預試與倫理 W11</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
@@ -1174,8 +1208,8 @@ export const W11Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W11"
-                title="工具實體 × 預試 × "
-                accentTitle="倫理 × 施測啟動"
+                title="預試與倫理："
+                accentTitle="施測啟動前的最後一道檢核"
                 subtitle="W10 把題目寫到 docx 上，這週把題目轉成真的能施測的載具——然後 1 對 1 跨方法 Pilot 找出 AI 看不到的毛病、過倫理、宣告施測啟動。"
                 chain="工具寫好了——但別急著真的施測。先找少數人試一遍，避免上場才發現坑。"
                 meta={[
@@ -1187,8 +1221,8 @@ export const W11Page = () => {
             />
             <CourseArc items={[
                     { wk: 'W1-W4', name: '探索\n定題', status: 'past' },
-                    { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
-                    { wk: 'W7-W8', name: '方法選擇\n組隊企劃', status: 'past' },
+                    { wk: 'W5-W6', name: '操作型定義\n海報博覽會', status: 'past' },
+                    { wk: 'W7-W8', name: '文獻偵探\n引用寫作', status: 'past' },
                     { wk: 'W9-W10', name: '工具設計\nAI精進預試', status: 'past' },
                     { wk: 'W11', name: '倫理審查\n施測啟動', status: 'now' },
                     { wk: 'W12-W13', name: '執行研究\n蒐集資料', status: '' },

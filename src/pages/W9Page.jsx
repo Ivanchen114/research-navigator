@@ -12,6 +12,7 @@ import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
+import GroupSizeSelector from '../components/ui/GroupSizeSelector';
 import { W9Data } from '../data/lessonMaps';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
@@ -519,7 +520,6 @@ const W9AiCheckPromptBox = () => {
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1：W8 老師回饋快速讀取 */
-    { key: 'w9-w8-feedback-quick', label: 'W8 老師建議（快速摘要）', question: '第一節看過老師回饋後記的一兩句' },
     /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
     { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-5 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
@@ -538,7 +538,6 @@ export const W9Page = () => {
     const [w8Method, setW8Method] = useState('');
     const [w8Secondary, setW8Secondary] = useState(''); // W8 補充方法（label 字串）
     const [w8Topic, setW8Topic] = useState('');
-    const [w8Drafts, setW8Drafts] = useState({ q1: '', q2: '', q3: '' });
     const [w8Route, setW8Route] = useState(''); // 'team' | 'solo' | ''
     const [showLessonMap, setShowLessonMap] = useState(false);
     /* Step 2 方法頁籤：預設 W8 選到的方法；無則 questionnaire（最常見） */
@@ -556,12 +555,6 @@ export const W9Page = () => {
         /* 讀取 W8 路線（Team / Solo）—— 影響 Step 1 互評環節的鷹架 */
         const route = localStorage.getItem('w8-route') || '';
         if (route === 'team' || route === 'solo') setW8Route(route);
-        /* 讀取 W8 三題初稿：學完三大標準後回頭自我診斷用 */
-        setW8Drafts({
-            q1: saved['w8-draft-q1']?.trim() || '',
-            q2: saved['w8-draft-q2']?.trim() || '',
-            q3: saved['w8-draft-q3']?.trim() || '',
-        });
 
         /* 嘗試自動偵測分流；pitfallTab 同步 */
         const methodLower = method.toLowerCase();
@@ -637,26 +630,6 @@ export const W9Page = () => {
                             </p>
                         </div>
                     )}
-
-                    {/* W8 老師回饋快速讀取（5 分鐘暖身） */}
-                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="text-[18px]">📬</span>
-                            <span className="font-bold text-[14px] text-[var(--ink)]">開始前：先看老師對 W8 計畫書第一版的回饋（5 分鐘）</span>
-                        </div>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            老師已在 <strong>Google Classroom</strong> 發回 W8 計畫書的批改。請先打開看過，把老師<strong className="text-[var(--ink)]">最主要</strong>的一兩句建議記下來——詳細整合留到 Step 3。
-                        </p>
-                        <ThinkRecord
-                            dataKey="w9-w8-feedback-quick"
-                            prompt="老師對我 W8 計畫書最主要的建議是？"
-                            placeholder="例：主題太大、對象要縮小、題目改問「行為」不要問「態度」⋯⋯"
-                            rows={3}
-                        />
-                        <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
-                            💡 還沒拿到回饋？可能老師還在批，或 GC 通知被淹沒。找老師或到 GC 搜 W8 主題。
-                        </p>
-                    </div>
 
                     {/* 1-5 章觀念複習地圖（不是個人素材清單，是觀念口訣）*/}
                     <div>
@@ -972,46 +945,56 @@ export const W9Page = () => {
                         <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed mb-3">
                             每章寫到「<strong>雛形</strong>」就 OK——能看出方向、邏輯通順但還粗糙。<strong>不用追求完美</strong>，下節 W10 還會再修一輪。
                         </p>
-                        <div className="grid md:grid-cols-2 gap-2 mb-3">
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">1 人組（Solo）</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li>第 1、3 章先寫到雛形（最關鍵）</li>
-                                    <li>第 2、4、5 章列大綱</li>
-                                    <li>下節 W10 前找老師個別對焦</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">2 人組</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li>A：第 1-3 章（題目／文獻／方法）</li>
-                                    <li>B：第 4-5 章（變項／對象） + 統整</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">3 人組</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li>A：第 1-2 章（題目 + 文獻）</li>
-                                    <li>B：第 3-4 章（方法 + 變項）</li>
-                                    <li>C：第 5 章 + 統整／同步檢查邏輯一致</li>
-                                </ul>
-                            </div>
-                            <div className="bg-white border border-[#0EA5E9]/30 rounded-[6px] p-3">
-                                <p className="text-[12px] font-bold text-[#075985] mb-1">4 人組</p>
-                                <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li>A：第 1 章（題目／動機／問題）</li>
-                                    <li>B：第 2 章（文獻探討）</li>
-                                    <li>C：第 3-4 章（方法 + 變項）</li>
-                                    <li>D：第 5 章 + 統整／跨章邏輯檢查</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mt-2 pt-2 border-t border-[#0EA5E9]/30">
+                        <GroupSizeSelector
+                            items={{
+                                1: {
+                                    title: '1 人（Solo）',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li>第 1、3 章先寫到雛形（最關鍵）</li>
+                                            <li>第 2、4、5 章列大綱</li>
+                                            <li>下節 W10 前找老師個別對焦</li>
+                                        </ul>
+                                    ),
+                                },
+                                2: {
+                                    title: '2 人組',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li>A：第 1-3 章（題目／文獻／方法）</li>
+                                            <li>B：第 4-5 章（變項／對象）+ 統整</li>
+                                        </ul>
+                                    ),
+                                },
+                                3: {
+                                    title: '3 人組',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li>A：第 1-2 章（題目 + 文獻）</li>
+                                            <li>B：第 3-4 章（方法 + 變項）</li>
+                                            <li>C：第 5 章 + 統整／同步檢查邏輯一致</li>
+                                        </ul>
+                                    ),
+                                },
+                                4: {
+                                    title: '4 人組',
+                                    content: (
+                                        <ul className="list-disc pl-4 space-y-0.5">
+                                            <li>A：第 1 章（題目／動機／問題）</li>
+                                            <li>B：第 2 章（文獻探討）</li>
+                                            <li>C：第 3-4 章（方法 + 變項）</li>
+                                            <li>D：第 5 章 + 統整／跨章邏輯檢查</li>
+                                        </ul>
+                                    ),
+                                },
+                            }}
+                        />
+                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mt-3 pt-2 border-t border-[#0EA5E9]/30">
                             ⏱️ <strong>時間建議</strong>：前 5 分鐘分工 + 對齊整體方向 → 各自寫 30 分鐘 → 最後 10 分鐘互讀統整。
                         </p>
                     </div>
 
-                    {/* 📚 文獻策略卡（承認 W8 合題後 W5/W6 文獻可能失效） */}
+                                        {/* 📚 文獻策略卡（承認 W8 合題後 W5/W6 文獻可能失效） */}
                     <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#D97706] bg-[#FEF3C7] max-w-[720px]">
                         <p className="text-[14px] font-bold text-[#92400E] mb-2">📚 第二章文獻怎麼處理？（W8 合題後 W5/W6 找的文獻可能要重查）</p>
                         <p className="text-[12.5px] text-[#78350F] leading-relaxed mb-3">
@@ -1035,55 +1018,6 @@ export const W9Page = () => {
                             </ul>
                         </div>
                     </div>
-
-                    {/* W8 素材狀態：有寫顯示唯讀，沒寫顯示戰情警示 */}
-                    {(w8Drafts.q1 || w8Drafts.q2 || w8Drafts.q3) ? (
-                        <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                            <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                                <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">W8 ARCHIVE</span>
-                                <span className="font-bold text-[13px] text-[var(--ink)]">W8 你寫的三題初稿（唯讀）——對照老師給的建議修正</span>
-                            </div>
-                            <div className="divide-y divide-[var(--border)]">
-                                {[
-                                    { n: 1, text: w8Drafts.q1 },
-                                    { n: 2, text: w8Drafts.q2 },
-                                    { n: 3, text: w8Drafts.q3 },
-                                ].map((d) => (
-                                    <div key={d.n} className="p-4 px-5 text-[13px] leading-relaxed">
-                                        <span className="font-mono font-bold text-[var(--accent)] mr-2">題 {d.n}：</span>
-                                        <span className="text-[var(--ink)] whitespace-pre-line">
-                                            {d.text || <span className="text-[var(--ink-light)] italic">（W8 這題沒寫）</span>}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
-                            <div className="flex items-center gap-2 mb-3">
-                                <ShieldAlert className="text-[var(--danger)]" size={20} />
-                                <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">R.I.B. 戰情示警 · Level 3</span>
-                            </div>
-                            <div className="font-bold text-[17px] md:text-[18px] mb-3 leading-tight">
-                                W8 計畫書第一版沒寫 = 本節開不了工
-                            </div>
-                            <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
-                                讀不到你的 W8 三題初稿——代表 W8 計畫書第一版沒寫（或沒存檔）。本節要做的整合都靠它：
-                            </p>
-                            <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1 mb-4 pl-4">
-                                <li>・<strong className="text-white">W8 老師建議</strong>：沒草稿 → 老師沒東西可批</li>
-                                <li>・<strong className="text-white">第一章修改</strong>：沒方向 → 無法討論怎麼改</li>
-                                <li>・<strong className="text-white">計畫書組裝</strong>：沒動機／問題／對象 → 第一章全空</li>
-                            </ul>
-                            <p className="text-[13px] text-white/90 leading-[1.9] mb-4">
-                                <strong className="text-[var(--danger)]">本節結束前回 W8 把三題補完</strong>——不然組員無法前進，落掉 W9 會連帶拖到 W10/W11。
-                            </p>
-                            <Link to="/w8" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2.5 rounded font-bold text-[13px] hover:opacity-90 transition-opacity">
-                                <ArrowRight size={15} />
-                                立刻回 W8 補寫三題
-                            </Link>
-                        </div>
-                    )}
 
                     {/* 5 種計畫書模板：自己的粗藍框，其他作「也認識一下」 */}
                     <div>
@@ -1356,6 +1290,26 @@ export const W9Page = () => {
                     </div>
 
                     {/* 2. 一鍵複製（AIRED 與 AI 檢核紀錄已在 Step 3 完成） */}
+                    {/* 本週結束，你應該要會 — B 標準格式 */}
+                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
+                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                            ✅ 本週結束，你應該要會
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                            {[
+                                                '把 W2-W8 寫過的東西整合到計畫書 1-5 章雛形',
+                                                '用 AI 檢核四個維度（方向／精度／結構／陷阱）逐章自查',
+                                                '看別組用什麼方法的計畫書模板，知道 5 種方法的差異',
+                                                '排定 W9-W10 之間的計畫書撰寫時間（避免拖到上課才寫）',
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                    <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                    <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <ExportButton
                         weekLabel="W9 工具設計基礎"
                         fields={EXPORT_FIELDS}
@@ -1460,10 +1414,10 @@ export const W9Page = () => {
             />
             <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
-                    { wk: 'W3-W4', name: '題目診斷\n博覽會', status: 'past' },
-                    { wk: 'W5-W6', name: '文獻搜尋\n引用寫作', status: 'past' },
-                    { wk: 'W7', name: '認識方法\n兩層判斷', status: 'past' },
-                    { wk: 'W8', name: '組隊決策\n企劃定案', status: 'past' },
+                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', status: 'past' },
+                    { wk: 'W5-W6', name: '操作型定義\n海報博覽會', status: 'past' },
+                    { wk: 'W7', name: '文獻搜尋\n入門', status: 'past' },
+                    { wk: 'W8', name: '文獻偵探社\n引用寫作', status: 'past' },
                     { wk: 'W9', name: '工具設計\n處方診斷', status: 'now' },
                     { wk: 'W10', name: '工具精進\n預試', status: '' },
                     { wk: 'W11-W14', name: '執行研究\n數據分析', status: '' },

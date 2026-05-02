@@ -4,12 +4,14 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import CopyButton from '../components/ui/CopyButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import { Map } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
+import BackfillField from '../components/ui/BackfillField';
 import { W2Data } from '../data/lessonMaps';
 import './ProblemFocus.css';
 
@@ -17,7 +19,7 @@ import './ProblemFocus.css';
 
 const FOUR_STEPS = [
     {
-        step: 'STEP 1', name: '覺察現象', who: 'human', whotxt: '⚠️ 只有人能做',
+        step: 'STEP 1', name: '觀察現象', who: 'human', whotxt: '⚠️ 只有人能做',
         how: '像攝影機一樣，具體描述你看到的畫面。不解釋，只描述。',
         ex: '段考前圖書館閱覽室爆滿，連地板都坐人；旁邊的借書區和書架區空無一人，連燈都沒開全。',
     },
@@ -27,14 +29,14 @@ const FOUR_STEPS = [
         ex: '圖書館的核心存在應該是「借閱書籍」，但段考期間它變成了只有桌椅功能、沒有閱讀功能的大型K書房。大家湧向圖書館，卻完全不碰最珍貴的資源：書。',
     },
     {
-        step: 'STEP 3', name: '鎖定核心疑問', who: 'human', whotxt: '⚠️ 你的好奇心，白話說',
-        how: '從矛盾裡，你最想搞清楚的那一件事是什麼？白話文，不管格式。',
-        ex: '「既然只是要桌子，為什麼大家不去空教室或咖啡廳，非要擠在一個充滿自己不讀的書的地方？」',
+        step: 'STEP 3', name: '展開假設', who: 'both', whotxt: '⚠️ 先發散，別急著鎖死',
+        how: '這個矛盾背後可能的解釋是什麼？至少 3 個、最多 5 個，不要只想一個就鎖死。',
+        ex: '① 考試壓力推學生找個地方讀／② 同儕氛圍（看到別人讀就讀）／③ 圖書館的「讀書感」儀式／④ 空教室沒冷氣、沒安靜感／⑤ 家裡讀不下去。',
     },
     {
-        step: 'STEP 4', name: '探究意圖', who: 'ai', whotxt: '第二節 · AI 協助翻譯',
-        how: '把白話疑問套上學術研究句型。第二節課重點。',
-        ex: '【A型】我想探究「考試壓力」如何影響學生對「圖書館空間使用」的選擇。',
+        step: 'STEP 4', name: '鎖定研究問題', who: 'ai', whotxt: '第二節 · 從假設中挑一個',
+        how: '從上一段假設中挑一個你最想先研究的，寫成 A／B／C 型句。AI 協助翻譯成學術語言，但「挑哪個」是你的研究設計決定。',
+        ex: '【A型】我想探究「考試壓力」如何影響學生對「圖書館空間使用」的選擇。（從 ① 出發；②③ 留待後續研究）',
     },
 ];
 
@@ -44,43 +46,365 @@ const ABC_TYPES = [
     { l: 'C', t: '深究型', p: '「A 背後的原因是什麼？」', m: '🎤 訪談 / 👀 觀察', e: '例：「學生選圖書館K書而非空教室的心理原因是什麼？」' },
 ];
 
-const AIRED_FIELDS = [
-    { l: 'A', w: 'Ascribe\n歸屬說明', v: '用了哪個 AI 工具？做什麼用？（ChatGPT / Claude / Gemini…）' },
-    { l: 'I', w: 'Inquire\n提問紀錄', v: '把你用過的 Prompt（包括追問）都貼上來，不要只貼最後一次。' },
-    { l: 'R', w: 'Reference\n引用標註', v: 'AI 生成內容不需查來源，填「無（AI 生成）」即可。' },
-    { l: 'E', w: 'Evaluate\n評估判斷', v: 'AI 給的建議合理嗎？哪裡需要修正？你的判斷寫在這裡。' },
-    { l: 'D', w: 'Document\n歷程記錄', v: '保存對話名稱或連結。Gemini 可匯出成 Google 文件直接存雲端。' },
-];
+/* PROMPT_INTENT 改成動態組（W2AuditPrompt 元件內 build），這個常數已不用。
+ * 保留 placeholder 字串供 fallback 顯示用。
+ */
+const PROMPT_AUDIT_TEMPLATE = (data) => {
+    const fb = (s, label) => s || `[ ⚠️ 沒抓到「${label}」，請回前面補齊 ]`;
+    return `我是高中生，正在做研究專題。請扮演研究方法老師幫我審核我寫的「研究問題草稿」。
 
-const PROMPT_GAP = `我觀察到一個現象：[請貼上你的現象]
+【我的四段式思考歷程】
+觀察現象：${fb(data.phenomenon, '現象')}
+發現落差：${fb(data.gap, '落差')}
+列出假設：${fb(data.hypotheses, '假設清單')}
+選定假設＋判型：${fb(data.judgment, '選定假設與 ABC 判型')}
 
-請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。
-（例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）
+【我的研究問題草稿】
+${fb(data.draft, '研究問題草稿')}
 
-請給我 5 個不同的矛盾點，每個用一句話說明。`;
+請你做兩件事：
 
-const PROMPT_INTENT = `我觀察到：[你的現象]
-發現落差：[你最終決定的落差]
-我最想搞清楚的核心疑問是：[你的白話疑問]
+① 結構審核：這個句子有沒有符合我選的型（A 影響型／B 比較型／C 深究型）的結構標準？如果結構漏了什麼，請具體指出。
+   · A 型：要清楚指出「自變項」與「依變項」
+   · B 型：要清楚對照兩個對象／情境
+   · C 型：要明確指出「機制／原因」是研究焦點
 
-請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：
+② 改寫建議：給我 1 個更精準的改寫版本（不超過 1 句），並用 1 句話說明你改了什麼、為什麼。
 
-A. 影響型（某因素如何影響某結果）
-B. 比較型（兩種對象/情境的差異）
-C. 深究型（某現象的運作機制/背後原因）
-
-每個方向請用一句話說明，並標註適合的研究方法。`;
+⚠️ 不要直接幫我換型——如果你覺得我選錯型，請在「結構審核」裡說明，但「改寫版本」請維持我選的型。`;
+};
 
 const EXPORT_FIELDS = [
+    { key: 'w2-practice1-phenomenon', label: '[暖身 ①垃圾] 現象', question: '像攝影機一樣描述（暖身練習，評分寬鬆）' },
+    { key: 'w2-practice1-gap', label: '[暖身 ①垃圾] 落差', question: '應該是⋯但實際上⋯（暖身）' },
+    { key: 'w2-practice1-hypotheses', label: '[暖身 ①垃圾] 假設', question: '可能的 3-5 個解釋（暖身）' },
+    { key: 'w2-practice2-phenomenon', label: '[暖身 ②課堂] 現象', question: '像攝影機一樣描述（暖身）' },
+    { key: 'w2-practice2-gap', label: '[暖身 ②課堂] 落差', question: '應該是⋯但實際上⋯（暖身）' },
+    { key: 'w2-practice2-hypotheses', label: '[暖身 ②課堂] 假設', question: '可能的 3-5 個解釋（暖身）' },
     { key: 'w2-step1-phenomenon', label: 'Step 1 現象', question: '像攝影機一樣，你看到了什麼？（至少 30 字）' },
     { key: 'w2-step2-gap', label: 'Step 2 落差', question: '哪裡跟你想的不一樣？矛盾在哪？' },
-    { key: 'w2-step3-question', label: 'Step 3 核心疑問', question: '你最想搞清楚的那一件事，白話說' },
-    { key: 'w2-ai-gap-choice', label: 'AI 落差擴充：我的選擇', question: 'AI 給了 5 個落差，你選了哪一個？為什麼？' },
-    { key: 'w2-abc-judgment', label: 'ABC 型判斷（人腦先行）', question: '你判斷是哪一型？為什麼？白話初稿？' },
-    { key: 'w2-ai-intent-choice', label: 'AI 三方向：我的選擇', question: 'AI 給了 3 個方向，你選哪一個？為什麼？' },
-    { key: 'w2-final-intent', label: '最終探究意圖', question: '你的最終探究意圖（帶去 W3 的版本）' },
-    { key: 'w2-aired-record', label: 'AI-RED 記錄', question: '用了什麼 AI、問了什麼、你的評估' },
+    { key: 'w2-step3-question', label: 'Step 3 展開假設', question: '這個矛盾背後可能的 3-5 個解釋' },
+    { key: 'w2-abc-judgment', label: '第一輪：挑選假設＋ABC 型判斷', question: '你選哪個假設？為什麼選它？它屬於 A／B／C 哪型？' },
+    { key: 'w2-rq-draft', label: '第一輪：研究問題草稿（自寫）', question: '你自己先寫一句研究問題（給 AI 審用的）' },
+    { key: 'w2-ai-intent-choice', label: '第三輪：AI 審核後的決定', question: '審核後你決定保留自己的、採 AI 改寫、還是混合？' },
+    { key: 'w2-final-intent', label: '最終研究問題', question: '你的最終研究問題（帶去 W3 的版本）' },
+    { key: 'w2-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w2-reflect-stuck', label: '反思：卡在哪一段', question: '四段式框架你卡在哪一段？為什麼那段最難？' },
 ];
+
+/* ── Step 4 第一輪帶入卡：把 Step 2「人腦練習」的三格內容（現象／落差／假設清單）
+ *    顯示出來，讓學生挑一個假設時不用翻回上一個 Step ── */
+function W2Beat1RefCard() {
+    const [phenomenon, setPhenomenon] = useState('');
+    const [gap, setGap] = useState('');
+    const [hypotheses, setHypotheses] = useState('');
+
+    const refresh = useCallback(() => {
+        const records = readRecords();
+        setPhenomenon((records['w2-step1-phenomenon'] || '').trim());
+        setGap((records['w2-step2-gap'] || '').trim());
+        setHypotheses((records['w2-step3-question'] || '').trim());
+    }, []);
+
+    useEffect(() => {
+        refresh();
+        window.addEventListener('focus', refresh);
+        return () => window.removeEventListener('focus', refresh);
+    }, [refresh]);
+
+    if (!phenomenon && !gap && !hypotheses) {
+        return (
+            <div className="mb-3">
+                <BackfillField
+                    dataKey="w2-step3-question"
+                    label="⚠️ 還沒偵測到「人腦練習」階段的內容——想直接從這個 AI 協作階段開始？把你列出的 3-5 個假設貼這裡，下方就能挑一個並判斷 ABC 型。"
+                    placeholder={'例：① 考試壓力 ② 同儕氛圍 ③ 圖書館「讀書感」儀式 ④ 空教室沒冷氣 ⑤ 家裡讀不下去'}
+                    buttonLabel="補上假設清單"
+                />
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[8px] p-4 space-y-2 text-[12.5px] mb-3">
+            <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider">
+                📎 你「人腦練習」階段寫過的（不用翻回去）
+            </div>
+            {phenomenon && (
+                <div className="flex items-baseline gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[80px]">Step 1 現象</span>
+                    <span className="text-[var(--ink-mid)] whitespace-pre-wrap line-clamp-2">{phenomenon}</span>
+                </div>
+            )}
+            {gap && (
+                <div className="flex items-baseline gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[80px]">Step 2 落差</span>
+                    <span className="text-[var(--ink-mid)] whitespace-pre-wrap line-clamp-2">{gap}</span>
+                </div>
+            )}
+            {hypotheses && (
+                <div className="flex items-start gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--accent)] shrink-0 w-[80px] mt-0.5">Step 3 假設</span>
+                    <span className="text-[var(--ink)] whitespace-pre-wrap font-medium">{hypotheses}</span>
+                </div>
+            )}
+            <p className="text-[11px] text-[var(--ink-light)] italic pt-1 border-t border-[var(--border)]">
+                💡 從假設清單裡挑一個你最想先研究的，下方寫「我選 ___ + 為什麼 + 它屬於 ABC 哪一型」。
+            </p>
+        </div>
+    );
+}
+
+/* ── Step 4 帶入卡：把 Step 1 現象 / Step 3 核心疑問 / ABC 判斷顯示出來，
+ *    讓學生定稿時不用翻回上一步 ── */
+function W2Step4RefCard() {
+    const [phenomenon, setPhenomenon] = useState('');
+    const [question, setQuestion] = useState('');
+    const [abcJudgment, setAbcJudgment] = useState('');
+    const [abcType, setAbcType] = useState(null); // 'A' | 'B' | 'C' | null
+
+    const refresh = useCallback(() => {
+        const records = readRecords();
+        setPhenomenon((records['w2-step1-phenomenon'] || '').trim());
+        setQuestion((records['w2-step3-question'] || '').trim());
+        const j = (records['w2-abc-judgment'] || '').trim();
+        setAbcJudgment(j);
+        // 偵測 ABC 型（白話初稿裡很可能寫「我判斷是 A 型」「B 型」「C 型」）
+        const m = j.match(/[ABC](?=\s*型)/);
+        setAbcType(m ? m[0] : null);
+    }, []);
+
+    useEffect(() => {
+        refresh();
+        window.addEventListener('focus', refresh);
+        return () => window.removeEventListener('focus', refresh);
+    }, [refresh]);
+
+    if (!phenomenon && !question && !abcJudgment) {
+        return (
+            <BackfillField
+                dataKey="w2-abc-judgment"
+                label="⚠️ 還沒偵測到「AI 協作」第一輪的挑選——想直接從定稿階段開始？把『我選假設 ___，因為 ___，這是 X 型』貼這裡，下方 scaffold 會根據 ABC 型給你翻譯提示。"
+                placeholder={'例：我選假設①「考試壓力」，因為這個變項最容易設計問卷量測。我判斷是 A 型（影響型）。'}
+                buttonLabel="補上挑選＋判斷"
+            />
+        );
+    }
+
+    const ABC_LABELS = { A: '影響型', B: '比較型', C: '深究型' };
+    const ABC_HINT = {
+        A: '建議用 scaffold 第 1 條：「我想探究『___』如何影響『___』」',
+        B: '建議用 scaffold 第 2 條：「我想比較『___』和『___』的差異」',
+        C: '建議用 scaffold 第 3 條：「我想深究『___』背後的原因」',
+    };
+
+    return (
+        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[10px] p-4 space-y-2 text-[12.5px]">
+            <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-wider">
+                📎 你前面寫過的（不用翻回去）
+            </div>
+            {abcType && (
+                <div className="flex items-baseline gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--accent)] shrink-0">ABC 判斷</span>
+                    <span className="text-[var(--ink)]">
+                        <strong>{abcType} 型（{ABC_LABELS[abcType]}）</strong>
+                        <span className="text-[11px] text-[var(--ink-light)] ml-2">— {ABC_HINT[abcType]}</span>
+                    </span>
+                </div>
+            )}
+            {question && (
+                <div className="flex items-start gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px] mt-0.5">Step 3 假設</span>
+                    <span className="text-[var(--ink)] whitespace-pre-wrap line-clamp-3">{question}</span>
+                </div>
+            )}
+            {abcJudgment && (
+                <div className="flex items-start gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px] mt-0.5">挑選＋判斷</span>
+                    <span className="text-[var(--ink)] whitespace-pre-wrap">{abcJudgment}</span>
+                </div>
+            )}
+            {phenomenon && (
+                <div className="flex items-baseline gap-2">
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px]">Step 1 現象</span>
+                    <span className="text-[var(--ink-mid)] whitespace-pre-wrap line-clamp-2">{phenomenon}</span>
+                </div>
+            )}
+            <p className="text-[11px] text-[var(--ink-light)] italic pt-1 border-t border-[var(--border)]">
+                💡 這格是參考——把上面審核後定稿的研究問題寫成完整句。
+            </p>
+        </div>
+    );
+}
+
+/* ── W2AuditPrompt：動態組「研究問題審核器」Prompt ──
+ *  從 localStorage 讀取四段思考歷程 + 草稿，組成完整 Prompt 給學生 Copy
+ *  缺資料的欄位顯示「⚠️ 沒抓到，請回前面補齊」，並在底部顯示警示橫條
+ */
+function W2AuditPrompt() {
+    const [data, setData] = useState({
+        phenomenon: '', gap: '', hypotheses: '', judgment: '', draft: '',
+    });
+
+    const refresh = useCallback(() => {
+        const r = readRecords();
+        setData({
+            phenomenon: (r['w2-step1-phenomenon'] || '').trim(),
+            gap: (r['w2-step2-gap'] || '').trim(),
+            hypotheses: (r['w2-step3-question'] || '').trim(),
+            judgment: (r['w2-abc-judgment'] || '').trim(),
+            draft: (r['w2-rq-draft'] || '').trim(),
+        });
+    }, []);
+
+    useEffect(() => {
+        refresh();
+        const interval = setInterval(refresh, 1500); // 每 1.5 秒同步一次（學生在同頁打字也能看到 Prompt 更新）
+        window.addEventListener('focus', refresh);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('focus', refresh);
+        };
+    }, [refresh]);
+
+    const promptText = PROMPT_AUDIT_TEMPLATE(data);
+    const missing = !data.phenomenon || !data.gap || !data.hypotheses || !data.judgment || !data.draft;
+
+    return (
+        <div className="prompt-box mt-4">
+            <div className="prompt-hd">
+                <span>PROMPT · 研究問題審核器（已自動帶入你寫過的內容）</span>
+                <CopyButton text={promptText} label="複製" />
+            </div>
+            <div className="prompt-body" style={{ whiteSpace: 'pre-wrap' }}>{promptText}</div>
+            {missing && (
+                <div className="px-3 py-2 text-[11px] text-[var(--danger)] bg-[var(--danger-light)] border-t border-[var(--border)]">
+                    ⚠️ 上方標 ⚠️ 的欄位請先回前面 Step 補齊，AI 才能審核完整。
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* ── 圖片轉化戰：合成圖 + Tab 切換兩個練習 ──
+ *  圖片：/public/images/w2/w2-scene-pair.jpg（學生用合成圖一張）
+ *  練習各 3 格 ThinkRecord（不納入 ExportButton，純練手感）
+ *  圖載入失敗時 fallback 灰底佔位，不會壞畫面
+ */
+const PRACTICE_TABS = [
+    {
+        id: 'p1',
+        label: '① 垃圾爆滿',
+        focus: '請聚焦在圖的左半邊',
+        accent: '#6b4a2e',
+        bg: '#f5f0e6',
+        keyPrefix: 'w2-practice1',
+        placeholderHint: '例：垃圾桶旁邊地上堆滿垃圾袋／飲料罐散落，但垃圾桶蓋是合上的⋯⋯',
+    },
+    {
+        id: 'p2',
+        label: '② 課堂失序',
+        focus: '請聚焦在圖的右半邊',
+        accent: '#5a3e7e',
+        bg: '#efe9f5',
+        keyPrefix: 'w2-practice2',
+        placeholderHint: '例：老師正在黑板上推導力學公式，前排同學趴睡、後排同學在玩手遊⋯⋯',
+    },
+];
+
+function PracticeTabs() {
+    const [active, setActive] = useState('p1');
+    const [imgError, setImgError] = useState(false);
+    const tab = PRACTICE_TABS.find(t => t.id === active);
+
+    return (
+        <div className="space-y-4">
+            {/* Header */}
+            <div>
+                <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#f0ede6] text-[#6b4a2e]">人腦</span>
+                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">先練手感（會匯入學習紀錄，但評分寬鬆）</span>
+                </div>
+                <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2 leading-[1.4]">
+                    圖片轉化戰（兩個練習）
+                </h4>
+                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] m-0">
+                    看下方合成圖的兩個場景，分別用「現象 → 落差 → 展開假設」三步快速思考。節奏要快，3 分鐘 / 場景。
+                </p>
+            </div>
+
+            {/* 合成圖 */}
+            <div className="rounded-[var(--radius-unified)] border border-[var(--border)] overflow-hidden bg-[#f5f5f0]">
+                {!imgError ? (
+                    <img
+                        src="/images/w2/w2-scene-pair.jpg"
+                        alt="左：垃圾爆滿的角落（公共空間失序）／右：課堂上老師講課但學生睡覺與滑手機（學習場域失序）"
+                        className="block w-full h-auto"
+                        onError={() => setImgError(true)}
+                    />
+                ) : (
+                    <div className="aspect-[16/9] flex items-center justify-center text-[12px] text-[var(--ink-light)] font-mono">
+                        圖片載入中⋯⋯（路徑：/images/w2/w2-scene-pair.jpg）
+                    </div>
+                )}
+            </div>
+
+            {/* Tab 切換 */}
+            <div className="flex border-b border-[var(--border)]">
+                {PRACTICE_TABS.map(t => {
+                    const isActive = t.id === active;
+                    return (
+                        <button
+                            key={t.id}
+                            type="button"
+                            onClick={() => setActive(t.id)}
+                            className="px-4 py-2.5 text-[13px] font-bold transition-colors -mb-px border-b-2"
+                            style={{
+                                color: isActive ? t.accent : 'var(--ink-light)',
+                                borderBottomColor: isActive ? t.accent : 'transparent',
+                                background: isActive ? t.bg : 'transparent',
+                            }}
+                        >
+                            {t.label}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* 焦點提示 */}
+            <div
+                className="px-3 py-2 rounded-[var(--radius-unified)] text-[12px] font-medium"
+                style={{ background: tab.bg, color: tab.accent }}
+            >
+                👉 {tab.focus}
+            </div>
+
+            {/* 三格快速 ThinkRecord */}
+            <div className="space-y-3">
+                <ThinkRecord
+                    dataKey={`${tab.keyPrefix}-phenomenon`}
+                    prompt="① 現象：像攝影機一樣描述（不解釋，只描述）"
+                    placeholder={tab.placeholderHint}
+                    rows={2}
+                />
+                <ThinkRecord
+                    dataKey={`${tab.keyPrefix}-gap`}
+                    prompt="② 落差：應該是⋯但實際上⋯"
+                    placeholder="例：學校貼了告示「丟完請關蓋」，但實際上垃圾根本沒進桶／例：教室是學習場域，但實際上一半學生在打瞌睡⋯⋯"
+                    rows={2}
+                />
+                <ThinkRecord
+                    dataKey={`${tab.keyPrefix}-hypotheses`}
+                    prompt="③ 展開假設：這個矛盾背後可能的 3-5 個解釋"
+                    placeholder={`① 可能是…\n② 也可能是…\n③ 還可能是…`}
+                    rows={4}
+                />
+            </div>
+
+            <div className="w2-notice block">❌ Step 3 不要只想一個假設就鎖死——研究的起點是承認「答案可能不只一個」。</div>
+        </div>
+    );
+}
 
 /* ── 主組件 ── */
 
@@ -90,8 +414,13 @@ export const ProblemFocus = () => {
     /* W1 生活觀察帶入 */
     const [w1Observe, setW1Observe] = useState('');
     useEffect(() => {
-        const records = readRecords();
-        setW1Observe(records['w1-life-observe'] || '');
+        const refresh = () => {
+            const records = readRecords();
+            setW1Observe(records['w1-life-observe'] || '');
+        };
+        refresh();
+        window.addEventListener('focus', refresh);
+        return () => window.removeEventListener('focus', refresh);
     }, []);
 
     // 追蹤選擇題結果（供匯出用）
@@ -141,28 +470,16 @@ export const ProblemFocus = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W2"
                 title="問題意識的覺醒："
                 accentTitle="把好奇心變成好問題"
-                subtitle="「為什麼」是爛問題——太大、太空、太發散。今天你要學四段式思考框架。第一節靠自己，第二節用 AI 協助翻譯。"
+                subtitle="「為什麼」是爛問題——太大、太空、太發散。今天你要學四段式思考框架：觀察 → 落差 → 展開假設 → 鎖定研究問題。第一節靠自己發散，第二節用 AI 協助收斂與翻譯。"
                 chain="研究是從『我想知道』開始的——但光想還不能研究。這週要把腦中的好奇，變成『可以拿來研究』的問題。"
                 meta={[
                     { label: '本週任務', value: '練「品味」' },
                     { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '探究意圖（初稿）' },
+                    { label: '課堂產出', value: '研究問題（定稿）' },
                     { label: '下週預告', value: '題目健檢 W3' },
                 ]}
             />
             <CourseArc items={W2Data.courseArc} />
-
-            {/* 本週簡報 */}
-            <div className="flex justify-end mb-8 -mt-2">
-                <a
-                    href="https://canva.link/ag9uchyk20tau82"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold tracking-wider text-[#8888aa] hover:text-[#1a1a2e] bg-[#f8f7f4] hover:bg-[#f0ede6] border border-[#dddbd5] hover:border-[#1a1a2e]/20 px-3 py-1.5 rounded-[5px] transition-all"
-                >
-                    📊 本週簡報 ↗
-                </a>
-            </div>
 
             {/* ══════════ STEP ENGINE ══════════ */}
             <StepEngine
@@ -243,7 +560,7 @@ export const ProblemFocus = () => {
                             </div>
 
                             <div className="w2-notice" style={{ margin: 0 }}>
-                                💡 拿著你的核心疑問問自己：你最想知道的是「影響」、「差異」還是「原因」？這個判斷由你來做，不准問 AI！
+                                💡 拿著你選定的假設問自己：你最想知道的是「影響」、「差異」還是「原因」？這個判斷由你來做，不准問 AI！
                             </div>
 
                             {/* 理解檢核 */}
@@ -263,42 +580,40 @@ export const ProblemFocus = () => {
                     ),
                 },
 
-                /* ──────── Step 2: 人腦練習 ──────── */
+                /* ──────── Step 2: 暖身練習（圖片轉化戰）──────── */
+                {
+                    title: '暖身練習',
+                    icon: '🎯',
+                    content: (
+                        <div className="flex flex-col gap-8 prose-zh">
+                            <div>
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2 · 第一節課 · 禁止使用 AI</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">先用範例練手感</h3>
+                                <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
+                                    用下方兩個範例場景試跑「現象 → 落差 → 展開假設」三步。3 分鐘 / 場景，節奏快、不分享。做完按 Next 進「人腦練習」階段，換你自己的 W1 觀察上場。
+                                </p>
+                            </div>
+                            <PracticeTabs />
+                        </div>
+                    ),
+                },
+
+                /* ──────── Step 3: 人腦練習（改寫 W1 觀察）──────── */
                 {
                     title: '人腦練習',
                     icon: '🧠',
                     content: (
                         <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2 · 第一節課 · 禁止使用 AI</div>
-                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">從觀察到核心疑問（人自己做）</h3>
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2.5 · 第一節課 · 主菜</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">換你的 W1 觀察上場</h3>
                                 <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
-                                    先練手感：跟著老師投影的圖片做兩輪快速練習，再改寫你 W1 的觀察。全程人腦，不准碰 AI。
+                                    暖身完了。用你 W1 的生活觀察跑一輪四段框架的前三步——這是後面所有 Step 的起點，10 分鐘，全程人腦。
                                 </p>
                             </div>
 
-                            {/* 圖片練習 1 & 2 — 去卡化，純敘事流 */}
-                            <div>
-                                <div className="flex items-center gap-2 mb-3">
-                                    <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#f0ede6] text-[#6b4a2e]">人腦</span>
-                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">先練手感</span>
-                                </div>
-                                <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
-                                    圖片轉化戰（練習 1 & 2）
-                                </h4>
-                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    老師投影兩張對比圖片，練習用前三步快速思考。節奏要快，不分享，Step 3 白話說就好。對每張圖片分別完成：
-                                </p>
-                                <ol className="list-decimal pl-5 text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] mt-2">
-                                    <li><strong className="text-[var(--ink)]">現象：</strong>像攝影機一樣描述（至少 30 字，不解釋，只描述）</li>
-                                    <li><strong className="text-[var(--ink)]">落差：</strong>哪裡矛盾？規則與現實的衝突在哪？（至少 30 字）</li>
-                                    <li><strong className="text-[var(--ink)]">核心疑問：</strong>你最想搞清楚的那件事，白話說出來</li>
-                                </ol>
-                                <div className="w2-notice block mt-3">❌ 禁止用「為什麼」開頭。Step 3 不需要學術格式，說白話就好。</div>
-                            </div>
-
-                            {/* 練習 0：核心！ */}
-                            {w1Observe && (
+                            {/* 練習 0：核心！有 W1 種子 → 顯示帶入；沒有 → 現場補上 */}
+                            {w1Observe ? (
                                 <div style={{ background: 'var(--accent-light)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)', borderRadius: '10px', padding: '16px 20px', display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '0' }}>
                                     <span style={{ fontSize: '16px' }}>📎</span>
                                     <div>
@@ -307,6 +622,13 @@ export const ProblemFocus = () => {
                                         <p style={{ fontSize: '11px', color: 'var(--ink-light)', marginTop: '4px' }}>用四段式思考，把這個觀察升級成下面的三步。</p>
                                     </div>
                                 </div>
+                            ) : (
+                                <BackfillField
+                                    dataKey="w1-life-observe"
+                                    label="⚠️ 沒偵測到你 W1 的生活觀察種子——把你上週寫的『最近覺得奇怪的現象』貼這裡，下方四段式練習就有起點。"
+                                    placeholder="例：每次段考前一週，圖書館借書區反而沒人，自習區卻擠爆。"
+                                    buttonLabel="補上 W1 觀察"
+                                />
                             )}
                             <div className="w2-practice-block" style={{ margin: 0, border: '2px solid var(--danger)' }}>
                                 <div className="w2-practice-header" style={{ background: 'var(--danger-light)', borderColor: 'var(--danger)' }}>
@@ -336,157 +658,131 @@ export const ProblemFocus = () => {
                             />
                             <ThinkRecord
                                 dataKey="w2-step3-question"
-                                prompt="Step 3 核心疑問：你最想搞清楚的那一件事，白話說"
-                                placeholder="不管格式，白話說出來就好…"
-                                scaffold={['我最想搞清楚的是…', '到底是因為…還是…']}
-                                rows={2}
+                                prompt="Step 3 展開假設：這個矛盾背後可能的解釋是什麼？至少 3 個、最多 5 個。先發散，不要只想一個就鎖死。"
+                                placeholder={`① 可能是…\n② 也可能是…\n③ 還可能是…\n（最多到 ⑤）`}
+                                scaffold={[
+                                    '① 可能是… / ② 也可能是… / ③ 還可能是…',
+                                    '別只寫一個——研究的起點是承認「答案可能不只一個」',
+                                    '不知道哪個對沒關係，下一段你會挑一個先研究',
+                                ]}
+                                rows={5}
                             />
                         </div>
                     ),
                 },
 
-                /* ──────── Step 3: AI 協作 ──────── */
+                /* ──────── Step 4: AI 協作 ──────── */
                 {
                     title: 'AI 協作',
                     icon: '🤖',
                     content: (
                         <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2.5 + PART 3 · 第二節課</div>
-                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">AI 當放大鏡，你當眼睛</h3>
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">第二節課 · AI 協作三輪</div>
+                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">AI 當教練，你當作者</h3>
                                 <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
-                                    AI 沒去過你的學校，觀察只能靠人。但它可以從多角度幫你找矛盾，還能把白話文翻譯成學術句型。
+                                    這週的 AI 不負責「寫」研究問題，負責「審」你寫的研究問題。本週唯一的 AI 工具：<strong className="text-[var(--ink)]">研究問題審核器</strong>（三輪流程）。
                                 </p>
                             </div>
 
-                            {/* 落差擴充器 — 去卡化 */}
+                            {/* 選用：AI 補假設小提示（不是完整工具，學生卡住才用）*/}
+                            <div className="px-4 py-3 rounded-[var(--radius-unified)] bg-[#FAFAF7] border border-dashed border-[var(--border)] text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                                <span className="font-bold text-[var(--ink)]">💡 假設展開卡住？選用提示：</span>
+                                把你「人腦練習」階段寫的落差 + 列的 3-5 個假設貼給 AI，問：「我可能漏想了哪 1-2 個假設？」AI 補完你再判斷哪些是真的、哪些是它在套話。<strong>但「列假設」這件事必須你先做</strong>——直接叫 AI 列等於跳過 Step 3。
+                            </div>
+
+                            {/* 研究問題審核器 — 自寫 → AI 審 → 定稿 */}
                             <div>
                                 <div className="flex items-center gap-2 mb-3">
                                     <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#e6efff] text-[#2d5be3]">AI 協作</span>
-                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">AI 給選項，你做判斷</span>
+                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">自寫 → AI 審 → 定稿</span>
                                 </div>
                                 <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
-                                    落差擴充器
+                                    研究問題審核器
                                 </h4>
                                 <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    把 Step 2 寫好的現象貼進去，讓 AI 幫你從多角度找矛盾：
-                                </p>
-
-                                <div className="prompt-box mt-4">
-                                    <div className="prompt-hd">
-                                        <span>PROMPT · 落差擴充器</span>
-                                        <CopyButton text={PROMPT_GAP} label="複製" />
-                                    </div>
-                                    <div className="prompt-body">
-                                        我觀察到一個現象：[請貼上你的現象]<br /><br />
-                                        請幫我從 5 個不同角度，找出這個現象中可能的「矛盾」或「奇怪之處」。<br />
-                                        （例如：時間對比、空間對比、行為對比、群體對比、邏輯矛盾）<br /><br />
-                                        請給我 5 個不同的矛盾點，每個用一句話說明。
-                                    </div>
-                                </div>
-
-                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85] mt-4">
-                                    AI 給了 5 個選項之後，問自己：這個矛盾我<strong className="text-[var(--ink)]">真的觀察到了嗎</strong>？（AI 在猜，不代表真實）這個矛盾我<strong className="text-[var(--ink)]">有興趣深究嗎</strong>？如果 5 個都不對，就用你原本的落差——AI 只是放大鏡，你才是眼睛。
+                                    跑三輪：<strong className="text-[var(--ink)]">先自己挑＋寫</strong> → <strong className="text-[var(--ink)]">給 AI 審</strong> → <strong className="text-[var(--ink)]">由你定稿</strong>。順序倒了就變成 AI 主導、你背書。
                                 </p>
                             </div>
 
-                            <ThinkRecord
-                                dataKey="w2-ai-gap-choice"
-                                prompt="AI 給了 5 個落差，你最終選了哪一個？為什麼？（如果都不對，寫「用我自己的」）"
-                                placeholder="例：我選第 3 個——因為段考前我真的觀察到借書區空無一人，這個矛盾讓我想深究。"
-                                scaffold={['我選第 ___ 個', '因為我真的觀察到…', '這個矛盾讓我想深究…']}
-                                rows={2}
-                            />
-
-                            {/* 分隔 */}
-                            <div className="w-full h-px bg-[var(--border)]" />
-
-                            {/* 探究意圖生成器 — 人腦先行 → AI 放大鏡 → 人腦裁奪 */}
-                            <div>
-                                <div className="flex items-center gap-2 mb-3">
-                                    <span className="text-[10px] font-mono uppercase tracking-[0.12em] px-2 py-0.5 rounded bg-[#e6efff] text-[#2d5be3]">AI 協作</span>
-                                    <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">人腦先行 → AI 放大鏡 → 人腦裁奪</span>
-                                </div>
-                                <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3 leading-[1.4]">
-                                    探究意圖生成器
-                                </h4>
-                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    這裡要跑三拍：<strong className="text-[var(--ink)]">先自己判斷</strong> → <strong className="text-[var(--ink)]">再用 AI 翻譯</strong> → <strong className="text-[var(--ink)]">最後由你裁奪</strong>。順序倒了就變成 AI 主導、你背書。
-                                </p>
-                            </div>
-
-                            {/* 拍 1：人腦先行 */}
+                            {/* 第一輪：人腦先行（挑假設+判型+寫草稿） */}
                             <div>
                                 <div className="w2-notice warn mb-3">
-                                    ★ <strong>拍 1 · 人腦先行：不准用 AI！</strong>看著你的核心疑問，先自己判斷是 A / B / C 型，並寫一句白話初稿。
+                                    ★ <strong>第一輪 · 人腦先行：不准用 AI！</strong>挑一個假設、判 ABC 型、自寫一句研究問題草稿。AI 等下要審的就是你寫的這句。
                                 </div>
+                                <W2Beat1RefCard />
                                 <ThinkRecord
                                     dataKey="w2-abc-judgment"
-                                    prompt="你自己判斷是哪一型？為什麼？並用白話寫一句初稿（等一下要給 AI 翻譯用的）"
-                                    placeholder="例：我判斷是 A 型。因為我最想知道考試壓力對學生選擇圖書館場域的影響。白話初稿：我想搞清楚為什麼大家不在家讀書要去圖書館。"
-                                    scaffold={['我判斷是 ___ 型（A 影響型／B 比較型／C 深究型）', '因為我最想知道的是…', '白話初稿：我想搞清楚…']}
-                                    rows={3}
+                                    prompt="（1-1）你選哪一個假設？為什麼？它屬於 A / B / C 哪一型？"
+                                    placeholder="例：我選假設①「考試壓力」。因為這個變項最容易設計問卷量測，而且我自己就有切身經驗。判斷是 A 型（影響型）——我想看的是壓力對空間選擇的影響。"
+                                    scaffold={[
+                                        '我選假設 ___（從「人腦練習」階段的清單挑一個）',
+                                        '因為 ___（為什麼先研究這個：可量測？切身經驗？社會意義？）',
+                                        '判斷是 ___ 型（A 影響型／B 比較型／C 深究型）',
+                                    ]}
+                                    rows={4}
                                 />
-                            </div>
-
-                            {/* 拍 2：AI 放大鏡 */}
-                            <div>
-                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    <strong className="text-[var(--ink)]">拍 2 · AI 放大鏡：</strong>把現象、落差、核心疑問（還有拍 1 的白話初稿）填進下方 Prompt，請 AI 幫你翻譯成 A / B / C 三種專業方向。
-                                </p>
-
-                                <div className="prompt-box mt-4">
-                                    <div className="prompt-hd">
-                                        <span>PROMPT · 探究意圖生成器</span>
-                                        <CopyButton text={PROMPT_INTENT} label="複製" />
-                                    </div>
-                                    <div className="prompt-body">
-                                        我觀察到：[你的現象]<br />
-                                        發現落差：[你最終決定的落差]<br />
-                                        我最想搞清楚的核心疑問是：[你的白話疑問]<br /><br />
-                                        請幫我把這個白話疑問，轉化為 3 種不同專業研究方向的「探究意圖」：<br /><br />
-                                        A. 影響型（某因素如何影響某結果）<br />
-                                        B. 比較型（兩種對象／情境的差異）<br />
-                                        C. 深究型（某現象的運作機制／背後原因）<br /><br />
-                                        每個方向請用一句話說明，並標註適合的研究方法。
-                                    </div>
+                                <div className="mt-4">
+                                    <ThinkRecord
+                                        dataKey="w2-rq-draft"
+                                        prompt="（1-2）根據上面選定的假設＋型，自寫一句研究問題草稿（不必完美，AI 等下會審）"
+                                        placeholder="例（A 型）：段考前一週的考試壓力，如何影響松山高中高一學生選擇圖書館作為讀書場所的傾向？"
+                                        scaffold={[
+                                            'A 型：「___」如何影響「___」',
+                                            'B 型：「___」和「___」在「___」上有何不同',
+                                            'C 型：「___」背後的「機制／原因」是什麼',
+                                        ]}
+                                        rows={3}
+                                    />
                                 </div>
                             </div>
 
-                            {/* 拍 3：人腦裁奪 */}
+                            {/* 第二輪：AI 審核（動態 Prompt） */}
                             <div>
                                 <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    <strong className="text-[var(--ink)]">拍 3 · 人腦裁奪：</strong>AI 給了三個方向，現在比對你在拍 1 的自判——<strong className="text-[var(--ink)]">一致</strong>代表直覺準；<strong className="text-[var(--ink)]">不一致</strong>代表 AI 點出你沒想到的角度。選一個真正打動你的。
+                                    <strong className="text-[var(--ink)]">第二輪 · AI 審核：</strong>下方 Prompt 已經把你前面寫的內容（觀察、落差、假設、選定假設、草稿）自動帶進去了。直接按複製貼到 ChatGPT / Claude / Gemini，AI 會回給你「結構審核」+「一個改寫建議」。
+                                </p>
+                                <W2AuditPrompt />
+                            </div>
+
+                            {/* 第三輪：人腦定稿（保留/採用/混合） */}
+                            <div>
+                                <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
+                                    <strong className="text-[var(--ink)]">第三輪 · 人腦定稿：</strong>看完 AI 審核，決定怎麼定稿——<strong className="text-[var(--ink)]">保留自己的</strong>（AI 說 OK 或你不認同它的改寫）／<strong className="text-[var(--ink)]">採 AI 改寫</strong>（它的版本更精準）／<strong className="text-[var(--ink)]">混合</strong>（取雙方各一半）。⚠️ AI 不是裁判，你才是。
                                 </p>
                             </div>
 
                             <ThinkRecord
                                 dataKey="w2-ai-intent-choice"
-                                prompt="AI 給了 3 個方向（A／B／C），你最終選哪一個？為什麼？（如果都不對，寫「用我自己判斷的那型」）"
-                                placeholder="例：我選 B 型。因為我想比較『考前』和『平時』圖書館使用的差別，比較適合做問卷或統計分析。"
-                                scaffold={['我選 ___ 型', '因為 AI 的說法讓我想到…／跟我拍 1 的自判一致／點出我沒想到的…', '這個方向最吸引我的地方是…（若都不對：用我自己判斷的那型）']}
-                                rows={3}
+                                prompt="AI 審完後，你決定怎麼定稿？為什麼？"
+                                placeholder="例：我選混合——AI 抓到我原版漏了「自變項清楚化」，但它建議的『考試壓力指數』太抽象。我採它「指出時間範圍」的改法，但保留我「考試壓力」原詞。"
+                                scaffold={[
+                                    '我決定：保留自己的／採 AI 改寫／混合',
+                                    '因為 AI 點出 ___（什麼結構問題或更好的寫法）',
+                                    '但我不接受 AI 的 ___（如果有不接受的部分），因為 ___',
+                                ]}
+                                rows={4}
                             />
 
                             <ThinkChoice
                                 dataKey="w2-tc2"
                                 prompt="小測驗：AI 在「四段式思考」中可以幫忙哪些步驟？"
                                 options={[
-                                    { label: 'A', text: 'Step 1 + Step 2（觀察現象和發現落差）' },
-                                    { label: 'B', text: 'Step 2 + Step 4（擴充落差和翻譯句型）' },
+                                    { label: 'A', text: 'Step 1 + Step 2（觀察現象和發現落差）都可交給 AI' },
+                                    { label: 'B', text: 'Step 3 補充假設 + Step 4 翻譯句型——但「挑哪個假設先研究」「最終定哪型」是人決定' },
                                     { label: 'C', text: '全部四個步驟都可以交給 AI' },
                                 ]}
                                 answer="B"
-                                feedback="Step 1 觀察現象只有人能做（AI 沒去過你的學校），Step 3 核心疑問是你的好奇心。AI 能幫的是 Step 2 從多角度找矛盾，以及 Step 4 把白話翻譯成學術句型。"
+                                feedback="Step 1 觀察、Step 2 落差、Step 3 列假設這些「動腦」的事必須你先做（AI 沒去過你的學校）。AI 真正幫得上的：Step 3 列完之後幫你補「漏想了什麼」，以及 Step 4 把白話翻譯成學術句型。但研究設計決定（挑哪個假設、定哪一型）必須由你做。"
                                 onAnswer={(selected, correct) => trackChoice('AI 可幫忙的步驟', selected, correct)}
                             />
                         </div>
                     ),
                 },
 
-                /* ──────── Step 4: 最終探究意圖 ──────── */
+                /* ──────── Step 5: 最終研究問題 ──────── */
                 {
-                    title: '探究意圖',
+                    title: '研究問題',
                     icon: '🎯',
                     content: (
                         <div className="flex flex-col gap-8 prose-zh">
@@ -494,71 +790,63 @@ export const ProblemFocus = () => {
                                 <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 3 FINAL · 定案 + AI-RED</div>
                                 <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">選定你的研究方向</h3>
                                 <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
-                                    你在 Step 3 已經選定方向。現在把它改寫成完整的探究意圖句（主詞＋動詞＋對象），這是帶去 W3 的定稿版本。選完記得填 AI-RED。
+                                    你已經完成「挑假設 → 自寫草稿 → AI 審 → 定稿」四個動作。現在把第三輪定稿的版本改寫成完整的研究問題句（主詞＋動詞＋對象），這就是帶去 W3 的版本。寫完記得填 AI-RED。
                                 </p>
                             </div>
 
+                            <W2Step4RefCard />
+
                             <ThinkRecord
                                 dataKey="w2-final-intent"
-                                prompt="把 Step 3 選的方向寫成完整句子（帶去 W3 的定稿版）"
-                                placeholder="例：我想探究「考試壓力」如何影響「學生對圖書館空間使用」的選擇。"
+                                prompt="把第三輪定稿的研究問題寫成完整句子（帶去 W3 的版本）"
+                                placeholder="例：我想探究「段考前一週的考試壓力」如何影響「松山高中高一學生對圖書館空間使用」的選擇。"
                                 scaffold={[
                                     'A 影響型：我想探究「___」如何影響「___」',
                                     'B 比較型：我想比較「___」和「___」的差異',
-                                    'C 深究型：我想深究「___」背後的原因',
+                                    'C 深究型：我想深究「___」背後的原因／機制',
                                 ]}
                                 rows={3}
                             />
 
-                            {/* AI-RED 記錄表 */}
-                            <div style={{ fontFamily: '"DM Mono", monospace', fontSize: '10px', color: 'var(--ink-light)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>AI-RED 記錄</div>
-                            <div className="w2-aired-table">
-                                {AIRED_FIELDS.map(row => (
-                                    <div className="w2-aired-row-item" key={row.l}>
-                                        <div className="w2-aired-key">
-                                            <span className="w2-aired-letter">{row.l}</span>
-                                            <div className="w2-aired-word" style={{ whiteSpace: 'pre-line' }}>{row.w}</div>
-                                        </div>
-                                        <div className="w2-aired-val">{row.v}</div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <ThinkRecord
-                                dataKey="w2-aired-record"
-                                prompt="把你的 AI-RED 記錄寫在這裡（用了什麼 AI、問了什麼 Prompt、你的評估）"
-                                defaultTemplate={'A: \nI: \nR: \nE: \nD: '}
-                                placeholder="例：D: 我選第 3 個版本並改了主詞，因為原版太抽象"
-                                rows={6}
-                            />
+                            {/* AI-RED 敘事紀錄（對齊其他週） */}
+                            <AIREDNarrative week="2" hint="研究問題審核器是 W2 的 AI 核心工具——記錄一次最關鍵的互動。" optional={false} />
                         </div>
                     ),
                 },
 
-                /* ──────── Step 5: 回顧與繳交 ──────── */
+                /* ──────── Step 6: 回顧與繳交 ──────── */
                 {
                     title: '回顧與繳交',
                     icon: '📋',
                     content: (
                         <div className="flex flex-col gap-8 prose-zh">
-                            <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">WRAP-UP</div>
-                                <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">本週結束，你應該要會</h3>
+                            <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
+                                    ✅ 本週結束，你應該要會
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
+                                    {[
+                                        '說出「為什麼」是爛問題的原因，並用四段式框架（觀察 / 落差 / 展開假設 / 鎖定研究問題）改造它',
+                                        '面對矛盾時先列 3-5 個可能假設，不只想一個就鎖死',
+                                        '區分 A / B / C 三種探究句型，知道各自對應什麼研究方法',
+                                        '用 AI 補假設、翻譯句型——但「挑哪個假設」「定哪型」是自己做的',
+                                    ].map((item, i) => (
+                                        <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
+                                            <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
+                                            <span className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
-                            <ul className="flex flex-col gap-3 md:gap-4 pt-2 list-none pl-0">
-                                {[
-                                    '說出「為什麼」是爛問題的原因，並用四段式框架改造它',
-                                    '區分 A / B / C 三種探究句型，知道各自對應什麼研究方法',
-                                    '用 AI 找落差、翻譯句型，但選擇是自己做的',
-                                    '寫出最終探究意圖，下週帶去 W3 題目健檢',
-                                ].map((txt, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                                        <span className="text-[var(--success)] mt-1 text-[16px] shrink-0">✓</span>
-                                        <span className="text-[15px] md:text-[16px] text-[var(--ink)] leading-[1.75]">{txt}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            {/* 反思 — 一題，逼學生點出卡點 */}
+                            <ThinkRecord
+                                dataKey="w2-reflect-stuck"
+                                prompt="✍️ 反思：四段式框架（觀察 → 落差 → 展開假設 → 鎖定研究問題）你卡在哪一段？為什麼那段最難？"
+                                placeholder="例：我卡在『展開假設』那段。觀察跟落差還算順，但要我針對同一個矛盾想出 3-5 個可能解釋就卡住——因為平常想事情習慣只想一個答案。後來發現：硬逼自己列第 4、第 5 個假設時，反而冒出意想不到的角度。"
+                                scaffold={['我卡在第 ___ 段（觀察 / 落差 / 展開假設 / 鎖定研究問題）', '為什麼最難…', '我後來怎麼處理或還沒處理…']}
+                                rows={4}
+                            />
 
                             {/* 一鍵複製 */}
                             <ExportButton
@@ -584,7 +872,7 @@ export const ProblemFocus = () => {
                                     </div>
                                     <div className="next-week-col">
                                         <div className="next-week-label">你要帶來</div>
-                                        <p className="next-week-text"><strong className="text-white">你的最終探究意圖</strong>——那就是下週的「病人」，沒有帶就沒得健檢。</p>
+                                        <p className="next-week-text"><strong className="text-white">你的最終研究問題</strong>——那就是下週的「病人」，沒有帶就沒得健檢。</p>
                                     </div>
                                 </div>
                             </div>
