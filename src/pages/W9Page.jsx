@@ -5,6 +5,9 @@ import './W9Page.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import Checklist from '../components/ui/Checklist';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
+import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
+import AIDialogSubmission from '../components/ui/AIDialogSubmission';
+import AIModePicker from '../components/ui/AIModePicker';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import AIAssistToggle from '../components/ui/AIAssistToggle';
 import StepEngine from '../components/ui/StepEngine';
@@ -521,7 +524,9 @@ const W9AiCheckPromptBox = () => {
 const EXPORT_FIELDS = [
     /* Step 1：W8 老師回饋快速讀取 */
     /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
-    { key: 'w9-plan-ai-check', label: 'AI 檢核第 1-5 章判斷紀錄', question: 'AI 指出的問題 + 我採納/不採納的決定' },
+    { key: 'w9-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（寫不出某章請示範）/ 🥊 驗收型（有初稿請壓力測試）' },
+    { key: 'w9-plan-ai-check', label: 'AI 互動後的判斷紀錄', question: 'AI 指出的問題 / 給的範例 + 我採納/不採納的決定' },
+    { key: 'w9-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
     { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 AI 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
     /* Step 4：回顧與繳交 */
@@ -542,6 +547,13 @@ export const W9Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
     /* Step 2 方法頁籤：預設 W8 選到的方法；無則 questionnaire（最常見） */
     const [pitfallTab, setPitfallTab] = useState('questionnaire');
+    /* AI 使用模式 */
+    const [w9AiMode, setW9AiMode] = useState(() => {
+        try {
+            const r = JSON.parse(localStorage.getItem('rib_think_records')) || {};
+            return r['w9-ai-mode'] || '';
+        } catch { return ''; }
+    });
 
     /* W8 帶入方法、題目與 3 題初稿（前測素材） */
     useEffect(() => {
@@ -1198,39 +1210,84 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* AI 檢核（必做）· AI 思考模式審第 1-5 章（黑底用 inline style 強制白字，避免 prose-zh cascade） */}
+                    {/* AI 工作坊（必做）· AI 思考模式審第 1-5 章 */}
                     <div className="space-y-4">
                         <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] overflow-hidden" style={{ color: '#fff' }}>
                             <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2" style={{ color: '#fff' }}>
-                                <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff' }}>AI 檢核 · 必做</span>
-                                <span style={{ fontWeight: 700, fontSize: 14, marginLeft: 4, color: '#fff' }}>🤖 用 AI 思考模式檢核第 1-5 章</span>
+                                <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff' }}>AI 工作坊 · 必做</span>
+                                <span style={{ fontWeight: 700, fontSize: 14, marginLeft: 4, color: '#fff' }}>🤖 用 AI 思考模式檢核（或學寫）第 1-5 章</span>
                             </div>
                             <div className="p-5" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                                 <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.9)' }}>
-                                    本節結束前複製下方 Prompt，回家貼進<strong style={{ color: '#fff', fontWeight: 700 }}>你慣用的 AI（開啟深度思考／推理模式）</strong>。把 docx 第 1-5 章內容填進 Prompt 的【___】位置後送出。AI 會深入找出你自己看不到的盲點。
+                                    本節結束前選一個 AI 使用模式，複製下方 Prompt，回家貼進<strong style={{ color: '#fff', fontWeight: 700 }}>你慣用的 AI（開啟深度思考／推理模式）</strong>。
                                 </p>
                                 <p style={{ fontSize: 12, lineHeight: 1.9, color: 'rgba(255,255,255,0.7)' }}>
-                                    💡 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>為什麼要用思考模式？</strong>深度推理模式會花更多時間檢核，揪出一般對話抓不到的邏輯盲點——地基工程一次定勝負，值得等它多想幾分鐘。
-                                </p>
-                                <p style={{ fontSize: 12, lineHeight: 1.9, color: 'rgba(255,255,255,0.7)' }}>
-                                    📝 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>流程：</strong>複製 Prompt → 回家貼入計畫書內容 → 等 AI 思考完成 → 讀回覆後在下方記錄判斷 → 補完 AIRED 的 R 欄位。
+                                    💡 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>兩種模式：</strong>有計畫書初稿 → 驗收型（AI 找盲點）；寫不出某幾章 → 教學型（AI 給範例 + 拆步驟）。
                                 </p>
                             </div>
                         </div>
 
-                        {/* Prompt 展示 + 複製 */}
-                        <W9AiCheckPromptBox />
+                        {/* AI 協作三原則（W9 角色：嚴格教練） */}
+                        <AICollaborationPrinciples week="9" role="critic" compact={false} />
+
+                        {/* AI 模式選擇 */}
+                        <AIModePicker week="9" taskName="計畫書檢核" onChange={setW9AiMode} />
+
+                        {/* 教學型：寫不出某幾章 → AI 給範例 */}
+                        {w9AiMode === 'teach' && (
+                            <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-5 space-y-3">
+                                <p className="text-[14px] font-bold text-[#166534]">🎓 教學型 Prompt（從零到一）</p>
+                                <p className="text-[12px] text-[#166534] leading-relaxed">
+                                    某幾章完全不會寫？把你卡關的章節貼上，請 Gemini 給範例。記得：<strong>看完範例自己寫一次</strong>，不要直接抄。
+                                </p>
+                                <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我在寫高中專題研究計畫書，需要寫第 1-5 章，但有幾章我完全不會寫。
+
+【我的研究】
+- 研究方法：問卷／訪談／實驗／觀察／文獻
+- 研究問題：___
+- 主要發現方向：___（如果還沒做完，寫預期方向）
+
+【我卡住的章節】
+___（例：第三章文獻探討、第四章變項定義）
+
+【請你做】
+1. 用我的研究主題，示範這幾章的「極簡範例」（每章 5-8 行）
+2. 解釋這幾章的「該寫什麼、不該寫什麼」
+3. 給我一個填空模板，我可以照著填
+
+【不要做】
+- 不要替我寫完整章節
+- 我會看完範例後自己寫一次再給你檢查`}</pre>
+                                <p className="text-[11px] text-[#166534] italic leading-relaxed">
+                                    💡 看完 AI 範例後，回到 docx 自己寫一次，再切回「驗收型」讓 AI 檢核。
+                                </p>
+                            </div>
+                        )}
+
+                        {/* 驗收型：有初稿 → AI 找盲點（保留現有 W9AiCheckPromptBox） */}
+                        {w9AiMode === 'verify' && <W9AiCheckPromptBox />}
+
+                        {!w9AiMode && (
+                            <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
+                                <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                    ☝️ 上方先選一個 AI 使用模式：寫不出來選🎓教學型；有初稿了選🥊驗收型。
+                                </p>
+                            </div>
+                        )}
 
                         {/* AI 建議判斷紀錄 */}
                         <ThinkRecord
                             dataKey="w9-plan-ai-check"
-                            prompt="AI 檢核後的判斷紀錄（課後 AI 跑完後補）"
-                            defaultTemplate={'AI 指出的主要問題：\n1. \n2. \n3. \n\n我的決定：\n・採納：\n・不採納：\n・部分採納：\n（每項記得寫理由）'}
+                            prompt="AI 互動後的判斷紀錄（課後 AI 跑完後補）"
+                            defaultTemplate={'AI 指出的主要問題（驗收型）/ AI 給的範例（教學型）：\n1. \n2. \n3. \n\n我的決定：\n・採納：\n・不採納：\n・部分採納：\n（每項記得寫理由 / 教學型寫「我自己改寫的版本」）'}
                             placeholder="例：採納第 1、3 點因為本來就漏寫；不採納第 2 點因為抽樣已是學期極限"
                             rows={10}
                         />
 
-                        {/* W9 完整 AIRED（從 Step 4 搬來，緊接 AI 檢核紀錄） */}
+                        {/* 完整對話繳交（W9 多輪互動，必繳） */}
+                        <AIDialogSubmission week="9" taskName="計畫書檢核對話" required={true} />
+
+                        {/* W9 完整 AIRED */}
                         <AIREDNarrative
                             week="9"
                             hint="本節預想式填 A/I/E/D；R 回家跑完 AI 思考模式再補"

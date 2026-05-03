@@ -9,6 +9,9 @@ import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
+import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
+import AIDialogSubmission from '../components/ui/AIDialogSubmission';
+import AIModePicker from '../components/ui/AIModePicker';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     Bot,
@@ -144,7 +147,8 @@ const EXPORT_FIELDS = [
     { key: 'w15-ai-helpful', label: 'AI 最有幫助的地方' },
     { key: 'w15-ai-limit', label: 'AI 最大的限制' },
     { key: 'w15-ai-blind-trust', label: '完全相信 AI 會犯的錯' },
-    { key: 'w15-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w15-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
+    { key: 'w15-aired-record', label: 'AI-RED 敘事紀錄（必填）', question: '本週用 AI 壓力測試四層結論的最重要一次互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -237,6 +241,17 @@ const W15Page = () => {
     const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
     const myQuestion = saved['w8-research-question'] || myTopic;
+    /* W14 跨週帶入 */
+    const w14Description = saved['w14-my-description'] || '';
+    const w14Inference = saved['w14-my-inference'] || '';
+    const w14Preview = saved['w14-w15-preview'] || '';
+    /* AI 使用模式 */
+    const [w15AiMode, setW15AiMode] = useState(() => {
+        try {
+            const r = JSON.parse(localStorage.getItem('rib_think_records')) || {};
+            return r['w15-ai-mode'] || '';
+        } catch { return ''; }
+    });
 
     const steps = [
         {
@@ -253,7 +268,46 @@ const W15Page = () => {
                             💡 <strong>名詞升級：</strong>W14 的「推論」在學術上更精確的說法是「詮釋」——意思一樣，都是「解釋數據背後的意義」。今天開始我們用四層學術名稱：描述、詮釋、回扣、批判。
                         </p>
                     </div>
-                    <ThinkRecord dataKey="w15-foreshadow" prompt="W14 留下的伏筆：結論的第三層叫___，任務是___。第四層叫___，任務是___。" scaffold={['第三層叫做「回扣」，任務是：直接回答研究問題', '第四層叫做「批判」，任務是：說出研究的限制']} />
+
+                    {/* 從 W14 帶入 — 描述/推論作為四層的雛型 */}
+                    {(w14Description || w14Inference) && (
+                        <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border-2 border-[#BAE6FD]">
+                            <p className="text-[13px] text-[#0369A1] font-bold mb-2">📂 你 W14 寫的（這就是四層結論的「描述+詮釋」雛型）</p>
+                            {w14Description && (
+                                <div className="mb-2">
+                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">🔵 W14 描述</p>
+                                    <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w14Description}</p>
+                                </div>
+                            )}
+                            {w14Inference && (
+                                <div>
+                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">🔴 W14 推論（=今天的「詮釋」）</p>
+                                    <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w14Inference}</p>
+                                </div>
+                            )}
+                            <p className="text-[11px] text-[#0369A1] italic mt-2 leading-relaxed border-t border-[#BAE6FD] pt-2">
+                                💡 W14 是針對「一張圖」寫的；本週要把這個雛型升級為整份研究的結論，再加兩層（回扣、批判）。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* W14 伏筆揭曉 */}
+                    {w14Preview && (
+                        <div className="p-4 rounded-[var(--radius-unified)] border-2 border-dashed border-[var(--accent)] bg-[#FFFBEB]">
+                            <p className="text-[12px] text-[var(--accent)] font-bold mb-2">🔮 你 W14 末對「第三層、第四層」的猜測</p>
+                            <p className="text-[12px] text-[var(--ink)] leading-relaxed mb-2 italic">{w14Preview}</p>
+                            <p className="text-[11px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--accent)] pt-2">
+                                🎯 <strong>答案揭曉：</strong>第三層是「<strong>回扣</strong>」（直接回答研究問題）、第四層是「<strong>批判</strong>」（說出研究的限制）。猜對幾項？下面架構圖完整展開。
+                            </p>
+                        </div>
+                    )}
+
+                    {!w14Preview && (
+                        <ThinkRecord dataKey="w15-foreshadow" prompt="W14 留下的伏筆：結論的第三層叫___，任務是___。第四層叫___，任務是___。" scaffold={['第三層叫做「回扣」，任務是：直接回答研究問題', '第四層叫做「批判」，任務是：說出研究的限制']} />
+                    )}
+
+                    {/* AI 協作三原則（W15 角色：嚴格教練） */}
+                    <AICollaborationPrinciples week="15" role="critic" compact={true} />
                     <div>
                         <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📐 四層結論架構</p>
                         <div className="w15-layer-grid">
@@ -410,13 +464,56 @@ const W15Page = () => {
                         </p>
                     </div>
 
-                    <div>
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🗂️ 選擇你的研究方法，取得對應的 Prompt</p>
-                        <p className="text-[11.5px] text-[var(--ink-mid)] mb-3 leading-relaxed">
-                            預設帶入<strong className="text-[var(--ink)]">你 W9 選的方法</strong>，但 5 個分頁都可以點——這是研究方法課，<strong className="text-[var(--ink)]">看一下別組的 Prompt 怎麼下，是這節課該做的事</strong>。
-                        </p>
-                        <MethodSelector />
-                    </div>
+                    {/* AI 使用模式選擇 */}
+                    <AIModePicker week="15" taskName="四層結論檢核" onChange={setW15AiMode} />
+
+                    {/* 教學型：完全不會寫四層 → 請 AI 示範 */}
+                    {w15AiMode === 'teach' && (
+                        <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-5 space-y-3">
+                            <p className="text-[14px] font-bold text-[#166534]">🎓 教學型 Prompt（我寫不出四層）</p>
+                            <p className="text-[12px] text-[#166534] leading-relaxed">
+                                你完全不知道四層怎麼寫？沒關係——請 Gemini 示範一個極簡範例給你照做。記得：<strong>看完範例自己寫一次</strong>，不要直接抄。
+                            </p>
+                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我在做研究，需要寫「四層結論」（描述、詮釋、回扣、批判），但我完全不知道怎麼寫。
+
+【我的研究】
+- 方法：問卷／訪談／實驗／觀察／文獻
+- 研究問題：___
+- 主要發現（一句話）：___
+- 樣本：N=___，對象是 ___
+
+【請你做】
+1. 用我的研究主題，示範一個極簡四層結論範例（每層 1-2 句即可）
+2. 用簡單話解釋每一層的「任務是什麼、不能做什麼」
+3. 給我四層的「填空模板」，我可以照著填
+
+【不要做】
+- 不要替我寫出完整的最終版
+- 我會看完範例後自己寫一次再給你檢查`}</pre>
+                            <p className="text-[11px] text-[#166534] italic leading-relaxed">
+                                💡 看完 AI 範例後，回去 Step 2「自己先寫」自己寫一次，再切回「驗收型」讓 AI 檢核。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 驗收型：有初版 → 方法別 prompt 檢核 */}
+                    {w15AiMode === 'verify' && (
+                        <div>
+                            <p className="text-[14px] font-bold text-[var(--ink)] mb-2">🥊 驗收型：選擇你的研究方法，取得對應的檢核 Prompt</p>
+                            <p className="text-[11.5px] text-[var(--ink-mid)] mb-3 leading-relaxed">
+                                預設帶入<strong className="text-[var(--ink)]">你 W9 選的方法</strong>，但 5 個分頁都可以點——這是研究方法課，<strong className="text-[var(--ink)]">看一下別組的 Prompt 怎麼下，是這節課該做的事</strong>。
+                            </p>
+                            <MethodSelector />
+                        </div>
+                    )}
+
+                    {!w15AiMode && (
+                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                ☝️ 上方先選一個 AI 使用模式：寫不出來選🎓教學型；有初版了選🥊驗收型。
+                            </p>
+                        </div>
+                    )}
                     <ThinkRecord dataKey="w15-ai-feedback" prompt="AI 提供了哪些建議？分別記錄描述層、詮釋層、回扣層潤飾、研究限制的建議重點。" scaffold={['描述層建議：...', '詮釋層建議：...', '回扣層潤飾：...', '研究限制建議：1.__ 2.__ 3.__']} />
                 </div>
             ),
@@ -461,8 +558,11 @@ const W15Page = () => {
                     <ThinkRecord dataKey="w15-ai-helpful" prompt="今天 AI 最有幫助的地方是什麼？" />
                     <ThinkRecord dataKey="w15-ai-limit" prompt="今天 AI 最大的限制是什麼？" />
                     <ThinkRecord dataKey="w15-ai-blind-trust" prompt="如果我完全相信 AI，我會犯什麼錯？" />
-                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="15" hint="這週用 AI 檢核四層結論" />
+                    {/* 完整對話繳交（W15 AI 檢核多輪互動，必繳） */}
+                    <AIDialogSubmission week="15" taskName="四層結論檢核對話" required={true} />
+
+                    {/* AIRED 敘事紀錄（W15 必填，因為使用 AI 檢核四層結論） */}
+                    <AIREDNarrative week="15" hint="本週用 AI 壓力測試四層結論：A=Gemini Pro / I=方法別 prompt / R=AI 找到的限制與盲點 / E=我同意/不同意哪些 / D=採納哪些修正" />
 
                     {/* 本週結束，你應該要會 — B 標準格式 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">

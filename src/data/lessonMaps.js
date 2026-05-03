@@ -1986,53 +1986,49 @@ export const W12Data = {
 
 export const W13Data = {
     id: "W13",
-    title: "中期盤點與資料收齊：問題診斷與最後衝刺",
-    description: "資料收集進行到哪了？今天回顧進度、解決問題、開始整理——邊收集邊整理，比最後一起整理好得多。",
+    title: "資料整理週：把原始資料變成可分析的表",
+    description: "W11-W12 用第六章工具蒐集到一堆原始資料——但還不能直接交給 Gemini 畫圖。本週把它轉成「分析表」：欄位清楚、N 值明確，下週 W14 才畫得了圖。",
     periods: [
         {
             name: "第一節",
             duration: "50 min",
-            title: "進度回顧 × 問題診斷 × 計畫調整",
+            title: "認識資料樣態 × 範本與彙整",
             stages: [
-                { time: "0:00 - 0:05", title: "① 開場", desc: "資料收集進行到哪裡了？建立回顧框架。", tags: ["回顧", "框架"], colorClass: "lm-c3" },
-                { time: "0:05 - 0:30", title: "② 各組進度報告", desc: "每組 4–5 分鐘報告：已收集量、遇到問題、目前打算、需要幫忙的事。", tags: ["口頭報告", "進度確認"], colorClass: "lm-c5" },
-                { time: "0:30 - 0:45", title: "③ 常見問題解方", desc: "教師主導討論 2–3 個最常見問題：回收率不足、題目看不懂、觀察條件不符、資料有遺漏。", tags: ["問題診斷", "全班討論"], colorClass: "lm-c1" },
-                { time: "0:45 - 0:50", title: "④ 調整計畫", desc: "各組更新執行計畫，在學習單 Part B 記錄修改內容與理由。", tags: ["計畫調整", "修正方向"], colorClass: "lm-c2" }
+                { time: "0:00 - 0:15", title: "① 認識資料樣態", desc: "5 法原始資料 → 分析表對照表；學生自我定位（我手上是還沒整理還是已半結構化）。", tags: ["對照表", "自我定位"], colorClass: "lm-c1" },
+                { time: "0:15 - 0:30", title: "② 範本與彙整教學", desc: "問卷／訪談／實驗組看「分析表結構範本」；觀察／文獻組看「xlsx 彙整教學」。", tags: ["範本", "兩條路徑"], colorClass: "lm-c1" },
+                { time: "0:30 - 0:50", title: "③ 動手整理（前段）", desc: "建立分析表的欄位 header + 第一筆資料；老師巡視確認結構正確。", tags: ["實作", "建表"], colorClass: "lm-c2" }
             ]
         },
         {
             name: "第二節",
             duration: "50 min",
-            title: "初步資料整理 × AI 輔助分析",
+            title: "動手整理 × 收尾繳交",
             stages: [
-                { time: "0:00 - 0:30", title: "⑤ 初步資料整理", desc: "清理（去掉無效資料）→ 分類（按研究問題分組）→ 描述（數清楚各選項各幾人）。", tags: ["資料清理", "分類整理"], colorClass: "lm-c2" },
-                { time: "0:30 - 0:45", title: "⑥ AI 輔助初步分析", desc: "用 Prompt 範本讓 AI 做第一輪觀察，學生判斷 AI 的分析是否合理。", tags: ["AI 協作", "初步分析"], colorClass: "lm-c4" },
-                { time: "0:45 - 0:50", title: "⑦ 收束 + 預告", desc: "W12 量化分析、W13 質性分析。W12 前請確保資料已整理好。", tags: ["預告", "收束"], colorClass: "lm-c3" }
+                { time: "0:00 - 0:35", title: "④ 動手整理（後段）", desc: "把資料填進分析表；進度自評（綠／黃／紅）；老師優先協助紅燈組。", tags: ["實作", "巡視"], colorClass: "lm-c2" },
+                { time: "0:35 - 0:50", title: "⑤ 收尾繳交", desc: "貼分析表連結（必繳）+ 寫表結構摘要 + 預告 W14 第一張圖；匯出。", tags: ["繳交", "預告"], colorClass: "lm-c3" }
             ]
         }
     ],
     summaries: [
         {
             icon: "📊",
-            label: "進度報告",
-            text: "各組口頭報告收集進度<br><small style=\"font-size:11px;color:#888;\">已收集量 / 問題 / 打算</small>"
+            label: "資料樣態",
+            text: "5 法原始資料 → 分析表對照<br><small style=\"font-size:11px;color:#888;\">問卷 / 訪談 / 實驗 / 觀察 / 文獻</small>"
         },
         {
-            icon: "🔧",
-            label: "問題解方",
-            text: "常見問題全班討論<br><small style=\"font-size:11px;color:#888;\">回收率 / 理解困難 / 遺漏</small>"
+            icon: "🧰",
+            label: "兩條路徑",
+            text: "從零建表 vs 彙整 xlsx<br><small style=\"font-size:11px;color:#888;\">問訪實 vs 觀察文獻</small>"
         },
         {
-            icon: "🤖",
-            label: "AI 初分析",
-            text: "AI 做初稿，學生做裁奪<br><small style=\"font-size:11px;color:#ccc;\">趨勢觀察 / 異常偵測</small>"
+            icon: "🔗",
+            label: "繳交分析表連結",
+            text: "Google Sheet 公開連結<br><small style=\"font-size:11px;color:#ccc;\">W14 直接讀取畫圖</small>"
         }
     ],
     legends: [
-        { colorClass: "lm-c1", label: "概念 / 討論" },
+        { colorClass: "lm-c1", label: "概念 / 範本" },
         { colorClass: "lm-c2", label: "實作 / 整理" },
-        { colorClass: "lm-c4", label: "AI 協作" },
-        { colorClass: "lm-c5", label: "互動 / 報告" },
         { colorClass: "lm-c3", label: "說明 / 收束" }
     ]
 };

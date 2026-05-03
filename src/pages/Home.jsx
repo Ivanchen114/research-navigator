@@ -584,7 +584,7 @@ export const Home = () => {
               <span className="ph-range">W13 – W17</span>
             </div>
             <div className="week-grid wg-5">
-              <WeekCard num="W13" icon={<Rocket size={18} className="text-[#9090b0]" />} title="自主進度" desc="彈性自主週——進度自評三按鈕分流 + Open Office 諮詢。" path="/w13" />
+              <WeekCard num="W13" icon={<Rocket size={18} className="text-[#9090b0]" />} title="資料整理週" desc="raw → 分析表：5 法對照 + 範本／彙整 + 動手整理 + 繳交 Google Sheet 連結。" path="/w13" />
               <WeekCard num="W14" icon={<BarChart2 size={18} className="text-[#9090b0]" />} title="數據轉譯" desc="四大圖表選擇、格式規範、描述＋詮釋寫作。" path="/w14" mission={{ tag: 'DECADE', name: '行動代號：解碼', path: '/game/chart-matcher' }} />
               <WeekCard num="W15" icon={<FileText size={18} className="text-[#9090b0]" />} title="研究結論" desc="四層結論寫作：描述、詮釋、回扣文獻、批判限制。" path="/w15" mission={{ tag: 'FILTER', name: '行動代號：濾鏡', path: '/game/data-detective' }} />
               <WeekCard num="W16" icon={<Palette size={18} className="text-[#9090b0]" />} title="簡報與海報" desc="七章報告組裝、AI 潤色縫合、海報設計。" path="/w16" />

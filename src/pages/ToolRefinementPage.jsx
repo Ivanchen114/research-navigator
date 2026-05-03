@@ -3,6 +3,9 @@ import CourseArc from '../components/ui/CourseArc';
 import './ToolRefinementPage.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
+import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
+import AIDialogSubmission from '../components/ui/AIDialogSubmission';
+import AIModePicker from '../components/ui/AIModePicker';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
@@ -640,6 +643,8 @@ const EXPORT_FIELDS = [
     { key: 'w10-entry-self-report', label: '入場自報（W9 docx 完成度）', question: '第二~五章章節完成狀況' },
     { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
+    { key: 'w10-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（不知怎麼設計題目請示範）/ 🥊 驗收型（有題目初稿請找毛病）' },
+    { key: 'w10-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
     /* Step 2：七到十三章 + AIRED + 課後待補 */
     { key: 'w10-aired-record', label: 'W10 完整 AIRED 敘事', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
     { key: 'w10-postclass-todo', label: '課後待補清單', question: '哪幾章還想再動，配 W11 老師回饋對照' },
@@ -858,6 +863,13 @@ export const ToolRefinementPage = () => {
     const [toolKitView, setToolKitView] = useState(null); // 工具書教學 tab 使用者切換值
     const [litSubtype, setLitSubtype] = useState(''); // 文獻組 4 子類型 id
     const [showLessonMap, setShowLessonMap] = useState(false);
+    /* AI 使用模式 */
+    const [w10AiMode, setW10AiMode] = useState(() => {
+        try {
+            const r = JSON.parse(localStorage.getItem('rib_think_records')) || {};
+            return r['w10-ai-mode'] || '';
+        } catch { return ''; }
+    });
 
     /* W9 資料帶入 */
     useEffect(() => {
@@ -1214,6 +1226,70 @@ export const ToolRefinementPage = () => {
                                 );
                             })()}
                         </div>
+                    </div>
+
+                    {/* —— AI 工作坊區（雙模式 + 完整對話繳交） —— */}
+                    <div className="space-y-4 pt-4 border-t-2 border-dashed border-[var(--accent)] mt-6">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">AI 工作坊</span>
+                            <span className="text-[14px] font-bold text-[var(--ink)]">🤖 用 AI 設計工具（雙模式可選）</span>
+                        </div>
+
+                        {/* AI 協作三原則（W10 角色：嚴格教練） */}
+                        <AICollaborationPrinciples week="10" role="critic" compact={false} />
+
+                        {/* AI 模式選擇 */}
+                        <AIModePicker week="10" taskName="工具設計" onChange={setW10AiMode} />
+
+                        {/* 教學型：直接點上方的「AI 啟動 prompt」 */}
+                        {w10AiMode === 'teach' && (
+                            <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-4 space-y-2">
+                                <p className="text-[13px] font-bold text-[#166534]">🎓 教學型：點上方 details「AI 啟動 prompt」</p>
+                                <p className="text-[11.5px] text-[#166534] leading-relaxed">
+                                    現有的「不知怎麼開始？點開複製這段 Prompt 給 AI」就是<strong>教學型</strong>——請 AI 給方向、給範例、拆步驟。
+                                    記得：AI 給「方向」就好，<strong>實際題目自己寫到 docx</strong>，看完範例後自己改寫一次。
+                                </p>
+                            </div>
+                        )}
+
+                        {/* 驗收型：通用 prompt（學生有初稿） */}
+                        {w10AiMode === 'verify' && (
+                            <div className="rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2] p-4 space-y-3">
+                                <p className="text-[13px] font-bold text-[#991B1B]">🥊 驗收型 Prompt（我有題目初稿）</p>
+                                <p className="text-[11.5px] text-[#991B1B] leading-relaxed">
+                                    你已寫了一些題目（在 docx 第六章），請 AI 從研究方法老師角度<strong>找毛病</strong>。
+                                </p>
+                                <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我寫了一份[問卷／訪談大綱／實驗流程／觀察紀錄表／文獻分析編碼表]，請從研究方法老師角度幫我找毛病。
+
+【我的研究】
+- 方法：___
+- 研究問題：___
+- 對象：___
+- 關鍵變項／主題：___
+
+【我的工具初稿】
+___（貼題目／訪綱／流程／編碼表）
+
+【請從以下角度檢查】
+1. 題目／提問是否對應研究問題？哪幾題偏離主題？
+2. 是否有「引導性題目」「雙題合一」「術語太難」等常見錯誤？
+3. 樣本／時序／順序設計是否有遺漏？
+4. 我這個方法的「獨家陷阱」我有避開嗎？
+
+只指出問題與建議改寫方向，不要替我重寫——改寫由我自己來。`}</pre>
+                            </div>
+                        )}
+
+                        {!w10AiMode && (
+                            <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
+                                <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                    ☝️ 上方先選一個 AI 使用模式：寫不出題目選🎓教學型；有初稿了選🥊驗收型。
+                                </p>
+                            </div>
+                        )}
+
+                        {/* 完整對話繳交（W10 多輪互動，必繳） */}
+                        <AIDialogSubmission week="10" taskName="工具設計對話" required={true} />
                     </div>
 
                     {/* 補充方法提示卡（W8 登記過才顯示） */}

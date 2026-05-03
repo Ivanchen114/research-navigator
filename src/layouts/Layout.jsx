@@ -85,7 +85,7 @@ export const Layout = () => {
         {
             sublabel: '階段五·分析與發表',
             items: [
-                { name: '自主進度', path: '/w13', week: 'W13', status: 'locked' },
+                { name: '資料整理週', path: '/w13', week: 'W13', status: 'locked' },
                 { name: '圖表與圖說', path: '/w14', week: 'W14', status: 'locked' },
                 { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
                 { name: '報告與海報', path: '/w16', week: 'W16', status: 'locked' },

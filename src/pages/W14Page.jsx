@@ -9,6 +9,9 @@ import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
+import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
+import AIDialogSubmission from '../components/ui/AIDialogSubmission';
+import AIModePicker from '../components/ui/AIModePicker';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     ArrowRight,
@@ -103,16 +106,19 @@ const EXPORT_FIELDS = [
     /* Step 2 */
     { key: 'w14-format-exercise', label: '格式規範演練' },
     /* Step 3 */
-    { key: 'w14-case-1', label: '案例一：研究樣本背景' },
-    { key: 'w14-case-2', label: '案例二：兩性愛情觀' },
-    { key: 'w14-case-3', label: '案例三：精神病患民調' },
-    /* Step 4 */
+    { key: 'w14-case-3', label: '描述+推論整合練習' },
+    /* Step 4 — AI 畫圖工作坊 */
+    { key: 'w14-pre-judgment', label: '草圖判讀（先別開 AI）', question: '我預期會看到什麼趨勢？最重要的發現是什麼？' },
     { key: 'w14-my-chart-type', label: '我的圖表類型與理由' },
+    { key: 'w14-ai-blindspot', label: 'AI 找到的盲點 / 我沒注意到的趨勢' },
+    { key: 'w14-validation-check', label: '圖表驗收結果' },
     { key: 'w14-my-description', label: '我的描述（藍筆）' },
     { key: 'w14-my-inference', label: '我的推論（紅筆）' },
+    { key: 'w14-ai-pressure-test', label: 'AI 壓力測試後我做了哪些修正' },
+    { key: 'w14-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
     /* Step 5 */
     { key: 'w14-w15-preview', label: 'W15 預告：結論的第三層和第四層' },
-    { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄（本週必填）', question: '本週用 AI 畫圖的最重要一次互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -206,6 +212,16 @@ const W14Page = () => {
     const saved = readRecords();
     const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
+    /* W13 跨週帶入 */
+    const w13TableLink = saved['w13-table-link'] || '';
+    const w13W14Question = saved['w13-w14-question'] || '';
+    /* AI 使用模式 */
+    const [w14AiMode, setW14AiMode] = useState(() => {
+        try {
+            const r = JSON.parse(localStorage.getItem('rib_think_records')) || {};
+            return r['w14-ai-mode'] || '';
+        } catch { return ''; }
+    });
 
     const steps = [
         {
@@ -373,38 +389,15 @@ const W14Page = () => {
                         </div>
                     </div>
 
-                    {/* 案例一 */}
+                    {/* 案例三（保留：整合練習） */}
                     <div className="w14-case-card">
-                        <div className="w14-case-header">案例一：研究樣本背景</div>
-                        <div className="w14-case-body">
-                            <p><strong>數據：</strong>年齡 19-25 歲者佔絕大多數（男 77.3%，女 86.83%）。</p>
-                            <p className="mt-2">這份問卷的主要調查對象大多為___。「絕大多數」這個說法精準嗎？為什麼？</p>
-                        </div>
-                    </div>
-                    <ThinkRecord dataKey="w14-case-1" prompt="案例一作答" scaffold={['主要調查對象是...', '「絕大多數」不夠精準，因為...']} />
-
-                    {/* 案例二 */}
-                    <div className="w14-case-card">
-                        <div className="w14-case-header">案例二：兩性愛情觀</div>
-                        <div className="w14-case-body">
-                            <p><strong>數據：</strong>Q1 曾有單戀經驗（男 78%、女 79%）；Q2 主動追求（男 56%、女 31%）。</p>
-                            <p className="mt-2">
-                                <span className="text-[#1E40AF]">描述：</span>兩性在單戀經驗上比例相當；但在主動追求上，男生顯著___於女生。
-                                <br /><span className="text-[#991B1B]">推論：</span>社會文化可能仍傾向由___性扮演主動角色。
-                            </p>
-                        </div>
-                    </div>
-                    <ThinkRecord dataKey="w14-case-2" prompt="案例二作答：填入描述和推論的空格" scaffold={['描述：男生顯著___於女生', '推論：___性扮演主動角色']} />
-
-                    {/* 案例三 */}
-                    <div className="w14-case-card">
-                        <div className="w14-case-header">案例三：精神病患處置民調</div>
+                        <div className="w14-case-header">整合練習：精神病患處置民調</div>
                         <div className="w14-case-body">
                             <p><strong>數據：</strong>73.5% 民眾不滿現況；不滿主因是「結束刑期後的社會危害（如再犯）」（85.3%）。</p>
                             <p className="mt-2">請用「描述＋推論」公式，把這兩個數字整合成一段完整的說明。</p>
                         </div>
                     </div>
-                    <ThinkRecord dataKey="w14-case-3" prompt="案例三：用描述＋推論公式寫出完整說明" scaffold={['描述：根據調查結果，...', '推論：這可能反映出...']} />
+                    <ThinkRecord dataKey="w14-case-3" prompt="整合練習：用描述＋推論公式寫出完整說明" scaffold={['描述：根據調查結果，...', '推論：這可能反映出...']} />
 
                     {/* 遊戲入口：Data Detective */}
                     <div className="p-4 rounded-[var(--radius-unified)] bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white text-center">
@@ -422,52 +415,111 @@ const W14Page = () => {
             ),
         },
         {
-            title: '各組實戰',
+            title: 'AI 畫圖工作坊',
             icon: <BarChart2 size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🛠️ 把公式套到你自己的資料上</p>
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🛠️ AI 畫圖工作坊：先判讀 → AI 畫 → 找漏洞</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            打開你的問卷回覆或實驗數據，挑選最關鍵的 1-2 個變項，製作圖表，然後寫出描述＋推論。
+                            開你 W13 整理好的分析表。<strong>先用腦袋讀懂自己的資料</strong>（草圖判讀）→ 結構化 prompt 給 Gemini → 看 AI 畫的圖跟你預期差多少 → 找出你忽略的趨勢／盲點 → 寫描述＋推論。
                         </p>
                     </div>
 
-                    {/* 帶入研究資訊 */}
-                    {myTopic && (
-                        <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border border-[#BAE6FD]">
-                            <p className="text-[12px] text-[#0369A1] font-bold mb-1">📂 你的研究</p>
-                            <p className="text-[13px] text-[#0C4A6E]">{myTopic}</p>
-                            {myMethod && <p className="text-[12px] text-[#0369A1] mt-1">方法：{myMethod}</p>}
+                    {/* 從 W13 帶入分析表 */}
+                    {(w13TableLink || w13W14Question) && (
+                        <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border-2 border-[#BAE6FD]">
+                            <p className="text-[12px] text-[#0369A1] font-bold mb-2">📂 從 W13 帶過來</p>
+                            {w13TableLink && (
+                                <div className="mb-2">
+                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">分析表連結</p>
+                                    <p className="text-[12px] text-[#0C4A6E] break-all">{w13TableLink}</p>
+                                </div>
+                            )}
+                            {w13W14Question && (
+                                <div>
+                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">你 W13 寫的「想看的第一張圖」</p>
+                                    <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w13W14Question}</p>
+                                </div>
+                            )}
                         </div>
                     )}
 
-                    {/* 📊 AI 圖表顧問（人選圖表前先問 AI，但你做最後決定） */}
-                    <details className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
-                        <summary className="text-[13px] font-bold text-[var(--accent)] cursor-pointer flex items-center justify-between">
-                            <span>🤖 AI 圖表顧問（卡住再開）</span>
-                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
-                        </summary>
-                        <div className="mt-3 space-y-3">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                直接套口訣選不出來？把資料特性貼給 AI 請它建議——但<strong>建議是參考</strong>，最後還是你決定。
-                            </p>
-                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我有一份研究資料：
-- 資料類型：[問卷/訪談/實驗/觀察/文獻]
-- 我想呈現的是：[___ 跟 ___ 的關係/分布/趨勢/比例]
-- 樣本數：N=___
-- 變項是否含「時間順序」？___（是/否）
-- 是否「複選題」？___（是/否）
+                    {/* AI 協作三原則（W14 角色：反思鏡） */}
+                    <AICollaborationPrinciples week="14" role="mirror" compact={false} />
 
-請建議我用什麼圖表類型，並說明為什麼。
-如果有兩個候選，請列出各自的優缺點，讓我自己選。`}</pre>
-                            <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
-                                💡 AI 給建議後，下方欄位請<strong>用自己的話</strong>寫為什麼選這個——不要照抄 AI。
+                    {/* AI 模式選擇 */}
+                    <AIModePicker week="14" taskName="畫圖判讀" onChange={setW14AiMode} />
+
+                    {/* 驗收型：先寫草圖判讀 */}
+                    {w14AiMode === 'verify' && (
+                        <>
+                            <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2]">
+                                <p className="text-[14px] font-bold text-[#991B1B] mb-2 flex items-center gap-2">
+                                    <ShieldAlert size={16} /> 第①步 · 草圖判讀（驗收型必做）
+                                </p>
+                                <p className="text-[12px] text-[#7F1D1D] leading-relaxed mb-2">
+                                    驗收型 = 你已經有概念了。<strong>沒先寫判讀就丟給 AI = 你說不出 AI 給的對不對</strong>。
+                                    用腦袋（不是 AI）先回答下面三個問題。寫不出來，就改用「教學型」。
+                                </p>
+                            </div>
+                            <ThinkRecord
+                                dataKey="w14-pre-judgment"
+                                prompt="① 我的草圖判讀（先別開 AI）"
+                                scaffold={[
+                                    '我選的變項：X = ___，Y = ___（為什麼選這兩個？）',
+                                    '我預期會看到的趨勢／模式：（口語描述，例：高一比高三花更多時間滑手機）',
+                                    '我預期最重要的發現：（如果這張圖只能講一句話，這句話是什麼？）',
+                                ]}
+                            />
+                        </>
+                    )}
+
+                    {/* 教學型：請 AI 教我能畫什麼 */}
+                    {w14AiMode === 'teach' && (
+                        <>
+                            <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4]">
+                                <p className="text-[14px] font-bold text-[#166534] mb-2 flex items-center gap-2">
+                                    🎓 第①步 · 請 AI 教我（教學型）
+                                </p>
+                                <p className="text-[12px] text-[#166534] leading-relaxed mb-3">
+                                    你完全不知道這份資料能畫什麼？沒關係——把資料樣態貼給 Gemini，請它<strong>給範例</strong>。
+                                    記得 AI 給範例後，<strong>你要自己選圖表類型 + 自己寫一次</strong>，不要只複製。
+                                </p>
+                                <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我有一份分析表（N=___），但我完全不知道這份資料能畫什麼圖、能看出什麼。
+
+我的研究問題是：___
+分析表的欄位：___（貼欄位清單）
+
+【請你做】
+1. 給我 2-3 個「這份資料可以畫的圖」範例（每個說明：用什麼圖表類型、X/Y 軸是什麼、預期會看到什麼）
+2. 列出我可以從這份資料問的 3 個分析問題（從淺到深）
+3. 教我用最簡單的方式判斷「該用什麼圖表」（口訣或決策樹）
+
+【不要做】
+- 不要直接幫我畫完
+- 不要替我寫描述/推論
+- 我看完範例後會自己選一個來做`}</pre>
+                            </div>
+                            <ThinkRecord
+                                dataKey="w14-teach-reflection"
+                                prompt="① 教學型反思（AI 教完後寫）"
+                                scaffold={[
+                                    'AI 給我哪 2-3 個範例？我選哪一個方向做？',
+                                    'AI 教我的「圖表選擇判斷」是什麼？我用自己的話解釋一次：',
+                                    '我接下來要畫的圖（變項+類型+預期看到什麼）：（自己寫，不抄 AI）',
+                                ]}
+                            />
+                        </>
+                    )}
+
+                    {!w14AiMode && (
+                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                ☝️ 上方先選一個 AI 使用模式，這裡會顯示對應的指引。
                             </p>
                         </div>
-                    </details>
-
-                    {/* 圖表類型選擇 */}
+                    )}
                     <ThinkRecord
                         dataKey="w14-my-chart-type"
                         prompt="我選用的圖表類型是什麼？為什麼？（套用口訣說明）"
@@ -478,17 +530,106 @@ const W14Page = () => {
                         ]}
                     />
 
-                    {/* 描述（藍筆） */}
+                    {/* —— 第②步 給 Gemini 畫圖 —— */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
+                        <p className="text-[14px] font-bold text-[var(--accent)] mb-2 flex items-center gap-2">
+                            <Gamepad2 size={16} /> 第②步 · 結構化 prompt 給 Gemini Pro
+                        </p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            打開 <strong>Gemini Pro · 思考模式 + Canvas</strong>。把分析表（CSV / 連結）+ 下方 prompt 一起貼進去。
+                        </p>
+                        <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`【任務】
+依我提供的判讀，幫我把資料畫成圖。
+不要自行更換圖表類型、不要自行新增變項。
+
+【我的判讀】
+- 變項：X = ___，Y = ___
+- 預期趨勢：___
+- 我選的圖表類型：___（折線/圓餅/長條/散佈）
+- 樣本數：N = ___
+
+【分析表】
+___（貼資料或連結）
+
+【請輸出】
+1. 用我選的圖表類型畫出圖（Canvas 顯示）
+2. 標題、N 值、座標軸、資料來源依學術圖表規範
+3. 你看完資料後，告訴我：我的預期趨勢對不對？
+
+不要替我寫圖說，圖說由我自己來。`}</pre>
+                        <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed mt-3">
+                            💡 看 Gemini 思考模式：它怎麼選圖表？跟你選的一致嗎？不一致誰對？
+                        </p>
+                    </div>
+
+                    {/* —— 第③步 AI 找漏洞 —— */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
+                        <p className="text-[14px] font-bold text-[#5B21B6] mb-2 flex items-center gap-2">
+                            🔍 第③步 · 請 AI 找出你忽略的盲點
+                        </p>
+                        <p className="text-[12px] text-[#4C1D95] leading-relaxed mb-3">
+                            高一學生分析力還在長——AI 可以搭你的鷹架，戳出你<strong>沒看到的角度</strong>。注意：AI 只給線索，判斷由你。
+                        </p>
+                        <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`接續上一輪。
+
+【我的判讀】（重貼一次）
+- 預期趨勢：___
+- 預期最重要的發現：___
+
+【請從研究方法老師角度幫我做兩件事】
+1. 找出我這份資料裡，可能有但我沒注意到的 3 個趨勢／模式
+2. 標出 1-2 個「乍看像趨勢、但其實樣本不足以支持」的點，提醒我不要過度解讀
+
+不要替我寫結論，只給我提示——「也許可以注意 ___」這種句型。`}</pre>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w14-ai-blindspot"
+                        prompt="② AI 找到的盲點 / 我沒注意到的趨勢"
+                        scaffold={[
+                            'AI 指出我可能忽略的趨勢：',
+                            'AI 警告我不要過度解讀的點：',
+                            '我採納哪些、不採納哪些：',
+                        ]}
+                    />
+
+                    {/* —— 第④步 驗收 —— */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#FCD34D] bg-[#FFFBEB]">
+                        <p className="text-[13px] font-bold text-[#92400E] mb-2 flex items-center gap-2">
+                            <ShieldAlert size={14} /> 第④步 · 驗收清單（每項都要對）
+                        </p>
+                        <ul className="text-[11px] text-[#78350F] leading-relaxed space-y-1">
+                            <li>☐ 圖表類型 = 我選的（不是 AI 擅自改的）</li>
+                            <li>☐ 標題在上方，含 N 值</li>
+                            <li>☐ 資料來源在下方</li>
+                            <li>☐ 座標軸沒騙人（沒截斷、比例合理）</li>
+                            <li>☐ AI 對我預期趨勢的判讀我有看懂、有同意 / 不同意的依據</li>
+                        </ul>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w14-validation-check"
+                        prompt="③ 圖表驗收結果"
+                        scaffold={[
+                            '5 項驗收都通過？☐ 是 / ☐ 否（哪幾項沒過？）',
+                            'AI 的判讀我同意嗎？為什麼？',
+                            '修正了哪些細節：',
+                        ]}
+                    />
+
+                    {/* —— 第⑤步 寫描述＋推論 —— */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 第⑤步 · 寫圖說（描述＋推論，這步自己寫）</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            根據驗收完的圖，用你<strong>自己的話</strong>寫描述（藍筆）＋推論（紅筆）。AI 圖說不能照抄。
+                        </p>
+                    </div>
                     <div>
                         <p className="text-[13px] font-bold mb-2" style={{ color: '#1E40AF' }}>🔵 描述（藍筆）：客觀事實</p>
                         <ThinkRecord
                             dataKey="w14-my-description"
                             prompt="根據你的圖表，你看到了什麼？報事實、報數字。"
-                            scaffold={['根據圖一，...']}
+                            scaffold={['根據圖一，...', '其中最明顯的是...']}
                         />
                     </div>
-
-                    {/* 推論（紅筆） */}
                     <div>
                         <p className="text-[13px] font-bold mb-2" style={{ color: '#991B1B' }}>🔴 推論（紅筆）：主觀見解</p>
                         <ThinkRecord
@@ -498,39 +639,53 @@ const W14Page = () => {
                         />
                     </div>
 
-                    {/* 🤖 AI 推論協力（檢查過度推論 + 補充角度） */}
-                    <details className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
-                        <summary className="text-[13px] font-bold text-[var(--accent)] cursor-pointer flex items-center justify-between">
-                            <span>🤖 AI 推論協力（推論寫完再開）</span>
+                    {/* —— 第⑥步 AI 壓力測試（推論） —— */}
+                    <details className="p-4 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
+                        <summary className="text-[13px] font-bold text-[#5B21B6] cursor-pointer flex items-center justify-between">
+                            <span>🥊 第⑥步 · AI 推論壓力測試（推論寫完再開）</span>
                             <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
                         </summary>
                         <div className="mt-3 space-y-3">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                推論最容易踩兩個雷：① <strong>過度推論</strong>（從 N=30 推到「全國高中生」）；② <strong>單一原因</strong>（只想到一個解釋就停）。讓 AI 幫你壓力測試。
+                            <p className="text-[12px] text-[#4C1D95] leading-relaxed">
+                                推論最容易踩兩個雷：① <strong>過度推論</strong>（N=30 推到「全國高中生」）；② <strong>單一原因</strong>（只想到一個解釋就停）。讓 AI 壓力測試。
                             </p>
-                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我做了一份研究，剛寫完一張圖的描述跟推論：
+                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`接續上一輪。
 
-【描述】___（貼上你的描述句）
-【推論】___（貼上你的推論句）
+【我的描述】___（貼）
+【我的推論】___（貼）
 【樣本資訊】N=___，對象是 ___
 
-請從研究方法老師的角度幫我檢查兩件事：
-1. 我的推論有沒有「過度推論」？哪些用詞需要加上「可能」「推測」「在 ___ 範圍內」等保留語？
+【請壓力測試】
+1. 我的推論有沒有過度推論？哪些用詞要加「可能」「推測」「在 ___ 範圍內」？
 2. 除了我寫的這個原因，還有哪 2 個合理但我沒想到的解釋？
-請只給檢查與建議，不要替我改寫——改寫由我自己來。`}</pre>
+3. 我的描述有沒有量詞不精準的地方（38% 寫成「絕大多數」）？
+
+只給檢查與建議，不要替我改寫——改寫由我自己來。`}</pre>
                             <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
-                                💡 AI 給建議後，回到上方推論欄修——不是貼 AI 改寫版，是你<strong>採納哪些建議再自己改</strong>。
+                                💡 AI 給建議後，回到上方推論欄修——你<strong>採納哪些</strong>再自己改，不照抄。
                             </p>
                         </div>
                     </details>
+                    <ThinkRecord
+                        dataKey="w14-ai-pressure-test"
+                        prompt="④ AI 壓力測試後我做了哪些修正"
+                        scaffold={[
+                            'AI 指出的問題：',
+                            '我採納哪些建議：',
+                            '我修正了什麼（描述／推論的具體用詞）：',
+                        ]}
+                    />
+
+                    {/* 完整對話繳交 */}
+                    <AIDialogSubmission week="14" taskName="圖表判讀對話" required={true} />
 
                     {/* 教師巡視提醒 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">
                         <p className="text-[12px] font-bold text-[var(--ink)] mb-2">👀 老師巡視會檢查三件事</p>
                         <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
-                            <span>1. 圖表類型選擇是否正確</span>
-                            <span>2. 標題在上方（含 N 值）、資料來源在下方</span>
-                            <span>3. 描述有沒有說到最高值、最低值或最明顯的數字</span>
+                            <span>1. 你有<strong>先寫草圖判讀</strong>再開 AI（沒寫的代表沒判讀）</span>
+                            <span>2. 圖表類型選擇是否正確 + 格式三鐵規（標題、N、來源）</span>
+                            <span>3. 描述／推論不是 AI 改寫版，是你<strong>採納後自己改</strong>的</span>
                         </div>
                     </div>
                 </div>
@@ -562,8 +717,8 @@ const W14Page = () => {
                         />
                     </div>
 
-                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="14" hint="選圖表、寫圖說可能用 AI 建議" optional={true} />
+                    {/* AIRED 敘事紀錄（W14 必填，因為使用了 AI 畫圖工作坊） */}
+                    <AIREDNarrative week="14" hint="本週用 AI 畫圖：A=Gemini Pro Canvas / I=結構化 prompt / R=AI 畫的圖+找到的盲點 / E=我的判讀 vs AI 的判讀差在哪 / D=採納哪些修正" />
 
                     {/* 本週結束，你應該要會 — B 標準格式 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
@@ -641,7 +796,7 @@ const W14Page = () => {
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
-                prevWeek={{ label: '回 W13 中期盤點', to: '/w13' }}
+                prevWeek={{ label: '回 W13 資料整理週', to: '/w13' }}
                 nextWeek={{ label: '前往 W15 研究結論', to: '/w15' }}
             flat
             />
