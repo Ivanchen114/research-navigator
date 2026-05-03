@@ -39,9 +39,9 @@ import {
 
 /* — 共通錯誤（五方法都可能犯）：三欄結構 類型 / 徵狀 / 怎麼改 — */
 const COMMON_ERRORS = [
-    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重」「非常好」等詞暗示了正確答案', fix: '改成中性語彙：「你覺得 X 對 Y 的影響是？」搭配雙向量表', color: 'var(--danger)' },
-    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，不知道在回答哪一個', fix: '拆成兩題，一題問一件事', color: '#2563EB' },
-    { name: '假開放真預設', icon: '🎭', desc: '看似開放，其實已預設了方向', fix: '改成真正開放或完全中性，不提示立場', color: '#059669' },
+    { name: '誘導性提問', icon: '🎯', desc: '題目用「嚴重／非常好」等詞偷偷暗示答案（例：「您是否同意減塑很重要？」← 已暗示要同意）', fix: '改中性「你覺得 X 對 Y 的影響是？」搭配雙向量表', color: 'var(--danger)' },
+    { name: '雙重問題', icon: '✌️', desc: '一題問兩件事，受訪者沒法答（例：「您滿意學校的課程跟師資？」← 課程滿意但師資不滿意怎麼答）', fix: '拆兩題分別問', color: '#2563EB' },
+    { name: '假開放真預設', icon: '🎭', desc: '看起來開放但答案被框住（例：「請談談對減塑的看法」後接「同意／不同意」）', fix: '改真正開放或完全中性，不提示立場', color: '#059669' },
 ];
 
 /* — 方法獨家陷阱：5 方法 × 2~3 條；同為 類型 / 徵狀 / 怎麼改 三欄結構 — */
@@ -72,9 +72,9 @@ const METHOD_PITFALLS = {
     experiment: {
         label: '🧪 實驗',
         items: [
-            { name: '混淆變項', icon: '🌀', desc: '實驗組和對照組還差了別的東西（時段、教師、氣氛），不只差你要測的那一個', fix: '非目標變項做到一致（同教師／時段／教材），或隨機分派抵銷', color: '#DB2777' },
-            { name: '操作定義不精確', icon: '📏', desc: '「多喝水」是幾 cc？「學習效果」是哪一份測驗？沒定義等於沒實驗', fix: '寫成 SOP：數量（2000cc）、頻率（3 次/日）、測驗工具（段考數學科）', color: '#0891B2' },
-            { name: '前後測污染', icon: '🧪', desc: '前測讓受試者猜到你要測什麼，後測表現被污染', fix: '加對照組比差異；或只後測設計；或讓前後測題目不同形式', color: '#6366F1' },
+            { name: '混淆變項', icon: '🌀', desc: '除了我研究的原因，還有別的原因可能影響結果（例：實驗組早上做、對照組下午做 ← 時段也變了）', fix: '兩組除了要測的變項以外要全一樣（同教師／時段／教材），或隨機分派抵銷', color: '#DB2777' },
+            { name: '操作定義不精確', icon: '📏', desc: '抽象詞沒變成可測量的東西（「多喝水」是幾 cc？「學習效果」是哪一份測驗？）', fix: '寫成步驟說明：數量（2000cc）、頻率（3 次/日）、測驗工具（段考數學科）', color: '#0891B2' },
+            { name: '前後測污染', icon: '🧪', desc: '前測讓受試者學到東西、影響後測（例：前測考過題目，後測再考會比較高分）', fix: '加對照組比差異；或只後測設計；或讓前後測題目不同形式', color: '#6366F1' },
         ],
     },
     literature: {
@@ -523,13 +523,13 @@ const W9AiCheckPromptBox = () => {
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1：W8 老師回饋快速讀取 */
-    /* Step 3：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
+    /* Step 2：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
     { key: 'w9-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（寫不出某章請示範）/ 🥊 驗收型（有初稿請壓力測試）' },
     { key: 'w9-plan-ai-check', label: 'AI 互動後的判斷紀錄', question: 'AI 指出的問題 / 給的範例 + 我採納/不採納的決定' },
     { key: 'w9-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
     { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 AI 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
-    /* Step 4：回顧與繳交 */
+    /* Step 4：回顧與繳交（時間承諾） */
     { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第三、四章的定版？' },
 ];
 
@@ -684,260 +684,15 @@ export const W9Page = () => {
                         </p>
                     </div>
 
-                    {/* 進到 Step 3 提示 */}
+                    {/* 進到 Step 2 提示 */}
                     <div className="w7-notice w7-notice-gold">
-                        ➡️ 看完地圖、知道每章對應素材在哪 → <strong>Step 2 診斷工具包</strong>是 W10 工具品質教學的預習（可快掃）→ <strong>Step 3 計畫書組裝工作坊</strong>開工寫 1-5 章。
+                        ➡️ 看完地圖、知道每章對應素材在哪 → 直接到 <strong>Step 2 計畫書組裝工作坊</strong>開工寫 1-5 章（工具品質與題目設計教學在 W10 處理）。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 2：診斷工具包（新建，響應式表格） ─── */
-        {
-            title: '診斷工具包',
-            icon: '🧰',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        這一頁是你的<strong className="text-[var(--ink)]">診斷工具箱</strong>——<strong>診斷尺</strong>（三大標準·設計原則）+ <strong>檢查清單</strong>（錯誤類型：3 共通 + 你的方法獨家）。Step 3 整合計畫書時，<strong>隨時點回這一頁查</strong>。老師投影也看這頁。
-                    </p>
-
-                    {/* 診斷尺 · 三大標準 — 手機 1 欄 / 桌機 3 欄（階層：方向 → 精度 → 執行） */}
-                    <div>
-                        <div className="mb-3">
-                            <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider">診斷尺 · 好工具三大標準</div>
-                            <div className="text-[12px] text-[var(--ink-mid)] mt-1 leading-relaxed">
-                                由根本到細節的三層關卡：<strong className="text-[var(--ink)]">方向 → 精度 → 執行</strong>。<span className="text-[var(--ink-mid)]">越上層錯，越沒救。</span>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            {THREE_STANDARDS.map((s, i) => (
-                                <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-4 flex flex-col">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="inline-block text-[10px] font-mono font-bold text-[var(--ink-light)] border border-[var(--border)] rounded px-1.5 py-0.5 tracking-wider">
-                                            LAYER {s.layer}
-                                        </span>
-                                        <span className="text-[20px]">{s.emoji}</span>
-                                    </div>
-                                    <div className="mb-2">
-                                        <div className="text-[15px] font-bold text-[var(--ink)] leading-tight">{s.plainQ}</div>
-                                        <div className="text-[10px] font-mono text-[var(--ink-light)] mt-0.5">
-                                            {s.name} · {s.en}
-                                        </div>
-                                    </div>
-                                    <div className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed flex-1">{s.desc}</div>
-                                    <div className="text-[11px] font-mono text-[var(--ink-light)] border-t border-dashed border-[var(--border)] pt-2 leading-relaxed">
-                                        錯了的代價：<span className="text-[var(--ink-mid)]">{s.stakes}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 思考練習：用三層階層自己判斷（拿掉範例，改讓學生判斷） */}
-                    <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">階層練習 · 用三大標準自己判斷</div>
-                        <div className="space-y-4">
-                            {/* 題 1：Layer 1 方向診斷 */}
-                            <ThinkChoice
-                                dataKey="w9-tc-layer1"
-                                prompt="研究問題是「高中生每週運動幾小時？」以下哪一題犯了 Layer 1（方向）的錯？"
-                                options={[
-                                    { label: 'A', text: '你認為運動重要嗎？（非常重要／重要／普通／不重要）' },
-                                    { label: 'B', text: '你每週大約運動幾小時？（0／1-3／4-6／7 小時以上）' },
-                                    { label: 'C', text: '你最常做的運動類型？（球類／跑步／游泳／其他）' },
-                                ]}
-                                answer="A"
-                                feedback="A 問的是「態度」（運動重不重要），但研究問題要的是「行為時數」——方向錯了，就算全班都答「非常重要」，你也得不到任何時數資料。Layer 1 錯了不能修，整題要重寫。B 和 C 雖然都不是「時數」本身，但至少測到行為變項，方向對。"
-                                onAnswer={handleChoice('tc-w9-layer1', 'Layer 1 方向診斷')}
-                            />
-
-                            {/* 題 2：Layer 2 精度診斷 */}
-                            <ThinkChoice
-                                dataKey="w9-tc-layer2"
-                                prompt="以下三題都在問「通勤狀況」（方向 Layer 1 都對），但哪一題因為用詞模糊犯了 Layer 2（精度）的錯？"
-                                options={[
-                                    { label: 'A', text: '你家離學校很近嗎？（近／普通／遠）' },
-                                    { label: 'B', text: '你家到學校的通勤時間？（<15 分／15-30 分／30-60 分／>60 分）' },
-                                    { label: 'C', text: '你主要的通勤方式？（走路／腳踏車／公車／汽車）' },
-                                ]}
-                                answer="A"
-                                feedback="A 的「近／普通／遠」每個人定義不同——住 1 公里可能叫「近」，住 3 公里也可能叫「近」。同一個人今天心情好答「近」，下雨天答「遠」，結果不穩定。這就是 Layer 2 測不準。B 用分鐘分級、C 用明確類別，精度都可以接受。"
-                                onAnswer={handleChoice('tc-w9-layer2', 'Layer 2 精度診斷')}
-                            />
-
-                            {/* 題 3：Layer 3 執行診斷 */}
-                            <ThinkChoice
-                                dataKey="w9-tc-layer3"
-                                prompt="以下三題內容都合理（方向對、精度也足夠），但哪一題犯了 Layer 3（執行）的錯？"
-                                options={[
-                                    { label: 'A', text: '請一位同學每天中午 12:00 主動回報他今天有沒有分心，持續 30 天' },
-                                    { label: 'B', text: '上週你超過 12 點睡的有幾天？（0 / 1-2 / 3-4 / 5+）' },
-                                    { label: 'C', text: '請花 5 分鐘填寫這份 15 題的問卷' },
-                                ]}
-                                answer="A"
-                                feedback="A 的問題不在「問什麼」，而在「做得到嗎」——沒有人會每天主動回報 30 天，這種設計執行率趨近於零。就算題目設計完美，沒有資料等於白做。Layer 3 最好修，只要把規模縮小（例：改成 5 天）或換方法（例：研究者每天下午問一次）就能救。"
-                                onAnswer={handleChoice('tc-w9-layer3', 'Layer 3 執行診斷')}
-                            />
-                        </div>
-                        <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
-                            💡 做完三題你會發現階層規律：<strong className="text-[var(--ink-mid)]">方向錯 → 重寫；測不準 → 換具體數字；做不到 → 砍規模</strong>。越上層錯，救起來越麻煩。
-                        </div>
-                    </div>
-
-                    {/* 檢查清單 · 錯誤類型（5 方法頁籤統一 3 欄表：類型 / 徵狀 / 怎麼改） */}
-                    <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">檢查清單 · 錯誤類型（3 條共通 + 你的方法獨家）</div>
-
-                        {/* 方法頁籤 bar */}
-                        <div className="flex flex-wrap gap-2 mb-3">
-                            {['questionnaire', 'interview', 'observation', 'experiment', 'literature'].map((id) => (
-                                <button
-                                    key={id}
-                                    type="button"
-                                    onClick={() => setPitfallTab(id)}
-                                    className={`text-[12px] font-bold px-3 py-1.5 rounded-[6px] border transition-colors ${pitfallTab === id
-                                        ? 'bg-[var(--ink)] text-white border-[var(--ink)]'
-                                        : 'bg-white text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink)]'
-                                        }`}
-                                >
-                                    {METHOD_PITFALLS[id].label}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* 桌機：table 版（3 欄：類型 / 徵狀 / 怎麼改） */}
-                        <div className="hidden md:block bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                            <div className="grid grid-cols-[1.2fr_2fr_2fr] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
-                                <div className="px-4 py-2.5">類型</div>
-                                <div className="px-4 py-2.5 border-l border-[var(--border)]">徵狀（長這樣是病）</div>
-                                <div className="px-4 py-2.5 border-l border-[var(--border)]">怎麼改</div>
-                            </div>
-                            {[...COMMON_ERRORS, ...(METHOD_PITFALLS[pitfallTab]?.items || [])].map((e, i) => {
-                                const isCommon = i < COMMON_ERRORS.length;
-                                return (
-                                    <div key={i} className={`grid grid-cols-[1.2fr_2fr_2fr] border-b border-[var(--border)] last:border-b-0 text-[12px] ${isCommon ? '' : 'bg-[var(--paper-warm)]/50'}`}>
-                                        <div className="px-4 py-3 flex items-center gap-2">
-                                            <span className="text-[16px]">{e.icon}</span>
-                                            <span className="font-bold" style={{ color: e.color }}>{e.name}</span>
-                                            {!isCommon && <span className="ml-1 text-[9px] font-mono text-[var(--ink-light)] bg-[var(--ink)]/5 px-1 py-0.5 rounded">獨家</span>}
-                                        </div>
-                                        <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
-                                        <div className="px-4 py-3 border-l border-[var(--border)] text-[var(--success)] leading-relaxed">{e.fix}</div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {/* 手機：卡片堆疊版 */}
-                        <div className="md:hidden space-y-3">
-                            {[...COMMON_ERRORS, ...(METHOD_PITFALLS[pitfallTab]?.items || [])].map((e, i) => {
-                                const isCommon = i < COMMON_ERRORS.length;
-                                return (
-                                    <div key={i} className={`border rounded-[var(--radius-unified)] overflow-hidden ${isCommon ? 'bg-white border-[var(--border)]' : 'bg-[var(--paper-warm)]/60 border-[var(--ink)]/15'}`}>
-                                        <div className="px-4 py-3 border-b border-[var(--border)] flex items-center gap-2">
-                                            <span className="text-[18px]">{e.icon}</span>
-                                            <span className="text-[14px] font-bold flex-1" style={{ color: e.color }}>{e.name}</span>
-                                            {!isCommon && <span className="text-[9px] font-mono text-[var(--ink-light)] bg-[var(--ink)]/5 px-1.5 py-0.5 rounded">獨家</span>}
-                                        </div>
-                                        <div className="p-4 space-y-2 text-[12px]">
-                                            <div>
-                                                <div className="text-[10px] font-mono font-bold text-[var(--ink-light)] mb-0.5">徵狀</div>
-                                                <div className="text-[var(--ink-mid)] leading-relaxed">{e.desc}</div>
-                                            </div>
-                                            <div>
-                                                <div className="text-[10px] font-mono font-bold text-[var(--success)] mb-0.5">怎麼改</div>
-                                                <div className="text-[var(--success)] leading-relaxed">{e.fix}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
-                            💡 前 3 條（誘導性／雙重／假開放）五方法都會犯；後 2~3 條是你這方法的獨家陷阱。切換上方頁籤可查看別組的狀況。
-                        </div>
-                    </div>
-
-                    {/* 錯誤類型練習：3 題扣合誘導性／雙重／假開放 */}
-                    <div>
-                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">錯誤類型練習 · 對照上方三類共通錯誤</div>
-                        <div className="space-y-4">
-                            <ThinkChoice
-                                dataKey="w9-tc-err-inducing"
-                                prompt="以下哪一題犯了「誘導性提問」的錯？"
-                                options={[
-                                    { label: 'A', text: '你認為嚴重影響專注力的手機使用方式是？（請勾選）' },
-                                    { label: 'B', text: '你每天使用手機的時數是？（<1 / 1-3 / 3-6 / 6+ 小時）' },
-                                    { label: 'C', text: '你最常用手機做什麼？（社群 / 遊戲 / 影片 / 通訊 / 其他）' },
-                                ]}
-                                answer="A"
-                                feedback="A 的「嚴重影響」已經預設了「手機有害」的立場，受試者不好意思選「沒有影響」。中性改寫：「你覺得手機使用對專注力有什麼影響？（正面／負面／沒影響）」"
-                                onAnswer={handleChoice('tc-w9-err-inducing', '誘導性提問診斷')}
-                            />
-
-                            <ThinkChoice
-                                dataKey="w9-tc-err-double"
-                                prompt="以下哪一題犯了「雙重問題」的錯（一題問兩件事）？"
-                                options={[
-                                    { label: 'A', text: '你同意學校應該禁止攜帶手機，並且加強網路過濾嗎？（同意／不同意）' },
-                                    { label: 'B', text: '你一週運動幾次？' },
-                                    { label: 'C', text: '你最常用的學習 App 是？' },
-                                ]}
-                                answer="A"
-                                feedback="A 問了兩件獨立的事（禁止攜帶、加強過濾），受試者可能同意其中一件、反對另一件，但被迫選一個答案。拆成兩題才能精準測到立場。"
-                                onAnswer={handleChoice('tc-w9-err-double', '雙重問題診斷')}
-                            />
-
-                            <ThinkChoice
-                                dataKey="w9-tc-err-fakeopen"
-                                prompt="以下哪一題看似「開放式」但其實「預設了答案方向」？"
-                                options={[
-                                    { label: 'A', text: '你覺得線上學習有什麼缺點？' },
-                                    { label: 'B', text: '你對線上學習的看法是？' },
-                                    { label: 'C', text: '和實體上課相比，線上學習對你而言有什麼不同？' },
-                                ]}
-                                answer="A"
-                                feedback="A 表面開放，實則只問「缺點」——假設受訪者已經認為線上學習有缺點。學生即使覺得沒缺點，也會被迫編一個出來。C 是真開放（問「不同」而非「缺點」），B 是中性。"
-                                onAnswer={handleChoice('tc-w9-err-fakeopen', '假開放真預設診斷')}
-                            />
-                        </div>
-                        <div className="mt-3 text-[11px] text-[var(--ink-light)] leading-relaxed">
-                            💡 這三類是<strong className="text-[var(--ink-mid)]">所有方法都會犯</strong>的共通錯誤，不分問卷／訪談／實驗／觀察／文獻。檢核工具時一定要逐一對照。
-                        </div>
-                    </div>
-
-                    {/* 方法獨家練習：訪談問法（保留作為補充） */}
-                    <ThinkChoice
-                        dataKey="w9-tc3"
-                        prompt={THINK_CHOICES[1].prompt}
-                        options={THINK_CHOICES[1].options}
-                        answer={THINK_CHOICES[1].answer}
-                        feedback={THINK_CHOICES[1].feedback}
-                        onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
-                    />
-
-                    {/* 下節預告 */}
-                    <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-6 text-white">
-                        <div className="flex items-center gap-2 mb-3">
-                            <AlertTriangle size={16} className="text-[var(--gold)]" />
-                            <span className="font-bold text-[14px]">下節準備：Step 3 計畫書組裝工作坊</span>
-                        </div>
-                        <p className="text-[13px] text-[rgba(255,255,255,0.7)] leading-relaxed mb-4">
-                            第二節把今天學到的診斷尺與檢查清單，用來整合 W8 老師給你的建議、填寫計畫書第一章。下課前老師會在 Google Classroom 發你對應方法的計畫書 docx 副本——先打開看結構。
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                            {METHOD_OPTIONS.map((m) => (
-                                <span key={m.id} className="bg-white/10 text-white text-[12px] px-3 py-1.5 rounded-full font-bold">{m.label}</span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ─── Step 3：計畫書組裝工作坊（W9 第二節重點：修計畫書第一章） ─── */
+        /* ─── Step 2：計畫書組裝工作坊（W9 第二節重點：寫計畫書 1-5 章） ─── */
         {
             title: '計畫書組裝工作坊',
             icon: '📋',
@@ -1226,13 +981,13 @@ export const W9Page = () => {
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 五章地基寫到雛形 → 下一步：<strong>Step 4 AI 工作坊</strong>（用 AI 檢核或學寫第 1-5 章）+ 寫 AIRED。
+                        ✅ 五章地基寫到雛形 → 下一步：<strong>Step 3 AI 工作坊</strong>（請 AI 檢核你寫好的 1-5 章；卡關的章節請 AI 給範例）+ 寫 AIRED。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 4：AI 工作坊（雙模式 + 完整對話繳交 + AIRED） ─── */
+        /* ─── Step 3：AI 工作坊（雙模式 + 完整對話繳交 + AIRED） ─── */
         {
             title: 'AI 工作坊',
             icon: '🤖',
@@ -1243,23 +998,8 @@ export const W9Page = () => {
                         計畫書 1-5 章寫到雛形了——這節用 AI 把它<strong className="text-[var(--ink)]">檢核一遍</strong>（驗收型）；如果有章節完全寫不出來，請 AI <strong className="text-[var(--ink)]">給範例</strong>（教學型）。
                     </p>
 
-                    {/* AI 工作坊（必做） */}
+                    {/* AI 工作坊區塊 */}
                     <div className="space-y-4">
-                        <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] overflow-hidden" style={{ color: '#fff' }}>
-                            <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2" style={{ color: '#fff' }}>
-                                <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#fff' }}>AI 工作坊 · 必做</span>
-                                <span style={{ fontWeight: 700, fontSize: 14, marginLeft: 4, color: '#fff' }}>🤖 用 AI 思考模式檢核（或學寫）第 1-5 章</span>
-                            </div>
-                            <div className="p-5" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                                <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.9)' }}>
-                                    選一個 AI 使用模式，複製下方 Prompt，貼進<strong style={{ color: '#fff', fontWeight: 700 }}>你慣用的 AI（開啟深度思考／推理模式）</strong>。
-                                </p>
-                                <p style={{ fontSize: 12, lineHeight: 1.9, color: 'rgba(255,255,255,0.7)' }}>
-                                    💡 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>兩種模式：</strong>有計畫書初稿 → 驗收型（AI 找盲點）；寫不出某幾章 → 教學型（AI 給範例 + 拆步驟）。
-                                </p>
-                            </div>
-                        </div>
-
                         {/* AI 協作三原則（W9 角色：嚴格教練） */}
                         <AICollaborationPrinciples week="9" role="critic" compact={false} />
 
@@ -1330,13 +1070,13 @@ ___（例：第三章文獻探討、第四章變項定義）
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ AI 工作坊完成 → <strong>Step 5 回顧與繳交</strong>。記得把 AI 檢核 Prompt 帶回家跑、補完 AIRED R 欄位、上傳計畫書到 GC。
+                        ✅ AI 工作坊完成 → <strong>Step 4 回顧與繳交</strong>。記得把 AI 檢核 Prompt 帶回家跑、補完 AIRED R 欄位、上傳計畫書到 GC。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 5：回顧與繳交（時間承諾 + 課後計畫書撰寫） ─── */
+        /* ─── Step 4：回顧與繳交（時間承諾 + 課後計畫書撰寫） ─── */
         {
             title: '回顧與繳交',
             icon: '📋',
@@ -1363,7 +1103,7 @@ ___（例：第三章文獻探討、第四章變項定義）
                         </div>
                     </div>
 
-                    {/* 2. 一鍵複製（AIRED 與 AI 檢核紀錄已在 Step 3 完成） */}
+                    {/* 2. 一鍵複製（AIRED 與 AI 檢核紀錄已在 Step 3 AI 工作坊完成） */}
                     {/* 本週結束，你應該要會 — B 標準格式 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">

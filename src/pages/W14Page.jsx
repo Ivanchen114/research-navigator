@@ -669,7 +669,10 @@ ___（貼資料或連結）
                         </summary>
                         <div className="mt-3 space-y-3">
                             <p className="text-[12px] text-[#4C1D95] leading-relaxed">
-                                推論最容易踩兩個雷：① <strong>過度推論</strong>（N=30 推到「全國高中生」）；② <strong>單一原因</strong>（只想到一個解釋就停）。讓 AI 壓力測試。
+                                推論最容易踩兩個雷：
+                                <br />① <strong>過度推論</strong>：你只訪問了 30 個本校學生，卻寫成「全國高中生都這樣想」——超出你的資料實際能說明的範圍。
+                                <br />② <strong>單一原因</strong>：只想到一個解釋就停。例如：學生成績下滑直接寫「因為滑手機太多」，但其實還可能是作業變多、補習太累、家裡發生事情……至少要列出 2-3 個可能。
+                                <br />讓 AI 幫你壓力測試這兩個雷。
                             </p>
                             <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`接續上一輪。
 
@@ -759,7 +762,7 @@ ___（貼資料或連結）
                                                 '為自己的數據選對圖表類型並說清楚理由',
                                                 '寫出符合格式的圖說（圖號／題目／單位／資料來源）',
                                                 '區分「描述」（藍筆）和「推論」（紅筆），避免推論失控',
-                                                '識別三大常見圖表錯誤（誤導比例／截斷座標／樣本失衡）',
+                                                '識別三大常見圖表錯誤（誤導比例／座標軸沒從 0 開始放大差距／樣本太少卻畫得很有結論感）',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>

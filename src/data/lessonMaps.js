@@ -1293,7 +1293,7 @@ export const W8Data = {
 
 export const W9Data = {
     id: "W9",
-    title: "方法深化 I：工具設計基礎與處方診斷",
+    title: "計畫書 1-5 章地基工程",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: baseCourseArc.map((item, idx) => ({
@@ -1304,30 +1304,30 @@ export const W9Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "診斷工具包（診斷尺 + 檢查清單）",
-            subtitle: "三大標準 + 錯誤類型清單",
-            desc: "方向／精度／執行 三層 + 3 共通錯誤 + 5 方法獨家陷阱（頁籤切換）",
+            title: "讀 W8 老師回饋",
+            subtitle: "把建議納入計畫書修正",
+            desc: "進場 5 分鐘看 GC 批改；W8 老師主要建議用一兩句記下",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "計畫書組裝工作坊",
-            subtitle: "整合 W2–W8 成果到第一章",
-            desc: "W8 老師建議納入修正、第一章（動機／問題／目的／對象）定版",
+            title: "計畫書 1-5 章組裝",
+            subtitle: "在 docx 把第一到五章寫到雛形",
+            desc: "1 動機、2 文獻、3 研究問題、4 變項定義、5 抽樣對象——W2–W8 素材整合",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "課後計畫書撰寫鷹架",
-            subtitle: "第二～八章的時間承諾",
-            desc: "W9–W10 間完成第二～八章；W10 第二節全本定稿",
+            title: "AI 工作坊（雙模式）",
+            subtitle: "教學型 / 驗收型 + 完整對話繳交",
+            desc: "寫不出來 → 教學型請 AI 給範例；有初稿 → 驗收型請 AI 找盲點。完整對話繳到 GC",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "W8 回饋 × 處方熱身 × 診斷工具包",
+            title: "讀回饋 × 計畫書 1-5 章組裝（前段）",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1337,104 +1337,65 @@ export const W9Data = {
                     duration: 5,
                     colorClass: "c3",
                     icon: "📢",
-                    title: "一、 開場：Level 1 → Level 2",
-                    desc: "W7 學掛號判斷（決定用什麼方法）。今天升級到處方診斷：工具設計得好不好？哪裡有毒？怎麼解毒？"
+                    title: "一、 開場：本週目標",
+                    desc: "把計畫書 1-5 章寫到雛形，整合 W2-W8 素材 + W8 老師回饋。工具品質與第六章題目設計移到 W10。"
                 },
                 {
                     timeStart: "0:05",
                     timeStartFormatted: "00:05",
-                    duration: 5,
+                    duration: 10,
                     colorClass: "c2",
                     icon: "📬",
-                    title: "二、 Step 1a 讀 W8 老師回饋",
-                    desc: "學生打開 Google Classroom 看 W8 計畫書批改，用一兩句記下老師最主要的建議（詳細整合留到 Step 3）。",
-                    tags: ["W8 回饋", "快速讀取"]
+                    title: "二、 Step 1 讀 W8 老師回饋 + 1-5 章地圖",
+                    desc: "打開 GC 看 W8 批改，記下老師最主要的一兩句建議；對照 1-5 章地圖確認每章對應的 W2-W8 素材。",
+                    tags: ["W8 回饋", "章節地圖"]
                 },
                 {
-                    timeStart: "0:10",
-                    timeStartFormatted: "00:10",
-                    duration: 7,
-                    colorClass: "c1",
-                    icon: "🩺",
-                    title: "三、 Step 1b 處方診斷熱身",
-                    desc: "老師現場打開 RxInspector 防線遊戲，帶全班共玩 1-2 題典型壞題，建立「診斷語言」。",
-                    tags: ["RxInspector", "共玩示範"]
-                },
-                {
-                    timeStart: "0:17",
-                    timeStartFormatted: "00:17",
-                    duration: 28,
-                    colorClass: "c1",
-                    icon: "🧰",
-                    title: "四、 Step 2 診斷工具包（診斷尺 + 檢查清單）",
-                    desc: "診斷尺：三大標準（方向／精度／執行）+ 三題階層練習。檢查清單：錯誤類型（3 共通 + 5 方法頁籤獨家陷阱）+ 三題錯誤類型練習。",
-                    tags: ["三大標準", "6 題練習"]
-                },
-                {
-                    timeStart: "0:45",
-                    timeStartFormatted: "00:45",
-                    duration: 5,
-                    colorClass: "c3",
-                    icon: "📋",
-                    title: "五、 下節預告：計畫書組裝工作坊",
-                    desc: "老師在 GC 發對應方法的計畫書 docx 副本；下課前先打開看結構。",
-                    tags: ["計畫書發放"]
+                    timeStart: "0:15",
+                    timeStartFormatted: "00:15",
+                    duration: 35,
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "三、 Step 2 計畫書組裝（前段）",
+                    desc: "在 docx 寫第一章 6 格（題目／動機／目的／主問題／子問題／對象）+ 第二章關鍵詞操作定義。網頁 ThinkRecord 只記關鍵決策。",
+                    tags: ["docx 動手", "第一、二章"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "計畫書組裝工作坊 × 回顧繳交",
+            title: "計畫書組裝（後段） × AI 工作坊 × 回顧繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
                     timeStartFormatted: "00:00",
-                    duration: 5,
-                    colorClass: "c3",
-                    icon: "🎯",
-                    title: "六、 Step 3 開場：本節目標",
-                    desc: "完成計畫書第一章（研究主題／動機／目的／問題／對象）。W8 老師建議在這一章修。"
-                },
-                {
-                    timeStart: "0:05",
-                    timeStartFormatted: "00:05",
-                    duration: 10,
-                    colorClass: "c4",
-                    icon: "🗺",
-                    title: "七、 Step 3 方法分流 + 章節地圖",
-                    desc: "對照 W8 選的方法確認你的計畫書模板；看章節地圖了解 W9→W17 各章來源。",
-                    tags: ["5 方法分流", "13 章地圖"]
-                },
-                {
-                    timeStart: "0:15",
-                    timeStartFormatted: "00:15",
-                    duration: 25,
+                    duration: 30,
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "八、 Step 3 第一章組裝（6 格）",
-                    desc: "研究題目／動機／目的／主問題／子問題／對象——在 docx 上填。網頁 ThinkRecord 只記關鍵決策與修改方向。",
-                    tags: ["docx 動手", "關鍵決策紀錄"]
+                    title: "四、 Step 2 計畫書組裝（後段）",
+                    desc: "第五章對象/抽樣/人數定版；第三、四章寫骨架（文獻 2-3 篇 + 變項清單，定版留課後）。",
+                    tags: ["docx 動手", "第三、四、五章"]
                 },
                 {
-                    timeStart: "0:43",
-                    timeStartFormatted: "00:43",
-                    duration: 5,
-                    colorClass: "c1",
+                    timeStart: "0:30",
+                    timeStartFormatted: "00:30",
+                    duration: 15,
+                    colorClass: "c4",
                     icon: "🤖",
-                    title: "九、 Step 3 AI 檢核 Prompt + 預想式 AIRED（必做）",
-                    desc: "複製 AI 思考模式 Prompt（審計畫書第 1-5 章）帶回家跑；課堂預想式寫 AIRED 的 A/I/E/D，R 欄位回家補。",
-                    tags: ["AI 思考模式", "預想 AIRED"]
+                    title: "五、 Step 3 AI 工作坊（雙模式）",
+                    desc: "選教學型（卡關章節請 AI 給範例）或驗收型（有初稿請 AI 找盲點）；複製 prompt 帶回家跑（深度思考模式）；預想式寫 AIRED A/I/E/D，R 回家補。",
+                    tags: ["雙模式", "完整對話繳交"]
                 },
                 {
-                    timeStart: "0:48",
-                    timeStartFormatted: "00:48",
-                    duration: 2,
+                    timeStart: "0:45",
+                    timeStartFormatted: "00:45",
+                    duration: 5,
                     colorClass: "c3",
                     icon: "📤",
-                    title: "十、 Step 4 回顧繳交 + 時間承諾",
-                    desc: "勾驗收 Checklist → 時間承諾（課後寫第三、四章定版）→ ExportButton 複製繳交。",
+                    title: "六、 Step 4 回顧繳交 + 時間承諾",
+                    desc: "勾驗收 Checklist → 時間承諾（課後補第三、四章定版 + 跑 AI + 上傳 GC）→ ExportButton 匯出。",
                     tags: ["時間承諾", "繳交"]
                 }
             ]
@@ -1444,17 +1405,17 @@ export const W9Data = {
         {
             icon: "📋",
             label: "核心產出",
-            text: "計畫書第一章 + W8 建議整合<br><small style=\"font-size:11px;color:#888;\">研究題目／動機／問題／對象定版</small>"
+            text: "計畫書 1-5 章雛形<br><small style=\"font-size:11px;color:#888;\">W2-W8 素材整合 + W8 建議納入</small>"
         },
         {
-            icon: "🧰",
-            label: "診斷能力",
-            text: "診斷尺 + 檢查清單<br><small style=\"font-size:11px;color:#888;\">三大標準 + 3 共通錯誤 + 5 方法獨家陷阱</small>"
+            icon: "🤖",
+            label: "AI 工作坊",
+            text: "雙模式（教學型 / 驗收型）<br><small style=\"font-size:11px;color:#888;\">完整對話繳到 GC</small>"
         },
         {
             icon: "📦",
             label: "課後任務",
-            text: "計畫書第二～八章<br><small style=\"font-size:11px;color:#888;\">W10 第二節前完成</small>"
+            text: "第三、四章定版 + 跑 AI<br><small style=\"font-size:11px;color:#888;\">W10 第一節前完成</small>"
         }
     ],
     legends: [
@@ -1479,30 +1440,30 @@ export const W10Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "工具設計（第六章）",
-            subtitle: "計畫書第六章 = 工具本體",
-            desc: "依方法分流：問卷題目／訪綱／實驗流程／觀察紀錄表／文獻分析架構（4 子類型擇一）",
+            title: "方法工具書 + 4 集教學影片",
+            subtitle: "5 法 4 區塊（題型／原則／陷阱／範例）",
+            desc: "看完老師親拍影片 + V→R→F 判準 + 自己方法 4 區塊，回 docx 寫第六章題目",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "整本計畫書 AI 檢核",
-            subtitle: "AI 檢整體邏輯一致性",
-            desc: "方向（1-3）→ 方法（4-5）→ 工具（6）→ 執行（7-13）整條連貫性",
+            title: "自我與同儕診斷",
+            subtitle: "自己挑 → 同學挑 → AI 補漏",
+            desc: "V→R→F 自查 + 雷區小測驗 + 跨組同儕互審。AI 工作坊只負責挑不出但覺得怪的",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "定稿 + W11 預告",
-            subtitle: "計畫書全本定稿繳交",
-            desc: "ExportButton、GC 上傳、W11 Pilot Test 與倫理審查準備",
+            title: "AI 工作坊 + 整本繳交",
+            subtitle: "雙模式 + 第七到十三章補完",
+            desc: "AI 工作坊（教學型 / 驗收型）+ 整本繳到 GC，下週 W11 拿老師第三次建議",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "入場擋板 × W9 回饋 × 工具設計",
+            title: "入場 × 讀回饋 × 方法工具書 × 寫第六章題目",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1512,117 +1473,87 @@ export const W10Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🚦",
-                    title: "一、 入場擋板：W9 完成狀態自檢",
-                    desc: "PrepStatusCheck 讀 W9 計畫書 checklist、方法、AIRED 是否到位；沒做 W9 的擋下。",
-                    tags: ["入場擋板", "W9 完成度"]
+                    title: "一、 入場擋板 + 讀 W9 老師回饋",
+                    desc: "PrepStatusCheck 讀 W9 完成度；打開 GC 看 W9 計畫書 1-5 章批改，記下老師最主要建議。",
+                    tags: ["入場擋板", "W9 回饋"]
                 },
                 {
                     timeStart: "0:05",
                     timeEnd: "0:10",
                     duration: "5 min",
-                    colorClass: "c2",
-                    icon: "📬",
-                    title: "二、 讀 W9 老師回饋（新）",
-                    desc: "打開 Google Classroom 看 W9 計畫書 1-5 章批改，把老師最主要的一兩句建議記下來。",
-                    tags: ["W9 回饋", "快速讀取"]
+                    colorClass: "c3",
+                    icon: "🎯",
+                    title: "二、 Step 1 開場 + 第六章流程",
+                    desc: "本節目標：在 docx 第六章寫題目。方法從 W9 自動帶入；必要時手動切換。",
+                    tags: ["方法分流"]
                 },
                 {
                     timeStart: "0:10",
-                    timeEnd: "0:15",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "🎯",
-                    title: "三、 Step 1 開場 + 方法確認",
-                    desc: "本節目標：計畫書第六章工具「主架構」（不是定稿）。方法從 W9 自動帶入；必要時手動切換。",
-                    tags: ["方法分流", "主架構"]
+                    timeEnd: "0:35",
+                    duration: "25 min",
+                    colorClass: "c1",
+                    icon: "📚",
+                    title: "三、 Step 2 方法工具書（含 4 集教學影片）",
+                    desc: "看老師親拍 4 集影片（文獻／訪談／觀察／實驗）+ V→R→F 三大判準 + 自己方法的 4 區塊（題型／原則／陷阱／範例）。",
+                    tags: ["影片預習", "5 法 4 區塊"]
                 },
                 {
-                    timeStart: "0:15",
-                    timeEnd: "0:45",
-                    duration: "30 min",
-                    colorClass: "c2",
-                    icon: "🔧",
-                    title: "四、 工具主架構實作（docx）",
-                    desc: "問卷組：每變項 2-3 題粗稿 ／ 訪談組：5 大問題粗稿 ／ 實驗組：變項定義 + 流程骨架 ／ 觀察組：行為定義 + 紀錄表骨架 ／ 文獻組：分析架構主軸 + 3-5 分析單位。W11 Pilot 後再修細節。",
-                    tags: ["docx 動手", "第六章主架構"]
-                },
-                {
-                    timeStart: "0:45",
+                    timeStart: "0:35",
                     timeEnd: "0:50",
-                    duration: "5 min",
-                    colorClass: "c4",
-                    icon: "✅",
-                    title: "五、 工具設計關鍵決策紀錄",
-                    desc: "在網頁 ThinkRecord 摘要「工具設計中的 2-3 個關鍵決定」。docx 寫完後，網頁只記決策。",
-                    tags: ["關鍵決策"]
+                    duration: "15 min",
+                    colorClass: "c2",
+                    icon: "✍️",
+                    title: "四、 Step 2 docx 第六章寫題目（前段）",
+                    desc: "依方法寫題目雛形：問卷／訪談／實驗／觀察／文獻分析架構。網頁 ThinkRecord 只記 2-3 個關鍵決定。",
+                    tags: ["docx 動手", "第六章雛形"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "整本 AI 檢核 × 定稿繳交",
+            title: "自我同儕診斷 × AI 工作坊 × 整本繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:05",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "🤖",
-                    title: "六、 Step 2 開場：整本 AI 檢核準備",
-                    desc: "前置假設：第六章工具主架構已寫、第七到十三章已套模板（時程／倫理／AI聲明／參考文獻）。複製整本檢核 Prompt，貼進 AI 對話框、填入全本 13 章內容（即使是模板套用版也貼）。",
-                    tags: ["Prompt 複製", "整本到位"]
+                    timeEnd: "0:25",
+                    duration: "25 min",
+                    colorClass: "c4",
+                    icon: "🔍",
+                    title: "五、 Step 3 自我與同儕診斷",
+                    desc: "V→R→F 自查 5 min + 雷區辨識小測驗 10 min + 跨組同儕互審 10 min。把「想送 AI 的問題」記下來進 Step 4。",
+                    tags: ["自我診斷", "同儕互審"]
                 },
                 {
-                    timeStart: "0:05",
-                    timeEnd: "0:20",
+                    timeStart: "0:25",
+                    timeEnd: "0:40",
                     duration: "15 min",
                     colorClass: "c1",
-                    icon: "📥",
-                    title: "七、 AI 回覆 + AIRED 的 A/I/R 紀錄",
-                    desc: "網頁 w10-ai-raw-feedback 開頭寫 A（用什麼 AI）+ I（問了什麼），然後貼 AI 完整回覆（含追問）。",
-                    tags: ["AIRED · A/I/R", "貼全文"]
+                    icon: "🤖",
+                    title: "六、 Step 4 AI 工作坊（雙模式）",
+                    desc: "選教學型（卡關請 AI 給範例）或驗收型（有題目請 AI 找毛病）；完整對話繳到 GC；寫 AIRED 紀錄。",
+                    tags: ["雙模式", "完整對話繳交"]
                 },
                 {
-                    timeStart: "0:20",
-                    timeEnd: "0:30",
-                    duration: "10 min",
-                    colorClass: "c4",
-                    icon: "⚖️",
-                    title: "八、 採納判斷 + 修正紀錄（E/D）",
-                    desc: "w10-ai-judge 逐條評估（✅/❌/🔶）= AIRED 的 E；w10-tool-revision 寫整本要改哪些章節 = AIRED 的 D。",
-                    tags: ["AIRED · E/D"]
-                },
-                {
-                    timeStart: "0:30",
-                    timeEnd: "0:35",
-                    duration: "5 min",
-                    colorClass: "c3",
-                    icon: "📋",
-                    title: "九、 Step 3 開場：定稿驗收",
-                    desc: "六項驗收 Checklist：第六章完成／整本到位／AI 檢核讀完／修正紀錄／docx 已上傳 GC。",
-                    tags: ["定稿驗收"]
-                },
-                {
-                    timeStart: "0:35",
-                    timeEnd: "0:45",
-                    duration: "10 min",
+                    timeStart: "0:40",
+                    timeEnd: "0:48",
+                    duration: "8 min",
                     colorClass: "c2",
                     icon: "📤",
-                    title: "十、 ExportButton + 上傳 GC",
-                    desc: "網頁一鍵匯出本週紀錄；docx 上傳 Google Classroom W10 作業區。",
-                    tags: ["匯出繳交"]
+                    title: "七、 Step 5 七到十三章補完 + 整本繳交",
+                    desc: "第七到十三章模板套用補完（時程／倫理／AI聲明／參考文獻）；整本 docx 上傳 GC。",
+                    tags: ["第七~十三章", "整本繳交"]
                 },
                 {
-                    timeStart: "0:45",
+                    timeStart: "0:48",
                     timeEnd: "0:50",
-                    duration: "5 min",
+                    duration: "2 min",
                     colorClass: "c5",
                     icon: "🔮",
-                    title: "十一、 W11 預告：Pilot Test + 倫理審查",
-                    desc: "課後任務：約 2-3 位預試者、把問卷轉 Google Form 或訪綱印紙本；W11 帶定稿工具來做真人預試。",
-                    tags: ["W11 預告", "課後準備"]
+                    title: "八、 Step 6 繳交確認 + W11 預告",
+                    desc: "ExportButton 匯出網頁紀錄；W11 拿到老師第三次建議再修工具，把題目轉施測載具 + 跨班 Pilot。",
+                    tags: ["匯出", "W11 預告"]
                 }
             ]
         }
