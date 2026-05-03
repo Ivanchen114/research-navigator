@@ -1210,7 +1210,40 @@ export const W9Page = () => {
                         </div>
                     </div>
 
-                    {/* AI 工作坊（必做）· AI 思考模式審第 1-5 章 */}
+                    {/* 五章進度 checklist */}
+                    <Checklist
+                        dataKey="w9-plan-ch1-checklist"
+                        prompt="本節繳交驗收（勾完才算通過）"
+                        items={[
+                            '第一章：6 格全填（docx）',
+                            '第二章：3 個關鍵詞操作定義（docx）',
+                            '第五章：對象／人數／抽樣方式（docx）',
+                            '第三章：至少 2 篇文獻基本資料（docx，骨架）',
+                            '第四章：變項／主題／維度清單（docx，骨架）',
+                            'W8 老師的建議在 docx 上已納入修正',
+                        ]}
+                    />
+
+                    {/* 下一步 */}
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 五章地基寫到雛形 → 下一步：<strong>Step 4 AI 工作坊</strong>（用 AI 檢核或學寫第 1-5 章）+ 寫 AIRED。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 4：AI 工作坊（雙模式 + 完整對話繳交 + AIRED） ─── */
+        {
+            title: 'AI 工作坊',
+            icon: '🤖',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    {/* 開場 */}
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        計畫書 1-5 章寫到雛形了——這節用 AI 把它<strong className="text-[var(--ink)]">檢核一遍</strong>（驗收型）；如果有章節完全寫不出來，請 AI <strong className="text-[var(--ink)]">給範例</strong>（教學型）。
+                    </p>
+
+                    {/* AI 工作坊（必做） */}
                     <div className="space-y-4">
                         <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] overflow-hidden" style={{ color: '#fff' }}>
                             <div className="px-5 py-3 bg-[var(--danger)] flex items-center gap-2" style={{ color: '#fff' }}>
@@ -1219,7 +1252,7 @@ export const W9Page = () => {
                             </div>
                             <div className="p-5" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                                 <p style={{ fontSize: 13, lineHeight: 1.9, color: 'rgba(255,255,255,0.9)' }}>
-                                    本節結束前選一個 AI 使用模式，複製下方 Prompt，回家貼進<strong style={{ color: '#fff', fontWeight: 700 }}>你慣用的 AI（開啟深度思考／推理模式）</strong>。
+                                    選一個 AI 使用模式，複製下方 Prompt，貼進<strong style={{ color: '#fff', fontWeight: 700 }}>你慣用的 AI（開啟深度思考／推理模式）</strong>。
                                 </p>
                                 <p style={{ fontSize: 12, lineHeight: 1.9, color: 'rgba(255,255,255,0.7)' }}>
                                     💡 <strong style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>兩種模式：</strong>有計畫書初稿 → 驗收型（AI 找盲點）；寫不出某幾章 → 教學型（AI 給範例 + 拆步驟）。
@@ -1295,31 +1328,15 @@ ___（例：第三章文獻探討、第四章變項定義）
                         />
                     </div>
 
-                    {/* 五章進度 checklist */}
-                    <Checklist
-                        dataKey="w9-plan-ch1-checklist"
-                        prompt="本節繳交驗收（勾完才算通過）"
-                        items={[
-                            '第一章：6 格全填（docx）',
-                            '第二章：3 個關鍵詞操作定義（docx）',
-                            '第五章：對象／人數／抽樣方式（docx）',
-                            '第三章：至少 2 篇文獻基本資料（docx，骨架）',
-                            '第四章：變項／主題／維度清單（docx，骨架）',
-                            '本節結束前：AI 檢核 Prompt 已複製',
-                            'W8 老師的建議在 docx 上已納入修正',
-                        ]}
-                    />
-
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 本節完成 → <strong>Step 4 寫 W9 AIRED</strong>（A/I/E/D 先寫預想版、R 回家 AI 跑完再補）+ 規劃課後補齊時程。<br/>
-                        ⚠️ <strong>記得把 AI 檢核 Prompt 複製帶回家跑</strong>，跑完後回 Step 4 補完 AIRED R 欄位。
+                        ✅ AI 工作坊完成 → <strong>Step 5 回顧與繳交</strong>。記得把 AI 檢核 Prompt 帶回家跑、補完 AIRED R 欄位、上傳計畫書到 GC。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 4：回顧與繳交（時間承諾 + 課後計畫書撰寫） ─── */
+        /* ─── Step 5：回顧與繳交（時間承諾 + 課後計畫書撰寫） ─── */
         {
             title: '回顧與繳交',
             icon: '📋',

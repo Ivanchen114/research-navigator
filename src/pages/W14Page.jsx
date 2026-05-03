@@ -615,6 +615,28 @@ ___（貼資料或連結）
                         ]}
                     />
 
+                    {/* 下一步 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#BFDBFE] bg-[#EFF6FF]">
+                        <p className="text-[12px] text-[#1E40AF] font-bold leading-relaxed">
+                            ✅ 圖畫好驗收完 → 下一步：<strong>Step 5 圖說寫作</strong>（寫描述/推論 + AI 壓力測試 + 對話繳交）。
+                        </p>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            title: '圖說寫作',
+            icon: <Lightbulb size={18} />,
+            content: (
+                <div className="flex flex-col gap-6 prose-zh">
+                    {/* 開場 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 圖說寫作 + AI 壓力測試</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            圖畫好了，現在用<strong>你自己的話</strong>寫描述（藍筆）+ 推論（紅筆）；寫完讓 AI 壓力測試找漏洞。完整對話也要繳交。
+                        </p>
+                    </div>
+
                     {/* —— 第⑤步 寫描述＋推論 —— */}
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 第⑤步 · 寫圖說（描述＋推論，這步自己寫）</p>
@@ -687,6 +709,13 @@ ___（貼資料或連結）
                             <span>2. 圖表類型選擇是否正確 + 格式三鐵規（標題、N、來源）</span>
                             <span>3. 描述／推論不是 AI 改寫版，是你<strong>採納後自己改</strong>的</span>
                         </div>
+                    </div>
+
+                    {/* 下一步 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#BFDBFE] bg-[#EFF6FF]">
+                        <p className="text-[12px] text-[#1E40AF] font-bold leading-relaxed">
+                            ✅ 圖說寫完、對話繳交完成 → 下一步：<strong>Step 6 回顧繳交</strong>。
+                        </p>
                     </div>
                 </div>
             ),

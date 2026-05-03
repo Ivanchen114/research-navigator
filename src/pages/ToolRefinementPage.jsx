@@ -995,17 +995,14 @@ export const ToolRefinementPage = () => {
                         </p>
                     </div>
 
-                    {/* 第六章在 docx 直接填題目（W11 才把題目轉成施測載具） */}
+                    {/* 第六章在 docx 直接填題目 */}
                     <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
-                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">第六章 · 填具體題目</span>
-                            <span className="font-bold text-[14px] text-[var(--ink)]">直接在 docx 第六章填題目</span>
+                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">第六章</span>
+                            <span className="font-bold text-[14px] text-[var(--ink)]">打開 docx 第六章填題目，對照 Step 2 工具書寫</span>
                         </div>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-2">
-                            計畫書 docx 第六章本來就有完整的填空表格（結構／題目類型／基本資料／變項題目／自檢）——本節 W10 直接<strong className="text-[var(--ink)]">在 docx 把題目都填到位</strong>。網頁不重複 docx 內容；下一頁 Step 2 的工具書自學教案是給你<strong>對照寫</strong>用的。
-                        </p>
-                        <p className="text-[12.5px] text-[var(--ink-light)] leading-relaxed bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
-                            💡 W10 vs W11 分工：<strong className="text-[var(--ink)]">W10 在 docx 裡寫題目本身</strong>（紙上設計）；<strong className="text-[var(--ink)]">W11 把題目轉成施測載具</strong>（Google Form／紙本訪綱／印出觀察表）+ 跨班 Pilot 真人測試。
+                        <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
+                            這節只在紙上設計題目；做成 Google Form／紙本訪綱／印觀察表是 W11 的事。
                         </p>
                     </div>
 
@@ -1023,52 +1020,28 @@ export const ToolRefinementPage = () => {
             icon: '📚',
             content: (
                 <div className="space-y-8 prose-zh">
-                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 max-w-[760px]">
-                        <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed mb-2">
-                            <strong className="text-[var(--ink)]">看完這頁能回 docx 第六章寫題目</strong>。先看「工具品質基礎」（三大標準，5 法共通）→ 再看自己方法的 4 區塊（題型結構 → 設計原則 → 常見錯誤 → 完整範例）。
-                        </p>
-                        <p className="text-[12.5px] text-[var(--ink-light)] leading-relaxed">
-                            💡 用法：①讀工具品質基礎（5 法共通的判準 + 5 大錯誤）→ ②看自己方法 A→B→C→D → ③回 docx 對照寫題目 → ④寫完回頭看別組（學會分辨＝真的懂）。
-                        </p>
-                    </div>
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[760px]">
+                        先看判準（V→R→F），再切到自己方法的 tab 看 4 區塊，然後回 docx 寫題目。
+                    </p>
 
-                    {/* ━━━ 工具品質基礎（5 法共通）— 寫題目前必看的判準與紅線 ━━━ */}
-                    <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold bg-white text-[var(--accent)] px-2 py-0.5 rounded-[3px]">基礎</span>
-                            <span className="font-bold text-[14px]">工具品質基礎（5 法共通）</span>
-                            <span className="ml-auto text-[10px] font-mono opacity-80">W9 已預習過</span>
-                        </div>
-
-                        <div className="p-5 space-y-5">
-                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85]">
-                                寫第六章題目前先看這把尺：<strong className="text-[var(--ink)]">三大標準（V→R→F）</strong>——判工具是好是壞，5 法都通用。具體會踩什麼坑因方法而異，下方 tab 切到你的方法看 <strong className="text-[var(--ink)]">C · 常見錯誤</strong>。
-                            </p>
-
-                            {/* 三大標準速查 */}
-                            <div>
-                                <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📐 三大標準（V→R→F）</p>
-                                <div className="grid md:grid-cols-3 gap-2">
-                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
-                                        <p className="text-[11.5px] font-mono font-bold text-[var(--accent)]">V · 方向</p>
-                                        <p className="text-[12.5px] font-bold text-[var(--ink)] mt-1">問對的事</p>
-                                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7] mt-1">每題對應到第四章某個變項／主題；沒對應就不該存在</p>
-                                    </div>
-                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
-                                        <p className="text-[11.5px] font-mono font-bold text-[var(--accent)]">R · 精度</p>
-                                        <p className="text-[12.5px] font-bold text-[var(--ink)] mt-1">問得清楚</p>
-                                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7] mt-1">用具體時段／量表／頻次，不用「常常」「偶爾」這類模糊詞</p>
-                                    </div>
-                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
-                                        <p className="text-[11.5px] font-mono font-bold text-[var(--accent)]">F · 執行</p>
-                                        <p className="text-[12.5px] font-bold text-[var(--ink)] mt-1">問得到答案</p>
-                                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7] mt-1">受訪者答得出來、時間負擔合理（問卷 5 min 內、訪談 30 min 內）</p>
-                                    </div>
-                                </div>
+                    {/* ━━━ 三大標準 V→R→F（5 法共通）━━━ */}
+                    <div>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📐 三大標準 V→R→F · 5 法共通的判準</p>
+                        <div className="grid md:grid-cols-3 gap-2 max-w-[760px]">
+                            <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                <p className="text-[11.5px] font-mono font-bold text-[var(--accent)]">V · 方向</p>
+                                <p className="text-[12.5px] font-bold text-[var(--ink)] mt-1">問對的事</p>
+                                <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7] mt-1">每題對應到第四章某個變項／主題</p>
                             </div>
-
-                            <div className="bg-[var(--paper-warm)] border-l-3 border-[var(--gold)] rounded-r-[6px] p-3 text-[11.5px] text-[var(--ink-mid)] leading-[1.85]">
-                                💡 <strong>具體錯誤類型</strong>因方法而異——下方 tab 切到你的方法看 <strong className="text-[var(--ink)]">C · 常見錯誤</strong> 區塊。問卷／訪談主要踩「題目用詞」的雷（誘導性、雙重、假開放）；觀察／文獻主要踩「類別設計」的雷（重疊、不全）；實驗則踩「變項設計」的雷（混淆變項、操作定義不精確、前後測污染）。
+                            <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                <p className="text-[11.5px] font-mono font-bold text-[var(--accent)]">R · 精度</p>
+                                <p className="text-[12.5px] font-bold text-[var(--ink)] mt-1">問得清楚</p>
+                                <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7] mt-1">用具體時段／量表，不用「常常」「偶爾」</p>
+                            </div>
+                            <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                <p className="text-[11.5px] font-mono font-bold text-[var(--accent)]">F · 執行</p>
+                                <p className="text-[12.5px] font-bold text-[var(--ink)] mt-1">問得到答案</p>
+                                <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7] mt-1">受訪者答得出來、時間合理（問卷 5 min、訪談 30 min）</p>
                             </div>
                         </div>
                     </div>
@@ -1228,8 +1201,37 @@ export const ToolRefinementPage = () => {
                         </div>
                     </div>
 
-                    {/* —— AI 工作坊區（雙模式 + 完整對話繳交） —— */}
-                    <div className="space-y-4 pt-4 border-t-2 border-dashed border-[var(--accent)] mt-6">
+                    {/* 補充方法提示卡（W8 登記過才顯示） */}
+                    {w8Secondary && (
+                        <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
+                            🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
+                            <p className="mt-1.5">
+                                docx 第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——兩個都填到，但<strong className="text-[#064E3B]">主工具寫完整、補充工具寫骨架就好</strong>。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 下一步 */}
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 方法工具書自學完 → 下一步：<strong>Step 3 AI 工作坊</strong>（用 AI 給範例或檢核你的題目）。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：AI 工作坊（雙模式 + 完整對話繳交） ─── */
+        {
+            title: 'AI 工作坊',
+            icon: '🤖',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    {/* 開場 */}
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        看完方法工具書後，把第六章題目寫到 docx——這節用 AI 來幫你<strong className="text-[var(--ink)]">驗收（找毛病）</strong>，或直接<strong className="text-[var(--ink)]">教學（給範例）</strong>。
+                    </p>
+
+                    {/* AI 工作坊區（雙模式 + 完整對話繳交） */}
+                    <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">AI 工作坊</span>
                             <span className="text-[14px] font-bold text-[var(--ink)]">🤖 用 AI 設計工具（雙模式可選）</span>
@@ -1241,12 +1243,12 @@ export const ToolRefinementPage = () => {
                         {/* AI 模式選擇 */}
                         <AIModePicker week="10" taskName="工具設計" onChange={setW10AiMode} />
 
-                        {/* 教學型：直接點上方的「AI 啟動 prompt」 */}
+                        {/* 教學型：直接點 Step 2 的「AI 啟動 prompt」 */}
                         {w10AiMode === 'teach' && (
                             <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-4 space-y-2">
-                                <p className="text-[13px] font-bold text-[#166534]">🎓 教學型：點上方 details「AI 啟動 prompt」</p>
+                                <p className="text-[13px] font-bold text-[#166534]">🎓 教學型：回 Step 2 點開「AI 啟動 prompt」</p>
                                 <p className="text-[11.5px] text-[#166534] leading-relaxed">
-                                    現有的「不知怎麼開始？點開複製這段 Prompt 給 AI」就是<strong>教學型</strong>——請 AI 給方向、給範例、拆步驟。
+                                    Step 2 末尾「不知怎麼開始？點開複製這段 Prompt 給 AI」就是<strong>教學型</strong>——請 AI 給方向、給範例、拆步驟。
                                     記得：AI 給「方向」就好，<strong>實際題目自己寫到 docx</strong>，看完範例後自己改寫一次。
                                 </p>
                             </div>
@@ -1292,26 +1294,16 @@ ___（貼題目／訪綱／流程／編碼表）
                         <AIDialogSubmission week="10" taskName="工具設計對話" required={true} />
                     </div>
 
-                    {/* 補充方法提示卡（W8 登記過才顯示） */}
-                    {w8Secondary && (
-                        <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
-                            🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
-                            <p className="mt-1.5">
-                                docx 第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——兩個都填到，但<strong className="text-[#064E3B]">主工具寫完整、補充工具寫骨架就好</strong>。
-                            </p>
-                        </div>
-                    )}
-
                     {/* 下節預告 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 工具書自學完 + docx 第六章題目寫到定位 → 下一頁 Step 3：<strong>補七到十三章 + 整本繳交</strong>。<br />
-                        💡 <strong>第八章 + 第九章(三) 限制改進 — 草稿即可、不花時間</strong>。理由：你還沒做完研究、不會分析。等 W14 數據出來再回頭補才寫得到位。第十章倫理／第十一章時程／第十二章 AI 聲明都是模板套用，最快搞定。
+                        ✅ AI 工作坊完成 → 下一步：<strong>Step 4 補七到十三章 + 整本繳交</strong>。<br />
+                        💡 <strong>第八章 + 第九章(三) 限制改進 — 草稿即可、不花時間</strong>。等 W14 數據出來再回頭補才寫得到位。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 3：第七~十三章補完 + 整本繳交 — 第二節 50 min ─── */
+        /* ─── Step 4：第七~十三章補完 + 整本繳交 — 第二節 50 min ─── */
         {
             title: '七到十三章 × 整本繳交',
             icon: '📤',
