@@ -1511,29 +1511,29 @@ export const W10Data = {
         },
         {
             badge: "第二節",
-            title: "自我同儕診斷 × AI 工作坊 × 整本繳交",
+            title: "AI 工作坊 × 老師諮詢 × 整本繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:25",
-                    duration: "25 min",
-                    colorClass: "c4",
-                    icon: "🔍",
-                    title: "五、 Step 3 自我與同儕診斷",
-                    desc: "V→R→F 自查 5 min + 雷區辨識小測驗 10 min + 跨組同儕互審 10 min。把「想送 AI 的問題」記下來進 Step 4。",
-                    tags: ["自我診斷", "同儕互審"]
-                },
-                {
-                    timeStart: "0:25",
-                    timeEnd: "0:40",
-                    duration: "15 min",
+                    timeEnd: "0:20",
+                    duration: "20 min",
                     colorClass: "c1",
                     icon: "🤖",
-                    title: "六、 Step 4 AI 工作坊（雙模式）",
-                    desc: "選教學型（卡關請 AI 給範例）或驗收型（有題目請 AI 找毛病）；完整對話繳到 GC；寫 AIRED 紀錄。",
-                    tags: ["雙模式", "完整對話繳交"]
+                    title: "五、 Step 3 AI 工作坊（雙模式 + 不用 AI 三選一）",
+                    desc: "選教學型（卡關請 AI 給範例）／驗收型（有題目請 AI 找毛病）／不用 AI（自己練手）三選一；完整對話繳到 GC；寫 AIRED 紀錄。",
+                    tags: ["三模式", "完整對話繳交"]
+                },
+                {
+                    timeStart: "0:20",
+                    timeEnd: "0:40",
+                    duration: "20 min",
+                    colorClass: "c4",
+                    icon: "🧑‍🏫",
+                    title: "六、 Step 4 老師諮詢區",
+                    desc: "老師隨機抽組到諮詢區報告進度（5 min/組），帶 AI 跑過的計畫書讓老師最終把關。沒被抽到的可主動排隊。",
+                    tags: ["最終把關", "隨機抽組"]
                 },
                 {
                     timeStart: "0:40",
@@ -1542,7 +1542,7 @@ export const W10Data = {
                     colorClass: "c2",
                     icon: "📤",
                     title: "七、 Step 5 七到十三章補完 + 整本繳交",
-                    desc: "第七到十三章模板套用補完（時程／倫理／AI聲明／參考文獻）；整本 docx 上傳 GC。",
+                    desc: "第七到十三章模板套用補完（時程／倫理／AI聲明／參考文獻）；整本計畫書上傳 GC。第八章＋第九章(三) 草稿即可。",
                     tags: ["第七~十三章", "整本繳交"]
                 },
                 {
@@ -1552,7 +1552,7 @@ export const W10Data = {
                     colorClass: "c5",
                     icon: "🔮",
                     title: "八、 Step 6 繳交確認 + W11 預告",
-                    desc: "ExportButton 匯出網頁紀錄；W11 拿到老師第三次建議再修工具，把題目轉施測載具 + 跨班 Pilot。",
+                    desc: "ExportButton 匯出網頁紀錄；W11 拿到老師第三次建議再修工具 + 實體工具轉換（Google Form／紙本）+ 跨班 Pilot。",
                     tags: ["匯出", "W11 預告"]
                 }
             ]
@@ -1562,17 +1562,17 @@ export const W10Data = {
         {
             icon: "🔧",
             label: "核心產出",
-            text: "計畫書第六章工具設計 + 整本定稿<br><small style=\"font-size:11px;color:#888;\">docx 13 章全到位</small>"
+            text: "計畫書 13 章全到位<br><small style=\"font-size:11px;color:#888;\">第六章寫題目 + 七到十三章模板套用</small>"
         },
         {
-            icon: "🤖",
-            label: "AI 檢核",
-            text: "整本計畫書邏輯一致性檢核<br><small style=\"font-size:11px;color:#888;\">AIRED 五要素分散在 w10-ai-* 欄位</small>"
+            icon: "🤝",
+            label: "AI + 老師雙層把關",
+            text: "AI 工作坊自查 → 老師諮詢區把關<br><small style=\"font-size:11px;color:#888;\">三模式可選（含「不用 AI」）</small>"
         },
         {
             icon: "📅",
             label: "課後任務",
-            text: "約預試者 + 準備工具實體形式<br><small style=\"font-size:11px;color:#ccc;\">W11 Pilot Test + 倫理審查</small>"
+            text: "等老師第三次建議<br><small style=\"font-size:11px;color:#ccc;\">W11 實體工具轉換 + 跨班 Pilot</small>"
         }
     ],
     legends: [

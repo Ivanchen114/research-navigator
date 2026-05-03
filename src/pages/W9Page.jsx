@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import './W9Page.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import PromptBlock from '../components/ui/PromptBlock';
 import Checklist from '../components/ui/Checklist';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
@@ -523,7 +524,7 @@ const W9AiCheckPromptBox = () => {
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1：W8 老師回饋快速讀取 */
-    /* Step 2：計畫書組裝工作坊（內容寫在 docx，網頁只記 AI 檢核+勾選） */
+    /* Step 2：計畫書組裝工作坊（內容寫在計畫書，網頁只記 AI 檢核+勾選） */
     { key: 'w9-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（寫不出某章請示範）/ 🥊 驗收型（有初稿請壓力測試）' },
     { key: 'w9-plan-ai-check', label: 'AI 互動後的判斷紀錄', question: 'AI 指出的問題 / 給的範例 + 我採納/不採納的決定' },
     { key: 'w9-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
@@ -643,13 +644,53 @@ export const W9Page = () => {
                         </div>
                     )}
 
+                    {/* 名詞白話化：變項（高一第一次正式接觸） */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[720px]">
+                        <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂一個詞：變項（W9 開始大量出現）</p>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            「變項」就是<strong>研究中會改變、會被測量的因素</strong>。例如「滑手機時間」「成績」「年級」都是變項。
+                            實驗法分三種角色：
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                            <div className="bg-white border-2 border-[#2563EB] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#2563EB] mb-1">🎛️ 自變項</p>
+                                <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed mb-1">你動手調整的</p>
+                                <p className="text-[11px] text-[#1E40AF] italic">例：實驗組聽音樂、對照組安靜</p>
+                            </div>
+                            <div className="bg-white border-2 border-[#7C3AED] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#7C3AED] mb-1">📈 依變項</p>
+                                <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-1">跟著變、你想測的</p>
+                                <p className="text-[11px] text-[#5B21B6] italic">例：記憶測驗分數</p>
+                            </div>
+                            <div className="bg-white border-2 border-[#059669] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#059669] mb-1">🔒 控制變項</p>
+                                <p className="text-[11.5px] text-[#065F46] leading-relaxed mb-1">要保持一樣、避免干擾</p>
+                                <p className="text-[11px] text-[#047857] italic">例：同考卷、同教室、同時段</p>
+                            </div>
+                        </div>
+                        <p className="text-[11px] text-[#1E40AF] italic leading-relaxed">
+                            💡 不是所有方法都叫「變項」——問卷叫「<strong>題目／構面</strong>」、訪談叫「<strong>主題</strong>」、觀察叫「<strong>行為類別</strong>」、文獻分析叫「<strong>分析維度</strong>」。下方對照表有完整對應。
+                        </p>
+                        {/* 📖 同義詞補充：主題 / 維度 是什麼 */}
+                        <div className="bg-white border border-[#BFDBFE] rounded p-2.5 mt-3">
+                            <p className="text-[11.5px] font-bold text-[#1E40AF] mb-1">📖 「主題／維度」是什麼意思？</p>
+                            <p className="text-[11px] text-[#1E3A8A] leading-relaxed">
+                                <strong>主題</strong>（訪談用）= 你想從訪談裡聽到的「分類」，例如研究補習動機就會聽到「家長期待／同儕壓力／自我需求」這 3 個主題。
+                                <br />
+                                <strong>分析維度</strong>（文獻用）= 你看每篇文獻時想抓的「比較欄位」，例如研究 YouTuber 標題就抓「數字／情緒詞／問句／視覺符號」這 4 個維度。
+                                <br />
+                                本質都是<strong>變項在不同方法的化身</strong>——名字不同，做的事一樣。
+                            </p>
+                        </div>
+                    </div>
+
                     {/* 1-5 章觀念複習地圖（不是個人素材清單，是觀念口訣）*/}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
                             📐 1-5 章觀念複習地圖（5 分鐘掃過）
                         </h4>
                         <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            W2-W8 學過的東西，6-7 週後幾乎都忘光了——這 5 章每章一句話濃縮，<strong>5 秒復現觀念</strong>，再回 docx 寫。<strong className="text-[var(--ink)]">這是觀念口訣、不是個人素材</strong>——W8 重新組隊、題目換了也適用。
+                            W2-W8 學過的東西，6-7 週後幾乎都忘光了——這 5 章每章一句話濃縮，<strong>5 秒復現觀念</strong>，再回計畫書 寫。<strong className="text-[var(--ink)]">這是觀念口訣、不是個人素材</strong>——W8 重新組隊、題目換了也適用。
                         </p>
                         <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                             <div className="grid grid-cols-[60px_140px_1fr_90px] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
@@ -700,7 +741,7 @@ export const W9Page = () => {
                 <div className="space-y-8 prose-zh">
                     {/* 開場 */}
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        第一節學了<strong className="text-[var(--ink)]">診斷尺</strong>（三大標準）與<strong className="text-[var(--ink)]">檢查清單</strong>（錯誤類型）——那是「診斷」。第二節回到<strong className="text-[var(--ink)]">實作</strong>：把 W2–W8 寫過的東西整合進研究計畫書。
+                        本節重點：把 W2–W8 寫過的東西整合進研究計畫書 1-5 章。工具品質判斷（V→R→F、5 法雷）移到 W10，那是寫第六章工具時才用得到的能力。
                     </p>
                     <div className="w7-notice w7-notice-gold">
                         🎯 <strong>本節目標：完成計畫書第 1-5 章雛形</strong>（五章地基工程）——把 W2-W8 寫過的東西整合進來，W8 老師回饋同步修進去。第六章以後留到 W10 做工具設計。
@@ -784,13 +825,38 @@ export const W9Page = () => {
                                 <li>關鍵字參考 AI 檢核回覆裡會給的「3 個搜尋組合」（在 Prompt 第 4 條已要求 AI 列）</li>
                             </ul>
                         </div>
+                        {/* 📖 還沒學過怎麼查？mini 教學 */}
+                        <details className="mt-3 rounded-[var(--radius-unified)] border border-[#D97706]/40 bg-white">
+                            <summary className="cursor-pointer px-3 py-2 hover:bg-[#FEF3C7] transition-colors flex items-center gap-2">
+                                <span className="text-[12px] font-bold text-[#92400E]">📖 還沒學過怎麼查文獻？點開看 3 步速查</span>
+                                <span className="ml-auto text-[10px] font-mono text-[#92400E]">▼</span>
+                            </summary>
+                            <div className="border-t border-[#D97706]/30 px-4 py-3 space-y-2 text-[11.5px] text-[#78350F] leading-relaxed">
+                                <p><strong>Step 1 · 工具選一個</strong>：</p>
+                                <ul className="list-disc pl-5 space-y-0.5">
+                                    <li><strong>華藝線上圖書館</strong>（airitilibrary.com）— 中文期刊／碩博論文</li>
+                                    <li><strong>Google Scholar</strong>（scholar.google.com）— 中英文都有，但要會篩</li>
+                                </ul>
+                                <p><strong>Step 2 · 關鍵字下兩層</strong>：</p>
+                                <ul className="list-disc pl-5 space-y-0.5">
+                                    <li>主題詞 + 對象詞，例：「手機成癮 高中生」「補習動機 青少年」</li>
+                                    <li>查不到 → 換同義詞：「手機」改「智慧型手機」、「補習」改「課外輔導」</li>
+                                </ul>
+                                <p><strong>Step 3 · 30 秒快速篩</strong>：</p>
+                                <ul className="list-disc pl-5 space-y-0.5">
+                                    <li>只讀<strong>摘要 + 結論段</strong>判斷「這篇跟我的題目有沒有關係」</li>
+                                    <li>有關 → 下載／截圖；沒關 → 跳下一篇，不要硬讀</li>
+                                </ul>
+                                <p className="italic text-[11px] text-[#92400E]">💡 W7 文獻搜尋週教過華藝，記不得就回 W7 複習。</p>
+                            </div>
+                        </details>
                     </div>
 
                     {/* 5 種計畫書模板：自己的粗藍框，其他作「也認識一下」 */}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">5 種研究方法的計畫書模板</h4>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            老師會在 <strong>Google Classroom</strong> 發你<strong className="text-[var(--ink)]">自己方法</strong>的 docx 副本（粗藍框那份）。但這是研究方法課——下方 5 種都列出，<strong className="text-[var(--ink)]">看別組用什麼模板，是這節該做的事</strong>。手動切換可點下方按鈕變更主框。
+                            老師會在 <strong>Google Classroom</strong> 發你<strong className="text-[var(--ink)]">自己方法</strong>的計畫書副本（粗藍框那份）。但這是研究方法課——下方 5 種都列出，<strong className="text-[var(--ink)]">看別組用什麼模板，是這節該做的事</strong>。手動切換可點下方按鈕變更主框。
                         </p>
                         <div className="flex flex-wrap gap-2 mb-4">
                             {METHOD_OPTIONS.map((m) => (
@@ -935,14 +1001,14 @@ export const W9Page = () => {
                             五章地基工程 · 本節要寫到的章節
                         </h4>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            <strong className="text-[var(--ink)]">所有內容寫在計畫書 docx 上</strong>，網頁只做進度勾選與 AI 檢核紀錄，不重寫 docx 內容。W8 老師建議直接在 docx 第一章各欄內修正即可。
+                            <strong className="text-[var(--ink)]">所有內容寫在計畫書 上</strong>，網頁只做進度勾選與 AI 檢核紀錄，不重寫 計畫書內容。W8 老師建議直接在 計畫書第一章各欄內修正即可。
                         </p>
                         <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-5 space-y-4">
                             <div>
                                 <div className="text-[11px] font-mono font-bold text-[var(--success)] uppercase tracking-wider mb-2">✅ 必達（課堂完成）</div>
                                 <ul className="text-[13px] text-[var(--ink-mid)] space-y-1 list-disc pl-5">
                                     <li><strong className="text-[var(--ink)]">第一章</strong>：題目／動機／目的／主問題／子問題／對象（6 格，整合 W2/W3/W8）</li>
-                                    <li><strong className="text-[var(--ink)]">第二章</strong>：3 個關鍵詞操作定義（剛學完診斷尺正好用）</li>
+                                    <li><strong className="text-[var(--ink)]">第二章</strong>：3 個關鍵詞操作定義（從 W5 操作型定義帶過來）</li>
                                     <li><strong className="text-[var(--ink)]">第五章</strong>：對象 + 預計人數 + 抽樣方式（搬 W8）</li>
                                 </ul>
                             </div>
@@ -970,12 +1036,12 @@ export const W9Page = () => {
                         dataKey="w9-plan-ch1-checklist"
                         prompt="本節繳交驗收（勾完才算通過）"
                         items={[
-                            '第一章：6 格全填（docx）',
-                            '第二章：3 個關鍵詞操作定義（docx）',
-                            '第五章：對象／人數／抽樣方式（docx）',
-                            '第三章：至少 2 篇文獻基本資料（docx，骨架）',
-                            '第四章：變項／主題／維度清單（docx，骨架）',
-                            'W8 老師的建議在 docx 上已納入修正',
+                            '第一章：6 格全填（計畫書）',
+                            '第二章：3 個關鍵詞操作定義（計畫書）',
+                            '第五章：對象／人數／抽樣方式（計畫書）',
+                            '第三章：至少 2 篇文獻基本資料（計畫書，骨架）',
+                            '第四章：變項／主題／維度清單（計畫書，骨架）',
+                            'W8 老師的建議在計畫書 上已納入修正',
                         ]}
                     />
 
@@ -1013,7 +1079,7 @@ export const W9Page = () => {
                                 <p className="text-[12px] text-[#166534] leading-relaxed">
                                     某幾章完全不會寫？把你卡關的章節貼上，請 Gemini 給範例。記得：<strong>看完範例自己寫一次</strong>，不要直接抄。
                                 </p>
-                                <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我在寫高中專題研究計畫書，需要寫第 1-5 章，但有幾章我完全不會寫。
+                                <PromptBlock text={`我在寫高中專題研究計畫書，需要寫第 1-5 章，但有幾章我完全不會寫。
 
 【我的研究】
 - 研究方法：問卷／訪談／實驗／觀察／文獻
@@ -1030,10 +1096,23 @@ ___（例：第三章文獻探討、第四章變項定義）
 
 【不要做】
 - 不要替我寫完整章節
-- 我會看完範例後自己寫一次再給你檢查`}</pre>
+- 我會看完範例後自己寫一次再給你檢查`} />
                                 <p className="text-[11px] text-[#166534] italic leading-relaxed">
-                                    💡 看完 AI 範例後，回到 docx 自己寫一次，再切回「驗收型」讓 AI 檢核。
+                                    💡 看完 AI 範例後，回到計畫書 自己寫一次，再切回「驗收型」讓 AI 檢核。
                                 </p>
+                                {/* 📋 怎麼算「改寫」不是「抄」？ */}
+                                <div className="bg-white border border-[#86EFAC] rounded p-3">
+                                    <p className="text-[11.5px] font-bold text-[#166534] mb-2">📋 怎麼算「改寫」不是「抄」？4 個自查問題</p>
+                                    <ul className="text-[11px] text-[#166534] leading-relaxed space-y-1">
+                                        <li>☐ 我用<strong>自己的研究主題詞彙</strong>替換 AI 的範例詞（不是直接套）</li>
+                                        <li>☐ AI 寫 5 句，我寫的句數至少不一樣（合理增減）</li>
+                                        <li>☐ 我能口頭跟同學講「為什麼這樣寫」（不是照念）</li>
+                                        <li>☐ 我有<strong>調整段落順序</strong>或補上 AI 沒提到的我自己想到的內容</li>
+                                    </ul>
+                                    <p className="text-[10.5px] text-[#166534] italic mt-2">
+                                        💡 4 項至少達 3 項才算改寫，否則就是抄——切回驗收型壓力測試一定會被 AI 戳穿。
+                                    </p>
+                                </div>
                             </div>
                         )}
 
@@ -1082,28 +1161,6 @@ ___（例：第三章文獻探討、第四章變項定義）
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 1. 檢核清單（先確認收穫） */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
-                            ✅ W9 完成後，請確認
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
-                            {[
-                                '學會三大標準判斷工具品質（方向 / 精度 / 執行）',
-                                '辨識錯誤類型（誘導性、雙重問題、假開放）',
-                                '完成計畫書第 1-5 章雛形（五章地基工程）',
-                                '整合 W8 老師建議到對應章節',
-                                '規劃好 W9 → W10 計畫書撰寫時程',
-                            ].map((item, i) => (
-                                <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
-                                    <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
-                                    <span className="text-[13px] text-[var(--ink-mid)]">{item}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 2. 一鍵複製（AIRED 與 AI 檢核紀錄已在 Step 3 AI 工作坊完成） */}
                     {/* 本週結束，你應該要會 — B 標準格式 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -1156,7 +1213,7 @@ ___（例：第三章文獻探討、第四章變項定義）
                             <li>第三章文獻補到 2-3 篇 + 差異段</li>
                             <li>第四章變項／主題／維度定版 + 操作定義</li>
                             <li>跑 AI 思考模式檢核第 1-5 章（用上方複製的 Prompt）→ 補完 AIRED 的 R 欄位</li>
-                            <li>docx 上傳 Google Classroom</li>
+                            <li>計畫書上傳 Google Classroom</li>
                         </ul>
                         <p style={{ fontSize: 12, lineHeight: 1.85, color: 'rgba(255,255,255,0.7)' }}>
                             💡 大部分已在課堂完成，課後只是「補細節 + 跑 AI + 繳交」。若要幫自己規劃具體時間，下方可以寫。
@@ -1175,7 +1232,7 @@ ___（例：第三章文獻探討、第四章變項定義）
                         <ThinkRecord
                             dataKey="w9-homework-commitment"
                             prompt="我打算什麼時候把課後三件事做完？"
-                            defaultTemplate={'補第三、四章：\n跑 AI 檢核 + 補 AIRED：\n上傳 docx 到 GC：'}
+                            defaultTemplate={'補第三、四章：\n跑 AI 檢核 + 補 AIRED：\n上傳計畫書 到 GC：'}
                             placeholder="例：週四晚 8-10 點，自己房間"
                             rows={4}
                         />
@@ -1217,10 +1274,10 @@ ___（例：第三章文獻探討、第四章變項定義）
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W9"
                 title="計畫書 · "
                 accentTitle="五章地基"
-                subtitle="第一節學診斷尺與檢查清單——認清什麼是好工具、什麼是毒題。第二節把 W2–W8 累積的成果整合為計畫書第一到第五章——工具設計之前，地基必須先打穩。"
+                subtitle="本週專心做計畫書 1-5 章地基（研究問題、文獻、變項、抽樣對象）——工具設計之前，地基必須先打穩。工具品質與第六章題目設計移到 W10。"
                 chain="題目方法都定了——這週兩節 100 分鐘做一件事：把腦中的研究想法寫成『可繳交』的計畫書 1-5 章。"
                 meta={[
-                    { label: '第一節', value: '讀 W8 回饋 + 診斷尺 + 檢查清單 + 6 題練習' },
+                    { label: '第一節', value: '讀 W8 回饋 + 計畫書第一、二章組裝' },
                     { label: '第二節', value: '計畫書五章地基工程 + AI 檢核 Prompt + 預想 AIRED' },
                     { label: '課堂產出', value: '計畫書第 1-5 章雛形 + W9 AIRED' },
                     { label: '前置要求', value: 'W8 合題企劃書／單飛施工單' },
@@ -1232,7 +1289,7 @@ ___（例：第三章文獻探討、第四章變項定義）
                     { wk: 'W5-W6', name: '操作型定義\n海報博覽會', status: 'past' },
                     { wk: 'W7', name: '文獻搜尋\n入門', status: 'past' },
                     { wk: 'W8', name: '文獻偵探社\n引用寫作', status: 'past' },
-                    { wk: 'W9', name: '工具設計\n處方診斷', status: 'now' },
+                    { wk: 'W9', name: '計畫書\n1-5 章地基', status: 'now' },
                     { wk: 'W10', name: '工具精進\n預試', status: '' },
                     { wk: 'W11-W14', name: '執行研究\n數據分析', status: '' },
                 ]} />

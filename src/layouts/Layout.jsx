@@ -44,8 +44,9 @@ export const Layout = () => {
         {
             label: '研究工具',
             items: [
-                { name: 'AI 協作實驗室', path: '/prompt-lab', status: 'none' },
-                { name: '資料分析站', path: '/analysis-station', status: 'none' },
+                { name: '方法工具書', path: '/tools/methods', status: 'none' },
+                { name: 'AI 協作實驗室（自學）', path: '/prompt-lab', status: 'none' },
+                { name: 'Prompt 範本庫（自學）', path: '/analysis-station', status: 'none' },
             ]
         },
         {

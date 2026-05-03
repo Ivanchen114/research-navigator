@@ -4,6 +4,7 @@ import CourseArc from '../components/ui/CourseArc';
 import { W14Data } from '../data/lessonMaps';
 import './W14.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import PromptBlock from '../components/ui/PromptBlock';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
@@ -24,6 +25,7 @@ import {
     AlertTriangle,
     Gamepad2,
     ShieldAlert,
+    Bot,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -107,18 +109,18 @@ const EXPORT_FIELDS = [
     { key: 'w14-format-exercise', label: '格式規範演練' },
     /* Step 3 */
     { key: 'w14-case-3', label: '描述+推論整合練習' },
-    /* Step 4 — AI 畫圖工作坊 */
-    { key: 'w14-pre-judgment', label: '草圖判讀（先別開 AI）', question: '我預期會看到什麼趨勢？最重要的發現是什麼？' },
-    { key: 'w14-my-chart-type', label: '我的圖表類型與理由' },
-    { key: 'w14-ai-blindspot', label: 'AI 找到的盲點 / 我沒注意到的趨勢' },
-    { key: 'w14-validation-check', label: '圖表驗收結果' },
-    { key: 'w14-my-description', label: '我的描述（藍筆）' },
-    { key: 'w14-my-inference', label: '我的推論（紅筆）' },
-    { key: 'w14-ai-pressure-test', label: 'AI 壓力測試後我做了哪些修正' },
-    { key: 'w14-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
+    { key: 'w14-pre-judgment', label: '① 草圖判讀（必填）', question: '我預期會看到什麼趨勢？最重要的發現是什麼？' },
+    { key: 'w14-my-chart-type', label: '② 圖表類型與理由（必填）' },
+    { key: 'w14-teach-reflection', label: '教學型反思（教學型才有）' },
+    { key: 'w14-ai-blindspot', label: 'AI 找到的盲點（進階·驗收型必填）' },
+    { key: 'w14-validation-check', label: '③ 圖表三鐵規驗收（必填）' },
+    { key: 'w14-my-description', label: '④ 描述（AI 起草+人工改寫）' },
+    { key: 'w14-my-inference', label: '⑤ 推論（純人工，研究核心）' },
+    { key: 'w14-ai-pressure-test', label: 'AI 壓測後修正（進階·驗收型必填）' },
+    { key: 'w14-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
     /* Step 5 */
     { key: 'w14-w15-preview', label: 'W15 預告：結論的第三層和第四層' },
-    { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄（本週必填）', question: '本週用 AI 畫圖的最重要一次互動（A-I-R-E-D 五要素）' },
+    { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 畫圖的最重要一次互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -229,6 +231,36 @@ const W14Page = () => {
             icon: <BarChart2 size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
+                    {/* 開場：任務定位 */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[15px] font-bold text-[var(--ink)] mb-2">🍽️ 選對盤子，數據才會說話</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            頂級和牛用塑膠臉盆裝，客人還想吃嗎？資料也一樣——你 W13 整理好的分析表是「食材」，
+                            本週要選對「盤子」（圖表類型）盛出來。<strong>選錯圖表，再好的資料也讀不出意義。</strong>
+                            Step 1 先學 4 大圖表的選擇口訣，再進格式、圖說、動手畫——共 6 步。
+                        </p>
+                    </div>
+
+                    {/* 名詞白話化：變項是什麼 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF]">
+                        <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂一個詞：變項</p>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-2">
+                            「變項」就是<strong>會改變的因素</strong>——你的資料裡兩個會變的東西就是兩個變項。畫圖時通常分成：
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-2 text-[11.5px] text-[#1E3A8A]">
+                            <div className="bg-white border border-[#BFDBFE] rounded p-2.5">
+                                <p className="font-bold mb-1">🅧 X 軸（橫）= 你想分組或排序的</p>
+                                <p>例：年級、月份、組別、題目、行為類別</p>
+                            </div>
+                            <div className="bg-white border border-[#BFDBFE] rounded p-2.5">
+                                <p className="font-bold mb-1">🅨 Y 軸（直）= 你想計算或比較的</p>
+                                <p>例：人數、百分比、平均分數、次數、時間</p>
+                            </div>
+                        </div>
+                        <p className="text-[11px] text-[#1E40AF] italic mt-2 leading-relaxed">
+                            💡 例：「不同<strong className="text-[#DC2626]">年級</strong>（X）的<strong className="text-[#DC2626]">手機平均使用時數</strong>（Y）」——年級和使用時數都是變項。
+                        </p>
+                    </div>
 
                     {/* 四大圖表卡 */}
                     <div className="w14-chart-grid">
@@ -269,10 +301,15 @@ const W14Page = () => {
                         <ChartExercise />
                     </div>
 
+                    {/* 對答案後的反思（避免跟上方互動演練重複） */}
                     <ThinkRecord
                         dataKey="w14-chart-exercise"
-                        prompt="把四題的答案和理由寫下來"
-                        scaffold={['第1題：___圖，因為...', '第2題：___圖，因為...', '第3題：___圖，因為...', '第4題：___圖，因為...']}
+                        prompt="對答案後的反思（不用重抄 4 題答案，只寫你錯了哪題＋為什麼）"
+                        scaffold={[
+                            '我錯的題（如果有）：第 ___ 題',
+                            '我選了 ___ 卻是 ___，原因是我把 ___ 跟 ___ 搞混了',
+                            '下次怎麼避免：（哪個口訣記不熟？）',
+                        ]}
                     />
 
                     {/* 演練：圖表除錯 */}
@@ -415,14 +452,17 @@ const W14Page = () => {
             ),
         },
         {
-            title: 'AI 畫圖工作坊',
+            title: '動手畫圖 + 圖說',
             icon: <BarChart2 size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
+                    {/* 開場：研究腦/技術分工 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🛠️ AI 畫圖工作坊：先判讀 → AI 畫 → 找漏洞</p>
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🎯 分工：你出研究腦，AI 代勞畫圖技術</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            開你 W13 整理好的分析表。<strong>先用腦袋讀懂自己的資料</strong>（草圖判讀）→ 結構化 prompt 給 Gemini → 看 AI 畫的圖跟你預期差多少 → 找出你忽略的趨勢／盲點 → 寫描述＋推論。
+                            打開你 W13 整理好的分析表。本週分工原則：
+                            <strong>選圖表類型／驗收／寫推論</strong>是研究核心由你自己做；
+                            <strong>畫圖（Sheets/Canva 操作）跟描述初稿</strong>可以交給 AI——AI 是技術助理，不是研究員。
                         </p>
                     </div>
 
@@ -438,91 +478,43 @@ const W14Page = () => {
                             )}
                             {w13W14Question && (
                                 <div>
-                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">你 W13 寫的「想看的第一張圖」</p>
+                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">你 W13 寫的「想怎麼呈現」</p>
                                     <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w13W14Question}</p>
                                 </div>
                             )}
                         </div>
                     )}
 
-                    {/* AI 協作三原則（W14 角色：反思鏡） */}
-                    <AICollaborationPrinciples week="14" role="mirror" compact={false} />
+                    {/* 第①步 草圖判讀 */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2]">
+                        <p className="text-[14px] font-bold text-[#991B1B] mb-2 flex items-center gap-2">
+                            <ShieldAlert size={16} /> 第①步 · 草圖判讀（純人工 · 不能讓 AI 替你看）
+                        </p>
+                        <p className="text-[12px] text-[#7F1D1D] leading-relaxed">
+                            開分析表，自己用腦袋讀一輪。回答下面三個問題——這是你研究的「眼力」訓練。
+                        </p>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w14-pre-judgment"
+                        prompt="① 我的草圖判讀"
+                        scaffold={[
+                            '我選的變項：X = ___，Y = ___（為什麼選這兩個？）',
+                            '我預期會看到的趨勢／模式：（口語描述，例：高一比高三花更多時間滑手機）',
+                            '我預期最重要的發現：（如果這張圖只能講一句話，這句話是什麼？）',
+                        ]}
+                    />
 
-                    {/* AI 模式選擇 */}
-                    <AIModePicker week="14" taskName="畫圖判讀" onChange={setW14AiMode} />
-
-                    {/* 驗收型：先寫草圖判讀 */}
-                    {w14AiMode === 'verify' && (
-                        <>
-                            <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2]">
-                                <p className="text-[14px] font-bold text-[#991B1B] mb-2 flex items-center gap-2">
-                                    <ShieldAlert size={16} /> 第①步 · 草圖判讀（驗收型必做）
-                                </p>
-                                <p className="text-[12px] text-[#7F1D1D] leading-relaxed mb-2">
-                                    驗收型 = 你已經有概念了。<strong>沒先寫判讀就丟給 AI = 你說不出 AI 給的對不對</strong>。
-                                    用腦袋（不是 AI）先回答下面三個問題。寫不出來，就改用「教學型」。
-                                </p>
-                            </div>
-                            <ThinkRecord
-                                dataKey="w14-pre-judgment"
-                                prompt="① 我的草圖判讀（先別開 AI）"
-                                scaffold={[
-                                    '我選的變項：X = ___，Y = ___（為什麼選這兩個？）',
-                                    '我預期會看到的趨勢／模式：（口語描述，例：高一比高三花更多時間滑手機）',
-                                    '我預期最重要的發現：（如果這張圖只能講一句話，這句話是什麼？）',
-                                ]}
-                            />
-                        </>
-                    )}
-
-                    {/* 教學型：請 AI 教我能畫什麼 */}
-                    {w14AiMode === 'teach' && (
-                        <>
-                            <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4]">
-                                <p className="text-[14px] font-bold text-[#166534] mb-2 flex items-center gap-2">
-                                    🎓 第①步 · 請 AI 教我（教學型）
-                                </p>
-                                <p className="text-[12px] text-[#166534] leading-relaxed mb-3">
-                                    你完全不知道這份資料能畫什麼？沒關係——把資料樣態貼給 Gemini，請它<strong>給範例</strong>。
-                                    記得 AI 給範例後，<strong>你要自己選圖表類型 + 自己寫一次</strong>，不要只複製。
-                                </p>
-                                <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我有一份分析表（N=___），但我完全不知道這份資料能畫什麼圖、能看出什麼。
-
-我的研究問題是：___
-分析表的欄位：___（貼欄位清單）
-
-【請你做】
-1. 給我 2-3 個「這份資料可以畫的圖」範例（每個說明：用什麼圖表類型、X/Y 軸是什麼、預期會看到什麼）
-2. 列出我可以從這份資料問的 3 個分析問題（從淺到深）
-3. 教我用最簡單的方式判斷「該用什麼圖表」（口訣或決策樹）
-
-【不要做】
-- 不要直接幫我畫完
-- 不要替我寫描述/推論
-- 我看完範例後會自己選一個來做`}</pre>
-                            </div>
-                            <ThinkRecord
-                                dataKey="w14-teach-reflection"
-                                prompt="① 教學型反思（AI 教完後寫）"
-                                scaffold={[
-                                    'AI 給我哪 2-3 個範例？我選哪一個方向做？',
-                                    'AI 教我的「圖表選擇判斷」是什麼？我用自己的話解釋一次：',
-                                    '我接下來要畫的圖（變項+類型+預期看到什麼）：（自己寫，不抄 AI）',
-                                ]}
-                            />
-                        </>
-                    )}
-
-                    {!w14AiMode && (
-                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                ☝️ 上方先選一個 AI 使用模式，這裡會顯示對應的指引。
-                            </p>
-                        </div>
-                    )}
+                    {/* 第②步 選類型 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🎯 第②步 · 選圖表類型（純人工 · 套 Step 1 口訣）</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            時間流動？比例？相關？比大小？挑一個套用。
+                            <strong>這步絕不能交給 AI</strong>——選錯類型，AI 畫得再美也是廢圖。
+                        </p>
+                    </div>
                     <ThinkRecord
                         dataKey="w14-my-chart-type"
-                        prompt="我選用的圖表類型是什麼？為什麼？（套用口訣說明）"
+                        prompt="② 我選用的圖表類型 + 理由 + 圖表標題"
                         scaffold={[
                             '圖表類型：折線圖 / 圓餅圖 / 長條圖 / 散佈圖',
                             '原因（套用口訣）：因為我的資料是在看...',
@@ -530,49 +522,253 @@ const W14Page = () => {
                         ]}
                     />
 
-                    {/* —— 第②步 給 Gemini 畫圖 —— */}
+                    {/* 第③步 AI 畫圖 */}
                     <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
                         <p className="text-[14px] font-bold text-[var(--accent)] mb-2 flex items-center gap-2">
-                            <Gamepad2 size={16} /> 第②步 · 結構化 prompt 給 Gemini Pro
+                            <Bot size={16} /> 第③步 · AI 畫圖（推薦路線）
                         </p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            打開 <strong>Gemini Pro · 思考模式 + Canvas</strong>。把分析表（CSV / 連結）+ 下方 prompt 一起貼進去。
+                            把你決定好的「類型 + 變項 + 標題」交給 <strong>Gemini Pro · 思考模式 + Canvas</strong> 畫圖。
+                            規則：<strong>AI 只能畫你選的類型，不能擅自換</strong>。
                         </p>
-                        <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`【任務】
-依我提供的判讀，幫我把資料畫成圖。
+                        <PromptBlock text={`【任務】依我提供的判讀，幫我把資料畫成圖。
 不要自行更換圖表類型、不要自行新增變項。
 
 【我的判讀】
 - 變項：X = ___，Y = ___
-- 預期趨勢：___
 - 我選的圖表類型：___（折線/圓餅/長條/散佈）
+- 圖表標題：圖一：___
 - 樣本數：N = ___
 
 【分析表】
-___（貼資料或連結）
+___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google Sheets 公開連結 ③上傳 Excel／CSV 檔案——Gemini 都能讀）
 
 【請輸出】
 1. 用我選的圖表類型畫出圖（Canvas 顯示）
-2. 標題、N 值、座標軸、資料來源依學術圖表規範
-3. 你看完資料後，告訴我：我的預期趨勢對不對？
+2. 標題在上、N 值標註、資料來源標「研究者繪製」
+3. 座標軸刻度合理、不截斷
 
-不要替我寫圖說，圖說由我自己來。`}</pre>
-                        <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed mt-3">
-                            💡 看 Gemini 思考模式：它怎麼選圖表？跟你選的一致嗎？不一致誰對？
+不要替我寫圖說，圖說由我自己來。`} />
+                    </div>
+
+                    {/* 替代路線：自己畫 */}
+                    <details className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
+                        <summary className="cursor-pointer px-5 py-3 flex items-center justify-between hover:bg-[var(--paper-warm)] transition-colors">
+                            <span className="text-[12px] font-bold text-[var(--ink)]">
+                                🛠️ 替代路線：我想自己用 Sheets/Excel/Canva 畫（點開看步驟）
+                            </span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="border-t border-[var(--border)] p-4 space-y-2 text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            <p><strong>Google Sheets：</strong>選資料 → 插入 → 圖表 → 編輯類型/標題（最快）</p>
+                            <p><strong>Excel：</strong>選資料 → 插入 → 圖表 → 設計／格式（功能多）</p>
+                            <p><strong>Canva：</strong>圖表元素 → 改數據 → 換顏色（最美）</p>
+                        </div>
+                    </details>
+
+                    {/* 第④步 人工驗收 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#FCD34D] bg-[#FFFBEB]">
+                        <p className="text-[13px] font-bold text-[#92400E] mb-2 flex items-center gap-2">
+                            <ShieldAlert size={14} /> 第④步 · 人工驗收（純人工 · 套 Step 2 三鐵規）
+                        </p>
+                        <ul className="text-[11px] text-[#78350F] leading-relaxed space-y-1 mb-2">
+                            <li>☐ 圖表類型 = 我選的（不是 AI 擅自改的）</li>
+                            <li>☐ 標題在上方，含 N 值</li>
+                            <li>☐ 資料來源在下方</li>
+                            <li>☐ 座標軸沒截斷、比例合理</li>
+                            <li>☐ 圖上的數字跟我的分析表對得上</li>
+                        </ul>
+                        <details className="bg-white border border-[#FCD34D] rounded p-2.5">
+                            <summary className="cursor-pointer text-[11.5px] font-bold text-[#92400E] flex items-center gap-2">
+                                <span>📋 任何一項沒過？點開看怎麼改 prompt 重畫</span>
+                                <span className="ml-auto text-[10px] font-mono">▼</span>
+                            </summary>
+                            <div className="mt-2 pt-2 border-t border-[#FCD34D] text-[11px] text-[#78350F] leading-relaxed space-y-1">
+                                <p><strong>① 圖表類型錯</strong>（AI 改成自己想的）→ prompt 開頭加紅字「請<strong>嚴格使用</strong>我選的 ___ 類型，禁止更換」</p>
+                                <p><strong>② 標題缺 N 值</strong>→ prompt 加「標題格式必須是『圖一：___ (N=___)』」</p>
+                                <p><strong>③ 沒資料來源</strong>→ prompt 加「圖下方標『資料來源：研究者繪製』」</p>
+                                <p><strong>④ 座標軸截斷</strong>（從非 0 開始放大差距）→ prompt 加「Y 軸從 0 開始」</p>
+                                <p><strong>⑤ 數字對不上</strong>→ 把分析表整段重貼一次，並說「請對照原始資料逐筆驗算」</p>
+                                <p className="italic text-[11px] text-[#92400E]">💡 AI 出錯不是你的責任，但驗收沒做就是你的責任。重畫 1-2 次很正常。</p>
+                            </div>
+                        </details>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w14-validation-check"
+                        prompt="③ 圖表驗收結果"
+                        scaffold={[
+                            '5 項驗收都通過？☐ 是 / ☐ 否（哪幾項沒過？）',
+                            'AI 畫錯什麼？我重 prompt 幾次才對？',
+                        ]}
+                    />
+
+                    {/* 第⑤步 寫描述 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 第⑤步 · 寫描述（AI 可起草，你逐句檢查改寫）</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            描述層 = 報事實、報數字。AI 可以幫你起草初稿——
+                            <strong>但你要逐句檢查數字對不對、量詞精不精準</strong>，最後用自己的話改寫一次。
+                        </p>
+                    </div>
+                    <details className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
+                        <summary className="cursor-pointer px-4 py-2.5 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2">
+                            <span className="text-[12px] text-[var(--ink-mid)]">
+                                🤖 <strong className="text-[var(--ink)]">AI 描述初稿 prompt</strong>（點開複製）
+                            </span>
+                            <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="border-t border-[var(--border)] p-3">
+                            <PromptBlock text={`接續上一輪。請幫我寫「圖一」的描述層初稿（純報事實，3-5 句）。
+
+【規則】
+1. 只報數字和趨勢，不要寫「因為」「所以」這類因果詞
+2. 量詞要精準：38% 不能說成「絕大多數」
+3. 句尾標明「（如圖一所示）」
+
+我會逐句驗收 + 改寫。`} />
+                        </div>
+                    </details>
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#1E40AF' }}>🔵 描述（藍筆）：AI 起草後你改寫的版本</p>
+                        <ThinkRecord
+                            dataKey="w14-my-description"
+                            prompt="④ 描述（AI 起草後你改寫）"
+                            scaffold={['根據圖一，...', '其中最明顯的是...']}
+                        />
+                    </div>
+
+                    {/* 第⑥步 寫推論（純人工） */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2]">
+                        <p className="text-[14px] font-bold text-[#991B1B] mb-1 flex items-center gap-2">
+                            <ShieldAlert size={16} /> 第⑥步 · 寫推論（純人工 · 不能交給 AI）
+                        </p>
+                        <p className="text-[12px] text-[#7F1D1D] leading-relaxed mb-2">
+                            推論層 = 解釋意義、推測原因——<strong>這是研究的靈魂</strong>。
+                            AI 寫的推論看起來合理，但那不是<strong>你的</strong>研究腦在運作。
+                            自己寫——醜沒關係，下一步可選 AI 戳盲點。
+                        </p>
+                        <div className="bg-white border border-[#FCA5A5] rounded p-2.5 text-[11px] text-[#7F1D1D] leading-relaxed">
+                            <p className="font-bold text-[#991B1B] mb-1">⚖️ 同樣是 AI，描述跟推論待遇不同：</p>
+                            <p>· <strong>描述（第⑤步）</strong>：AI 起草 OK，因為事實有對錯，你改寫即可</p>
+                            <p>· <strong>推論（這步）</strong>：AI 不行，因為「為什麼會這樣」沒有標準答案——你的解釋才是研究的核心，外包等於放棄做研究</p>
+                            <p className="italic mt-1.5">💡 老師抽問會問：「為什麼你推論是 ___？」答不出來 = 你沒做研究。</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#991B1B' }}>🔴 推論（紅筆）：純人工</p>
+                        <ThinkRecord
+                            dataKey="w14-my-inference"
+                            prompt="⑤ 推論（你自己寫，不能讓 AI 代寫）"
+                            scaffold={['這可能代表...', '因為...']}
+                        />
+                    </div>
+
+                    {/* 老師巡視 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">👀 老師巡視會檢查三件事</p>
+                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
+                            <span>1. <strong>有先寫草圖判讀</strong>（用腦袋讀過資料才動手）</span>
+                            <span>2. AI 出的圖通過三鐵規驗收（圖表類型對 + 標題/N/來源齊）</span>
+                            <span>3. <strong>推論是自己寫的</strong>，不是抄 AI（會抽問你「為什麼這樣推」）</span>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            title: '進階·AI 壓力測試（可選）',
+            icon: <Lightbulb size={18} />,
+            content: (
+                <div className="flex flex-col gap-6 prose-zh">
+                    {/* 開場：進階定位 */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
+                        <p className="text-[15px] font-bold text-[var(--accent)] mb-2">🥊 已完成基本要求 · 要不要被 AI 嚴格教練檢一輪</p>
+                        <p className="text-[12px] text-[var(--ink)] leading-relaxed">
+                            Step 4 你已完成圖+描述+推論基本要求。
+                            這一步是<strong>進階訓練</strong>：請 AI 從研究方法老師角度找你忽略的趨勢、警告過度推論——
+                            挖出你自己看不到的盲點。
+                            <strong>用了 AI 一定要做裁奪（不能照單全收），並繳完整對話。</strong>
                         </p>
                     </div>
 
-                    {/* —— 第③步 AI 找漏洞 —— */}
-                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
-                        <p className="text-[14px] font-bold text-[#5B21B6] mb-2 flex items-center gap-2">
-                            🔍 第③步 · 請 AI 找出你忽略的盲點
+                    {/* 跨工具：Prompt 範本庫 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 flex items-center justify-between gap-3">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            💡 想看更進階的 5 法分析 prompt？回 <strong className="text-[var(--ink)]">Prompt 範本庫</strong>（5 法 × Step 1-5 速查，自學用）。
                         </p>
-                        <p className="text-[12px] text-[#4C1D95] leading-relaxed mb-3">
-                            高一學生分析力還在長——AI 可以搭你的鷹架，戳出你<strong>沒看到的角度</strong>。注意：AI 只給線索，判斷由你。
-                        </p>
-                        <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`接續上一輪。
+                        <a
+                            href="/analysis-station"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[12px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
+                        >
+                            📚 開範本庫
+                        </a>
+                    </div>
 
-【我的判讀】（重貼一次）
+                    {/* AI 協作三原則（W14 角色：反思鏡） */}
+                    <p className="text-[11.5px] text-[var(--ink-mid)] italic leading-relaxed -mb-2">
+                        💡 W14 的 AI 角色叫<strong className="text-[var(--ink)]">「反思鏡」</strong>——不論你下方選教學型／驗收型，AI 都是幫你戳「你沒看到的角度」，不是給你標準答案。
+                    </p>
+                    <AICollaborationPrinciples week="14" role="mirror" compact={false} />
+
+                    {/* AI 模式選擇 */}
+                    <AIModePicker week="14" taskName="進階壓力測試" onChange={setW14AiMode} />
+
+                    {/* standalone */}
+                    {w14AiMode === 'standalone' && (
+                        <div className="rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] p-5">
+                            <p className="text-[14px] font-bold text-[#1E40AF] mb-2">🚫 你選擇不做進階壓力測試</p>
+                            <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
+                                完全 OK——Step 4 基本要求已達標。直接到下一步繳交即可（AI-RED 留空不會扣分）。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* teach */}
+                    {w14AiMode === 'teach' && (
+                        <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-5 space-y-3">
+                            <p className="text-[14px] font-bold text-[#166534] flex items-center gap-2">
+                                🎓 教學型 Prompt（AI 教我這份資料還能看出什麼）
+                            </p>
+                            <p className="text-[12px] text-[#166534] leading-relaxed">
+                                如果 Step 4 推論卡關，可以請 Gemini 教你「這份資料還有哪些角度可以看」——
+                                但<strong>不要直接抄它的推論</strong>，看完範例自己回 Step 4 重寫。
+                            </p>
+                            <PromptBlock text={`我有一張圖（已附），描述層我寫了：___
+
+【請教我】
+1. 同一份資料，從研究方法老師角度，還有哪 3 個角度可以推論？
+2. 每個角度給 1 句範例（不超過 15 字），讓我參考但不要寫長篇
+3. 提醒我哪些是「過度推論」的紅線（哪些不能寫）
+
+【不要做】
+- 不要寫完整推論段落
+- 我看完範例會自己回 Step 4 推論欄改寫`} />
+                            <ThinkRecord
+                                dataKey="w14-teach-reflection"
+                                prompt="教學型反思（AI 教完後寫）"
+                                scaffold={[
+                                    'AI 給我哪 3 個角度？',
+                                    '我要採納哪些回 Step 4 改寫推論：',
+                                ]}
+                            />
+                        </div>
+                    )}
+
+                    {/* verify */}
+                    {w14AiMode === 'verify' && (
+                        <>
+                            {/* 第①步 找盲點 */}
+                            <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
+                                <p className="text-[14px] font-bold text-[#5B21B6] mb-2 flex items-center gap-2">
+                                    🔍 第①步 · 請 AI 找出你忽略的盲點
+                                </p>
+                                <p className="text-[12px] text-[#4C1D95] leading-relaxed mb-3">
+                                    高一學生分析力還在長——AI 可以戳出你<strong>沒看到的角度</strong>。注意：AI 只給線索，判斷由你。
+                                </p>
+                                <PromptBlock text={`【我的圖】（附圖或貼資料）
+【我的判讀】
 - 預期趨勢：___
 - 預期最重要的發現：___
 
@@ -580,101 +776,30 @@ ___（貼資料或連結）
 1. 找出我這份資料裡，可能有但我沒注意到的 3 個趨勢／模式
 2. 標出 1-2 個「乍看像趨勢、但其實樣本不足以支持」的點，提醒我不要過度解讀
 
-不要替我寫結論，只給我提示——「也許可以注意 ___」這種句型。`}</pre>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w14-ai-blindspot"
-                        prompt="② AI 找到的盲點 / 我沒注意到的趨勢"
-                        scaffold={[
-                            'AI 指出我可能忽略的趨勢：',
-                            'AI 警告我不要過度解讀的點：',
-                            '我採納哪些、不採納哪些：',
-                        ]}
-                    />
+不要替我寫結論，只給我提示——「也許可以注意 ___」這種句型。`} />
+                            </div>
+                            <ThinkRecord
+                                dataKey="w14-ai-blindspot"
+                                prompt="① AI 找到的盲點 / 我沒注意到的趨勢"
+                                scaffold={[
+                                    'AI 指出我可能忽略的趨勢：',
+                                    'AI 警告我不要過度解讀的點：',
+                                    '我採納哪些、不採納哪些：',
+                                ]}
+                            />
 
-                    {/* —— 第④步 驗收 —— */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#FCD34D] bg-[#FFFBEB]">
-                        <p className="text-[13px] font-bold text-[#92400E] mb-2 flex items-center gap-2">
-                            <ShieldAlert size={14} /> 第④步 · 驗收清單（每項都要對）
-                        </p>
-                        <ul className="text-[11px] text-[#78350F] leading-relaxed space-y-1">
-                            <li>☐ 圖表類型 = 我選的（不是 AI 擅自改的）</li>
-                            <li>☐ 標題在上方，含 N 值</li>
-                            <li>☐ 資料來源在下方</li>
-                            <li>☐ 座標軸沒騙人（沒截斷、比例合理）</li>
-                            <li>☐ AI 對我預期趨勢的判讀我有看懂、有同意 / 不同意的依據</li>
-                        </ul>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w14-validation-check"
-                        prompt="③ 圖表驗收結果"
-                        scaffold={[
-                            '5 項驗收都通過？☐ 是 / ☐ 否（哪幾項沒過？）',
-                            'AI 的判讀我同意嗎？為什麼？',
-                            '修正了哪些細節：',
-                        ]}
-                    />
-
-                    {/* 下一步 */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#BFDBFE] bg-[#EFF6FF]">
-                        <p className="text-[12px] text-[#1E40AF] font-bold leading-relaxed">
-                            ✅ 圖畫好驗收完 → 下一步：<strong>Step 5 圖說寫作</strong>（寫描述/推論 + AI 壓力測試 + 對話繳交）。
-                        </p>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            title: '圖說寫作',
-            icon: <Lightbulb size={18} />,
-            content: (
-                <div className="flex flex-col gap-6 prose-zh">
-                    {/* 開場 */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 圖說寫作 + AI 壓力測試</p>
-                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            圖畫好了，現在用<strong>你自己的話</strong>寫描述（藍筆）+ 推論（紅筆）；寫完讓 AI 壓力測試找漏洞。完整對話也要繳交。
-                        </p>
-                    </div>
-
-                    {/* —— 第⑤步 寫描述＋推論 —— */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">✍️ 第⑤步 · 寫圖說（描述＋推論，這步自己寫）</p>
-                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            根據驗收完的圖，用你<strong>自己的話</strong>寫描述（藍筆）＋推論（紅筆）。AI 圖說不能照抄。
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-[13px] font-bold mb-2" style={{ color: '#1E40AF' }}>🔵 描述（藍筆）：客觀事實</p>
-                        <ThinkRecord
-                            dataKey="w14-my-description"
-                            prompt="根據你的圖表，你看到了什麼？報事實、報數字。"
-                            scaffold={['根據圖一，...', '其中最明顯的是...']}
-                        />
-                    </div>
-                    <div>
-                        <p className="text-[13px] font-bold mb-2" style={{ color: '#991B1B' }}>🔴 推論（紅筆）：主觀見解</p>
-                        <ThinkRecord
-                            dataKey="w14-my-inference"
-                            prompt="這個數據代表什麼？解釋意義、推測原因。"
-                            scaffold={['這可能代表...', '因為...']}
-                        />
-                    </div>
-
-                    {/* —— 第⑥步 AI 壓力測試（推論） —— */}
-                    <details className="p-4 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
-                        <summary className="text-[13px] font-bold text-[#5B21B6] cursor-pointer flex items-center justify-between">
-                            <span>🥊 第⑥步 · AI 推論壓力測試（推論寫完再開）</span>
-                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
-                        </summary>
-                        <div className="mt-3 space-y-3">
-                            <p className="text-[12px] text-[#4C1D95] leading-relaxed">
-                                推論最容易踩兩個雷：
-                                <br />① <strong>過度推論</strong>：你只訪問了 30 個本校學生，卻寫成「全國高中生都這樣想」——超出你的資料實際能說明的範圍。
-                                <br />② <strong>單一原因</strong>：只想到一個解釋就停。例如：學生成績下滑直接寫「因為滑手機太多」，但其實還可能是作業變多、補習太累、家裡發生事情……至少要列出 2-3 個可能。
-                                <br />讓 AI 幫你壓力測試這兩個雷。
-                            </p>
-                            <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`接續上一輪。
+                            {/* 第②步 推論壓力測試 */}
+                            <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF]">
+                                <p className="text-[14px] font-bold text-[#5B21B6] mb-2 flex items-center gap-2">
+                                    🥊 第②步 · AI 推論壓力測試
+                                </p>
+                                <p className="text-[12px] text-[#4C1D95] leading-relaxed mb-3">
+                                    推論最容易踩兩個雷：
+                                    <br />① <strong>過度推論</strong>：你只訪問了 30 個本校學生，卻寫成「全國高中生都這樣想」。
+                                    <br />② <strong>單一原因</strong>：只想到一個解釋就停。要列 2-3 個可能。
+                                    <br />讓 AI 幫你壓力測試這兩個雷——但別直接抄 AI 的修改。
+                                </p>
+                                <PromptBlock text={`接續上一輪。
 
 【我的描述】___（貼）
 【我的推論】___（貼）
@@ -683,47 +808,43 @@ ___（貼資料或連結）
 【請壓力測試】
 1. 我的推論有沒有過度推論？哪些用詞要加「可能」「推測」「在 ___ 範圍內」？
 2. 除了我寫的這個原因，還有哪 2 個合理但我沒想到的解釋？
-3. 我的描述有沒有量詞不精準的地方（38% 寫成「絕大多數」）？
+3. 我的描述有沒有量詞不精準的地方？
 
-只給檢查與建議，不要替我改寫——改寫由我自己來。`}</pre>
-                            <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
-                                💡 AI 給建議後，回到上方推論欄修——你<strong>採納哪些</strong>再自己改，不照抄。
+只給檢查與建議，不要替我改寫——改寫由我自己來。`} />
+                            </div>
+                            <ThinkRecord
+                                dataKey="w14-ai-pressure-test"
+                                prompt="② AI 壓力測試後我做了哪些修正"
+                                scaffold={[
+                                    'AI 指出的問題：',
+                                    '我採納哪些建議：',
+                                    '我修正了什麼（描述／推論的具體用詞）：',
+                                ]}
+                            />
+
+                            <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
+                                <p className="text-[12px] font-bold text-[var(--accent)] mb-2">📝 用 AI 修完，回 Step 4 覆蓋描述/推論欄</p>
+                                <p className="text-[11px] text-[var(--ink-mid)] leading-relaxed">
+                                    若採納 AI 建議，<strong>回 Step 4 覆蓋描述/推論欄位</strong>，匯出時就會是 AI 修飾版。沒覆蓋＝以 Step 4 自寫版為準。
+                                </p>
+                            </div>
+
+                            {/* 完整對話繳交 */}
+                            <AIDialogSubmission week="14" taskName="進階壓力測試對話" required={true} />
+                        </>
+                    )}
+
+                    {!w14AiMode && (
+                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                ☝️ 上方先選一個 AI 使用模式：教學型（推論卡關）／驗收型（找盲點+壓測）／不用（基本要求已達標）。
                             </p>
                         </div>
-                    </details>
-                    <ThinkRecord
-                        dataKey="w14-ai-pressure-test"
-                        prompt="④ AI 壓力測試後我做了哪些修正"
-                        scaffold={[
-                            'AI 指出的問題：',
-                            '我採納哪些建議：',
-                            '我修正了什麼（描述／推論的具體用詞）：',
-                        ]}
-                    />
-
-                    {/* 完整對話繳交 */}
-                    <AIDialogSubmission week="14" taskName="圖表判讀對話" required={true} />
-
-                    {/* 教師巡視提醒 */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)]">
-                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">👀 老師巡視會檢查三件事</p>
-                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
-                            <span>1. 你有<strong>先寫草圖判讀</strong>再開 AI（沒寫的代表沒判讀）</span>
-                            <span>2. 圖表類型選擇是否正確 + 格式三鐵規（標題、N、來源）</span>
-                            <span>3. 描述／推論不是 AI 改寫版，是你<strong>採納後自己改</strong>的</span>
-                        </div>
-                    </div>
-
-                    {/* 下一步 */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#BFDBFE] bg-[#EFF6FF]">
-                        <p className="text-[12px] text-[#1E40AF] font-bold leading-relaxed">
-                            ✅ 圖說寫完、對話繳交完成 → 下一步：<strong>Step 6 回顧繳交</strong>。
-                        </p>
-                    </div>
+                    )}
                 </div>
             ),
         },
-        {
+                {
             title: '回顧繳交',
             icon: <FileText size={18} />,
             content: (
@@ -749,8 +870,20 @@ ___（貼資料或連結）
                         />
                     </div>
 
-                    {/* AIRED 敘事紀錄（W14 必填，因為使用了 AI 畫圖工作坊） */}
-                    <AIREDNarrative week="14" hint="本週用 AI 畫圖：A=Gemini Pro Canvas / I=結構化 prompt / R=AI 畫的圖+找到的盲點 / E=我的判讀 vs AI 的判讀差在哪 / D=採納哪些修正" />
+                    {/* AIRED 敘事紀錄（依進階 AIMode 三分支） */}
+                    {(w14AiMode === 'teach' || w14AiMode === 'verify') ? (
+                        <AIREDNarrative week="14" hint="本週用 AI 進階壓測：A=Gemini Pro / I=找盲點+壓測 prompt / R=AI 找到的盲點+風險 / E=我同意/不同意哪些 / D=採納哪些修正" />
+                    ) : w14AiMode === 'standalone' ? (
+                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-4">
+                            <p className="text-[13px] font-bold text-[var(--ink)] mb-1">🚫 你選擇不做進階壓測 · 不需 AI 反思</p>
+                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                Step 4 基本要求已達標（含 AI 畫圖那種「技術代勞」級用法）。
+                                這格自動略過——反思真正大舉發生在 W15（結論寫作）和 W17（成果發表）。
+                            </p>
+                        </div>
+                    ) : (
+                        <AIREDNarrative week="14" hint="本週若有用 AI 進階檢核推論，記下最關鍵的一次互動" optional={true} />
+                    )}
 
                     {/* 本週結束，你應該要會 — B 標準格式 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
@@ -760,9 +893,9 @@ ___（貼資料或連結）
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
                                                 '為自己的數據選對圖表類型並說清楚理由',
-                                                '寫出符合格式的圖說（圖號／題目／單位／資料來源）',
-                                                '區分「描述」（藍筆）和「推論」（紅筆），避免推論失控',
-                                                '識別三大常見圖表錯誤（誤導比例／座標軸沒從 0 開始放大差距／樣本太少卻畫得很有結論感）',
+                                                '把畫圖技術交給 AI，自己用三鐵規驗收圖表',
+                                                '區分「描述」（AI 起草+人工改）和「推論」（純人工），避免推論失控',
+                                                '若選用 AI 進階壓測：知道過度推論／單一原因兩大雷並做裁奪',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
@@ -814,12 +947,12 @@ ___（貼資料或連結）
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W14"
                 title="讓數據自己說話 · "
                 accentTitle="圖表選擇與圖的說明"
-                subtitle="頂級和牛用塑膠臉盆裝，客人還想吃嗎？選錯圖表，數據就無法說話。今天學會選對盤子、寫好圖說。"
+                subtitle="頂級和牛用塑膠臉盆裝，客人還想吃嗎？選錯圖表，數據就無法說話。今天分工：你選類型／驗收／寫推論，AI 代勞畫圖+描述初稿。想再進階壓測？可選用，不強迫。"
                 chain="資料收齊了——但一堆數字／訪談稿，怎麼讓人看得懂？這週學『讓數據自己說話』：選對圖、寫對說明。"
                 meta={[
-                    { label: '本週任務', value: '四大圖表判斷 + 三鐵規寫圖說' },
+                    { label: '本週任務', value: '4 大圖表判斷 + AI 畫圖+人工驗收 + 自寫推論 + 進階壓測（可選）' },
                     { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '各組實戰圖表 + 藍筆描述紅筆推論' },
+                    { label: '課堂產出', value: '完成圖（含三鐵規驗收）+ 描述+推論（人工為主）' },
                     { label: '下週預告', value: 'W15 四層結論' },
                 ]}
             />

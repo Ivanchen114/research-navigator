@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, Swords } from 'lucide-react';
+import { GraduationCap, Swords, UserCheck } from 'lucide-react';
 
 /**
  * AI 使用模式選擇器（W13/W14/W15 共用）
@@ -39,6 +39,17 @@ const MODES = [
         bg: '#FEF2F2',
         icon: Swords,
     },
+    {
+        id: 'standalone',
+        emoji: '🚫',
+        label: '不用 AI · 全靠自己',
+        sub: '完全合法的選擇',
+        desc: '這次想自己練手 → 不用 AI（要寫一行為什麼選這條）',
+        prompt: 'AI 是輔助不是必修——選不用，但要自覺地選',
+        accent: '#6B7280',
+        bg: '#F9FAFB',
+        icon: UserCheck,
+    },
 ];
 
 const AIModePicker = ({ week, taskName = 'AI 互動', onChange }) => {
@@ -77,7 +88,7 @@ const AIModePicker = ({ week, taskName = 'AI 互動', onChange }) => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {MODES.map((m) => {
                     const Icon = m.icon;
                     const isPicked = mode === m.id;
@@ -116,7 +127,11 @@ const AIModePicker = ({ week, taskName = 'AI 互動', onChange }) => {
                     className="p-3 rounded-[var(--radius-unified)] border-l-4 text-[12px] leading-relaxed"
                     style={{ background: picked.bg, borderLeftColor: picked.accent, color: picked.accent }}
                 >
-                    <strong>已選：{picked.label}</strong>——下方會顯示對應的 prompt 範本。{taskName}結束後，繳交開頭也記得標明「【{picked.id === 'teach' ? '教學型' : '驗收型'}】」。
+                    <strong>已選：{picked.label}</strong>——
+                    {picked.id === 'standalone'
+                        ? '下方不會顯示 AI prompt（你選自己做）。但仍要寫一行 AIRED 紀錄為什麼選不用 AI。'
+                        : `下方會顯示對應的 prompt 範本。${taskName}結束後，繳交開頭也記得標明「【${picked.id === 'teach' ? '教學型' : '驗收型'}】」。`
+                    }
                 </div>
             )}
         </div>

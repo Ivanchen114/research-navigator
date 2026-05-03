@@ -93,23 +93,25 @@ const MODES_INFO = [
     },
 ];
 
-const AICollaborationPrinciples = ({ week = '13', role = 'assistant' }) => {
+const AICollaborationPrinciples = ({ week = '13', role = 'assistant', showRoleCard = true }) => {
     const roleInfo = ROLE_DESC[role] || ROLE_DESC.assistant;
 
     return (
         <div className="flex flex-col gap-3">
-            {/* 角色卡（常駐 · 緊湊版）*/}
-            <div className="rounded-[var(--radius-unified)] border border-[var(--accent)] bg-[#F8F8FB] p-3">
-                <div className="flex items-start gap-2">
-                    <Lightbulb size={14} className="text-[var(--accent)] mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                        <p className="text-[12.5px] font-bold text-[var(--ink)]">
-                            {roleInfo.emoji} 本週 AI：{roleInfo.label}
-                        </p>
-                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed mt-1">{roleInfo.tip}</p>
+            {/* 角色卡（常駐 · 緊湊版）— 若旁邊已有「核心原則卡」可關閉避免重複 */}
+            {showRoleCard && (
+                <div className="rounded-[var(--radius-unified)] border border-[var(--accent)] bg-[#F8F8FB] p-3">
+                    <div className="flex items-start gap-2">
+                        <Lightbulb size={14} className="text-[var(--accent)] mt-0.5 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                            <p className="text-[12.5px] font-bold text-[var(--ink)]">
+                                {roleInfo.emoji} 本週 AI：{roleInfo.label}
+                            </p>
+                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed mt-1">{roleInfo.tip}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* 詳細教學內容（預設摺疊）*/}
             <details className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white overflow-hidden">

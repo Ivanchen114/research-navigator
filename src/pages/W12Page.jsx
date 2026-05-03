@@ -86,12 +86,13 @@ const RUBRIC = [
 ];
 
 /* — 短報卡 5 段（學生 W11 結束課後在 Form 填）— */
+/* 朗讀速率：高中生中速約 200 字/分鐘 ≈ 3.3 字/秒 → 30 秒 ~100 字、60 秒 ~200 字 */
 const REPORT_SECTIONS = [
-    { idx: 1, time: '30 秒', title: '題目 + 動機', desc: '一句話研究題目 + 一句話為什麼想做', limit: '各 50 字' },
-    { idx: 2, time: '30 秒', title: '方法 + 工具', desc: '研究方法 + 工具實體類型（如「Google Form 25 題」）', limit: '80 字' },
-    { idx: 3, time: '60 秒', title: 'Pilot 共識發現', desc: '全組合議的 1-2 個共通工具弱點 + 已修正什麼', limit: '200 字' },
-    { idx: 4, time: '30 秒', title: '目前進度', desc: '計畫書到哪／工具實體做到哪', limit: '80 字' },
-    { idx: 5, time: '30 秒', title: '預期蒐集 + Plan B', desc: '樣本目標／時程／Plan B 一句話', limit: '100 字' },
+    { idx: 1, time: '30 秒', title: '題目 + 動機', desc: '一句話研究題目 + 一句話為什麼想做', limit: '各 50 字（共 ~100 字 ≈ 30 秒）' },
+    { idx: 2, time: '30 秒', title: '方法 + 工具', desc: '研究方法 + 工具實體類型（如「Google Form 25 題」）', limit: '80 字 ≈ 24 秒（留 buffer）' },
+    { idx: 3, time: '60 秒', title: 'Pilot 共識發現', desc: '全組合議的 1-2 個共通工具弱點 + 已修正什麼', limit: '200 字 ≈ 60 秒（最緊湊）' },
+    { idx: 4, time: '30 秒', title: '目前進度', desc: '計畫書到哪／工具實體做到哪', limit: '80 字 ≈ 24 秒' },
+    { idx: 5, time: '30 秒', title: '預期蒐集 + Plan B', desc: '樣本目標／時程／Plan B 一句話', limit: '100 字 ≈ 30 秒（剛好用滿）' },
 ];
 
 /* — 100 min 課堂流程 — */
@@ -243,7 +244,7 @@ const W12Page = () => {
                         <ToolInfoCard
                             icon="✏️"
                             title="③ 同儕回饋 Form（W12 課堂中填，每組 1 分鐘）"
-                            desc="3 題：漏洞勾選（5 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。每位同學要填 12 次（不評自己）。連結到自己班 GC 找。"
+                            desc={'3 題：漏洞勾選（5 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。13 組 → 每位同學填 12 次（不評自己）。連結到自己班 GC 找。📋 30 字「具體建議」三句式：「我發現___ → 建議改成___ → 理由___」。範例：「題 5 跟題 8 在問同個概念 → 建議刪題 8 → 受測者會疑惑」。'}
                         />
                     </div>
                 </div>
@@ -285,7 +286,7 @@ const W12Page = () => {
                         小組 4 人各自跨方法 1 對 1 Pilot、partner 不同、發現各異——「合議」就是把這些攤開找共通模式：
                     </p>
                     <ol className="text-[12.5px] text-[#78350F] leading-[1.85] list-decimal pl-5 space-y-1.5">
-                        <li><strong>攤開</strong>：每人寫下自己 Pilot 最痛的 1 個發現（10 min）</li>
+                        <li><strong>攤開</strong>：每人從 W11 Step 3 自己寫的「最卡的+次卡的」拿出來（10 min）——<strong>4 人合計會有 8 個發現</strong></li>
                         <li><strong>找共識</strong>：哪個發現「不只我這個 partner 卡住、別人 partner 也類似」？這就是工具弱點，不是個人偏差（10 min）</li>
                         <li><strong>寫共識（200 字內）</strong>：「我們組共通弱點是 [X]、證據 [A 同學 B 同學 partner 都卡題 5]、已修正 [改成 ___]」（10 min）</li>
                     </ol>
@@ -298,6 +299,14 @@ const W12Page = () => {
                 <div>
                     <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2 flex items-center gap-2">
                         <Star size={18} className="text-[#EA580C]" /> 評分基準（5 維 × 4 級 = 20 分滿分）
+                    </h3>
+                    <div className="bg-[#FFFBEB] border border-[#FCD34D] rounded-[6px] p-3 mb-3 text-[12px] text-[#78350F] leading-relaxed">
+                        ⚖️ <strong>評分分流：</strong>
+                        <strong className="text-[#92400E]">A 維度</strong>看你 Classroom 上計畫書檔案實際狀態（不只是短報講的）；
+                        <strong className="text-[#92400E]">B-E 維度</strong>主要看你今天的<strong>短報 5 段</strong>表現。
+                        <strong>意思：</strong>就算短報講得不錯，計畫書如果停在第六章雛形，A 還是會低分。
+                    </div>
+                    <h3 className="hidden">
                     </h3>
                     <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
                         老師當場給分當壓力槓桿。<strong>17-20 ★★★★ ／ 13-16 ★★★ ／ 9-12 ★★ ／ 5-8 ★</strong>。分數 ≤ 12 的組 W13 前要找老師談。
@@ -375,7 +384,7 @@ const W12Page = () => {
                     <ThinkRecord
                         dataKey="w12-self-revision"
                         prompt="同儕回饋 + 老師評分後，我們組 W13 前要修的具體項目是？"
-                        defaultTemplate={'要修 1：\n  → 怎麼改：\n  → 期限：\n\n要修 2：\n  → 怎麼改：\n  → 期限：'}
+                        defaultTemplate={'}要修 1：\n  → 怎麼改：\n  → 期限：\n\n要修 2：\n  → 怎麼改：\n  → 期限：'}
                         placeholder="例：要修 1：第 5 題雙重問題（同儕第 8 票漏洞）→ 拆成兩題 → W13 前完成 Form 改版"
                         rows={6}
                     />

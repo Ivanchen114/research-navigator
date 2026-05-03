@@ -470,8 +470,8 @@ export const DataAnalysisStation = () => {
             {/* TOP BAR */}
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
-                    研究方法與專題 / 分析工具 /
-                    <span className="text-[#1a1a2e] font-bold">資料分析站</span>
+                    研究方法與專題 / 自學速查 /
+                    <span className="text-[#1a1a2e] font-bold">Prompt 範本庫</span>
                 </div>
                 <div className="flex items-center gap-3">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">
@@ -487,14 +487,18 @@ export const DataAnalysisStation = () => {
             <div className="max-w-[800px] mb-8">
                 <div className="font-mono text-[11px] font-bold text-[#8888aa] tracking-widest uppercase mb-4 flex items-center gap-2">
                     <Database size={12} />
-                    資料分析站 · 方法指南
+                    Prompt 範本庫 · 自學速查
                 </div>
                 <h1 className="font-serif text-[40px] font-bold leading-[1.2] text-[#1a1a2e] mb-5 tracking-[-0.01em]">
-                    資料蒐集完了，<span className="text-[#2d5be3]">然後呢？</span>
+                    想做<span className="text-[#2d5be3]">進階分析？</span>
                 </h1>
-                <p className="text-[16px] text-[#4a4a6a] leading-relaxed">
-                    先選你的研究方法，從第一步 Prompt 開始——底層邏輯和工具說明在頁面下方。
+                <p className="text-[16px] text-[#4a4a6a] leading-relaxed mb-3">
+                    這裡是 5 法的 Prompt 範本速查（Step 1-5）——課堂主流程不依賴此頁，
+                    若 W13 整理完想做<strong>交叉分析、主題編碼、跨個案比較</strong>等進階分析才會用到。
                 </p>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-[#FFFBEB] border border-[#FCD34D] text-[12px] text-[#92400E]">
+                    💡 <strong>定位：</strong>課後自學速查，不是課堂必修
+                </div>
             </div>
 
             {/* ══════════════════════════════════════════════════════

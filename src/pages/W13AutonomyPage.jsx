@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
 import ThinkRecord from '../components/ui/ThinkRecord';
+import Checklist from '../components/ui/Checklist';
+import PromptBlock from '../components/ui/PromptBlock';
 import StepEngine from '../components/ui/StepEngine';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
@@ -41,6 +43,19 @@ const METHOD_TABLE = [
         targetTable: '一張「題號（欄）× 樣本（列）」的乾淨表',
         steps: '匯出 CSV → 刪無效樣本 → 變項代碼化 → 標 N',
         accent: '#2563EB',
+        example: {
+            topic: '高中生手機使用調查',
+            raw: `時間戳記              姓名      Q1每天用幾小時   Q2主要用途
+2026/4/15 14:23   小明      4-6 小時         娛樂(看影片)
+2026/4/15 14:30   阿美      2-4 小時         社交
+2026/4/15 14:32   小華      6 小時以上       娛樂+社交
+2026/4/15 14:40   阿翔      （沒填）         （沒填）  ← 無效樣本`,
+            table: `樣本編號  性別  年級   Q1代碼    Q2_娛樂  Q2_社交  Q2_學習
+S001     M    高一    3(4-6h)   1        0        0
+S002     F    高二    2(2-4h)   0        1        0
+S003     F    高一    4(6h+)    1        1        0
+N=85（已扣除 4 份無效）`,
+        },
     },
     {
         id: 'interview',
@@ -51,6 +66,22 @@ const METHOD_TABLE = [
         targetTable: '主題編碼表「議題（欄）× 受訪者（列）× 出現次數」',
         steps: '逐字稿 → 主題編碼 → 統計各議題出現頻次',
         accent: '#7C3AED',
+        example: {
+            topic: '高中生補習動機',
+            raw: `受訪者 A（03:42）：「我媽都說補習是為我好，但我
+其實覺得是同學都在補，所以我也不能不補……」
+
+受訪者 B（07:15）：「補習老實講就是一種習慣啦，從
+國中就這樣，我也沒想過為什麼。」
+
+受訪者 C（02:30）：「我自己想補的，因為數學真的很爛
+不補考不好。」`,
+            table: `受訪者  家長期待  同儕壓力  習慣性  自我需求
+A       2 次     1 次     0       0
+B       0       0        2       0
+C       1       0        1       1
+N=6 位受訪者`,
+        },
     },
     {
         id: 'experiment',
@@ -61,26 +92,71 @@ const METHOD_TABLE = [
         targetTable: '「組別 × 變項 × 數值」結果表（前測/後測）',
         steps: '紀錄抽出 → 結構化 → 計算組別均值/差值',
         accent: '#059669',
+        example: {
+            topic: '背景音樂對記憶測驗的影響',
+            raw: `2026/4/15 第一節（手寫紀錄）
+小明（音樂組）前測 75，後測 82
+小華（安靜組）前測 80，後測 85
+小美（音樂組）前測 65，後測 70
+（散頁手寫，數字部分潦草）`,
+            table: `受試者  組別      前測  後測  差值
+P01    音樂組    75    82    +7
+P02    安靜組    80    85    +5
+P03    音樂組    65    70    +5
+...
+組別均值差：音樂 +6.2 / 安靜 +4.8
+N=24（音樂 12 + 安靜 12）`,
+        },
     },
     {
         id: 'observation',
         emoji: '👀',
         name: '觀察法',
         rawSrc: '04_觀察紀錄表.xlsx（多份）',
-        rawState: '✅ 半結構化',
+        rawState: '⚠️ 半結構化（還要彙整）',
         targetTable: '彙整成「行為類別 × 次數/時間」總表',
         steps: '多份紀錄 → 行為類別合併 → 加總頻次',
         accent: '#D97706',
+        example: {
+            topic: '高一自習課專注行為',
+            raw: `2026/4/15 第六節（第一次觀察）
+13:30 - 小組 A：書寫
+13:35 - 小組 A：滑手機
+13:40 - 小組 A：組內聊天
+13:45 - 小組 A：書寫
+（共 4 節，30 次取樣 × 4）`,
+            table: `行為類別     第一節  第二節  第三節  第四節  總次數
+書寫專注     8       5       6       4       23 (19%)
+滑手機       12      14      11      13      50 (42%)
+組內聊天     6       8       9       7       30 (25%)
+其他         4       3       4       6       17 (14%)
+N=4 節 × 30 次取樣 = 120 筆`,
+        },
     },
     {
         id: 'literature',
         emoji: '📚',
         name: '文獻分析法',
         rawSrc: '05a-d 編碼表.xlsx',
-        rawState: '✅ 半結構化',
+        rawState: '⚠️ 半結構化（還要彙整）',
         targetTable: '彙整成可視化用表（時間軸 / 立場分布 / 詞頻）',
         steps: '多份編碼 → 主題彙整 → 製作分析欄位',
         accent: '#DC2626',
+        example: {
+            topic: 'YouTuber 影片標題吸睛策略分析',
+            raw: `05a 編碼表（單篇）
+標題：「我吃了 100 個漢堡會怎樣？！瘋狂挑戰！」
+作者：A 頻道
+日期：2026/3/15
+觀看數：120 萬`,
+            table: `標題編號  作者     數字  情緒詞   問句  驚嘆號  觀看(萬)
+T001     A 頻道   有    瘋狂     有    !!     120
+T002     B 頻道   無    驚人     無    無      45
+T003     A 頻道   有    無       有    !       89
+...
+含數字+情緒詞+問句的標題平均觀看數=A 頻道風格
+N=20 部影片`,
+        },
     },
 ];
 
@@ -224,12 +300,12 @@ const STATUS_OPTIONS = [
     {
         id: 'healthy',
         label: '🟢 表已成型',
-        title: '結構清楚 · 可直接貼給 AI',
+        title: '結構清楚 · 可進入下一階段',
         accent: 'var(--success)',
         bg: '#F0FDF4',
         border: '#86EFAC',
         icon: Coffee,
-        guide: '今天課程結尾把「分析表連結」貼上，再寫一行「我下週想叫 Gemini 畫的第一張圖是什麼」。下週 W14 開機速度會比別組快一截。',
+        guide: '今天課程結尾把「原始資料 + 整理後分析表」雙繳到 Classroom，再到 Step 5 寫一行「我下週想怎麼呈現這份資料」。下週 W14 開機速度會比別組快一截。',
     },
     {
         id: 'warning',
@@ -239,7 +315,7 @@ const STATUS_OPTIONS = [
         bg: '#FFFBEB',
         border: '#FCD34D',
         icon: AlertTriangle,
-        guide: '今天剩下時間優先補完。卡在哪寫進「我的資料現況」欄位，下週 W14 進來前老師會挑黃燈組先看。',
+        guide: '今天剩下時間優先補完。卡在哪寫進「我手上的原始資料現在是什麼狀態」欄位，下週 W14 進來前老師會挑黃燈組先看。',
     },
     {
         id: 'falling',
@@ -255,16 +331,14 @@ const STATUS_OPTIONS = [
 
 /* ExportButton 欄位 */
 const EXPORT_FIELDS = [
-    { key: 'w13-method', label: '我的研究方法', question: '問卷／訪談／實驗／觀察／文獻分析' },
     { key: 'w13-data-state', label: '我的原始資料現況', question: '我手上原本的資料是什麼樣子？來自哪裡？' },
     { key: 'w13-table-structure', label: '我的分析表結構（必做）', question: '欄位名稱列表 + 列數 + N 值 + 編碼類別（如果是訪談/觀察/文獻）' },
-    { key: 'w13-route-choice', label: '我選的整理路線', question: '純人工 or AI 輔助？為什麼？' },
-    { key: 'w13-ai-validation', label: 'AI 輔助驗收紀錄（路線 B 必填）', question: '我做了哪些驗收？發現 AI 哪裡跑偏 / 幻覺？' },
-    { key: 'w13-ai-dialog-submission', label: 'AI 完整對話繳交方式（路線 B 必填）', question: '我用哪種方式繳交完整對話？（A 私人註解 / B 文件上傳並貼連結）' },
-    { key: 'w13-table-link', label: '分析表連結（必繳）', question: '我的 Google Sheet（或 Excel）公開／可閱讀連結' },
+    { key: 'w13-ai-validation', label: 'AI 輔助驗收紀錄（用了 AI 必填）', question: '我做了哪些驗收？發現 AI 哪裡跑偏 / 幻覺？' },
+    { key: 'w13-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: '我用哪種方式繳交完整對話？（A 私人註解 / B 文件上傳並貼連結）' },
+    { key: 'w13-classroom-submit', label: 'Classroom 繳交檢核', question: '已勾選的繳交項目' },
     { key: 'w13-progress-status', label: '整理進度自評', question: '🟢 已成型／🟡 半成品／🔴 還在掙扎' },
-    { key: 'w13-w14-question', label: 'W14 第一張圖', question: '下週我要請 Gemini 幫我畫的第一張圖是什麼？想看什麼變項？' },
-    { key: 'w13-aired-record', label: 'AI-RED 敘事紀錄（路線 B 必填）', question: '本週用 AI 整理資料的最重要互動（A-I-R-E-D 五要素）' },
+    { key: 'w13-w14-question', label: 'W14 資料呈現規劃', question: '下週我想怎麼呈現這份資料？（圖／表／摘要／混合）' },
+    { key: 'w13-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 整理資料的最重要互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -397,23 +471,29 @@ const W13AutonomyPage = () => {
 
     const steps = [
         {
-            title: '認識資料 + AI 真相',
+            title: '認識資料',
             icon: <Database size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
-                    {/* 核心原則 */}
-                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
-                        <p className="text-[15px] font-bold text-[var(--accent)] mb-2">🧠 核心原則：腦袋先有架構，AI 才幫得上忙</p>
-                        <p className="text-[12px] text-[var(--ink)] leading-relaxed">
-                            <strong>你是研究者，AI 是助理</strong>。今天的任務是把原始資料變成可分析的表——
-                            這件事「<strong>結構怎麼設</strong>」必須你決定（這就是你的研究本身）；「<strong>內容怎麼填</strong>」可以選擇人工或 AI 輔助。
-                            如果 AI 連結構都替你想，你做的就不是研究，是驗收 AI 做的研究。
+                    {/* 開場：純觀念，先不談 AI */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[15px] font-bold text-[var(--ink)] mb-2">📦 任務：原始資料 → 可分析的表</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            W11-W12 你蒐集到一堆原始資料（問卷回應／逐字稿／實驗紀錄／觀察表／編碼表）。
+                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、N 值明確的乾淨表，下週 W14 才畫得了圖。
+                            先看看 5 法的對照，找到自己這組對應的轉換路徑。
                         </p>
                     </div>
 
                     {/* 5 法對照表 */}
                     <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📊 5 種方法 · 原始資料 → 分析表 對照</p>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📊 5 種方法 · 原始資料 → 分析表 對照</p>
+                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            <strong>怎麼讀標籤？</strong>
+                            「<span className="font-mono text-[#DC2626]">❌ 完全沒整理</span>」= 還是錄音／手寫狀態；
+                            「<span className="font-mono text-[#D97706]">⚠️ 還沒整理</span>」= 數位但沒結構；
+                            「<span className="font-mono text-[#D97706]">⚠️ 半結構化（還要彙整）</span>」= 已有單份結構但<strong>多份還沒合在一起</strong>，<strong className="text-[var(--accent)]">還是要做 Step 2 彙整</strong>，不是「不用做」。
+                        </p>
                         <div className="grid grid-cols-1 gap-3">
                             {METHOD_TABLE.map((m) => (
                                 <div
@@ -443,64 +523,39 @@ const W13AutonomyPage = () => {
                                             <p className="text-[var(--ink-mid)] leading-snug">{m.steps}</p>
                                         </div>
                                     </div>
+                                    {m.example && (
+                                        <details className="border-t border-[var(--border)]">
+                                            <summary className="cursor-pointer px-4 py-2 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2 text-[12px]">
+                                                <span className="font-bold" style={{ color: m.accent }}>📋 看範例：{m.example.topic}</span>
+                                                <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                                            </summary>
+                                            <div className="border-t border-[var(--border)] px-4 py-3 bg-[#FAFAF9] grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                <div>
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#991B1B' }}>
+                                                        <span className="inline-block w-2 h-2 rounded-full bg-[#FCA5A5]"></span>
+                                                        ❌ 原始（雜亂、無法分析）
+                                                    </p>
+                                                    <pre className="text-[10.5px] text-[var(--ink-mid)] bg-white border border-[var(--border)] rounded p-2 overflow-x-auto whitespace-pre leading-relaxed font-mono">{m.example.raw}</pre>
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#166534' }}>
+                                                        <span className="inline-block w-2 h-2 rounded-full bg-[#86EFAC]"></span>
+                                                        ✅ 整理後（可分析的表）
+                                                    </p>
+                                                    <pre className="text-[10.5px] text-[var(--ink)] bg-white border border-[var(--border)] rounded p-2 overflow-x-auto whitespace-pre leading-relaxed font-mono">{m.example.table}</pre>
+                                                </div>
+                                            </div>
+                                        </details>
+                                    )}
                                 </div>
                             ))}
                         </div>
                     </div>
-
-                    {/* AI 能 vs 不能 */}
-                    <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">🤖 AI 能幫你什麼？不能幫什麼？</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-4">
-                                <p className="text-[12px] font-bold text-[#166534] mb-2">✅ AI 可以幫</p>
-                                <ul className="text-[11px] text-[#166534] leading-relaxed space-y-1">
-                                    {AI_CAN_DO.map((s, i) => (<li key={i}>· {s}</li>))}
-                                </ul>
-                            </div>
-                            <div className="rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2] p-4">
-                                <p className="text-[12px] font-bold text-[#991B1B] mb-2">❌ AI 不能替你做</p>
-                                <ul className="text-[11px] text-[#991B1B] leading-relaxed space-y-1">
-                                    {AI_CANNOT_DO.map((s, i) => (<li key={i}>· {s}</li>))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* AI 三大風險 */}
-                    <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3 flex items-center gap-2">
-                            <ShieldAlert size={16} className="text-[#DC2626]" />
-                            ⚠️ 用 AI 整理資料的三大風險（每個學生都要懂）
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            {AI_RISKS.map((r, i) => (
-                                <div key={i} className="rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB] p-4">
-                                    <p className="text-[14px] font-bold text-[#92400E] mb-2">{r.emoji} {r.title}</p>
-                                    <p className="text-[11px] text-[#78350F] leading-relaxed mb-2">{r.body}</p>
-                                    <p className="text-[11px] text-[#92400E] leading-relaxed border-t border-[#FCD34D] pt-2">
-                                        <strong>對策：</strong>{r.safeguard}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                        <p className="text-[11px] text-[var(--ink-light)] italic mt-3 leading-relaxed">
-                            💡 用了 AI 一定要跑 AI-RED 紀錄（A=工具、I=指令、R=回覆、E=評價、D=決策），下方繳交區會強制要求填。
-                        </p>
-                    </div>
-
-                    {/* AI 協作三原則 + 對話四步驟（W13/14/15 共用） */}
-                    <AICollaborationPrinciples week="13" role="assistant" />
 
                     {/* 自我定位 */}
                     <ThinkRecord
-                        dataKey="w13-method"
-                        prompt="① 我的研究方法是？（單選）"
-                        scaffold={['問卷法 / 訪談法 / 實驗法 / 觀察法 / 文獻分析法']}
-                    />
-                    <ThinkRecord
                         dataKey="w13-data-state"
-                        prompt="② 我手上的原始資料現在是什麼狀態？"
+                        prompt="① 我手上的原始資料現在是什麼狀態？"
                         scaffold={[
                             '我的原始資料來源：（Google Forms / 逐字稿 / 04 紀錄表…）',
                             '目前數量：（N=__；已收齊 / 還缺 __）',
@@ -511,271 +566,72 @@ const W13AutonomyPage = () => {
             ),
         },
         {
-            title: '定義分析架構（必做）',
-            icon: <Brain size={18} />,
-            content: (
-                <div className="flex flex-col gap-6 prose-zh">
-                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2]">
-                        <p className="text-[14px] font-bold text-[#991B1B] mb-1 flex items-center gap-2">
-                            <ShieldAlert size={16} /> 這一步絕對自己做 · 不能外包給 AI
-                        </p>
-                        <p className="text-[12px] text-[#7F1D1D] leading-relaxed">
-                            <strong>分析表的「結構」=你的研究的概念框架</strong>。欄位定錯，後面整理再漂亮也是廢的。
-                            訪談、文獻組更要小心：你定的「主題編碼類別」就是你的研究本身——AI 替你定，你研究就被掏空。
-                        </p>
-                    </div>
-
-                    {/* 三個範本（建表組） */}
-                    <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📋 路徑 A · 從零建分析表（問卷／訪談／實驗組）</p>
-                        <div className="grid grid-cols-1 gap-3">
-                            {TABLE_TEMPLATES.map((t) => (
-                                <details key={t.id} className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
-                                    <summary className="px-4 py-3 cursor-pointer flex items-center gap-2 hover:bg-[var(--paper-warm)] transition-colors">
-                                        <span className="text-[16px]">{t.emoji}</span>
-                                        <span className="text-[13px] font-bold text-[var(--ink)]">{t.name}</span>
-                                        <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼ 點開看結構</span>
-                                    </summary>
-                                    <div className="border-t border-[var(--border)] p-4 bg-[#FAFAF9]">
-                                        <table className="w-full text-[12px]">
-                                            <thead>
-                                                <tr className="border-b border-[var(--border)]">
-                                                    <th className="text-left py-2 px-2 font-mono text-[10px] text-[var(--ink-light)]">欄位位置</th>
-                                                    <th className="text-left py-2 px-2 font-mono text-[10px] text-[var(--ink-light)]">內容</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {t.rows.map((r, i) => (
-                                                    <tr key={i} className="border-b border-[var(--border)]">
-                                                        <td className="py-2 px-2 font-mono text-[var(--ink)]">{r.col}</td>
-                                                        <td className="py-2 px-2 text-[var(--ink-mid)]">{r.desc}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                        <p className="mt-3 text-[11px] text-[var(--ink-mid)] italic leading-relaxed">
-                                            💡 {t.tip}
-                                        </p>
-                                    </div>
-                                </details>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 彙整教學（觀察 / 文獻組） */}
-                    <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">🔧 路徑 B · 彙整 xlsx 工具（觀察／文獻組）</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {CONSOLIDATE_GUIDE.map((g) => (
-                                <div key={g.id} className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white overflow-hidden">
-                                    <div className="px-4 py-2 flex items-center gap-2 bg-[var(--paper-warm)] border-b border-[var(--border)]">
-                                        <span className="text-[16px]">{g.emoji}</span>
-                                        <span className="text-[13px] font-bold text-[var(--ink)]">{g.name}</span>
-                                    </div>
-                                    <ol className="px-5 py-3 list-decimal text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
-                                        {g.steps.map((s, i) => (
-                                            <li key={i}>{s}</li>
-                                        ))}
-                                    </ol>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 表結構必做（不能外包） */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[#BFDBFE] bg-[#EFF6FF]">
-                        <p className="text-[12px] text-[#1E40AF] font-bold mb-2">📝 寫下你的分析表結構（這步必須自己做）</p>
-                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-2">
-                            打開 Google Sheets，依範本／彙整步驟，先把<strong>欄位名稱</strong>列出來。
-                            訪談組、觀察組、文獻組必須在下方額外寫出「編碼類別 / 行為類別 / 分析維度」清單——這就是你研究的概念框架。
-                        </p>
-                    </div>
-
-                    <ThinkRecord
-                        dataKey="w13-table-structure"
-                        prompt="③ 我的分析表結構（欄位＋編碼類別）"
-                        scaffold={[
-                            '欄位有：（列出 5-10 個欄位名稱，對應研究問題）',
-                            '訪談組 / 觀察組 / 文獻組額外寫：編碼類別 / 行為類別 / 分析維度（5-8 個）',
-                            'N 值（樣本數）：__',
-                        ]}
-                    />
-                </div>
-            ),
-        },
-        {
-            title: '選路線 + 動手整理',
+            title: '動手整理',
             icon: <Route size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🛣️ 你決定整理路線</p>
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🧑 純人工整理 · 大家先動手做一遍</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            結構定好後，<strong>內容怎麼填</strong>是你的選擇——純人工或 AI 輔助。
-                            兩條路線都可以做出好的分析表，差別是時間成本與你想學什麼。
+                            結構定好了，現在依結構逐筆把資料填進去。<strong>不用急著用 AI</strong>——
+                            人工整理是研究的基本功，先親手做一輪你才知道資料長什麼樣子。
+                            想試 AI 輔助？下一步「補充·AI 輔助」會教你怎麼用，<strong>且不一定要用</strong>。
                         </p>
                     </div>
 
-                    {/* 路線選擇兩按鈕 */}
-                    <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">⏱️ 選一條路線</p>
-                        <RouteSelector value={route} onChange={handleRoute} />
+                    {/* 純人工執行步驟 */}
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] p-5">
+                        <p className="text-[14px] font-bold text-[#1E40AF] mb-3">📋 動手整理執行步驟</p>
+                        <div className="space-y-3 text-[12px] text-[#1E3A8A] leading-relaxed">
+                            <div>
+                                <p className="font-bold mb-1">逐步操作（通用）：</p>
+                                <ol className="list-decimal pl-5 space-y-1">
+                                    <li>打開你的 Google Sheet（已建好欄位 header）</li>
+                                    <li>依結構逐筆填入</li>
+                                    <li>每填 10 筆做一次抽檢（避免疲勞錯誤）</li>
+                                    <li>檢查 N 值是否標清楚</li>
+                                </ol>
+                            </div>
+                            <details className="mt-2 rounded border border-[#BFDBFE] bg-white">
+                                <summary className="cursor-pointer px-3 py-2 hover:bg-[#EFF6FF] flex items-center gap-2">
+                                    <span className="text-[12px] font-bold text-[#1E40AF]">📋 看你這組的具體操作（5 法分流 · 點開）</span>
+                                    <span className="ml-auto text-[10px] font-mono text-[#1E40AF]">▼</span>
+                                </summary>
+                                <div className="border-t border-[#BFDBFE] p-3 grid grid-cols-1 gap-2 text-[11.5px] text-[#1E3A8A] leading-relaxed">
+                                    <div>
+                                        <p className="font-bold mb-0.5">📋 問卷組</p>
+                                        <p>下載 Google Forms CSV → 貼進 Sheet → <strong>第一輪先刪空白／未完整作答的列</strong>（這就是「無效樣本」）→ 變項代碼化（例：「非常同意/同意/普通/不同意/非常不同意」改成 5/4/3/2/1）→ 標 N。</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold mb-0.5">🎤 訪談組（最花時間，安排給課後）</p>
+                                        <p>開新 Sheet 建欄：受訪者代號 / 主題 1 / 主題 2 / 主題 3...（從研究問題反推 5-8 個主題）→ <strong>邊讀逐字稿，遇到主題出現就在對應格 +1</strong>，並把該段話的「行號或時間戳」記在備註欄 → 全篇讀完一個受訪者再換下一個。</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold mb-0.5">🧪 實驗組</p>
+                                        <p>從紀錄表抽出每位受試者的：編號 / 組別 / 前測值 / 後測值 → 算<strong>差值（後 - 前）</strong>→ 計算各組均值差 → <strong>確認實驗組與對照組 N 數一致</strong>（不一致 = 對照組無效）。</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold mb-0.5">👀 觀察組</p>
+                                        <p>把多份觀察紀錄表攤開 → <strong>統一行為類別命名</strong>（「滑手機」「玩手機」要合併還是拆開？先決定）→ 新建總表「行為類別 × 觀察時段」逐格加總頻次。</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold mb-0.5">📚 文獻組</p>
+                                        <p>把 05a-d 編碼表單篇彙整 → 依研究問題決定彙整維度（時間軸／立場／詞頻）→ 新建分析表「分析維度（欄）× 文獻篇（列）」逐格填值 → 標 N（總文獻篇數）。</p>
+                                    </div>
+                                </div>
+                            </details>
+                            <div className="hidden">
+                            </div>
+                            <div className="border-t border-[#BFDBFE] pt-3">
+                                <p className="font-bold mb-1">老師巡視重點：</p>
+                                <ul className="list-disc pl-5 space-y-1">
+                                    <li>欄位是否對應研究問題</li>
+                                    <li>編碼類別是否互斥（不會一筆資料同時屬於兩類）</li>
+                                    <li>是否有不知道怎麼編的「灰色資料」（這需要老師討論）</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-
-                    {/* 路線 A 指引（純人工） */}
-                    {route === 'manual' && (
-                        <div className="rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] p-5">
-                            <p className="text-[14px] font-bold text-[#1E40AF] mb-3">🧑 路線 A · 純人工整理指引</p>
-                            <div className="space-y-3 text-[12px] text-[#1E3A8A] leading-relaxed">
-                                <div>
-                                    <p className="font-bold mb-1">執行步驟：</p>
-                                    <ol className="list-decimal pl-5 space-y-1">
-                                        <li>打開你的 Google Sheet（已建好欄位 header）</li>
-                                        <li>依結構逐筆填入（訪談組：邊讀逐字稿邊編碼）</li>
-                                        <li>每填 10 筆做一次抽檢（避免疲勞錯誤）</li>
-                                        <li>檢查 N 值是否標清楚</li>
-                                    </ol>
-                                </div>
-                                <div className="border-t border-[#BFDBFE] pt-3">
-                                    <p className="font-bold mb-1">老師巡視重點：</p>
-                                    <ul className="list-disc pl-5 space-y-1">
-                                        <li>欄位是否對應研究問題</li>
-                                        <li>編碼類別是否互斥（不會一筆資料同時屬於兩類）</li>
-                                        <li>是否有不知道怎麼編的「灰色資料」（這需要老師討論）</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 路線 B 工作坊（AI 輔助） */}
-                    {route === 'ai-assist' && (
-                        <div className="rounded-[var(--radius-unified)] border-2 border-[#DDD6FE] bg-[#F5F3FF] p-5 space-y-4">
-                            <p className="text-[14px] font-bold text-[#5B21B6]">🤖 路線 B · AI 輔助整理工作坊</p>
-
-                            {/* AI 模式選擇 */}
-                            <AIModePicker week="13" taskName="資料整理" onChange={setAiMode} />
-
-                            {/* 教學型：完全不會 → AI 給範例 */}
-                            {aiMode === 'teach' && (
-                                <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-white p-4">
-                                    <p className="text-[13px] font-bold text-[#166534] mb-2">🎓 教學型 Prompt（從零到一）</p>
-                                    <p className="text-[11px] text-[#166534] leading-relaxed mb-3">
-                                        貼給 Gemini Pro（思考模式）。記得 AI 給範例後，<strong>你要自己改寫一次</strong>，不要只複製。
-                                    </p>
-                                    <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我有 N=___ 份[問卷／訪談／實驗／觀察／文獻]研究蒐集到的原始資料，
-但我完全不知道怎麼整理成「可分析的表」。
-
-我的研究問題是：___
-
-【請你做】
-1. 教我「分析表」應該長什麼樣子（給 1 個極簡範例，不超過 10 行）
-2. 列出我這個方法該有的 5-6 個關鍵欄位（含說明）
-3. 給我可以照著做的步驟（3-5 步）
-
-【不要做】
-- 不要替我做完整張表
-- 不要直接給我「最終版」答案
-- 我看完範例後會自己照著做一遍`}</pre>
-                                    <p className="text-[11px] text-[#166534] italic mt-2 leading-relaxed">
-                                        💡 對話來回後：把 AI 範例「<strong>用自己的話改寫</strong>」一次，證明你懂了。不能直接抄。
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* 驗收型：有初版 → AI 找漏洞 */}
-                            {aiMode === 'verify' && (
-                                <div className="rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-white p-4">
-                                    <p className="text-[13px] font-bold text-[#991B1B] mb-2">🥊 驗收型 Prompt（從 1 到 100）</p>
-                                    <p className="text-[11px] text-[#991B1B] leading-relaxed mb-3">
-                                        你已經做了一張表（或結構），請 AI 從研究方法老師角度<strong>壓力測試</strong>。
-                                    </p>
-                                    <pre className="bg-[#0F172A] text-[#E2E8F0] text-[11.5px] leading-[1.7] p-3 rounded-[6px] whitespace-pre-wrap font-mono overflow-x-auto">{`我做好了一張分析表，請你幫我把資料填進去 / 檢查結構。
-
-【任務】
-依我提供的「分析表結構」與「編碼規則」，把原始資料逐筆填入。
-不要自行新增類別、不要替我重新定義變項。
-遇到不確定的資料，標 ❓ 並列出疑問。
-
-【分析表結構】
-欄位：___（貼你的欄位清單）
-編碼類別：___（如果有）
-N 值：___
-
-【原始資料】
-___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
-
-【輸出格式】
-1. 完成的分析表（CSV 或 Markdown 表）
-2. ❓ 區：你不確定的資料 + 你的疑問
-3. ⚠️ 區：你發現的可能問題（重複、缺漏、不一致）
-
-請嚴格依照我的編碼規則，不要自行擴充。`}</pre>
-                                </div>
-                            )}
-
-                            {!aiMode && (
-                                <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
-                                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                        ☝️ 上方先選一個 AI 使用模式，這裡會顯示對應的 prompt 範本。
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* 強制驗收清單 */}
-                            <div className="bg-white rounded-[var(--radius-unified)] border border-[#DDD6FE] p-4">
-                                <p className="text-[12px] font-bold text-[#5B21B6] mb-2 flex items-center gap-2">
-                                    <ShieldAlert size={14} /> 強制驗收清單（不做＝賭運氣）
-                                </p>
-                                <ul className="text-[11px] text-[#4C1D95] leading-relaxed space-y-1">
-                                    <li>☐ 抽前 5 筆對照原始資料，確認 AI 沒有幻覺（沒亂加東西）</li>
-                                    <li>☐ 抽中段 5 筆，確認 AI 沒有跑偏（編碼類別跟我定義的一致）</li>
-                                    <li>☐ AI 標 ❓ 的資料我自己處理，不直接讓 AI 決定</li>
-                                    <li>☐ N 值跟我原本算的一致</li>
-                                </ul>
-                            </div>
-
-                            {/* 訪談 / 文獻組額外門檻 */}
-                            <div className="bg-[#FEF2F2] rounded-[var(--radius-unified)] border border-[#FCA5A5] p-4">
-                                <p className="text-[12px] font-bold text-[#991B1B] mb-2 flex items-center gap-2">
-                                    <ShieldAlert size={14} /> 訪談組／文獻組 · 額外驗收門檻（非常重要）
-                                </p>
-                                <p className="text-[11px] text-[#7F1D1D] leading-relaxed mb-2">
-                                    這兩組的編碼<strong>就是研究本身</strong>。AI 全做完，你不抽樣比對，等於放棄判斷。
-                                </p>
-                                <ul className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-1">
-                                    <li>☐ 隨機抽 30% 樣本，<strong>我自己編碼一次</strong></li>
-                                    <li>☐ 跟 AI 編碼結果比對</li>
-                                    <li>☐ 差異率 &gt;20%：重新定義類別 + 重編一輪</li>
-                                    <li>☐ 把差異最大的 2-3 筆寫進「AI 驗收紀錄」</li>
-                                </ul>
-                            </div>
-
-                            {/* AI 驗收紀錄 */}
-                            <ThinkRecord
-                                dataKey="w13-ai-validation"
-                                prompt="④ AI 輔助驗收紀錄（路線 B 必填）"
-                                scaffold={[
-                                    '我抽了哪幾筆驗收：（前 5 / 中 5 / 抽 30%）',
-                                    '我發現 AI 哪裡跑偏 / 幻覺：',
-                                    '我做了什麼修正：',
-                                ]}
-                            />
-
-                            {/* 完整對話繳交（共用元件） */}
-                            <AIDialogSubmission week="13" taskName="資料整理對話" required={true} />
-                        </div>
-                    )}
-
-                    {/* 路線選擇 ThinkRecord */}
-                    <ThinkRecord
-                        dataKey="w13-route-choice"
-                        prompt="⑤ 我選的整理路線 + 為什麼"
-                        scaffold={[
-                            '我選：純人工 / AI 輔助',
-                            '原因：（資料量／我的方法／我想練什麼…）',
-                        ]}
-                    />
 
                     {/* 進度自評 */}
                     <div>
@@ -801,45 +657,293 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
             ),
         },
         {
+            title: '補充·AI 輔助（可選）',
+            icon: <Bot size={18} />,
+            content: (
+                <div className="flex flex-col gap-6 prose-zh">
+                    {/* 核心原則（一句話帶過開場 + 任務定位） */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
+                        <p className="text-[15px] font-bold text-[var(--accent)] mb-2">🧠 核心原則：腦袋先有架構，AI 才幫得上忙</p>
+                        <p className="text-[12px] text-[var(--ink)] leading-relaxed">
+                            純人工整理就夠完成本週任務；想試 AI 也行——但記住：
+                            <strong>「結構怎麼設」由你決定（已在 Step 2 寫好）；「內容怎麼填」才可以交給 AI。</strong>
+                            用了 AI 一定要做驗收，並繳完整對話。
+                        </p>
+                    </div>
+
+                    {/* AI 能/不能 + 三風險 收合（需要時點開） */}
+                    <details className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
+                        <summary className="cursor-pointer px-5 py-3 flex items-center justify-between hover:bg-[var(--paper-warm)] transition-colors">
+                            <span className="text-[13px] font-bold text-[var(--ink)] flex items-center gap-2">
+                                <ShieldAlert size={14} className="text-[#DC2626]" />
+                                📋 AI 風險速查 · AI 能/不能做什麼 + 三大風險（點開展開）
+                            </span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                        </summary>
+                        <div className="px-5 py-4 border-t border-[var(--border)] flex flex-col gap-4">
+                            {/* AI 能 vs 不能 */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-4">
+                                    <p className="text-[12px] font-bold text-[#166534] mb-2">✅ AI 可以幫</p>
+                                    <ul className="text-[11px] text-[#166534] leading-relaxed space-y-1">
+                                        {AI_CAN_DO.map((s, i) => (<li key={i}>· {s}</li>))}
+                                    </ul>
+                                </div>
+                                <div className="rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2] p-4">
+                                    <p className="text-[12px] font-bold text-[#991B1B] mb-2">❌ AI 不能替你做</p>
+                                    <ul className="text-[11px] text-[#991B1B] leading-relaxed space-y-1">
+                                        {AI_CANNOT_DO.map((s, i) => (<li key={i}>· {s}</li>))}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            {/* AI 三大風險 */}
+                            <div>
+                                <p className="text-[12px] font-bold text-[var(--ink)] mb-2">⚠️ 三大風險</p>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    {AI_RISKS.map((r, i) => (
+                                        <div key={i} className="rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB] p-3">
+                                            <p className="text-[13px] font-bold text-[#92400E] mb-1">{r.emoji} {r.title}</p>
+                                            <p className="text-[11px] text-[#78350F] leading-relaxed mb-1">{r.body}</p>
+                                            <p className="text-[11px] text-[#92400E] leading-relaxed border-t border-[#FCD34D] pt-1">
+                                                <strong>對策：</strong>{r.safeguard}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p className="text-[11px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
+                                    💡 用了 AI 一定要跑 AI-RED 紀錄（A=工具、I=指令、R=回覆、E=評價、D=決策），下方繳交區會強制要求填。
+                                </p>
+                            </div>
+                        </div>
+                    </details>
+
+                    {/* AI 協作三原則 + 對話四步驟（W13/14/15 共用） */}
+                    <AICollaborationPrinciples week="13" role="assistant" showRoleCard={false} />
+
+                    {/* AI 模式選擇（含 standalone 不用 AI） */}
+                    <AIModePicker week="13" taskName="資料整理" onChange={setAiMode} />
+
+                    {/* standalone：不用 AI */}
+                    {aiMode === 'standalone' && (
+                        <div className="rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] p-5">
+                            <p className="text-[14px] font-bold text-[#1E40AF] mb-2">🚫 你選擇不用 AI</p>
+                            <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
+                                完全 OK——純人工整理已經足以完成本週任務。回到 Step 3 繼續動手填表，
+                                記得每填 10 筆抽檢一次，並在下一步繳交分析表連結。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 教學型：完全不會 → AI 給範例 */}
+                    {aiMode === 'teach' && (
+                        <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-white p-4">
+                            <p className="text-[13px] font-bold text-[#166534] mb-2">🎓 教學型 Prompt（從零到一）</p>
+                            <p className="text-[11px] text-[#166534] leading-relaxed mb-3">
+                                貼給 Gemini Pro（思考模式）。記得 AI 給範例後，<strong>你要自己改寫一次</strong>，不要只複製。
+                            </p>
+                            <PromptBlock text={`我有 N=___ 份[問卷／訪談／實驗／觀察／文獻]研究蒐集到的原始資料，
+但我完全不知道怎麼整理成「可分析的表」。
+
+我的研究問題是：___
+
+【請你做】
+1. 教我「分析表」應該長什麼樣子（給 1 個極簡範例，不超過 10 行）
+2. 列出我這個方法該有的 5-6 個關鍵欄位（含說明）
+3. 給我可以照著做的步驟（3-5 步）
+
+【不要做】
+- 不要替我做完整張表
+- 不要直接給我「最終版」答案
+- 我看完範例後會自己照著做一遍`} />
+                            <p className="text-[11px] text-[#166534] italic mt-2 leading-relaxed">
+                                💡 對話來回後：把 AI 範例「<strong>用自己的話改寫</strong>」一次，證明你懂了。不能直接抄。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 驗收型：有初版 → AI 找漏洞 */}
+                    {aiMode === 'verify' && (
+                        <div className="rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-white p-4">
+                            <p className="text-[13px] font-bold text-[#991B1B] mb-2">🥊 驗收型 Prompt（從 1 到 100）</p>
+                            <p className="text-[11px] text-[#991B1B] leading-relaxed mb-3">
+                                你已經做了一張表（或結構），請 AI 從研究方法老師角度<strong>壓力測試</strong>。
+                            </p>
+                            <PromptBlock text={`我做好了一張分析表，請你幫我把資料填進去 / 檢查結構。
+
+【任務】
+依我提供的「分析表結構」與「編碼規則」，把原始資料逐筆填入。
+不要自行新增類別、不要替我重新定義變項。
+遇到不確定的資料，標 ❓ 並列出疑問。
+
+【分析表結構】
+欄位：___（貼你的欄位清單）
+編碼類別：___（如果有）
+N 值：___
+
+【原始資料】
+___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
+
+【輸出格式】
+1. 完成的分析表（CSV 或 Markdown 表）
+2. ❓ 區：你不確定的資料 + 你的疑問
+3. ⚠️ 區：你發現的可能問題（重複、缺漏、不一致）
+
+請嚴格依照我的編碼規則，不要自行擴充。`} />
+                        </div>
+                    )}
+
+                    {!aiMode && (
+                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                ☝️ 上方先選一個 AI 使用模式：教學型（從零到一）／驗收型（從 1 到 100）／不用 AI。
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 強制驗收清單（teach/verify 才顯示） */}
+                    {(aiMode === 'teach' || aiMode === 'verify') && (
+                        <>
+                            <div className="bg-white rounded-[var(--radius-unified)] border border-[#DDD6FE] p-4">
+                                <p className="text-[12px] font-bold text-[#5B21B6] mb-2 flex items-center gap-2">
+                                    <ShieldAlert size={14} /> 強制驗收清單（不做＝賭運氣）
+                                </p>
+                                <ul className="text-[11px] text-[#4C1D95] leading-relaxed space-y-1">
+                                    <li>☐ 抽前 5 筆對照原始資料，確認 AI 沒有幻覺（沒亂加東西）</li>
+                                    <li>☐ 抽中段 5 筆，確認 AI 沒有跑偏（編碼類別跟我定義的一致）</li>
+                                    <li>☐ AI 標 ❓ 的資料我自己處理，不直接讓 AI 決定</li>
+                                    <li>☐ N 值跟我原本算的一致</li>
+                                </ul>
+                            </div>
+
+                            {/* 訪談 / 文獻組額外門檻 */}
+                            <div className="bg-[#FEF2F2] rounded-[var(--radius-unified)] border border-[#FCA5A5] p-4">
+                                <p className="text-[12px] font-bold text-[#991B1B] mb-2 flex items-center gap-2">
+                                    <ShieldAlert size={14} /> 訪談組／文獻組 · 額外驗收門檻（非常重要）
+                                </p>
+                                <p className="text-[11px] text-[#7F1D1D] leading-relaxed mb-2">
+                                    這兩組的編碼<strong>就是研究本身</strong>。AI 全做完，你不抽樣比對，等於放棄判斷。
+                                </p>
+                                <ul className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-1 mb-3">
+                                    <li>☐ 隨機抽 30% 樣本，<strong>我自己編碼一次</strong></li>
+                                    <li>☐ 跟 AI 編碼結果比對</li>
+                                    <li>☐ 差異率 &gt;20%：重新定義類別 + 重編一輪</li>
+                                    <li>☐ 把差異最大的 2-3 筆寫進「AI 驗收紀錄」</li>
+                                </ul>
+                                <div className="bg-white border border-[#FCA5A5] rounded p-3">
+                                    <p className="text-[11.5px] font-bold text-[#991B1B] mb-2">📖 「差異」怎麼算？什麼算 1 筆差異</p>
+                                    <div className="grid md:grid-cols-2 gap-2 text-[11px] text-[#7F1D1D]">
+                                        <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-2">
+                                            <p className="font-bold mb-1">✅ 算差異（要計入）</p>
+                                            <ul className="space-y-1 leading-relaxed">
+                                                <li>· 我編「家庭壓力」、AI 編「同儕壓力」 = <strong>1 筆</strong></li>
+                                                <li>· 我編「正面態度」、AI 漏編沒分類 = <strong>1 筆</strong></li>
+                                                <li>· 我編入兩個類別、AI 只編一個 = <strong>1 筆</strong></li>
+                                            </ul>
+                                        </div>
+                                        <div className="bg-[#F0FDF4] border border-[#86EFAC] rounded p-2">
+                                            <p className="font-bold text-[#166534] mb-1">❌ 不算差異（不計入）</p>
+                                            <ul className="space-y-1 leading-relaxed text-[#166534]">
+                                                <li>· 用詞略不同但意思一樣（「家庭期待」vs「家長期待」）</li>
+                                                <li>· 順序不同但類別一樣</li>
+                                                <li>· AI 多寫了註解但分類正確</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p className="text-[10.5px] text-[#991B1B] italic mt-2 leading-relaxed">
+                                        💡 例：抽 30 筆比對，找到 4 筆「真差異」 = 差異率 13%（&lt;20% 通過）。如果 8 筆 = 27%（&gt;20%）→ 重編。
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* AI 驗收紀錄 */}
+                            <ThinkRecord
+                                dataKey="w13-ai-validation"
+                                prompt="③ AI 輔助驗收紀錄（用了 AI 必填）"
+                                scaffold={[
+                                    '我抽了哪幾筆驗收：（前 5 / 中 5 / 抽 30%）',
+                                    '我發現 AI 哪裡跑偏 / 幻覺：',
+                                    '我做了什麼修正：',
+                                ]}
+                            />
+
+                            {/* 完整對話繳交（共用元件） */}
+                            <AIDialogSubmission week="13" taskName="資料整理對話" required={true} />
+                        </>
+                    )}
+                </div>
+            ),
+        },
+        {
             title: '收尾繳交',
             icon: <FileCheck size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📤 下課前 10 分鐘 · 三件事一定要做完</p>
+                    {/* 跨工具：Prompt 範本庫（自學） */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 flex items-center justify-between gap-3">
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            ① 貼分析表連結 ② 寫 W14 第一張圖 ③ 路線 B 學生加 AI-RED 紀錄。沒交連結 = 沒繳。
+                            💡 整理完想做更進階的分析（交叉分析、主題編碼、跨個案比較）？回 <strong className="text-[var(--ink)]">Prompt 範本庫</strong>看 5 法 Step 2-5 的進階 prompt——自學用，不影響本週繳交。
                         </p>
+                        <a
+                            href="/analysis-station"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[12px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
+                        >
+                            📚 開範本庫
+                        </a>
                     </div>
 
-                    {/* 分析表連結（必繳） */}
-                    <ThinkRecord
-                        dataKey="w13-table-link"
-                        prompt="⑥ 分析表連結（必繳）"
-                        placeholder="貼上你的 Google Sheet 公開連結（或 Excel 雲端檔連結）。確認權限是「知道連結的人可以檢視」。"
-                        rows={2}
-                    />
+                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📤 下課前 10 分鐘 · 兩條繳交動線</p>
+                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
+                            <span>📁 <strong>Classroom 繳：</strong>原始資料雲端連結 + 整理後分析表連結（用了 AI 的學生再加完整對話）</span>
+                            <span>📝 <strong>網頁繳：</strong>下方檢核清單 + W14 伏筆（用了 AI 補 AI-RED）</span>
+                        </div>
+                    </div>
 
-                    {/* W14 第一張圖 */}
-                    <ThinkRecord
-                        dataKey="w13-w14-question"
-                        prompt="⑦ W14 我要請 Gemini 畫的第一張圖"
-                        scaffold={[
-                            '我想看的：（趨勢／比例／關係／排名）',
-                            '涉及變項：（X = ___，Y = ___）',
-                            '預期可能的圖表類型：（折線／圓餅／長條／散佈）',
+                    {/* Classroom 繳交檢核 */}
+                    <Checklist
+                        dataKey="w13-classroom-submit"
+                        prompt="④ Classroom 繳交檢核（勾選你已繳的項目）"
+                        items={[
+                            '原始資料雲端連結（Google Sheets / Excel / 逐字稿等）已繳',
+                            '整理後分析表雲端連結已繳（含欄位、N 值清楚）',
+                            '雲端權限設定為「知道連結的人可以檢視」',
+                            '訪談組／文獻組：已清個資（姓名改代號 A、B、C）',
+                            '用了 AI 的學生：完整對話紀錄（私人註解或文件連結）已繳',
                         ]}
                     />
 
-                    {/* AI-RED（路線 B 強制） */}
-                    {route === 'ai-assist' ? (
+                    {/* W14 伏筆：資料呈現方式（不限於圖） */}
+                    <ThinkRecord
+                        dataKey="w13-w14-question"
+                        prompt="⑤ W14 我想怎麼呈現這份資料？"
+                        scaffold={[
+                            '我想呈現的訊息：（哪一點最值得讓讀者看到？）',
+                            '我考慮的呈現方式：圖表 / 對照表 / 文字摘要 / 混合（自選）',
+                            '若用圖表，可能的類型：（折線／圓餅／長條／散佈）',
+                            '若用對照表或摘要，主要欄位／重點：',
+                        ]}
+                    />
+
+                    {/* AI-RED（依 AI Mode 條件分流） */}
+                    {(aiMode === 'teach' || aiMode === 'verify') ? (
                         <div className="rounded-[var(--radius-unified)] border-2 border-[#DDD6FE] bg-[#F5F3FF] p-4">
-                            <p className="text-[12px] font-bold text-[#5B21B6] mb-2">🤖 路線 B · AI-RED 紀錄（強制）</p>
+                            <p className="text-[12px] font-bold text-[#5B21B6] mb-2">🤖 用了 AI · AI-RED 紀錄（必填）</p>
                             <p className="text-[11px] text-[#4C1D95] mb-3 leading-relaxed">
                                 你用了 AI 整理資料，必須留下完整的 A-I-R-E-D 紀錄——這是學術倫理，也是讓你之後讀書摘時記得自己做了什麼決定。
                                 <strong>注意：</strong>AIRED 是「事後重述一次最關鍵的互動」；上方還要繳<strong>完整對話</strong>，兩者不衝突。
                             </p>
                             <AIREDNarrative week="13" hint="本週用 AI 整理資料：A=Gemini Pro / I=結構化 prompt / R=AI 填出的表 / E=驗收結果（哪裡好哪裡跑偏）/ D=採納哪些、改了哪些" />
+                        </div>
+                    ) : aiMode === 'standalone' ? (
+                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-4">
+                            <p className="text-[13px] font-bold text-[var(--ink)] mb-1">🚫 本週純人工 · 不需 AI 反思</p>
+                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                你在 Step 4 選擇不用 AI，這格自動略過。
+                                W13 是動手週，<strong>反思真正大舉發生在 W15（結論寫作）和 W17（成果發表）</strong>——把腦力留到那時候用。
+                            </p>
                         </div>
                     ) : (
                         <AIREDNarrative week="13" hint="本週若有用 AI 幫忙建議分析表結構或編碼分類，記下最關鍵的一次互動" optional={true} />
@@ -854,8 +958,8 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                             {[
                                 '說清楚自己原始資料現況（來源／數量／結構）',
                                 '依研究方法定義分析表結構（欄位／編碼類別／N）',
-                                '判斷自己適合純人工 or AI 輔助路線',
-                                '若用 AI：知道幻覺/跑偏/掏空判斷的風險並做驗收',
+                                '親手做完純人工整理一輪',
+                                '若選擇用 AI 補充：知道幻覺/跑偏/掏空判斷的風險並做驗收',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
@@ -920,13 +1024,13 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W13"
                 title="資料整理週："
                 accentTitle="把原始資料變成可分析的表"
-                subtitle="腦袋先有架構，AI 才幫得上忙。今天的核心：你決定分析表的結構（這就是研究本身），然後選擇用純人工或 AI 輔助來填內容。AI 是助理，不是研究者。"
+                subtitle="腦袋先有架構，AI 才幫得上忙。今天的核心：你決定分析表的結構（這就是研究本身），先動手做一輪純人工整理；想學 AI 協作可選用。AI 是助理，不是研究者。"
                 chain="W11-W12 用第六章工具蒐集到一堆原始資料。本週把它變成「分析表」——欄位清楚、N 值明確，下週 W14 才畫得了圖。"
                 meta={[
-                    { label: '本週任務', value: '5 法對照 · 定義架構（必做）· 選路線整理 · 繳連結' },
+                    { label: '本週任務', value: '5 法對照 · 定義架構（必做）· 動手整理 · 補充 AI（可選）· 繳連結' },
                     { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '結構成型的分析表 + Google Sheet 連結 + 路線決定' },
-                    { label: '帶去 W14', value: '分析表連結（W14 直接讀取做圖）' },
+                    { label: '課堂產出', value: '結構成型的分析表 + 原始/整理後資料雙繳 Classroom' },
+                    { label: '帶去 W14', value: '原始資料 + 整理後分析表（兩份都繳 Classroom）' },
                 ]}
             />
             <CourseArc items={[

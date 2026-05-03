@@ -410,11 +410,14 @@ ${template}
               <GraduationCap size={13} /> 自學模式
             </span>
           </div>
-          <p className="text-[14px] text-[var(--pl-ink-mid)] leading-[1.95] max-w-3xl">
+          <p className="text-[14px] text-[var(--pl-ink-mid)] leading-[1.95] max-w-3xl mb-3">
             依 <strong className="text-[var(--pl-ink)]">角色 → 階段 → 素材</strong> 三步驟，幫你組出對 AI 提問的高品質 prompt。
             每個步驟旁邊點開「💡 為什麼這樣寫」，你會看到背後的 prompt 工程原理。
             下方還有「Prompt 對照診所」可以自學——沒有老師在旁邊也看得懂。
           </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-[var(--pl-gold-pale)] border border-[var(--pl-gold)]/40 text-[12px] text-[var(--pl-gold)]">
+            💡 <strong>定位：</strong>課後自學工具，課堂主流程不依賴此頁
+          </div>
         </div>
 
         {/* ━━━ 範式說明：成果先行 vs 流程式 ━━━ */}

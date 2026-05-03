@@ -32,6 +32,12 @@ const ETHICS_QUESTIONS = [
         color: '#2563EB',
         question: '受訪者知道這是什麼研究嗎？你打算怎麼告知他們？',
         hint: '問卷開頭 or 訪談前要先說明：研究目的、所需時間、資料用途。',
+        examples: [
+            '問卷開頭放灰色框：「本研究 ___，預計花 5 分鐘，匿名」',
+            '訪談前先口頭說明 + 問「可以錄音嗎？」（要錄音必須口頭同意）',
+            '觀察非參與式（對方不知）→ 事後告知 + 提供「撤回資料」選項',
+            '實驗開始前一週發同意書給家長簽（涉及 18 歲以下受試者）',
+        ],
     },
     {
         id: 'privacy',
@@ -40,6 +46,12 @@ const ETHICS_QUESTIONS = [
         color: '#7C3AED',
         question: '你的工具有沒有收集可辨識個人身份的資料（學號、電話）？',
         hint: '有 → 必要嗎？不必要就刪掉。必要就說明保密措施。',
+        examples: [
+            '姓名欄改編號：問卷 S001、S002 / 訪談 I01、I02 / 實驗 P01、P02',
+            '不收學號／電話／IG 帳號 — 高中研究幾乎不需要這些',
+            '逐字稿用代號 A、B、C 替代真名（包含提到的第三人也要改）',
+            '原始檔案存個人雲端資料夾（非公開），共筆只放分析後的表',
+        ],
     },
     {
         id: 'harm',
@@ -48,6 +60,12 @@ const ETHICS_QUESTIONS = [
         color: '#DC2626',
         question: '你的題目有沒有涉及敏感領域（情緒、家庭、感情、身體、成績）？',
         hint: '有敏感題 → 可以保留，但要有應對方式（如：加上「如不方便可跳過」）。',
+        examples: [
+            '敏感題加「如不方便可跳過」按鈕（Google Form 設「不必填」）',
+            '訪談給「我可以不回答」的口頭暗號（如：說「下一題」就跳過）',
+            '不問太具體：「你家經濟狀況？」→ 改「你覺得補習費對家裡有壓力嗎？」',
+            '事後給「結果出爐前可撤回我的資料」的窗口（提供 email 或截止日）',
+        ],
     },
     {
         id: 'voluntary',
@@ -56,6 +74,12 @@ const ETHICS_QUESTIONS = [
         color: '#059669',
         question: '你打算怎麼招募受訪者？有沒有隱性壓力的可能？',
         hint: '拜託朋友填 → 他們很難拒絕。要明確說「不填完全沒關係」。',
+        examples: [
+            '招募文宣加「不參加完全沒影響、不會被記名」一句',
+            '禁用「拜託我」「幫我一下」這類請求語（製造義務感）',
+            '不收班級全員（讓人覺得「沒填會被注意」），改公開徵求願意者',
+            '對熟人：先說「真的不方便就跟我說」+ 給對方一週時間決定',
+        ],
     },
 ];
 
@@ -468,13 +492,15 @@ export const W11Page = () => {
                             <span className="font-bold text-[14px] text-[var(--ink)]">先看老師對 W10 計畫書整本的回饋（5 分鐘）</span>
                         </div>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            老師已在 <strong>Google Classroom</strong> 發回 W10 計畫書的批改。今天的整節課都建立在這份回饋上——把老師<strong className="text-[var(--ink)]">最主要</strong>的建議寫下來。
+                            老師已在 <strong>Google Classroom</strong> 發回 W10 計畫書的批改。今天的整節課都建立在這份回饋上——
+                            <strong className="text-[var(--ink)]">這格只寫「總體印象」（1-2 句即可），不用排權重</strong>。
+                            下方會用「星號等級」工具幫你逐項分輕重。
                         </p>
                         <ThinkRecord
                             dataKey="w11-w10-feedback-quick"
-                            prompt="老師對我 W10 整本計畫書最主要的建議是？"
-                            placeholder="例：第六章問卷題目太多要砍、第七章實施時程要更具體、倫理章節不夠深入⋯⋯"
-                            rows={3}
+                            prompt="老師回饋的總體印象（1-2 句，不用排權重）"
+                            placeholder="例：「整體方向 OK，但第六、七章細節要修」／「方法選對了，但變項定義要更清楚」"
+                            rows={2}
                         />
                         <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
                             💡 還沒拿到回饋？老師可能還在批。先往下做工具實體（Step 2），回饋拿到再回頭補這格。
@@ -535,6 +561,21 @@ export const W11Page = () => {
                         <p className="text-[12px] text-[#075985] italic mt-2 pt-2 border-t border-[#0284C7]/30">
                             ⚠️ 今天<strong>不大改題目內容</strong>。題目修正回到 W10 docx 上改；今天主力是「把寫好的題目搬到能施測的載體上」。
                         </p>
+                    </div>
+
+                    {/* 工具書連結 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 max-w-[760px] flex items-center justify-between gap-3">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                            💡 修題目／轉載具卡關？回 <strong className="text-[var(--ink)]">方法工具書</strong> 查 5 法的設計原則和常見錯誤。
+                        </p>
+                        <a
+                            href="/tools/methods"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[12px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
+                        >
+                            📚 開工具書
+                        </a>
                     </div>
 
                     {/* 主方法工具下載 */}
@@ -728,6 +769,19 @@ export const W11Page = () => {
                         </h4>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
                             <strong className="text-[var(--ink)]">老師會在投影幕放出座位表</strong>——你跟對面的同學配對 1 對 1 互測。對方不一定跟你同方法，但這正好——<strong className="text-[var(--ink)]">真實受測者也不會懂你的研究方法</strong>，能不能讓他看懂、填得下去，才是工具好不好用的真正測試。
+                        </p>
+                        <details className="mt-2 rounded border border-[var(--border)] bg-white">
+                            <summary className="cursor-pointer px-3 py-2 hover:bg-[var(--paper-warm)] flex items-center gap-2">
+                                <span className="text-[12px] font-bold text-[var(--ink)]">🤔 為什麼不能找同組／好友互測？（點開看 3 個理由）</span>
+                                <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                            </summary>
+                            <ul className="border-t border-[var(--border)] px-4 py-3 text-[11.5px] text-[var(--ink-mid)] leading-relaxed space-y-1.5 list-disc pl-7">
+                                <li><strong>同組懂太多</strong>：他知道題目背後想問什麼，會自動補腦——你看不到「真實受測者卡哪裡」</li>
+                                <li><strong>好友會放水</strong>：人情壓力下「都還可以啦」，沒有真實回饋</li>
+                                <li><strong>跨方法 = 模擬真實</strong>：未來實際施測的人也不懂你的研究——能不能讓「外行人」秒懂，才是工具品質的真正檢驗</li>
+                            </ul>
+                        </details>
+                        <p className="hidden">
                         </p>
 
                         {/* 通用注意事項：當作真的施測 */}
@@ -959,6 +1013,19 @@ export const W11Page = () => {
                                     <div className="p-5">
                                         <p className="text-[13px] text-[var(--ink-mid)] mb-2"><strong className="text-[var(--ink)]">{q.question}</strong></p>
                                         <p className="text-[11.5px] text-[var(--ink-light)] mb-3 leading-relaxed">💡 {q.hint}</p>
+                                        {q.examples && (
+                                            <details className="mb-3 rounded border border-[var(--border)] bg-[#FAFAF9]">
+                                                <summary className="cursor-pointer px-3 py-2 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2">
+                                                    <span className="text-[11.5px] font-bold" style={{ color: q.color }}>📋 高中研究常見做法（點開挑一個照做或自己改寫）</span>
+                                                    <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                                                </summary>
+                                                <ul className="border-t border-[var(--border)] px-4 py-3 space-y-1.5 text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                                    {q.examples.map((ex, i) => (
+                                                        <li key={i}>· {ex}</li>
+                                                    ))}
+                                                </ul>
+                                            </details>
+                                        )}
                                         <ThinkRecord
                                             dataKey={`w11-ethics-${q.id}`}
                                             prompt={`我對「${q.title}」的具體做法`}
@@ -1048,7 +1115,22 @@ export const W11Page = () => {
                             施測啟動承諾
                         </h4>
                         <div className="bg-[#F0F9FF] border-l-4 border-[#0284C7] rounded-r-[var(--radius-unified)] p-4 mb-4 max-w-[760px]">
-                            <p className="text-[12.5px] font-bold text-[#075985] mb-2">📌 樣本目標／時程已在計畫書裡，這裡<u>不重複填</u></p>
+                            <p className="text-[12.5px] font-bold text-[#075985] mb-2">📌 樣本目標／時程已在計畫書裡，這裡<u>不重複填</u>——但你<strong>真的有寫週日程嗎？</strong></p>
+                            <details className="mb-2 rounded border border-[#0EA5E9]/40 bg-white">
+                                <summary className="cursor-pointer px-3 py-2 hover:bg-[#F0F9FF] flex items-center gap-2">
+                                    <span className="text-[11.5px] font-bold text-[#075985]">📅 沒寫週日程？點開看「2 週日程」mini 範本</span>
+                                    <span className="ml-auto text-[10px] font-mono text-[#075985]">▼</span>
+                                </summary>
+                                <div className="border-t border-[#0EA5E9]/40 px-4 py-3 text-[11.5px] text-[#0C4A6E] leading-relaxed space-y-1.5">
+                                    <p><strong>W11 末（今天）→ W13 之間（兩週）的具體日程例：</strong></p>
+                                    <ul className="list-disc pl-5 space-y-1">
+                                        <li><strong>第 1 週末</strong>：發出問卷／聯絡訪談對象 → 目標 50% 樣本（如預計 80 份，週末收 40）</li>
+                                        <li><strong>第 2 週中</strong>：催繳第一波／補約訪談 → 累積 80% 樣本</li>
+                                        <li><strong>W13 進來前</strong>：100% 完成 → 沒到 → 啟動 Plan B（縮樣本／改方法）</li>
+                                    </ul>
+                                    <p className="italic text-[11px] text-[#0369A1]">💡 「Plan B 觸發條件」（下方欄位）就是「W13 進來前累計 &lt; ___ 份就啟動」這種具體數字。</p>
+                                </div>
+                            </details>
                             <p className="text-[12px] text-[#0C4A6E] leading-[1.85]">
                                 計畫書 docx <strong>第七章「實施與回收」</strong>已寫樣本量目標／回收策略，<strong>第十一章「研究流程時程表」</strong>已排 W9-W17 時程。本節做兩件 W12-W13 真正會用到的事：
                             </p>

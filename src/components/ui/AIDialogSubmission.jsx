@@ -72,6 +72,17 @@ const AIDialogSubmission = ({ week, taskName = 'AI 互動', required = true }) =
     const reflections = MODE_REFLECTIONS[mode] || MODE_REFLECTIONS.none;
     const taggedTask = m ? `${m.tag}${taskName}` : taskName;
 
+    /* standalone 模式：不用 AI，沒對話可繳，整個元件不顯示 */
+    if (mode === 'standalone') {
+        return (
+            <div className="rounded-[var(--radius-unified)] border border-[#D1D5DB] bg-[#F9FAFB] p-3">
+                <p className="text-[12px] text-[#6B7280] leading-relaxed">
+                    🚫 你選了「不用 AI · 全靠自己」——本次沒有 AI 對話需要繳交。請在下方 AIRED 區寫一行為什麼選不用 AI。
+                </p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col gap-3">
             <div className="rounded-[var(--radius-unified)] border-2 border-[#FCD34D] bg-[#FFFBEB] p-4">

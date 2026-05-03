@@ -9,6 +9,7 @@ import { ProblemFocus } from './pages/ProblemFocus';
 // ClinicPage / TeamFormation 已歸檔（v2 內容已搬到 W4 / W6）；保留 import 註解避免未來誤刪 ClinicPage.css
 import { W9Page } from './pages/W9Page';
 import { ToolRefinementPage } from './pages/ToolRefinementPage';
+import { MethodToolbookPage } from './pages/MethodToolbookPage';
 import { W11Page } from './pages/W11Page';
 import { W12Page } from './pages/W12Page';
 import { W13AutonomyPage } from './pages/W13AutonomyPage';
@@ -74,6 +75,8 @@ function App() {
           <Route path="w15" element={<W15Page />} />
           <Route path="w16" element={<W16Page />} />
           <Route path="w17" element={<W17Page />} />
+
+          <Route path="tools/methods" element={<MethodToolbookPage />} />
 
           <Route path="games" element={<GameHub />} />
           <Route path="game/question-er" element={<QuestionERGame />} />
