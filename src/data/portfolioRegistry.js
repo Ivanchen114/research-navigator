@@ -171,7 +171,7 @@ export const PORTFOLIO_REGISTRY = [
       { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
       { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
       { key: 'w10-vrf-self-check', label: 'V→R→F 自查', question: '逐題對照三條判準的勾選結果' },
-      { key: 'w10-issues-found', label: '自我+同儕找到的問題清單', question: '自己挑+同學挑的問題與修改紀錄' },
+      { key: 'w10-self-diagnosis', label: '對照工具書自查紀錄', question: '我發現踩到的雷 + 我修了什麼 + 想送 AI 的' },
       { key: 'w10-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（不知怎麼設計題目請示範）/ 🥊 驗收型（有題目初稿請找毛病）' },
       { key: 'w10-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
       { key: 'w10-ai-raw-feedback', label: 'AI 回覆原文（含 A+I 前置）', question: 'A: 用什麼 AI | I: 問了什麼 | R: AI 完整回覆' },

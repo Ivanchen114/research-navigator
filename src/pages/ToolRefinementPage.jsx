@@ -718,9 +718,9 @@ const EXPORT_FIELDS = [
     { key: 'w10-entry-self-report', label: '入場自報（W9 docx 完成度）', question: '第二~五章章節完成狀況' },
     { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
-    /* Step 3：自我與同儕診斷 */
+    /* Step 3：對照工具書自查 */
     { key: 'w10-vrf-self-check', label: 'V→R→F 自查', question: '逐題對照三條判準的勾選結果' },
-    { key: 'w10-issues-found', label: '自我+同儕找到的問題清單', question: '自己挑+同學挑的問題與修改紀錄' },
+    { key: 'w10-self-diagnosis', label: '對照工具書自查紀錄', question: '我發現踩到的雷 + 我修了什麼 + 想送 AI 的' },
     /* Step 4：AI 工作坊 */
     { key: 'w10-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（不知怎麼設計題目請示範）/ 🥊 驗收型（有題目初稿請找毛病）' },
     { key: 'w10-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
@@ -1360,60 +1360,18 @@ export const ToolRefinementPage = () => {
                         </div>
                     )}
 
-                    {/* 下一步 */}
-                    <div className="w7-notice w7-notice-teal">
-                        ✅ 方法工具書自學完 → 回 docx 第六章寫題目 → 進 <strong>Step 3 自我與同儕診斷</strong>。
-                    </div>
-                </div>
-            ),
-        },
-
-        /* ─── Step 3：自我與同儕診斷（寫完題目後先自己挑，再丟 AI） ─── */
-        {
-            title: '自我與同儕診斷',
-            icon: '🔍',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[760px]">
-                        你已經在 docx 第六章寫了題目——<strong className="text-[var(--ink)]">先別丟 AI</strong>，自己用判準診斷一遍 + 找同學讀一遍。
-                        AI 工作坊是「找漏網之魚」，不是「整份丟給 AI 收尾」。
-                    </p>
-
-                    <div className="bg-[#FEF2F2] border-l-4 border-[#DC2626] rounded-r-[6px] p-3 text-[12px] text-[#7F1D1D] leading-[1.85] max-w-[760px]">
-                        💡 <strong>為什麼要自己先診斷？</strong>學生最容易把整份題目丟 AI 找毛病——但這樣你的「自我審視」能力沒被訓練到。先自己挑 → 同學挑 → AI 補漏，三層由內而外才是好設計。
-                    </div>
-
-                    {/* ① V→R→F 自查 */}
-                    <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold bg-white text-[var(--accent)] px-2 py-0.5 rounded-[3px]">①</span>
-                            <span className="font-bold text-[14px]">V→R→F 自查（個人 5 分鐘）</span>
-                        </div>
-                        <div className="p-4">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                                打開你 docx 第六章寫好的題目，逐題對照下面三條判準。
-                            </p>
-                            <Checklist
-                                dataKey="w10-vrf-self-check"
-                                prompt="V→R→F 自查"
-                                items={[
-                                    'V · 方向：每一題都對應到第四章某個變項／主題（沒對應就刪）',
-                                    'R · 精度：用具體時段／量表／頻次（沒「常常」「偶爾」這類模糊詞）',
-                                    'F · 執行：受訪者答得出來、時間負擔合理（問卷 5 min、訪談 30 min）',
-                                ]}
-                            />
-                        </div>
-                    </div>
-
-                    {/* ② 5 法雷自查（互動題組從 W9 搬來） */}
-                    <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold bg-white text-[var(--accent)] px-2 py-0.5 rounded-[3px]">②</span>
-                            <span className="font-bold text-[14px]">題目雷區辨識小測驗（個人 10 分鐘）</span>
-                        </div>
-                        <div className="p-4">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                                做這 3 題情境題，驗證自己看不看得出 traps。看不出來代表回 Step 2 再讀一次方法工具書。
+                    {/* 補充練習：題目雷區辨識小測驗（學完工具書立刻測，記憶最新鮮） */}
+                    <details className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white max-w-[760px] overflow-hidden">
+                        <summary className="cursor-pointer px-4 py-2.5 hover:bg-[var(--paper-warm)] transition-colors flex items-center justify-between gap-2">
+                            <span className="text-[12px] text-[var(--ink-mid)]">
+                                📚 <strong className="text-[var(--ink)]">補充練習：題目雷區辨識小測驗</strong>（選做，3 題）
+                                <span className="text-[var(--ink-light)] ml-1">驗證自己看不看得出 traps</span>
+                            </span>
+                            <span className="text-[10px] font-mono text-[var(--ink-light)] flex-shrink-0">▼</span>
+                        </summary>
+                        <div className="border-t border-[var(--border)] p-4 bg-[#FAFAF9]">
+                            <p className="text-[11px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                                看完工具書立刻測——做 3 題情境題，看自己會不會挑出誘導性／封閉化／可靠性問題。看不出來就回頭再讀一次自己方法的 tab。
                             </p>
                             <div className="space-y-3">
                                 {W10_THINK_CHOICES.map((tc) => (
@@ -1428,45 +1386,94 @@ export const ToolRefinementPage = () => {
                                 ))}
                             </div>
                         </div>
+                    </details>
+
+                    {/* 下一步 */}
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 方法工具書自學完 → 回 docx 第六章寫題目 → 進 <strong>Step 3 對照工具書自查</strong>。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：對照工具書自查（寫完題目後用 V→R→F + 5 法雷照自己題目） ─── */
+        {
+            title: '對照工具書自查',
+            icon: '🔍',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[760px]">
+                        你在 docx 第六章寫了題目——回頭<strong className="text-[var(--ink)]">用 Step 2 學的工具書照自己的題目</strong>，看有沒有踩到 V→R→F 三條判準的雷，以及自己方法的常見錯誤。AI 工作坊在下一步補你看不到的漏洞。
+                    </p>
+
+                    {/* ① V→R→F 自查 */}
+                    <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-white text-[var(--accent)] px-2 py-0.5 rounded-[3px]">①</span>
+                            <span className="font-bold text-[14px]">V→R→F 三條判準照自己題目</span>
+                        </div>
+                        <div className="p-4">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                                打開 docx，逐題對照下面三條。
+                            </p>
+                            <Checklist
+                                dataKey="w10-vrf-self-check"
+                                prompt="V→R→F 自查"
+                                items={[
+                                    'V · 方向：每一題都對應到第四章某個變項／主題（沒對應就刪）',
+                                    'R · 精度：用具體時段／量表／頻次（沒「常常」「偶爾」這類模糊詞）',
+                                    'F · 執行：受訪者答得出來、時間負擔合理（問卷 5 min、訪談 30 min）',
+                                ]}
+                            />
+                        </div>
                     </div>
 
-                    {/* ③ 同儕互審 */}
-                    <div className="border-2 border-[#DC2626] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
-                        <div className="px-5 py-3 bg-[#DC2626] text-white flex items-center gap-2">
-                            <span className="text-[10px] font-mono font-bold bg-white text-[#DC2626] px-2 py-0.5 rounded-[3px]">③ 重點</span>
-                            <span className="font-bold text-[14px]">同儕互審（10 分鐘）</span>
+                    {/* ② 5 法雷對照（依方法動態顯示 checklist） */}
+                    <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-bold bg-white text-[var(--accent)] px-2 py-0.5 rounded-[3px]">②</span>
+                            <span className="font-bold text-[14px]">自己方法的「C · 常見錯誤」逐條勾選</span>
                         </div>
-                        <div className="p-4 space-y-3">
-                            <p className="text-[12px] text-[var(--ink)] leading-relaxed">
-                                <strong>跟「不同組」同學交換看</strong>——同組同學想法跟你太接近，看不出問題。
-                            </p>
-                            <ol className="list-decimal pl-5 text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1">
-                                <li>把你的 docx 第六章給對方看（或印出來）</li>
-                                <li>對方扮演<strong>受訪者</strong>讀一遍，挑 2-3 個「看不懂／會猶豫／重複」的題目</li>
-                                <li>對方寫下來給你（不用討論，先看到對方挑出什麼）</li>
-                                <li>交換角色，你也幫對方挑</li>
-                            </ol>
-                            <p className="text-[11px] text-[var(--ink-light)] italic">
-                                💡 對方挑出來你不認同的，才討論為什麼——這是金礦。
-                            </p>
+                        <div className="p-4">
+                            {(() => {
+                                const activeKey = toolKitView || detectedMethodId || 'questionnaire';
+                                const kit = TOOL_DESC_KIT[activeKey];
+                                if (!kit) return (
+                                    <p className="text-[12px] text-[var(--ink-mid)]">請先在 Step 2 選擇你的研究方法。</p>
+                                );
+                                return (
+                                    <>
+                                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                                            逐條對照你 docx 第六章的題目——<strong className="text-[var(--ink)]">勾起來代表「我已確認沒踩到這條雷」</strong>。看到沒勾的條目，回去修題目。
+                                        </p>
+                                        <Checklist
+                                            dataKey={`w10-traps-self-check-${activeKey}`}
+                                            prompt={`${kit.label} · 常見錯誤逐條自查`}
+                                            items={kit.traps}
+                                        />
+                                        <p className="text-[11px] text-[var(--ink-light)] italic mt-3 leading-relaxed">
+                                            💡 顯示的是你方法（{kit.label}）的雷——切到 Step 2 改方法 tab，這裡會跟著切換。
+                                        </p>
+                                    </>
+                                );
+                            })()}
                         </div>
                     </div>
 
-                    {/* ④ 紀錄找到的問題 */}
+                    {/* ③ ThinkRecord 反思 */}
                     <ThinkRecord
-                        dataKey="w10-issues-found"
-                        prompt="④ 我找到的問題清單（自己挑 + 同學挑）"
+                        dataKey="w10-self-diagnosis"
+                        prompt="③ 對照工具書後的自查紀錄"
                         scaffold={[
-                            '我自己 V→R→F 自查找到的問題：（題號 + 問題描述）',
-                            '同學幫我找的問題：（題號 + 對方反饋）',
+                            '我發現自己踩到的雷：（題號 + 哪一條，例：題 3 用了「常常」屬於 R 精度問題）',
                             '我修了什麼：（具體修改）',
-                            '還挑不出但覺得怪、想送 AI 看的：（這是 Step 4 AI 工作坊的入口）',
+                            '還搞不清楚、想送 AI 看的：（這是 Step 4 AI 工作坊的入口）',
                         ]}
                     />
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 自己 + 同學各挑一輪，題目修了一版 → 下一步：<strong>Step 4 AI 工作坊</strong>（帶著上面「想送 AI 的問題」找 AI，而不是整份丟）。
+                        ✅ 自查完、題目修了一版 → 下一步：<strong>Step 4 AI 工作坊</strong>（帶著上面「想送 AI 的問題」找 AI，而不是整份丟）。
                     </div>
                 </div>
             ),
