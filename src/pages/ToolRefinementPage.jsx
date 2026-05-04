@@ -184,7 +184,7 @@ const PAIRING_INSTRUCTIONS = {
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     /* Step 1：第六章填具體題目 */
-    { key: 'w10-entry-self-report', label: '入場自報（W9 計畫書完成度）', question: '第二~五章章節完成狀況' },
+    { key: 'w10-entry-self-report', label: '入場自報（W9 計畫書完成度）', question: '第 1-5 章完成狀況' },
     { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
     /* Step 3：老師諮詢區 */
@@ -240,9 +240,9 @@ const CopyablePrompt = ({ text }) => {
  * ══════════════════════════════════════ */
 
 const PREP_OPTIONS = [
-    { id: 'complete', icon: '✅', label: '第二~五章完成',    desc: '計畫書五章都寫完' },
-    { id: 'partial',  icon: '🔶', label: '部分完成',          desc: '第三、四章還在補' },
-    { id: 'none',     icon: '⚠️', label: '只寫到第一章',      desc: 'W9 課後沒補第二~五章' },
+    { id: 'complete', icon: '✅', label: '第 1-5 章全部完成',  desc: '動機 / 文獻 / 變項 / 假設 / 方法（W9 應達進度）' },
+    { id: 'partial',  icon: '🔶', label: '部分完成',          desc: '第三章文獻 / 第四章變項還在補' },
+    { id: 'none',     icon: '⚠️', label: '進度嚴重落後',      desc: 'W9 課後沒補第三、四章（甚至第一章還沒寫完）' },
 ];
 
 const PrepStatusCheck = ({ methodId }) => {
