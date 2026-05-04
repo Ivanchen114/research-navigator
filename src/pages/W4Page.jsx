@@ -383,22 +383,22 @@ const DecisionTree = () => {
             {/* SVG 視覺樹 */}
             <div className="bg-[var(--paper-warm)] p-4 overflow-x-auto">
                 <svg
-                    viewBox="0 0 880 620"
+                    viewBox="0 0 920 580"
                     className="block mx-auto"
-                    style={{ width: '100%', minWidth: '720px', maxWidth: '900px', height: 'auto' }}
+                    style={{ width: '100%', minWidth: '720px', maxWidth: '820px', height: 'auto' }}
                 >
                     {/* ============ 連線 ============ */}
                     <path d="M 440 60 C 440 95, 270 100, 270 130" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
                     <path d="M 440 60 C 440 95, 610 100, 610 130" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
                     <line x1="270" y1="180" x2="270" y2="200" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" />
-                    <line x1="610" y1="180" x2="610" y2="200" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" />
+                    <line x1="650" y1="180" x2="650" y2="200" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" />
                     {[267, 381, 495].map((qy, i) => (
                         <g key={i} opacity={dimLeft ? 0.3 : 1}>
                             <line x1="130" y1={qy} x2="130" y2={qy + 19} stroke="#999" strokeWidth="1.5" />
                             <line x1="370" y1={qy} x2="370" y2={qy + 19} stroke="#999" strokeWidth="1.5" />
                         </g>
                     ))}
-                    <line x1="610" y1="252" x2="610" y2="266" stroke={dimRight ? '#ddd' : '#6b21a8'} strokeWidth="2" />
+                    <line x1="650" y1="252" x2="650" y2="266" stroke={dimRight ? '#ddd' : '#6b21a8'} strokeWidth="2" />
 
                     {/* ============ ROOT ============ */}
                     <g>
@@ -435,15 +435,15 @@ const DecisionTree = () => {
                         opacity={dimRight ? 0.4 : 1}
                     >
                         <rect
-                            x={510} y={130} width={200} height={50} rx={8}
+                            x={550} y={130} width={200} height={50} rx={8}
                             fill={l1Choice === 'literature' ? '#f5f3ff' : 'white'}
                             stroke={l1Choice === 'literature' ? '#6b21a8' : '#666'}
                             strokeWidth={l1Choice === 'literature' ? 2.5 : 1.5}
                         />
-                        <text x={610} y={155} fontSize="14" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
+                        <text x={650} y={155} fontSize="14" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
                             📚 分析現成文本
                         </text>
-                        <text x={610} y={172} fontSize="10.5" textAnchor="middle" fill="#666">
+                        <text x={650} y={172} fontSize="10.5" textAnchor="middle" fill="#666">
                             把文本當研究對象
                         </text>
                     </g>
@@ -481,39 +481,40 @@ const DecisionTree = () => {
 
                     {/* ============ 文獻分支（右半）============ */}
                     <g opacity={dimRight ? 0.35 : 1}>
-                        <rect x={500} y={210} width={220} height={42} rx={8}
+                        <rect x={540} y={210} width={220} height={42} rx={8}
                               fill={l1Choice === 'literature' ? '#f5f3ff' : 'white'}
                               stroke="#6b21a8" strokeWidth="2" />
-                        <text x={610} y={236} fontSize="13" fontWeight="bold" textAnchor="middle" fill="#6b21a8">
+                        <text x={650} y={236} fontSize="13" fontWeight="bold" textAnchor="middle" fill="#6b21a8">
                             📚 文獻分析法（主方法）
                         </text>
 
-                        <rect x={460} y={266} width={400} height={48} rx={6} fill="#FEF3C7" stroke="#D97706" strokeWidth="1.5" />
-                        <text x={476} y={286} fontSize="11.5" fontWeight="bold" fill="#7F1D1D">
-                            ⚠️ 文獻「分析」≠ 文獻「回顧」
-                        </text>
-                        <text x={476} y={303} fontSize="10.5" fill="#7F1D1D">
-                            回顧 = 整理前人說法（每個方法第三章都做，不算主方法）
-                        </text>
-
                         {[
-                            { num: '②', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」', y: 326 },
-                            { num: '③', name: '內容分析',     when: '統計文本中詞彙／主題的頻率（量化）', y: 380 },
-                            { num: '④', name: '論述分析',     when: '看話語怎麼建構立場、誰被說／怎麼被說', y: 434 },
-                            { num: '⑤', name: '敘事分析',     when: '從文本抓情節結構、角色、轉折', y: 488 },
+                            { num: '②', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」', y: 270 },
+                            { num: '③', name: '內容分析',     when: '統計文本中詞彙／主題的頻率（量化）', y: 324 },
+                            { num: '④', name: '論述分析',     when: '看話語怎麼建構立場、誰被說／怎麼被說', y: 378 },
+                            { num: '⑤', name: '敘事分析',     when: '從文本抓情節結構、角色、轉折', y: 432 },
                         ].map(s => (
                             <g key={s.num}>
-                                <rect x={460} y={s.y} width={400} height={44} rx={6} fill="white" stroke="#e0d5f5" strokeWidth="1.5" />
-                                <text x={476} y={s.y + 22} fontSize="14" fontWeight="bold" fill="#6b21a8">{s.num}</text>
-                                <text x={500} y={s.y + 22} fontSize="13" fontWeight="bold" fill="#6b21a8">{s.name}</text>
-                                <text x={476} y={s.y + 38} fontSize="10.5" fill="#666">→ {s.when}</text>
+                                <rect x={500} y={s.y} width={400} height={44} rx={6} fill="white" stroke="#e0d5f5" strokeWidth="1.5" />
+                                <text x={516} y={s.y + 22} fontSize="14" fontWeight="bold" fill="#6b21a8">{s.num}</text>
+                                <text x={540} y={s.y + 22} fontSize="13" fontWeight="bold" fill="#6b21a8">{s.name}</text>
+                                <text x={516} y={s.y + 38} fontSize="10.5" fill="#666">→ {s.when}</text>
                             </g>
                         ))}
-                        <text x={460} y={560} fontSize="10" fill="#999" fontStyle="italic">
+                        <text x={500} y={500} fontSize="10" fill="#999" fontStyle="italic">
                             （W9 計畫書與工具會挑一個子類型細講分析架構）
                         </text>
                     </g>
                 </svg>
+
+                {/* ⚠️ 文獻分析 vs 回顧 警示（從 SVG 內拉出，避免擠到子類型） */}
+                <div className="mx-5 mt-3 mb-1 bg-[#FEF3C7] border-l-4 border-[#D97706] rounded-r-[6px] p-3">
+                    <p className="text-[12.5px] font-bold text-[#7F1D1D] mb-0.5">⚠️ 文獻「分析」≠ 文獻「回顧」</p>
+                    <p className="text-[11.5px] text-[#7F1D1D] leading-relaxed">
+                        <strong>回顧</strong> = 整理前人說法（每個方法第三章都做，不算主方法）；
+                        <strong>分析</strong> = 把文本當研究對象（只有文獻組要做）。
+                    </p>
+                </div>
             </div>
 
             {/* 自然科學分流卡 + 統整推薦（HTML） */}

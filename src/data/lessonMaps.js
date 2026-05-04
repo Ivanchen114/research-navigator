@@ -1311,13 +1311,20 @@ export const W9Data = {
         },
         {
             prefix: "②",
-            title: "計畫書 1-5 章組裝",
-            subtitle: "在 docx 把第一到五章寫到雛形",
-            desc: "1 動機、2 文獻、3 研究問題、4 變項定義、5 抽樣對象——W2–W8 素材整合",
-            colorConfig: "b"
+            title: "第一章動機擴寫",
+            subtitle: "W3 一句話 → W9 一段話（3 問鷹架）",
+            desc: "對照 W3 個人 vs W8 組內題目；用「情境/空缺/解決什麼」3 問擴寫；含學生實例 + 4 種常犯錯誤",
+            colorConfig: "y"
         },
         {
             prefix: "③",
+            title: "計畫書 2-5 章組裝",
+            subtitle: "在計畫書把第二到五章寫到雛形",
+            desc: "2 文獻、3 研究方法、4 變項定義、5 抽樣對象——W2-W8 素材整合 + 分章工作流",
+            colorConfig: "b"
+        },
+        {
+            prefix: "④",
             title: "AI 工作坊（雙模式）",
             subtitle: "教學型 / 驗收型 + 完整對話繳交",
             desc: "寫不出來 → 教學型請 AI 給範例；有初稿 → 驗收型請 AI 找盲點。完整對話繳到 GC",
@@ -1353,12 +1360,22 @@ export const W9Data = {
                 {
                     timeStart: "0:15",
                     timeStartFormatted: "00:15",
-                    duration: 35,
+                    duration: 20,
+                    colorClass: "c4",
+                    icon: "🔥",
+                    title: "三、 Step 2 第一章動機擴寫",
+                    desc: "對照 W3 個人 vs W8 組內題目，用 3 問（情境/空缺/解決什麼）把動機從一句話擴成一段。看學生實例 + 4 種常犯錯誤對照。",
+                    tags: ["W3→W9 橋", "3 問鷹架"]
+                },
+                {
+                    timeStart: "0:35",
+                    timeStartFormatted: "00:35",
+                    duration: 15,
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "三、 Step 2 計畫書組裝（前段）",
-                    desc: "在 docx 寫第一章 6 格（題目／動機／目的／主問題／子問題／對象）+ 第二章關鍵詞操作定義。網頁 ThinkRecord 只記關鍵決策。",
-                    tags: ["docx 動手", "第一、二章"]
+                    title: "四、 Step 3 計畫書組裝（前段：第二章）",
+                    desc: "依分章工作流分配誰寫哪章；先把第二章關鍵詞操作型定義寫到雛形。",
+                    tags: ["分章工作流", "第二章"]
                 }
             ]
         },
@@ -1374,9 +1391,9 @@ export const W9Data = {
                     duration: 30,
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "四、 Step 2 計畫書組裝（後段）",
+                    title: "五、 Step 3 計畫書組裝（後段：第三、四、五章）",
                     desc: "第五章對象/抽樣/人數定版；第三、四章寫骨架（文獻 2-3 篇 + 變項清單，定版留課後）。",
-                    tags: ["docx 動手", "第三、四、五章"]
+                    tags: ["分章工作流", "第三、四、五章"]
                 },
                 {
                     timeStart: "0:30",
@@ -1384,7 +1401,7 @@ export const W9Data = {
                     duration: 15,
                     colorClass: "c4",
                     icon: "🤖",
-                    title: "五、 Step 3 AI 工作坊（雙模式）",
+                    title: "六、 Step 4 AI 工作坊（雙模式）",
                     desc: "選教學型（卡關章節請 AI 給範例）或驗收型（有初稿請 AI 找盲點）；複製 prompt 帶回家跑（深度思考模式）；預想式寫 AIRED A/I/E/D，R 回家補。",
                     tags: ["雙模式", "完整對話繳交"]
                 },
@@ -1394,7 +1411,7 @@ export const W9Data = {
                     duration: 5,
                     colorClass: "c3",
                     icon: "📤",
-                    title: "六、 Step 4 回顧繳交 + 時間承諾",
+                    title: "七、 Step 5 回顧繳交 + 時間承諾",
                     desc: "勾驗收 Checklist → 時間承諾（課後補第三、四章定版 + 跑 AI + 上傳 GC）→ ExportButton 匯出。",
                     tags: ["時間承諾", "繳交"]
                 }
@@ -1612,15 +1629,15 @@ export const W11Data = {
         {
             prefix: "③",
             title: "倫理審查 + 教師蓋章",
-            subtitle: "四問自查 + AI 審知情同意書",
+            subtitle: "四問自查 + 知情同意書精修",
             desc: "知情/隱私/不傷害/自願；秘密按鈕（⚖ 點 5 次）觸發教師審查",
             colorConfig: "g"
         },
         {
             prefix: "④",
-            title: "施測啟動 + AIRED",
-            subtitle: "目標、時程、備案、啟動宣告",
-            desc: "W11 AIRED 本週重點 AI 互動：知情同意書 AI 審",
+            title: "工具繳交 + 蓋章",
+            subtitle: "Classroom 繳工具 + 教師蓋章補蓋",
+            desc: "工具實體（Form／訪綱／紀錄表）連結貼到 Classroom；沒抽到的組課後 Classroom 補蓋",
             colorConfig: "y"
         }
     ],
@@ -1715,9 +1732,9 @@ export const W11Data = {
                     duration: "7 min",
                     colorClass: "c4",
                     icon: "⚖",
-                    title: "八、 Step 5 倫理四問 + 知情同意 AI 審",
-                    desc: "知情同意／隱私／不傷害／自願逐一具體答；複製 CONSENT_PROMPT 貼 AI，把採納/不採納判斷寫下（即 AIRED 的 E/D）。",
-                    tags: ["四問", "AI 審", "AIRED"]
+                    title: "八、 Step 5 倫理四問 + 知情同意書精修",
+                    desc: "知情同意／隱私／不傷害／自願逐一具體答；翻出 W10 初稿，對著 Pilot 觀察修用詞、補說明，定稿後拿給老師檢查。",
+                    tags: ["四問", "純人工修", "對 Pilot 改"]
                 },
                 {
                     timeStart: "0:42",
@@ -1735,9 +1752,9 @@ export const W11Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🛫",
-                    title: "十、 Step 6 施測啟動 + AIRED + ExportButton + W12 預告",
-                    desc: "Plan B 觸發條件具體化 + 動員宣告（樣本/時程已在計畫書，這裡不重填）→ AIREDNarrative → 一鍵匯出繳交 → W12 預告（正式施測）。",
-                    tags: ["Plan B 觸發", "動員宣告", "繳交"]
+                    title: "十、 Step 6 收尾：蓋章補蓋 + 工具實體繳交 + W12 預告",
+                    desc: "5 min 內完成：① 教師蓋章（沒抽到→Classroom 補蓋）② 工具實體連結貼到 Classroom 本週作業 ③ 看 W12 預告。Plan B / 動員宣告等 W12 老師問再口頭討論。",
+                    tags: ["教師蓋章", "工具繳交", "W12 預告"]
                 }
             ]
         }

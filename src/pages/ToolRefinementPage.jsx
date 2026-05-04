@@ -188,7 +188,7 @@ const EXPORT_FIELDS = [
     { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
     { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
     /* Step 3：老師諮詢區 */
-    { key: 'w10-teacher-consult', label: '老師諮詢區紀錄', question: '老師指出的主要問題 + 我修了什麼 + 想送 AI 的' },
+    { key: 'w10-teacher-consult', label: '老師諮詢區紀錄', question: '老師指出的主要問題 + 我修了什麼' },
     /* Step 4：AI 工作坊 */
     { key: 'w10-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（不知怎麼設計題目請示範）/ 🥊 驗收型（有題目初稿請找毛病）' },
     { key: 'w10-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
@@ -374,9 +374,10 @@ const PrepStatusCheck = ({ methodId }) => {
                         </p>
 
                         <div className="bg-white border border-[var(--border)] rounded-[6px] p-3 space-y-2 text-[12px] leading-relaxed">
-                            <p><strong>實際可行的兩條路（不要硬補）：</strong></p>
-                            <p>① <strong className="text-[var(--danger)]">強烈建議：本節下課前找老師預約 10 min 個別諮詢</strong> — 一起決定哪幾章是「最小可動骨架」、哪幾章可以先用 AI 教學型 prompt 補。本節剩下時間先做 Step 2 方法工具書當熱身。</p>
-                            <p>② <strong>不可行：</strong>50 分鐘內把 4 章都補完——這會讓你<strong>同時跑兩週份的思考</strong>，效率最差，工具也會長歪。</p>
+                            <p><strong>本節怎麼辦：</strong></p>
+                            <p>① <strong>立刻回 W9 補齊第 2-5 章</strong>（變項／文獻／對象都先列骨架就好，不追求完美）</p>
+                            <p>② <strong className="text-[var(--danger)]">補完<u>馬上把計畫書上傳 Classroom 並 @ 老師</u></strong> — 老師會即時看到並回覆，可能下節 W11 前就能給你回饋。</p>
+                            <p>③ 補完後再回來做 Step 2 方法工具書 + Step 3 工具設計。</p>
                         </div>
 
                         <div className="flex flex-col md:flex-row gap-2">
@@ -384,12 +385,12 @@ const PrepStatusCheck = ({ methodId }) => {
                                 href="/w9"
                                 className="flex items-center justify-center gap-2 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 no-underline transition-colors text-[13px] font-bold"
                             >
-                                回 W9 補齊第 2-5 章 →
+                                立刻回 W9 補齊第 2-5 章 →
                             </a>
                         </div>
 
                         <p className="text-[11px] bg-white border border-[var(--border)] rounded-[4px] p-2 text-[var(--ink-mid)]">
-                            💡 <strong className="text-[var(--ink)]">誠實面對：</strong>硬做工具會讓 W11 Pilot Test 與倫理審查連帶出錯——錯在上游，下游會放大。
+                            💡 <strong className="text-[var(--ink)]">誠實面對：</strong>硬做工具會讓 W11 Pilot Test 與倫理審查連帶出錯——錯在上游，下游會放大。補完通知老師是最快回到正軌的方式。
                         </p>
                     </div>
                 )}
@@ -775,7 +776,6 @@ ___（貼題目／訪綱／流程／編碼表）
                         scaffold={[
                             '老師指出的主要問題：（題號 + 老師回饋）',
                             '我修了什麼：（具體修改）',
-                            '還沒解決、想送 AI 的：（這是 Step 4 AI 工作坊的入口）',
                         ]}
                     />
 
@@ -817,6 +817,12 @@ ___（貼題目／訪綱／流程／編碼表）
                             </p>
                         </div>
 
+                        <div className="bg-[#EFF6FF] border-l-4 border-[#2563EB] rounded-r-[6px] p-3 mb-3 max-w-[760px]">
+                            <p className="text-[12.5px] text-[#1E40AF] leading-[1.85]">
+                                💡 <strong>第十～十三章不用另外找通用版／模板</strong>——計畫書 docx 範本內已經<strong>預填好結構</strong>（第十章 17 個倫理勾選項、第十二章 AI 聲明 3 條、第十三章 APA 範例）。
+                                <strong className="text-[#1E40AF]">直接在範本上勾選或填空即可</strong>，網頁這張表只是進度檢核。
+                            </p>
+                        </div>
                         <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                             <div className="grid grid-cols-[60px_1fr_70px] bg-[var(--paper-warm)] border-b border-[var(--border)] text-[11px] font-mono font-bold text-[var(--ink)]">
                                 <div className="px-3 py-2.5">章</div>
@@ -824,13 +830,13 @@ ___（貼題目／訪綱／流程／編碼表）
                                 <div className="px-3 py-2.5 border-l border-[var(--border)]">本節到</div>
                             </div>
                             {[
-                                { ch: '七', t: '研究實施（時程／地點／流程）', stage: '草稿' },
-                                { ch: '八', t: '資料分析方式（寫一句「預計用 ___」即可）', stage: '草稿' },
-                                { ch: '九', t: '預期結論與貢獻（(三) 限制改進＝草稿）', stage: '雛形' },
-                                { ch: '十', t: '研究倫理（抄通用＋微調）', stage: '雛形' },
-                                { ch: '十一', t: '時程表 W9-W17（套模板）', stage: '雛形' },
-                                { ch: '十二', t: 'AI 使用聲明（套通用）', stage: '雛形' },
-                                { ch: '十三', t: '參考文獻（列 W5-W6 文獻）', stage: '雛形' },
+                                { ch: '七', t: '研究實施（W11-W12 大致時程／地點／流程）', stage: '草稿' },
+                                { ch: '八', t: '資料分析方式（已預列 5 種統計方法 + 6 種圖表，勾選即可）', stage: '草稿' },
+                                { ch: '九', t: '預期結論與貢獻（(三) 限制只寫 1-2 條，等 W14-W15 再補）', stage: '雛形' },
+                                { ch: '十', t: '研究倫理（已預列 4 原則 + 17 個 ☐ 勾選項，勾選＋微調）', stage: '雛形' },
+                                { ch: '十一', t: '時程表 W9-W17（對照課表填每週做什麼）', stage: '雛形' },
+                                { ch: '十二', t: 'AI 使用聲明（已預列聲明條款 + 3 個 ☐ 勾選項）', stage: '雛形' },
+                                { ch: '十三', t: '參考文獻（已給 APA 範例，列 W5-W6 找的文獻 ≥3 筆）', stage: '雛形' },
                             ].map((r, i) => (
                                 <div key={i} className="grid grid-cols-[60px_1fr_70px] border-b border-[var(--border)] last:border-b-0 text-[12.5px]">
                                     <div className="px-3 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
@@ -840,7 +846,7 @@ ___（貼題目／訪綱／流程／編碼表）
                             ))}
                         </div>
                         <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">
-                            💡 第十一章時程表照課表填、第十二章 AI 聲明貼通用版、第十三章把 W5-W6 文獻整理一下——這三章最快。
+                            💡 第十、十一、十二章在範本內已是勾選項／預填條款，是<strong>最快寫完的三章</strong>；第十三章把 W5-W6 找過的文獻 3 筆套 APA 格式即可。
                         </p>
                     </div>
 
@@ -905,10 +911,24 @@ ___（貼題目／訪綱／流程／編碼表）
                         </div>
                     </div>
 
-                    <ExportButton
-                        weekLabel="W10 計畫書整本"
-                        fields={EXPORT_FIELDS}
-                    />
+                    {/* 繳交說明卡（取代 ExportButton：W9-W10 主產出是計畫書本身） */}
+                    <div className="bg-[#F0FDF4] border-2 border-[var(--success)] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[18px]">📤</span>
+                            <span className="font-bold text-[14px] text-[var(--ink)]">本週繳交</span>
+                            <span className="text-[10.5px] font-mono text-[var(--ink-light)] ml-1">TO CLASSROOM</span>
+                        </div>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
+                            這週主產出是<strong className="text-[var(--ink)]">計畫書 docx 定稿</strong>。把網頁 ThinkRecord 寫好的內容複製到計畫書對應章節，繳交時：
+                        </p>
+                        <ol className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] list-decimal pl-5 space-y-1">
+                            <li><strong>計畫書 docx 定稿</strong>（必繳）— 老師會在 W11 上課前批改回饋（含★星號等級）</li>
+                            <li><strong>AI 完整對話連結／文件</strong>（有用 AI 才繳）— 跟計畫書一起貼到 Classroom 本週作業</li>
+                        </ol>
+                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-3 pt-3 border-t border-[var(--border)] leading-[1.85]">
+                            💡 網頁本身是<strong>自學導引手冊</strong>——你寫的 ThinkRecord 留在瀏覽器，<strong>期末（W17）會一次匯出 W3-W17 全部歷程</strong>。本週不用單獨匯出網頁紀錄。
+                        </p>
+                    </div>
 
                     {/* W11 預告（新流程：第一節工具實體 + 第二節 Pilot+倫理+施測） */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">

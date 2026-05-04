@@ -467,7 +467,7 @@ const W13AutonomyPage = () => {
     /* 從先前週次抓題目和方法 */
     const saved = readRecords();
     const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || saved['w4-final-topic'] || saved['w3-final-topic'] || '';
-    const myMethod = saved['w8-tool-method'] || saved['w7-method-choice'] || '';
+    const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || saved['w7-method-choice'] || '';
 
     const steps = [
         {

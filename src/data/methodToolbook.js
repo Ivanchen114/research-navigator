@@ -385,10 +385,10 @@ Step 5：回收測驗、致謝、解釋研究意義（5 min）
         structure: {
             title: '4 子類型結構（必選一）',
             types: [
-                { name: '② 歷史分析', use: '用舊資料還原過去發生過什麼事', ex: '例：日治時期某事件的前因後果（用報導／檔案／回憶錄）' },
-                { name: '③ 內容分析', use: '數文章裡某些詞或類別出現幾次／佔多少', ex: '例：總統演講中「經濟」一詞每年出現幾次' },
-                { name: '④ 論述分析', use: '看作者用什麼方式說話、想表達什麼立場', ex: '例：A 報跟 B 報報導同一事件，用詞、角度差在哪' },
-                { name: '⑤ 敘事分析', use: '拆解故事：主角是誰？發生什麼？誰在講？', ex: '例：迪士尼動畫公主 50 年來行為模式怎麼變' },
+                { name: '② 歷史分析', use: '用舊資料還原過去發生過什麼事', ex: '例：日治時期某事件的前因後果（用報導／檔案／回憶錄）', url: 'https://docs.google.com/spreadsheets/d/1vvtTwR2_9F293I0GozYZc6zsGluTcfIY1NlHb2TpdgA/copy', toolName: '05a_文獻_歷史分析_工具' },
+                { name: '③ 內容分析', use: '數文章裡某些詞或類別出現幾次／佔多少', ex: '例：總統演講中「經濟」一詞每年出現幾次', url: 'https://docs.google.com/spreadsheets/d/1C_McYlh5zqyS216cAdSvorMzOZ4U8W56_bQFpYHlEdY/copy', toolName: '05b_文獻_內容分析_工具' },
+                { name: '④ 論述分析', use: '看作者用什麼方式說話、想表達什麼立場', ex: '例：A 報跟 B 報報導同一事件，用詞、角度差在哪', url: 'https://docs.google.com/spreadsheets/d/1p4RCHe_uXwGs0NkwLoz_7XOrmAX35d3mhad7DmxBQjQ/copy', toolName: '05c_文獻_論述分析_工具' },
+                { name: '⑤ 敘事分析', use: '拆解故事：主角是誰？發生什麼？誰在講？', ex: '例：迪士尼動畫公主 50 年來行為模式怎麼變', url: 'https://docs.google.com/spreadsheets/d/1h5qymclzSox-t-gKvjL9iU8d48N4ORMxcPFX2hkQ70g/copy', toolName: '05d_文獻_敘事分析_工具' },
             ],
             template: '⚠️ 文獻分析 ≠ 文獻回顧。把文獻當「研究對象」分析，不是整理前人論文。\n\n📌 怎麼選 4 子類型？看你研究問題問的是什麼：\n• 想還原「過去發生什麼事」→ ② 歷史分析\n• 想用數字統計「某詞出現多少次／某類別佔多少比例」→ ③ 內容分析\n• 想看「作者立場、說話手法、價值觀」→ ④ 論述分析\n• 想拆解「故事的主角／情節／敘事者」→ ⑤ 敘事分析\n\n結構：子類型選定 → 分析對象 → 資料來源 → 納入排除標準 → 分析架構',
         },

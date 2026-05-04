@@ -172,11 +172,11 @@ const THINK_CHOICES = [
 
 /* — 分流方法選項 — */
 const METHOD_OPTIONS = [
-    { id: 'questionnaire', label: '📋 問卷組', icon: <ClipboardList size={18} /> },
-    { id: 'interview', label: '🎤 訪談組', icon: <Mic size={18} /> },
-    { id: 'experiment', label: '🧪 實驗組', icon: <TestTube2 size={18} /> },
-    { id: 'observation', label: '👀 觀察組', icon: <Camera size={18} /> },
-    { id: 'literature', label: '📚 文獻組', icon: <FileSearch size={18} /> },
+    { id: 'questionnaire', label: '問卷組', icon: <ClipboardList size={18} /> },
+    { id: 'interview', label: '訪談組', icon: <Mic size={18} /> },
+    { id: 'experiment', label: '實驗組', icon: <TestTube2 size={18} /> },
+    { id: 'observation', label: '觀察組', icon: <Camera size={18} /> },
+    { id: 'literature', label: '文獻組', icon: <FileSearch size={18} /> },
 ];
 
 /* — 各組三欄對應表 scaffold — */
@@ -529,9 +529,10 @@ const EXPORT_FIELDS = [
     { key: 'w9-plan-ai-check', label: 'AI 互動後的判斷紀錄', question: 'AI 指出的問題 / 給的範例 + 我採納/不採納的決定' },
     { key: 'w9-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
-    { key: 'w9-aired-record', label: 'W9 完整 AIRED 敘事（含 AI 檢核 R 欄位）', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
-    /* Step 4：回顧與繳交（時間承諾） */
-    { key: 'w9-homework-commitment', label: '計畫書撰寫時間承諾', question: '我打算什麼時候寫計畫書第三、四章的定版？' },
+    { key: 'w9-motivation-extended', label: '動機擴寫（W3 一句話 → 一段話）', question: '4 要素：個人連結／現象觀察／研究空缺／研究價值' },
+    { key: 'w8-tool-method', label: '組內合議的研究方法', question: 'W9 開頭組內合議的主方法（按鈕點選自動寫入）' },
+    { key: 'w9-method-reason', label: '方法合議理由 + 補充方法', question: '為什麼選這個方法？跟 W4 比改了嗎？有補充方法嗎？' },
+    /* Step 4：回顧與繳交 */
 ];
 
 /* ══════════════════════════════════════
@@ -541,6 +542,8 @@ const EXPORT_FIELDS = [
 export const W9Page = () => {
     const [choiceResults, setChoiceResults] = useState([]);
     const [selectedMethod, setSelectedMethod] = useState('');
+    const [w3Motivation, setW3Motivation] = useState('');
+    const [w3Topic, setW3Topic] = useState('');
     const [w8Method, setW8Method] = useState('');
     const [w8Secondary, setW8Secondary] = useState(''); // W8 補充方法（label 字串）
     const [w8Topic, setW8Topic] = useState('');
@@ -565,6 +568,11 @@ export const W9Page = () => {
         if (method) setW8Method(method);
         if (secondary) setW8Secondary(secondary);
         if (topic) setW8Topic(topic);
+        /* W3 一句話動機 + W3 個人題目帶入（給 Step 2 動機擴寫鷹架做組內對照用） */
+        const motivation = saved['w3-motivation']?.trim() || '';
+        if (motivation) setW3Motivation(motivation);
+        const w3T = saved['w3-final-topic']?.trim() || '';
+        if (w3T) setW3Topic(w3T);
         /* 讀取 W8 路線（Team / Solo）—— 影響 Step 1 互評環節的鷹架 */
         const route = localStorage.getItem('w8-route') || '';
         if (route === 'team' || route === 'solo') setW8Route(route);
@@ -586,12 +594,13 @@ export const W9Page = () => {
         });
     }, []);
 
-    /* 選擇方法時同步存檔 */
+    /* 選擇方法時同步存檔（同時寫 w9-my-method + w8-tool-method 給 useEffect 帶入跟下游 fallback 用） */
     const handleMethodSelect = useCallback((methodId) => {
         setSelectedMethod(methodId);
         const label = METHOD_OPTIONS.find(m => m.id === methodId)?.label || methodId;
         const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
         all['w9-my-method'] = label;
+        all['w8-tool-method'] = label;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
     }, []);
 
@@ -684,6 +693,84 @@ export const W9Page = () => {
                         </div>
                     </div>
 
+                    {/* 🤝 組內合議方法登記（W9 第一個紀錄點 · 點按鈕＋寫理由） */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
+                        <p className="text-[14px] font-bold text-[var(--accent)] mb-2">🤝 開工前先合議：你們組要用什麼方法？（5 分鐘）</p>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
+                            W4 你<strong>個人</strong>選了一個方法，但 W6 組隊後<strong>可能改</strong>——這 5 分鐘<strong>組內合議</strong>：
+                            <strong>第三章方法是上層決策</strong>，第四章變項／第五章對象都要依它展開。<strong>邊寫邊改方法 = 後面章節重寫</strong>。
+                        </p>
+
+                        {/* 跨週連結：回 W4 方法地圖決策樹 */}
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-2.5 mb-3 flex items-center justify-between gap-3">
+                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                💡 不確定該選哪個方法？回 <strong className="text-[var(--ink)]">W4 方法地圖</strong>看「兩層判斷決策樹」（自己收集 vs 分析文本 → 5 法分流），再回來點選。
+                            </p>
+                            <a
+                                href="/w4"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[11.5px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
+                            >
+                                🗺️ 回 W4 看
+                            </a>
+                        </div>
+
+                        {/* 5 按鈕：方法點選（同步寫 w9-my-method + w8-tool-method） */}
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">① 點選組內合議的主方法（單選 · 之後可改）</p>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-2">
+                            {METHOD_OPTIONS.map((m) => {
+                                const picked = selectedMethod === m.id;
+                                return (
+                                    <button
+                                        key={m.id}
+                                        type="button"
+                                        onClick={() => handleMethodSelect(m.id)}
+                                        className="text-center p-3 rounded-[var(--radius-unified)] border-2 transition-all"
+                                        style={{
+                                            background: picked ? 'var(--accent)' : '#fff',
+                                            borderColor: picked ? 'var(--accent)' : 'var(--border)',
+                                            color: picked ? '#fff' : 'var(--ink-mid)',
+                                            fontWeight: picked ? 700 : 500,
+                                        }}
+                                    >
+                                        <div className="flex items-center justify-center gap-1 text-[12.5px]">
+                                            {m.icon}
+                                            <span>{m.label}</span>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {selectedMethod && (
+                            <>
+                                <div className="bg-[#F0FDF4] border border-[#86EFAC] rounded p-2 mb-1.5 text-[11.5px] text-[#166534]">
+                                    ✅ 已選：{METHOD_OPTIONS.find(m => m.id === selectedMethod)?.label}（W9-W15 會帶入這個）
+                                </div>
+                                <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-2 mb-3 text-[11.5px] text-[#991B1B]">
+                                    ⚠️ <strong>方法決定後，W10 整本工具設計都會跟著走</strong>。下週 W10 前若要改方法，<strong>先找老師討論</strong>，不要自己換——換了等於工具設計重來。
+                                </div>
+                            </>
+                        )}
+
+                        {/* 合議理由 + 補充方法（合一） */}
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2 mt-3">② 合議理由 + 補充方法（如果有）</p>
+                        <ThinkRecord
+                            dataKey="w9-method-reason"
+                            prompt="為什麼選這個方法？有沒有補充方法？"
+                            scaffold={[
+                                '主方法：（上方按鈕已選 · 這格寫理由即可）',
+                                '為什麼選這個：（跟研究問題對得上嗎？樣本好取得嗎？組內成員擅長嗎？）',
+                                '跟 W4 個人選的相比：（一樣／改了。改的話為什麼？）',
+                                '補充方法：（如有，例：「先問卷找趨勢 N=80 → 再訪談補深度 N=6」；沒有就留空）',
+                            ]}
+                            rows={6}
+                        />
+                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
+                            ✏️ 寫完複製到<strong>計畫書第六章「研究方法」段落</strong>。Solo 或單飛？直接寫你個人決定的方法即可（跟 W4 一樣或改了都行）。
+                        </p>
+                    </div>
+
                     {/* 1-5 章觀念複習地圖（不是個人素材清單，是觀念口訣）*/}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
@@ -701,10 +788,10 @@ export const W9Page = () => {
                             </div>
                             {[
                                 { ch: '一', t: '題目／動機／問題', key: '8 病症速記：太大／太抽象／百科／玄學／太私／無聊／個案／無範圍。題目要避開這 8 條。', back: [{ to: '/w3', label: 'W3 八病症' }] },
-                                { ch: '二', t: '操作型定義', key: '三件事：可測量、有正反例、前後一致。「壓力大」不行、「每週超過 3 次熬夜過 12 點」可以。同一條技能：W3→W4→W7 越拆越細。', back: [{ to: '/w3', label: 'W3 具體化' }, { to: '/w4', label: 'W4 5W1H' }, { to: '/w7', label: 'W7 定義' }] },
-                                { ch: '三', t: '文獻探討', key: '文獻不是擺著、要對話：他怎麼說 → 我怎麼接 → 我怎麼補。最少 2-3 篇 A/B 級。', back: [{ to: '/w5', label: 'W5 華藝' }, { to: '/w6', label: 'W6 引用' }] },
-                                { ch: '四', t: '變項／主題／維度', key: '從題目拆出來。題目沒明說、但會影響結果的——就是控制變項。', back: [{ to: '/w7', label: 'W7 方法' }, { to: '/w8', label: 'W8 變項' }] },
-                                { ch: '五', t: '抽樣／對象', key: '三件都要寫：為什麼是這群人？幾人？怎麼找？「方便抽樣」要老實寫不要假裝隨機。', back: [{ to: '/w8', label: 'W8 對象' }] },
+                                { ch: '二', t: '操作型定義', key: '三件事：可測量、有正反例、前後一致。「壓力大」不行、「每週超過 3 次熬夜過 12 點」可以。', back: [{ to: '/w3', label: 'W3 具體化' }, { to: '/w5', label: 'W5 操作型' }] },
+                                { ch: '三', t: '文獻探討', key: '文獻不是擺著、要對話：他怎麼說 → 我怎麼接 → 我怎麼補。最少 2-3 篇 A/B 級。', back: [{ to: '/w7', label: 'W7 文獻搜尋' }, { to: '/w8', label: 'W8 引用寫作' }] },
+                                { ch: '四', t: '變項／主題／維度', key: '從題目拆出來。題目沒明說、但會影響結果的——就是控制變項。', back: [{ to: '/w4', label: 'W4 方法地圖' }, { to: '/w5', label: 'W5 操作型' }] },
+                                { ch: '五', t: '抽樣／對象', key: '三件都要寫：為什麼是這群人？幾人？怎麼找？「方便抽樣」要老實寫不要假裝隨機。', back: [{ to: '/w5', label: 'W5 對象與抽樣' }] },
                             ].map((r, i) => (
                                 <div key={i} className="grid grid-cols-[60px_140px_1fr_90px] border-b border-[var(--border)] last:border-b-0 text-[12px]">
                                     <div className="px-3 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
@@ -735,7 +822,7 @@ export const W9Page = () => {
 
         /* ─── Step 2：計畫書組裝工作坊（W9 第二節重點：寫計畫書 1-5 章） ─── */
         {
-            title: '計畫書組裝工作坊',
+            title: '第一章動機擴寫',
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
@@ -746,6 +833,205 @@ export const W9Page = () => {
                     <div className="w7-notice w7-notice-gold">
                         🎯 <strong>本節目標：完成計畫書第 1-5 章雛形</strong>（五章地基工程）——把 W2-W8 寫過的東西整合進來，W8 老師回饋同步修進去。第六章以後留到 W10 做工具設計。
                     </div>
+
+                    {/* 🔥 第一章動機擴寫鷹架（W3 一句話 → W9 一段話的橋） */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
+                        <p className="text-[14px] font-bold text-[var(--accent)] mb-2">🔥 寫第一章動機前 · 先對照 W3 個人題目 vs 組內合議題目</p>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
+                            <strong>W3 是個人寫的</strong>，W6 組隊後組內可能<strong>融合題目</strong>或<strong>整個換新題目</strong>。
+                            動機要基於<strong className="text-[var(--accent)]">組內合議的題目</strong>寫——W3 那句只是個人靈感參考，組內題目改了就要重寫動機。
+                        </p>
+
+                        {/* 題目對照：W3 個人 vs W8 組內 */}
+                        {(w3Topic || w8Topic) && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                                <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded p-2.5">
+                                    <p className="text-[11px] font-bold text-[var(--ink-light)] mb-1">📂 W3 你個人寫的題目</p>
+                                    {w3Topic
+                                        ? <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed italic">「{w3Topic}」</p>
+                                        : <p className="text-[11.5px] text-[var(--ink-light)] italic">（沒紀錄）</p>}
+                                </div>
+                                <div className="bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded p-2.5">
+                                    <p className="text-[11px] font-bold text-[#1E40AF] mb-1">🤝 W8 組內合議題目（W9 起以這個為準）</p>
+                                    {w8Topic
+                                        ? <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed italic">「{w8Topic}」</p>
+                                        : <p className="text-[11.5px] text-[#92400E] italic">⚠️ 組內還沒合議題目——回 <a href="/w8" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline">W8</a> 寫合議題目，或<strong>立刻組內討論</strong>把組內題目寫到計畫書第一章再回來</p>}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* W3 動機帶入（明示是個人版，僅作參考） */}
+                        {w3Motivation ? (
+                            <div className="bg-[#FFFBEB] border-l-4 border-[#D97706] rounded-r-[6px] p-3 mb-3">
+                                <p className="text-[11.5px] font-bold text-[#92400E] mb-1">📂 你 W3 寫的個人版一句話動機（僅作靈感參考 · 組內題目改了就要重寫）：</p>
+                                <p className="text-[12.5px] text-[#7C2D12] italic leading-relaxed">「{w3Motivation}」</p>
+                                <p className="text-[11px] text-[#92400E] italic mt-1.5 pt-1.5 border-t border-[#D97706]/30">
+                                    💡 W8 組內題目跟 W3 個人題目<strong>一樣／很接近</strong> → 這句可直接擴寫。
+                                    <strong>完全不同</strong> → 不要硬擴寫，<strong>組內重新討論一句</strong>，再依下方 3 問擴寫。
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded p-2.5 mb-3 text-[11.5px] text-[var(--ink-light)]">
+                                ⚠️ 沒偵測到 W3 個人動機紀錄。沒關係——下方直接依組內題目從 3 問開始寫即可。
+                            </div>
+                        )}
+
+                        {/* 動機 3 問 */}
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">📋 動機 3 問（擴寫時對著補，3 題都要答到）</p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+                            <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded p-2.5">
+                                <p className="text-[11.5px] font-bold text-[#1E40AF] mb-1">Q1 · 情境／理由</p>
+                                <p className="text-[11px] text-[#1E3A8A] leading-relaxed">基於什麼樣的情境或理由，讓你們想要做這個研究？<br /><span className="text-[#1E40AF] italic">（你看到／經歷什麼具體事？為什麼是「你」想做？）</span></p>
+                            </div>
+                            <div className="bg-[#F5F3FF] border border-[#DDD6FE] rounded p-2.5">
+                                <p className="text-[11.5px] font-bold text-[#5B21B6] mb-1">Q2 · 研究空缺</p>
+                                <p className="text-[11px] text-[#4C1D95] leading-relaxed">前人研究說過什麼？哪裡還沒答到？<br /><span className="text-[#5B21B6] italic">（W7-W8 找的文獻說 ___，但 ___ 沒人答）</span></p>
+                            </div>
+                            <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded p-2.5">
+                                <p className="text-[11.5px] font-bold text-[#92400E] mb-1">Q3 · 解決什麼</p>
+                                <p className="text-[11px] text-[#78350F] leading-relaxed">做這個研究可以解決什麼事情？<br /><span className="text-[#92400E] italic">（例：把某現象說清楚／驗證某現象是否存在／比較異同／探索原因）</span></p>
+                            </div>
+                        </div>
+
+                        {/* 📋 學生實例（含色標 + 對照教學） */}
+                        <details className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] mb-3">
+                            <summary className="cursor-pointer px-4 py-2 hover:bg-[var(--paper-warm)] flex items-center gap-2 text-[12px]">
+                                <span className="font-bold text-[var(--ink)]">📋 學生實例 · 色標對照（點開看 2 個真實範例 + 老師標註）</span>
+                                <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                            </summary>
+                            <div className="border-t border-[var(--border)] p-4 space-y-4">
+                                {/* 範例 1 */}
+                                <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded p-3">
+                                    <p className="text-[12px] font-bold text-[var(--ink)] mb-1">📌 範例 1：不同職業對信仰的差異（人神共奮）</p>
+                                    <p className="text-[12.5px] text-[var(--ink)] leading-[1.85] mb-2">
+                                        <span className="bg-[#FEF3C7] px-0.5">不同職業背景的人可能會對信仰和宗教有不同的看法與接受程度。</span>
+                                        <span className="bg-[#CFFAFE] px-0.5">我們希望能理解不同職業背景的人如何看待和實踐信仰，並且揭示出宗教與職業生涯之間的深層關聯性。</span>
+                                    </p>
+                                    <div className="text-[11px] text-[var(--ink-mid)] leading-relaxed space-y-0.5">
+                                        <p>· <span className="bg-[#FEF3C7] px-1 font-bold text-[#92400E]">Q1 情境</span> 寫了「不同職業可能不同」（觀察）✅</p>
+                                        <p>· <span className="bg-[#CFFAFE] px-1 font-bold text-[#075985]">Q3 解決什麼</span> 寫了「理解+揭示關聯」✅</p>
+                                        <p className="text-[#991B1B]">· <strong>⚠️ 缺 Q2 研究空缺</strong>——沒提到「前人研究過了嗎？哪裡還沒答到？」</p>
+                                    </div>
+                                </div>
+
+                                {/* 範例 2 */}
+                                <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded p-3">
+                                    <p className="text-[12px] font-bold text-[var(--ink)] mb-1">📌 範例 2：遊戲對青少年社交的影響（虛擬與現實的冒險）</p>
+                                    <p className="text-[12.5px] text-[var(--ink)] leading-[1.85] mb-2">
+                                        <span className="bg-[#FEF3C7] px-0.5">遊戲對青少年的影響越來越大，不僅能夠帶來娛樂，還能從上面認識好友，青少年能從上頭認識朋友，也能因此失去現實世界的朋友。</span>
+                                        <span className="bg-[#CFFAFE] px-0.5">這份報告是研究遊戲，究竟是拓寬社交圈，還是降低社交能力。</span>
+                                    </p>
+                                    <div className="text-[11px] text-[var(--ink-mid)] leading-relaxed space-y-0.5">
+                                        <p>· <span className="bg-[#FEF3C7] px-1 font-bold text-[#92400E]">Q1 情境</span> 觀察具體（拓寬 vs 失去現實朋友）✅</p>
+                                        <p>· <span className="bg-[#CFFAFE] px-1 font-bold text-[#075985]">Q3 解決什麼</span> 用「比較」動詞（究竟是 X 還是 Y）✅</p>
+                                        <p className="text-[#991B1B]">· <strong>⚠️ 缺 Q2 研究空缺</strong>——沒提到 W7-W8 找的文獻說過什麼</p>
+                                    </div>
+                                </div>
+
+                                {/* 補完 Q2 的示範 */}
+                                <div className="bg-[#F0FDF4] border-2 border-[#86EFAC] rounded p-3">
+                                    <p className="text-[12px] font-bold text-[#166534] mb-1">✨ 把範例 2 補完 Q2 後會長什麼樣（示範）</p>
+                                    <p className="text-[12.5px] text-[var(--ink)] leading-[1.85] mb-2">
+                                        <span className="bg-[#FEF3C7] px-0.5">遊戲對青少年的影響越來越大，能帶來娛樂、能認識朋友，也能因此失去現實世界的朋友。</span>
+                                        <span className="bg-[#F5F3FF] px-0.5">前人研究多聚焦在「遊戲成癮」的負面，較少同時看「社交圈擴大」這個正面效果（Lee, 2020；陳明德, 2023）。</span>
+                                        <span className="bg-[#CFFAFE] px-0.5">本研究想比較這兩種效果在高中生身上哪個比較強，做完可以給家長／導師具體判斷依據。</span>
+                                    </p>
+                                    <p className="text-[11px] text-[#166534] italic">
+                                        💡 多了 1 句「前人研究說 ___，但 ___ 沒人答」的紫色段，動機就跟文獻對話了，學術味才出來。
+                                    </p>
+                                </div>
+
+                                {/* ⚠️ 4 種學生最常犯的錯誤 */}
+                                <div className="pt-3 border-t-2 border-dashed border-[#FCA5A5]">
+                                    <p className="text-[13px] font-bold text-[#991B1B] mb-2">⚠️ 4 種學生最常踩的雷（依常犯程度排序）</p>
+
+                                    {/* 雷 1 · 廢話型 */}
+                                    <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-3 mb-2">
+                                        <p className="text-[11.5px] font-bold text-[#991B1B] mb-1">🚫 雷 1 · 「廢話型」（最常見）</p>
+                                        <p className="text-[12px] text-[var(--ink)] leading-[1.85] italic mb-1.5">「我對這個主題很有興趣，希望透過研究學到更多。」</p>
+                                        <div className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-0.5">
+                                            <p>· ❌ <strong>Q1 缺</strong>：沒說「為什麼是你」想做（「有興趣」誰都能說）</p>
+                                            <p>· ❌ <strong>Q2 缺</strong>：完全沒提文獻</p>
+                                            <p>· ❌ <strong>Q3 缺</strong>：「學到更多」不是研究行動——做完到底解決了什麼？</p>
+                                            <p className="text-[#92400E] italic">💡 改寫起手：把「有興趣」換成你<strong>具體看到的事</strong>（我看到 ___ 卻 ___）</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 雷 2 · 百科型 */}
+                                    <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-3 mb-2">
+                                        <p className="text-[11.5px] font-bold text-[#991B1B] mb-1">🚫 雷 2 · 「百科型」（抄統計／定義就停）</p>
+                                        <p className="text-[12px] text-[var(--ink)] leading-[1.85] italic mb-1.5">「根據衛福部統計，台灣青少年焦慮比例近年上升。本研究希望探討高中生焦慮現象。」</p>
+                                        <div className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-0.5">
+                                            <p>· ❌ <strong>Q1 缺</strong>：抄統計但沒個人觀察、沒「為什麼是你想做」</p>
+                                            <p>· ❌ <strong>Q2 缺</strong>：引了一個數據但沒對話前人研究的「空缺」</p>
+                                            <p>· △ <strong>Q3 半</strong>：「探討」太抽象（探討完要做什麼？比較？驗證？）</p>
+                                            <p className="text-[#92400E] italic">💡 改寫起手：在統計後接「我自己／身邊朋友也 ___」的個人連結句</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 雷 3 · 個人化過度型 */}
+                                    <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-3 mb-2">
+                                        <p className="text-[11.5px] font-bold text-[#991B1B] mb-1">🚫 雷 3 · 「個人化過度型」（只對自己朋友有意義）</p>
+                                        <p className="text-[12px] text-[var(--ink)] leading-[1.85] italic mb-1.5">「我朋友因為玩遊戲跟父母吵架，我想了解為什麼。」</p>
+                                        <div className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-0.5">
+                                            <p>· ✅ <strong>Q1 OK</strong>：有具體個人觀察</p>
+                                            <p>· ❌ <strong>Q2 缺</strong>：沒文獻——「了解為什麼」前人可能早有研究</p>
+                                            <p>· ❌ <strong>Q3 缺</strong>：做完只對你朋友有意義？沒說對更廣的「青少年/家庭」研究有什麼貢獻</p>
+                                            <p className="text-[#92400E] italic">💡 改寫起手：把「我朋友」擴成「我觀察到很多同學的家庭都 ___」</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 雷 4 · 現象列表型 */}
+                                    <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-3">
+                                        <p className="text-[11.5px] font-bold text-[#991B1B] mb-1">🚫 雷 4 · 「現象列表型」（列了一堆但沒人在裡面）</p>
+                                        <p className="text-[12px] text-[var(--ink)] leading-[1.85] italic mb-1.5">「現代社群媒體 IG、Threads、TikTok 普及，許多研究顯示與焦慮相關。本研究探討此現象。」</p>
+                                        <div className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-0.5">
+                                            <p>· △ <strong>Q1 半</strong>：列現象但沒「為什麼是你想做」</p>
+                                            <p>· △ <strong>Q2 半</strong>：提了「許多研究」但沒指出「哪裡還沒答到」</p>
+                                            <p>· ❌ <strong>Q3 缺</strong>：「探討此現象」說了等於沒說（探討什麼？比較？驗證？）</p>
+                                            <p className="text-[#92400E] italic">💡 改寫起手：在「許多研究」後接「但 ___ 還沒人做」（具體指出空缺）</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        {/* 擴寫 ThinkRecord */}
+                        <ThinkRecord
+                            dataKey="w9-motivation-extended"
+                            prompt="✍️ 動機擴寫：把 W3 一句話擴成一段（4-6 句，3 問都要答）"
+                            scaffold={[
+                                'Q1 情境／理由：（我看到 ___／我自己經歷 ___，所以想研究 ___）',
+                                'Q2 研究空缺：（W7-W8 找的文獻說 ___，但 ___ 還沒人答）',
+                                'Q3 解決什麼：（這份研究會 ___（說清楚／驗證／比較／探索）___，做完對 ___ 有貢獻／有意義）',
+                            ]}
+                            rows={6}
+                        />
+                        <p className="text-[11px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
+                            💡 寫完直接複製到計畫書第一章「研究動機」段落。
+                        </p>
+                        <div className="bg-[#FFFBEB] border border-[#FCD34D] rounded p-2.5 mt-2 text-[11px] text-[#92400E] leading-relaxed">
+                            🔁 <strong>提醒：</strong>這 4 種錯誤（廢話型／百科型／個人化過度／現象列表型），<strong>計畫書 docx 第四章寫「變項」時也常踩</strong>——例：「學習動機」別只寫「同學都很投入」（廢話型），要具體可測量（每週主動學習時數／主動找老師問問題的次數）。
+                        </div>
+                    </div>
+
+                    <div className="w7-notice w7-notice-teal">
+                        ✅ 動機擴寫完成 → 下一步：計畫書 1-5 章組裝（分工 + 模板 + 各章工作表）。
+                    </div>
+                </div>
+            ),
+        },
+
+        /* ─── Step 3：計畫書 1-5 章組裝（分工 + 模板 + 章節地圖 + 各章工作表） ─── */
+        {
+            title: '計畫書 1-5 章組裝',
+            icon: '✍️',
+            content: (
+                <div className="space-y-8 prose-zh">
+                    {/* 開場 */}
+                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
+                        動機寫完後，把第二、三、四、五章一起補到雛形。第六章工具設計留到 W10。先看分工，再依各組方法挑工作表。
+                    </p>
 
                     {/* 🤝 小組分章工作流（避免全組擠在第一章、解決時間不夠的真實問題） */}
                     <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF] max-w-[720px]">
@@ -833,9 +1119,13 @@ export const W9Page = () => {
                             </summary>
                             <div className="border-t border-[#D97706]/30 px-4 py-3 space-y-2 text-[11.5px] text-[#78350F] leading-relaxed">
                                 <p><strong>Step 1 · 工具選一個</strong>：</p>
-                                <ul className="list-disc pl-5 space-y-0.5">
-                                    <li><strong>華藝線上圖書館</strong>（airitilibrary.com）— 中文期刊／碩博論文</li>
-                                    <li><strong>Google Scholar</strong>（scholar.google.com）— 中英文都有，但要會篩</li>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                    <a href="https://www.airitilibrary.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 bg-[#D97706] text-white px-3 py-1.5 rounded font-bold text-[11.5px] hover:opacity-90 no-underline">🔗 開啟華藝</a>
+                                    <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 bg-[#D97706] text-white px-3 py-1.5 rounded font-bold text-[11.5px] hover:opacity-90 no-underline">🔗 開啟 Google Scholar</a>
+                                </div>
+                                <ul className="list-disc pl-5 space-y-0.5 text-[11px] text-[#92400E]">
+                                    <li><strong>華藝</strong>：中文期刊／碩博論文（學校 VPN 內可下載全文）</li>
+                                    <li><strong>Google Scholar</strong>：中英文都有，但要會篩（看作者+年份+被引次數）</li>
                                 </ul>
                                 <p><strong>Step 2 · 關鍵字下兩層</strong>：</p>
                                 <ul className="list-disc pl-5 space-y-0.5">
@@ -976,8 +1266,8 @@ export const W9Page = () => {
                             {[
                                 { ch: '一', title: '研究主題基本資訊', src: 'W2 動機 + W3 問題 + W8 對象' },
                                 { ch: '二', title: '關鍵詞／行為操作型定義', src: 'W9 本節' },
-                                { ch: '三', title: '文獻回顧', src: 'W5–W6' },
-                                { ch: '四', title: '變項／主題／維度設計', src: 'W9–W10' },
+                                { ch: '三', title: '文獻回顧', src: 'W7-W8' },
+                                { ch: '四', title: '變項／主題／維度設計', src: 'W9 骨架｜W10 定版' },
                                 { ch: '五', title: '對象與抽樣', src: 'W8' },
                                 { ch: '六', title: '工具設計', src: 'W10' },
                                 { ch: '七～九', title: '實施／分析／結論', src: 'W10 定稿' },
@@ -1024,8 +1314,8 @@ export const W9Page = () => {
                                 <ul className="text-[13px] text-[var(--ink-mid)] space-y-1 list-disc pl-5">
                                     <li>第三章文獻補齊 2-3 篇 + 寫「與本研究差異」</li>
                                     <li>第四章變項／主題／維度定版 + 每個都有操作定義</li>
-                                    <li>跑 AI 檢核 Prompt（見下方）+ 補 W9 AIRED 的 R 欄位</li>
                                     <li>上傳計畫書到 Google Classroom</li>
+                                    <li className="text-[var(--ink-light)]">（選做）跑 AI 檢核 Prompt 看 1-5 章 — W10 第二節整本檢核才是重點，這裡先試也行</li>
                                 </ul>
                             </div>
                         </div>
@@ -1055,7 +1345,7 @@ export const W9Page = () => {
 
         /* ─── Step 3：AI 工作坊（雙模式 + 完整對話繳交 + AIRED） ─── */
         {
-            title: 'AI 工作坊',
+            title: 'AI 工作坊（可選）',
             icon: '🤖',
             content: (
                 <div className="space-y-8 prose-zh">
@@ -1068,6 +1358,20 @@ export const W9Page = () => {
                     <div className="space-y-4">
                         {/* AI 協作三原則（W9 角色：嚴格教練） */}
                         <AICollaborationPrinciples week="9" role="critic" compact={false} />
+
+                        {/* 📋 用 AI 寫東西的 4 自查（前置 · 兩種模式都適用） */}
+                        <div className="bg-white border-2 border-[#86EFAC] rounded p-3 mb-3">
+                            <p className="text-[12px] font-bold text-[#166534] mb-2">📋 用 AI 寫東西的 4 個自查（不論教學型／驗收型都適用）</p>
+                            <ul className="text-[11.5px] text-[#166534] leading-relaxed space-y-1">
+                                <li>☐ 我用<strong>自己的研究主題詞彙</strong>替換 AI 給的詞（不是直接套）</li>
+                                <li>☐ AI 寫 5 句，我寫的句數至少不一樣（合理增減）</li>
+                                <li>☐ 我能口頭跟同學講「為什麼這樣寫」（不是照念）</li>
+                                <li>☐ 我有<strong>調整段落順序</strong>或補上 AI 沒提到的我自己想到的內容</li>
+                            </ul>
+                            <p className="text-[10.5px] text-[#166534] italic mt-2">
+                                💡 4 項至少達 3 項才算改寫，否則就是抄——下一週老師抽問會看出來。
+                            </p>
+                        </div>
 
                         {/* AI 模式選擇 */}
                         <AIModePicker week="9" taskName="計畫書檢核" onChange={setW9AiMode} />
@@ -1100,19 +1404,6 @@ ___（例：第三章文獻探討、第四章變項定義）
                                 <p className="text-[11px] text-[#166534] italic leading-relaxed">
                                     💡 看完 AI 範例後，回到計畫書 自己寫一次，再切回「驗收型」讓 AI 檢核。
                                 </p>
-                                {/* 📋 怎麼算「改寫」不是「抄」？ */}
-                                <div className="bg-white border border-[#86EFAC] rounded p-3">
-                                    <p className="text-[11.5px] font-bold text-[#166534] mb-2">📋 怎麼算「改寫」不是「抄」？4 個自查問題</p>
-                                    <ul className="text-[11px] text-[#166534] leading-relaxed space-y-1">
-                                        <li>☐ 我用<strong>自己的研究主題詞彙</strong>替換 AI 的範例詞（不是直接套）</li>
-                                        <li>☐ AI 寫 5 句，我寫的句數至少不一樣（合理增減）</li>
-                                        <li>☐ 我能口頭跟同學講「為什麼這樣寫」（不是照念）</li>
-                                        <li>☐ 我有<strong>調整段落順序</strong>或補上 AI 沒提到的我自己想到的內容</li>
-                                    </ul>
-                                    <p className="text-[10.5px] text-[#166534] italic mt-2">
-                                        💡 4 項至少達 3 項才算改寫，否則就是抄——切回驗收型壓力測試一定會被 AI 戳穿。
-                                    </p>
-                                </div>
                             </div>
                         )}
 
@@ -1127,29 +1418,35 @@ ___（例：第三章文獻探討、第四章變項定義）
                             </div>
                         )}
 
-                        {/* AI 建議判斷紀錄 */}
-                        <ThinkRecord
-                            dataKey="w9-plan-ai-check"
-                            prompt="AI 互動後的判斷紀錄（課後 AI 跑完後補）"
-                            defaultTemplate={'AI 指出的主要問題（驗收型）/ AI 給的範例（教學型）：\n1. \n2. \n3. \n\n我的決定：\n・採納：\n・不採納：\n・部分採納：\n（每項記得寫理由 / 教學型寫「我自己改寫的版本」）'}
-                            placeholder="例：採納第 1、3 點因為本來就漏寫；不採納第 2 點因為抽樣已是學期極限"
-                            rows={10}
-                        />
+                        {/* AI 判斷紀錄 + 對話繳交（用了 AI 才顯示） */}
+                        {w9AiMode !== 'standalone' && w9AiMode && (
+                            <>
+                                <ThinkRecord
+                                    dataKey="w9-plan-ai-check"
+                                    prompt="AI 互動後的判斷紀錄（課後 AI 跑完後補）"
+                                    defaultTemplate={'AI 指出的主要問題（驗收型）/ AI 給的範例（教學型）：\n1. \n2. \n3. \n\n我的決定：\n・採納：\n・不採納：\n・部分採納：\n（每項記得寫理由 / 教學型寫「我自己改寫的版本」）'}
+                                    placeholder="例：採納第 1、3 點因為本來就漏寫；不採納第 2 點因為抽樣已是學期極限"
+                                    rows={10}
+                                />
+                                <AIDialogSubmission week="9" taskName="計畫書檢核對話" required={true} />
+                            </>
+                        )}
 
-                        {/* 完整對話繳交（W9 多輪互動，必繳） */}
-                        <AIDialogSubmission week="9" taskName="計畫書檢核對話" required={true} />
-
-                        {/* W9 完整 AIRED */}
-                        <AIREDNarrative
-                            week="9"
-                            hint="本節預想式填 A/I/E/D；R 回家跑完 AI 思考模式再補"
-                            optional={false}
-                        />
+                        {/* standalone 提示 */}
+                        {w9AiMode === 'standalone' && (
+                            <div className="bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded p-4">
+                                <p className="text-[13px] font-bold text-[#1E40AF] mb-1">🚫 你選擇不用 AI</p>
+                                <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
+                                    完全 OK——直接到下一步繳交。<strong>AIRED 紀錄留到 W10</strong>（W9-W10 是計畫書連續週，AIRED 在 W10 一起寫即可）。
+                                </p>
+                            </div>
+                        )}
+                        {/* AIRED 已搬到 W10 寫（W9-W10 計畫書連續週） */}
                     </div>
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ AI 工作坊完成 → <strong>Step 4 回顧與繳交</strong>。記得把 AI 檢核 Prompt 帶回家跑、補完 AIRED R 欄位、上傳計畫書到 GC。
+                        ✅ AI 工作坊完成（或你選擇不用 AI）→ 下一步回顧與繳交。記得把 AI 檢核 Prompt 帶回家跑、上傳計畫書到 GC。<strong>AIRED 留到 W10 寫</strong>（W9-W10 是計畫書連續週）。
                     </div>
                 </div>
             ),
@@ -1181,11 +1478,24 @@ ___（例：第三章文獻探討、第四章變項定義）
                         </div>
                     </div>
 
-                    <ExportButton
-                        weekLabel="W9 工具設計基礎"
-                        fields={EXPORT_FIELDS}
-                        choices={choiceResults}
-                    />
+                    {/* 繳交說明卡（取代 ExportButton：W9-W10 主產出是計畫書本身） */}
+                    <div className="bg-[#F0FDF4] border-2 border-[var(--success)] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[18px]">📤</span>
+                            <span className="font-bold text-[14px] text-[var(--ink)]">本週繳交</span>
+                            <span className="text-[10.5px] font-mono text-[var(--ink-light)] ml-1">TO CLASSROOM</span>
+                        </div>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
+                            這週主產出是<strong className="text-[var(--ink)]">計畫書 docx</strong>。把網頁 ThinkRecord 寫好的內容複製到計畫書對應章節，繳交時：
+                        </p>
+                        <ol className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] list-decimal pl-5 space-y-1">
+                            <li><strong>計畫書 docx</strong>（必繳）— 主要評分依據</li>
+                            <li><strong>AI 完整對話連結／文件</strong>（有用 AI 才繳）— 跟計畫書一起貼到 Classroom 本週作業</li>
+                        </ol>
+                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-3 pt-3 border-t border-[var(--border)] leading-[1.85]">
+                            💡 網頁本身是<strong>自學導引手冊</strong>——你寫的 ThinkRecord 留在瀏覽器，<strong>期末（W17）會一次匯出 W3-W17 全部歷程</strong>。本週不用單獨匯出網頁紀錄。
+                        </p>
+                    </div>
 
                     {/* 5. 遊戲彩蛋（黑底用 inline style 確保白字勝過 prose-zh cascade） */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg shadow-xl" style={{ color: '#fff' }}>
@@ -1212,31 +1522,14 @@ ___（例：第三章文獻探討、第四章變項定義）
                         <ul style={{ fontSize: 13, lineHeight: 1.9, listStyle: 'disc', paddingLeft: 20, marginBottom: 16, color: '#fff' }}>
                             <li>第三章文獻補到 2-3 篇 + 差異段</li>
                             <li>第四章變項／主題／維度定版 + 操作定義</li>
-                            <li>跑 AI 思考模式檢核第 1-5 章（用上方複製的 Prompt）→ 補完 AIRED 的 R 欄位</li>
                             <li>計畫書上傳 Google Classroom</li>
+                            <li style={{ opacity: 0.65 }}>（選做）跑 AI 思考模式檢核第 1-5 章（用上方複製的 Prompt）— W10 第二節整本檢核才是重點</li>
                         </ul>
                         <p style={{ fontSize: 12, lineHeight: 1.85, color: 'rgba(255,255,255,0.7)' }}>
                             💡 大部分已在課堂完成，課後只是「補細節 + 跑 AI + 繳交」。若要幫自己規劃具體時間，下方可以寫。
                         </p>
                     </div>
 
-                    {/* 時間承諾（選填） */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-5 space-y-3">
-                        <div className="flex items-center gap-2">
-                            <span className="text-[14px]">⏰</span>
-                            <span className="font-bold text-[13px] text-[var(--ink)]">時間承諾（選填）</span>
-                        </div>
-                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            研究心理學：寫下「什麼時候、在哪裡、做多久」，完成率比模糊計畫高 2-3 倍。
-                        </p>
-                        <ThinkRecord
-                            dataKey="w9-homework-commitment"
-                            prompt="我打算什麼時候把課後三件事做完？"
-                            defaultTemplate={'補第三、四章：\n跑 AI 檢核 + 補 AIRED：\n上傳計畫書 到 GC：'}
-                            placeholder="例：週四晚 8-10 點，自己房間"
-                            rows={4}
-                        />
-                    </div>
                 </div>
             ),
         },

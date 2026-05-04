@@ -396,6 +396,7 @@ const MethodToolbookPage = () => {
                                             <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold w-[120px]">類型</th>
                                             <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold">用途</th>
                                             <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold">例子</th>
+                                            <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold w-[180px]">工具範本</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -404,6 +405,20 @@ const MethodToolbookPage = () => {
                                                 <td className="border border-[var(--border)] px-2 py-1.5 font-bold text-[var(--ink)]">{t.name}</td>
                                                 <td className="border border-[var(--border)] px-2 py-1.5 text-[var(--ink-mid)]">{t.use}</td>
                                                 <td className="border border-[var(--border)] px-2 py-1.5 text-[var(--ink-light)]">{t.ex}</td>
+                                                <td className="border border-[var(--border)] px-2 py-1.5">
+                                                    {t.url ? (
+                                                        <a
+                                                            href={t.url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-2.5 py-1 rounded text-[10.5px] font-bold hover:opacity-90 transition-opacity no-underline whitespace-nowrap"
+                                                        >
+                                                            📄 複製範本
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-[10.5px] text-[var(--ink-light)]">—</span>
+                                                    )}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
