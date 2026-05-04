@@ -22,6 +22,7 @@ dist-v3/
 dist-test-*/
 dist-*/
 dist_v*/
+dist_old*/
 
 # 一次性轉檔／修補腳本與紀錄（保留在本機，不入庫）
 convert_*.py
