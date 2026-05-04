@@ -1826,7 +1826,7 @@ export const W12Data = {
     periods: [
         {
             badge: "第一節",
-            title: "開場 + Round 1（6 組短報）",
+            title: "開場 + Round 1（7 組短報）",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1836,67 +1836,57 @@ export const W12Data = {
                     duration: "5 min",
                     colorClass: "c1",
                     icon: "📢",
-                    title: "一、 開場 + 規則說明",
-                    desc: "短報 5 段模板回顧、3 min 計時器示範、同儕 Form 填寫示範（dummy 假人示範一次）",
-                    tags: ["規則", "示範"]
+                    title: "一、 開場 + 規則",
+                    desc: "邊聽可以邊填表；每組之間留 1 分鐘確保填完。",
+                    tags: ["規則"]
                 },
                 {
                     timeStart: "0:05",
-                    timeEnd: "0:35",
-                    duration: "30 min",
+                    timeEnd: "0:40",
+                    duration: "35 min",
                     colorClass: "c5",
                     icon: "🎤",
-                    title: "二、 Round 1：6 組短報（每組 3+1）",
-                    desc: "每組 3 min 短報（投影輪播） + 1 min 老師選題提問。聽眾邊聽邊填同儕 Form（QA 1 min 內完成）",
-                    tags: ["短報×6", "同儕 Form"]
+                    title: "二、 Round 1：7 組短報",
+                    desc: "每組 5 min（3 短報 + 1 老師提問 + 1 緩衝給聽眾把同儕 Form 填完）",
+                    tags: ["短報×7"]
                 },
                 {
-                    timeStart: "0:35",
-                    timeEnd: "0:40",
-                    duration: "5 min",
+                    timeStart: "0:40",
+                    timeEnd: "0:50",
+                    duration: "10 min",
                     colorClass: "c2",
-                    icon: "☕",
-                    title: "三、 中場休息",
-                    desc: "舒緩 + 補填漏掉的同儕 Form 那組",
-                    tags: ["休息"]
+                    icon: "⏳",
+                    title: "三、 緩衝",
+                    desc: "補填漏掉的回饋",
+                    tags: ["緩衝"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "Round 2（7 組短報）+ 老師總評",
+            title: "Round 2（6 組短報）+ 老師總結",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
-                    timeStart: "0:40",
-                    timeEnd: "1:15",
-                    duration: "35 min",
+                    timeStart: "1:00",
+                    timeEnd: "1:30",
+                    duration: "30 min",
                     colorClass: "c5",
                     icon: "🎤",
-                    title: "四、 Round 2：7 組短報（每組 3+1）",
-                    desc: "同 Round 1 流程；老師持續記分（5 維 × 4 級 = 20 分）",
-                    tags: ["短報×7", "老師評分"]
-                },
-                {
-                    timeStart: "1:15",
-                    timeEnd: "1:30",
-                    duration: "15 min",
-                    colorClass: "c4",
-                    icon: "🏁",
-                    title: "五、 老師總評 + 評分公告",
-                    desc: "(1) 集體痛點：全班最常出現的漏洞 (2) W13 督促名單：≤ 12 分組要找老師談 (3) 評分張貼",
-                    tags: ["總評", "W13 督促"]
+                    title: "四、 Round 2：6 組短報",
+                    desc: "同 Round 1 流程",
+                    tags: ["短報×6"]
                 },
                 {
                     timeStart: "1:30",
-                    timeEnd: "1:40",
-                    duration: "10 min",
-                    colorClass: "c3",
-                    icon: "⏱",
-                    title: "六、 Buffer（彈性緩衝）",
-                    desc: "萬一拖時間用；或學生填網頁課後反思（聽完 12 組學到什麼 + 我們組 W13 要修什麼）+ AIRED",
-                    tags: ["Buffer", "課後反思"]
+                    timeEnd: "1:50",
+                    duration: "20 min",
+                    colorClass: "c4",
+                    icon: "🏁",
+                    title: "五、 老師總結 + 收尾",
+                    desc: "集體痛點 + W13 督促名單（評分私下給組長，不公告）",
+                    tags: ["總結", "W13 督促"]
                 }
             ]
         }

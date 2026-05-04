@@ -5,7 +5,6 @@ import HeroBlock from '../components/ui/HeroBlock';
 import LessonMap from '../components/ui/LessonMap';
 import './W12.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
-import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords } from '../components/ui/ThinkRecord';
@@ -95,21 +94,20 @@ const REPORT_SECTIONS = [
     { idx: 5, time: '30 秒', title: '預期蒐集 + Plan B', desc: '樣本目標／時程／Plan B 一句話', limit: '100 字 ≈ 30 秒（剛好用滿）' },
 ];
 
-/* — 100 min 課堂流程 — */
+/* — 100 min 課堂流程（對齊學校 50/10/50 作息）— */
 const LESSON_FLOW = [
-    { time: '0:00-0:05', label: '開場 + 規則說明', desc: 'Pitch 模板說明、計時器示範、同儕 Form 假人示範填法', dur: 5 },
-    { time: '0:05-0:35', label: 'Round 1：6 組短報（3+1）', desc: '每組 3 分鐘短報 + 1 分鐘老師選題提問；同儕同步在 Form 填回饋', dur: 30 },
-    { time: '0:35-0:40', label: '中場休息', desc: '舒緩 + 同儕回饋補填', dur: 5 },
-    { time: '0:40-1:15', label: 'Round 2：7 組短報（3+1）', desc: '同 Round 1', dur: 35 },
-    { time: '1:15-1:30', label: '老師總評 + 評分公告', desc: '集體痛點整理 + W13 督促名單 + 評分張貼', dur: 15 },
-    { time: '1:30-1:40', label: 'Buffer', desc: '萬一拖時間用', dur: 10 },
+    { time: '0:00-0:05', label: '開場 + 規則', desc: '邊聽可以邊填表；每組之間留 1 min 確保填完。', dur: 5 },
+    { time: '0:05-0:40', label: 'Round 1：7 組短報', desc: '每組 5 min（3 短報 + 1 老師提問 + 1 緩衝填表）', dur: 35 },
+    { time: '0:40-0:50', label: '緩衝', desc: '補填漏掉的回饋', dur: 10 },
+    { time: '0:50-1:00', label: '⚠️ 下課', desc: '學校作息', dur: 10 },
+    { time: '1:00-1:30', label: 'Round 2：6 組短報', desc: '同 Round 1 流程', dur: 30 },
+    { time: '1:30-1:50', label: '老師總結 + 收尾', desc: '集體痛點 + W13 督促名單（評分私下給，不公告）', dur: 20 },
 ];
 
 /* — ExportButton 欄位 — */
 const EXPORT_FIELDS = [
     { key: 'w12-listening-takeaway', label: '聽完 12 組學到什麼', question: '哪一組的設計／Pilot 發現最讓你想回頭改自己的？' },
     { key: 'w12-self-revision', label: '我們組要改什麼', question: '同儕回饋 + 老師評分後，W13 前要修的具體項目' },
-    { key: 'w12-aired-record', label: 'W12 AIRED 敘事', question: '本週 AI 互動（含 W11 → W12 之間的合議）' },
 ];
 
 /* ══════════════════════════════════════
@@ -175,9 +173,9 @@ const W12Page = () => {
                 subtitle="正式施測前的最後一道擋板。每組 3 分鐘短報 + 1 分鐘老師選題提問。同學透過 Google Form 即時回饋你的計畫漏洞——你看不到的，30 個聽眾總有人看出。"
                 chain="W11 工具上線、要開始施測了——但別急。先把計畫拉出來給全班看，你想不到的漏洞，30 雙眼睛總有人看到。"
                 meta={[
-                    { label: '第一節', value: '開場 5 + Round 1 六組短報 30 + 中場 5（共 40 min，後 10 min 銜接 R2）' },
-                    { label: '第二節', value: 'Round 2 七組短報 35 + 老師總評 15' },
-                    { label: '課堂產出', value: '各組短報投影 + 全班同儕回饋 Form + 老師當場評分' },
+                    { label: '第一節', value: '開場 + Round 1 七組短報（每組 5 min）+ 緩衝' },
+                    { label: '第二節', value: 'Round 2 六組短報 + 老師總結（評分私下給，不公告）' },
+                    { label: '課堂產出', value: '各組短報投影 + 全班同儕回饋 Form + 老師私下評分' },
                     { label: '前置要求', value: 'W11 結束 7 天內全組合議 + 組長已填短報 Form（W12 上課前 8:00 截止）' },
                 ]}
             />
@@ -309,7 +307,7 @@ const W12Page = () => {
                     <h3 className="hidden">
                     </h3>
                     <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                        老師當場給分當壓力槓桿。<strong>17-20 ★★★★ ／ 13-16 ★★★ ／ 9-12 ★★ ／ 5-8 ★</strong>。分數 ≤ 12 的組 W13 前要找老師談。
+                        老師現場記分、私下給組長（不公告排名）。<strong>17-20 ★★★★ ／ 13-16 ★★★ ／ 9-12 ★★ ／ 5-8 ★</strong>。分數 ≤ 12 的組 W13 前要找老師談。
                     </p>
                     <div className="space-y-2">
                         {RUBRIC.map((r) => (
@@ -335,16 +333,44 @@ const W12Page = () => {
                 <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0FDF4] border-2 border-[#10B981]">
                     <p className="text-[14px] font-bold text-[#065F46] mb-2">📝 你聽 12 組短報時，每組要填 3 題（1 分鐘內）</p>
                     <ul className="text-[12.5px] text-[#047857] leading-[1.85] list-decimal pl-5 space-y-1">
-                        <li><strong>這組最大的計畫漏洞是？</strong>（單選 5 個漏洞選項）</li>
+                        <li><strong>這組最大的計畫漏洞是？</strong>（單選 5 個漏洞——下方定義）</li>
                         <li><strong>給這組一句具體建議</strong>（30 字內、必填）</li>
                         <li><strong>我從這組學到什麼？</strong>（30 字內、必填）</li>
                     </ul>
+
+                    {/* 5 漏洞定義 */}
+                    <div className="mt-3 bg-white border border-[#10B981]/40 rounded-[var(--radius-unified)] p-3">
+                        <p className="font-bold text-[12.5px] text-[#065F46] mb-2">🎯 5 個漏洞選項是什麼意思？</p>
+                        <div className="grid md:grid-cols-2 gap-2 text-[11.5px] leading-[1.75]">
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">① 樣本不夠 / 取樣偏</p>
+                                <p className="text-[var(--ink-mid)]">數量太少代表性不足；或只找特定類型的人（例：只找朋友）</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">② 題目雙重問題 / 歧義</p>
+                                <p className="text-[var(--ink-mid)]">一題問兩件事；或受測者每個人理解不同（例：「壓力」是學業還是經濟？）</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">③ 變項定義不可測量</p>
+                                <p className="text-[var(--ink-mid)]">「投入度」「動機」沒寫怎麼測；只有抽象概念沒有指標</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">④ Plan B 不具體</p>
+                                <p className="text-[var(--ink-mid)]">「會努力」「再想辦法」沒說什麼數字以下啟動、改成什麼方案、期限到哪</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2 md:col-span-2">
+                                <p className="font-bold text-[var(--ink)]">⑤ 方法跟研究問題對不上</p>
+                                <p className="text-[var(--ink-mid)]">想知道因果卻用問卷（只能看相關）；想知道感受卻用是非題（要訪談才深）</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="mt-3 grid md:grid-cols-2 gap-2 text-[11.5px]">
                         <div className="bg-white border border-[#10B981]/40 rounded-[6px] p-2.5">
                             <p className="font-bold text-[#065F46] mb-1">✅ 接受的建議寫法</p>
                             <ul className="text-[#047857] leading-[1.8] list-disc pl-4 space-y-0.5">
-                                <li>「建議把 Q5 拆兩題，你問的是兩件事（W9 雙重問題）」</li>
-                                <li>「Plan B 要寫期限——『改線上訪談』要訂 W13 中前完成」</li>
+                                <li>「建議把 Q5 拆兩題，你問的是兩件事（漏洞②）」</li>
+                                <li>「Plan B 要寫期限——『改線上訪談』要訂 W13 中前完成（漏洞④）」</li>
                             </ul>
                         </div>
                         <div className="bg-white border border-[#DC2626]/40 rounded-[6px] p-2.5">
@@ -384,14 +410,11 @@ const W12Page = () => {
                     <ThinkRecord
                         dataKey="w12-self-revision"
                         prompt="同儕回饋 + 老師評分後，我們組 W13 前要修的具體項目是？"
-                        defaultTemplate={'}要修 1：\n  → 怎麼改：\n  → 期限：\n\n要修 2：\n  → 怎麼改：\n  → 期限：'}
+                        defaultTemplate={'要修 1：\n  → 怎麼改：\n  → 期限：\n\n要修 2：\n  → 怎麼改：\n  → 期限：'}
                         placeholder="例：要修 1：第 5 題雙重問題（同儕第 8 票漏洞）→ 拆成兩題 → W13 前完成 Form 改版"
                         rows={6}
                     />
                 </div>
-
-                {/* AIRED */}
-                <AIREDNarrative week="12" hint="本週重點 AI 互動：W11→W12 之間 AI 反向質問（如有用）／合議時 AI 輔助整理共識" optional={false} />
 
                 {/* 本週結束，你應該要會 — B 標準格式 */}
                 <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">

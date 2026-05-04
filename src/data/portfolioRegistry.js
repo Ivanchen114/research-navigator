@@ -210,7 +210,6 @@ export const PORTFOLIO_REGISTRY = [
       { key: 'w12-midterm-status', label: 'W13 中期報告：現況' },
       { key: 'w12-midterm-gap', label: 'W13 中期報告：缺口' },
       { key: 'w12-midterm-plan', label: 'W13 中期報告：計畫' },
-      { key: 'w12-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
     ],
   },
   {
