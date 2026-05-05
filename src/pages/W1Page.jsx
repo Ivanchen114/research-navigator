@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
-import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
@@ -457,9 +456,6 @@ export const W1Page = () => {
                                     💡 這個觀察下週 W2 一進教室就會自動帶入——老師會帶你把它變成正式的研究問題。
                                 </p>
                             </div>
-
-                            {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                            <AIREDNarrative week="1" hint="這週你和 AI 玩模仿遊戲" />
 
                             {/* 一鍵複製 */}
                             <ExportButton

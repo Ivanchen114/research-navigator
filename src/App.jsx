@@ -31,6 +31,7 @@ import { ChartMatcherGame } from './pages/games/ChartMatcherGame';
 import { LiteratureReview } from './pages/LiteratureReview';
 // TeamFormation 已歸檔（v2 組隊功能已併入 W6 海報博覽會）
 import { PromptLab } from './pages/PromptLab';
+import { FindTrapsReport } from './pages/FindTrapsReport';
 import { DataAnalysisStation } from './pages/DataAnalysisStation';
 import { Dossier } from './pages/Dossier';
 import { Portfolio } from './pages/Portfolio';
@@ -86,6 +87,7 @@ function App() {
           <Route path="game/data-detective" element={<DataDetectiveGame />} />
           <Route path="game/chart-matcher" element={<ChartMatcherGame />} />
           <Route path="prompt-lab" element={<PromptLab />} />
+          <Route path="find-traps" element={<FindTrapsReport />} />
           <Route path="analysis-station" element={<DataAnalysisStation />} />
           <Route path="dossier" element={<Dossier />} />
           <Route path="portfolio" element={<Portfolio />} />

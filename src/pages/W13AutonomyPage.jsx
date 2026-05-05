@@ -80,7 +80,11 @@ N=85（已扣除 4 份無效）`,
 A       2 次     1 次     0       0
 B       0       0        2       0
 C       1       0        1       1
-N=6 位受訪者`,
+N=6 位受訪者
+
+📌 編碼規則：本範例計「次數」（同一人提 2 次=2）。
+若改計「人數」（同一人提 5 次仍算 1 人），表格內值改為 0/1。
+研究時自己決定，並在編碼規則中寫明——通常質性訪談用人數、量化頻率分析用次數。`,
         },
     },
     {
@@ -287,7 +291,7 @@ const CONSOLIDATE_GUIDE = [
         name: '文獻組：編碼表 → 視覺化表',
         steps: [
             '從 05a-d 工具中抓出「編碼結果」分頁',
-            '依研究問題決定彙整維度（時間軸 / 立場 / 詞頻 / 主題）',
+            '依研究問題決定彙整維度（=想看資料的角度，例：時間軸／立場／詞頻／主題）',
             '新建一張「分析表」：欄=分析維度、列=文獻篇',
             '把每篇文獻的編碼值填入',
             '標 N（總文獻篇數）',
@@ -475,12 +479,34 @@ const W13AutonomyPage = () => {
             icon: <Database size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
+                    {/* ⭐ 開場·必看：AI 報告找雷大挑戰（連到反面教材頁）*/}
+                    <Link
+                        to="/find-traps"
+                        className="block p-5 rounded-[var(--radius-unified)] bg-gradient-to-br from-[var(--ink)] to-[#1E293B] text-white shadow-xl no-underline hover:shadow-2xl transition-all hover:-translate-y-0.5"
+                    >
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[20px]">📺</span>
+                            <p className="font-mono text-[10.5px] font-bold tracking-[0.15em] text-[#FCD34D] uppercase">
+                                上課必看 · AI 反面教材
+                            </p>
+                        </div>
+                        <p className="font-serif text-[18px] md:text-[20px] font-bold leading-tight mb-2">
+                            老師用 Gemini 跑了一份「研究報告」——你能找出 8 個學術紅線嗎？
+                        </p>
+                        <p className="text-[12px] text-white/85 leading-[1.85]">
+                            進入頁面前，先記住一件事：<strong className="text-[#FCD34D]">AI 沒做錯，是 prompt 沒給規則</strong>。本週我們要學的就是怎麼把判斷力寫進 prompt 裡。
+                        </p>
+                        <span className="inline-flex items-center gap-1 mt-3 text-[12.5px] font-bold text-[#FCD34D]">
+                            點進去找雷 →
+                        </span>
+                    </Link>
+
                     {/* 開場：純觀念，先不談 AI */}
                     <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
                         <p className="text-[15px] font-bold text-[var(--ink)] mb-2">📦 任務：原始資料 → 可分析的表</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
                             W11-W12 你蒐集到一堆原始資料（問卷回應／逐字稿／實驗紀錄／觀察表／編碼表）。
-                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、N 值明確的乾淨表，下週 W14 才畫得了圖。
+                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、<strong>N 值（=總筆數，例：N=85 代表收到 85 份）</strong>明確的乾淨表，下週 W14 才畫得了圖。
                             先看看 5 法的對照，找到自己這組對應的轉換路徑。
                         </p>
                     </div>
@@ -592,41 +618,49 @@ const W13AutonomyPage = () => {
                                     <li>檢查 N 值是否標清楚</li>
                                 </ol>
                             </div>
-                            <details className="mt-2 rounded border border-[#BFDBFE] bg-white">
-                                <summary className="cursor-pointer px-3 py-2 hover:bg-[#EFF6FF] flex items-center gap-2">
-                                    <span className="text-[12px] font-bold text-[#1E40AF]">📋 看你這組的具體操作（5 法分流 · 點開）</span>
-                                    <span className="ml-auto text-[10px] font-mono text-[#1E40AF]">▼</span>
-                                </summary>
-                                <div className="border-t border-[#BFDBFE] p-3 grid grid-cols-1 gap-2 text-[11.5px] text-[#1E3A8A] leading-relaxed">
-                                    <div>
-                                        <p className="font-bold mb-0.5">📋 問卷組</p>
-                                        <p>下載 Google Forms CSV → 貼進 Sheet → <strong>第一輪先刪空白／未完整作答的列</strong>（這就是「無效樣本」）→ 變項代碼化（例：「非常同意/同意/普通/不同意/非常不同意」改成 5/4/3/2/1）→ 標 N。</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold mb-0.5">🎤 訪談組（最花時間，安排給課後）</p>
-                                        <p>開新 Sheet 建欄：受訪者代號 / 主題 1 / 主題 2 / 主題 3...（從研究問題反推 5-8 個主題）→ <strong>邊讀逐字稿，遇到主題出現就在對應格 +1</strong>，並把該段話的「行號或時間戳」記在備註欄 → 全篇讀完一個受訪者再換下一個。</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold mb-0.5">🧪 實驗組</p>
-                                        <p>從紀錄表抽出每位受試者的：編號 / 組別 / 前測值 / 後測值 → 算<strong>差值（後 - 前）</strong>→ 計算各組均值差 → <strong>確認實驗組與對照組 N 數一致</strong>（不一致 = 對照組無效）。</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold mb-0.5">👀 觀察組</p>
-                                        <p>把多份觀察紀錄表攤開 → <strong>統一行為類別命名</strong>（「滑手機」「玩手機」要合併還是拆開？先決定）→ 新建總表「行為類別 × 觀察時段」逐格加總頻次。</p>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold mb-0.5">📚 文獻組</p>
-                                        <p>把 05a-d 編碼表單篇彙整 → 依研究問題決定彙整維度（時間軸／立場／詞頻）→ 新建分析表「分析維度（欄）× 文獻篇（列）」逐格填值 → 標 N（總文獻篇數）。</p>
-                                    </div>
-                                </div>
-                            </details>
+                            {(() => {
+                                const METHOD_OPS = [
+                                    { id: 'survey', match: ['問卷'], label: '📋 問卷組', body: <p>下載 Google Forms CSV → 貼進 Sheet → <strong>第一輪先刪空白／未完整作答的列</strong>（這就是「無效樣本」）→ 變項代碼化（例：「非常同意/同意/普通/不同意/非常不同意」改成 5/4/3/2/1）→ 標 N。</p> },
+                                    { id: 'interview', match: ['訪談'], label: '🎤 訪談組（最花時間，安排給課後）', body: <p>開新 Sheet 建欄：受訪者代號 / 主題 1 / 主題 2 / 主題 3...（從研究問題反推 5-8 個主題）→ <strong>邊讀逐字稿，遇到主題出現就在對應格 +1</strong>，並把該段話的「行號或時間戳」記在備註欄 → 全篇讀完一個受訪者再換下一個。</p> },
+                                    { id: 'experiment', match: ['實驗'], label: '🧪 實驗組', body: <p>從紀錄表抽出每位受試者的：編號 / 組別 / 前測值 / 後測值 → 算<strong>差值（後 - 前）</strong>→ 計算各組均值差 → <strong>確認實驗組與對照組 N 數一致</strong>（不一致 = 對照組無效）。</p> },
+                                    { id: 'observation', match: ['觀察'], label: '👀 觀察組', body: <p>把多份觀察紀錄表攤開 → <strong>統一行為類別命名</strong>（「滑手機」「玩手機」要合併還是拆開？先決定）→ 新建總表「行為類別 × 觀察時段」逐格加總頻次。</p> },
+                                    { id: 'literature', match: ['文獻'], label: '📚 文獻組', body: <p>把 05a-d 編碼表單篇彙整 → 依研究問題決定彙整維度（時間軸／立場／詞頻）→ 新建分析表「分析維度（欄）× 文獻篇（列）」逐格填值 → 標 N（總文獻篇數）。</p> },
+                                ];
+                                const myOp = METHOD_OPS.find(m => m.match.some(k => myMethod && myMethod.includes(k)));
+                                const others = myOp ? METHOD_OPS.filter(m => m.id !== myOp.id) : METHOD_OPS;
+                                return (
+                                    <>
+                                        {myOp && (
+                                            <div className="mt-2 rounded border-2 border-[#1E40AF] bg-[#EFF6FF] p-3">
+                                                <p className="text-[10px] font-mono text-[#1E40AF] mb-1 tracking-wider">YOUR GROUP</p>
+                                                <p className="font-bold text-[12px] text-[#1E40AF] mb-1">{myOp.label}</p>
+                                                <div className="text-[11.5px] text-[#1E3A8A] leading-relaxed">{myOp.body}</div>
+                                            </div>
+                                        )}
+                                        <details className="mt-2 rounded border border-[#BFDBFE] bg-white">
+                                            <summary className="cursor-pointer px-3 py-2 hover:bg-[#EFF6FF] flex items-center gap-2">
+                                                <span className="text-[12px] font-bold text-[#1E40AF]">{myOp ? '📂 想看其他方法的具體操作？（點開）' : '📋 5 法分流 · 看自己組的操作（點開）'}</span>
+                                                <span className="ml-auto text-[10px] font-mono text-[#1E40AF]">▼</span>
+                                            </summary>
+                                            <div className="border-t border-[#BFDBFE] p-3 grid grid-cols-1 gap-2 text-[11.5px] text-[#1E3A8A] leading-relaxed">
+                                                {others.map(m => (
+                                                    <div key={m.id}>
+                                                        <p className="font-bold mb-0.5">{m.label}</p>
+                                                        {m.body}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </details>
+                                    </>
+                                );
+                            })()}
                             <div className="hidden">
                             </div>
                             <div className="border-t border-[#BFDBFE] pt-3">
                                 <p className="font-bold mb-1">老師巡視重點：</p>
                                 <ul className="list-disc pl-5 space-y-1">
                                     <li>欄位是否對應研究問題</li>
-                                    <li>編碼類別是否互斥（不會一筆資料同時屬於兩類）</li>
+                                    <li><strong>編碼類別</strong>（=分類項目，例：「家長期待」「同儕壓力」）是否<strong>不重疊</strong>（一筆資料只能歸一類，不會同時屬於兩類）</li>
                                     <li>是否有不知道怎麼編的「灰色資料」（這需要老師討論）</li>
                                 </ul>
                             </div>
@@ -637,7 +671,7 @@ const W13AutonomyPage = () => {
                     <div>
                         <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📍 整理進度自評（誠實標記）</p>
                         <p className="text-[12px] text-[var(--ink-mid)] mb-3">
-                            這個自評不打分數，只決定老師巡視時誰先看。
+                            <strong className="text-[var(--success)]">100% 不影響分數、不公告排名</strong>——選 🔴 不會被點名也不扣分，只是讓老師巡視時知道誰先看。誠實標記=老師能更快來找你。
                         </p>
                         <ProgressSelector value={status} onChange={handleStatus} />
 
@@ -853,6 +887,13 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                                     <p className="text-[10.5px] text-[#991B1B] italic mt-2 leading-relaxed">
                                         💡 例：抽 30 筆比對，找到 4 筆「真差異」 = 差異率 13%（&lt;20% 通過）。如果 8 筆 = 27%（&gt;20%）→ 重編。
                                     </p>
+                                    <div className="mt-2 pt-2 border-t border-[#FCA5A5] text-[11px] text-[#7F1D1D] leading-[1.85]">
+                                        <p className="font-bold mb-1">⏱ 差異率 &gt; 20% 怎麼辦？重做一輪約 30 分鐘：</p>
+                                        <ol className="list-decimal pl-5 space-y-0.5">
+                                            <li>全組坐下來，重新講清楚每個分類的定義（哪些算「家長期待」、哪些算「同儕壓力」）—— 約 20 分鐘</li>
+                                            <li>再抽 10% 樣本，每個人重做一次，看這次大家有沒有對上 —— 約 10 分鐘</li>
+                                        </ol>
+                                    </div>
                                 </div>
                             </div>
 
@@ -882,7 +923,7 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                     {/* 跨工具：Prompt 範本庫（自學） */}
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 flex items-center justify-between gap-3">
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            💡 整理完想做更進階的分析（交叉分析、主題編碼、跨個案比較）？回 <strong className="text-[var(--ink)]">Prompt 範本庫</strong>看 5 法 Step 2-5 的進階 prompt——自學用，不影響本週繳交。
+                            💡 整理完想做更進階的分析？例如：<strong>交叉分析</strong>（兩個變項對著比，例：「性別 × 補習動機」）、<strong>主題編碼</strong>（從質性資料找主題）、<strong>跨個案比較</strong>（不同案例之間比一比）——回 <strong className="text-[var(--ink)]">Prompt 範本庫</strong>看 5 法 Step 2-5 的進階 prompt（自學用，不影響本週繳交）。
                         </p>
                         <a
                             href="/analysis-station"
@@ -920,12 +961,36 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                         dataKey="w13-w14-question"
                         prompt="⑤ W14 我想怎麼呈現這份資料？"
                         scaffold={[
-                            '我想呈現的訊息：（哪一點最值得讓讀者看到？）',
-                            '我考慮的呈現方式：圖表 / 對照表 / 文字摘要 / 混合（自選）',
+                            '我想呈現的訊息（選 1 個 最值得讓讀者看到的）：',
+                            '我考慮的呈現方式（1-3 種就好，別貪多）：',
                             '若用圖表，可能的類型：（折線／圓餅／長條／散佈）',
-                            '若用對照表或摘要，主要欄位／重點：',
                         ]}
                     />
+                    <details className="mt-2 rounded border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <summary className="cursor-pointer px-3 py-2 text-[12px] font-bold text-[var(--ink)] hover:bg-white">
+                            📊 看 5 法的呈現範例（點開）
+                        </summary>
+                        <div className="px-4 py-3 border-t border-[var(--border)]">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-[11.5px] border-collapse">
+                                    <thead>
+                                        <tr className="bg-white border-b border-[var(--border)]">
+                                            <th className="p-2 text-left font-bold">方法</th>
+                                            <th className="p-2 text-left font-bold">想呈現的訊息（範例）</th>
+                                            <th className="p-2 text-left font-bold">呈現方式（範例）</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">📋 問卷</td><td className="p-2">5 點量表分布</td><td className="p-2">長條圖 / 圓餅</td></tr>
+                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">🎤 訪談</td><td className="p-2">主題出現頻次</td><td className="p-2">橫向長條圖 + 引用佳句框</td></tr>
+                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">🧪 實驗</td><td className="p-2">前後測差異</td><td className="p-2">折線圖 + 組間均值表</td></tr>
+                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">👀 觀察</td><td className="p-2">行為類別佔比</td><td className="p-2">圓餅圖 / 時間軸折線</td></tr>
+                                        <tr><td className="p-2 font-bold">📚 文獻</td><td className="p-2">立場分布 / 時間軸</td><td className="p-2">時間軸 + 圓餅</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </details>
 
                     {/* AI-RED（依 AI Mode 條件分流） */}
                     {(aiMode === 'teach' || aiMode === 'verify') ? (

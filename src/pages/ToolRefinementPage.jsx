@@ -852,8 +852,8 @@ ___（貼題目／訪綱／流程／編碼表）
 
                     {/* W10 完整 AIRED */}
                     <AIREDNarrative
-                        dataKey="w10-aired-record"
-                        weekLabel="W10"
+                        week="10"
+                        hint="本週用 AI 檢核整本計畫書（教學型卡關處給範例 / 驗收型整本找盲點）"
                     />
 
                     {/* 繳交驗收 + 課後待補清單 */}

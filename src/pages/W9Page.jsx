@@ -5,7 +5,6 @@ import './W9Page.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import PromptBlock from '../components/ui/PromptBlock';
 import Checklist from '../components/ui/Checklist';
-import AIREDNarrative from '../components/ui/AIREDNarrative';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
 import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';

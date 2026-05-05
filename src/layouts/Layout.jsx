@@ -47,6 +47,7 @@ export const Layout = () => {
                 { name: '方法工具書', path: '/tools/methods', status: 'none' },
                 { name: 'AI 協作實驗室（自學）', path: '/prompt-lab', status: 'none' },
                 { name: 'Prompt 範本庫（自學）', path: '/analysis-station', status: 'none' },
+                { name: 'AI 報告找雷挑戰', path: '/find-traps', status: 'none' },
             ]
         },
         {
@@ -165,6 +166,8 @@ export const Layout = () => {
                 if (location.pathname === '/analysis-station') finalStatus = 'active';
             } else if (item.path === '/prompt-lab') {
                 if (location.pathname === '/prompt-lab') finalStatus = 'active';
+            } else if (item.path === '/find-traps') {
+                if (location.pathname === '/find-traps') finalStatus = 'active';
             } else if (item.path === '/about') {
                 if (location.pathname === '/about') finalStatus = 'active';
             } else {
