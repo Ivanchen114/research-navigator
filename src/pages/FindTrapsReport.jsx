@@ -117,29 +117,59 @@ const TRAPS = {
 const TOTAL_TRAPS = Object.keys(TRAPS).length;
 
 /* ══════════════════════════════════════
- *  TrapTarget — 雷區包裝元件
+ *  3 個假雷（看似可疑但其實 OK，訓練學生分辨）
  * ══════════════════════════════════════ */
-const TrapTarget = ({ id, found, showAll, onFind, children }) => {
-    const isRevealed = found || showAll;
+const FAKE_TRAPS = {
+    F1: {
+        label: '「完全跟隨」',
+        why: '雖然「完全」這個詞看起來很絕對，但它只是在描述「資料看到的趨勢」（分數隨睡眠時數變動），並沒做因果推論。',
+        whatIsRealTrap: '真正的雷在後面【做因果推論】的詞，例如「最關鍵基石」「核心元兇」——這些是「為什麼會這樣」的解釋。',
+    },
+    F2: {
+        label: '「慘跌」',
+        why: '「慘跌」確實是情緒化用詞，但前後文是「平均專注力慘跌至 4 分」——有具體數字（4 分）支持，不算憑空誇大。',
+        whatIsRealTrap: '雷不在情緒化用詞本身，而在後面的「核心元兇」——它把「跟睡眠少同時出現」說成「導致睡眠少」，是因果跳躍。',
+    },
+    F3: {
+        label: '「8~10 分的高水準」',
+        why: '這個雖帶評價詞「高水準」，但只是描述分數區間（8-10 分）有依據，不算空泛。',
+        whatIsRealTrap: '雷在後面的「證實」「最關鍵」——這些是【因果斷言】，不是【描述觀察】。學會分辨這兩者是研究員的核心功夫。',
+    },
+};
+
+/* ══════════════════════════════════════
+ *  TrapTarget — 雷區包裝元件（手機友善：預設明顯可見）
+ * ══════════════════════════════════════ */
+const TrapTarget = ({ id, type = 'real', found, showAll, onFind, children }) => {
+    const isRealRevealed = type === 'real' && (found || showAll);
+    const isFakeRevealed = type === 'fake' && found;
+    const isRevealed = isRealRevealed || isFakeRevealed;
+
+    let className = 'inline cursor-pointer transition-all rounded px-1 ';
+    if (isRealRevealed) {
+        className += 'bg-[#FEE2E2] text-[#991B1B] font-bold underline decoration-2 decoration-[#DC2626]';
+    } else if (isFakeRevealed) {
+        className += 'bg-[#D1FAE5] text-[#065F46] font-bold underline decoration-2 decoration-[#10B981]';
+    } else {
+        // 預設：明顯可見的「可疑詞」標記（手機友善 — 不依賴 hover）
+        className += 'bg-[#FEF3C7] underline decoration-dotted decoration-[#92400E]/60 active:bg-[#FCD34D]';
+    }
+
     return (
         <span
-            onClick={() => !found && onFind(id)}
-            className={`
-                inline cursor-pointer transition-all rounded px-1
-                ${isRevealed
-                    ? 'bg-[#FEE2E2] text-[#991B1B] font-bold underline decoration-2 decoration-[#DC2626]'
-                    : 'hover:bg-[#FEF3C7] hover:underline hover:decoration-dotted'}
-            `}
-            title={isRevealed ? `已揭曉：${TRAPS[id].label}` : '點點看？'}
+            onClick={() => !found && onFind(id, type)}
+            className={className}
+            title={isRevealed ? '已揭曉' : '你覺得這個是真雷還是假雷？點看答案'}
         >
             {children}
-            {isRevealed && <span className="text-[10px] ml-1 font-mono">⚠️</span>}
+            {isRealRevealed && <span className="text-[10px] ml-1 font-mono">⚠️</span>}
+            {isFakeRevealed && <span className="text-[10px] ml-1 font-mono">💚</span>}
         </span>
     );
 };
 
 /* ══════════════════════════════════════
- *  TrapExplanation — 雷的拆解卡（在 Reveal 後顯示）
+ *  TrapExplanation — 真雷拆解卡（紅）
  * ══════════════════════════════════════ */
 const TrapExplanation = ({ id }) => {
     const t = TRAPS[id];
@@ -156,19 +186,45 @@ const TrapExplanation = ({ id }) => {
 };
 
 /* ══════════════════════════════════════
+ *  FakeTrapExplanation — 假雷拆解卡（綠）
+ * ══════════════════════════════════════ */
+const FakeTrapExplanation = ({ id }) => {
+    const f = FAKE_TRAPS[id];
+    return (
+        <div className="my-3 p-3 rounded-[var(--radius-unified)] border-l-4 border-[#10B981] bg-[#F0FDF4]">
+            <p className="text-[11px] font-mono font-bold text-[#065F46] mb-1">💚 假雷 #{id} · 這個其實沒問題</p>
+            <p className="font-bold text-[13px] text-[#065F46] mb-2">{f.label}</p>
+            <p className="text-[12px] text-[#047857] leading-relaxed mb-2"><strong>為什麼 OK：</strong>{f.why}</p>
+            <p className="text-[12px] text-[#7F1D1D] bg-white border border-[#FCA5A5] rounded p-2 leading-relaxed">
+                <strong className="text-[#991B1B]">🎯 真雷在哪：</strong>{f.whatIsRealTrap}
+            </p>
+        </div>
+    );
+};
+
+/* ══════════════════════════════════════
  *  主元件
  * ══════════════════════════════════════ */
 export const FindTrapsReport = () => {
     const [foundTraps, setFoundTraps] = useState(new Set());
+    const [foundFakes, setFoundFakes] = useState(new Set());
     const [showAll, setShowAll] = useState(false);
     const [showExplanations, setShowExplanations] = useState(false);
 
-    const handleFind = useCallback((id) => {
-        setFoundTraps(prev => {
-            const next = new Set(prev);
-            next.add(id);
-            return next;
-        });
+    const handleFind = useCallback((id, type) => {
+        if (type === 'fake') {
+            setFoundFakes(prev => {
+                const next = new Set(prev);
+                next.add(id);
+                return next;
+            });
+        } else {
+            setFoundTraps(prev => {
+                const next = new Set(prev);
+                next.add(id);
+                return next;
+            });
+        }
     }, []);
 
     const revealAll = () => {
@@ -177,11 +233,13 @@ export const FindTrapsReport = () => {
     };
     const reset = () => {
         setFoundTraps(new Set());
+        setFoundFakes(new Set());
         setShowAll(false);
         setShowExplanations(false);
     };
 
     const isRevealed = (id) => foundTraps.has(id) || showAll;
+    const isFakeFound = (id) => foundFakes.has(id);
     const score = foundTraps.size;
     const isComplete = score >= TOTAL_TRAPS;
 
@@ -382,9 +440,22 @@ export const FindTrapsReport = () => {
                     </div>
                 </div>
                 {!showAll && score === 0 && (
-                    <p className="text-[12px] text-[var(--ink-mid)] italic mt-3 text-center">
-                        💡 提示：游標移到文字上會微微反白的就是可點區。但不是所有可點區都是雷——點點看才知道。
-                    </p>
+                    <div className="mt-4 bg-[#FFFBEB] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-5 max-w-[760px] mx-auto">
+                        <p className="font-bold text-[16px] md:text-[18px] text-[#92400E] mb-3 flex items-center gap-2">
+                            <span className="text-[22px]">🎯</span>
+                            怎麼玩？看這裡！
+                        </p>
+                        <ol className="text-[14px] md:text-[15px] text-[#78350F] leading-[1.95] list-decimal pl-6 space-y-1.5">
+                            <li><strong>讀完下方那份 AI 寫的研究報告</strong>（看起來圖文並茂）</li>
+                            <li>你覺得哪裡有問題？<strong className="text-[#92400E]">直接用手指點那段文字</strong>（會看到底色比較深的字就是可點區）</li>
+                            <li>點對 → 跳出「⚠️ 這是雷」+ 為什麼錯 + 該怎麼改</li>
+                            <li>點到「假雷」（看起來可疑但其實 OK）→ 跳出「💚 這個其實沒問題」+ 解釋</li>
+                            <li>找到 8 個真雷 → 解鎖收網卡（為什麼 AI 會寫這麼多雷？）</li>
+                        </ol>
+                        <p className="text-[12.5px] text-[#92400E] italic mt-3 pt-3 border-t border-[#F59E0B]/40 leading-[1.85]">
+                            ⚡ <strong>注意</strong>：報告裡有<strong>真雷（要找）</strong>跟<strong>假雷（看似可疑但其實 OK）</strong>——點點看才知道。卡關了？按下方「全部揭曉」。
+                        </p>
+                    </div>
                 )}
             </div>
 
@@ -458,32 +529,129 @@ export const FindTrapsReport = () => {
                     {showExplanations && isRevealed(1) && <TrapExplanation id={1} />}
                 </section>
 
-                {/* 三、研究結論 */}
+                {/* 三、視覺化儀表板（移到結論前 — 先看圖再看結論）*/}
                 <section className="mb-8">
-                    <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">三、 研究結論</h2>
+                    <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-1">三、 視覺化儀表板</h2>
+                    <p className="text-[12px] text-[var(--ink-mid)] mb-4">
+                        基於 22 份有效樣本（已清理）。圖表標題：
+                        <TrapTarget id={8} found={isRevealed(8)} showAll={showAll} onFind={handleFind}>「睡眠時數與專注力的關係」</TrapTarget>
+                    </p>
+                    {showExplanations && isRevealed(8) && <TrapExplanation id={8} />}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        {/* 散佈圖 + 圖說 */}
+                        <div className="bg-white border border-[var(--border)] rounded p-4">
+                            <h4 className="font-bold text-[13px] text-[var(--ink)] mb-3">睡眠時數與專注力的關係</h4>
+                            <div className="h-64">
+                                <Scatter
+                                    data={scatterData}
+                                    options={{
+                                        responsive: true, maintainAspectRatio: false,
+                                        scales: {
+                                            x: { title: { display: true, text: '平均睡眠時數 (小時)' }, min: 3, max: 13 },
+                                            y: { title: { display: true, text: '自評專注力 (1-10分)' }, min: 0, max: 11 },
+                                        },
+                                        plugins: { legend: { display: false } },
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3 p-3 rounded border border-[#BFDBFE] bg-[#EFF6FF] text-[11.5px] leading-[1.85]">
+                                <p className="font-bold text-[#1E40AF] mb-1">📌 研究員圖說（示範）</p>
+                                <p className="text-[#1E3A8A] mb-1.5">
+                                    <strong>描述：</strong>N=22 學生中，睡眠時數從 4.5 到 12 小時不等，專注力分數從 3 到 10 分。整體而言，睡眠時數較高的學生，專注力分數也傾向較高。
+                                </p>
+                                <p className="text-[#1E3A8A]">
+                                    <strong>推論：</strong>兩變項看似呈正向關聯，但本研究無法判斷是因果、共同原因、或反向因果。需更嚴謹研究設計才能釐清。
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* 3C 混合圖 + 圖說 */}
+                        <div className="bg-white border border-[var(--border)] rounded p-4">
+                            <h4 className="font-bold text-[13px] text-[var(--ink)] mb-3">熬夜使用 3C 對表現的影響</h4>
+                            <div className="h-64">
+                                <Bar
+                                    data={mixed3CData}
+                                    options={{
+                                        responsive: true, maintainAspectRatio: false,
+                                        scales: {
+                                            y: { type: 'linear', position: 'left', title: { display: true, text: '專注力 (分)' }, min: 0, max: 10 },
+                                            y1: { type: 'linear', position: 'right', title: { display: true, text: '睡眠 (小時)' }, min: 0, max: 10, grid: { drawOnChartArea: false } },
+                                        },
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3 p-3 rounded border border-[#BFDBFE] bg-[#EFF6FF] text-[11.5px] leading-[1.85]">
+                                <p className="font-bold text-[#1E40AF] mb-1">📌 研究員圖說（示範）</p>
+                                <p className="text-[#1E3A8A] mb-1.5">
+                                    <strong>描述：</strong>將學生分為「常常／偶爾／沒有」使用 3C 至凌晨三組。三組平均專注力分別為 4.0/6.4/8.7 分，平均睡眠分別為 5.3/6.9/8.8 小時。
+                                </p>
+                                <p className="text-[#1E3A8A]">
+                                    <strong>推論：</strong>兩條趨勢方向一致，3C 使用程度可能與睡眠及專注力同時相關。但本資料無法判斷誰是誰的原因，也可能有其他變項（壓力、習慣）同時影響三者。
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* 補習對比 + 圖說 */}
+                        <div className="bg-white border border-[var(--border)] rounded p-4 md:col-span-2">
+                            <h4 className="font-bold text-[13px] text-[var(--ink)] mb-3">有無補習對作息的影響對比</h4>
+                            <div className="h-64">
+                                <Bar
+                                    data={tutoringData}
+                                    options={{
+                                        responsive: true, maintainAspectRatio: false,
+                                        scales: { y: { beginAtZero: true, max: 10 } },
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3 p-3 rounded border border-[#BFDBFE] bg-[#EFF6FF] text-[11.5px] leading-[1.85]">
+                                <p className="font-bold text-[#1E40AF] mb-1">📌 研究員圖說（示範）</p>
+                                <p className="text-[#1E3A8A] mb-1.5">
+                                    <strong>描述：</strong>有補習組（n=12）平均睡眠 6.5 小時、專注力 5.6 分；無補習組（n=8）平均睡眠 7.6 小時、專注力 7.4 分。
+                                </p>
+                                <p className="text-[#1E3A8A]">
+                                    <strong>推論：</strong>兩組數值有差異，但差異原因可能涉及補習時長、家庭因素、學業壓力等。本資料未控制這些變項，無法把差異歸因於「補習」本身。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 四、研究結論（移到圖表後 — 含 3 個假雷訓練辨真假）*/}
+                <section className="mb-8">
+                    <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">四、 研究結論</h2>
                     <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">根據上述清理後的有效數據，我們進行交叉比對與平均數分析，得出以下三大核心研究結論：</p>
 
-                    {/* 結論 1 */}
+                    {/* 結論 1（含真雷 #2 #3 #4 + 假雷 F1 F3）*/}
                     <div className="mt-4">
                         <h3 className="font-bold text-[15px] text-[var(--ink)] mb-2">1. 睡眠時數與專注力呈「
                             <TrapTarget id={2} found={isRevealed(2)} showAll={showAll} onFind={handleFind}>高度</TrapTarget>正相關」</h3>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">
-                            數據顯示，學生的自評專注力分數完全跟隨睡眠時數增減。平均睡眠時數達到 8 小時以上的學生，其專注力評分均落在 8~10 分的高水準；反觀睡眠時數低於 6 小時的學生，專注力普遍低落於 5 分以下。這
+                            數據顯示，學生的自評專注力分數
+                            <TrapTarget id="F1" type="fake" found={isFakeFound('F1')} showAll={showAll} onFind={handleFind}>完全跟隨</TrapTarget>
+                            睡眠時數增減。平均睡眠時數達到 8 小時以上的學生，其專注力評分均落在
+                            <TrapTarget id="F3" type="fake" found={isFakeFound('F3')} showAll={showAll} onFind={handleFind}>8~10 分的高水準</TrapTarget>
+                            ；反觀睡眠時數低於 6 小時的學生，專注力普遍低落於 5 分以下。這
                             <TrapTarget id={3} found={isRevealed(3)} showAll={showAll} onFind={handleFind}>證實了</TrapTarget>充足的睡眠是維持高中生課堂專注力的
                             <TrapTarget id={4} found={isRevealed(4)} showAll={showAll} onFind={handleFind}>最關鍵基石</TrapTarget>。
                         </p>
                         {showExplanations && isRevealed(2) && <TrapExplanation id={2} />}
+                        {showExplanations && isFakeFound('F1') && <FakeTrapExplanation id="F1" />}
+                        {showExplanations && isFakeFound('F3') && <FakeTrapExplanation id="F3" />}
                         {showExplanations && isRevealed(3) && <TrapExplanation id={3} />}
                         {showExplanations && isRevealed(4) && <TrapExplanation id={4} />}
                     </div>
 
-                    {/* 結論 2 */}
+                    {/* 結論 2（含真雷 #5 + 假雷 F2）*/}
                     <div className="mt-4">
                         <h3 className="font-bold text-[15px] text-[var(--ink)] mb-2">2. 熬夜使用 3C 產品是破壞專注力的「
                             <TrapTarget id={5} found={isRevealed(5)} showAll={showAll} onFind={handleFind}>核心元兇</TrapTarget>」</h3>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">
-                            進一步分析「使用 3C 至凌晨」的頻率與表現：「常常」熬夜使用 3C 者，平均睡眠僅約 5.3 小時，專注力平均慘跌至 4 分，表現最差。「沒有」熬夜使用 3C 者，平均睡眠高達 8.8 小時，專注力平均高達 8.7 分，表現最優異。此落差表明，睡前過度使用 3C 產品不僅嚴重壓縮睡眠時間，更直接導致隔日課堂精神渙散。
+                            進一步分析「使用 3C 至凌晨」的頻率與表現：「常常」熬夜使用 3C 者，平均睡眠僅約 5.3 小時，專注力平均
+                            <TrapTarget id="F2" type="fake" found={isFakeFound('F2')} showAll={showAll} onFind={handleFind}>慘跌</TrapTarget>
+                            至 4 分，表現最差。「沒有」熬夜使用 3C 者，平均睡眠高達 8.8 小時，專注力平均高達 8.7 分，表現最優異。此落差表明，睡前過度使用 3C 產品不僅嚴重壓縮睡眠時間，更直接導致隔日課堂精神渙散。
                         </p>
+                        {showExplanations && isFakeFound('F2') && <FakeTrapExplanation id="F2" />}
                         {showExplanations && isRevealed(5) && <TrapExplanation id={5} />}
                     </div>
 
@@ -514,67 +682,6 @@ export const FindTrapsReport = () => {
                             </p>
                         </button>
                         {showExplanations && isRevealed(7) && <TrapExplanation id={7} />}
-                    </div>
-                </section>
-
-                {/* 圖表儀表板 */}
-                <section>
-                    <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-1">📊 視覺化儀表板</h2>
-                    <p className="text-[12px] text-[var(--ink-mid)] mb-4">
-                        基於 22 份有效樣本（已清理）。圖表標題：
-                        <TrapTarget id={8} found={isRevealed(8)} showAll={showAll} onFind={handleFind}>「睡眠時數與專注力的關係」</TrapTarget>
-                    </p>
-                    {showExplanations && isRevealed(8) && <TrapExplanation id={8} />}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        {/* 散佈圖 */}
-                        <div className="bg-white border border-[var(--border)] rounded p-4">
-                            <h4 className="font-bold text-[13px] text-[var(--ink)] mb-3">睡眠時數與專注力的關係</h4>
-                            <div className="h-64">
-                                <Scatter
-                                    data={scatterData}
-                                    options={{
-                                        responsive: true, maintainAspectRatio: false,
-                                        scales: {
-                                            x: { title: { display: true, text: '平均睡眠時數 (小時)' }, min: 3, max: 13 },
-                                            y: { title: { display: true, text: '自評專注力 (1-10分)' }, min: 0, max: 11 },
-                                        },
-                                        plugins: { legend: { display: false } },
-                                    }}
-                                />
-                            </div>
-                        </div>
-
-                        {/* 3C 混合圖 */}
-                        <div className="bg-white border border-[var(--border)] rounded p-4">
-                            <h4 className="font-bold text-[13px] text-[var(--ink)] mb-3">熬夜使用 3C 對表現的影響</h4>
-                            <div className="h-64">
-                                <Bar
-                                    data={mixed3CData}
-                                    options={{
-                                        responsive: true, maintainAspectRatio: false,
-                                        scales: {
-                                            y: { type: 'linear', position: 'left', title: { display: true, text: '專注力 (分)' }, min: 0, max: 10 },
-                                            y1: { type: 'linear', position: 'right', title: { display: true, text: '睡眠 (小時)' }, min: 0, max: 10, grid: { drawOnChartArea: false } },
-                                        },
-                                    }}
-                                />
-                            </div>
-                        </div>
-
-                        {/* 補習對比 */}
-                        <div className="bg-white border border-[var(--border)] rounded p-4 md:col-span-2">
-                            <h4 className="font-bold text-[13px] text-[var(--ink)] mb-3">有無補習對作息的影響對比</h4>
-                            <div className="h-64">
-                                <Bar
-                                    data={tutoringData}
-                                    options={{
-                                        responsive: true, maintainAspectRatio: false,
-                                        scales: { y: { beginAtZero: true, max: 10 } },
-                                    }}
-                                />
-                            </div>
-                        </div>
                     </div>
                 </section>
             </div>
