@@ -6,6 +6,7 @@ import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
@@ -676,6 +677,18 @@ export const W50Page = () => {
                 ]}
             />
             <CourseArc items={W7Data.courseArc} />
+
+            <TaskCard
+                weekNumber="W7"
+                weekTitle={W7Data.title}
+                duration={`${W7Data.duration} 分鐘 · ${W7Data.durationDesc}`}
+                tasks={[
+                    '手動搜索四步 — 不准用 AI 一鍵幫找',
+                    '證物 A-D 分級 — 鑑識文獻可信度',
+                    '標註 APA 證物標籤 — 至少 5 條，下週寫文獻探討用',
+                ]}
+                exportReminder="匯出 W7 文獻清單 + APA 標籤 → 帶進 W8 文獻偵探社"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

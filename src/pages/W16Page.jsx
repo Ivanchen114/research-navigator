@@ -5,6 +5,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
@@ -533,6 +534,18 @@ const W16Page = () => {
                     { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
                     { wk: 'W16-W17', name: '海報製作\nGallery Walk', now: true },
                 ]} />
+
+            <TaskCard
+                weekNumber="W16"
+                weekTitle={W16Data.title}
+                duration={`${W16Data.duration} 分鐘 · ${W16Data.durationDesc}`}
+                tasks={[
+                    '七步組裝 — 搬運 → 縫合 → 潤色',
+                    'AI 潤色校對 — 縫合稿先丟 AI、最終人工把關',
+                    'A1 海報設計 + 發表預演',
+                ]}
+                exportReminder="繳交報告完稿 + 海報 PDF → W17 Gallery Walk 用"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

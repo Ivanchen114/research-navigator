@@ -6,6 +6,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import BackfillField from '../components/ui/BackfillField';
@@ -602,6 +603,18 @@ export const W5MeasurePage = () => {
                 { wk: 'W9-W11', name: '工具設計\n倫理審查' },
                 { wk: 'W13-W17', name: '數據解讀\n發表' }
             ]} />
+
+            <TaskCard
+                weekNumber="W5"
+                weekTitle={W5Data.title}
+                duration={`${W5Data.duration} 分鐘 · ${W5Data.durationDesc}`}
+                tasks={[
+                    '操作型定義入門 — 把抽象詞變成「看得到／量得到」',
+                    '5 法策略 — 對齊 W4 主方法的操作化技巧',
+                    '三件事檢核 — 可測量／正反例／一致性',
+                ]}
+                exportReminder="匯出 W5 操作型定義 → 下週 W6 海報博覽會直接用"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

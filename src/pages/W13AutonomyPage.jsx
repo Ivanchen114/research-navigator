@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
+import { W13Data } from '../data/lessonMaps';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import Checklist from '../components/ui/Checklist';
 import PromptBlock from '../components/ui/PromptBlock';
@@ -1108,6 +1110,18 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 { wk: 'W13', name: '資料整理\n原始 → 表', status: 'now' },
                 { wk: 'W14-W17', name: '數據解讀\n發表', status: 'future' },
             ]} />
+
+            <TaskCard
+                weekNumber="W13"
+                weekTitle={W13Data.title}
+                duration={`${W13Data.duration} 分鐘 · ${W13Data.durationDesc}`}
+                tasks={[
+                    '5 法對照 — 你的方法該長成什麼分析表結構',
+                    '純人工整理一輪 — 動手做、不靠 AI（你決定結構就是研究本身）',
+                    'AI 協作（選用）— AI 當助理、不當研究者',
+                ]}
+                exportReminder="繳交 Google Sheet 連結 → W14 的圖表選擇從這裡接力"
+            />
 
             {(myTopic || myMethod) && (
                 <div className="mt-6 mb-2 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--paper-warm)] border border-[var(--border)] text-[13px] flex items-start gap-2">

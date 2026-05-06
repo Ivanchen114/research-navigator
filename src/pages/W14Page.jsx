@@ -8,6 +8,7 @@ import PromptBlock from '../components/ui/PromptBlock';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
@@ -121,6 +122,7 @@ const EXPORT_FIELDS = [
     /* Step 5 */
     { key: 'w14-w15-preview', label: 'W15 預告：結論的第三層和第四層' },
     { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 畫圖的最重要一次互動（A-I-R-E-D 五要素）' },
+    { key: 'w14-semester-reflection', label: '學期 AI 協作反思（W14-W17 跨週作業）', question: '從 W1 到現在，你跟 AI 共事最讓你改變想法的一次是什麼？（W17 老師會點 3 位同學現場分享）' },
 ];
 
 /* ══════════════════════════════════════
@@ -885,6 +887,32 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                         <AIREDNarrative week="14" hint="本週若有用 AI 進階檢核推論，記下最關鍵的一次互動" optional={true} />
                     )}
 
+                    {/* 學期 AI 協作反思（從 W17 移過來——這週的「人 vs AI 分工」最清楚，反思最有素材）*/}
+                    <div className="mt-6 p-5 rounded-[var(--radius-unified)] border-2 border-[#D97706] bg-[#FEF3C7]">
+                        <div className="flex items-start justify-between mb-2 gap-2">
+                            <p className="text-[14px] font-bold text-[#92400E]">🎯 學期 AI 協作反思（W14 寫，W17 抽問）</p>
+                            <span className="text-[10px] font-mono text-[#92400E] bg-white px-2 py-0.5 rounded border border-[#D97706] flex-shrink-0">跨週作業</span>
+                        </div>
+                        <p className="text-[12px] text-[#78350F] leading-relaxed mb-3">
+                            這週你親身經歷了「人選圖表類型／驗收三鐵規／寫推論」vs「AI 畫圖／描述初稿」這套分工——是整學期 AI 協作分工最清楚的一次。<br />
+                            趁這個體感最強的時刻，回頭看：<strong>從 W1 模仿遊戲到今天，你跟 AI 共事最讓你改變想法的一次是什麼？</strong>
+                        </p>
+                        <div className="bg-white border border-[#FCD34D] rounded p-3 mb-3 text-[11.5px] text-[#92400E] leading-relaxed">
+                            📌 <strong>不是評分作業，但 W17 Gallery Walk 當天老師會隨機點 3 位同學現場分享你寫的內容</strong>——空白或敷衍會很尷尬。寫具體的事件、具體的轉變，3-5 分鐘可以寫完。
+                        </div>
+                        <ThinkRecord
+                            dataKey="w14-semester-reflection"
+                            prompt="這學期跟 AI 協作的經驗，最讓你改變想法的是什麼？（具體寫一個事件 + 你的轉變）"
+                            placeholder="例：我原本以為 AI 給的建議都該照單全收，但 W11 那次我的問卷被 AI 改到完全不像我自己的研究——那次之後我才真的懂『AI 給選項，人做選擇』的意思。"
+                            scaffold={[
+                                '我最初對 AI 的看法是…',
+                                '一個讓我改變想法的具體事件（哪一週、發生什麼、你做了什麼）：…',
+                                '現在我對「人機協作」的理解是…',
+                            ]}
+                            rows={6}
+                        />
+                    </div>
+
                     {/* 本週結束，你應該要會 — B 標準格式 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-4">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -957,6 +985,18 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                 ]}
             />
             <CourseArc items={W14Data.courseArc} />
+
+            <TaskCard
+                weekNumber="W14"
+                weekTitle={W14Data.title}
+                duration={`${W14Data.duration} 分鐘 · ${W14Data.durationDesc}`}
+                tasks={[
+                    '四大圖表速查（折線／圓餅／長條／散佈）— 選對才能讓數據說話',
+                    '圖說寫作公式 — 描述（客觀）+ 推論（主觀）',
+                    'AI 協作三步 — 自己寫初稿 → AI 檢核 → 人工裁奪',
+                ]}
+                exportReminder="匯出 W14 圖表 + 圖說 → W15 結論回扣使用"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

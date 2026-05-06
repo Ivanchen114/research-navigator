@@ -7,6 +7,7 @@ import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
@@ -1132,6 +1133,18 @@ export const W4Page = () => {
                     { wk: 'W9-W11', name: '工具設計\n倫理審查' },
                     { wk: 'W13-W17', name: '數據解讀\n發表' }
                 ]} />
+
+            <TaskCard
+                weekNumber="W4"
+                weekTitle={W4Data.title}
+                duration={`${W4Data.duration} 分鐘 · ${W4Data.durationDesc}`}
+                tasks={[
+                    '認識 5 種研究方法（問卷／訪談／實驗／觀察／文獻）',
+                    '兩層判斷練習 — L1 自蒐／文獻分流，L2 三題分科',
+                    '為自己 W3 定案題目選主方法 + 寫一句理由',
+                ]}
+                exportReminder="匯出方法選擇紀錄 → W5 直接拿主方法做操作型定義"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

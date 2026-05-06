@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import './Portfolio.css';
 import {
   BookMarked,
   Clock,
@@ -107,19 +108,7 @@ export const Portfolio = () => {
 
   return (
     <div className="page-container animate-in-fade-slide">
-      {/* ─── 列印用 CSS：只在列印模式下套用 ─── */}
-      <style>{`
-        @media print {
-          @page { size: A4 portrait; margin: 18mm 16mm; }
-          body { background: white !important; }
-          .no-print { display: none !important; }
-          .print-only { display: block !important; }
-          .print-page { page-break-after: always; }
-          .print-moment { page-break-inside: avoid; break-inside: avoid; }
-          .portfolio-print-body { font-family: 'Noto Serif TC', 'Songti TC', serif; color: #1a1a2e; }
-        }
-        .print-only { display: none; }
-      `}</style>
+      {/* 列印樣式抽到 Portfolio.css（已 import，下方 className 直接吃到）*/}
 
       {/* ════════════════════════════════
           TOP BAR

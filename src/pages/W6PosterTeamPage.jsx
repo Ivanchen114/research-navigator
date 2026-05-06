@@ -6,6 +6,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import BackfillField from '../components/ui/BackfillField';
@@ -871,6 +872,47 @@ export const W6PosterTeamPage = () => {
                             <div className="bg-[#FEF2F2] border-l-4 border-[var(--danger)] p-3 rounded-r-[6px] text-[12.5px] text-[#7F1D1D] leading-relaxed">
                                 ⚠️ <strong>Solo 契約提醒：</strong>這 5 項寫完後會送 ExportButton 一鍵匯出，老師審 Solo 申請時會逐條檢查。被退回就要重做或回 Team 線。
                             </div>
+
+                            {/* Solo 申請被退回的明確 fallback 流程 */}
+                            <details className="mt-3 rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB] overflow-hidden">
+                                <summary className="cursor-pointer px-4 py-2.5 hover:bg-[#FEF3C7] transition-colors flex items-center gap-2">
+                                    <span className="text-[12.5px] font-bold text-[#92400E]">⚠️ Solo 申請被退回怎麼辦？——點開看 3 條具體下一步</span>
+                                    <span className="ml-auto text-[10px] font-mono text-[#92400E]">▼</span>
+                                </summary>
+                                <div className="border-t border-[#FCD34D] p-4 bg-white space-y-3">
+                                    <p className="text-[12px] text-[#78350F] leading-relaxed">
+                                        老師退回不是判你死刑——是告訴你「這 5 項裡有一項說服力不夠」。<strong>不要硬撐重寫一樣的內容</strong>，依老師的退件理由走以下 3 條路其中 1 條：
+                                    </p>
+
+                                    <div className="rounded border border-[#FCD34D] p-3 bg-[#FFFBEB]">
+                                        <p className="text-[12.5px] font-bold text-[#92400E] mb-1.5">🔁 路 A · 修補 Solo 申請</p>
+                                        <p className="text-[11.5px] text-[#78350F] leading-relaxed">
+                                            退件理由是「① 為什麼非 Solo 不可」說服力不夠？<strong>回 Step 3 走讀紀錄</strong>找具體證據（同學說「這題目別人接不上」「資料只有你能拿到」），再重寫第 ① 項。其他 4 項（時間規劃／三大風險／求援計畫／Plan B）若被點到，照同樣方式回前一個 Step 找素材。<br />
+                                            <span className="text-[#92400E] font-mono text-[11px]">→ 重新交一次 Solo 申請（最多 2 次機會）</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="rounded border border-[#86EFAC] p-3 bg-[#F0FDF4]">
+                                        <p className="text-[12.5px] font-bold text-[#166534] mb-1.5">🤝 路 B · 轉 Team 找合題夥伴</p>
+                                        <p className="text-[11.5px] text-[#14532D] leading-relaxed">
+                                            兩次都被退？多數情況是「你的題目其實合得起來，只是你還沒找到對的人」。<strong>回 W2 觀察種子＋ABC 型句</strong>，找題目方向相近的同學（特別是核心問題類型相同——A 影響型 / B 比較型 / C 深究型 同型最容易合）；或<strong>回 W4 方法地圖</strong>看自己跟誰選同樣主方法，方法相同最容易共用工具。<br />
+                                            <span className="text-[#166534] font-mono text-[11px]">→ 切回上方「路線選擇」改選 Team，重走 Step 4 Team 線</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="rounded border border-[#BFDBFE] p-3 bg-[#EFF6FF]">
+                                        <p className="text-[12.5px] font-bold text-[#1E40AF] mb-1.5">🔧 路 C · 縮小題目再 Solo</p>
+                                        <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed">
+                                            老師退件常常是「題目太大、Solo 一個人扛不住」。<strong>回 W3 Wizard 的 4 把刀</strong>（範圍縮小／抽象具體化／對象可及化／方法可行化），把題目砍到「一個人 4 章絕對做得完」的規模——例如原本「全校學生」改「我們班 30 人」、原本「整學期」改「兩週」。題目縮小後再走 Solo 5 項通常會通。<br />
+                                            <span className="text-[#1E40AF] font-mono text-[11px]">→ 回 Step 4 重寫 Solo 5 項，特別是「② 一個人 4 章時間規劃」</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-[#1a1a2e] text-[#FDE68A] rounded p-3 text-[11.5px] leading-relaxed">
+                                        💡 <strong>選哪一條路？</strong>看老師退件理由：題目本身有問題 → 路 C 縮小；找不到合題夥伴的證據不夠 → 路 A 修補；自己也覺得撐不住 → 路 B 轉 Team。<strong>沒有對錯，只有「你撐得住的那條」</strong>。
+                                    </div>
+                                </div>
+                            </details>
                         </>
                     )}
                 </div>
@@ -993,6 +1035,18 @@ export const W6PosterTeamPage = () => {
                 { wk: 'W9-W11', name: '工具設計\n倫理審查' },
                 { wk: 'W13-W17', name: '數據解讀\n發表' }
             ]} />
+
+            <TaskCard
+                weekNumber="W6"
+                weekTitle={W6Data.title}
+                duration={`${W6Data.duration} 分鐘 · ${W6Data.durationDesc}`}
+                tasks={[
+                    '三件齊一張 A4 海報 — 題目 + 方法 + 操作型定義',
+                    '走讀同學海報 + 三色便利貼回饋（粉紅／黃／藍）',
+                    '組隊（Team 合題）或 Solo 嚴格 5 項',
+                ]}
+                exportReminder="匯出組隊結果（Team 名單 / Solo 自證書）→ 之後以隊伍為單位推進"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

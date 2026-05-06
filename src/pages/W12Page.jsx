@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import LessonMap from '../components/ui/LessonMap';
 import './W12.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
@@ -189,6 +190,18 @@ const W12Page = () => {
                 { wk: 'W13-W14', name: '執行 + 數據\n圖表結論' },
                 { wk: 'W15-W17', name: '成果簡報\n博覽發表' },
             ]} />
+
+            <TaskCard
+                weekNumber="W12"
+                weekTitle={W12Data.title}
+                duration={`${W12Data.duration} 分鐘 · ${W12Data.durationDesc}`}
+                tasks={[
+                    '各組期中短報 — 3 min Pitch + 1 min QA',
+                    '全班同儕回饋 Form — 5 漏洞選擇 + 30 字建議 + 30 字學到什麼',
+                    '老師當場評分（5 維 × 4 級 = 20 分）',
+                ]}
+                exportReminder="收齊同儕回饋 → 下週調整研究設計依據"
+            />
 
             {/* ═══ SCROLLING CONTENT ═══ */}
             <div className="mx-auto prose-zh space-y-6" style={{ maxWidth: 760 }}>

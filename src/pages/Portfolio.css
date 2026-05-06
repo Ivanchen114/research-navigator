@@ -1,0 +1,12 @@
+/* Portfolio 列印樣式（之前內嵌於 Portfolio.jsx 的 <style> 塊中，為與其他頁面 CSS 一致而抽出） */
+
+@media print {
+  @page { size: A4 portrait; margin: 18mm 16mm; }
+  body { background: white !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .print-page { page-break-after: always; }
+  .print-moment { page-break-inside: avoid; break-inside: avoid; }
+  .portfolio-print-body { font-family: 'Noto Serif TC', 'Songti TC', serif; color: #1a1a2e; }
+}
+.print-only { display: none; }

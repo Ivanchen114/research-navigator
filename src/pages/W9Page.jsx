@@ -12,6 +12,7 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import AIAssistToggle from '../components/ui/AIAssistToggle';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
@@ -1585,6 +1586,19 @@ ___（例：第三章文獻探討、第四章變項定義）
                     { wk: 'W10', name: '工具精進\n預試', status: '' },
                     { wk: 'W11-W14', name: '執行研究\n數據分析', status: '' },
                 ]} />
+
+            {/* 本節任務卡 — 學生一眼看懂「今天要做什麼」 */}
+            <TaskCard
+                weekNumber="W9"
+                weekTitle={W9Data.title}
+                duration={`${W9Data.duration} 分鐘 · ${W9Data.durationDesc}`}
+                tasks={[
+                    '讀完 W8 老師回饋 — 把建議納入計畫書修正方向，先決定哪些要改、哪些堅持',
+                    '第一章動機擴寫 — 用「3 問鷹架」把 W3 一句話研究動機擴成完整一段',
+                    '計畫書 2-5 章組裝 — 把第二到第五章寫到雛形（雙模式 AI 工作坊可選用）',
+                ]}
+                exportReminder="匯出本週紀錄 → 繳交計畫書 1-5 章草稿 + W9 AIRED 對話"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

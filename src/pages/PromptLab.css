@@ -1,0 +1,111 @@
+/* PromptLab 樣式（之前內嵌於 PromptLab.jsx 的 <style dangerouslySetInnerHTML> 中，抽出便於維護） */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+
+.promptlab-root {
+  --pl-ink: #1a1a2e;
+  --pl-ink-mid: #4a4a6a;
+  --pl-ink-light: #9090b0;
+  --pl-paper: #f7f5f0;
+  --pl-paper-warm: #edeae2;
+  --pl-accent: #4f46e5;
+  --pl-accent-deep: #3730a3;
+  --pl-accent-light: #eef0ff;
+  --pl-border: #d8d4ca;
+  --pl-border-light: #e8e4dc;
+  --pl-gold: #c9a84c;
+  --pl-gold-pale: #faf5e4;
+  --pl-danger: #c0392b;
+
+  font-family: 'Noto Sans TC', sans-serif;
+  color: var(--pl-ink);
+  background-color: var(--pl-paper);
+  background-image: radial-gradient(circle, #c8c4ba 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.promptlab-root .pl-serif { font-family: 'Noto Serif TC', serif; }
+.promptlab-root .pl-mono { font-family: 'DM Mono', monospace; }
+
+.pl-card {
+  background: #fff;
+  border: 1px solid var(--pl-border);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.pl-card.accent { border-left: 3px solid var(--pl-accent); }
+
+.pl-input-label {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  color: var(--pl-ink-mid);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.pl-step-num {
+  font-family: 'DM Mono', monospace;
+  color: var(--pl-accent);
+  font-weight: 700;
+}
+.pl-input-field {
+  width: 100%;
+  background: var(--pl-paper-warm);
+  border: 1px solid var(--pl-border-light);
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  color: var(--pl-ink);
+  font-family: 'Noto Sans TC', sans-serif;
+  transition: all 0.2s;
+}
+.pl-input-field:focus {
+  outline: none;
+  border-color: var(--pl-accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--pl-accent-light);
+}
+
+.pl-option-btn {
+  text-align: left; padding: 14px 16px;
+  border-radius: 6px; border: 1px solid var(--pl-border-light);
+  background: #fff; transition: all 0.15s;
+  width: 100%;
+}
+.pl-option-btn:hover {
+  border-color: var(--pl-accent);
+  background: #fafbff;
+}
+.pl-option-btn.selected {
+  background: var(--pl-accent-light);
+  border-color: var(--pl-accent);
+  box-shadow: 0 0 0 1px var(--pl-accent);
+}
+
+.pl-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em;
+  color: var(--pl-ink-light);
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px;
+}
+.pl-kicker::before {
+  content: ''; display: inline-block;
+  width: 20px; height: 1px;
+  background: var(--pl-border);
+}
+
+.pl-prompt-output {
+  background: var(--pl-ink);
+  color: #d4d4dc;
+  padding: 24px;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  overflow: auto;
+  max-height: 500px;
+}

@@ -6,6 +6,7 @@ import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
@@ -755,6 +756,18 @@ export const LiteratureReview = () => {
                 ]}
             />
             <CourseArc items={W8Data.courseArc} />
+
+            <TaskCard
+                weekNumber="W8"
+                weekTitle={W8Data.title}
+                duration={`${W8Data.duration} 分鐘 · ${W8Data.durationDesc}`}
+                tasks={[
+                    '遮蓋測試 — 識破自己的「換字抄襲」',
+                    '三明治引用 — 觀點 + 引用 + 分析，寫一段示範',
+                    '多文獻整合 — 提煉故事而不堆砌',
+                ]}
+                exportReminder="匯出文獻探討初稿 → W9 計畫書第二章直接用"
+            />
 
             {/* 📚 W7 偵察成果回顧（W8 開場銜接 — 放在 Step 之前最顯眼處） */}
             {w5Paper ? (

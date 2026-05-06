@@ -6,6 +6,7 @@ import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import CopyButton from '../components/ui/CopyButton';
@@ -1488,6 +1489,19 @@ export const Wizard = () => {
                 ]}
             />
             <CourseArc items={W3Data.courseArc} />
+
+            {/* 本節任務卡 — 學生一眼看懂「今天要做什麼」 */}
+            <TaskCard
+                weekNumber="W3"
+                weekTitle={W3Data.title}
+                duration={`${W3Data.duration} 分鐘 · ${W3Data.durationDesc}`}
+                tasks={[
+                    '練識別 — 看 8 個爛題目，自己診斷是哪一種「題目病症」（先不靠 AI）',
+                    '學下刀 — 用「大→小／空→實／遠→近／難→易」四把刀練改題',
+                    '自己題目定案 — 把 W2 的探究意圖搬上手術台，AI 協作 4 步出最終題目',
+                ]}
+                exportReminder="用本週紀錄匯出按鈕 → 把 W3 全部紀錄 + AI-RED 對話貼到 Google 文件繳交"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

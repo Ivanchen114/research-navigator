@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
-import ThinkRecord from '../components/ui/ThinkRecord';
+import TaskCard from '../components/ui/TaskCard';
 import GroupSizeSelector from '../components/ui/GroupSizeSelector';
 import './W17.css';
 import {
@@ -103,15 +103,27 @@ const W17Page = () => {
                     { label: '繳交', value: '兩份紙本學習單（個人作業）' },
                 ]}
             />
+            {/* 改用 Home.jsx 的 5-phase studentArc 格式（原本 7-段細分屬 pacingArc） */}
             <CourseArc items={[
-                { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
-                { wk: 'W5-W8', name: '操作型定義\n海報／文獻', past: true },
-                { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
-                { wk: 'W11-W13', name: '執行階段\n自主研究', past: true },
-                { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
-                { wk: 'W16-W17', name: '成果簡報\n博覽發表', now: true },
+                { wk: 'W0–W3', name: '問題意識' , past: true },
+                { wk: 'W4–W8', name: '研究規劃', past: true },
+                { wk: 'W9–W10', name: '計畫定稿', past: true },
+                { wk: 'W11–W12', name: '執行檢核', past: true },
+                { wk: 'W13–W17', name: '分析與發表', now: true },
             ]} />
+
+            {/* W17 沒有 lessonMaps W17Data，本節任務直接 inline 寫 */}
+            <TaskCard
+                weekNumber="W17"
+                weekTitle="成果發表 · Gallery Walk"
+                duration="90 分鐘 · 1 節課（含 5 分休息）"
+                tasks={[
+                    '報告者：分享 4 場（每場 5–8 分鐘）',
+                    '聆聽者：聆聽 4 組 + 主動提問（至少各一次）',
+                    '完成兩份紙本學習單（個人作業）+ 學術投資貼紙',
+                ]}
+                exportReminder="繳交兩份紙本學習單 — 完課！🎉"
+            />
 
             {/* ═══ SCROLLING CONTENT ═══ */}
             <div className="prose-zh" style={{ maxWidth: 720, margin: '0 auto' }}>
@@ -384,23 +396,20 @@ const W17Page = () => {
                 </div>
             </div>
 
-            {/* 學期 AI 協作反思（個人，不是繳交範圍）*/}
+            {/* 學期 AI 協作反思 — 已搬到 W14 寫，W17 是抽問日 */}
             <div className="card" style={{ marginTop: 16, padding: 16, background: '#FEF3C7', borderColor: '#D97706', borderWidth: 2 }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: '#92400E', marginBottom: 6 }}>🎯 學期 AI 協作反思（個人記錄，不交）</p>
-                <p style={{ fontSize: 12, color: '#78350F', lineHeight: 1.7, marginBottom: 10 }}>
-                    這 17 週你跟 AI 共事很多次。回頭看：你跟 AI 的關係是怎麼變化的？AI-RED 公約對你來說從「規則」變成什麼？這份反思不影響成績——是給你自己的學期回望。
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: '#92400E', margin: 0 }}>🎯 學期 AI 協作反思（今日抽問日）</p>
+                    <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: '#92400E', background: 'white', padding: '2px 8px', borderRadius: 4, border: '1px solid #D97706', flexShrink: 0 }}>跨週作業</span>
+                </div>
+                <p style={{ fontSize: 12, color: '#78350F', lineHeight: 1.75, marginBottom: 10 }}>
+                    這份反思你應該已在 <strong>W14</strong> 寫完了——回頭打開 <Link to="/w14" style={{ color: '#92400E', fontWeight: 700, textDecoration: 'underline' }}>W14 頁面</Link> 翻到「學期 AI 協作反思」block 看你當時寫的內容。<br />
+                    <strong>今天 Gallery Walk 中段老師會隨機點 3 位同學現場分享</strong>你 W14 寫的內容——所以你現在要做的事是：<strong>翻出來複習一下，準備好 1-2 句精華</strong>。
                 </p>
-                <ThinkRecord
-                    dataKey="w17-ai-reflection"
-                    prompt="這學期跟 AI 協作的經驗，最讓你改變想法的是什麼？"
-                    placeholder="例：我原本以為 AI 給的建議都該照單全收，但 W11 那次我的問卷被 AI 改到完全不像我自己的研究——那次之後我才真的懂『AI 給選項，人做選擇』的意思。"
-                    scaffold={[
-                        '我最初對 AI 的看法是…',
-                        '一個讓我改變想法的具體事件：…',
-                        '現在我對「人機協作」的理解是…',
-                    ]}
-                    rows={6}
-                />
+                <div style={{ background: 'white', border: '1px dashed #D97706', borderRadius: 4, padding: '10px 14px', fontSize: 11.5, color: '#92400E', lineHeight: 1.8 }}>
+                    📌 <strong>沒在 W14 寫過怎麼辦？</strong>馬上補——5 分鐘寫完即可。但被點到時就承認「我在 W14 沒寫，現場想一個給你」，誠實比裝有寫更尊重大家。<br />
+                    💡 <strong>抽問問題會是哪個？</strong>三選一隨機：①「最讓你改變想法的一次 AI 協作」②「AI-RED 五字裡你最常忘的是哪一個？為什麼」③「你會推薦學弟妹怎麼用 AI 做研究？」
+                </div>
             </div>
 
             {/* 本週結束，你應該要會 — B 標準格式 */}

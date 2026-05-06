@@ -4,6 +4,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
@@ -65,7 +66,7 @@ ${fb(data.draft, '研究問題草稿')}
 請你做兩件事：
 
 ① 結構審核：這個句子有沒有符合我選的型（A 影響型／B 比較型／C 深究型）的結構標準？如果結構漏了什麼，請具體指出。
-   · A 型：要清楚指出「自變項」與「依變項」
+   · A 型：要清楚指出「自變項」（我改的那個條件，例如：考試壓力大小）與「依變項」（我觀察／測量的結果，例如：圖書館空間選擇）
    · B 型：要清楚對照兩個對象／情境
    · C 型：要明確指出「機制／原因」是研究焦點
 
@@ -480,6 +481,18 @@ export const ProblemFocus = () => {
                 ]}
             />
             <CourseArc items={W2Data.courseArc} />
+
+            <TaskCard
+                weekNumber="W2"
+                weekTitle={W2Data.title}
+                duration={`${W2Data.duration} 分鐘 · ${W2Data.durationDesc}`}
+                tasks={[
+                    '四段式框架練習 — 觀察 → 落差 → 假設 → 鎖定研究問題',
+                    'ABC 探究句型 — 寫出影響型／比較型／深究型題目各一條',
+                    '把 W1 的「想知道」轉成 W2 的「探究意圖」',
+                ]}
+                exportReminder="匯出 W2 探究意圖 → 下週帶進 W3 題目健檢上手術台"
+            />
 
             {/* ══════════ STEP ENGINE ══════════ */}
             <StepEngine

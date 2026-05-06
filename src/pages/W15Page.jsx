@@ -8,6 +8,7 @@ import PromptBlock from '../components/ui/PromptBlock';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
@@ -905,6 +906,18 @@ const W15Page = () => {
                 ]}
             />
             <CourseArc items={W15Data.courseArc} />
+
+            <TaskCard
+                weekNumber="W15"
+                weekTitle={W15Data.title}
+                duration={`${W15Data.duration} 分鐘 · ${W15Data.durationDesc}`}
+                tasks={[
+                    '四層寫作法 — 描述 / 詮釋 / 回扣 / 批判',
+                    '回扣層練習 — 把你的發現連回研究問題',
+                    '批判層練習 — 寫出至少 3 個研究限制',
+                ]}
+                exportReminder="匯出 W15 結論章 → W16 報告整合"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

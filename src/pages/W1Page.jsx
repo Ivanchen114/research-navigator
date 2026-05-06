@@ -5,6 +5,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import {
@@ -126,6 +127,18 @@ export const W1Page = () => {
                 ]}
             />
             <CourseArc items={W1Data.courseArc} />
+
+            <TaskCard
+                weekNumber="W1"
+                weekTitle={W1Data.title}
+                duration={`${W1Data.duration} 分鐘 · ${W1Data.durationDesc}`}
+                tasks={[
+                    'AI-RED 協作公約 — 學會「捍衛真實，不是防弊」',
+                    '三件 AI 做不到的事 — 體驗品味、接觸、判斷各一次',
+                    '寫下你的協作邊界 — 哪些事我絕對不交給 AI',
+                ]}
+                exportReminder="匯出 W1 紀錄 + 你寫的 AI-RED 公約 → 之後每週都會用到"
+            />
 
             {/* ══════════ STEP ENGINE ══════════ */}
             <StepEngine

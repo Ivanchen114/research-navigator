@@ -1,4 +1,9 @@
-export const baseCourseArc = [
+/**
+ * pacingArc：教學節奏細分（8 個段落，2 週為單位）
+ * 學生主地圖請看 Home.jsx 的 5 phase studentArc。
+ * 不要在學生頁面直接用 pacingArc，避免兩種地圖打架。
+ */
+export const pacingArc = [
     { wk: 'W1-W2', name: '探索階段\nRED 公約' },
     { wk: 'W3-W4', name: '題目診斷\n方法地圖' },
     { wk: 'W5-W6', name: '操作型定義\n海報博覽會' },

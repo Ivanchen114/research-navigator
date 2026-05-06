@@ -5,6 +5,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import Checklist from '../components/ui/Checklist';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
@@ -1360,6 +1361,18 @@ export const W11Page = () => {
                     { wk: 'W12-W13', name: '執行研究\n蒐集資料', status: '' },
                     { wk: 'W14-W17', name: '分析報告\n發表', status: '' },
                 ]} />
+
+            <TaskCard
+                weekNumber="W11"
+                weekTitle={W11Data.title}
+                duration={`${W11Data.duration} 分鐘 · ${W11Data.durationDesc}`}
+                tasks={[
+                    '工具實體化（題目 → Google Form / 訪綱卡 / 紀錄表）',
+                    '座位表 1 對 1 跨方法 Pilot — 雙向紀錄 + 自我檢核',
+                    '倫理審查 + 教師蓋章 → 啟動施測',
+                ]}
+                exportReminder="Classroom 繳交工具 + 等老師蓋章 → 正式啟動施測"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

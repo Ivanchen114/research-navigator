@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TaskCard from '../components/ui/TaskCard';
 import {
     CheckCircle2,
     AlertCircle,
@@ -55,6 +56,19 @@ export const Discovery = () => {
                     </div>
                 ))}
             </div>
+
+            {/* W0 沒有 lessonMaps W0Data，本節任務 inline 寫 */}
+            <TaskCard
+                weekNumber="W0"
+                weekTitle="偵探特訓班 · The Detective Camp"
+                duration="50 分鐘 · 1 節課"
+                tasks={[
+                    '三把研究之劍入門 — 觀察力／假設檢定／批判思考',
+                    '偵探試煉 Level 0 — 三個案例練眼（試煉一／烏龜一／烏龜二）',
+                    '領取「三把劍筆記」收進偵探檔案',
+                ]}
+                exportReminder="把三把劍筆記放進你的探員檔案 → 下週 W1 簽 AI-RED 公約"
+            />
 
             <div className="section-head">
                 <h2>學什麼</h2>

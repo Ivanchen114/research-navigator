@@ -11,6 +11,7 @@ import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
+import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
@@ -1004,6 +1005,18 @@ ___（貼題目／訪綱／流程／編碼表）
                     { wk: 'W11', name: 'Pilot Test\n倫理審查', status: '' },
                     { wk: 'W12-W15', name: '執行研究\n數據分析', status: '' },
                 ]} />
+
+            <TaskCard
+                weekNumber="W10"
+                weekTitle={W10Data.title}
+                duration={`${W10Data.duration} 分鐘 · ${W10Data.durationDesc}`}
+                tasks={[
+                    '方法工具書 + 4 集教學影片 — 5 法 4 區塊速覽',
+                    '自我與同儕診斷 — 自己挑 → 同學挑 → AI 補漏',
+                    'AI 工作坊（雙模式）+ 計畫書整本繳交',
+                ]}
+                exportReminder="繳交計畫書整本（含第七到十三章）+ AI 對話記錄"
+            />
 
             {/* STEP ENGINE */}
             <StepEngine

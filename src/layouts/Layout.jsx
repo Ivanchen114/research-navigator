@@ -26,78 +26,81 @@ export const Layout = () => {
         window.scrollTo({ top: 0, behavior: 'instant' });
     }, [location.pathname]);
 
+    // 注意：item.status 改由下方 dynamicSections 依當前路由 + maxWeek 動態計算
+    // （規則：當前頁=active、走過的週次=done、其餘=none；不再 locked）。
+    // 此處 navSections 不再寫死 status 欄位，避免被誤以為是真實狀態。
     const navSections = [
         {
             label: '任務大廳',
             items: [
-                { name: '任務總覽', path: '/', status: 'active' },
-                { name: 'R.I.B. 特務指揮中心', path: '/games', status: 'none' },
+                { name: '任務總覽', path: '/' },
+                { name: 'R.I.B. 特務指揮中心', path: '/games' },
             ]
         },
         {
             label: '我的檔案',
             items: [
-                { name: '探員檔案', path: '/dossier', status: 'none' },
-                { name: '學習歷程策展室', path: '/portfolio', status: 'none' },
+                { name: '探員檔案', path: '/dossier' },
+                { name: '學習歷程策展室', path: '/portfolio' },
             ]
         },
         {
             label: '研究工具',
             items: [
-                { name: '方法工具書', path: '/tools/methods', status: 'none' },
-                { name: 'AI 協作實驗室（自學）', path: '/prompt-lab', status: 'none' },
-                { name: 'Prompt 範本庫（自學）', path: '/analysis-station', status: 'none' },
-                { name: 'AI 報告找雷挑戰', path: '/find-traps', status: 'none' },
+                { name: '方法工具書', path: '/tools/methods' },
+                { name: 'AI 協作實驗室（自學）', path: '/prompt-lab' },
+                { name: 'Prompt 範本庫（自學）', path: '/analysis-station' },
+                { name: 'AI 報告找雷挑戰', path: '/find-traps' },
             ]
         },
         {
             label: '課程進度',
             sublabel: '階段一·問題意識',
             items: [
-                { name: '偵探特訓班', path: '/w0', week: 'W0', status: 'done' },
-                { name: '模仿遊戲', path: '/w1', week: 'W1', status: 'done' },
-                { name: '四段式框架', path: '/w2', week: 'W2', status: 'done' },
-                { name: '題目健檢', path: '/w3', week: 'W3', status: 'done' },
+                { name: '偵探特訓班', path: '/w0', week: 'W0' },
+                { name: '模仿遊戲', path: '/w1', week: 'W1' },
+                { name: '四段式框架', path: '/w2', week: 'W2' },
+                { name: '題目健檢', path: '/w3', week: 'W3' },
             ]
         },
         {
             sublabel: '階段二·研究規劃',
             items: [
-                { name: '方法地圖', path: '/w4', week: 'W4', status: 'done' },
-                { name: '操作型定義', path: '/w5', week: 'W5', status: 'done' },
-                { name: '海報博覽會', path: '/w6', week: 'W6', status: 'done' },
-                { name: '文獻搜尋', path: '/w7', week: 'W7', status: 'done' },
-                { name: '文獻偵探社', path: '/w8', week: 'W8', status: 'active' },
+                { name: '方法地圖', path: '/w4', week: 'W4' },
+                { name: '操作型定義', path: '/w5', week: 'W5' },
+                { name: '海報博覽會', path: '/w6', week: 'W6' },
+                { name: '文獻搜尋', path: '/w7', week: 'W7' },
+                { name: '文獻偵探社', path: '/w8', week: 'W8' },
             ]
         },
         {
             sublabel: '階段三·計畫定稿',
             items: [
-                { name: '計畫書·五章地基', path: '/w9', week: 'W9', status: 'locked' },
-                { name: '計畫書·整本定稿', path: '/w10', week: 'W10', status: 'locked' },
+                { name: '計畫書·五章地基', path: '/w9', week: 'W9' },
+                { name: '計畫書·整本定稿', path: '/w10', week: 'W10' },
             ]
         },
         {
             sublabel: '階段四·執行檢核',
             items: [
-                { name: '預試與倫理', path: '/w11', week: 'W11', status: 'locked' },
-                { name: '期中短報', path: '/w12', week: 'W12', status: 'locked' },
+                { name: '預試與倫理', path: '/w11', week: 'W11' },
+                { name: '期中短報', path: '/w12', week: 'W12' },
             ]
         },
         {
             sublabel: '階段五·分析與發表',
             items: [
-                { name: '資料整理週', path: '/w13', week: 'W13', status: 'locked' },
-                { name: '圖表與圖說', path: '/w14', week: 'W14', status: 'locked' },
-                { name: '研究結論', path: '/w15', week: 'W15', status: 'locked' },
-                { name: '報告與海報', path: '/w16', week: 'W16', status: 'locked' },
-                { name: '成果發表', path: '/w17', week: 'W17', status: 'locked' }
+                { name: '資料整理週', path: '/w13', week: 'W13' },
+                { name: '圖表與圖說', path: '/w14', week: 'W14' },
+                { name: '研究結論', path: '/w15', week: 'W15' },
+                { name: '報告與海報', path: '/w16', week: 'W16' },
+                { name: '成果發表', path: '/w17', week: 'W17' }
             ]
         },
         {
             label: '關於',
             items: [
-                { name: '關於本站', path: '/about', status: 'none' },
+                { name: '關於本站', path: '/about' },
             ]
         }
     ];
@@ -238,7 +241,7 @@ export const Layout = () => {
                             )}
 
                             {section.sublabel && (
-                                <div className={`text-[9px] text-[#bbb] pt-1 pb-1 px-[20px] ${section.items[0]?.status === 'locked' ? 'opacity-50 mt-1' : ''}`}>
+                                <div className="text-[9px] text-[#bbb] pt-1 pb-1 px-[20px]">
                                     {section.sublabel}
                                 </div>
                             )}
