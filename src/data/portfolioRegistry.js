@@ -242,6 +242,7 @@ export const PORTFOLIO_REGISTRY = [
       { key: 'w14-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（從零到一）/ 🥊 驗收型（從 1 到 100）' },
       { key: 'w14-pre-judgment', label: '草圖判讀（驗收型必填）', question: '我預期會看到什麼趨勢？最重要的發現是什麼？' },
       { key: 'w14-teach-reflection', label: '教學型反思（教學型必填）', question: 'AI 教我什麼？我自己選什麼方向？' },
+      { key: 'w14-semester-reflection', label: '學期 AI 協作反思（W14-W17 跨週作業）', question: '從 W1 到現在，你跟 AI 共事最讓你改變想法的一次是什麼？' },
       { key: 'w14-my-chart-type', label: '我的圖表類型與理由' },
       { key: 'w14-ai-blindspot', label: 'AI 找到的盲點 / 我沒注意到的趨勢' },
       { key: 'w14-validation-check', label: '圖表驗收結果' },
