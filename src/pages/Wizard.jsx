@@ -513,15 +513,7 @@ function CutPractice() {
 export const Wizard = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [obstacleStates, setObstacleStates] = useState({ a: false, b: false });
-    /* 病症診斷支援多選：{ patientId: { picks: ['A', 'H'], submitted: false } }
-       多選原因：H 病（變因失控）常和 D 病（主觀偏見）等複合，單選會強迫學生只挑一種 */
-    const [diagnoses, setDiagnoses] = useState(() => {
-        try {
-            const raw = localStorage.getItem('w3-patient-diagnoses');
-            if (raw) return JSON.parse(raw);
-        } catch { /* ignore */ }
-        return {};
-    });
+    const [diagnoses, setDiagnoses] = useState({});
     const [choiceResults, setChoiceResults] = useState([]);
 
     // Part 2 抽題機
@@ -581,39 +573,13 @@ export const Wizard = () => {
         });
     }, []);
 
-    const persistDiagnoses = (next) => {
-        try { localStorage.setItem('w3-patient-diagnoses', JSON.stringify(next)); } catch { /* ignore */ }
+    const handleDiagnose = (patientId, diseaseCode) => {
+        if (diagnoses[patientId]) return; // 已作答不可更改
+        setDiagnoses(prev => ({ ...prev, [patientId]: diseaseCode }));
     };
 
-    const togglePick = (patientId, code) => {
-        setDiagnoses(prev => {
-            const cur = prev[patientId] || { picks: [], submitted: false };
-            if (cur.submitted) return prev; // 已送出不可更改
-            const picks = cur.picks.includes(code)
-                ? cur.picks.filter(c => c !== code)
-                : [...cur.picks, code];
-            const next = { ...prev, [patientId]: { ...cur, picks } };
-            persistDiagnoses(next);
-            return next;
-        });
-    };
-
-    const submitDiagnose = (patientId) => {
-        setDiagnoses(prev => {
-            const cur = prev[patientId];
-            if (!cur || cur.picks.length === 0 || cur.submitted) return prev;
-            const next = { ...prev, [patientId]: { ...cur, submitted: true } };
-            persistDiagnoses(next);
-            return next;
-        });
-    };
-
-    const diagnosedCount = Object.values(diagnoses).filter(d => d?.submitted).length;
-    /* 答對 = 送出後 picks 包含正解（允許多選複合病；只要選到正解就算抓到） */
-    const correctCount = PATIENTS.filter(p => {
-        const d = diagnoses[p.id];
-        return d?.submitted && d.picks.includes(p.ans);
-    }).length;
+    const diagnosedCount = Object.keys(diagnoses).length;
+    const correctCount = PATIENTS.filter(p => diagnoses[p.id] === p.ans).length;
 
     /* ── 五個步驟 ── */
 
@@ -750,67 +716,47 @@ export const Wizard = () => {
 
                             <div className="w3-patient-grid">
                                 {PATIENTS.map(p => {
-                                    const entry = diagnoses[p.id];
-                                    const picks = entry?.picks || [];
-                                    const submitted = !!entry?.submitted;
-                                    const isCorrect = submitted && picks.includes(p.ans);
+                                    const picked = diagnoses[p.id];
+                                    const isCorrect = picked === p.ans;
+                                    const answered = !!picked;
                                     const correctLabel = DISEASE_LABELS[p.ans];
 
                                     return (
                                         <div className="w3-patient-card" key={p.id}>
                                             <div className="w3-patient-hd">
                                                 <span className="w3-patient-num">病人 #{p.n}</span>
-                                                {submitted && (
+                                                {answered && (
                                                     <span className={`text-[11px] font-bold font-mono ml-auto ${isCorrect ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
-                                                        {isCorrect ? '✓ 抓到正解' : '✗ 再想想'}
+                                                        {isCorrect ? '✓ 正確' : '✗ 再想想'}
                                                     </span>
                                                 )}
                                             </div>
                                             <div className="w3-patient-body">{p.t}</div>
 
-                                            {/* 病症多選 checkbox（H+D 等常複合病可一次勾多項） */}
+                                            {/* 病症下拉選單 */}
                                             <div className="px-3 pb-3 mt-2">
-                                                {!submitted ? (
-                                                    <div className="flex flex-col gap-2">
-                                                        <p className="text-[10.5px] font-mono text-[var(--ink-light)] tracking-wider">可複選 · 至少 1 項</p>
-                                                        <div className="grid grid-cols-2 gap-1">
-                                                            {DISEASES.map(d => {
-                                                                const checked = picks.includes(d.c);
-                                                                return (
-                                                                    <label
-                                                                        key={d.c}
-                                                                        className={`flex items-center gap-1.5 px-2 py-1 rounded text-[11.5px] cursor-pointer border transition-all leading-tight ${checked ? 'bg-[var(--accent-light)] border-[var(--accent)] text-[var(--ink)] font-bold' : 'bg-white border-[var(--border)] text-[var(--ink-mid)] hover:bg-[var(--paper-warm)]'}`}
-                                                                    >
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            checked={checked}
-                                                                            onChange={() => togglePick(p.id, d.c)}
-                                                                            className="cursor-pointer flex-shrink-0"
-                                                                        />
-                                                                        <span>{d.c} {d.e} {d.n}</span>
-                                                                    </label>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => submitDiagnose(p.id)}
-                                                            disabled={picks.length === 0}
-                                                            className={`mt-1 px-3 py-1.5 rounded-[var(--radius-unified)] text-[12px] font-bold transition-all ${picks.length > 0 ? 'bg-[var(--accent)] text-white hover:opacity-90 cursor-pointer' : 'bg-[var(--border)] text-[var(--ink-light)] cursor-not-allowed'}`}
-                                                        >
-                                                            {picks.length === 0 ? '請至少選一項' : `送出診斷（已選 ${picks.length} 項：${picks.join('、')}）`}
-                                                        </button>
-                                                    </div>
+                                                {!answered ? (
+                                                    <select
+                                                        value=""
+                                                        onChange={(e) => handleDiagnose(p.id, e.target.value)}
+                                                        className="w-full px-3 py-2 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all cursor-pointer"
+                                                    >
+                                                        <option value="" disabled>選擇你的診斷…</option>
+                                                        {DISEASES.map(d => (
+                                                            <option key={d.c} value={d.c}>
+                                                                {d.c}. {d.e} {d.n}
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                 ) : (
-                                                    <div className={`flex flex-col gap-1 px-3 py-2 rounded-[var(--radius-unified)] border text-[12px] ${isCorrect ? 'bg-[var(--success-light)] border-[var(--success)] text-[var(--success)]' : 'bg-[var(--danger-light)] border-[var(--danger)] text-[var(--danger)]'}`}>
-                                                        <span className="font-bold">{isCorrect ? '✓ 抓到正解' : '✗ 沒選到正解'}</span>
-                                                        <span className="font-normal text-[var(--ink-mid)]">你選了：{picks.map(c => `${c}. ${DISEASE_LABELS[c].n}`).join(' + ')}</span>
+                                                    <div className={`flex items-center gap-2 px-3 py-2 rounded-[var(--radius-unified)] border text-[13px] font-bold ${isCorrect ? 'bg-[var(--success-light)] border-[var(--success)] text-[var(--success)]' : 'bg-[var(--danger-light)] border-[var(--danger)] text-[var(--danger)]'}`}>
+                                                        {isCorrect ? '✓' : '✗'} 你的診斷：{picked}. {DISEASE_LABELS[picked].e} {DISEASE_LABELS[picked].n}
                                                     </div>
                                                 )}
                                             </div>
 
                                             {/* 答案揭曉 */}
-                                            {submitted && (
+                                            {answered && (
                                                 <div className={`px-3 pb-3 text-[12px] leading-relaxed ${isCorrect ? 'text-[var(--success)]' : 'text-[var(--ink-mid)]'}`}>
                                                     <div className="p-3 rounded-[6px] bg-[var(--success-light)] border border-[var(--success)]/15">
                                                         <strong>{p.ans} {correctLabel.e} {correctLabel.n}</strong> — {p.explain}
