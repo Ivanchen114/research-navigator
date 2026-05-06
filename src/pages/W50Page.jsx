@@ -673,7 +673,7 @@ export const W50Page = () => {
                     { label: '本週任務', value: '華藝搜尋 + APA 格式 + 證物鑑識' },
                     { label: '時長', value: '100 MINS' },
                     { label: '課堂產出', value: 'A/B 級文獻 + APA 書目 + 鑑識紀錄' },
-                    { label: '下週預告', value: 'W6 文獻偵探社' },
+                    { label: '下週預告', value: 'W8 文獻偵探社' },
                 ]}
             />
             <CourseArc items={W7Data.courseArc} />
