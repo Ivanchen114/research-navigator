@@ -513,7 +513,15 @@ function CutPractice() {
 export const Wizard = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [obstacleStates, setObstacleStates] = useState({ a: false, b: false });
-    const [diagnoses, setDiagnoses] = useState({});
+    /* 病症診斷支援多選：{ patientId: { picks: ['A', 'H'], submitted: false } }
+       多選原因：H 病（變因失控）常和 D 病（主觀偏見）等複合，單選會強迫學生只挑一種 */
+    const [diagnoses, setDiagnoses] = useState(() => {
+        try {
+            const raw = localStorage.getItem('w3-patient-diagnoses');
+            if (raw) return JSON.parse(raw);
+        } catch { /* ignore */ }
+        return {};
+    });
     const [choiceResults, setChoiceResults] = useState([]);
 
     // Part 2 抽題機
@@ -573,13 +581,39 @@ export const Wizard = () => {
         });
     }, []);
 
-    const handleDiagnose = (patientId, diseaseCode) => {
-        if (diagnoses[patientId]) return; // 已作答不可更改
-        setDiagnoses(prev => ({ ...prev, [patientId]: diseaseCode }));
+    const persistDiagnoses = (next) => {
+        try { localStorage.setItem('w3-patient-diagnoses', JSON.stringify(next)); } catch { /* ignore */ }
     };
 
-    const diagnosedCount = Object.keys(diagnoses).length;
-    const correctCount = PATIENTS.filter(p => diagnoses[p.id] === p.ans).length;
+    const togglePick = (patientId, code) => {
+        setDiagnoses(prev => {
+            const cur = prev[patientId] || { picks: [], submitted: false };
+            if (cur.submitted) return prev; // 已送出不可更改
+            const picks = cur.picks.includes(code)
+                ? cur.picks.filter(c => c !== code)
+                : [...cur.picks, code];
+            const next = { ...prev, [patientId]: { ...cur, picks } };
+            persistDiagnoses(next);
+            return next;
+        });
+    };
+
+    const submitDiagnose = (patientId) => {
+        setDiagnoses(prev => {
+            const cur = prev[patientId];
+            if (!cur || cur.picks.length === 0 || cur.submitted) return prev;
+            const next = { ...prev, [patientId]: { ...cur, submitted: true } };
+            persistDiagnoses(next);
+            return next;
+        });
+    };
+
+    const diagnosedCount = Object.values(diagnoses).filter(d => d?.submitted).length;
+    /* 答對 = 送出後 picks 包含正解（允許多選複合病；只要選到正解就算抓到） */
+    const correctCount = PATIENTS.filter(p => {
+        const d = diagnoses[p.id];
+        return d?.submitted && d.picks.includes(p.ans);
+    }).length;
 
     /* ── 五個步驟 ── */
 
@@ -716,47 +750,67 @@ export const Wizard = () => {
 
                             <div className="w3-patient-grid">
                                 {PATIENTS.map(p => {
-                                    const picked = diagnoses[p.id];
-                                    const isCorrect = picked === p.ans;
-                                    const answered = !!picked;
+                                    const entry = diagnoses[p.id];
+                                    const picks = entry?.picks || [];
+                                    const submitted = !!entry?.submitted;
+                                    const isCorrect = submitted && picks.includes(p.ans);
                                     const correctLabel = DISEASE_LABELS[p.ans];
 
                                     return (
                                         <div className="w3-patient-card" key={p.id}>
                                             <div className="w3-patient-hd">
                                                 <span className="w3-patient-num">病人 #{p.n}</span>
-                                                {answered && (
+                                                {submitted && (
                                                     <span className={`text-[11px] font-bold font-mono ml-auto ${isCorrect ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
-                                                        {isCorrect ? '✓ 正確' : '✗ 再想想'}
+                                                        {isCorrect ? '✓ 抓到正解' : '✗ 再想想'}
                                                     </span>
                                                 )}
                                             </div>
                                             <div className="w3-patient-body">{p.t}</div>
 
-                                            {/* 病症下拉選單 */}
+                                            {/* 病症多選 checkbox（H+D 等常複合病可一次勾多項） */}
                                             <div className="px-3 pb-3 mt-2">
-                                                {!answered ? (
-                                                    <select
-                                                        value=""
-                                                        onChange={(e) => handleDiagnose(p.id, e.target.value)}
-                                                        className="w-full px-3 py-2 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all cursor-pointer"
-                                                    >
-                                                        <option value="" disabled>選擇你的診斷…</option>
-                                                        {DISEASES.map(d => (
-                                                            <option key={d.c} value={d.c}>
-                                                                {d.c}. {d.e} {d.n}
-                                                            </option>
-                                                        ))}
-                                                    </select>
+                                                {!submitted ? (
+                                                    <div className="flex flex-col gap-2">
+                                                        <p className="text-[10.5px] font-mono text-[var(--ink-light)] tracking-wider">可複選 · 至少 1 項</p>
+                                                        <div className="grid grid-cols-2 gap-1">
+                                                            {DISEASES.map(d => {
+                                                                const checked = picks.includes(d.c);
+                                                                return (
+                                                                    <label
+                                                                        key={d.c}
+                                                                        className={`flex items-center gap-1.5 px-2 py-1 rounded text-[11.5px] cursor-pointer border transition-all leading-tight ${checked ? 'bg-[var(--accent-light)] border-[var(--accent)] text-[var(--ink)] font-bold' : 'bg-white border-[var(--border)] text-[var(--ink-mid)] hover:bg-[var(--paper-warm)]'}`}
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={checked}
+                                                                            onChange={() => togglePick(p.id, d.c)}
+                                                                            className="cursor-pointer flex-shrink-0"
+                                                                        />
+                                                                        <span>{d.c} {d.e} {d.n}</span>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => submitDiagnose(p.id)}
+                                                            disabled={picks.length === 0}
+                                                            className={`mt-1 px-3 py-1.5 rounded-[var(--radius-unified)] text-[12px] font-bold transition-all ${picks.length > 0 ? 'bg-[var(--accent)] text-white hover:opacity-90 cursor-pointer' : 'bg-[var(--border)] text-[var(--ink-light)] cursor-not-allowed'}`}
+                                                        >
+                                                            {picks.length === 0 ? '請至少選一項' : `送出診斷（已選 ${picks.length} 項：${picks.join('、')}）`}
+                                                        </button>
+                                                    </div>
                                                 ) : (
-                                                    <div className={`flex items-center gap-2 px-3 py-2 rounded-[var(--radius-unified)] border text-[13px] font-bold ${isCorrect ? 'bg-[var(--success-light)] border-[var(--success)] text-[var(--success)]' : 'bg-[var(--danger-light)] border-[var(--danger)] text-[var(--danger)]'}`}>
-                                                        {isCorrect ? '✓' : '✗'} 你的診斷：{picked}. {DISEASE_LABELS[picked].e} {DISEASE_LABELS[picked].n}
+                                                    <div className={`flex flex-col gap-1 px-3 py-2 rounded-[var(--radius-unified)] border text-[12px] ${isCorrect ? 'bg-[var(--success-light)] border-[var(--success)] text-[var(--success)]' : 'bg-[var(--danger-light)] border-[var(--danger)] text-[var(--danger)]'}`}>
+                                                        <span className="font-bold">{isCorrect ? '✓ 抓到正解' : '✗ 沒選到正解'}</span>
+                                                        <span className="font-normal text-[var(--ink-mid)]">你選了：{picks.map(c => `${c}. ${DISEASE_LABELS[c].n}`).join(' + ')}</span>
                                                     </div>
                                                 )}
                                             </div>
 
                                             {/* 答案揭曉 */}
-                                            {answered && (
+                                            {submitted && (
                                                 <div className={`px-3 pb-3 text-[12px] leading-relaxed ${isCorrect ? 'text-[var(--success)]' : 'text-[var(--ink-mid)]'}`}>
                                                     <div className="p-3 rounded-[6px] bg-[var(--success-light)] border border-[var(--success)]/15">
                                                         <strong>{p.ans} {correctLabel.e} {correctLabel.n}</strong> — {p.explain}
@@ -988,32 +1042,32 @@ export const Wizard = () => {
                             💡 如果你的題目太大、太空、太遠、太難——回頭用萬用心法修！
                         </div>
 
-                        {/* 🎮 遊戲暱稱對映卡：學生玩「靶心」遊戲時會看到醫療隱喻版本，建立對映 */}
+                        {/* 🎮 遊戲暱稱對映卡：正式名為主、遊戲名降為副文字（避免高一搞不清誰是「課本說法」） */}
                         <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 mt-4 max-w-[760px]">
                             <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2.5 flex items-center gap-1.5">
                                 <span>🎮</span>
-                                <span>進到「靶心」遊戲後會看到這四把處方的暱稱</span>
+                                <span>進到「靶心」遊戲後，這四把處方會以「醫療暱稱」呈現</span>
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[12px]">
                                 <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
                                     <span className="text-[16px]">💊</span>
-                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">範圍縮小</strong>　＝　縮小藥丸</span>
+                                    <span><strong className="text-[var(--ink)]">範圍縮小</strong><span className="text-[var(--ink-light)] text-[11px] ml-1">（遊戲名：縮小藥丸）</span></span>
                                 </div>
                                 <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
                                     <span className="text-[16px]">💉</span>
-                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">抽象具體化</strong>　＝　具體疫苗</span>
+                                    <span><strong className="text-[var(--ink)]">抽象具體化</strong><span className="text-[var(--ink-light)] text-[11px] ml-1">（遊戲名：具體疫苗）</span></span>
                                 </div>
                                 <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
                                     <span className="text-[16px]">🚪</span>
-                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">對象可及化</strong>　＝　任意門探測儀</span>
+                                    <span><strong className="text-[var(--ink)]">對象可及化</strong><span className="text-[var(--ink-light)] text-[11px] ml-1">（遊戲名：任意門探測儀）</span></span>
                                 </div>
                                 <div className="flex items-center gap-2 bg-white border border-[var(--border)] rounded-[6px] px-3 py-2">
                                     <span className="text-[16px]">🔪</span>
-                                    <span className="text-[var(--ink-mid)]"><strong className="text-[var(--ink)]">方法可行化</strong>　＝　降維手術刀</span>
+                                    <span><strong className="text-[var(--ink)]">方法可行化</strong><span className="text-[var(--ink-light)] text-[11px] ml-1">（遊戲名：降維手術刀）</span></span>
                                 </div>
                             </div>
                             <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed mt-2.5">
-                                💡 同一件事的兩種說法——主頁面用「正式技能名」幫你記下動作；遊戲用「醫療隱喻」讓練習有趣。看到任何一個都認得出對方。
+                                💡 <strong className="text-[var(--ink)]">課本／作業／老師講的</strong>都用粗體那個正式名；括號裡的醫療暱稱只在遊戲裡看得到。
                             </p>
                         </div>
 

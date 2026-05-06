@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useId } from 'react';
 
 /**
  * ThinkRecord — 自動存檔文字輸入框
@@ -38,6 +38,8 @@ export default function ThinkRecord({
   const [value, setValue] = useState('');
   const [status, setStatus] = useState('idle'); // idle | typing | saved | restored
   const timerRef = useRef(null);
+  /* useId 產生穩定唯一 id，讓 textarea 與 prompt label 程式化連結（螢幕閱讀器可讀題目） */
+  const fieldId = useId();
   // 用 ref 存 defaultTemplate，避免「變動的樣板字串」觸發 useEffect 重跑覆蓋使用者已打但未存的輸入
   const defaultTemplateRef = useRef(defaultTemplate);
   defaultTemplateRef.current = defaultTemplate;
@@ -101,7 +103,7 @@ export default function ThinkRecord({
           ✍️ 輪到你填
         </span>
         {prompt && (
-          <p className="text-[14px] font-bold text-[var(--ink)] leading-relaxed m-0">{prompt}</p>
+          <label htmlFor={fieldId} className="text-[14px] font-bold text-[var(--ink)] leading-relaxed m-0 cursor-text">{prompt}</label>
         )}
       </div>
 
@@ -124,7 +126,9 @@ export default function ThinkRecord({
       )}
 
       <textarea
+        id={fieldId}
         name={dataKey}
+        aria-label={prompt || '寫下你的想法'}
         autoComplete="off"
         value={value}
         onChange={handleChange}

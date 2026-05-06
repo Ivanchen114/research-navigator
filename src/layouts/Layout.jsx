@@ -26,6 +26,16 @@ export const Layout = () => {
         window.scrollTo({ top: 0, behavior: 'instant' });
     }, [location.pathname]);
 
+    /* ESC 關閉手機選單（a11y：鍵盤使用者必備） */
+    useEffect(() => {
+        if (!isMobileMenuOpen) return;
+        const onKey = (e) => {
+            if (e.key === 'Escape') setIsMobileMenuOpen(false);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [isMobileMenuOpen]);
+
     // 注意：item.status 改由下方 dynamicSections 依當前路由 + maxWeek 動態計算
     // （規則：當前頁=active、走過的週次=done、其餘=none；不再 locked）。
     // 此處 navSections 不再寫死 status 欄位，避免被誤以為是真實狀態。
@@ -231,7 +241,7 @@ export const Layout = () => {
                 </div>
 
                 {/* Navigation Links */}
-                <nav className="flex-1 py-4 overflow-y-auto">
+                <nav id="mobile-sidebar-nav" className="flex-1 py-4 overflow-y-auto">
                     {dynamicSections.map((section, sIdx) => (
                         <div key={sIdx}>
                             {section.label && (
@@ -325,6 +335,9 @@ export const Layout = () => {
                     <button
                         onClick={toggleMobileMenu}
                         className="text-[#4a4a6a] focus:outline-none p-1"
+                        aria-label={isMobileMenuOpen ? '關閉選單' : '開啟選單'}
+                        aria-expanded={isMobileMenuOpen}
+                        aria-controls="mobile-sidebar-nav"
                     >
                         {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>

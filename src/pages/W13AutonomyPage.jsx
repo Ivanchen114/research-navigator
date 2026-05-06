@@ -508,8 +508,41 @@ const W13AutonomyPage = () => {
                         <p className="text-[15px] font-bold text-[var(--ink)] mb-2">📦 任務：原始資料 → 可分析的表</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
                             W11-W12 你蒐集到一堆原始資料（問卷回應／逐字稿／實驗紀錄／觀察表／編碼表）。
-                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、<strong>N 值（=總筆數，例：N=85 代表收到 85 份）</strong>明確的乾淨表，下週 W14 才畫得了圖。
+                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、<strong>N 值</strong>明確的乾淨表，下週 W14 才畫得了圖。
                             先看看 5 法的對照，找到自己這組對應的轉換路徑。
+                        </p>
+                    </div>
+
+                    {/* 📖 4 個詞卡：N 值／半結構化／編碼類別／代碼化（先定義再用，仿 W9 變項詞卡格式） */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[760px]">
+                        <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂 4 個詞（W13 開始大量出現）</p>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            這 4 個詞下方的 5 法對照表會頻繁用到——先花 90 秒掃過。
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div className="bg-white border-2 border-[#2563EB] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#2563EB] mb-1">🔢 N 值</p>
+                                <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed mb-1">每一欄、每一筆資料的<strong>樣本數量</strong>。</p>
+                                <p className="text-[11px] text-[#1E40AF] italic">例：訪了 8 人 → N = 8；收到 85 份問卷 → N = 85</p>
+                            </div>
+                            <div className="bg-white border-2 border-[#7C3AED] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#7C3AED] mb-1">🎙️ 半結構化訪談</p>
+                                <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-1">有大綱但允許追問的訪談形式——介於完全自由聊天和死板問卷之間。</p>
+                                <p className="text-[11px] text-[#5B21B6] italic">例：照訪綱問 5 大題，但聽到有意思的就追問</p>
+                            </div>
+                            <div className="bg-white border-2 border-[#059669] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#059669] mb-1">🏷️ 編碼類別</p>
+                                <p className="text-[11.5px] text-[#065F46] leading-relaxed mb-1">把文字資料分類的<strong>標籤</strong>。</p>
+                                <p className="text-[11px] text-[#047857] italic">例：把 8 位受訪者的答案分成「正面 / 中立 / 負面」3 類</p>
+                            </div>
+                            <div className="bg-white border-2 border-[#D97706] rounded p-2.5">
+                                <p className="text-[12px] font-bold text-[#D97706] mb-1">🔢 代碼化（變項代碼化）</p>
+                                <p className="text-[11.5px] text-[#7C2D12] leading-relaxed mb-1">把文字標籤轉成<strong>數字</strong>便於計算。</p>
+                                <p className="text-[11px] text-[#9A3412] italic">例：正面 = 1，中立 = 0，負面 = -1</p>
+                            </div>
+                        </div>
+                        <p className="text-[11px] text-[#1E40AF] italic leading-relaxed mt-2.5">
+                            💡 <strong>編碼類別</strong>是「貼標籤」（質性的分類）；<strong>代碼化</strong>是「把標籤換成數字」（為了能丟進 Excel／統計軟體算）。順序是先編碼、再代碼。
                         </p>
                     </div>
 
