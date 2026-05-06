@@ -218,7 +218,7 @@ export const W3Data = {
         { colorClass: "lm-c4", label: "個人練習 / 規格化" },
         { colorClass: "lm-c5", label: "小組共作 / 互動" }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 1,
         now: idx === 1
@@ -235,7 +235,7 @@ export const W1Data = {
         { label: '課課產出', value: '好奇心種子' },
         { label: '下週預告', value: '你觀察到的生活現象' }
     ],
-    courseArc: baseCourseArc.map(item => ({
+    courseArc: pacingArc.map(item => ({
         ...item,
         now: item.wk === 'W1-W2'
     })),
@@ -376,7 +376,7 @@ export const W2Data = {
     title: "問題意識的覺醒",
     duration: 100,
     durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: false,
         now: idx === 0
@@ -525,7 +525,7 @@ export const W4Data = {
         { label: '課堂產出', value: '主要方法 + 選擇理由（+ 輔助方法）' },
         { label: '帶去 W5', value: '主要方法選擇（W5 操作型定義要用）' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 1,
         now: idx === 1
@@ -710,7 +710,7 @@ export const W5Data = {
         { label: '課堂產出', value: '核心概念 + 操作型定義 + 正反例（三格）' },
         { label: '帶去 W6', value: '操作型定義（海報必填內容）' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 2,
         now: idx === 2
@@ -872,7 +872,7 @@ export const W6Data = {
         { label: '課堂產出', value: 'A4 海報 + 走讀回饋 + 路線（Team / Solo）' },
         { label: '帶去 W7', value: '題目／方法／路線——文獻搜尋的起點' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 2,
         now: idx === 2
@@ -1020,7 +1020,7 @@ export const W7Data = {
         { label: '課堂產出', value: '1 篇真實證物文獻 + APA 書目' },
         { label: '帶去 W8', value: '找到的文獻——下週寫成文獻探討段落' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 2,
         now: idx === 2
@@ -1160,7 +1160,7 @@ export const W8Data = {
         { label: '課堂產出', value: '5 句以上文獻探討段落（連回題目）' },
         { label: '帶去 W9', value: '文獻探討段落（計畫書第二章地基）' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 2,
         now: idx === 2
@@ -1301,7 +1301,7 @@ export const W9Data = {
     title: "計畫書 1-5 章地基工程",
     duration: 100,
     durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 3,
         now: idx === 3
@@ -1454,7 +1454,7 @@ export const W10Data = {
     title: "工具設計 × 整本計畫書 AI 檢核 × 定稿繳交",
     duration: 100,
     durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 3,
         now: idx === 3
@@ -1611,7 +1611,7 @@ export const W11Data = {
     title: "工具實體 × 跨方法 Pilot × 倫理 × 施測啟動",
     duration: 100,
     durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 4,
         now: idx === 4
@@ -1800,7 +1800,7 @@ export const W12Data = {
     title: "期中進度短報 · 同儕擋板",
     duration: 100,
     durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 5,
         now: idx === 5
@@ -1987,7 +1987,7 @@ export const W14Data = {
         { label: '課堂產出', value: '圖表初稿 + 圖說段落 + 互評回饋' },
         { label: '帶去 W14', value: '完整圖表，準備撰寫結論' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 5,
         now: idx === 5
@@ -2147,7 +2147,7 @@ export const W15Data = {
         { label: '課業產出', value: '完整四層結論段落' },
         { label: '帶去 W15', value: '結論定稿，準備簡報' }
     ],
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 6,
         now: idx === 6
@@ -2266,7 +2266,7 @@ export const W16Data = {
     title: "報告撰寫與海報製作：從數據到故事",
     duration: 100,
     durationDesc: "2 節課",
-    courseArc: baseCourseArc.map((item, idx) => ({
+    courseArc: pacingArc.map((item, idx) => ({
         ...item,
         past: idx < 7,
         now: idx === 7
