@@ -52,6 +52,89 @@ export const Home = () => {
 
       <div className="inner">
 
+        {/* MISSION · 為什麼這門課 */}
+        <div style={{
+          background: 'linear-gradient(135deg, #1a1a2e 0%, #1E293B 100%)',
+          color: '#fff',
+          borderRadius: 12,
+          padding: '40px 32px',
+          marginBottom: 48,
+          marginTop: 8,
+          boxShadow: '0 12px 40px rgba(0,0,0,0.18)',
+        }}>
+          <div style={{
+            fontSize: 11,
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.2em',
+            color: '#FCD34D',
+            textTransform: 'uppercase',
+            fontWeight: 700,
+            marginBottom: 12,
+          }}>
+            🎯 這門課為什麼存在
+          </div>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 26,
+            lineHeight: 1.45,
+            fontWeight: 700,
+            color: '#fff',
+            marginBottom: 16,
+            letterSpacing: '-0.01em',
+          }}>
+            AI 已經能幫你寫出漂亮的研究報告了。<br />
+            但你看得出它哪裡錯嗎？敢挑戰它的結論嗎？
+          </h2>
+          <p style={{
+            fontSize: 15,
+            lineHeight: 1.95,
+            color: 'rgba(255,255,255,0.88)',
+            marginBottom: 20,
+          }}>
+            17 週後你帶走的不是一份研究，
+            是「<strong style={{ color: '#FCD34D' }}>不會輕易相信任何答案</strong>」的能力。
+            我們把這個能力叫做「<strong style={{ color: '#FCD34D' }}>裁決力</strong>」——AI 時代真正的剛性能力。
+          </p>
+          <div style={{
+            background: 'rgba(255,255,255,0.08)',
+            borderRadius: 8,
+            padding: '20px 24px',
+            marginTop: 8,
+          }}>
+            <div style={{
+              fontSize: 12,
+              fontFamily: 'var(--font-mono)',
+              color: '#FCD34D',
+              fontWeight: 700,
+              marginBottom: 12,
+              letterSpacing: '0.1em',
+            }}>三大目標 · 你要學會裁決三個對象</div>
+            <ul style={{
+              fontSize: 13.5,
+              lineHeight: 2.0,
+              color: 'rgba(255,255,255,0.92)',
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+            }}>
+              <li>① <strong style={{ color: '#fff' }}>裁決外部論述</strong>：AI、新聞、文獻、網紅引用——能問「樣本？因果？還是相關？」</li>
+              <li>② <strong style={{ color: '#fff' }}>裁決自己論述</strong>：寫研究時能指出「我這話不能說，因為 ___」</li>
+              <li>③ <strong style={{ color: '#fff' }}>裁決協作對象</strong>：能挑 AI 輸出的雷、能給同學具體可行動的建議</li>
+            </ul>
+          </div>
+          <p style={{
+            fontSize: 12,
+            fontStyle: 'italic',
+            color: 'rgba(255,255,255,0.55)',
+            marginTop: 20,
+            paddingTop: 16,
+            borderTop: '1px solid rgba(255,255,255,0.15)',
+          }}>
+            💡 這門課不是教你背步驟、不是教你寫漂亮報告，
+            是教你「<strong style={{ color: 'rgba(255,255,255,0.9)' }}>在 AI 介入下，保有自己判斷力</strong>」。
+          </p>
+        </div>
+
         {/* QUICK JUMP */}
         <div className="section-head">
           <h2>快速入口</h2>
