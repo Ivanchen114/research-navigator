@@ -33,7 +33,7 @@ ChartJS.register(
 );
 
 /* ══════════════════════════════════════
- *  資料常數 — Gemini 預先「整理好」的 22 筆乾淨資料
+ *  資料常數 — AI 預先「整理好」的 22 筆乾淨資料
  * ══════════════════════════════════════ */
 const CLEANED_DATA = [
     { id: 1, gender: '男', grade: '高一', sleep: 7.5, tutoring: '有', use3C: '偶爾', concentration: 8 },
@@ -145,25 +145,25 @@ const TrapTarget = ({ id, type = 'real', found, showAll, onFind, children }) => 
     const isFakeRevealed = type === 'fake' && found;
     const isRevealed = isRealRevealed || isFakeRevealed;
 
-    let className = 'inline cursor-pointer transition-all rounded px-1 ';
+    let className = 'inline transition-all rounded px-1 ';
     if (isRealRevealed) {
-        className += 'bg-[#FEE2E2] text-[#991B1B] font-bold underline decoration-2 decoration-[#DC2626]';
+        className += 'cursor-default bg-[#FEE2E2] text-[#991B1B] font-bold underline decoration-2 decoration-[#DC2626]';
     } else if (isFakeRevealed) {
-        className += 'bg-[#D1FAE5] text-[#065F46] font-bold underline decoration-2 decoration-[#10B981]';
+        className += 'cursor-default bg-[#D1FAE5] text-[#065F46] font-bold underline decoration-2 decoration-[#10B981]';
     } else {
         // 預設：明顯可見的「可疑詞」標記（手機友善 — 不依賴 hover）
-        className += 'bg-[#FEF3C7] underline decoration-dotted decoration-[#92400E]/60 active:bg-[#FCD34D]';
+        className += 'cursor-pointer bg-[#FEF3C7] underline decoration-dotted decoration-[#92400E]/60 active:bg-[#FCD34D]';
     }
 
     return (
         <span
             onClick={() => !found && onFind(id, type)}
             className={className}
-            title={isRevealed ? '已揭曉' : '你覺得這個是真雷還是假雷？點看答案'}
+            title={isRevealed ? '已揭曉（請看下方紅/綠卡解釋）' : '你覺得這個是真雷還是假雷？點看答案'}
         >
             {children}
-            {isRealRevealed && <span className="text-[10px] ml-1 font-mono">⚠️</span>}
-            {isFakeRevealed && <span className="text-[10px] ml-1 font-mono">💚</span>}
+            {isRealRevealed && <span className="text-[10px] ml-1 font-mono pointer-events-none">⚠️</span>}
+            {isFakeRevealed && <span className="text-[10px] ml-1 font-mono pointer-events-none">💚</span>}
         </span>
     );
 };
@@ -210,6 +210,7 @@ export const FindTrapsReport = () => {
     const [foundFakes, setFoundFakes] = useState(new Set());
     const [showAll, setShowAll] = useState(false);
     const [showExplanations, setShowExplanations] = useState(false);
+    const [copied, setCopied] = useState(null);
 
     const handleFind = useCallback((id, type) => {
         if (type === 'fake') {
@@ -323,7 +324,7 @@ export const FindTrapsReport = () => {
                 kicker="📺 老師上課示範用 · AI 反面教材"
                 title="AI 寫的研究報告："
                 accentTitle="哪裡有問題？"
-                subtitle="這是 Gemini 端到端寫的「高中生睡眠 vs. 上課專注力」研究報告，看起來圖文並茂，但暗藏 8 個學術紅線。你能找出幾個？"
+                subtitle="這是 AI 端到端寫的「高中生睡眠 vs. 上課專注力」研究報告，看起來圖文並茂，但暗藏 8 個學術紅線。你能找出幾個？"
                 meta={[
                     { label: '案例', value: '高中生睡眠 vs 上課專注力（問卷法 N=22）' },
                     { label: '雷的數量', value: `共 ${TOTAL_TRAPS} 個（W13 整理 1 + W14 圖表 1 + W15 結論 6）` },
@@ -332,15 +333,15 @@ export const FindTrapsReport = () => {
                 ]}
             />
 
-            {/* ⭐ 老師當時給 Gemini 的 prompt — 反面教材的關鍵：讓學生先看到 prompt 多簡陋 */}
+            {/* ⭐ 老師當時給 AI 的 prompt — 反面教材的關鍵：讓學生先看到 prompt 多簡陋 */}
             <div className="my-8 max-w-[820px] mx-auto">
                 <div className="bg-[#FEF2F2] border-2 border-[#DC2626] rounded-[var(--radius-unified)] p-5">
                     <div className="flex items-center gap-2 mb-3">
                         <AlertTriangle size={20} className="text-[#DC2626]" />
-                        <p className="font-mono text-[11px] font-bold tracking-[0.15em] text-[#991B1B] uppercase">老師當時給 Gemini 的 prompt（看完你就知道為什麼 AI 會寫這樣）</p>
+                        <p className="font-mono text-[11px] font-bold tracking-[0.15em] text-[#991B1B] uppercase">老師當時給 AI 的 prompt（看完你就知道為什麼 AI 會寫這樣）</p>
                     </div>
                     <p className="text-[12.5px] text-[#7F1D1D] leading-[1.85] mb-4">
-                        老師只下了<strong>三句很短的 prompt</strong>，沒給規則、沒設限制、沒提紅線。下方就是 Gemini 端到端跑出來的結果——看起來很完整，但暗藏雷。
+                        老師只下了<strong>三句很短的 prompt</strong>，沒給規則、沒設限制、沒提紅線。下方就是 AI 端到端跑出來的結果——看起來很完整，但暗藏雷。
                     </p>
 
                     {/* 三句 prompt */}
@@ -407,8 +408,10 @@ export const FindTrapsReport = () => {
                         </div>
                     </details>
 
-                    <p className="text-[11.5px] text-[#7F1D1D] italic mt-3 pt-3 border-t border-[#FCA5A5]">
-                        💡 看完 prompt 跟雜訊資料，再去下方看 AI 寫了什麼。<strong>記住一件事：AI 沒做錯，是 prompt 沒給規則。</strong>
+                    <p className="text-[11.5px] text-[#7F1D1D] italic mt-3 pt-3 border-t border-[#FCA5A5] leading-[1.85]">
+                        💡 看完 prompt 跟雜訊資料，再去下方看 AI 寫了什麼。<strong>記住兩件事</strong>：
+                        <br />（1）AI 沒做錯，是 <strong>prompt 沒給規則</strong>。
+                        <br />（2）研究類問題對 AI 的<strong>邏輯精度與專業度要求很高</strong>——一般模型在這領域容易出錯，但只要 <strong>prompt 寫得好、規則設清楚</strong>，這些雷都可以避開。
                     </p>
                 </div>
             </div>
@@ -472,7 +475,7 @@ export const FindTrapsReport = () => {
             )}
 
             {/* ════════════════════════════════════════
-             *  Gemini 報告本體
+             *  AI 報告本體
              * ════════════════════════════════════════ */}
             <div className="max-w-[820px] mx-auto bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-6 md:p-8 shadow-sm prose-zh">
                 <div className="border-b border-[var(--border)] pb-4 mb-6">
@@ -613,6 +616,55 @@ export const FindTrapsReport = () => {
                                     <strong>推論：</strong>兩組數值有差異，但差異原因可能涉及補習時長、家庭因素、學業壓力等。本資料未控制這些變項，無法把差異歸因於「補習」本身。
                                 </p>
                             </div>
+
+                            {/* 高一常寫錯版（details 對照卡） */}
+                            <details className="mt-2 rounded border-2 border-[#DC2626]/40 bg-[#FEF2F2]">
+                                <summary className="cursor-pointer px-3 py-2 text-[12px] font-bold text-[#991B1B] hover:bg-[#FEE2E2] flex items-center gap-2">
+                                    <span>📛 學生最常寫錯的 4 種版本（點開對照看）</span>
+                                    <span className="ml-auto text-[10px] font-mono">▼</span>
+                                </summary>
+                                <div className="border-t border-[#DC2626]/40 p-3 space-y-3 text-[11.5px] leading-[1.85]">
+
+                                    <div className="bg-white border border-[#FCA5A5] rounded p-2.5">
+                                        <p className="font-bold text-[#991B1B] mb-1">❌ 錯誤 1：直接歸因（最常見）</p>
+                                        <p className="text-[#7F1D1D] italic mb-1.5">「補習<u>導致</u>學生睡眠減少、專注力下降。建議家長減少讓孩子補習。」</p>
+                                        <p className="text-[#7F1D1D] text-[11px]">
+                                            <strong className="text-[#991B1B]">錯在哪：</strong>「導致」是因果，但資料只能看到「相關」。沒控制變項——可能真正影響的是「補習時長」「家庭壓力」或「會去補習的學生本來就有原因」。
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-white border border-[#FCA5A5] rounded p-2.5">
+                                        <p className="font-bold text-[#991B1B] mb-1">❌ 錯誤 2：道德化、規範性主張</p>
+                                        <p className="text-[#7F1D1D] italic mb-1.5">「補習浪費時間，是現代教育的問題。」</p>
+                                        <p className="text-[#7F1D1D] text-[11px]">
+                                            <strong className="text-[#991B1B]">錯在哪：</strong>學術論文不該下價值判斷。「浪費」「教育問題」是個人立場，不是資料能支持的結論。研究員只能說「兩組有差異」，評論員才會說「補習浪費」。
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-white border border-[#FCA5A5] rounded p-2.5">
+                                        <p className="font-bold text-[#991B1B] mb-1">❌ 錯誤 3：過度推廣樣本</p>
+                                        <p className="text-[#7F1D1D] italic mb-1.5">「研究結果顯示，台灣所有高中生不該補習。」</p>
+                                        <p className="text-[#7F1D1D] text-[11px]">
+                                            <strong className="text-[#991B1B]">錯在哪：</strong>N=20 不能推到「台灣所有高中生」。應限縮：「<strong>在本研究 22 位高一學生中</strong>…」，並在「研究限制」段註明樣本侷限。
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-white border border-[#FCA5A5] rounded p-2.5">
+                                        <p className="font-bold text-[#991B1B] mb-1">❌ 錯誤 4：忽略反向因果（高階）</p>
+                                        <p className="text-[#7F1D1D] italic mb-1.5">「補習壓縮了學生的睡眠時間。」</p>
+                                        <p className="text-[#7F1D1D] text-[11px]">
+                                            <strong className="text-[#991B1B]">錯在哪：</strong>
+                                            <br />· <strong>反向可能</strong>：睡眠少／專注力差的學生<strong>選擇去補習補救</strong>（因果方向反過來）
+                                            <br />· <strong>共同原因</strong>：壓力大的家庭環境<strong>同時</strong>導致補習 + 睡眠少
+                                            <br />· 橫斷資料無法判斷因果方向。
+                                        </p>
+                                    </div>
+
+                                    <p className="text-[10.5px] text-[#7F1D1D] italic pt-2 border-t border-[#FCA5A5]/50">
+                                        💡 對照上方藍色「研究員圖說（示範）」——你看到差別了嗎？研究員只說「資料看到什麼」+「為什麼不能下因果結論」，不下評價、不推廣、不腦補機制。
+                                    </p>
+                                </div>
+                            </details>
                         </div>
                     </div>
                 </section>
@@ -697,27 +749,317 @@ export const FindTrapsReport = () => {
                         為什麼 AI 會寫這麼多雷？
                     </h3>
                     <p className="text-[13.5px] text-white/85 leading-[1.95] mb-4">
-                        因為老師問 Gemini 的 prompt 只有：「<strong className="text-[var(--accent)]">幫我寫研究結論</strong>」。
-                        AI 沒有研究員的判斷力，它用最常見的語言（新聞／部落格）寫，當然會踩雷。
+                        因為老師給 AI 的 prompt 只有：「<strong className="text-[var(--accent)]">幫我寫研究結論</strong>」。
+                        <br/>AI 沒有研究員的判斷力，再加上<strong>研究類問題對 AI 邏輯精度要求高</strong>，它用最常見的語言（新聞／部落格）寫，當然會踩雷。
                     </p>
                     <div className="bg-white/10 rounded p-4 mb-4">
-                        <p className="font-bold text-[14px] text-[var(--accent)] mb-2">一個好 prompt = 4 件事 ⭐</p>
-                        <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1">
-                            <li>① <strong>角色</strong>（你是研究方法老師…）</li>
-                            <li>② <strong>任務</strong>（幫我審查結論…）</li>
-                            <li>③ <strong>規則／紅線</strong>（N=22 不可用「證實」「最關鍵」；必含限制段；區分相關 vs 因果）⭐</li>
-                            <li>④ <strong>格式</strong>（分四層輸出：描述／推論／限制／回扣）</li>
+                        <p className="font-bold text-[14px] text-[var(--accent)] mb-2">好 Prompt = 核心 3 元素 + 補強 1 元素 ⭐</p>
+                        <p className="text-[11.5px] text-white/70 italic mb-3">頂尖 AI 模型已內化「專業」概念，所以「角色」不再是必要，但對較弱模型仍有用——以下是真正影響輸出品質的順序：</p>
+                        <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1.5">
+                            <li>① <strong className="text-[#FCD34D]">任務</strong>：明確動詞（整理／審查／改寫／列出）+ 你要的產出 <span className="text-white/50">[核心]</span></li>
+                            <li>② <strong className="text-[#FCD34D]">規則／紅線</strong>：把你的判斷力寫進去（N=22 不可用「證實」、必含限制段、區分相關 vs 因果）<span className="text-white/50">[核心 · 命脈]</span></li>
+                            <li>③ <strong className="text-[#FCD34D]">格式</strong>：限定產出長相（分四層、表格、字數）<span className="text-white/50">[核心]</span></li>
+                            <li>④ <strong className="text-white/70">角色</strong>：你是研究方法老師…<span className="text-white/50">[補強，視情況]</span></li>
                         </ul>
                     </div>
                     <p className="text-[12px] text-white/70 italic">
                         💡 把判斷力寫進 prompt——這就是研究者的素養。
                     </p>
-                    <Link
-                        to="/prompt-lab"
-                        className="inline-flex items-center gap-2 mt-4 bg-[var(--accent)] hover:opacity-90 text-[var(--ink)] px-4 py-2 rounded-[6px] text-[13px] font-bold no-underline"
-                    >
-                        看好 prompt 怎麼寫 <Sparkles size={14} />
-                    </Link>
+                </div>
+            )}
+
+            {/* Prompt 範本三段 — 找完後出現 */}
+            {isComplete && (
+                <div className="max-w-[760px] mx-auto mt-8 space-y-4">
+                    <div className="text-center mb-2">
+                        <p className="font-mono text-[11px] tracking-wider text-[var(--ink-mid)] uppercase">PROMPT 範本 · 複製貼到 AI 用</p>
+                        <h3 className="font-serif text-[20px] md:text-[22px] font-bold text-[var(--ink)] mt-1">三階段研究 · 通用 Prompt 範本</h3>
+                        <p className="text-[12px] text-[var(--ink-mid)] italic mt-1">注意：這些 prompt 同時也是「給你自己的指令」——學會這些規則，比抄 prompt 更重要。</p>
+                    </div>
+
+                    {/* W13 prompt */}
+                    <details className="rounded-[var(--radius-unified)] border-2 border-[#3B82F6] bg-[#EFF6FF]" open>
+                        <summary className="cursor-pointer px-4 py-3 flex items-center gap-2 hover:bg-[#DBEAFE]">
+                            <span className="font-mono text-[10px] font-bold tracking-wider text-[#1E40AF]">W13</span>
+                            <span className="font-bold text-[14px] text-[#1E3A8A]">資料整理 · Prompt</span>
+                            <span className="ml-auto text-[10px] font-mono text-[#1E40AF]">▼</span>
+                        </summary>
+                        <div className="border-t border-[#BFDBFE] p-4">
+                            <p className="text-[11.5px] text-[#1E3A8A] mb-2 italic">學生學到：4 類資料問題（缺漏／極端／格式／無效）+ 研究員 vs AI 分工</p>
+                            <pre className="bg-white border border-[#BFDBFE] rounded p-3 text-[11.5px] leading-[1.85] whitespace-pre-wrap font-mono text-[#1E3A8A] overflow-x-auto">{`【任務】
+我有一份研究問卷／訪談／實驗的原始資料。
+請幫我整理成可分析的乾淨表。
+
+【規則】
+1. 第一階段「找問題」：先列出資料中所有「可能要處理的點」給我看：
+   · 缺漏值（空白或半空白的列）
+   · 極端值（明顯偏離常態的數字，要研究員判斷是真實還是錯誤）
+   · 格式不一致（如同欄位有不同寫法，需統一）
+   · 無效填答（數值欄出現文字、回答跟題目無關）
+2. 列出後 → 等我針對每個問題回覆「保留／刪除／標記」決定後，
+   再進入第二階段
+3. 不要替我做判斷、不要直接刪資料
+   （資料異常不一定要刪——研究員要決定）
+
+【格式】
+階段一：表格列「問題類型 / 所在位置 / 為什麼可疑 / 建議處理選項」
+階段二（待我確認後）：清理後的乾淨表 + 每個處理決定的紀錄
+
+【原始資料】
+[貼你的資料 CSV / Sheets 連結]`}</pre>
+                            <button
+                                onClick={() => { navigator.clipboard.writeText(document.querySelector('[data-prompt="w13"]')?.innerText || ''); setCopied('w13'); setTimeout(() => setCopied(null), 2000); }}
+                                className="mt-3 bg-[#1E40AF] hover:bg-[#1E3A8A] text-white px-4 py-2 rounded text-[12px] font-bold"
+                            >
+                                {copied === 'w13' ? '✓ 已複製' : '📋 複製這段 Prompt'}
+                            </button>
+                            <span data-prompt="w13" style={{ display: 'none' }}>{`【任務】
+我有一份研究問卷／訪談／實驗的原始資料。
+請幫我整理成可分析的乾淨表。
+
+【規則】
+1. 第一階段「找問題」：先列出資料中所有「可能要處理的點」給我看：
+   · 缺漏值（空白或半空白的列）
+   · 極端值（明顯偏離常態的數字，要研究員判斷是真實還是錯誤）
+   · 格式不一致（如同欄位有不同寫法，需統一）
+   · 無效填答（數值欄出現文字、回答跟題目無關）
+2. 列出後 → 等我針對每個問題回覆「保留／刪除／標記」決定後，
+   再進入第二階段
+3. 不要替我做判斷、不要直接刪資料
+   （資料異常不一定要刪——研究員要決定）
+
+【格式】
+階段一：表格列「問題類型 / 所在位置 / 為什麼可疑 / 建議處理選項」
+階段二（待我確認後）：清理後的乾淨表 + 每個處理決定的紀錄
+
+【原始資料】
+[貼你的資料 CSV / Sheets 連結]`}</span>
+                        </div>
+                    </details>
+
+                    {/* W14 prompt */}
+                    <details className="rounded-[var(--radius-unified)] border-2 border-[#10B981] bg-[#F0FDF4]">
+                        <summary className="cursor-pointer px-4 py-3 flex items-center gap-2 hover:bg-[#D1FAE5]">
+                            <span className="font-mono text-[10px] font-bold tracking-wider text-[#047857]">W14</span>
+                            <span className="font-bold text-[14px] text-[#065F46]">圖表 · Prompt</span>
+                            <span className="ml-auto text-[10px] font-mono text-[#047857]">▼</span>
+                        </summary>
+                        <div className="border-t border-[#86EFAC] p-4">
+                            <p className="text-[11.5px] text-[#065F46] mb-2 italic">學生學到：4 種圖表的選擇邏輯 + 圖表 5 鐵規</p>
+                            <pre className="bg-white border border-[#86EFAC] rounded p-3 text-[11.5px] leading-[1.85] whitespace-pre-wrap font-mono text-[#065F46] overflow-x-auto">{`【任務】
+依下列分析表，幫我畫一張[你選的圖表類型]。
+
+【規則 — 圖表 5 鐵規】
+1. 圖表類型：___（你決定，不可讓 AI 擅自改）
+   選圖邏輯：
+   · 看「比較大小」→ 長條圖
+   · 看「趨勢變化」→ 折線圖
+   · 看「兩個變項關係」→ 散佈圖
+   · 看「組成比例」→ 圓餅圖
+2. 標題格式：「圖一：（變項1）與（變項2）的（關係/差異）（N=___）」
+3. 座標軸從 0 開始，不可截斷數據
+4. 圖下方標註：「資料來源:研究者繪製」
+5. 不要替我寫圖說（描述+推論）——那是研究者的工作
+
+【格式】
+- 圖檔
+- 確認語：「我用了___圖、N=___、座標從 0、資料來源已標」
+
+【分析表】
+[貼資料]`}</pre>
+                            <button
+                                onClick={() => { navigator.clipboard.writeText(document.querySelector('[data-prompt="w14"]')?.innerText || ''); setCopied('w14'); setTimeout(() => setCopied(null), 2000); }}
+                                className="mt-3 bg-[#047857] hover:bg-[#065F46] text-white px-4 py-2 rounded text-[12px] font-bold"
+                            >
+                                {copied === 'w14' ? '✓ 已複製' : '📋 複製這段 Prompt'}
+                            </button>
+                            <span data-prompt="w14" style={{ display: 'none' }}>{`【任務】
+依下列分析表，幫我畫一張[你選的圖表類型]。
+
+【規則 — 圖表 5 鐵規】
+1. 圖表類型：___（你決定，不可讓 AI 擅自改）
+   選圖邏輯：
+   · 看「比較大小」→ 長條圖
+   · 看「趨勢變化」→ 折線圖
+   · 看「兩個變項關係」→ 散佈圖
+   · 看「組成比例」→ 圓餅圖
+2. 標題格式：「圖一：（變項1）與（變項2）的（關係/差異）（N=___）」
+3. 座標軸從 0 開始，不可截斷數據
+4. 圖下方標註：「資料來源:研究者繪製」
+5. 不要替我寫圖說（描述+推論）——那是研究者的工作
+
+【格式】
+- 圖檔
+- 確認語：「我用了___圖、N=___、座標從 0、資料來源已標」
+
+【分析表】
+[貼資料]`}</span>
+                        </div>
+                    </details>
+
+                    {/* W15 prompt */}
+                    <details className="rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
+                        <summary className="cursor-pointer px-4 py-3 flex items-center gap-2 hover:bg-[#FEE2E2]">
+                            <span className="font-mono text-[10px] font-bold tracking-wider text-[#991B1B]">W15</span>
+                            <span className="font-bold text-[14px] text-[#7F1D1D]">研究結論 · Prompt</span>
+                            <span className="ml-auto text-[10px] font-mono text-[#991B1B]">▼</span>
+                        </summary>
+                        <div className="border-t border-[#FCA5A5] p-4">
+                            <p className="text-[11.5px] text-[#7F1D1D] mb-2 italic">學生學到：6 條結論紅線（樣本／因果／用詞）+ 必含限制段 + 四層分層</p>
+                            <pre className="bg-white border border-[#FCA5A5] rounded p-3 text-[11.5px] leading-[1.85] whitespace-pre-wrap font-mono text-[#7F1D1D] overflow-x-auto">{`【任務】
+依我的圖表跟分析資料，幫我寫一份研究結論。
+
+【規則 — 紅線清單，不可違反】
+
+（樣本侷限）
+1. N=___（自填），禁用「高度／完全／證實／顯著」這類強斷言
+2. 結論主語必須是「在本研究 N 位受訪者中」，不可推到全體
+   （如不可寫「全國高中生」「所有學生」）
+
+（因果 vs 相關）
+3. 區分「相關」和「因果」——資料只能看到相關時，
+   不可寫「導致／影響／造成／元兇」
+4. 不可使用「最關鍵／核心／主要原因」這類因果排名詞
+
+（用詞）
+5. 中性學術語言，不下價值判斷
+   （不可寫「浪費／不該／必須」這類規範性詞）
+6. 不要腦補資料沒問的機制
+   （如沒問補習時長，就不能說「補習壓縮睡眠」這個機制）
+
+（必含段落）
+7. 必須有「研究限制」段，至少寫 4 條：
+   · N 數侷限
+   · 自評偏誤（如有自評題）
+   · 樣本範圍偏斜（年級/性別不均）
+   · 無對照組（如有此情況）
+
+【格式】
+分四層輸出：
+- 描述：純報資料看到的趨勢（含具體數字）
+- 推論：克制版本，含「可能」「初步」「值得後續研究」
+- 限制：4 條以上具體限制
+- 回扣：跟最初研究問題對話
+
+【圖表 + 分析】
+[貼圖 + 表]`}</pre>
+                            <button
+                                onClick={() => { navigator.clipboard.writeText(document.querySelector('[data-prompt="w15"]')?.innerText || ''); setCopied('w15'); setTimeout(() => setCopied(null), 2000); }}
+                                className="mt-3 bg-[#991B1B] hover:bg-[#7F1D1D] text-white px-4 py-2 rounded text-[12px] font-bold"
+                            >
+                                {copied === 'w15' ? '✓ 已複製' : '📋 複製這段 Prompt'}
+                            </button>
+                            <span data-prompt="w15" style={{ display: 'none' }}>{`【任務】
+依我的圖表跟分析資料，幫我寫一份研究結論。
+
+【規則 — 紅線清單，不可違反】
+
+（樣本侷限）
+1. N=___（自填），禁用「高度／完全／證實／顯著」這類強斷言
+2. 結論主語必須是「在本研究 N 位受訪者中」，不可推到全體
+   （如不可寫「全國高中生」「所有學生」）
+
+（因果 vs 相關）
+3. 區分「相關」和「因果」——資料只能看到相關時，
+   不可寫「導致／影響／造成／元兇」
+4. 不可使用「最關鍵／核心／主要原因」這類因果排名詞
+
+（用詞）
+5. 中性學術語言，不下價值判斷
+   （不可寫「浪費／不該／必須」這類規範性詞）
+6. 不要腦補資料沒問的機制
+   （如沒問補習時長，就不能說「補習壓縮睡眠」這個機制）
+
+（必含段落）
+7. 必須有「研究限制」段，至少寫 4 條：
+   · N 數侷限
+   · 自評偏誤（如有自評題）
+   · 樣本範圍偏斜（年級/性別不均）
+   · 無對照組（如有此情況）
+
+【格式】
+分四層輸出：
+- 描述：純報資料看到的趨勢（含具體數字）
+- 推論：克制版本，含「可能」「初步」「值得後續研究」
+- 限制：4 條以上具體限制
+- 回扣：跟最初研究問題對話
+
+【圖表 + 分析】
+[貼圖 + 表]`}</span>
+                        </div>
+                    </details>
+                </div>
+            )}
+
+            {/* 注意事項 — 規則來源 + 自學橋樑 + 老師親身踩雷 */}
+            {isComplete && (
+                <div className="max-w-[760px] mx-auto mt-8 p-5 rounded-[var(--radius-unified)] bg-[#FFFBEB] border-2 border-[#F59E0B]">
+                    <p className="font-bold text-[16px] text-[#92400E] mb-3">💡 這些規則怎麼知道的？</p>
+                    <p className="text-[12.5px] text-[#78350F] leading-[1.95] mb-3">
+                        老師上課寫給你的這些「紅線」「鐵規」「整理 4 類」——不是老師憑空想的。它們來自：
+                    </p>
+                    <ul className="text-[12.5px] text-[#78350F] leading-[1.95] list-disc pl-6 mb-4 space-y-1">
+                        <li>📚 研究方法教科書（量化、質性各有專門教科書）</li>
+                        <li>📰 學術期刊投稿規範（每個期刊都有 author guidelines）</li>
+                        <li>📐 APA 格式手冊（美國心理學會出版，第 7 版，2020 年）</li>
+                        <li>🎓 學界長時間累積、反覆檢驗形成的共識</li>
+                    </ul>
+
+                    <p className="font-bold text-[14px] text-[#92400E] mt-5 mb-2">🚀 等你不在我的課堂上時⋯</p>
+                    <p className="text-[12.5px] text-[#78350F] leading-[1.95] mb-3">
+                        你以後選了一個領域（心理學？工程？醫學？法律？），規則跟現在不一樣——而老師不會剛好在你身邊。這時，AI 可以變成你的「規則教練」：
+                    </p>
+                    <pre className="bg-white border border-[#FCD34D] rounded p-3 text-[11px] leading-[1.85] whitespace-pre-wrap font-mono text-[#78350F] mb-4 overflow-x-auto">{`【任務】
+我正在做 ___領域 的研究，但我不熟這個領域的規範。
+
+【規則】
+請依序教我：
+1. 這個領域寫研究結論的「紅線」
+   （哪些用詞被學界視為過度推論？）
+2. 這個領域的圖表 / 統計呈現規範
+   （標題格式、座標、附註要求）
+3. 「研究限制」段必須提到什麼維度
+   （樣本？方法？倫理？）
+
+【格式】
+- 用列表整理
+- 每條規則必須附「依據」（教科書、期刊規範、權威手冊）
+- 列出 2-3 個我可以查證的來源`}</pre>
+
+                    <p className="font-bold text-[14px] text-[#92400E] mt-5 mb-2">⚠️ 但 AI 給的規則還是要你驗證</p>
+                    <p className="text-[12.5px] text-[#78350F] leading-[1.95] mb-3">
+                        你問 AI「這個領域的規則是什麼」，它會給你一個說法。但這個說法是 AI 的，不是學界的。AI 可能：
+                    </p>
+                    <ul className="text-[12.5px] text-[#78350F] leading-[1.95] list-disc pl-6 mb-3 space-y-1">
+                        <li><strong>編造看起來權威的引用</strong>（虛構教科書、虛構期刊）</li>
+                        <li>把不同領域的規則混在一起</li>
+                        <li>跟你的具體研究場景不符</li>
+                    </ul>
+                    <p className="text-[12.5px] text-[#78350F] leading-[1.95] mb-3">
+                        所以你還是要：(1) 抽 1-2 條規則去 Google Scholar 查證 (2) 問領域內的老師確認 (3) 比對 2-3 個 AI 模型的回答看哪些一致、哪些不一致。
+                    </p>
+
+                    <div className="bg-[#FEF2F2] border-2 border-[#DC2626] rounded p-3 my-4">
+                        <p className="font-bold text-[12.5px] text-[#991B1B] mb-2">📛 老師親身踩雷案例</p>
+                        <p className="text-[11.5px] text-[#7F1D1D] leading-[1.95]">
+                            做這份頁面時，老師讓 AI 幫忙寫「規則來源說明」。AI 寫了「研究方法教科書（質化量化各 500 頁）」——看起來很具體、很可信。但這個「500 頁」是 AI 編的，沒人查證。
+                        </p>
+                        <p className="text-[11.5px] text-[#7F1D1D] leading-[1.95] mt-2">
+                            如果直接放進你的研究報告，就變成「我引用了一本不存在規格的書」，等於說謊。<strong>連老師都會被 AI 騙到，何況是你。</strong>
+                        </p>
+                    </div>
+
+                    <div className="bg-[var(--ink)] text-white rounded p-4 mt-5">
+                        <p className="font-mono text-[10.5px] tracking-wider text-[#FCD34D] uppercase mb-2">🎯 這門課真正要你帶走的</p>
+                        <p className="text-[12.5px] leading-[1.95] text-white/90 mb-3">
+                            不是這幾條規則本身，是「<strong className="text-[#FCD34D]">不在規則裡時，怎麼自己找到規則 + 怎麼判斷規則對不對</strong>」。
+                        </p>
+                        <ul className="text-[11.5px] leading-[1.95] text-white/85 space-y-1.5 list-none pl-0">
+                            <li>· 老師現在告訴你規則 → 你照做<span className="text-white/55">（拐杖期）</span></li>
+                            <li>· 未來 AI 告訴你規則 → 你裁決<span className="text-white/55">（自學期）</span></li>
+                            <li>· 最後 你自己提出規則 → 你成為研究者<span className="text-white/55">（成熟期）</span></li>
+                        </ul>
+                    </div>
                 </div>
             )}
 
