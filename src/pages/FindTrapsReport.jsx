@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Chart as ChartJS,
@@ -17,6 +17,8 @@ import {
 import { Scatter, Bar } from 'react-chartjs-2';
 import { ArrowLeft, AlertTriangle, CheckCircle2, Eye, RotateCcw, Sparkles, Target } from 'lucide-react';
 import HeroBlock from '../components/ui/HeroBlock';
+import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
+import ThinkRecord from '../components/ui/ThinkRecord';
 
 ChartJS.register(
     CategoryScale,
@@ -112,6 +114,36 @@ const TRAPS = {
         issue: 'W14 5 鐵規要求標題格式為「圖一：___（N=___）」，但 AI 只給「睡眠時數與專注力的關係」，沒有圖編號、沒有 N 值、也沒有資料來源「研究者繪製」。',
         shouldDo: '改「圖一：睡眠時數與上課專注力散佈圖（N=22）」並在圖下方標「資料來源：研究者繪製」。',
     },
+    9: {
+        stage: 'W13 整理',
+        label: '剔除規則模糊（「疑似填答不認真」）',
+        issue: '「疑似」是研究員主觀判斷，不是事前訂定的標準。學術上必須先寫好「核心欄位空白者剔除」「亂填者剔除」這類客觀規則，再依規則篩——而不是看到不順眼才砍。',
+        shouldDo: '改「依事前標準剔除：核心欄位空白（編號 11、21）、明顯無意義填答（編號 23 填 test）」。把規則寫出來，讀者才能判斷你是否一致執行。',
+    },
+    10: {
+        stage: 'W13 整理',
+        label: '「即為後續分析的唯一依據」暗示原始檔被覆蓋',
+        issue: '清理是不可逆操作——原始檔必須保留備份，清理後的檔案另存。AI 寫「即為唯一依據」會讓讀者以為原始資料被覆蓋，研究無法重現。',
+        shouldDo: '改「保留原始檔（raw.csv），另存清理版（cleaned.csv）作為後續分析依據」。',
+    },
+    11: {
+        stage: 'W14 圖表',
+        label: '散佈圖圖說「明顯」過度修飾',
+        issue: '「明顯」需要相關係數（r 值）或統計檢定支撐。N=22 沒做任何檢定，圖看起來有趨勢就斷言「明顯」屬於過度修飾。',
+        shouldDo: '改「初步看似正向關聯」「傾向隨睡眠時數遞增」。沒做檢定，用「初步」「看似」「傾向」。',
+    },
+    12: {
+        stage: 'W14 圖表',
+        label: '3C 圖說「反映了 / 影響」是因果語氣',
+        issue: '「反映了」「影響」都是因果用詞——但圖只能呈現兩條趨勢一致，無法判斷「3C 使用 → 睡眠少」「壓力大 → 同時導致 3C 使用 + 睡眠少」哪個才是真因果。圖說應分「描述 / 推論」兩段，因果留到結論章。',
+        shouldDo: '描述：三組平均專注力 4.0/6.4/8.7，平均睡眠 5.3/6.9/8.8。推論：兩條趨勢方向一致，但本研究無法判斷因果方向，可能有其他變項同時影響。',
+    },
+    13: {
+        stage: 'W14 圖表',
+        label: '補習圖說「明顯睡得較少」缺統計支撐',
+        issue: '「明顯」差異需要 t 檢定或效果量計算。本研究沒做任何檢定，N=22 又是小樣本，「明顯」屬於過度修飾。',
+        shouldDo: '改「有補習組平均睡眠較無補習組短（6.5 vs 7.6 小時）」。只報數字，不下強詞判斷。',
+    },
 };
 
 const TOTAL_TRAPS = Object.keys(TRAPS).length;
@@ -140,26 +172,35 @@ const FAKE_TRAPS = {
 /* ══════════════════════════════════════
  *  TrapTarget — 雷區包裝元件（手機友善：預設明顯可見）
  * ══════════════════════════════════════ */
-const TrapTarget = ({ id, type = 'real', found, showAll, onFind, children }) => {
+const TrapTarget = ({ id, type = 'real', found, showAll, onFind, onToggleExp, children }) => {
     const isRealRevealed = type === 'real' && (found || showAll);
     const isFakeRevealed = type === 'fake' && found;
     const isRevealed = isRealRevealed || isFakeRevealed;
 
     let className = 'inline transition-all rounded px-1 ';
     if (isRealRevealed) {
-        className += 'cursor-default bg-[#FEE2E2] text-[#991B1B] font-bold underline decoration-2 decoration-[#DC2626]';
+        className += 'cursor-pointer bg-[#FEE2E2] text-[#991B1B] font-bold underline decoration-2 decoration-[#DC2626] hover:bg-[#FECACA]';
     } else if (isFakeRevealed) {
-        className += 'cursor-default bg-[#D1FAE5] text-[#065F46] font-bold underline decoration-2 decoration-[#10B981]';
+        className += 'cursor-pointer bg-[#D1FAE5] text-[#065F46] font-bold underline decoration-2 decoration-[#10B981] hover:bg-[#A7F3D0]';
     } else {
         // 預設：明顯可見的「可疑詞」標記（手機友善 — 不依賴 hover）
         className += 'cursor-pointer bg-[#FEF3C7] underline decoration-dotted decoration-[#92400E]/60 active:bg-[#FCD34D]';
     }
 
+    const handleClick = () => {
+        if (!found) {
+            onFind(id, type);
+        } else if (onToggleExp) {
+            // 已找到 → 第二次點 toggle 個別的拆解卡
+            onToggleExp(id, type);
+        }
+    };
+
     return (
         <span
-            onClick={() => !found && onFind(id, type)}
+            onClick={handleClick}
             className={className}
-            title={isRevealed ? '已揭曉（請看下方紅/綠卡解釋）' : '你覺得這個是真雷還是假雷？點看答案'}
+            title={isRevealed ? '再點一次 → 顯示／隱藏這條的拆解卡' : '你覺得這個是真雷還是假雷？點看答案'}
         >
             {children}
             {isRealRevealed && <span className="text-[10px] ml-1 font-mono pointer-events-none">⚠️</span>}
@@ -210,6 +251,8 @@ export const FindTrapsReport = () => {
     const [foundFakes, setFoundFakes] = useState(new Set());
     const [showAll, setShowAll] = useState(false);
     const [showExplanations, setShowExplanations] = useState(false);
+    const [expandedReal, setExpandedReal] = useState(new Set());   // 個別展開的真雷
+    const [expandedFake, setExpandedFake] = useState(new Set());   // 個別展開的假雷
     const [copied, setCopied] = useState(null);
 
     const handleFind = useCallback((id, type) => {
@@ -219,10 +262,38 @@ export const FindTrapsReport = () => {
                 next.add(id);
                 return next;
             });
+            // 第一次點到 → 自動展開該條拆解卡
+            setExpandedFake(prev => {
+                const next = new Set(prev);
+                next.add(id);
+                return next;
+            });
         } else {
             setFoundTraps(prev => {
                 const next = new Set(prev);
                 next.add(id);
+                return next;
+            });
+            setExpandedReal(prev => {
+                const next = new Set(prev);
+                next.add(id);
+                return next;
+            });
+        }
+    }, []);
+
+    // 第二次點 reveal 過的雷 → toggle 個別拆解卡
+    const handleToggleExp = useCallback((id, type) => {
+        if (type === 'fake') {
+            setExpandedFake(prev => {
+                const next = new Set(prev);
+                if (next.has(id)) next.delete(id); else next.add(id);
+                return next;
+            });
+        } else {
+            setExpandedReal(prev => {
+                const next = new Set(prev);
+                if (next.has(id)) next.delete(id); else next.add(id);
                 return next;
             });
         }
@@ -237,12 +308,37 @@ export const FindTrapsReport = () => {
         setFoundFakes(new Set());
         setShowAll(false);
         setShowExplanations(false);
+        setExpandedReal(new Set());
+        setExpandedFake(new Set());
     };
 
     const isRevealed = (id) => foundTraps.has(id) || showAll;
     const isFakeFound = (id) => foundFakes.has(id);
+    const showRealExp = (id) => showExplanations || expandedReal.has(id);
+    const showFakeExp = (id) => showExplanations || expandedFake.has(id);
     const score = foundTraps.size;
     const isComplete = score >= TOTAL_TRAPS;
+
+    // URL hash deep link：/find-traps#w13/w14/w15 → 自動捲到對應段
+    useEffect(() => {
+        const hash = window.location.hash.replace('#', '');
+        if (['w13', 'w14', 'w15'].includes(hash)) {
+            // 等 React render 完
+            setTimeout(() => {
+                const el = document.getElementById(`section-${hash}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+        }
+    }, []);
+
+    // sticky 章節導航：點按鈕→平滑捲到該段
+    const scrollToSection = (id) => {
+        const el = document.getElementById(`section-${id}`);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.history.replaceState(null, '', `#${id}`);
+        }
+    };
 
     /* ── 圖表資料 ── */
     const scatterData = useMemo(() => ({
@@ -321,15 +417,15 @@ export const FindTrapsReport = () => {
             </div>
 
             <HeroBlock
-                kicker="📺 老師上課示範用 · AI 反面教材"
+                kicker="📺 W13~W15 跨週之鏡 · AI 反面教材"
                 title="AI 寫的研究報告："
                 accentTitle="哪裡有問題？"
-                subtitle="這是 AI 端到端寫的「高中生睡眠 vs. 上課專注力」研究報告，看起來圖文並茂，但暗藏 8 個學術紅線。你能找出幾個？"
+                subtitle="這份 AI 端到端寫的研究報告，看起來圖文並茂，但暗藏 13 個學術紅線——同時也是 W13（資料整理）→ W14（視覺化）→ W15（結論）三週要學的 17 條規則的反例集合。"
                 meta={[
+                    { label: '三種用法', value: 'W12 末預覽 / W13~W15 課中對照 / W15 末驗收' },
                     { label: '案例', value: '高中生睡眠 vs 上課專注力（問卷法 N=22）' },
-                    { label: '雷的數量', value: `共 ${TOTAL_TRAPS} 個（W13 整理 1 + W14 圖表 1 + W15 結論 6）` },
-                    { label: '玩法', value: '讀完報告，看到覺得有問題的字句就點點看' },
-                    { label: '收網', value: '找完後跳出「為什麼會錯？」+ 4 元素 prompt 寫法' },
+                    { label: '雷的數量', value: `共 ${TOTAL_TRAPS} 個（W13 整理 3 + W14 圖表 4 + W15 結論 6）` },
+                    { label: '收網', value: '找完後對照 17 條紅線 + 4 元素 prompt 寫法' },
                 ]}
             />
 
@@ -374,7 +470,7 @@ export const FindTrapsReport = () => {
                     {/* 看原始資料 */}
                     <details className="mt-4 bg-white border border-[#FCA5A5] rounded">
                         <summary className="cursor-pointer px-3 py-2 text-[11.5px] font-bold text-[#991B1B] hover:bg-[#FEF2F2]">
-                            📋 看 25 筆原始問卷資料（含 5 筆雜訊樣本）▼
+                            📋 看 25 筆原始問卷資料（含 9 處異常 — 老師故意加的）▼
                         </summary>
                         <div className="border-t border-[#FCA5A5] p-3 max-h-[300px] overflow-y-auto">
                             <pre className="text-[10.5px] font-mono text-[var(--ink-mid)] leading-[1.75] whitespace-pre">
@@ -453,13 +549,41 @@ export const FindTrapsReport = () => {
                             <li>你覺得哪裡有問題？<strong className="text-[#92400E]">直接用手指點那段文字</strong>（會看到底色比較深的字就是可點區）</li>
                             <li>點對 → 跳出「⚠️ 這是雷」+ 為什麼錯 + 該怎麼改</li>
                             <li>點到「假雷」（看起來可疑但其實 OK）→ 跳出「💚 這個其實沒問題」+ 解釋</li>
-                            <li>找到 8 個真雷 → 解鎖收網卡（為什麼 AI 會寫這麼多雷？）</li>
+                            <li>找到 13 個真雷 → 解鎖收網卡（為什麼 AI 會寫這麼多雷？）</li>
                         </ol>
                         <p className="text-[12.5px] text-[#92400E] italic mt-3 pt-3 border-t border-[#F59E0B]/40 leading-[1.85]">
                             ⚡ <strong>注意</strong>：報告裡有<strong>真雷（要找）</strong>跟<strong>假雷（看似可疑但其實 OK）</strong>——點點看才知道。卡關了？按下方「全部揭曉」。
                         </p>
                     </div>
                 )}
+            </div>
+
+            {/* 章節導航 — sticky，方便 W13/W14/W15 各週課堂引導學生只看該段 */}
+            <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-sm border-y border-[var(--border)] py-2 my-4">
+                <div className="max-w-[820px] mx-auto px-4 flex flex-wrap items-center gap-2 text-[11px]">
+                    <span className="font-mono text-[var(--ink-light)] uppercase tracking-wider">📋 跳到</span>
+                    <button
+                        onClick={() => scrollToSection('w13')}
+                        className="px-2.5 py-1 rounded font-bold text-white bg-[#0EA5E9] hover:bg-[#0284C7] transition-colors"
+                    >
+                        W13 整理 · 3 雷
+                    </button>
+                    <button
+                        onClick={() => scrollToSection('w14')}
+                        className="px-2.5 py-1 rounded font-bold text-white bg-[#8B5CF6] hover:bg-[#7C3AED] transition-colors"
+                    >
+                        W14 視覺化 · 4 雷
+                    </button>
+                    <button
+                        onClick={() => scrollToSection('w15')}
+                        className="px-2.5 py-1 rounded font-bold text-white bg-[#E11D48] hover:bg-[#BE123C] transition-colors"
+                    >
+                        W15 結論 · 6 雷
+                    </button>
+                    <span className="ml-auto text-[10.5px] text-[var(--ink-light)] italic hidden md:inline">
+                        老師上課用 W13/W14/W15 引導學生只看對應段落
+                    </span>
+                </div>
             </div>
 
             {/* 切換顯示拆解卡 */}
@@ -483,15 +607,19 @@ export const FindTrapsReport = () => {
                     <h1 className="font-serif text-[24px] md:text-[28px] font-bold text-[var(--ink)] leading-tight m-0">高中生睡眠與專注力分析報告</h1>
                 </div>
 
-                {/* 一、資料清理 */}
-                <section className="mb-8">
+                {/* 一、資料清理 — W13 段錨點 */}
+                <section id="section-w13" className="mb-8 scroll-mt-20">
                     <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">一、 資料清理說明</h2>
                     <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">在進行分析前，針對原始問卷資料進行了以下清理步驟，以確保數據的準確性：</p>
                     <ul className="text-[13px] text-[var(--ink-mid)] leading-[1.95] list-disc pl-6 space-y-1 mt-2">
                         <li><strong>標準化輸入：</strong>將性別欄位中的 F 與 M 統一轉換為「女」與「男」。</li>
-                        <li><strong>處理遺失與異常值：</strong>剔除第 21 筆「完全空白」的無效資料；剔除第 11 筆缺少「睡眠時數」與「專注力」核心指標的資料；剔除第 23 筆專注力欄位填寫為無效字串「test」的資料。</li>
-                        <li><strong>填補次要缺漏：</strong>針對僅缺少性別（第 15 筆）或補習狀況（第 4 筆）但核心數據完整的樣本，標記為「未提供」並保留，最終獲得 22 筆有效分析樣本。</li>
+                        <li><strong>處理遺失與異常值：</strong>剔除第 21 筆「完全空白」的無效資料；剔除第 11 筆缺少「睡眠時數」與「專注力」核心指標的資料；剔除第 23 筆專注力欄位填寫為無效字串「test」的資料；此外亦剔除
+                            <TrapTarget id={9} found={isRevealed(9)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>疑似填答不認真的樣本</TrapTarget>。</li>
+                        <li><strong>填補次要缺漏：</strong>針對僅缺少性別（第 15 筆）或補習狀況（第 4 筆）但核心數據完整的樣本，標記為「未提供」並保留，最終獲得 22 筆有效分析樣本。此清理後的資料
+                            <TrapTarget id={10} found={isRevealed(10)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>即為後續分析的唯一依據</TrapTarget>。</li>
                     </ul>
+                    {showRealExp(9) && isRevealed(9) && <TrapExplanation id={9} />}
+                    {showRealExp(10) && isRevealed(10) && <TrapExplanation id={10} />}
                 </section>
 
                 {/* 二、清理後資料表 */}
@@ -518,7 +646,7 @@ export const FindTrapsReport = () => {
                                         <td className="p-1.5">{d.grade}</td>
                                         <td className="p-1.5">
                                             {d.isOutlier
-                                                ? <TrapTarget id={1} found={isRevealed(1)} showAll={showAll} onFind={handleFind}>{d.sleep}</TrapTarget>
+                                                ? <TrapTarget id={1} found={isRevealed(1)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>{d.sleep}</TrapTarget>
                                                 : d.sleep}
                                         </td>
                                         <td className="p-1.5">{d.tutoring}</td>
@@ -529,17 +657,17 @@ export const FindTrapsReport = () => {
                             </tbody>
                         </table>
                     </div>
-                    {showExplanations && isRevealed(1) && <TrapExplanation id={1} />}
+                    {showRealExp(1) && isRevealed(1) && <TrapExplanation id={1} />}
                 </section>
 
-                {/* 三、視覺化儀表板（移到結論前 — 先看圖再看結論）*/}
-                <section className="mb-8">
+                {/* 三、視覺化儀表板 — W14 段錨點 */}
+                <section id="section-w14" className="mb-8 scroll-mt-20">
                     <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-1">三、 視覺化儀表板</h2>
                     <p className="text-[12px] text-[var(--ink-mid)] mb-4">
                         基於 22 份有效樣本（已清理）。圖表標題：
-                        <TrapTarget id={8} found={isRevealed(8)} showAll={showAll} onFind={handleFind}>「睡眠時數與專注力的關係」</TrapTarget>
+                        <TrapTarget id={8} found={isRevealed(8)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>「睡眠時數與專注力的關係」</TrapTarget>
                     </p>
-                    {showExplanations && isRevealed(8) && <TrapExplanation id={8} />}
+                    {showRealExp(8) && isRevealed(8) && <TrapExplanation id={8} />}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         {/* 散佈圖 + 圖說 */}
@@ -561,12 +689,14 @@ export const FindTrapsReport = () => {
                             <div className="mt-3 p-3 rounded border border-[#BFDBFE] bg-[#EFF6FF] text-[11.5px] leading-[1.85]">
                                 <p className="font-bold text-[#1E40AF] mb-1">📌 研究員圖說（示範）</p>
                                 <p className="text-[#1E3A8A] mb-1.5">
-                                    <strong>描述：</strong>N=22 學生中，睡眠時數從 4.5 到 12 小時不等，專注力分數從 3 到 10 分。整體而言，睡眠時數較高的學生，專注力分數也傾向較高。
+                                    <strong>描述：</strong>N=22 學生中，睡眠時數從 4.5 到 12 小時不等，專注力分數從 3 到 10 分。整體而言，睡眠時數較高的學生，專注力分數
+                                    <TrapTarget id={11} found={isRevealed(11)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>明顯</TrapTarget>較高。
                                 </p>
                                 <p className="text-[#1E3A8A]">
                                     <strong>推論：</strong>兩變項看似呈正向關聯，但本研究無法判斷是因果、共同原因、或反向因果。需更嚴謹研究設計才能釐清。
                                 </p>
                             </div>
+                            {showRealExp(11) && isRevealed(11) && <TrapExplanation id={11} />}
                         </div>
 
                         {/* 3C 混合圖 + 圖說 */}
@@ -590,9 +720,12 @@ export const FindTrapsReport = () => {
                                     <strong>描述：</strong>將學生分為「常常／偶爾／沒有」使用 3C 至凌晨三組。三組平均專注力分別為 4.0/6.4/8.7 分，平均睡眠分別為 5.3/6.9/8.8 小時。
                                 </p>
                                 <p className="text-[#1E3A8A]">
-                                    <strong>推論：</strong>兩條趨勢方向一致，3C 使用程度可能與睡眠及專注力同時相關。但本資料無法判斷誰是誰的原因，也可能有其他變項（壓力、習慣）同時影響三者。
+                                    <strong>推論：</strong>兩條趨勢方向一致，
+                                    <TrapTarget id={12} found={isRevealed(12)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>反映了 3C 使用會影響</TrapTarget>
+                                    睡眠及專注力。但本資料無法判斷誰是誰的原因，也可能有其他變項（壓力、習慣）同時影響三者。
                                 </p>
                             </div>
+                            {showRealExp(12) && isRevealed(12) && <TrapExplanation id={12} />}
                         </div>
 
                         {/* 補習對比 + 圖說 */}
@@ -610,12 +743,14 @@ export const FindTrapsReport = () => {
                             <div className="mt-3 p-3 rounded border border-[#BFDBFE] bg-[#EFF6FF] text-[11.5px] leading-[1.85]">
                                 <p className="font-bold text-[#1E40AF] mb-1">📌 研究員圖說（示範）</p>
                                 <p className="text-[#1E3A8A] mb-1.5">
-                                    <strong>描述：</strong>有補習組（n=12）平均睡眠 6.5 小時、專注力 5.6 分；無補習組（n=8）平均睡眠 7.6 小時、專注力 7.4 分。
+                                    <strong>描述：</strong>有補習組（n=12）平均睡眠 6.5 小時、專注力 5.6 分；無補習組（n=8）平均睡眠 7.6 小時、專注力 7.4 分。有補習組
+                                    <TrapTarget id={13} found={isRevealed(13)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>明顯睡得較少</TrapTarget>。
                                 </p>
                                 <p className="text-[#1E3A8A]">
                                     <strong>推論：</strong>兩組數值有差異，但差異原因可能涉及補習時長、家庭因素、學業壓力等。本資料未控制這些變項，無法把差異歸因於「補習」本身。
                                 </p>
                             </div>
+                            {showRealExp(13) && isRevealed(13) && <TrapExplanation id={13} />}
 
                             {/* 高一常寫錯版（details 對照卡） */}
                             <details className="mt-2 rounded border-2 border-[#DC2626]/40 bg-[#FEF2F2]">
@@ -669,52 +804,52 @@ export const FindTrapsReport = () => {
                     </div>
                 </section>
 
-                {/* 四、研究結論（移到圖表後 — 含 3 個假雷訓練辨真假）*/}
-                <section className="mb-8">
+                {/* 四、研究結論 — W15 段錨點 */}
+                <section id="section-w15" className="mb-8 scroll-mt-20">
                     <h2 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">四、 研究結論</h2>
                     <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">根據上述清理後的有效數據，我們進行交叉比對與平均數分析，得出以下三大核心研究結論：</p>
 
                     {/* 結論 1（含真雷 #2 #3 #4 + 假雷 F1 F3）*/}
                     <div className="mt-4">
                         <h3 className="font-bold text-[15px] text-[var(--ink)] mb-2">1. 睡眠時數與專注力呈「
-                            <TrapTarget id={2} found={isRevealed(2)} showAll={showAll} onFind={handleFind}>高度</TrapTarget>正相關」</h3>
+                            <TrapTarget id={2} found={isRevealed(2)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>高度</TrapTarget>正相關」</h3>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">
                             數據顯示，學生的自評專注力分數
-                            <TrapTarget id="F1" type="fake" found={isFakeFound('F1')} showAll={showAll} onFind={handleFind}>完全跟隨</TrapTarget>
+                            <TrapTarget id="F1" type="fake" found={isFakeFound('F1')} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>完全跟隨</TrapTarget>
                             睡眠時數增減。平均睡眠時數達到 8 小時以上的學生，其專注力評分均落在
-                            <TrapTarget id="F3" type="fake" found={isFakeFound('F3')} showAll={showAll} onFind={handleFind}>8~10 分的高水準</TrapTarget>
+                            <TrapTarget id="F3" type="fake" found={isFakeFound('F3')} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>8~10 分的高水準</TrapTarget>
                             ；反觀睡眠時數低於 6 小時的學生，專注力普遍低落於 5 分以下。這
-                            <TrapTarget id={3} found={isRevealed(3)} showAll={showAll} onFind={handleFind}>證實了</TrapTarget>充足的睡眠是維持高中生課堂專注力的
-                            <TrapTarget id={4} found={isRevealed(4)} showAll={showAll} onFind={handleFind}>最關鍵基石</TrapTarget>。
+                            <TrapTarget id={3} found={isRevealed(3)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>證實了</TrapTarget>充足的睡眠是維持高中生課堂專注力的
+                            <TrapTarget id={4} found={isRevealed(4)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>最關鍵基石</TrapTarget>。
                         </p>
-                        {showExplanations && isRevealed(2) && <TrapExplanation id={2} />}
-                        {showExplanations && isFakeFound('F1') && <FakeTrapExplanation id="F1" />}
-                        {showExplanations && isFakeFound('F3') && <FakeTrapExplanation id="F3" />}
-                        {showExplanations && isRevealed(3) && <TrapExplanation id={3} />}
-                        {showExplanations && isRevealed(4) && <TrapExplanation id={4} />}
+                        {showRealExp(2) && isRevealed(2) && <TrapExplanation id={2} />}
+                        {showFakeExp('F1') && isFakeFound('F1') && <FakeTrapExplanation id="F1" />}
+                        {showFakeExp('F3') && isFakeFound('F3') && <FakeTrapExplanation id="F3" />}
+                        {showRealExp(3) && isRevealed(3) && <TrapExplanation id={3} />}
+                        {showRealExp(4) && isRevealed(4) && <TrapExplanation id={4} />}
                     </div>
 
                     {/* 結論 2（含真雷 #5 + 假雷 F2）*/}
                     <div className="mt-4">
                         <h3 className="font-bold text-[15px] text-[var(--ink)] mb-2">2. 熬夜使用 3C 產品是破壞專注力的「
-                            <TrapTarget id={5} found={isRevealed(5)} showAll={showAll} onFind={handleFind}>核心元兇</TrapTarget>」</h3>
+                            <TrapTarget id={5} found={isRevealed(5)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>核心元兇</TrapTarget>」</h3>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">
                             進一步分析「使用 3C 至凌晨」的頻率與表現：「常常」熬夜使用 3C 者，平均睡眠僅約 5.3 小時，專注力平均
-                            <TrapTarget id="F2" type="fake" found={isFakeFound('F2')} showAll={showAll} onFind={handleFind}>慘跌</TrapTarget>
+                            <TrapTarget id="F2" type="fake" found={isFakeFound('F2')} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>慘跌</TrapTarget>
                             至 4 分，表現最差。「沒有」熬夜使用 3C 者，平均睡眠高達 8.8 小時，專注力平均高達 8.7 分，表現最優異。此落差表明，睡前過度使用 3C 產品不僅嚴重壓縮睡眠時間，更直接導致隔日課堂精神渙散。
                         </p>
-                        {showExplanations && isFakeFound('F2') && <FakeTrapExplanation id="F2" />}
-                        {showExplanations && isRevealed(5) && <TrapExplanation id={5} />}
+                        {showFakeExp('F2') && isFakeFound('F2') && <FakeTrapExplanation id="F2" />}
+                        {showRealExp(5) && isRevealed(5) && <TrapExplanation id={5} />}
                     </div>
 
                     {/* 結論 3 */}
                     <div className="mt-4">
                         <h3 className="font-bold text-[15px] text-[var(--ink)] mb-2">3. 「補習」對作息可能產生「
-                            <TrapTarget id={6} found={isRevealed(6)} showAll={showAll} onFind={handleFind}>排擠效應</TrapTarget>」</h3>
+                            <TrapTarget id={6} found={isRevealed(6)} showAll={showAll} onFind={handleFind} onToggleExp={handleToggleExp}>排擠效應</TrapTarget>」</h3>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-[1.85]">
                             在「有無補習」的交叉分析中，「有補習」的學生群體整體平均睡眠時數與專注力，皆略低於「沒有補習」的學生。這反映出課後補習可能延長了學生的學習時間並壓縮了休息時間。對於有補習的學生而言，如何做好時間管理以避免排擠睡眠，是維持學習效率的重要課題。
                         </p>
-                        {showExplanations && isRevealed(6) && <TrapExplanation id={6} />}
+                        {showRealExp(6) && isRevealed(6) && <TrapExplanation id={6} />}
                     </div>
 
                     {/* 雷 7：缺研究限制段（直接顯示提示按鈕） */}
@@ -733,10 +868,13 @@ export const FindTrapsReport = () => {
                                 整篇結論到這裡就結束了。{isRevealed(7) ? '⚠️ 你發現缺什麼了！' : '你覺得這份結論有沒有缺什麼？(點點看)'}
                             </p>
                         </button>
-                        {showExplanations && isRevealed(7) && <TrapExplanation id={7} />}
+                        {showRealExp(7) && isRevealed(7) && <TrapExplanation id={7} />}
                     </div>
                 </section>
             </div>
+
+            {/* 研究員 17 條紅線 — 玩完雷後揭示，不劇透 */}
+            <ResearcherRedlines mode="full" linkToWeek={true} defaultOpen={false} />
 
             {/* 收網卡 — 找完所有雷後出現 */}
             {isComplete && (
@@ -765,6 +903,25 @@ export const FindTrapsReport = () => {
                     <p className="text-[12px] text-white/70 italic">
                         💡 把判斷力寫進 prompt——這就是研究者的素養。
                     </p>
+                </div>
+            )}
+
+            {/* 自我遷移卡 — 找完後出現，把找雷能力轉回自己研究 */}
+            {isComplete && (
+                <div className="max-w-[760px] mx-auto mt-8 p-5 rounded-[var(--radius-unified)] border-2 border-[#F59E0B] bg-[#FFFBEB]">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Target size={18} className="text-[#92400E]" />
+                        <p className="font-bold text-[14px] text-[#92400E] m-0">🪞 自我遷移：把找雷能力轉回自己研究</p>
+                    </div>
+                    <p className="text-[12.5px] text-[#78350F] leading-[1.85] mb-3">
+                        會找別人的雷不算什麼——能看到自己研究的雷才是研究員。動腦想一下：
+                    </p>
+                    <ThinkRecord
+                        dataKey="findtraps-self-migration"
+                        prompt="我們組的資料 / 圖表 / 結論，最可能踩到 17 條紅線中的哪一條？為什麼？"
+                        placeholder="例如：我們的結論章可能踩 L11——我寫了「補習導致睡眠不足」，但其實只能說相關，需要改成「有補習組睡眠較少，原因待研究」。"
+                        rows={4}
+                    />
                 </div>
             )}
 

@@ -14,6 +14,10 @@ import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
 import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';
+import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
+import TrapRewritePractice from '../components/ui/TrapRewritePractice';
+import ThreeColumnConclusion from '../components/ui/ThreeColumnConclusion';
+import BraveScientistReflection from '../components/ui/BraveScientistReflection';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     Bot,
@@ -919,6 +923,9 @@ const W15Page = () => {
                 exportReminder="匯出 W15 結論章 → W16 報告整合"
             />
 
+            {/* W15 任務前警戒語 — 2 條核心紅線（相關≠因果 + 寫研究限制段）*/}
+            <ResearcherRedlines mode="warning" stage="W15" />
+
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
@@ -926,6 +933,27 @@ const W15Page = () => {
                 nextWeek={{ label: '前往 W16 報告與海報', to: '/w16' }}
             flat
             />
+
+            {/* W15 三欄結論寫作鷹架 — 寫結論前先把每句話分類「能說 / 謹慎說 / 不能說」 */}
+            <ThreeColumnConclusion dataKey="w15-three-column" />
+
+            {/* W15 改寫練習 — 反糾察隊配套（雷 #3「證實了」）*/}
+            <TrapRewritePractice
+                trapNumber={3}
+                stage="W15"
+                title="「證實了」太武斷"
+                wrong="這證實了充足的睡眠是維持高中生課堂專注力的最關鍵基石。"
+                issue="「證實」是因果用詞——單一研究、N=22、自評偏誤、無對照組，憑什麼「證實」？「最關鍵」是過度推論。"
+                hint="把「證實」改成研究員的保守語氣（本研究發現 / 初步觀察到）。把「最關鍵基石」拿掉強因果。"
+                shouldDo="本研究在 22 位高一學生中初步觀察到：睡眠時數較高的學生，自評專注力傾向較高。但本研究設計無法判斷睡眠是否為「最關鍵」因素。"
+                dataKey="w15-trap-rewrite-3"
+            />
+
+            {/* W15 末 Brave Scientist 反思 — 反「學術糾察隊效應」配套 */}
+            <BraveScientistReflection dataKey="w15-brave-scientist" />
+
+            {/* W15 階段紅線完整版 — 7 條 · 做完反思用 */}
+            <ResearcherRedlines mode="subset" stage="W15" collapsible />
         </div>
     );
 };

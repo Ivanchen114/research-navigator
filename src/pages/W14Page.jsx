@@ -14,6 +14,9 @@ import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
 import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';
+import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
+import TrapRewritePractice from '../components/ui/TrapRewritePractice';
+import ChartChoiceChecker from '../components/ui/ChartChoiceChecker';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     ArrowRight,
@@ -998,6 +1001,9 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                 exportReminder="匯出 W14 圖表 + 圖說 → W15 結論回扣使用"
             />
 
+            {/* W14 任務前警戒語 — 3 條核心紅線 */}
+            <ResearcherRedlines mode="warning" stage="W14" />
+
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
@@ -1005,6 +1011,24 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                 nextWeek={{ label: '前往 W15 研究結論', to: '/w15' }}
             flat
             />
+
+            {/* W14 選圖判斷檢核 — 學生不會用試算表沒關係，但選圖判斷不能外包給 AI */}
+            <ChartChoiceChecker dataKey="w14-chart-choice" />
+
+            {/* W14 改寫練習 — 反糾察隊配套 */}
+            <TrapRewritePractice
+                trapNumber={11}
+                stage="W14"
+                title="散佈圖圖說「明顯」過度修飾"
+                wrong="整體而言，睡眠時數較高的學生，專注力分數明顯較高。"
+                issue="「明顯」需要相關係數（r 值）或統計檢定支撐。N=22 沒做任何檢定，圖看起來有趨勢就斷言「明顯」屬於過度修飾。"
+                hint="把「明顯」拿掉。改成保守的觀察用語——「初步」「看似」「傾向」。"
+                shouldDo="N=22 學生中，睡眠時數較高的學生，專注力分數初步看似較高（傾向隨睡眠時數遞增）。"
+                dataKey="w14-trap-rewrite-11"
+            />
+
+            {/* W14 階段紅線完整版 — 5 條 · 做完反思用 */}
+            <ResearcherRedlines mode="subset" stage="W14" collapsible />
         </div>
     );
 };

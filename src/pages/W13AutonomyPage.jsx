@@ -14,6 +14,8 @@ import AIREDNarrative from '../components/ui/AIREDNarrative';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
 import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';
+import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
+import TrapRewritePractice from '../components/ui/TrapRewritePractice';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
     Database,
@@ -1173,6 +1175,9 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 </div>
             )}
 
+            {/* W13 任務前警戒語 — 3 條核心紅線（task-time 可隨時查）*/}
+            <ResearcherRedlines mode="warning" stage="W13" />
+
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
@@ -1180,6 +1185,21 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 nextWeek={{ label: '前往 W14 圖表與圖說', to: '/w14' }}
                 flat
             />
+
+            {/* W13 改寫練習 — 反糾察隊配套（不只挑錯，動手寫對的）*/}
+            <TrapRewritePractice
+                trapNumber={9}
+                stage="W13"
+                title="剔除規則模糊"
+                wrong="剔除疑似填答不認真的樣本。"
+                issue="「疑似」是研究員主觀判斷，不是事前訂定的標準。學術上必須先寫好客觀規則，再依規則篩。"
+                hint="把「疑似」拿掉。改寫成「依事前標準剔除 ___」這種可被檢驗的句型。"
+                shouldDo="依事前標準剔除：核心欄位空白者（編號 11、21）、明顯無意義填答（編號 23 填 test）。"
+                dataKey="w13-trap-rewrite-9"
+            />
+
+            {/* W13 階段紅線完整版 — 5 條 · 做完反思用 */}
+            <ResearcherRedlines mode="subset" stage="W13" collapsible />
         </div>
     );
 };
