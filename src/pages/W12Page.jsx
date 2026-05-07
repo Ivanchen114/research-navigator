@@ -79,20 +79,22 @@ const RUBRIC = [
         levels: [
             '念稿 / 超時 / 重點不明',
             '大致講清楚但散',
-            '結構好、5 段都講到',
+            '結構好、6 段都講到（含文獻定位）',
             '結構好 + 自然不念稿 + 在 3 分鐘內',
         ],
     },
 ];
 
-/* — 短報卡 5 段（學生 W11 結束課後在 Form 填）— */
+/* — 短報卡 6 段（學生 W11 結束課後在 Form 填）— */
 /* 朗讀速率：高中生中速約 200 字/分鐘 ≈ 3.3 字/秒 → 30 秒 ~100 字、60 秒 ~200 字 */
+/* 總時長 180 秒 = 30+30+25+45+25+25（文獻段擠進來，Pilot 從 60s 砍 15s）*/
 const REPORT_SECTIONS = [
     { idx: 1, time: '30 秒', title: '題目 + 動機', desc: '一句話研究題目 + 一句話為什麼想做', limit: '各 50 字（共 ~100 字 ≈ 30 秒）' },
-    { idx: 2, time: '30 秒', title: '方法 + 工具', desc: '研究方法 + 工具實體類型（如「Google Form 25 題」）', limit: '80 字 ≈ 24 秒（留 buffer）' },
-    { idx: 3, time: '60 秒', title: 'Pilot 共識發現', desc: '全組合議的 1-2 個共通工具弱點 + 已修正什麼', limit: '200 字 ≈ 60 秒（最緊湊）' },
-    { idx: 4, time: '30 秒', title: '目前進度', desc: '計畫書到哪／工具實體做到哪', limit: '80 字 ≈ 24 秒' },
-    { idx: 5, time: '30 秒', title: '預期蒐集 + Plan B', desc: '樣本目標／時程／Plan B 一句話', limit: '100 字 ≈ 30 秒（剛好用滿）' },
+    { idx: 2, time: '30 秒', title: '文獻定位（APA + 對話）', desc: '關鍵文獻 1 篇（APA 格式）+ 該文核心觀點 + 本研究是驗證／延伸／質疑它 + 最大差異', limit: '~100 字 ≈ 30 秒（含 APA 書目 1 行）' },
+    { idx: 3, time: '25 秒', title: '方法 + 工具', desc: '研究方法 + 工具實體類型（如「Google Form 25 題」）', limit: '80 字 ≈ 25 秒（留 buffer）' },
+    { idx: 4, time: '45 秒', title: 'Pilot 共識發現', desc: '全組合議的 1-2 個共通工具弱點 + 已修正什麼', limit: '150 字 ≈ 45 秒（最緊湊）' },
+    { idx: 5, time: '25 秒', title: '目前進度', desc: '計畫書到哪／工具實體做到哪', limit: '80 字 ≈ 25 秒' },
+    { idx: 6, time: '25 秒', title: '預期蒐集 + Plan B', desc: '樣本目標／時程／Plan B 一句話', limit: '80 字 ≈ 25 秒' },
 ];
 
 /* — 100 min 課堂流程（對齊學校 50/10/50 作息）— */
@@ -262,7 +264,7 @@ const W12Page = () => {
 
                 {/* 短報卡 5 段內容 */}
                 <div>
-                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">📄 你的短報卡 — 5 段 3 分鐘</h3>
+                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">📄 你的短報卡 — 6 段 3 分鐘</h3>
                     <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
                         組長已在課前填進 Form。上課時老師輪播投影，你對著自己那頁講。
                     </p>

@@ -265,13 +265,9 @@ const EXPORT_FIELDS = [
     /* Step 3：Pilot 互測 */
     { key: 'w11-pilot-partner', label: 'Pilot Test 對象', question: '座位表配對到誰？對方是哪個方法？' },
     { key: 'w11-pilot-findings', label: 'Pilot Test 發現', question: '當研究者時對方的回饋 + 你自己觀察到的工具卡點' },
-    { key: 'w11-pilot-as-subject', label: '當受測者反思', question: '換你被測時，你以為對方在研究什麼？實際感受？' },
     /* Step 4：倫理 + 施測啟動 */
     { key: 'w11-tool-final-revision', label: '工具第二輪修正', question: '根據 Pilot 回饋要改載具的哪幾點' },
-    { key: 'w11-ethics-consent', label: '倫理 · 知情同意' },
-    { key: 'w11-ethics-privacy', label: '倫理 · 保密性' },
-    { key: 'w11-ethics-harm', label: '倫理 · 不傷害' },
-    { key: 'w11-ethics-voluntary', label: '倫理 · 自願性' },
+    { key: 'w11-ethics-self-review', label: '倫理四原則 · 小組實踐紀錄', question: '對照四原則（知情同意/保密/不傷害/自願）我們組的研究分別怎麼做' },
     { key: 'w11-teacher-stamp', label: '教師倫理審查蓋章', question: '老師當面審完工具+知情同意+四問後蓋章紀錄' },
 ];
 
@@ -914,10 +910,10 @@ export const W11Page = () => {
                         </div>
                     </div>
 
-                    {/* 雙向紀錄：當研究者 + 當受測者 */}
+                    {/* 研究者紀錄 */}
                     <div className="space-y-4">
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            雙向紀錄（你當研究者 + 你當受測者）
+                            Pilot 紀錄（你當研究者）
                         </h4>
 
                         {/* 觀察清單（預設依方法分流，可切換看別組）*/}
@@ -1006,31 +1002,6 @@ export const W11Page = () => {
                             rows={8}
                         />
 
-                        {/* 範例示範卡：當受測者反思 */}
-                        <details className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] mb-3">
-                            <summary className="cursor-pointer px-4 py-2 hover:bg-[var(--paper-warm)] flex items-center gap-2 text-[12px]">
-                                <span className="font-bold text-[var(--ink)]">📋 範例示範：當受測者怎麼寫反思（點開）</span>
-                                <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
-                            </summary>
-                            <div className="border-t border-[var(--border)] p-4 text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
-                                <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded p-3">
-                                    <p>1. 我以為對方研究的問題是：<strong>大學生睡眠跟成績的關係</strong></p>
-                                    <p>2. 跟對方真實研究問題對得上嗎？<strong>部分</strong>（他其實研究睡眠跟<u>專注力</u>，不是成績——題目集中在考試讓我誤會）</p>
-                                    <p>3. 過程中我哪裡卡住或不舒服：<strong>第 4 題問「最近的考試成績」太私人</strong>，我猶豫要不要寫真實分數</p>
-                                    <p>4. 我覺得對方工具最該優化的一點是：<strong>把「成績」改成「自己感受到的專注度（量表 1-5）」</strong>——既切回研究問題，又少一些尷尬</p>
-                                </div>
-                                <p className="italic text-[11px] text-[var(--ink-light)] mt-2">💡 重點不是「猜對」研究問題，而是讓對方知道<strong>受測者的腦袋怎麼解讀他的工具</strong>。</p>
-                            </div>
-                        </details>
-                        <ThinkRecord
-                            dataKey="w11-pilot-as-subject"
-                            prompt="【你當受測者】幫對方寫反思——你以為對方在研究什麼？實際感受？"
-                            defaultTemplate={'1. 我以為對方研究的問題是：\n2. 跟對方的真實研究問題對得上嗎？（對得上／部分／差很多）\n3. 過程中我哪裡卡住或不舒服：\n4. 我覺得對方工具最該優化的一點是：'}
-                            placeholder="例：我以為對方在研究睡眠跟成績，但他其實要研究睡眠跟專注力——題目太集中考試導致我誤會"
-                            rows={6}
-                        />
-
-
                     </div>
 
                     {/* 📸 拍照存證（實體存在性證據 — 反偽造） */}
@@ -1076,8 +1047,6 @@ export const W11Page = () => {
                                 '我寫的「對方回饋」是對方**真的說過**的話，不是我猜他想說的',
                                 '我自己觀察到的問題用了**自己的話**寫，不是照抄對方',
                                 '至少有一條問題是「我原本沒想到、預試後才發現」的——如果都是我預期內的，預試可能太流於形式',
-                                '當受測者反思有寫——我有試著從對方角度回頭看自己的工具',
-                                '【實驗組】架設圖至少有一個漏洞是別人挑出來的，不是自己挑',
                             ]}
                         />
                     </div>
@@ -1132,45 +1101,50 @@ export const W11Page = () => {
             icon: '⚖',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 倫理四問自查 */}
+                    {/* 請回頭審查小組的設計有無符合倫理審查 */}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            倫理四問自查
+                            請回頭審查小組的設計有無符合倫理審查
                         </h4>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
-                            逐一回答四個問題——這是研究倫理的基礎底線。每題都要具體回答，不可寫「有注意」。
+                            下方四原則是研究倫理的基礎底線。對照你們組的研究設計，記錄這四個在自己的研究要怎麼實踐。
                         </p>
-                        <div className="space-y-4">
+
+                        {/* 四原則卡片（純顯示，不收輸入）*/}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
                             {ETHICS_QUESTIONS.map((q) => (
                                 <div key={q.id} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                                    <div className="px-5 py-3 flex items-center gap-2 border-b border-[var(--border)]" style={{ backgroundColor: `${q.color}12` }}>
-                                        <span className="text-[18px]">{q.icon}</span>
-                                        <span className="font-bold text-[14px]" style={{ color: q.color }}>{q.title}</span>
+                                    <div className="px-4 py-2.5 flex items-center gap-2 border-b border-[var(--border)]" style={{ backgroundColor: `${q.color}12` }}>
+                                        <span className="text-[16px]">{q.icon}</span>
+                                        <span className="font-bold text-[13px]" style={{ color: q.color }}>{q.title}</span>
                                     </div>
-                                    <div className="p-5">
-                                        <p className="text-[13px] text-[var(--ink-mid)] mb-2"><strong className="text-[var(--ink)]">{q.question}</strong></p>
-                                        <p className="text-[11.5px] text-[var(--ink-light)] mb-3 leading-relaxed">💡 {q.hint}</p>
+                                    <div className="p-4">
+                                        <p className="text-[12.5px] text-[var(--ink)] font-bold mb-1.5">{q.question}</p>
+                                        <p className="text-[11.5px] text-[var(--ink-light)] mb-2 leading-relaxed">💡 {q.hint}</p>
                                         {q.examples && (
-                                            <details className="mb-3 rounded border border-[var(--border)] bg-[#FAFAF9]">
-                                                <summary className="cursor-pointer px-3 py-2 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2">
-                                                    <span className="text-[11.5px] font-bold" style={{ color: q.color }}>📋 高中研究常見做法（點開挑一個照做或自己改寫）</span>
-                                                    <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
+                                            <details className="rounded border border-[var(--border)] bg-[#FAFAF9]">
+                                                <summary className="cursor-pointer px-2.5 py-1.5 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2">
+                                                    <span className="text-[11px] font-bold" style={{ color: q.color }}>📋 高中研究常見做法 ▼</span>
                                                 </summary>
-                                                <ul className="border-t border-[var(--border)] px-4 py-3 space-y-1.5 text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                                <ul className="border-t border-[var(--border)] px-3 py-2 space-y-1 text-[11px] text-[var(--ink-mid)] leading-relaxed">
                                                     {q.examples.map((ex, i) => (
                                                         <li key={i}>· {ex}</li>
                                                     ))}
                                                 </ul>
                                             </details>
                                         )}
-                                        <ThinkRecord
-                                            dataKey={`w11-ethics-${q.id}`}
-                                            prompt={`我對「${q.title}」的具體做法`}
-                                            rows={3}
-                                        />
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* 合併紀錄欄 */}
+                        <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-4">
+                            <ThinkRecord
+                                dataKey="w11-ethics-self-review"
+                                prompt="請回頭審查小組的設計有無符合倫理審查，以及倫理審查在自己的研究要怎麼實踐"
+                                rows={8}
+                            />
                         </div>
                     </div>
 
