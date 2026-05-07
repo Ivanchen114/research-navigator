@@ -268,7 +268,6 @@ const EXPORT_FIELDS = [
     /* Step 4：倫理 + 施測啟動 */
     { key: 'w11-tool-final-revision', label: '工具第二輪修正', question: '根據 Pilot 回饋要改載具的哪幾點' },
     { key: 'w11-ethics-self-review', label: '倫理四原則 · 小組實踐紀錄', question: '對照四原則（知情同意/保密/不傷害/自願）我們組的研究分別怎麼做' },
-    { key: 'w11-teacher-stamp', label: '教師倫理審查蓋章', question: '老師當面審完工具+知情同意+四問後蓋章紀錄' },
 ];
 
 /* ══════════════════════════════════════
@@ -1148,45 +1147,6 @@ export const W11Page = () => {
                         </div>
                     </div>
 
-                    {/* 知情同意書精修（純人工 · 修完最後給老師檢查） */}
-                    <div>
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            知情同意書精修（修完給老師檢查）
-                        </h4>
-                        {myMethodKey === 'literature' && (
-                            <div className="bg-[#EEF2FF] border-2 border-[#6366F1] rounded-[var(--radius-unified)] p-4 mb-4 max-w-[760px]">
-                                <p className="text-[13px] font-bold text-[#3730A3] mb-2">📚 文獻分析法 — 你通常不需要寫知情同意書</p>
-                                <p className="text-[12.5px] text-[#312E81] leading-[1.85]">
-                                    你的「對象」是<strong>公開出版的文獻</strong>（不是活人），所以<strong>不需要寫知情同意書</strong>，這部分可以跳過。<strong>第十章倫理</strong>還是要寫——重點放在：(1) 資料來源是否合法取得、(2) 引用是否合理、(3) 是否避免片面解讀讓作者被誤解。
-                                </p>
-                            </div>
-                        )}
-                        <div className="bg-[#FFF7ED] border-l-4 border-[#EA580C] rounded-r-[var(--radius-unified)] p-4 max-w-[760px]">
-                            <p className="text-[12.5px] font-bold text-[#9A3412] mb-2">📌 怎麼修？三步驟</p>
-                            <ol className="text-[12px] text-[#7C2D12] leading-[1.85] list-decimal pl-5 space-y-1">
-                                <li><strong>翻出 W10 初稿</strong>：計畫書工具模板的開場白 = 知情同意「初稿」（你已寫過）</li>
-                                <li><strong>對著 Step 3 的 Pilot 觀察修</strong>：對方聽你念時哪句皺眉？哪句重複問？依此改用詞、補說明</li>
-                                <li><strong>修完拿給老師檢查</strong>——四原則（知情同意／保密／不傷害／自願）有沒有都對應到具體做法</li>
-                            </ol>
-                            <p className="text-[11.5px] text-[#9A3412] italic mt-2 pt-2 border-t border-[#EA580C]/30">
-                                💡 精修版回頭蓋過<strong>計畫書第六章工具的開場白</strong>（不是第十章）——知情同意是「給受訪者讀的那段話」，住在工具裡。第十章倫理只寫四原則的對應做法（已在上方四問填好）。
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* 教師蓋章區塊（秘密按鈕） */}
-                    <div>
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            教師倫理審查
-                        </h4>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
-                            把<strong className="text-[var(--ink)]">工具實體</strong>（Form／訪綱／紀錄表，含開場的知情同意）拿給老師當面看。整本計畫書已在 W10 審過，這裡不重審。
-                        </p>
-                        <div className="bg-[#FFFBEB] border border-[#F59E0B]/40 rounded-[var(--radius-unified)] p-3 mb-4 max-w-[760px] text-[12px] text-[#92400E] leading-[1.85]">
-                            ⏰ 課堂時間有限（約 5 分鐘）→ <strong>老師會隨機抽 5-6 組現場蓋章</strong>。沒抽到的組請<strong>把工具實體連結直接貼到 Google Classroom 本週作業</strong>，老師會在 Classroom 留言補蓋（本週末未蓋章＝下週不能進入施測）。
-                        </div>
-                        <TeacherApprovalBadge />
-                    </div>
                 </div>
             ),
         },
@@ -1195,7 +1155,7 @@ export const W11Page = () => {
             icon: '🚀',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 施測啟動 — 不填表，課堂結尾只做：教師蓋章 + 工具實體繳交 + W12 預告 */}
+                    {/* 施測啟動 — 不填表，課堂結尾只做：工具實體繳交 + W12 預告 */}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
                             施測啟動 · 收尾說明
@@ -1205,7 +1165,7 @@ export const W11Page = () => {
                                 樣本量／時程<strong>已在計畫書第七章+第十一章寫過</strong>——<u>這裡不重填</u>。<strong>Plan B 觸發條件</strong>（W13 進來前累計 &lt; X 份就啟動備案）等到 <strong>W12 期中短報</strong>老師問再口頭討論，現在不寫網頁。
                             </p>
                             <p className="text-[12px] text-[#0C4A6E] leading-[1.85] mt-2">
-                                ✅ 本節剩下的 5 分鐘只做四件事：<strong>① 教師蓋章（如沒抽到→Classroom 補蓋）</strong> · <strong>② 工具實體連結貼到 Classroom</strong> · <strong>③ 一鍵匯出網頁歷程 docx 一起貼</strong>（含 Pilot 雙向紀錄、第二輪修正、倫理四問）· <strong>④ 看 W12 預告</strong>。
+                                ✅ 本節剩下的時間只做三件事：<strong>① 工具實體連結貼到 Classroom</strong> · <strong>② 一鍵匯出網頁歷程 docx 一起貼</strong>（含 Pilot 紀錄、第二輪修正、倫理四原則）· <strong>③ 看 W12 預告</strong>。老師會在 W11 結束後收回工具書統一給回饋。
                             </p>
                         </div>
                     </div>
@@ -1220,8 +1180,8 @@ export const W11Page = () => {
                             {[
                                                 '把計畫書題目轉成真的能施測的載具（Form／訪綱／紀錄表）',
                                                 '透過 1 對 1 跨方法 Pilot 找出 AI 看不到的工具毛病',
-                                                '完成倫理四問自查 + 知情同意書精修',
-                                                '繳交：工具實體連結 + 上課歷程 docx（含 Pilot 紀錄）+ 教師蓋章',
+                                                '對照倫理四原則紀錄小組研究的具體實踐方式',
+                                                '繳交：工具實體連結 + 上課歷程 docx（含 Pilot 紀錄、倫理四原則紀錄）',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>

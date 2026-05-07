@@ -31,7 +31,7 @@ import {
  *  資料常數
  * ══════════════════════════════════════ */
 
-/* — 評分基準（5 維 × 4 級）— */
+/* — 評分基準（4 維 × 4 級）— */
 const RUBRIC = [
     {
         dim: 'A',
@@ -56,6 +56,7 @@ const RUBRIC = [
     {
         dim: 'C',
         title: 'Pilot 共識發現深度',
+        note: '看 W11 Pilot 紀錄文件（短報不講 Pilot 段，由 Classroom 上的紀錄評分）',
         levels: [
             '寫「都沒發現」',
             '找出最弱題但沒講為什麼',
@@ -65,36 +66,25 @@ const RUBRIC = [
     },
     {
         dim: 'D',
-        title: 'Plan B 具體度',
-        levels: [
-            '沒寫或只寫「會努力」',
-            '提了風險但沒應變',
-            '風險 + 應變但沒期限',
-            '情境 + 應變 + 期限三件齊備',
-        ],
-    },
-    {
-        dim: 'E',
         title: '報告清晰度',
         levels: [
             '念稿 / 超時 / 重點不明',
             '大致講清楚但散',
-            '結構好、6 段都講到（含文獻定位）',
+            '結構好、5 段都講到（含 3 篇文獻對話）',
             '結構好 + 自然不念稿 + 在 3 分鐘內',
         ],
     },
 ];
 
-/* — 短報卡 6 段（學生 W11 結束課後在 Form 填）— */
+/* — 短報卡 5 段（學生 W11 結束課後在 Form 填）— */
 /* 朗讀速率：高中生中速約 200 字/分鐘 ≈ 3.3 字/秒 → 30 秒 ~100 字、60 秒 ~200 字 */
-/* 總時長 180 秒 = 30+30+25+45+25+25（文獻段擠進來，Pilot 從 60s 砍 15s）*/
+/* 總時長 180 秒 = 15+20+30+90+25（文獻探討 3 篇佔最大塊：90 秒講 3 篇對話）*/
 const REPORT_SECTIONS = [
-    { idx: 1, time: '30 秒', title: '題目 + 動機', desc: '一句話研究題目 + 一句話為什麼想做', limit: '各 50 字（共 ~100 字 ≈ 30 秒）' },
-    { idx: 2, time: '30 秒', title: '文獻定位（APA + 對話）', desc: '關鍵文獻 1 篇（APA 格式）+ 該文核心觀點 + 本研究是驗證／延伸／質疑它 + 最大差異', limit: '~100 字 ≈ 30 秒（含 APA 書目 1 行）' },
-    { idx: 3, time: '25 秒', title: '方法 + 工具', desc: '研究方法 + 工具實體類型（如「Google Form 25 題」）', limit: '80 字 ≈ 25 秒（留 buffer）' },
-    { idx: 4, time: '45 秒', title: 'Pilot 共識發現', desc: '全組合議的 1-2 個共通工具弱點 + 已修正什麼', limit: '150 字 ≈ 45 秒（最緊湊）' },
-    { idx: 5, time: '25 秒', title: '目前進度', desc: '計畫書到哪／工具實體做到哪', limit: '80 字 ≈ 25 秒' },
-    { idx: 6, time: '25 秒', title: '預期蒐集 + Plan B', desc: '樣本目標／時程／Plan B 一句話', limit: '80 字 ≈ 25 秒' },
+    { idx: 1, time: '15 秒', title: '研究題目', desc: '一句話寫清楚——你要研究什麼', limit: '30 字內 ≈ 15 秒' },
+    { idx: 2, time: '20 秒', title: '研究動機', desc: '為什麼想做這個——一句話的好奇或痛點', limit: '50 字內 ≈ 20 秒' },
+    { idx: 3, time: '30 秒', title: '研究方法 + 工具實體', desc: '研究方法 + 工具實體類型（如「Google Form 25 題」）', limit: '80 字內 ≈ 30 秒' },
+    { idx: 4, time: '90 秒', title: '文獻探討（3 篇對話）', desc: '3 篇關鍵文獻 — 比較不同專家觀點、呈現研究現況與未解決問題（每篇含 APA + 核心觀點 + 跟其他文獻或本研究的差異）', limit: '每篇 100 字 × 3 ≈ 90 秒（最大塊）' },
+    { idx: 5, time: '25 秒', title: '目前進度', desc: '計畫書到哪 / 工具實體做到哪 / W11 Pilot 後修了什麼', limit: '80 字內 ≈ 25 秒' },
 ];
 
 /* — 100 min 課堂流程（對齊學校 50/10/50 作息）— */
@@ -200,7 +190,7 @@ const W12Page = () => {
                 tasks={[
                     '各組期中短報 — 3 min Pitch + 1 min QA',
                     '全班同儕回饋 Form — 5 漏洞選擇 + 30 字建議 + 30 字學到什麼',
-                    '老師當場評分（5 維 × 4 級 = 20 分）',
+                    '老師當場評分（4 維 × 4 級 = 16 分）',
                 ]}
                 exportReminder="收齊同儕回饋 → 下週調整研究設計依據"
             />
@@ -216,7 +206,7 @@ const W12Page = () => {
                             <p className="text-[15px] font-bold text-[#991B1B] mb-2">⏰ 上課前先確認三件事</p>
                             <ol className="text-[12.5px] text-[#7F1D1D] leading-[1.85] list-decimal pl-5 space-y-1">
                                 <li>全組已在 W11-W12 之間自約 30 min 合議出 Pilot 共識發現</li>
-                                <li>組長已在 <strong>今天 8:00 前</strong>填好短報 Google Form（沒填 = E 維度直接扣 4 分）</li>
+                                <li>組長已在 <strong>今天 8:00 前</strong>填好短報 Google Form（沒填 = D 維度直接扣 4 分）</li>
                                 <li>每位同學手機 / 筆電上課準備好——課堂內要填同儕回饋 Form 12 次</li>
                             </ol>
                         </div>
@@ -247,7 +237,7 @@ const W12Page = () => {
                         <ToolInfoCard
                             icon="📝"
                             title="① 短報 Google Form（W11 結束 → W12 上課前 8:00 截止）"
-                            desc="組長代填。5 段內容：題目+動機 / 方法+工具 / Pilot 共識 / 進度 / 預期+Plan B。連結到自己班 GC 找。"
+                            desc="組長代填。5 段內容：題目 / 動機 / 方法+工具 / 文獻探討（3 篇 APA + 對話）/ 目前進度。連結到自己班 GC 找。"
                         />
                         <ToolInfoCard
                             icon="🖥️"
@@ -257,14 +247,14 @@ const W12Page = () => {
                         <ToolInfoCard
                             icon="✏️"
                             title="③ 同儕回饋 Form（W12 課堂中填，每組 1 分鐘）"
-                            desc={'3 題：漏洞勾選（5 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。13 組 → 每位同學填 12 次（不評自己）。連結到自己班 GC 找。📋 30 字「具體建議」三句式：「我發現___ → 建議改成___ → 理由___」。範例：「題 5 跟題 8 在問同個概念 → 建議刪題 8 → 受測者會疑惑」。'}
+                            desc={'3 題：漏洞勾選（6 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。13 組 → 每位同學填 12 次（不評自己）。連結到自己班 GC 找。📋 30 字「具體建議」三句式：「我發現___ → 建議改成___ → 理由___」。範例：「題 5 跟題 8 在問同個概念 → 建議刪題 8 → 受測者會疑惑」。'}
                         />
                     </div>
                 </div>
 
                 {/* 短報卡 5 段內容 */}
                 <div>
-                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">📄 你的短報卡 — 6 段 3 分鐘</h3>
+                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">📄 你的短報卡 — 5 段 3 分鐘</h3>
                     <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
                         組長已在課前填進 Form。上課時老師輪播投影，你對著自己那頁講。
                     </p>
@@ -311,18 +301,19 @@ const W12Page = () => {
                 {/* 評分基準 */}
                 <div>
                     <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2 flex items-center gap-2">
-                        <Star size={18} className="text-[#EA580C]" /> 評分基準（5 維 × 4 級 = 20 分滿分）
+                        <Star size={18} className="text-[#EA580C]" /> 評分基準（4 維 × 4 級 = 16 分滿分）
                     </h3>
                     <div className="bg-[#FFFBEB] border border-[#FCD34D] rounded-[6px] p-3 mb-3 text-[12px] text-[#78350F] leading-relaxed">
                         ⚖️ <strong>評分分流：</strong>
-                        <strong className="text-[#92400E]">A 維度</strong>看你 Classroom 上計畫書檔案實際狀態（不只是短報講的）；
-                        <strong className="text-[#92400E]">B-E 維度</strong>主要看你今天的<strong>短報 5 段</strong>表現。
-                        <strong>意思：</strong>就算短報講得不錯，計畫書如果停在第六章雛形，A 還是會低分。
+                        <strong className="text-[#92400E]">A 維度</strong>看你 Classroom 上計畫書檔案實際狀態；
+                        <strong className="text-[#92400E]">C 維度（Pilot 共識）</strong>看你 W11 Pilot 紀錄文件（短報不講 Pilot 段）；
+                        <strong className="text-[#92400E]">B / D 維度</strong>主要看今天<strong>短報 5 段</strong>的表現。
+                        <strong>意思：</strong>就算短報講得不錯，計畫書如果停在第六章雛形，A 還是會低分；W11 Pilot 紀錄空白，C 還是會低分。
                     </div>
                     <h3 className="hidden">
                     </h3>
                     <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                        老師現場記分、私下給組長（不公告排名）。<strong>17-20 ★★★★ ／ 13-16 ★★★ ／ 9-12 ★★ ／ 5-8 ★</strong>。分數 ≤ 12 的組 W13 前要找老師談。
+                        老師現場記分、私下給組長（不公告排名）。<strong>13-16 ★★★★ ／ 9-12 ★★★ ／ 5-8 ★★ ／ 4 ★</strong>。分數 ≤ 8 的組 W13 前要找老師談。
                     </p>
                     <div className="space-y-2">
                         {RUBRIC.map((r) => (
@@ -331,6 +322,9 @@ const W12Page = () => {
                                     <span><span className="text-[var(--accent)] mr-2">{r.dim}.</span>{r.title}</span>
                                     <span className="text-[11px] text-[var(--ink-light)] font-normal">展開 4 級 ▼</span>
                                 </summary>
+                                {r.note && (
+                                    <p className="px-4 pb-2 text-[11.5px] text-[var(--ink-light)] italic leading-[1.7]">📌 {r.note}</p>
+                                )}
                                 <div className="px-4 pb-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-[11.5px]">
                                     {r.levels.map((lv, i) => (
                                         <div key={i} className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-2">
@@ -348,34 +342,38 @@ const W12Page = () => {
                 <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0FDF4] border-2 border-[#10B981]">
                     <p className="text-[14px] font-bold text-[#065F46] mb-2">📝 你聽 12 組短報時，每組要填 3 題（1 分鐘內）</p>
                     <ul className="text-[12.5px] text-[#047857] leading-[1.85] list-decimal pl-5 space-y-1">
-                        <li><strong>這組最大的計畫漏洞是？</strong>（單選 5 個漏洞——下方定義）</li>
+                        <li><strong>這組最大的計畫漏洞是？</strong>（單選 6 個漏洞——下方定義）</li>
                         <li><strong>給這組一句具體建議</strong>（30 字內、必填）</li>
                         <li><strong>我從這組學到什麼？</strong>（30 字內、必填）</li>
                     </ul>
 
-                    {/* 5 漏洞定義 */}
+                    {/* 6 漏洞定義 — 對齊新短報 5 段內容 */}
                     <div className="mt-3 bg-white border border-[#10B981]/40 rounded-[var(--radius-unified)] p-3">
-                        <p className="font-bold text-[12.5px] text-[#065F46] mb-2">🎯 5 個漏洞選項是什麼意思？</p>
+                        <p className="font-bold text-[12.5px] text-[#065F46] mb-2">🎯 6 個漏洞選項是什麼意思？（對齊短報 5 段：題目 / 動機 / 方法 / 文獻 / 進度）</p>
                         <div className="grid md:grid-cols-2 gap-2 text-[11.5px] leading-[1.75]">
                             <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">① 樣本不夠 / 取樣偏</p>
-                                <p className="text-[var(--ink-mid)]">數量太少代表性不足；或只找特定類型的人（例：只找朋友）</p>
+                                <p className="font-bold text-[var(--ink)]">① 題目模糊</p>
+                                <p className="text-[var(--ink-mid)]">一句話講不清楚 / 範圍太大太小 / 抽象到無法操作</p>
                             </div>
                             <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">② 題目雙重問題 / 歧義</p>
-                                <p className="text-[var(--ink-mid)]">一題問兩件事；或受測者每個人理解不同（例：「壓力」是學業還是經濟？）</p>
+                                <p className="font-bold text-[var(--ink)]">② 動機不充分</p>
+                                <p className="text-[var(--ink-mid)]">為什麼想做沒講清楚 / 動機跟題目連不起來</p>
                             </div>
                             <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">③ 變項定義不可測量</p>
-                                <p className="text-[var(--ink-mid)]">「投入度」「動機」沒寫怎麼測；只有抽象概念沒有指標</p>
-                            </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">④ Plan B 不具體</p>
-                                <p className="text-[var(--ink-mid)]">「會努力」「再想辦法」沒說什麼數字以下啟動、改成什麼方案、期限到哪</p>
-                            </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2 md:col-span-2">
-                                <p className="font-bold text-[var(--ink)]">⑤ 方法跟研究問題對不上</p>
+                                <p className="font-bold text-[var(--ink)]">③ 方法跟研究問題對不上</p>
                                 <p className="text-[var(--ink-mid)]">想知道因果卻用問卷（只能看相關）；想知道感受卻用是非題（要訪談才深）</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">④ 文獻沒對話</p>
+                                <p className="text-[var(--ink-mid)]">3 篇都重複同一觀點 / 沒比較專家差異 / 沒講跟本研究的關係</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">⑤ APA 格式錯誤</p>
+                                <p className="text-[var(--ink-mid)]">引用格式不對 / 缺資訊（年、卷、頁碼）/ 3 篇格式不一致</p>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                <p className="font-bold text-[var(--ink)]">⑥ 進度落後或太籠統</p>
+                                <p className="text-[var(--ink-mid)]">計畫書章節停在某段沒進展 / 工具實體還沒做出來 / 進度寫得太抽象</p>
                             </div>
                         </div>
                     </div>
@@ -384,8 +382,9 @@ const W12Page = () => {
                         <div className="bg-white border border-[#10B981]/40 rounded-[6px] p-2.5">
                             <p className="font-bold text-[#065F46] mb-1">✅ 接受的建議寫法</p>
                             <ul className="text-[#047857] leading-[1.8] list-disc pl-4 space-y-0.5">
-                                <li>「建議把 Q5 拆兩題，你問的是兩件事（漏洞②）」</li>
-                                <li>「Plan B 要寫期限——『改線上訪談』要訂 W13 中前完成（漏洞④）」</li>
+                                <li>「題目「XX 行為」太抽象，建議改成可觀察的指標（漏洞①）」</li>
+                                <li>「文獻 1 跟 3 都講同一件事，建議換一篇對立觀點（漏洞④）」</li>
+                                <li>「APA 缺卷期頁碼——格式：作者(年)。篇名。期刊, 卷(期), 頁碼（漏洞⑤）」</li>
                             </ul>
                         </div>
                         <div className="bg-white border border-[#DC2626]/40 rounded-[6px] p-2.5">
@@ -438,10 +437,10 @@ const W12Page = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                         {[
-                                            '上台 3 分鐘短報自己的研究進度（題目+方法+Pilot+進度+Plan B）',
+                                            '上台 3 分鐘短報自己的研究進度（題目 / 動機 / 方法 / 3 篇文獻 / 目前進度）',
                                             '聽完 12 組短報並用 Form 給每組具體回饋',
                                             '整理「聽別組學到什麼」並轉成自己組要改的事',
-                                            '接住老師當場 5 維 × 4 級評分，識別自己的弱項',
+                                            '接住老師當場 4 維 × 4 級評分，識別自己的弱項',
                         ].map((item, i) => (
                             <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                 <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
@@ -464,7 +463,7 @@ const W12Page = () => {
                     </div>
                     <ul className="text-[12.5px] text-white/85 leading-[1.95] space-y-1 pl-4">
                         <li>・依 W12 同儕回饋 + 老師評分修工具</li>
-                        <li>・施測進度衝刺（依你今天的 Plan B 啟動條件）</li>
+                        <li>・施測進度衝刺（如進度落後請找老師討論補救方案）</li>
                         <li>・W13 資料關帳清洗 → 進 W14 圖表分析</li>
                     </ul>
                 </div>
