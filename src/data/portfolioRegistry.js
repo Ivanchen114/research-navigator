@@ -201,7 +201,6 @@ export const PORTFOLIO_REGISTRY = [
       { key: 'w11-pilot-self-check', label: 'Pilot 紀錄品質自檢', question: '勾完才能進工具修正——我寫的回饋是真的、我自己觀察到的問題用自己的話寫' },
       { key: 'w11-tool-final-revision', label: '工具第二輪修正', question: '根據 Pilot 回饋要改載具的哪幾點' },
       { key: 'w11-ethics-self-review', label: '倫理四原則 · 小組實踐紀錄', question: '對照四原則（知情同意/保密/不傷害/自願）我們組的研究分別怎麼做' },
-      { key: 'w11-teacher-stamp', label: '教師倫理審查蓋章', question: '老師當面審完工具+知情同意+四問後蓋章紀錄' },
     ],
   },
   {

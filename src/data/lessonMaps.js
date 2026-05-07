@@ -1633,16 +1633,16 @@ export const W11Data = {
         },
         {
             prefix: "③",
-            title: "倫理審查 + 教師蓋章",
-            subtitle: "四問自查 + 知情同意書精修",
-            desc: "知情/隱私/不傷害/自願；秘密按鈕（⚖ 點 5 次）觸發教師審查",
+            title: "倫理四原則自查",
+            subtitle: "對照小組設計實踐",
+            desc: "知情/隱私/不傷害/自願——對照四原則，記錄這四個在自己研究要怎麼實踐",
             colorConfig: "g"
         },
         {
             prefix: "④",
-            title: "工具繳交 + 蓋章",
-            subtitle: "Classroom 繳工具 + 教師蓋章補蓋",
-            desc: "工具實體（Form／訪綱／紀錄表）連結貼到 Classroom；沒抽到的組課後 Classroom 補蓋",
+            title: "工具繳交",
+            subtitle: "Classroom 繳工具實體 + 上課歷程 docx",
+            desc: "工具實體（Form／訪綱／紀錄表）連結 + 一鍵匯出歷程 docx 一起貼到 Classroom；老師收回統一給回饋",
             colorConfig: "y"
         }
     ],
@@ -1733,23 +1733,13 @@ export const W11Data = {
                 },
                 {
                     timeStart: "0:35",
-                    timeEnd: "0:42",
-                    duration: "7 min",
+                    timeEnd: "0:45",
+                    duration: "10 min",
                     colorClass: "c4",
                     icon: "⚖",
-                    title: "八、 Step 5 倫理四問 + 知情同意書精修",
-                    desc: "知情同意／隱私／不傷害／自願逐一具體答；翻出 W10 初稿，對著 Pilot 觀察修用詞、補說明，定稿後拿給老師檢查。",
-                    tags: ["四問", "純人工修", "對 Pilot 改"]
-                },
-                {
-                    timeStart: "0:42",
-                    timeEnd: "0:45",
-                    duration: "3 min",
-                    colorClass: "c4",
-                    icon: "✅",
-                    title: "九、 Step 5 教師倫理審查（秘密按鈕）",
-                    desc: "老師當面看完計畫書 + 倫理紀錄，連續點 ⚖ 5 次 → 輸入姓名 → 學生端顯示「已通過」。",
-                    tags: ["⚖ 點 5 次", "教師蓋章"]
+                    title: "八、 Step 5 倫理四原則自查",
+                    desc: "對照知情同意／隱私／不傷害／自願四原則，回頭審查小組的研究設計，記錄這四個在自己研究要怎麼實踐（合併一格紀錄、不拆四題）。",
+                    tags: ["四原則", "小組設計實踐"]
                 },
                 {
                     timeStart: "0:45",
@@ -1757,9 +1747,9 @@ export const W11Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🛫",
-                    title: "十、 Step 6 收尾：蓋章補蓋 + 工具實體繳交 + W12 預告",
-                    desc: "5 min 內完成：① 教師蓋章（沒抽到→Classroom 補蓋）② 工具實體連結貼到 Classroom 本週作業 ③ 看 W12 預告。Plan B / 動員宣告等 W12 老師問再口頭討論。",
-                    tags: ["教師蓋章", "工具繳交", "W12 預告"]
+                    title: "九、 Step 6 收尾：工具實體繳交 + W12 預告",
+                    desc: "5 min 內完成：① 工具實體連結貼到 Classroom 本週作業 ② 一鍵匯出網頁歷程 docx 一起貼（含 Pilot 紀錄、第二輪修正、倫理四原則）③ 看 W12 預告。老師收回工具書統一給回饋。",
+                    tags: ["工具繳交", "歷程匯出", "W12 預告"]
                 }
             ]
         }
@@ -1773,12 +1763,12 @@ export const W11Data = {
         {
             icon: "🧪",
             label: "Pilot 發現",
-            text: "座位表 1 對 1 跨方法雙向紀錄<br><small style=\"font-size:11px;color:#888;\">當研究者 + 當受測者反思</small>"
+            text: "座位表 1 對 1 跨方法 Pilot<br><small style=\"font-size:11px;color:#888;\">當研究者紀錄 + 自我檢核</small>"
         },
         {
             icon: "⚖",
             label: "倫理審查",
-            text: "四問自查 + 知情同意定稿 + 教師蓋章<br><small style=\"font-size:11px;color:#888;\">秘密按鈕：⚖ 點 5 次</small>"
+            text: "倫理四原則 · 小組實踐紀錄<br><small style=\"font-size:11px;color:#888;\">老師收回工具書統一給回饋</small>"
         },
         {
             icon: "🛫",
@@ -1810,20 +1800,20 @@ export const W12Data = {
             prefix: "①",
             title: "各組期中短報",
             subtitle: "3 min Pitch + 1 min QA",
-            desc: "5 段內容：題目+動機 / 方法+工具 / Pilot 共識 / 進度 / 預期+Plan B",
+            desc: "5 段內容：題目 / 動機 / 方法+工具 / 文獻探討 3 篇 / 進度（含預期蒐集）",
             colorConfig: "r"
         },
         {
             prefix: "②",
             title: "全班同儕回饋 Form",
-            subtitle: "5 漏洞選擇 + 30 字建議 + 30 字學到什麼",
+            subtitle: "6 漏洞選擇 + 30 字建議 + 30 字學到什麼",
             desc: "每位同學聽 12 組各填一次；老師當場投影回饋分布",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "老師當場評分（5 維 × 4 級 = 20 分）",
-            subtitle: "計畫書 / 工具 / Pilot / Plan B / 報告",
+            title: "老師當場評分（4 維 × 4 級 = 16 分）",
+            subtitle: "計畫書 / 工具 / Pilot 紀錄 / 報告清晰度",
             desc: "≤12 分組 W13 前要找老師談；公開壓力槓桿督促進度",
             colorConfig: "g"
         }
@@ -1910,7 +1900,7 @@ export const W12Data = {
         {
             icon: "⭐",
             label: "老師評分",
-            text: "5 維 × 4 級 = 20 分<br><small style=\"font-size:11px;color:#888;\">當場給分；督促 W13 前修正</small>"
+            text: "4 維 × 4 級 = 16 分<br><small style=\"font-size:11px;color:#888;\">當場給分；督促 W13 前修正</small>"
         },
         {
             icon: "📤",

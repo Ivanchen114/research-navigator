@@ -1302,10 +1302,10 @@ export const W11Page = () => {
                 duration={`${W11Data.duration} 分鐘 · ${W11Data.durationDesc}`}
                 tasks={[
                     '工具實體化（題目 → Google Form / 訪綱卡 / 紀錄表）',
-                    '座位表 1 對 1 跨方法 Pilot — 雙向紀錄 + 自我檢核',
-                    '倫理審查 + 教師蓋章 → 啟動施測',
+                    '座位表 1 對 1 跨方法 Pilot — 紀錄 + 自我檢核',
+                    '倫理四原則自查 → 啟動施測',
                 ]}
-                exportReminder="Classroom 繳交工具 + 等老師蓋章 → 正式啟動施測"
+                exportReminder="Classroom 繳交工具實體連結 + 上課歷程 docx → 老師收回統一給回饋"
             />
 
             {/* STEP ENGINE */}

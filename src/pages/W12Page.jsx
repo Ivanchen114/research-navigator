@@ -189,7 +189,7 @@ const W12Page = () => {
                 duration={`${W12Data.duration} 分鐘 · ${W12Data.durationDesc}`}
                 tasks={[
                     '各組期中短報 — 3 min Pitch + 1 min QA',
-                    '全班同儕回饋 Form — 5 漏洞選擇 + 30 字建議 + 30 字學到什麼',
+                    '全班同儕回饋 Form — 6 漏洞勾選 + 30 字建議 + 30 字學到什麼',
                     '老師當場評分（4 維 × 4 級 = 16 分）',
                 ]}
                 exportReminder="收齊同儕回饋 → 下週調整研究設計依據"
@@ -205,7 +205,7 @@ const W12Page = () => {
                         <div>
                             <p className="text-[15px] font-bold text-[#991B1B] mb-2">⏰ 上課前先確認三件事</p>
                             <ol className="text-[12.5px] text-[#7F1D1D] leading-[1.85] list-decimal pl-5 space-y-1">
-                                <li>全組已在 W11-W12 之間自約 30 min 合議出 Pilot 共識發現</li>
+                                <li>全組已在 W11-W12 之間自約 30 min 合議完研究設計（題目 / 動機 / 方法 / 文獻 3 篇 / 進度 / 預期蒐集）</li>
                                 <li>組長已在 <strong>今天 8:00 前</strong>填好短報 Google Form（沒填 = D 維度直接扣 4 分）</li>
                                 <li>每位同學手機 / 筆電上課準備好——課堂內要填同儕回饋 Form 12 次</li>
                             </ol>
@@ -280,22 +280,6 @@ const W12Page = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
-
-                {/* 小組合議鷹架 */}
-                <div className="p-4 rounded-[var(--radius-unified)] bg-[#FFFBEB] border-2 border-[#D97706]">
-                    <p className="text-[14px] font-bold text-[#92400E] mb-2">🪜 Pilot 共識合議鷹架（W11 結束後 30 min 自約完成）</p>
-                    <p className="text-[12.5px] text-[#78350F] leading-[1.85] mb-3">
-                        小組 4 人各自跨方法 1 對 1 Pilot、partner 不同、發現各異——「合議」就是把這些攤開找共通模式：
-                    </p>
-                    <ol className="text-[12.5px] text-[#78350F] leading-[1.85] list-decimal pl-5 space-y-1.5">
-                        <li><strong>攤開</strong>：每人從 W11 Step 3 自己寫的「最卡的+次卡的」拿出來（10 min）——<strong>4 人合計會有 8 個發現</strong></li>
-                        <li><strong>找共識</strong>：哪個發現「不只我這個 partner 卡住、別人 partner 也類似」？這就是工具弱點，不是個人偏差（10 min）</li>
-                        <li><strong>寫共識（200 字內）</strong>：「我們組共通弱點是 [X]、證據 [A 同學 B 同學 partner 都卡題 5]、已修正 [改成 ___]」（10 min）</li>
-                    </ol>
-                    <p className="text-[11.5px] text-[#92400E] italic mt-2 pt-2 border-t border-[#D97706]/30">
-                        💡 全組覺得「都沒發現」？回 W11 Step 3 用「AI 反向質問鷹架」——AI 一定挑得出 3 點。
-                    </p>
                 </div>
 
                 {/* 評分基準 */}
