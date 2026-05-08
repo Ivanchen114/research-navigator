@@ -18,7 +18,7 @@ const METHOD_COLORS = {
     '實驗法':   { dot: 'bg-rose-400',   text: 'text-rose-400',   border: 'border-rose-700/40' },
 };
 
-const REQUIRED_WEEK = 7; // W7 研究診所結束後解鎖
+const REQUIRED_WEEK = 4; // W4 方法地圖結束後解鎖（5 種研究方法概念到位即可進場演練）
 
 export const PhantomDataHub = () => {
     const navigate = useNavigate();
@@ -111,14 +111,14 @@ export const PhantomDataHub = () => {
                         <div className="flex-1">
                             <div className="font-mono text-xs text-amber-400 tracking-widest mb-1">CASE FILE LOCKED</div>
                             <p className="text-slate-300 text-sm leading-relaxed">
-                                本案調查需要先完成 <strong className="text-amber-300">W7 研究診所</strong> 的方法選擇訓練。
-                                完成後，所有五章將同步開放，可依個人節奏調查。
+                                本案調查需要先完成 <strong className="text-amber-300">W4 方法地圖</strong>，
+                                掌握 5 種研究方法（觀察 / 訪談 / 問卷 / 文獻 / 實驗）的判斷後，所有五章將同步開放，可依個人節奏調查。
                             </p>
                             <button
-                                onClick={() => navigate('/w7')}
+                                onClick={() => navigate('/w4')}
                                 className="mt-3 inline-flex items-center gap-2 text-xs font-mono text-amber-400 hover:text-amber-300 transition-colors"
                             >
-                                前往 W7 研究診所 <ChevronRight size={12} />
+                                前往 W4 方法地圖 <ChevronRight size={12} />
                             </button>
                         </div>
                     </div>

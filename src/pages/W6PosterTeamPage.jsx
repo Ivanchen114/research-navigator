@@ -853,6 +853,73 @@ export const W6PosterTeamPage = () => {
                                 </p>
                             </div>
 
+                            {/* Solo 5 項完整範本（卡關時開來看 1 個學生長什麼樣）*/}
+                            <details className="rounded-[var(--radius-unified)] border border-[#D97706] bg-[#FFFBEB] overflow-hidden">
+                                <summary className="cursor-pointer px-4 py-3 hover:bg-[#FEF3C7] transition-colors flex items-center gap-2">
+                                    <span className="text-[14px]">📖</span>
+                                    <span className="text-[12.5px] font-bold text-[#92400E]">想看別人 5 項怎麼寫？開來看 Yuki 的完整範本</span>
+                                    <span className="ml-auto text-[10px] font-mono text-[#92400E]">▼</span>
+                                </summary>
+                                <div className="border-t border-[#FCD34D] p-4 bg-white space-y-3 text-[12.5px] leading-relaxed">
+                                    <div className="bg-[var(--paper-warm)] rounded-[6px] p-3 border border-[var(--border)]">
+                                        <p className="text-[11px] font-mono text-[var(--ink-mid)] mb-1">範例學生</p>
+                                        <p className="text-[14px] font-bold text-[var(--ink)]">Yuki（高一）</p>
+                                        <p className="text-[11.5px] text-[var(--ink-mid)] italic mt-1">題目：「我自己這 3 年補習經歷怎麼改變我的讀書方法」</p>
+                                        <p className="text-[11px] text-[var(--ink-light)] italic mt-1">方法：自我訪談 + 寫個人日記（自己當研究對象）</p>
+                                    </div>
+
+                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                        <p className="font-bold text-[#92400E] mb-1">① 為什麼非 Solo 不可</p>
+                                        <p className="text-[var(--ink-mid)]">我研究的是「<strong className="text-[var(--ink)]">我自己</strong>」這 3 年怎麼變的。別人沒辦法跟我一起當受訪者——我就是那個研究對象。如果合題變成「補習對高中生的影響」就稀釋了我想知道的「我內在怎麼變」，研究意義會不一樣。</p>
+                                    </div>
+
+                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                        <p className="font-bold text-[#92400E] mb-1">② 一個人扛 4 章的時間規劃</p>
+                                        <ul className="text-[var(--ink-mid)] list-disc list-inside space-y-0.5">
+                                            <li>W7-W8：找「補習文化／自我反思」相關文獻（約 6 小時）</li>
+                                            <li>W9：寫回憶大綱——從國一到高一，列關鍵事件時間軸（3 小時）</li>
+                                            <li>W10-W11：每天回想 30 分鐘，寫日記（共 14 篇）</li>
+                                            <li>W12-W13：把日記整理成 3-5 個「轉折點」（4 小時）</li>
+                                            <li>W14：分析每個轉折點對讀書方法的影響（5 小時）</li>
+                                            <li>W15-W17：寫結論 + 發表準備（8 小時）</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                        <p className="font-bold text-[#92400E] mb-1">③ 三大風險</p>
+                                        <ul className="text-[var(--ink-mid)] list-disc list-inside space-y-0.5">
+                                            <li><strong className="text-[var(--ink)]">A 自己回憶不準</strong>（機率高／衝擊中）→ 翻補習班舊發票、筆記、課表、班級合照當佐證</li>
+                                            <li><strong className="text-[var(--ink)]">B 寫到一半發現太私密不想公開</strong>（機率中／衝擊高）→ 第 1 週先列「可公開／不可公開」清單，劃清楚邊界</li>
+                                            <li><strong className="text-[var(--ink)]">C 沒人檢驗我的詮釋對不對</strong>（機率高／衝擊高）→ 找導師當第二讀者，每兩週給他看一次</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                        <p className="font-bold text-[#92400E] mb-1">④ 求援計畫——卡住找誰</p>
+                                        <ul className="text-[var(--ink-mid)] list-disc list-inside space-y-0.5">
+                                            <li>題目卡關 → 找導師（每週一晚自習找他 15 分鐘）</li>
+                                            <li>方法卡關（不知道日記怎麼寫才有研究感）→ 找研究方法老師（週四 office hour）</li>
+                                            <li>心態卡關（寫不下去）→ 找朋友小白聊（週末約咖啡店）</li>
+                                            <li><strong className="text-[var(--ink)]">承諾卡 5 天就求援，不硬撐</strong></li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
+                                        <p className="font-bold text-[#92400E] mb-1">⑤ Plan B——做不下去的退路</p>
+                                        <ul className="text-[var(--ink-mid)] list-disc list-inside space-y-0.5">
+                                            <li><strong className="text-[var(--ink)]">原計畫</strong>：用日記+回憶大綱寫自己 3 年補習史</li>
+                                            <li><strong className="text-[var(--ink)]">切 Plan B 觸發條件</strong>：寫到第 5 週還寫不出 3 個關鍵轉折點</li>
+                                            <li><strong className="text-[var(--ink)]">Plan B 題目</strong>：改訪談 3-5 位有補習經驗的高中同學，做質性比較</li>
+                                            <li><strong className="text-[var(--ink)]">Plan B 方法</strong>：訪談法（比自我民族誌簡單，編碼方法有書可參考）</li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="bg-[var(--accent-light)] border-l-3 border-[var(--accent)] p-3 rounded-r-[6px] text-[12px] text-[var(--ink)] leading-relaxed">
+                                        💡 <strong>關鍵：別抄這份</strong>——你的題目不一樣，5 項內容必須換成你的。但「**寫得多具體**」的程度可以參考 Yuki——時間有週次、風險有機率、求援有對象 + 觸發條件。
+                                    </div>
+                                </div>
+                            </details>
+
                             {SOLO_REQUIREMENTS.map((req, i) => (
                                 <div key={req.id}>
                                     <div className="bg-[#fef3c7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] mb-2">

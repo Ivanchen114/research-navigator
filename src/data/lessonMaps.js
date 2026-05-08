@@ -760,7 +760,7 @@ export const W5Data = {
                     tags: ["概念講解", "範例對照"]
                 },
                 {
-                    timeStart: "0:15", timeEnd: "0:25", duration: "10 min",
+                    timeStart: "0:15", timeEnd: "0:24", duration: "9 min",
                     colorClass: "c1", icon: "⚠️",
                     title: "三、 三件事檢核（三大卡）+ 對錯例討論",
                     desc: "可測量／有正反例／前後一致——三大卡並列，每張對／錯例配對，挑 1-2 張現場討論。",
@@ -768,16 +768,24 @@ export const W5Data = {
                     keyPoint: "⚠️ 三件事缺一都會讓研究數據打架，這是後面寫工具的地基。"
                 },
                 {
-                    timeStart: "0:25", timeEnd: "0:45", duration: "20 min",
+                    timeStart: "0:24", timeEnd: "0:29", duration: "5 min",
+                    colorClass: "c2", icon: "📝",
+                    title: "四、 集體共寫示範｜「上課專心」一題",
+                    desc: "從『讀範例』到『自己寫』的鷹架。老師帶全班跑「上課專心」一題（觀察法）：抽核心概念→寫操作型定義→列正反例→三件事檢核。展開卡 4 步驟。",
+                    tags: ["師生共寫", "鷹架"],
+                    keyPoint: "💡 沒做這段，下半節弱生會在第一格就卡住。"
+                },
+                {
+                    timeStart: "0:29", timeEnd: "0:44", duration: "15 min",
                     colorClass: "c4", icon: "🧰",
-                    title: "四、 5 法操作型定義策略——學生分流自學",
+                    title: "五、 5 法操作型定義策略——學生分流自學",
                     desc: "5 法 tabs：學生點開自己 W4 主方法那張深讀（公式 + 描述 + 範例），再看 1 張輔助方法（如有）。文獻分析學生看 4 子類型範例。",
                     tags: ["互動 tabs", "個別分流"]
                 },
                 {
-                    timeStart: "0:45", timeEnd: "0:50", duration: "5 min",
+                    timeStart: "0:44", timeEnd: "0:50", duration: "6 min",
                     colorClass: "c5", icon: "🔁",
-                    title: "五、 換場 + 第二節預告",
+                    title: "六、 換場 + 第二節預告",
                     desc: "「下半節你的題目要動手了」——預告 Step 4 三格寫作。",
                     tags: ["換場", "預告"]
                 }
@@ -792,43 +800,50 @@ export const W5Data = {
                 {
                     timeStart: "0:00", timeEnd: "0:05", duration: "5 min",
                     colorClass: "c3", icon: "🎯",
-                    title: "六、 暖機 + 帶入卡再次調出",
+                    title: "七、 暖機 + 帶入卡再次調出",
                     desc: "讀一遍 W4 帶入的「題目 + 主方法」，確認三格要寫什麼。",
                     tags: ["連貫鏈", "目標聚焦"]
                 },
                 {
-                    timeStart: "0:05", timeEnd: "0:25", duration: "20 min",
+                    timeStart: "0:05", timeEnd: "0:06", duration: "1 min",
+                    colorClass: "c4", icon: "🎯",
+                    title: "八、 核心概念抽取暖身（3 題範例）",
+                    desc: "Step 4 開頭的展開卡——3 個範例題目，學生心裡圈核心概念再展開揭曉。避免在第一格直接卡死。",
+                    tags: ["暖身", "鷹架"]
+                },
+                {
+                    timeStart: "0:06", timeEnd: "0:25", duration: "19 min",
                     colorClass: "c2", icon: "✍️",
-                    title: "七、 寫三格——核心概念 + 操作型定義 + 正反例",
+                    title: "九、 寫三格——核心概念 + 操作型定義 + 正反例",
                     desc: "ThinkRecord 連寫三格。placeholder/scaffold 會根據 W4 方法動態切換對應範例。",
                     tags: ["個人實作", "兌現點"],
                     keyPoint: "⚠️ 寫一次、用三次：W7-W8 計畫書、W9 工具設計都會用到。"
                 },
                 {
-                    timeStart: "0:25", timeEnd: "0:32", duration: "7 min",
+                    timeStart: "0:25", timeEnd: "0:31", duration: "6 min",
                     colorClass: "c5", icon: "🗣️",
-                    title: "八、 同儕挑戰——正反例分得開嗎",
+                    title: "十、 同儕挑戰——正反例分得開嗎",
                     desc: "兩兩交換唸自己的核心概念 + 操作型定義。對方用「正反例分得開嗎？」挑戰。分不開就回頭修。",
                     tags: ["同儕對話", "口頭驗證"]
                 },
                 {
-                    timeStart: "0:32", timeEnd: "0:40", duration: "8 min",
+                    timeStart: "0:31", timeEnd: "0:40", duration: "9 min",
                     colorClass: "c5", icon: "💭",
-                    title: "九、 反思——模糊→可測最難的轉化",
+                    title: "十一、 反思——模糊→可測最難的轉化",
                     desc: "1 題反思：把抽象變可測，最難的是什麼？怎麼克服？（後設認知收束）",
                     tags: ["後設認知", "反思"]
                 },
                 {
                     timeStart: "0:40", timeEnd: "0:48", duration: "8 min",
                     colorClass: "c5", icon: "🤖",
-                    title: "十、 AIRED（optional）+ 檢核清單走讀",
+                    title: "十二、 AIRED（optional）+ 檢核清單走讀",
                     desc: "AI-RED 敘事紀錄（操作型定義可能用 AI 發散候選版本）+ 本週檢核清單 4 項打勾。",
                     tags: ["AIRED", "檢核"]
                 },
                 {
                     timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
                     colorClass: "c3", icon: "🏁",
-                    title: "十一、 ExportButton 匯出 + W6 預告",
+                    title: "十三、 ExportButton 匯出 + W6 預告",
                     desc: "一鍵複製本週紀錄貼 Google Classroom。預告 W6 海報博覽會 + 組隊（操作型定義是海報必填內容）。",
                     tags: ["成果繳交", "下週預告"]
                 }

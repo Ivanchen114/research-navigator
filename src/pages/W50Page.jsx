@@ -544,7 +544,7 @@ export const W50Page = () => {
                                     </div>
 
                                     <ThinkRecord
-                                        dataKey={`w5-forensic-${card.id.toLowerCase()}`}
+                                        dataKey={`w7-forensic-${card.id.toLowerCase()}`}
                                         prompt={`證物 ${card.id}：你判定什麼等級？理由是什麼？你怎麼查證的？`}
                                         scaffold={[`我判定是…級，因為…`, '我的查核路徑：…']}
                                         rows={3}

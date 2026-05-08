@@ -38,7 +38,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #02',
-        tags: ['W5', '文獻鑑識', '學術誠信'],
+        tags: ['W8', '文獻鑑識', '學術誠信'],
         id: 'citation-detective',
         title: "行動代號：獵狐",
         difficulty: 4.5,
@@ -53,7 +53,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #03',
-        tags: ['W3-W5', '方法快篩', '裝備盤點'],
+        tags: ['W4', '方法快篩', '裝備盤點'],
         id: 'tool-quiz',
         title: "行動代號：裝備",
         difficulty: 2.0,
@@ -68,7 +68,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #04',
-        tags: ['W8-W9', '研究設計', '避險測試'],
+        tags: ['W9', '研究設計', '避險測試'],
         id: 'rx-inspector',
         title: "行動代號：防線",
         difficulty: 3.5,
@@ -83,7 +83,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #05',
-        tags: ['W13', '圖表選擇', '資訊呈現'],
+        tags: ['W14', '圖表選擇', '資訊呈現'],
         id: 'chart-matcher',
         title: "行動代號：解碼",
         difficulty: 3.0,
@@ -98,7 +98,7 @@ const RIB_MISSIONS = [
     },
     {
         caseCode: 'CASE #06',
-        tags: ['W14', '數據解讀', '批判思考'],
+        tags: ['W15', '數據解讀', '批判思考'],
         id: 'data-detective',
         title: "行動代號：濾鏡",
         difficulty: 5.0,

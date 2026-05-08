@@ -18,6 +18,7 @@ const LiteratureReview = lazy(() => import('./pages/LiteratureReview').then(m =>
 const W9Page = lazy(() => import('./pages/W9Page').then(m => ({ default: m.W9Page ?? m.default })));
 const ToolRefinementPage = lazy(() => import('./pages/ToolRefinementPage').then(m => ({ default: m.ToolRefinementPage ?? m.default })));
 const MethodToolbookPage = lazy(() => import('./pages/MethodToolbookPage').then(m => ({ default: m.MethodToolbookPage ?? m.default })));
+const OperationalizePage = lazy(() => import('./pages/OperationalizePage').then(m => ({ default: m.OperationalizePage ?? m.default })));
 const W11Page = lazy(() => import('./pages/W11Page').then(m => ({ default: m.W11Page ?? m.default })));
 const W12Page = lazy(() => import('./pages/W12Page').then(m => ({ default: m.W12Page ?? m.default })));
 const W13AutonomyPage = lazy(() => import('./pages/W13AutonomyPage').then(m => ({ default: m.W13AutonomyPage ?? m.default })));
@@ -86,6 +87,7 @@ function App() {
             <Route path="w17" element={<W17Page />} />
 
             <Route path="tools/methods" element={<MethodToolbookPage />} />
+            <Route path="tools/operationalize" element={<OperationalizePage />} />
 
             <Route path="games" element={<GameHub />} />
             <Route path="game/question-er" element={<QuestionERGame />} />

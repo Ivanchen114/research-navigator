@@ -335,6 +335,92 @@ export const W5MeasurePage = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* 集體共寫示範｜上課專心 — 從讀範例到動手中間的鷹架 */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                            <span className="text-[14px]">📝</span>
+                            <span className="font-bold text-[14px]">集體共寫示範　·　跟著老師跑一題：「上課專心」</span>
+                            <span className="ml-auto text-[10px] font-mono opacity-80 tracking-wider">5 MIN</span>
+                        </div>
+                        <div className="p-5 space-y-3">
+                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                                下半節要寫自己題目前——先看老師完整跑一題。題目選大家都熟的「<strong className="text-[var(--ink)]">上課專心</strong>」，假設用 <strong>👀 觀察法</strong>。展開順序：① 抽核心概念 → ② 寫操作型定義 → ③ 列正反例 → ④ 三件事檢核。
+                            </p>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] font-bold cursor-pointer hover:bg-[var(--accent-light)]">
+                                    <span className="text-[var(--accent)] mr-2">①</span>抽核心概念
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)]">
+                                    <p><strong className="text-[var(--ink)]">老師問</strong>：「上課專心」這個句子裡，**最抽象、最沒辦法直接看到**的是哪個詞？</p>
+                                    <p className="mt-1.5"><strong className="text-[var(--ink)]">學生答</strong>：「專心」。</p>
+                                    <p className="mt-1.5"><strong className="text-[var(--ink)]">核心概念</strong>：<span className="bg-[var(--accent-light)] px-2 py-0.5 rounded">專心</span>（不是「上課」「老師」「同學」——那些是條件，不是要測的東西）</p>
+                                </div>
+                            </details>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] font-bold cursor-pointer hover:bg-[var(--accent-light)]">
+                                    <span className="text-[var(--accent)] mr-2">②</span>用觀察法寫操作型定義
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)] space-y-1.5">
+                                    <p><strong className="text-[var(--ink)]">套公式</strong>：行為類別 + 正反例 ＝ 操作型定義</p>
+                                    <p className="bg-white px-3 py-2 rounded-[4px] border border-[var(--border)]">
+                                        <strong className="text-[var(--ink)]">行為類別</strong>：視線停留在老師／黑板／課本連續 ≥ 10 秒，且**沒有**滑手機、趴睡、與旁人交談的動作。
+                                    </p>
+                                    <p className="text-[11.5px] italic text-[var(--ink-light)]">為什麼設「≥ 10 秒」？因為 1-2 秒可能只是抬頭，不算專心；10 秒以上才是有意識的注視。</p>
+                                </div>
+                            </details>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] font-bold cursor-pointer hover:bg-[var(--accent-light)]">
+                                    <span className="text-[var(--accent)] mr-2">③</span>列正反例（誰來分都該分對）
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)] grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div className="bg-[var(--success-light)] border border-[var(--success)]/30 rounded-[4px] p-2">
+                                        <div className="text-[10px] font-mono font-bold text-[var(--success)] uppercase tracking-wider mb-1">✅ 正例（算專心）</div>
+                                        <ul className="list-disc list-inside text-[12px] space-y-0.5">
+                                            <li>抄筆記同時眼睛看黑板</li>
+                                            <li>舉手發問</li>
+                                            <li>盯著老師示範</li>
+                                        </ul>
+                                    </div>
+                                    <div className="bg-[#FEF2F2] border border-[var(--danger)]/30 rounded-[4px] p-2">
+                                        <div className="text-[10px] font-mono font-bold text-[var(--danger)] uppercase tracking-wider mb-1">❌ 反例（不算專心）</div>
+                                        <ul className="list-disc list-inside text-[12px] space-y-0.5">
+                                            <li>滑手機（即使課本攤開）</li>
+                                            <li>趴桌睡覺</li>
+                                            <li>跟同學講話 ≥ 5 秒</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] font-bold cursor-pointer hover:bg-[var(--accent-light)]">
+                                    <span className="text-[var(--accent)] mr-2">④</span>三件事檢核（3/3 都過才算 OK）
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)] space-y-1">
+                                    <p>✅ <strong>可測量</strong>：用碼表+紀錄表計次（不是主觀打分）</p>
+                                    <p>✅ <strong>有正反例</strong>：上面 ③ 已列三正三反</p>
+                                    <p>✅ <strong>前後一致</strong>：整節課用同一定義（不能因為下半節老師上課方式變了就改）</p>
+                                </div>
+                            </details>
+
+                            <div className="bg-[var(--gold-light)] border-l-3 border-[var(--gold)] p-3 rounded-r-[6px] text-[12px] text-[var(--ink)] leading-relaxed">
+                                💡 <strong>看完老師示範，下半節寫你自己的題目時這樣跑</strong>——把「上課專心」換成你題目裡那個最抽象的詞。同樣 4 步驟。
+                            </div>
+
+                            <div className="bg-[var(--accent-light)] border border-[var(--accent)] rounded-[6px] p-3 text-[12px] text-[var(--ink)] leading-relaxed flex items-start gap-2">
+                                <span className="text-[16px]">📚</span>
+                                <div className="flex-1">
+                                    <strong className="text-[var(--ink)]">想看更多範例？</strong>「上課專心」其實還有更嚴謹的版本，加上 5 法各 2-3 個範例（共 12 個）——
+                                    <Link to="/tools/operationalize" className="text-[var(--accent)] font-bold hover:underline ml-1">📐 操作型定義範例庫</Link>
+                                    <span className="text-[var(--ink-light)] ml-1">（自學）</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ),
         },
@@ -436,6 +522,53 @@ export const W5MeasurePage = () => {
                             )}
                         </div>
                     )}
+
+                    {/* 核心概念抽取暖身——避免學生在第一格就卡死 */}
+                    <div className="bg-white border-2 border-[var(--gold)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="px-5 py-3 bg-[var(--gold)] text-white flex items-center gap-2">
+                            <span className="text-[14px]">🎯</span>
+                            <span className="font-bold text-[14px]">寫之前先暖身：核心概念抽取（1 分鐘）</span>
+                        </div>
+                        <div className="p-5 space-y-3">
+                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                                在你動筆寫自己題目之前，先看下面 3 個範例題目——**心裡圈一下核心概念在哪**，再展開看答案。
+                            </p>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] cursor-pointer hover:bg-[var(--gold-light)]">
+                                    <strong className="text-[var(--ink)]">範例 ①</strong>　高一段考前一週的夜間滑手機時數與翌日上課專注力之相關性
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)]">
+                                    <p>核心概念：<span className="bg-[var(--gold-light)] px-2 py-0.5 rounded font-bold text-[var(--ink)]">夜間滑手機時數</span>＋<span className="bg-[var(--gold-light)] px-2 py-0.5 rounded font-bold text-[var(--ink)]">上課專注力</span>（**兩個都要操作化**）</p>
+                                    <p className="mt-1.5 text-[11.5px] italic text-[var(--ink-light)]">不是「高一」「段考前」「翌日」——那些是條件／時間範圍，不是要測的東西。</p>
+                                </div>
+                            </details>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] cursor-pointer hover:bg-[var(--gold-light)]">
+                                    <strong className="text-[var(--ink)]">範例 ②</strong>　高中生使用 IG 對自我形象認知的影響
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)]">
+                                    <p>核心概念：<span className="bg-[var(--gold-light)] px-2 py-0.5 rounded font-bold text-[var(--ink)]">IG 使用（強度／時數／類型）</span>＋<span className="bg-[var(--gold-light)] px-2 py-0.5 rounded font-bold text-[var(--ink)]">自我形象認知</span></p>
+                                    <p className="mt-1.5 text-[11.5px] italic text-[var(--ink-light)]">「影響」不是核心概念——它是兩個變項之間的**關係**，操作化要分別處理「IG 使用」跟「自我形象」。</p>
+                                </div>
+                            </details>
+
+                            <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
+                                <summary className="px-3 py-2 text-[12.5px] cursor-pointer hover:bg-[var(--gold-light)]">
+                                    <strong className="text-[var(--ink)]">範例 ③</strong>　家庭氣氛對學生選社團類型的決策歷程
+                                </summary>
+                                <div className="px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--border)]">
+                                    <p>核心概念：<span className="bg-[var(--gold-light)] px-2 py-0.5 rounded font-bold text-[var(--ink)]">家庭氣氛</span>＋<span className="bg-[var(--gold-light)] px-2 py-0.5 rounded font-bold text-[var(--ink)]">社團選擇決策歷程</span></p>
+                                    <p className="mt-1.5 text-[11.5px] italic text-[var(--ink-light)]">「決策歷程」是訪談會挖到的東西——這題明顯是訪談組。「家庭氣氛」要訂出 3-4 個面向（溝通、衝突、支持⋯）才好操作化。</p>
+                                </div>
+                            </details>
+
+                            <div className="bg-[var(--accent-light)] border-l-3 border-[var(--accent)] p-3 rounded-r-[6px] text-[12px] text-[var(--ink)] leading-relaxed">
+                                💡 <strong>抽核心概念的口訣</strong>：把題目裡那些「**沒辦法直接看到、需要再定義一次才能測**」的詞圈出來。**通常是兩個**——A 和 B 都要操作化。
+                            </div>
+                        </div>
+                    </div>
 
                     <ThinkRecord
                         dataKey="w5-core-concept"

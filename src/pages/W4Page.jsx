@@ -734,6 +734,21 @@ export const W4Page = () => {
                         feedback={THINK_CHOICES[0].feedback}
                         onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
                     />
+
+                    {/* 🎮 遊戲彩蛋入口（前移版）— 老師講完 5 方法+兩層判斷後，介紹這個遊戲讓學生自選玩 */}
+                    <div className="bg-gradient-to-br from-[#1F2937] to-[#0F172A] border-l-4 border-[var(--danger)] p-5 rounded-r-lg text-white shadow-xl max-w-[760px]">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ShieldAlert className="text-[var(--danger)]" size={20} />
+                            <h3 className="text-[15px] font-bold m-0">🎮 R.I.B. 單元挑戰｜行動代號：裝備</h3>
+                            <span className="ml-auto text-[10px] font-mono text-white/60 uppercase tracking-wider">自選遊戲</span>
+                        </div>
+                        <p className="text-[12.5px] text-white/85 mb-3 leading-relaxed">
+                            研究方法是探員的裝備——你能在時限內分辨每種方法的適用場景嗎？老師會試玩示範；想驗收 5 方法判斷的同學，自己進去玩。
+                        </p>
+                        <Link to="/game/tool-quiz" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-[12.5px] hover:opacity-90 transition-colors no-underline">
+                            進入裝備挑戰 <ArrowRight size={14} />
+                        </Link>
+                    </div>
                 </div>
             ),
         },
@@ -1118,7 +1133,7 @@ export const W4Page = () => {
                 chain="W3 你決定了題目——但「題目」不會自動變成「資料」。這週把你的題目放上方法地圖，做一個決定：要用哪一種方法去收／去問／去看？"
                 meta={[
                     { label: '課堂節奏', value: '五種方法 → 互動決策樹 → AI 測驗 → 為自己題目選路' },
-                    { label: '時長', value: '50 MINS' },
+                    { label: '時長', value: '100 MINS' },
                     { label: '課堂產出', value: '為題目選定主要方法（+ 輔助方法）並寫出理由' },
                     { label: '帶去 W5', value: '主要方法 + 選擇理由（W5 操作型定義要用）' },
                 ]}

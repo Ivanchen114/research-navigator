@@ -58,6 +58,7 @@ export const Layout = () => {
             label: '研究工具',
             items: [
                 { name: '方法工具書', path: '/tools/methods' },
+                { name: '操作型定義範例庫（自學）', path: '/tools/operationalize' },
                 { name: 'AI 協作實驗室（自學）', path: '/prompt-lab' },
                 { name: 'Prompt 範本庫（自學）', path: '/analysis-station' },
                 { name: 'AI 報告找雷挑戰', path: '/find-traps' },
