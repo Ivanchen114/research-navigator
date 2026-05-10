@@ -115,7 +115,7 @@ const W16Page = () => {
                                 ))}
                             </div>
                             <div style={{ marginTop: 12, padding: '10px 14px', background: '#FFFBEB', borderLeft: '3px solid #F59E0B', borderRadius: 4, fontSize: 12, color: '#92400E', lineHeight: 1.8 }}>
-                                ⚠️ <strong>規準五（資料完整性 10%）海報放不下原始資料</strong>——組長要把問卷原稿／訪談逐字稿／實驗紀錄壓成 zip，上傳到 GC（檔名：<code>組別_原始資料.zip</code>）。<strong>沒交直接 D。</strong>
+                                ⚠️ <strong>規準五（資料完整性 10%）海報放不下原始資料</strong>——組長要把問卷原稿／訪談逐字稿／實驗紀錄壓成 zip，上傳到 Google Classroom（檔名：<code>組別_原始資料.zip</code>）。<strong>逾期未交者該項以不及格計。</strong>
                             </div>
                         </div>
                     </div>
@@ -205,11 +205,11 @@ const W16Page = () => {
                     {/* 模板下載（只剩乾淨版）*/}
                     <div className="card" style={{ marginTop: 16, border: '2px solid var(--accent)' }}>
                         <div className="card-header" style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
-                            <Download size={16} /> 海報 PPT 模板下載
+                            <Download size={16} /> 海報 PowerPoint 模板下載
                         </div>
                         <div className="card-body">
                             <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
-                                這份就是你要動手改的<strong>乾淨版 PPT</strong>。版面已對齊 7 項規準，你只負責替換文字 + 貼上自己的核心呈現視覺，最後匯出 PDF 給老師印 A1。
+                                這份就是你要動手改的<strong>乾淨版 PPT</strong>。版面已對齊 7 項規準，你要把自己的研究內容整理進 7 個區塊，並貼上最能呈現研究發現的核心視覺，最後匯出 PDF 給老師印 A1。
                             </p>
                             <a
                                 href="/templates/research-poster-template-clean.pptx"
@@ -376,7 +376,7 @@ const W16Page = () => {
                             <div style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.95 }}>
                                 · <strong>標題吸睛改寫</strong>：把你研究題目原版貼給 AI，請它「保持原意，改成更吸引人的問句或驚人數字版」<br />
                                 · <strong>結論句精簡</strong>：把 W15 寫的結論貼給 AI，請它「壓縮成 2 句話的海報結論」<br />
-                                · <strong>圖示／配色建議</strong>：直接問 AI「這個研究主題適合什麼配色和圖示」<br />
+                                · <strong>圖示／配色建議</strong>：可以請 AI 提供視覺方向，但最後要檢查是否符合你的研究主題與資料，<strong>不要為了好看改變研究意思</strong>。<br />
                                 <span style={{ color: 'var(--ink-light)', fontStyle: 'italic' }}>⚠️ 不要叫 AI 從零生成整張海報內容——你的研究內容只有你才知道對不對。AI 只能修飾，不能取代。</span>
                             </div>
                         </div>
@@ -394,7 +394,7 @@ const W16Page = () => {
                     {/* 上課紀錄 3 欄 */}
                     <div className="card">
                         <div className="card-header">
-                            <Target size={16} /> 上課紀錄（3 格 + AIRED）
+                            <Target size={16} /> 上課紀錄（3 格 + AI-RED）
                         </div>
                         <div className="card-body">
                             <p style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.85, marginBottom: 16 }}>
@@ -432,7 +432,7 @@ const W16Page = () => {
                         </div>
                     </div>
 
-                    {/* AIRED */}
+                    {/* AI-RED */}
                     <div style={{ marginTop: 16 }}>
                         <AIREDNarrative
                             week="16"
@@ -475,7 +475,7 @@ const W16Page = () => {
                             <div style={{ fontSize: 12, lineHeight: 1.85, opacity: 0.9 }}>
                                 本週 PDF 匯出後傳給老師，老師會在 W17 前印好 A1 海報。<br />
                                 W17 上半場顧攤分享、下半場走動聆聽，每個人都會填兩份紙本學習單。<br />
-                                <strong style={{ color: '#FCD34D' }}>記得：原始資料壓縮檔（規準五）由組長代繳到 GC，沒交直接 D！</strong>
+                                <strong style={{ color: '#FCD34D' }}>記得：原始資料壓縮檔（規準五）由組長代繳到 Google Classroom，逾期未交者該項以不及格計。</strong>
                             </div>
                         </div>
                     </div>
@@ -516,7 +516,7 @@ const W16Page = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W16"
                 title="海報製作 · "
                 accentTitle="兩張 A1 把研究說清楚"
-                subtitle="期末成果不是 Word 報告，是兩張 A1 海報。本週把 W1-W15 累積的內容塞進 7 個區塊，下週 W17 上場。海報本身就是期末研究報告——依 7 項規準打分。"
+                subtitle="期末成果不是 Word 報告，是兩張 A1 海報。本週把 W1-W15 累積的研究內容，整理成 7 個清楚區塊，下週 W17 上場。海報本身就是期末研究報告——依 7 項規準打分。"
                 chain="W15 你寫完四層次結論——是時候把整份研究壓縮成兩張海報，讓 3 秒內路過的同學就能 get 你的核心發現。"
                 meta={[
                     { label: '第一節', value: '海報入門 + 7 項規準 + 兩張 A1 架構' },
@@ -540,9 +540,9 @@ const W16Page = () => {
                 weekTitle={W16Data.title}
                 duration={`${W16Data.duration} 分鐘 · ${W16Data.durationDesc}`}
                 tasks={[
-                    '七步組裝 — 搬運 → 縫合 → 潤色',
-                    'AI 潤色校對 — 縫合稿先丟 AI、最終人工把關',
-                    'A1 海報設計 + 發表預演',
+                    '海報入門：7 項規準 + 兩張 A1 架構',
+                    '海報架構：模板下載 + 5 法核心呈現對照',
+                    '海報製作：直接開模板改 + 上課紀錄 3 格 + 收尾繳交',
                 ]}
                 exportReminder="繳交報告完稿 + 海報 PDF → W17 Gallery Walk 用"
             />

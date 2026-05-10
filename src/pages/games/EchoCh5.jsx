@@ -462,7 +462,7 @@ export const EchoCh5 = () => {
                             <div className="bg-slate-900 border border-slate-700 rounded p-6 mb-5">
                                 <div className="font-mono text-xs text-slate-500 tracking-widest mb-4">ECHO — 案件結案</div>
                                 <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                                    五週的調查，五種方法，從不同角度逐一拆解了這場謠言。截圖是偽造的，時間軸無法成立，散播源頭有跡可循。案件結案，相關資料移交給學校行政。
+                                    五週的調查，五種方法，從不同角度逐一拆解了這場謠言。現有證據顯示，截圖高度可疑、時間軸難以成立、散播路徑也逐漸清楚。案件結案，相關資料移交給學校行政。
                                 </p>
                                 <p className="text-slate-300 text-sm leading-relaxed mb-4">
                                     陳宇佳重返班聯會。但謠言留下的那些眼神，沒有那麼快消失。

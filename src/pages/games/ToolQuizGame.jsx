@@ -214,7 +214,7 @@ export const ToolQuizGame = () => {
                     </h2>
 
                     <p className="text-slate-300 text-lg mb-8 font-medium leading-relaxed drop-shadow-sm">
-                        真相永遠只有一個！<br />
+                        方法沒有唯一答案，但有更合適的選擇！<br />
                         面對 11 個越來越困難的研究委託，<br />身為首席調查員的你，<br />該從工具箱拔出哪一項<span className="text-amber-400 font-bold ml-1 drop-shadow-[0_0_5px_rgba(251,191,36,0.6)]">「辦案道具」</span>？
                     </p>
 
@@ -425,7 +425,7 @@ export const ToolQuizGame = () => {
                     {wrongQuestions.length === 0 && (
                         <div className="bg-gradient-to-r from-emerald-900/40 via-emerald-800/40 to-emerald-900/40 text-emerald-300 border border-emerald-500/40 p-6 rounded-sm font-bold text-lg relative z-10 backdrop-blur-sm shadow-[0_0_30px_rgba(16,185,129,0.15)] flex flex-col items-center gap-3">
                             <span className="text-4xl drop-shadow-[0_0_10px_currentColor] mb-1">🎉</span>
-                            <span className="tracking-wide">完美破案！毫無破綻的推理</span>
+                            <span className="tracking-wide">高品質判斷！理由清楚、推理到位</span>
                             <span className="text-emerald-200/70 text-sm font-medium">你已經完全掌握研究工具的精髓了！</span>
                         </div>
                     )}

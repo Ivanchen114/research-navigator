@@ -183,7 +183,7 @@ const AI_RISKS = [
         safeguard: '事先寫清楚編碼類別 / 變項定義給 AI，要求嚴格分類。',
     },
     {
-        title: '掏空判斷',
+        title: '把判斷交給 AI',
         emoji: '🪤',
         body: '訪談、文獻組的「分類」就是研究本身。全外包等於 AI 做研究、你變成驗收員——研究不是你做的。',
         safeguard: '訪談、文獻組必須自己定義分類框架，AI 只能填內容。',
@@ -333,7 +333,7 @@ const STATUS_OPTIONS = [
         bg: '#FEF2F2',
         border: '#FCA5A5',
         icon: Flame,
-        guide: '直接舉手叫老師——10 分鐘 1 對 1，一起決定「最小可分析版本」。今天結束前至少要有一張結構（可以資料還沒填滿）。',
+        guide: '直接舉手叫老師——10 分鐘一對一，一起決定「最小可分析版本」。今天結束前至少要有一張結構（可以資料還沒填滿）。',
     },
 ];
 
@@ -342,7 +342,7 @@ const EXPORT_FIELDS = [
     { key: 'w13-data-state', label: '我的原始資料現況', question: '我手上原本的資料是什麼樣子？來自哪裡？' },
     { key: 'w13-table-structure', label: '我的分析表結構（必做）', question: '欄位名稱列表 + 列數 + N 值 + 編碼類別（如果是訪談/觀察/文獻）' },
     { key: 'w13-ai-validation', label: 'AI 輔助驗收紀錄（用了 AI 必填）', question: '我做了哪些驗收？發現 AI 哪裡跑偏 / 幻覺？' },
-    { key: 'w13-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: '我用哪種方式繳交完整對話？（A 私人註解 / B 文件上傳並貼連結）' },
+    { key: 'w13-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: '我用哪種方式繳交完整對話？（A 私人留言 / B 文件上傳並貼連結）' },
     { key: 'w13-classroom-submit', label: 'Classroom 繳交檢核', question: '已勾選的繳交項目' },
     { key: 'w13-progress-status', label: '整理進度自評', question: '🟢 已成型／🟡 半成品／🔴 還在掙扎' },
     { key: 'w13-w14-question', label: 'W14 資料呈現規劃', question: '下週我想怎麼呈現這份資料？（圖／表／摘要／混合）' },
@@ -491,14 +491,14 @@ const W13AutonomyPage = () => {
                         <div className="flex items-center gap-2 mb-2">
                             <span className="text-[20px]">📺</span>
                             <p className="font-mono text-[10.5px] font-bold tracking-[0.15em] text-[#FCD34D] uppercase">
-                                上課必看 · AI 反面教材
+                                上課必看 · AI 草稿找雷練習
                             </p>
                         </div>
                         <p className="font-serif text-[18px] md:text-[20px] font-bold leading-tight mb-2">
-                            老師用 Gemini 跑了一份「研究報告」——你能找出 8 個學術紅線嗎？
+                            老師用 Gemini 跑了一份「研究報告」——你能找出學術紅線（共 13 個）嗎？
                         </p>
                         <p className="text-[12px] text-white/85 leading-[1.85]">
-                            進入頁面前，先記住一件事：<strong className="text-[#FCD34D]">AI 沒做錯，是 prompt 沒給規則</strong>。本週我們要學的就是怎麼把判斷力寫進 prompt 裡。
+                            進入頁面前，先記住一件事：<strong className="text-[#FCD34D]">AI 會照規則做事——但規則要由研究者設定與驗收</strong>。本週我們要學的就是怎麼把判斷力寫進 prompt 裡，並親自驗收 AI 的輸出。
                         </p>
                         <span className="inline-flex items-center gap-1 mt-3 text-[12.5px] font-bold text-[#FCD34D]">
                             點進去找雷 →
@@ -976,7 +976,7 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📤 下課前 10 分鐘 · 兩條繳交動線</p>
                         <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
                             <span>📁 <strong>Classroom 繳：</strong>原始資料雲端連結 + 整理後分析表連結（用了 AI 的學生再加完整對話）</span>
-                            <span>📝 <strong>網頁繳：</strong>下方檢核清單 + W14 伏筆（用了 AI 補 AI-RED）</span>
+                            <span>📝 <strong>網頁繳：</strong>下方檢核清單 + W14 資料呈現規劃（用了 AI 補 AI-RED）</span>
                         </div>
                     </div>
 
@@ -989,11 +989,11 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                             '整理後分析表雲端連結已繳（含欄位、N 值清楚）',
                             '雲端權限設定為「知道連結的人可以檢視」',
                             '訪談組／文獻組：已清個資（姓名改代號 A、B、C）',
-                            '用了 AI 的學生：完整對話紀錄（私人註解或文件連結）已繳',
+                            '用了 AI 的學生：完整對話紀錄（私人留言或文件連結）已繳',
                         ]}
                     />
 
-                    {/* W14 伏筆：資料呈現方式（不限於圖） */}
+                    {/* W14 資料呈現規劃：資料呈現方式（不限於圖） */}
                     <ThinkRecord
                         dataKey="w13-w14-question"
                         prompt="⑤ W14 我想怎麼呈現這份資料？"
@@ -1035,7 +1035,7 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                             <p className="text-[12px] font-bold text-[#5B21B6] mb-2">🤖 用了 AI · AI-RED 紀錄（必填）</p>
                             <p className="text-[11px] text-[#4C1D95] mb-3 leading-relaxed">
                                 你用了 AI 整理資料，必須留下完整的 A-I-R-E-D 紀錄——這是學術倫理，也是讓你之後讀書摘時記得自己做了什麼決定。
-                                <strong>注意：</strong>AIRED 是「事後重述一次最關鍵的互動」；上方還要繳<strong>完整對話</strong>，兩者不衝突。
+                                <strong>注意：</strong>AI-RED 是「事後重述一次最關鍵的互動」；上方還要繳<strong>完整對話</strong>，兩者不衝突。
                             </p>
                             <AIREDNarrative week="13" hint="本週用 AI 整理資料：A=Gemini Pro / I=結構化 prompt / R=AI 填出的表 / E=驗收結果（哪裡好哪裡跑偏）/ D=採納哪些、改了哪些" />
                         </div>
@@ -1061,7 +1061,7 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                                 '說清楚自己原始資料現況（來源／數量／結構）',
                                 '依研究方法定義分析表結構（欄位／編碼類別／N）',
                                 '親手做完純人工整理一輪',
-                                '若選擇用 AI 補充：知道幻覺/跑偏/掏空判斷的風險並做驗收',
+                                '若選擇用 AI 補充：知道幻覺/跑偏/把判斷交給 AI的風險並做驗收',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>

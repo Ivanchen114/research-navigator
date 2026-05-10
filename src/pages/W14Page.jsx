@@ -120,8 +120,8 @@ const EXPORT_FIELDS = [
     { key: 'w14-validation-check', label: '③ 圖表三鐵規驗收（必填）' },
     { key: 'w14-my-description', label: '④ 描述（AI 起草+人工改寫）' },
     { key: 'w14-my-inference', label: '⑤ 推論（純人工，研究核心）' },
-    { key: 'w14-ai-pressure-test', label: 'AI 壓測後修正（進階·驗收型必填）' },
-    { key: 'w14-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
+    { key: 'w14-ai-pressure-test', label: 'AI 壓力測試後修正（進階·驗收型必填）' },
+    { key: 'w14-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人留言 / B 文件上傳並貼連結' },
     /* Step 5 */
     { key: 'w14-w15-preview', label: 'W15 預告：結論的第三層和第四層' },
     { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 畫圖的最重要一次互動（A-I-R-E-D 五要素）' },
@@ -692,7 +692,7 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                             Step 4 你已完成圖+描述+推論基本要求。
                             這一步是<strong>進階訓練</strong>：請 AI 從研究方法老師角度找你忽略的趨勢、警告過度推論——
                             挖出你自己看不到的盲點。
-                            <strong>用了 AI 一定要做裁奪（不能照單全收），並繳完整對話。</strong>
+                            <strong>用了 AI 一定要做判斷取捨（不能照單全收），並繳完整對話。</strong>
                         </p>
                     </div>
 
@@ -875,7 +875,7 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                         />
                     </div>
 
-                    {/* AIRED 敘事紀錄（依進階 AIMode 三分支） */}
+                    {/* AI-RED 敘事紀錄（依進階 AIMode 三分支） */}
                     {(w14AiMode === 'teach' || w14AiMode === 'verify') ? (
                         <AIREDNarrative week="14" hint="本週用 AI 進階壓測：A=Gemini Pro / I=找盲點+壓測 prompt / R=AI 找到的盲點+風險 / E=我同意/不同意哪些 / D=採納哪些修正" />
                     ) : w14AiMode === 'standalone' ? (
@@ -926,7 +926,7 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                                                 '為自己的數據選對圖表類型並說清楚理由',
                                                 '把畫圖技術交給 AI，自己用三鐵規驗收圖表',
                                                 '區分「描述」（AI 起草+人工改）和「推論」（純人工），避免推論失控',
-                                                '若選用 AI 進階壓測：知道過度推論／單一原因兩大雷並做裁奪',
+                                                '若選用 AI 進階壓測：知道過度推論／單一原因兩大雷並做判斷',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
@@ -937,7 +937,7 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                     </div>
 
                     <ExportButton
-                        weekLabel="W14 讓數據自己說話：圖表選擇與圖的說明"
+                        weekLabel="W14 讓數據自己說話：圖表選擇與圖說"
                         fields={EXPORT_FIELDS}
                     />
 
@@ -977,7 +977,7 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W14"
                 title="讓數據自己說話 · "
-                accentTitle="圖表選擇與圖的說明"
+                accentTitle="圖表選擇與圖說"
                 subtitle="頂級和牛用塑膠臉盆裝，客人還想吃嗎？選錯圖表，數據就無法說話。今天分工：你選類型／驗收／寫推論，AI 代勞畫圖+描述初稿。想再進階壓測？可選用，不強迫。"
                 chain="W13 把原始資料整理成『分析表』了——但一堆數字／訪談稿，怎麼讓人看得懂？這週學『讓數據自己說話』：選對圖、寫對說明。"
                 meta={[
@@ -996,9 +996,9 @@ ___（貼資料或連結，三選一：①直接貼 CSV 文字 ②貼 Google She
                 tasks={[
                     '四大圖表速查（折線／圓餅／長條／散佈）— 選對才能讓數據說話',
                     '圖說寫作公式 — 描述（客觀）+ 推論（主觀）',
-                    'AI 協作三步 — 自己寫初稿 → AI 檢核 → 人工裁奪',
+                    'AI 協作三步 — 自己寫初稿 → AI 檢核 → 人工判斷取捨',
                 ]}
-                exportReminder="匯出 W14 圖表 + 圖說 → W15 結論回扣使用"
+                exportReminder="匯出 W14 圖表 + 圖說 → W15 結論呼應使用"
             />
 
             {/* W14 任務前警戒語 — 3 條核心紅線 */}

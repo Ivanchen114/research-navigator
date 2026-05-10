@@ -333,20 +333,20 @@ export const W50Page = () => {
         },
 
         /* ──────────────────────────────────────
-         * STEP 2: 資料庫實戰（不准用 AI！）
+         * STEP 2: 資料庫實戰（先手動搜尋，建立自己的查找路徑）
          * ────────────────────────────────────── */
         {
             title: '資料庫實戰',
             icon: '🔍',
             content: (
                 <div className="space-y-8 prose-zh">
-                    <div className="section-head"><h2>資料庫查找練習</h2><div className="line"></div><span className="mono">不准用 AI · 25 分鐘</span></div>
+                    <div className="section-head"><h2>資料庫查找練習</h2><div className="line"></div><span className="mono">先手動搜尋 · 25 分鐘</span></div>
                     <p className="section-desc">
                         先知道自己有多少斤兩。這個階段只能用華藝資料庫或國圖碩博系統，不能開 AI。靠你自己的搜尋策略找到第一篇真實證物。
                     </p>
 
                     <div className="notice notice-gold text-[12px] mb-6">
-                        🚫 <strong>限時內不准用 AI！</strong>搜尋不是亂槍打鳥——先想好關鍵字組合，再下手搜尋。
+                        🔍 <strong>這 25 分鐘先靠自己手動搜尋</strong>——目標是建立你自己的查找路徑：先想好關鍵字組合，再下手搜尋。
                     </div>
 
                     {/* 搜尋關鍵字 */}
@@ -361,7 +361,7 @@ export const W50Page = () => {
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden mt-4">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center justify-between">
                             <span className="font-bold text-[13px] text-[var(--ink)]">我的搜尋策略</span>
-                            <span className="text-[10px] font-mono font-bold text-[var(--danger)]">🚫 不准用 AI</span>
+                            <span className="text-[10px] font-mono font-bold text-[var(--danger)]">✋ 先靠自己手動</span>
                         </div>
                         <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
@@ -598,7 +598,7 @@ export const W50Page = () => {
                         </div>
                     </div>
 
-                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                                        {/* AI-RED 敘事紀錄（循序漸進：五欄 → 一段話） */}
                     <AIREDNarrative week="7" hint="華藝搜尋可能遇到 AI 輔助" optional={true} />
 
                     {/* 一鍵複製 */}
@@ -683,7 +683,7 @@ export const W50Page = () => {
                 weekTitle={W7Data.title}
                 duration={`${W7Data.duration} 分鐘 · ${W7Data.durationDesc}`}
                 tasks={[
-                    '手動搜索四步 — 不准用 AI 一鍵幫找',
+                    '手動搜索四步 — 先建立自己的查找路徑',
                     '證物 A-D 分級 — 鑑識文獻可信度',
                     '標註 APA 證物標籤 — 至少 5 條，下週寫文獻探討用',
                 ]}

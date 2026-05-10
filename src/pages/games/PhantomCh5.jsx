@@ -420,7 +420,7 @@ export const PhantomCh5 = () => {
                         <div className="bg-slate-900 border border-slate-700/30 rounded p-6 mb-5">
                             <SectionLabel icon={<CheckCircle size={13} />} text="第五章任務完成" color="text-violet-400" />
                             <p className="text-slate-300 text-sm leading-relaxed my-5">
-                                五個章節、五種研究方法、五週時間。你從觀察到訪談，從問卷到文獻，最後在實驗室完成了這場實證的最後一哩路。幽靈數據工具的使用軌跡與底層邏輯，已經被你嚴密鎖定。這份無可挑剔的報告會成為 R.I.B. 的典範調查樣本。
+                                五個章節、五種研究方法、五週時間。你從觀察到訪談，從問卷到文獻，最後在實驗室完成了這場實證的最後一哩路。幽靈數據工具的使用軌跡與底層邏輯，已經被你逐步釐清。這份報告將成為 R.I.B. 的高品質調查樣本：證據清楚、限制明確，也願意接受追問。
                             </p>
 
                             <div className="border-t border-slate-700/20 pt-5">
@@ -436,7 +436,7 @@ export const PhantomCh5 = () => {
                                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/80 to-transparent"></div>
                                                 <div className="absolute inset-0 mix-blend-color bg-emerald-900/40"></div>
                                             </div>
-                                            <EvidenceItem text="終極洞見：抓死工具 15% 標準差流失的指紋特徵！此項技術特徵被成功留檔，成為鑑定 AI 偽造數據的系統性判準證物！" highlight />
+                                            <EvidenceItem text="關鍵發現：工具生成資料可能留下約 15% 標準差偏移的可疑特徵；此特徵需與其他證據交叉檢查，才能作為判準依據。" highlight />
                                             </div>
                                           )
                                         : <div className="flex items-center gap-2 text-slate-600 text-xs py-2 px-3 bg-slate-950 rounded-sm border border-slate-800"><Lock size={12} /><span>最高驗證成就：工具瑕疵技術特徵鑑識（重試可解鎖完美查核）</span></div>
@@ -462,11 +462,11 @@ export const PhantomCh5 = () => {
                             <div className="bg-emerald-950/30 border border-emerald-700/40 rounded p-5 mb-5">
                                 <div className="font-mono text-xs text-emerald-400 tracking-widest mb-3">◈ 完整調查紀錄解鎖</div>
                                 <p className="text-slate-300 text-sm leading-relaxed mb-3">
-                                    你不只完成了五章調查，你還拼出了幽靈數據工具的完整犯罪地圖——第一章識別出不規則操作的行為特徵，第二章從線人口中取得核心功能的第一手確認，第三章問卷定位了擴散的真實規模，第四章文獻比對鎖定了偽造指紋，第五章實驗重現標定了那個只有工具才會留下的 15% 標準差流失特徵。五個最優線索，構成一條無法辯駁的完整證據鏈。
+                                    你不只完成了五章調查，你還拼出了幽靈數據工具的完整犯罪地圖——第一章識別出不規則操作的行為特徵，第二章從線人口中取得核心功能的第一手確認，第三章問卷定位了擴散的真實規模，第四章文獻比對鎖定了偽造指紋，第五章實驗重現標定了那個只有工具才會留下的 15% 標準差流失特徵。五個主要線索，構成一條互相支持的證據鏈；它不能取代最終判決，但足以支持一個清楚而謹慎的研究判斷。
                                 </p>
                                 <p className="text-slate-400 text-xs leading-relaxed font-mono">
                                     R.I.B. 將此調查歸入典範案例資料庫。<br />
-                                    檔案標題：<span className="text-emerald-400">PHANTOM DATA — 一個 AI 工具如何在學術系統的盲點裡生長。</span>
+                                    檔案標題：<span className="text-emerald-400">PHANTOM DATA — 一個資料生成工具如何挑戰研究證據與學術誠信。</span>
                                 </p>
                             </div>
                         ) : (

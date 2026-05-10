@@ -136,7 +136,7 @@ export const Portfolio = () => {
           kicker="R.I.B. 調查檔案 · 學習歷程策展室"
           title="把一整學期的思考，"
           accentTitle="做成你的作品"
-          subtitle="這裡不是重交作業的地方——是你回頭看整學期，挑出真正值得讓大學教授看見的思考瞬間，並加上此刻的回看。"
+          subtitle="這裡不是重交作業的地方——是你回頭看整學期，挑出能代表你思考變化的瞬間，並加上此刻的回看。"
           meta={[
             { label: 'Step 1', value: '盤點：瀏覽整學期紀錄' },
             { label: 'Step 2', value: '策展：選出 10 個關鍵時刻' },
@@ -155,7 +155,7 @@ export const Portfolio = () => {
           <div>
             <div className="font-bold text-amber-900 mb-1">目前沒有任何紀錄可策展</div>
             <div className="text-[13px] text-amber-800 leading-relaxed">
-              這個頁面會自動讀取你在每一週（W1-W16）填在「思考紀錄」格子裡的內容。先回到任何一週的課程頁面填寫一些題目，再回來這裡策展。
+              這個頁面會自動讀取你在每一週（各週）填在「思考紀錄」格子裡的內容。先回到任何一週的課程頁面填寫一些題目，再回來這裡策展。
             </div>
           </div>
         </div>

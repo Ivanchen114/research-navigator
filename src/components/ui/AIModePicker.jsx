@@ -31,9 +31,9 @@ const MODES = [
     {
         id: 'verify',
         emoji: '🥊',
-        label: '從 1 到 100 · 驗收型',
+        label: '有初版了 · 驗收型',
         sub: 'AI 角色：教練 / 壓力測試',
-        desc: '我有初版了 → 請 AI 找漏洞、戳盲點、檢查邊界',
+        desc: '我有初版了 → 請 AI 找漏洞、提醒可能漏掉的角度、檢查邊界',
         prompt: '「我寫了 X，請從研究方法老師角度找 3 個問題」',
         accent: '#DC2626',
         bg: '#FEF2F2',
@@ -42,10 +42,10 @@ const MODES = [
     {
         id: 'standalone',
         emoji: '🚫',
-        label: '不用 AI · 全靠自己',
+        label: '不用 AI · 自己先試',
         sub: '完全合法的選擇',
         desc: '這次想自己練手 → 不用 AI（要寫一行為什麼選這條）',
-        prompt: 'AI 是輔助不是必修——選不用，但要自覺地選',
+        prompt: 'AI 是輔助不是必修——選不用，但要有意識地選擇',
         accent: '#6B7280',
         bg: '#F9FAFB',
         icon: UserCheck,
@@ -129,7 +129,7 @@ const AIModePicker = ({ week, taskName = 'AI 互動', onChange }) => {
                 >
                     <strong>已選：{picked.label}</strong>——
                     {picked.id === 'standalone'
-                        ? '下方不會顯示 AI prompt（你選自己做）。但仍要寫一行 AIRED 紀錄為什麼選不用 AI。'
+                        ? '下方不會顯示 AI prompt（你選自己做）。但仍要寫一行 AI-RED 紀錄為什麼選不用 AI。'
                         : `下方會顯示對應的 prompt 範本。${taskName}結束後，繳交開頭也記得標明「【${picked.id === 'teach' ? '教學型' : '驗收型'}】」。`
                     }
                 </div>

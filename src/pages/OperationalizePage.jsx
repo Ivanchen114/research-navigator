@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Map, Ruler, ArrowLeft, Lightbulb, AlertTriangle } from 'lucide-react';
 
 /* ══════════════════════════════════════
- *  資料：12 個操作型定義範例（5 法）
+ *  資料：14 個操作型定義範例（5 法）
  * ══════════════════════════════════════ */
 
 const METHOD_TABS = [
@@ -135,7 +135,7 @@ const EXAMPLES = {
     observation: [
         {
             title: '上課專心 v1（入門版）',
-            concept: '上課專心（外顯指標：目視學習行為 on-task behavior）',
+            concept: '上課專心（外顯指標：目視學習行為 課堂專注行為（on-task behavior））',
             opdef: '**行為類別**：視線停留在老師／黑板／課本連續 ≥ 10 秒，且當下無滑手機、趴睡、與旁人交談的動作。**計次方式**：一節課 50 分鐘，每 5 分鐘記錄一次該學生當下是否符合「專心」（10 次觀察點）。',
             posExamples: ['抄筆記同時眼睛看黑板', '舉手發問', '盯著老師示範實驗操作'],
             negExamples: ['滑手機（即使課本攤開）', '趴桌睡覺', '跟同學講話 ≥ 5 秒（非課程相關）'],
@@ -306,7 +306,7 @@ export const OperationalizePage = () => {
                 <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">RESEARCH TOOLBOOK</div>
                 <h1 className="text-[24px] font-bold text-[var(--ink)] mb-2">📐 操作型定義範例庫</h1>
                 <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed max-w-[760px]">
-                    給想看更多範例的同學自學參考。共 <strong className="text-[var(--ink)]">13 個範例</strong>（5 法各 2-4 個，含「上課專心」入門版 vs 嚴謹版、問卷組「量表改編 vs 自設量表」兩種路線）。每張卡都有：核心概念 / 操作型定義 / 正反例 / 三件事檢核。
+                    給想看更多範例的同學自學參考。共 <strong className="text-[var(--ink)]">14 個範例</strong>（5 法各 2-4 個，含「上課專心」入門版 vs 嚴謹版、問卷組「量表改編 vs 自設量表」兩種路線）。每張卡都有：核心概念 / 操作型定義 / 正反例 / 三件事檢核。
                 </p>
                 <div className="bg-white border-l-3 border-[var(--gold)] p-3 rounded-r-[6px] mt-4 text-[12px] text-[var(--ink-mid)] leading-relaxed">
                     <AlertTriangle size={14} className="inline mr-1 text-[var(--gold)]" />

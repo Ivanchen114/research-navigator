@@ -527,7 +527,7 @@ const EXPORT_FIELDS = [
     /* Step 2：計畫書組裝工作坊（內容寫在計畫書，網頁只記 AI 檢核+勾選） */
     { key: 'w9-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（寫不出某章請示範）/ 🥊 驗收型（有初稿請壓力測試）' },
     { key: 'w9-plan-ai-check', label: 'AI 互動後的判斷紀錄', question: 'AI 指出的問題 / 給的範例 + 我採納/不採納的決定' },
-    { key: 'w9-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
+    { key: 'w9-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人留言 / B 文件上傳並貼連結' },
     { key: 'w9-plan-ch1-checklist', label: '五章地基工程進度', question: '本節繳交驗收 7 項勾選' },
     { key: 'w9-motivation-extended', label: '動機擴寫（W3 一句話 → 一段話）', question: '4 要素：個人連結／現象觀察／研究空缺／研究價值' },
     { key: 'w8-tool-method', label: '組內合議的研究方法', question: 'W9 開頭組內合議的主方法（按鈕點選自動寫入）' },
@@ -1337,13 +1337,13 @@ export const W9Page = () => {
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 五章地基寫到雛形 → 下一步：<strong>Step 3 AI 工作坊</strong>（請 AI 檢核你寫好的 1-5 章；卡關的章節請 AI 給範例）+ 寫 AIRED。
+                        ✅ 五章地基寫到雛形 → 下一步：<strong>Step 3 AI 工作坊</strong>（請 AI 檢核你寫好的 1-5 章；卡關的章節請 AI 給範例）+ 寫 AI-RED。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 3：AI 工作坊（雙模式 + 完整對話繳交 + AIRED） ─── */
+        /* ─── Step 3：AI 工作坊（雙模式 + 完整對話繳交 + AI-RED） ─── */
         {
             title: 'AI 工作坊（可選）',
             icon: '🤖',
@@ -1437,16 +1437,16 @@ ___（例：第三章文獻探討、第四章變項定義）
                             <div className="bg-[#EFF6FF] border-2 border-[#BFDBFE] rounded p-4">
                                 <p className="text-[13px] font-bold text-[#1E40AF] mb-1">🚫 你選擇不用 AI</p>
                                 <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
-                                    完全 OK——直接到下一步繳交。<strong>AIRED 紀錄留到 W10</strong>（W9-W10 是計畫書連續週，AIRED 在 W10 一起寫即可）。
+                                    完全 OK——直接到下一步繳交。<strong>AI-RED 紀錄留到 W10</strong>（W9-W10 是計畫書連續週，AI-RED 在 W10 一起寫即可）。
                                 </p>
                             </div>
                         )}
-                        {/* AIRED 已搬到 W10 寫（W9-W10 計畫書連續週） */}
+                        {/* AI-RED 已搬到 W10 寫（W9-W10 計畫書連續週） */}
                     </div>
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ AI 工作坊完成（或你選擇不用 AI）→ 下一步回顧與繳交。記得把 AI 檢核 Prompt 帶回家跑、上傳計畫書到 GC。<strong>AIRED 留到 W10 寫</strong>（W9-W10 是計畫書連續週）。
+                        ✅ AI 工作坊完成（或你選擇不用 AI）→ 下一步回顧與繳交。記得把 AI 檢核 Prompt 帶回家跑、上傳計畫書到 Google Classroom。<strong>W9 不另填 AI-RED；保留完整 AI 對話，W10 統一記錄</strong>（W9-W10 是計畫書連續週）。
                     </div>
                 </div>
             ),
@@ -1571,8 +1571,8 @@ ___（例：第三章文獻探討、第四章變項定義）
                 chain="W8 文獻找完了、題目方法也定了——這週兩節 100 分鐘做一件事：把這些素材整合成『可繳交』的計畫書 1-5 章。"
                 meta={[
                     { label: '第一節', value: '讀 W8 回饋 + 計畫書第一、二章組裝' },
-                    { label: '第二節', value: '計畫書五章地基工程 + AI 檢核 Prompt + 預想 AIRED' },
-                    { label: '課堂產出', value: '計畫書第 1-5 章雛形 + W9 AIRED' },
+                    { label: '第二節', value: '計畫書五章地基工程 + AI 檢核 Prompt + 保留 AI 對話備 W10 用' },
+                    { label: '課堂產出', value: '計畫書第 1-5 章雛形 + W9 AI-RED' },
                     { label: '前置要求', value: 'W8 合題企劃書／單飛施工單' },
                 ]}
             />
@@ -1597,7 +1597,7 @@ ___（例：第三章文獻探討、第四章變項定義）
                     '第一章動機擴寫 — 用「3 問鷹架」把 W3 一句話研究動機擴成完整一段',
                     '計畫書 2-5 章組裝 — 把第二到第五章寫到雛形（雙模式 AI 工作坊可選用）',
                 ]}
-                exportReminder="匯出本週紀錄 → 繳交計畫書 1-5 章草稿 + W9 AIRED 對話"
+                exportReminder="匯出本週紀錄 → 繳交計畫書 1-5 章草稿；若使用 AI，另附完整 AI 對話"
             />
 
             {/* STEP ENGINE */}

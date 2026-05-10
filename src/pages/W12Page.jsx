@@ -89,7 +89,7 @@ const REPORT_SECTIONS = [
 
 /* — 100 min 課堂流程（對齊學校 50/10/50 作息）— */
 const LESSON_FLOW = [
-    { time: '0:00-0:05', label: '開場 + 規則', desc: '邊聽可以邊填表；每組之間留 1 min 確保填完。', dur: 5 },
+    { time: '0:00-0:05', label: '開場 + 規則', desc: '老師說明全堂規則：邊聽可以邊填表，每組之間留 1 min 確保填完。', dur: 5 },
     { time: '0:05-0:40', label: 'Round 1：7 組短報', desc: '每組 5 min（3 短報 + 1 老師提問 + 1 緩衝填表）', dur: 35 },
     { time: '0:40-0:50', label: '緩衝', desc: '補填漏掉的回饋', dur: 10 },
     { time: '0:50-1:00', label: '⚠️ 下課', desc: '學校作息', dur: 10 },
@@ -162,7 +162,7 @@ const W12Page = () => {
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W12"
                 title="期中進度短報 · "
-                accentTitle="同儕擋板"
+                accentTitle="同儕把關"
                 subtitle="正式施測前的最後一道擋板。每組 3 分鐘短報 + 1 分鐘老師選題提問。同學透過 Google Form 即時回饋你的計畫漏洞——你看不到的，30 個聽眾總有人看出。"
                 chain="W11 工具上線、要開始施測了——但別急。先把計畫拉出來給全班看，你想不到的漏洞，30 雙眼睛總有人看到。"
                 meta={[
@@ -178,7 +178,7 @@ const W12Page = () => {
                 { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
                 { wk: 'W5-W8', name: '操作型定義／海報／文獻', past: true },
                 { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
-                { wk: 'W12', name: '期中短報\n同儕擋板', now: true },
+                { wk: 'W12', name: '期中短報\n同儕把關', now: true },
                 { wk: 'W13-W14', name: '執行 + 數據\n圖表結論' },
                 { wk: 'W15-W17', name: '成果簡報\n博覽發表' },
             ]} />
@@ -297,7 +297,7 @@ const W12Page = () => {
                     <h3 className="hidden">
                     </h3>
                     <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                        老師現場記分、私下給組長（不公告排名）。<strong>13-16 ★★★★ ／ 9-12 ★★★ ／ 5-8 ★★ ／ 4 ★</strong>。分數 ≤ 8 的組 W13 前要找老師談。
+                        老師現場記分、私下給組長（不公告排名）。<strong>13-16 ★★★★ ／ 9-12 ★★★ ／ 5-8 ★★ ／ ≤ 4 ★</strong>。分數 ≤ 8 的組 W13 前要找老師談。
                     </p>
                     <div className="space-y-2">
                         {RUBRIC.map((r) => (

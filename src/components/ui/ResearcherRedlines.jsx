@@ -264,7 +264,10 @@ const RedlineRow = ({ item, index, accent }) => {
                     {item.title}
                 </p>
                 {item.relatedTrap && (
-                    <span className="ml-auto text-[10px] font-mono text-[#7F1D1D] bg-[#FEE2E2] px-1.5 py-0.5 rounded whitespace-nowrap">
+                    <span
+                        className="ml-auto text-[10px] font-mono text-[#7F1D1D] bg-[#FEE2E2] px-1.5 py-0.5 rounded whitespace-nowrap cursor-help"
+                        title={`對應「AI 報告找雷挑戰」的第 ${item.relatedTrap} 個錯誤案例`}
+                    >
                         ↔ 雷 #{item.relatedTrap}
                     </span>
                 )}

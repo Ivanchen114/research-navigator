@@ -49,7 +49,8 @@ const JOURNEY_MAP = [
     { weeks: 'W8-W10', ability: '科學嚴謹', desc: '設計與執行的品質意識' },
     { weeks: 'W11-W12', ability: '執行力', desc: '在不確定中持續推進' },
     { weeks: 'W13-W15', ability: '洞察力', desc: '從數據中讀出意義' },
-    { weeks: 'W16-W17', ability: '溝通力', desc: '向他人清楚表達自己的發現' },
+    { weeks: 'W16', ability: '溝通力', desc: '向他人清楚表達自己的發現' },
+    { weeks: 'W17', ability: '整合反思', desc: '回顧整學期 AI 協作的學習' },
 ];
 
 const DOS_AND_DONTS = {
@@ -116,11 +117,11 @@ const W17Page = () => {
             <TaskCard
                 weekNumber="W17"
                 weekTitle="成果發表 · Gallery Walk"
-                duration="90 分鐘 · 1 節課（含 5 分休息）"
+                duration="100 分鐘 · 含 5 分休息"
                 tasks={[
                     '報告者：分享 4 場（每場 5–8 分鐘）',
                     '聆聽者：聆聽 4 組 + 主動提問（至少各一次）',
-                    '完成兩份紙本學習單（個人作業）+ 學術投資貼紙',
+                    '完成兩份紙本學習單（個人作業）+ 用學術投資貼紙互投「我覺得最可信」',
                 ]}
                 exportReminder="繳交兩份紙本學習單 — 完課！🎉"
             />
@@ -180,7 +181,7 @@ const W17Page = () => {
                 </div>
                 <div className="card-body">
                     <p style={{ fontSize: 12.5, color: 'var(--ink-mid)', lineHeight: 1.8, marginBottom: 12 }}>
-                        <strong>請各組事先協調好輪值時間</strong>，確保攤位隨時有人。先選你的隊型：
+                        <strong>請各組事先協調好輪值時間</strong>，確保攤位隨時有人。先選你的隊形：
                     </p>
                     <GroupSizeSelector
                         items={{

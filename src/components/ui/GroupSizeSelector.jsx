@@ -107,7 +107,7 @@ export default function GroupSizeSelector({
                     className="rounded-[6px] p-4 text-center text-[12.5px] border-dashed border-2"
                     style={{ background: bg, borderColor: `${border}55`, color: accent }}
                 >
-                    👆 先選你的隊型，下方就會出現對應分工
+                    👆 先選你的隊形，下方就會出現對應分工
                 </div>
             )}
         </div>

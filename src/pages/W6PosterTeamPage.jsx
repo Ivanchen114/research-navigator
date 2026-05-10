@@ -553,7 +553,7 @@ export const W6PosterTeamPage = () => {
 
         /* ─── Step 2：Gallery Walk ─── */
         {
-            title: 'Gallery Walk 走讀',
+            title: 'Gallery Walk · 海報觀摩',
             icon: '👀',
             content: (
                 <div className="space-y-6 prose-zh">
@@ -1021,7 +1021,7 @@ export const W6PosterTeamPage = () => {
                         rows={5}
                     />
 
-                    {/* AIRED optional */}
+                    {/* AI-RED optional */}
                     <AIREDNarrative week="6" hint="海報標題優化可能用 AI——記錄一次最關鍵的互動。" optional={true} />
 
                     {/* 一鍵複製 */}

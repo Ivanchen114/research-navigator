@@ -21,24 +21,24 @@ const STORAGE_KEY = 'rib_think_records';
 
 const MODE_LABEL = {
     teach: { tag: '【教學型】', desc: '我從零到一', emoji: '🎓' },
-    verify: { tag: '【驗收型】', desc: '我從 1 到 100', emoji: '🥊' },
+    verify: { tag: '【驗收型】', desc: '我已有初版，請 AI 協助檢核', emoji: '🥊' },
 };
 
 const MODE_REFLECTIONS = {
     teach: [
-        '我選的繳交方式：A 貼在 GC 私人註解 / B 上傳 Google Doc',
+        '我選的繳交方式：A 貼在 GC 私人留言 / B 上傳 Google Doc',
         '若 B：文件連結 ___',
         '從這個對話我學到什麼（核心觀念 / 步驟）：',
         '我自己照著做的版本是：（不能是 AI 範例的複製）',
     ],
     verify: [
-        '我選的繳交方式：A 貼在 GC 私人註解 / B 上傳 Google Doc',
+        '我選的繳交方式：A 貼在 GC 私人留言 / B 上傳 Google Doc',
         '若 B：文件連結 ___',
-        'AI 找到我哪些盲點 / 漏洞：',
+        'AI 指出哪些可能問題或漏想之處：',
         '我採納哪些、不採納哪些，為什麼：',
     ],
     none: [
-        '我選的繳交方式：A 貼在 GC 私人註解 / B 上傳 Google Doc',
+        '我選的繳交方式：A 貼在 GC 私人留言 / B 上傳 Google Doc',
         '若 B：文件連結 ___',
         '我用了哪種模式（教學型 / 驗收型）+ 開頭已註明：',
     ],
@@ -77,7 +77,7 @@ const AIDialogSubmission = ({ week, taskName = 'AI 互動', required = true }) =
         return (
             <div className="rounded-[var(--radius-unified)] border border-[#D1D5DB] bg-[#F9FAFB] p-3">
                 <p className="text-[12px] text-[#6B7280] leading-relaxed">
-                    🚫 你選了「不用 AI · 全靠自己」——本次沒有 AI 對話需要繳交。請在下方 AIRED 區寫一行為什麼選不用 AI。
+                    🚫 你選了「不用 AI · 全靠自己」——本次沒有 AI 對話需要繳交。請在下方 AI-RED 區寫一行為什麼選不用 AI。
                 </p>
             </div>
         );
@@ -94,11 +94,11 @@ const AIDialogSubmission = ({ week, taskName = 'AI 互動', required = true }) =
                     為了讓老師看見你怎麼跟 AI 對話、怎麼判斷修正，請把<strong>完整對話</strong>繳交（不只是最後採納版本）。
                 </p>
                 <div className="text-[11px] text-[#78350F] leading-relaxed space-y-1 mb-3">
-                    <p>📋 <strong>方式 A：</strong>複製整個對話貼到 Google Classroom 的<strong>私人註解</strong></p>
+                    <p>📋 <strong>方式 A：</strong>複製整個對話貼到 Google Classroom 的<strong>私人留言</strong></p>
                     <p>📄 <strong>方式 B：</strong>開 Google Doc 貼進去，命名 <code className="bg-white px-1 py-0.5 rounded text-[10px] font-mono">{fileName}</code>，上傳到 GC</p>
                 </div>
                 <p className="text-[11px] text-[#92400E] font-bold leading-relaxed border-t border-[#FCD34D] pt-2">
-                    ⚠️ 必須在文件 / 註解開頭註明：「<strong>這是與 Gemini 的{taggedTask}完整對話{m ? `——${m.desc}` : ''}</strong>」
+                    ⚠️ 必須在文件 / 註解開頭註明：「<strong>這是與 ___（請填工具名：ChatGPT / Claude / Gemini 等）的{taggedTask}完整對話{m ? `——${m.desc}` : ''}</strong>」
                 </p>
                 {!m && (
                     <p className="text-[11px] text-[#92400E] italic mt-2 leading-relaxed">

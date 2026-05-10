@@ -338,7 +338,7 @@ export const Dossier = () => {
                                 {Object.keys(gameStats).length === 0 ? (
                                     <div className="text-center py-16 md:py-20 bg-[#f8f7f4] rounded-[8px] border-2 border-dashed border-[#dddbd5]">
                                         <Clock size={42} className="mx-auto text-slate-300 mb-4" />
-                                        <p className="text-slate-500 font-bold">目前尚無出勤紀錄</p>
+                                        <p className="text-slate-500 font-bold">目前尚無任務紀錄</p>
                                         <button
                                             onClick={() => navigate('/games')}
                                             className="mt-4 text-[#2d5be3] font-bold hover:underline text-sm"
@@ -380,7 +380,7 @@ export const Dossier = () => {
 
                             <div className="mt-8 md:mt-10 bg-[#f8f7f4] p-5 md:p-6 rounded-[8px] border border-[#dddbd5] flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
                                 <div>
-                                    <h4 className="font-serif font-bold text-[#1a1a2e] text-[16px] md:text-[17px]">學期結業預判</h4>
+                                    <h4 className="font-serif font-bold text-[#1a1a2e] text-[16px] md:text-[17px]">學期進度預覽</h4>
                                     <p className="text-[13px] text-slate-600 mt-1">目前單元進度：{Math.round((Object.keys(gameStats).length / 6) * 100)}%</p>
                                 </div>
                                 <button

@@ -39,7 +39,7 @@ import {
 const FOUR_LAYERS = [
     { name: '描述', color: '#2563EB', task: '報事實、報數字（看到了什麼）', ai: '人先寫，AI 檢核有無數字錯誤或量詞不精準', scaffold: '根據___，___，其中最明顯的是___。' },
     { name: '詮釋', color: '#7C3AED', task: '解釋意義、推測原因（這代表什麼）', ai: '人先寫，AI 優化並補充可能遺漏的原因', scaffold: '這個結果顯示___，可能的原因是___。' },
-    { name: '回扣', color: '#DC2626', task: '回頭回答你最初的研究問題（你問的問題答了沒）', ai: '人寫內容和邏輯，AI 只能潤飾文句', scaffold: '本研究原本想了解___。根據分析結果，本研究的答案是___。但這個結論只能說明___，無法確定___。', star: true },
+    { name: '呼應', color: '#DC2626', task: '回頭回答你最初的研究問題（你問的問題答了沒）', ai: '人寫內容和邏輯，AI 只能潤飾文句', scaffold: '本研究原本想了解___。根據分析結果，本研究的答案是___。但這個結論只能說明___，無法確定___。', star: true },
     { name: '批判', color: '#059669', task: '說出研究的限制（哪裡還沒做好）', ai: '人先寫，AI 補充常見限制類型供參考', scaffold: '本研究的限制在於___，因此結論不宜推論至___。若要更完整回答這個問題，未來可以___。' },
 ];
 
@@ -55,9 +55,9 @@ const METHOD_PROMPTS = {
 請幫我：
 1. 檢核描述層有無數字錯誤或量詞不精準，並建議修改。
 2. 優化詮釋層，補充可能遺漏的原因。
-3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+3. 呼應層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
 4. 列出問卷研究常見的三種研究限制供我參考。
-5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+5. 根據以上修改建議，整合成一段完整的結論論述，呼應層請使用我原本寫的內容，不要自行改變邏輯。`,
         tips: ['相關不等於因果：「可能有相關」不是「導致」', '量詞要精準：38% 不是「多數」', '樣本數偏少（<30份）要加「本結果僅供初步參考」'],
     },
     interview: {
@@ -71,9 +71,9 @@ const METHOD_PROMPTS = {
 請幫我：
 1. 檢核描述層有無過度詮釋或遺漏重要現象，並建議修改。
 2. 優化詮釋層，補充可能遺漏的意義。
-3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+3. 呼應層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
 4. 列出質性訪談研究常見的三種研究限制供我參考。
-5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+5. 根據以上修改建議，整合成一段完整的結論論述，呼應層請使用我原本寫的內容，不要自行改變邏輯。`,
         tips: ['AI 說得比受訪者更強（過度詮釋：說超過受訪者實際說的）→ 對照原文', '只有 1 人說的 → 算個案，不能說成普遍現象', '多數受訪者都提到的 → 才算主要發現'],
     },
     experiment: {
@@ -88,9 +88,9 @@ const METHOD_PROMPTS = {
 請幫我：
 1. 檢核描述層有無數字錯誤或遺漏，並建議修改。
 2. 優化詮釋層，補充可能的原因解釋。
-3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+3. 呼應層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
 4. 列出實驗研究常見的三種研究限制供我參考。
-5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+5. 根據以上修改建議，整合成一段完整的結論論述，呼應層請使用我原本寫的內容，不要自行改變邏輯。`,
         tips: ['有差異不等於有效：先確認干擾變因', '用「顯示差異」不是「證明效果」', '霍桑效應：被觀察者知道有人在看，行為可能改變'],
     },
     observation: {
@@ -105,9 +105,9 @@ const METHOD_PROMPTS = {
 請幫我：
 1. 檢核描述層有無行為模式遺漏或頻率描述不精準，並建議修改。
 2. 優化詮釋層，補充可能的脈絡解釋。
-3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+3. 呼應層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
 4. 列出觀察研究常見的三種研究限制供我參考。
-5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+5. 根據以上修改建議，整合成一段完整的結論論述，呼應層請使用我原本寫的內容，不要自行改變邏輯。`,
         tips: ['補充脈絡：月考週、特殊活動要主動說明', '觀察者效應：被觀察者行為可能改變', '行為模式要有頻率支持，不能只憑印象'],
     },
     literature: {
@@ -121,9 +121,9 @@ const METHOD_PROMPTS = {
 請幫我：
 1. 檢核描述層有無文獻引用錯誤或遺漏重要共識，並建議修改。
 2. 優化詮釋層，補充文獻支持的可能解釋。
-3. 回扣層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
+3. 呼應層我已經寫好內容和邏輯，請只幫我潤飾文句，不要改變意思。
 4. 列出文獻研究常見的三種研究限制供我參考。
-5. 根據以上修改建議，整合成一段完整的結論論述，回扣層請使用我原本寫的內容，不要自行改變邏輯。`,
+5. 根據以上修改建議，整合成一段完整的結論論述，呼應層請使用我原本寫的內容，不要自行改變邏輯。`,
         tips: ['AI 說「多項研究顯示」→ 確認是否真有 2 篇以上支持', 'AI 找的研究缺口 → 確認是否對應你的研究問題', '引用要有出處：作者＋年份，不能只說「有研究指出」'],
     },
 };
@@ -134,7 +134,7 @@ const DEMO_EXAMPLE = {
     layers: [
         { name: '描述', color: '#2563EB', text: '根據問卷統計，67% 的受訪者每天使用手機超過三小時，其中高一生佔比最高（82%），高三生最低（51%）。' },
         { name: '詮釋', color: '#7C3AED', text: '手機使用時間隨年級升高而下降，推測高三生因升學壓力增加而主動減少使用時間，高一生課後自律習慣尚在建立中。' },
-        { name: '回扣', color: '#DC2626', text: '本研究原本想了解手機使用時間是否與年級有關。根據分析結果，年級越高使用時間越短，兩者有相關性。但這個結論只能說明兩者有相關，無法確定是年級本身還是其他因素（如補習頻率）造成差異。' },
+        { name: '呼應', color: '#DC2626', text: '本研究原本想了解手機使用時間是否與年級有關。根據分析結果，年級越高使用時間越短，兩者有相關性。但這個結論只能說明兩者有相關，無法確定是年級本身還是其他因素（如補習頻率）造成差異。' },
         { name: '批判', color: '#059669', text: '本研究樣本僅限兩班 60 人，且為自填問卷可能存在社會期許偏差，結論不宜推論至全體高中生。若要更完整回答這個問題，未來可擴大樣本並加入訪談交叉驗證。' },
     ],
 };
@@ -142,18 +142,18 @@ const DEMO_EXAMPLE = {
 const EXPORT_FIELDS = [
     { key: 'w15-draft-describe', label: '初稿：描述層' },
     { key: 'w15-draft-interpret', label: '初稿：詮釋層' },
-    { key: 'w15-draft-anchor', label: '初稿：回扣層' },
+    { key: 'w15-draft-anchor', label: '初稿：呼應層' },
     { key: 'w15-draft-critique', label: '初稿：批判層' },
     { key: 'w15-self-review', label: '自查紀錄', question: '自查後我發現了什麼問題？做了哪些修正？' },
     { key: 'w15-ai-feedback', label: 'AI 檢核建議紀錄' },
-    { key: 'w15-judge-table', label: '裁奪紀錄' },
+    { key: 'w15-judge-table', label: '判斷取捨紀錄' },
     { key: 'w15-rejected', label: '拒絕 AI 的建議與原因' },
     { key: 'w15-human-context', label: 'AI 說不出來但我知道的脈絡' },
     { key: 'w15-final-draft', label: '最終四層結論草稿' },
     { key: 'w15-ai-helpful', label: 'AI 最有幫助的地方' },
     { key: 'w15-ai-limit', label: 'AI 最大的限制' },
     { key: 'w15-ai-blind-trust', label: '完全相信 AI 會犯的錯' },
-    { key: 'w15-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人註解 / B 文件上傳並貼連結' },
+    { key: 'w15-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人留言 / B 文件上傳並貼連結' },
     { key: 'w15-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 壓力測試四層結論的最重要一次互動（A-I-R-E-D 五要素）' },
 ];
 
@@ -226,7 +226,7 @@ const MethodSelector = () => {
                 <div className="flex flex-col gap-4">
                     <CopyablePrompt text={current.prompt} label={`${current.label} Prompt`} />
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB]">
-                        <p className="text-[12px] text-[#92400E] font-bold mb-2">🧠 人工裁奪提醒</p>
+                        <p className="text-[12px] text-[#92400E] font-bold mb-2">🧠 人工判斷取捨提醒</p>
                         <div className="text-[12px] text-[#78350F] leading-relaxed flex flex-col gap-1">
                             {current.tips.map((tip, i) => <span key={i}>• {tip}</span>)}
                         </div>
@@ -278,7 +278,7 @@ const W15Page = () => {
                         <p className="text-[13px] font-bold text-[#5B21B6] mb-2">📖 名詞升級：W14「推論」→ W15「詮釋」</p>
                         <p className="text-[12px] text-[#4C1D95] leading-relaxed mb-2">
                             兩個詞<strong>意思完全一樣</strong>，都是「解釋數據背後的意義」——只是學術上用「詮釋」。
-                            今天開始你會看到「四層」用學術名：<strong>描述 / 詮釋 / 回扣 / 批判</strong>。
+                            今天開始你會看到「四層」用學術名：<strong>描述 / 詮釋 / 呼應 / 批判</strong>。
                         </p>
                         <div className="bg-white border border-[#DDD6FE] rounded p-2.5">
                             <p className="text-[11px] text-[#4C1D95] font-mono leading-relaxed">
@@ -306,7 +306,7 @@ const W15Page = () => {
                                 </div>
                             )}
                             <p className="text-[11px] text-[#0369A1] italic mt-2 leading-relaxed border-t border-[#BAE6FD] pt-2">
-                                💡 W14 是針對「一張圖」寫的；本週要把這個雛型升級為整份研究的結論，再加兩層（回扣、批判）。
+                                💡 W14 是針對「一張圖」寫的；本週要把這個雛型升級為整份研究的結論，再加兩層（呼應、批判）。
                             </p>
                         </div>
                     )}
@@ -317,7 +317,7 @@ const W15Page = () => {
                             <p className="text-[12px] text-[var(--accent)] font-bold mb-2">🔮 你 W14 末對「第三層、第四層」的猜測</p>
                             <p className="text-[12px] text-[var(--ink)] leading-relaxed mb-2 italic">{w14Preview}</p>
                             <p className="text-[11px] text-[var(--ink-mid)] leading-relaxed border-t border-[var(--accent)] pt-2">
-                                🎯 <strong>答案揭曉：</strong>第三層是「<strong>回扣</strong>」（直接回答研究問題）、第四層是「<strong>批判</strong>」（說出研究的限制）。猜對幾項？下面架構圖完整展開。
+                                🎯 <strong>答案揭曉：</strong>第三層是「<strong>呼應</strong>」（直接回答研究問題）、第四層是「<strong>批判</strong>」（說出研究的限制）。猜對幾項？下面架構圖完整展開。
                             </p>
                         </div>
                     )}
@@ -327,7 +327,7 @@ const W15Page = () => {
                             <p className="text-[12px] text-[var(--accent)] font-bold mb-2">🔮 W14 沒寫伏筆？沒關係，直接看答案</p>
                             <div className="grid md:grid-cols-2 gap-3 text-[12px]">
                                 <div className="p-3 rounded-[var(--radius-unified)] bg-white border border-[#FCD34D]">
-                                    <p className="font-bold text-[#DC2626] mb-1">⭐ 第三層：回扣</p>
+                                    <p className="font-bold text-[#DC2626] mb-1">⭐ 第三層：呼應</p>
                                     <p className="text-[var(--ink-mid)] leading-relaxed">直接回答你最初的研究問題（你問的問題答了沒）</p>
                                 </div>
                                 <div className="p-3 rounded-[var(--radius-unified)] bg-white border border-[#FCD34D]">
@@ -356,9 +356,9 @@ const W15Page = () => {
                         </div>
                     </div>
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[#FCA5A5] bg-[#FEF2F2]">
-                        <p className="text-[13px] text-[#DC2626] font-bold mb-1">⭐ 回扣層為什麼特別？</p>
+                        <p className="text-[13px] text-[#DC2626] font-bold mb-1">⭐ 呼應層為什麼特別？</p>
                         <p className="text-[12px] text-[#991B1B] leading-relaxed mb-3">
-                            AI 可以幫你把回扣層的文句說得更通順，但<strong>內容和邏輯只能由你來寫</strong>。因為只有你知道你當初為什麼要做這個研究、你的問題問的是什麼。
+                            AI 可以幫你把呼應層的文句說得更通順，但<strong>內容和邏輯只能由你來寫</strong>。因為只有你知道你當初為什麼要做這個研究、你的問題問的是什麼。
                         </p>
                         <div className="bg-white border border-[#FCA5A5] rounded p-3">
                             <p className="text-[12px] font-bold text-[#991B1B] mb-2">📖 「潤飾」是什麼意思？哪些算 ✅、哪些算 ❌</p>
@@ -386,9 +386,9 @@ const W15Page = () => {
                             </p>
                         </div>
                     </div>
-                    {/* 回扣層多方法範例 */}
+                    {/* 呼應層多方法範例 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📌 回扣層範例：不同方法怎麼寫？</p>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-3">📌 呼應層範例：不同方法怎麼寫？</p>
                         <div className="flex flex-col gap-3">
                             <div className="p-3 rounded-[var(--radius-unified)] bg-[#EFF6FF] border border-[#BFDBFE]">
                                 <p className="text-[11px] font-bold text-[#1E40AF] mb-1">📋 問卷研究</p>
@@ -470,7 +470,7 @@ const W15Page = () => {
                         <ThinkRecord dataKey="w15-draft-interpret" prompt="這代表什麼意義？可能的原因是什麼？" scaffold={[FOUR_LAYERS[1].scaffold]} />
                     </div>
                     <div>
-                        <p className="text-[13px] font-bold mb-2" style={{ color: '#DC2626' }}>⭐ 第三層：回扣（內容和邏輯只能你自己寫！）</p>
+                        <p className="text-[13px] font-bold mb-2" style={{ color: '#DC2626' }}>⭐ 第三層：呼應（內容和邏輯只能你自己寫！）</p>
                         <ThinkRecord dataKey="w15-draft-anchor" prompt="直接回答你的研究問題。這個結論能說明什麼？不能確定什麼？" scaffold={[FOUR_LAYERS[2].scaffold]} />
                     </div>
                     <div>
@@ -489,7 +489,7 @@ const W15Page = () => {
                         <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🔍 對著自己初稿做四層自查</p>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
                             Step 2 寫好了初稿，<strong>不用急著找 AI</strong>——先自己重讀一遍。
-                            初學者最常踩的雷不是「文句不漂亮」，而是「描述層偷渡因果」「詮釋層用沒問過的變項」「回扣層忘了回答自己的研究問題」。這些自己就抓得到。
+                            初學者最常踩的雷不是「文句不漂亮」，而是「描述層偷渡因果」「詮釋層用沒問過的變項」「呼應層忘了回答自己的研究問題」。這些自己就抓得到。
                         </p>
                     </div>
 
@@ -553,7 +553,7 @@ const W15Page = () => {
                                 </ul>
                             </div>
                             <div className="rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2] p-4">
-                                <p className="text-[12px] font-bold text-[#991B1B] mb-2">🔴 回扣層（核心）</p>
+                                <p className="text-[12px] font-bold text-[#991B1B] mb-2">🔴 呼應層（核心）</p>
                                 <ul className="text-[11.5px] text-[#7F1D1D] leading-relaxed space-y-1">
                                     <li>☐ 有直接回答我最初的研究問題嗎？</li>
                                     <li>☐ 結論強度合理嗎（不寫「證明」「證實」）？</li>
@@ -580,7 +580,7 @@ const W15Page = () => {
                         scaffold={[
                             '描述層改了：（哪幾個地方）',
                             '詮釋層改了：',
-                            '回扣層改了：',
+                            '呼應層改了：',
                             '批判層改了：',
                         ]}
                     />
@@ -602,7 +602,7 @@ const W15Page = () => {
                             scaffold={[
                                 '【描述】...',
                                 '【詮釋】...',
-                                '【回扣】本研究原本想了解___。根據分析結果，___。但這個結論只能說明___，無法確定___。',
+                                '【呼應】本研究原本想了解___。根據分析結果，___。但這個結論只能說明___，無法確定___。',
                                 '【批判】本研究的限制在於___，因此結論不宜推論至___。未來可以___。',
                             ]}
                         />
@@ -612,7 +612,7 @@ const W15Page = () => {
                         <p className="text-[12px] font-bold text-[var(--ink)] mb-2">📋 這份草稿對應期末報告的章節</p>
                         <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
                             <span><strong>第四章 研究結果</strong> → 放【描述層】</span>
-                            <span><strong>第五章 討論與結論</strong> → 放【詮釋層】＋【回扣層】＋【批判層】</span>
+                            <span><strong>第五章 討論與結論</strong> → 放【詮釋層】＋【呼應層】＋【批判層】</span>
                         </div>
                     </div>
                 </div>
@@ -629,7 +629,7 @@ const W15Page = () => {
                         <p className="text-[12px] text-[var(--ink)] leading-relaxed">
                             Step 3 自查通過了，初稿已達本週基本要求。
                             如果想被「AI 嚴格教練」再壓力測試一輪——找盲點、補強研究限制、潤飾文句——可挑下方一種模式。
-                            <strong>用了 AI 一定要做裁奪（不能照單全收），並繳完整對話。</strong>
+                            <strong>用了 AI 一定要做判斷取捨（不能照單全收），並繳完整對話。</strong>
                         </p>
                     </div>
 
@@ -668,7 +668,7 @@ const W15Page = () => {
                                 如果 Step 2 卡關完全寫不出來，可以請 Gemini 示範一個極簡範例給你照做。
                                 <strong>看完範例自己回 Step 2 寫一次</strong>，不要直接抄。
                             </p>
-                            <PromptBlock text={`我在做研究，需要寫「四層結論」（描述、詮釋、回扣、批判），但我完全不知道怎麼寫。
+                            <PromptBlock text={`我在做研究，需要寫「四層結論」（描述、詮釋、呼應、批判），但我完全不知道怎麼寫。
 
 【我的研究】
 - 方法：問卷／訪談／實驗／觀察／文獻
@@ -692,9 +692,9 @@ const W15Page = () => {
                         <>
                             {/* 三層紅線判斷卡 */}
                             <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
-                                <p className="text-[13px] font-bold text-[#991B1B] mb-2">🚦 AI 改稿時——哪些可採納、哪些是紅線</p>
+                                <p className="text-[13px] font-bold text-[#991B1B] mb-2">🚦 AI 改稿四層紅線檢核（批判層由你自寫，AI 不介入）</p>
                                 <p className="text-[11.5px] text-[#7F1D1D] leading-relaxed mb-3">
-                                    AI 會把建議混在一起送回來，你必須<strong>逐條判斷</strong>。三層各有自己的紅線。
+                                    AI 會把建議混在一起送回來，你必須<strong>逐條判斷</strong>。以下是 AI 可介入的描述／詮釋／呼應 三層各自紅線；批判層（研究限制）只由你自己寫，本卡不列。
                                 </p>
                                 <div className="grid md:grid-cols-3 gap-2">
                                     <div className="bg-white border border-[#2563EB] rounded-[6px] p-3">
@@ -708,7 +708,7 @@ const W15Page = () => {
                                         <p className="text-[11px] text-[#991B1B] leading-[1.7]"><strong>❌ 紅線：</strong>AI 用<strong>你問卷沒問過的變項</strong>當原因（例：你沒問升學壓力，AI 卻寫「因為升學壓力」）——拒絕</p>
                                     </div>
                                     <div className="bg-white border border-[#DC2626] rounded-[6px] p-3">
-                                        <p className="text-[12px] font-bold text-[#991B1B] mb-1">🔴 回扣層（核心）</p>
+                                        <p className="text-[12px] font-bold text-[#991B1B] mb-1">🔴 呼應層（核心）</p>
                                         <p className="text-[11px] text-[#7F1D1D] leading-[1.7] mb-1"><strong>✅ 可採納：</strong>句子變通順、用詞更學術（「我發現」→「本研究發現」）</p>
                                         <p className="text-[11px] text-[#991B1B] leading-[1.7]"><strong>❌ 紅線：</strong>AI 改了<strong>你的研究問題答案</strong>、加了你沒做的限制、改了結論強度（「有相關」→「有顯著相關」）——這是研究的靈魂，不能讓 AI 動</p>
                                     </div>
@@ -769,21 +769,21 @@ const W15Page = () => {
                             {/* AI 建議紀錄 */}
                             <ThinkRecord
                                 dataKey="w15-ai-feedback"
-                                prompt="AI 提供了哪些建議？分別記錄描述層、詮釋層、回扣層潤飾、研究限制的建議重點。"
-                                scaffold={['描述層建議：...', '詮釋層建議：...', '回扣層潤飾：...', '研究限制建議：1.__ 2.__ 3.__']}
+                                prompt="AI 提供了哪些建議？分別記錄描述層、詮釋層、呼應層潤飾、研究限制的建議重點。"
+                                scaffold={['描述層建議：...', '詮釋層建議：...', '呼應層潤飾：...', '研究限制建議：1.__ 2.__ 3.__']}
                             />
 
-                            {/* 人工裁奪 */}
+                            {/* 人工判斷取捨 */}
                             <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                                <p className="text-[14px] font-bold text-[var(--ink)] mb-1">⚖️ 人工裁奪 · 對照 AI 版本，逐條判斷</p>
+                                <p className="text-[14px] font-bold text-[var(--ink)] mb-1">⚖️ 人工判斷 · 對照 AI 版本，逐條判斷</p>
                                 <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
                                     AI 給你的是建議，不是答案。每一條都要決定：<strong>採納、不採納、還是修改後採納</strong>。
                                 </p>
                             </div>
                             <ThinkRecord
                                 dataKey="w15-judge-table"
-                                prompt="逐條記錄 AI 的建議和你的裁奪（採納/不採納/修改後採納），並說明原因。"
-                                scaffold={['建議1：___。裁奪：___。原因：...', '建議2：___。裁奪：___。原因：...', '建議3：___。裁奪：___。原因：...']}
+                                prompt="逐條記錄 AI 的建議和你的判斷取捨（採納/不採納/修改後採納），並說明原因。"
+                                scaffold={['建議1：___。判斷：___。原因：...', '建議2：___。判斷：___。原因：...', '建議3：___。判斷：___。原因：...']}
                                 placeholder="品質下限：至少 3 條建議要寫到「原因」（不能只寫『採納』兩字）。AI 通常給 5-10 條，全採納或全拒絕都是失格——學會挑、會說為什麼，才是本步驟的核心。"
                             />
                             <ThinkRecord
@@ -834,7 +834,7 @@ const W15Page = () => {
                     <ThinkRecord dataKey="w15-ai-helpful" prompt="今天 AI 最有幫助的地方是什麼？" />
                     <ThinkRecord dataKey="w15-ai-limit" prompt="今天 AI 最大的限制是什麼？" />
                     <ThinkRecord dataKey="w15-ai-blind-trust" prompt="如果我完全相信 AI，我會犯什麼錯？" />
-                    {/* AIRED 敘事紀錄（用了 AI 必填） */}
+                    {/* AI-RED 敘事紀錄（用了 AI 必填） */}
                     {(w15AiMode === 'teach' || w15AiMode === 'verify') ? (
                         <AIREDNarrative week="15" hint="本週用 AI 壓力測試四層結論：A=Gemini Pro / I=方法別 prompt / R=AI 找到的限制與盲點 / E=我同意/不同意哪些 / D=採納哪些修正" />
                     ) : (
@@ -848,9 +848,9 @@ const W15Page = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
-                                                '寫出四層次結論（描述／詮釋／回扣／批判）',
+                                                '寫出四層次結論（描述／詮釋／呼應／批判）',
                                                 '用四層自查清單抓出自己初稿的問題',
-                                                '若選用 AI 檢核：保留自己的最終裁奪權，識別紅線',
+                                                '若選用 AI 檢核：保留自己的最終判斷權，識別紅線',
                                                 '反思「完全相信 AI 會犯的錯」並用紅線守住',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
@@ -870,7 +870,7 @@ const W15Page = () => {
                             R.I.B. 單元挑戰：行動代號濾鏡
                         </h3>
                         <p className="text-[var(--ink-light)] text-sm mb-4">
-                            資料裁奪能力——面對可疑數據或結論，你能挑出真正該採納的那一份嗎？
+                            資料判斷取捨能力——面對可疑數據或結論，你能挑出真正該採納的那一份嗎？
                         </p>
                         <Link to="/game/data-detective" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-sm hover:opacity-90 transition-colors">
                             進入濾鏡 <ArrowRight size={14} />
@@ -900,8 +900,8 @@ const W15Page = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W15"
                 title="四層結論 · "
                 accentTitle="從圖的說明到研究結論"
-                subtitle="W14 寫的是「一張圖的說明」。今天升級：用描述、詮釋、回扣、批判四層整合整份研究。先自己寫、再自己自查；想再被 AI 嚴格教練檢一輪？可選用，不強迫。"
-                chain="W14 你會說明一張圖了——但整份研究有十幾張圖、訪談、文獻。怎麼整合成『所以我發現了什麼』？這週寫研究結論（描述／詮釋／回扣／批判 四層整合）。"
+                subtitle="W14 寫的是「一張圖的說明」。今天升級：用描述、詮釋、呼應、批判四層整合整份研究。先自己寫、再自己自查；想再被 AI 嚴格教練檢一輪？可選用，不強迫。"
+                chain="W14 你會說明一張圖了——但整份研究有十幾張圖、訪談、文獻。怎麼整合成『所以我發現了什麼』？這週寫研究結論（描述／詮釋／呼應／批判 四層整合）。"
                 meta={[
                     { label: '本週任務', value: '四層結論寫作 + 自查 + 補充 AI 檢核（可選）' },
                     { label: '時長', value: '100 MINS' },
@@ -916,8 +916,8 @@ const W15Page = () => {
                 weekTitle={W15Data.title}
                 duration={`${W15Data.duration} 分鐘 · ${W15Data.durationDesc}`}
                 tasks={[
-                    '四層寫作法 — 描述 / 詮釋 / 回扣 / 批判',
-                    '回扣層練習 — 把你的發現連回研究問題',
+                    '四層寫作法 — 描述 / 詮釋 / 呼應 / 批判',
+                    '呼應層練習 — 把你的發現連回研究問題',
                     '批判層練習 — 寫出至少 3 個研究限制',
                 ]}
                 exportReminder="匯出 W15 結論章 → W16 報告整合"

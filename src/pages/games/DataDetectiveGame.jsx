@@ -136,7 +136,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此調查初步回答了關於社團參與是否會影響學業表現的提問。" }
                 ]
             },
@@ -173,7 +173,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "研究結果回應了關於學生生活作息習慣對出勤影響的探討。" }
                 ]
             },
@@ -212,7 +212,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此結論對應了我們欲探討的「課外學習投入與主觀成效之關係」的研究問題。" }
                 ]
             },
@@ -249,7 +249,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "報告結果回應了學校對新型態閱讀課程實施成效的評估需求。" }
                 ]
             },
@@ -284,7 +284,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此調查初步解答了目前校園中多數學生面臨的困境核心。" }
                 ]
             },
@@ -322,7 +322,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "本研究證實了關於睡前螢幕使用時間對睡眠長度存在影響的假設。" }
                 ]
             },
@@ -360,7 +360,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此調查回應了關於三校學生對合作社評價差異的提問。" }
                 ]
             },
@@ -397,7 +397,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此研究初步解答了規律運動習慣與學生心理健康關聯的探討。" }
                 ]
             },
@@ -438,7 +438,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "本研究數據對應了目前性別在特定學科表現差異的研究問題。" }
                 ]
             },
@@ -477,7 +477,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此結果回應了計畫目標中關於線上學習平台近期導入後追蹤成效的評估需求。" }
                 ]
             },
@@ -514,7 +514,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此研究回應了關於學生通勤方式是否影響出勤狀況的討論。" }
                 ]
             },
@@ -550,7 +550,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "本調查初步解答了校方對於學生午餐飲食偏好分佈的疑問。" }
                 ]
             },
@@ -591,7 +591,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "此分析對應了各班階段性學習成效追蹤與比較的研究目的。" }
                 ]
             },
@@ -628,7 +628,7 @@ const caseData = [
                 ]
             },
             {
-                type: "relevance", icon: "🎯", label: "回扣", parts: [
+                type: "relevance", icon: "🎯", label: "呼應", parts: [
                     { text: "報告結果回應了研究計畫中關於學生長期滿意度的趨勢探討。" }
                 ]
             },
@@ -870,7 +870,7 @@ export const DataDetectiveGame = () => {
                     <p className="text-lg text-slate-300 mb-8 max-w-lg mx-auto leading-relaxed shadow-sm font-medium">
                         歡迎來到「行動代號：濾鏡」！在這裡，你將化身為數據偵探，運用你的批判性思維，
                         從看似合理的分析報告中，找出隱藏的偏誤、錯誤詮釋或不當結論。
-                        每一份報告都可能藏著「假象」，你的任務就是揭露它們，還原數據的「真相」！
+                        每一份報告都可能藏著「假象」，你的任務就是揭露它們，檢查圖表、結論與研究問題對不對得上。
                     </p>
 
                     {/* 🏆 挑戰結束的稱號規則 */}
@@ -902,7 +902,7 @@ export const DataDetectiveGame = () => {
                             <div className="pl-3 border-l-2 border-slate-700/80 space-y-2 py-1 my-2">
                                 <p className="flex items-center gap-2"><span className="text-indigo-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">📊 描述</span> <span className="text-slate-400">—</span> 客觀陳述數據</p>
                                 <p className="flex items-center gap-2"><span className="text-amber-500 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🧠 詮釋</span> <span className="text-slate-400">—</span> 解讀數據意義</p>
-                                <p className="flex items-center gap-2"><span className="text-purple-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🎯 回扣</span> <span className="text-slate-400">—</span> 對應研究問題</p>
+                                <p className="flex items-center gap-2"><span className="text-purple-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🎯 呼應</span> <span className="text-slate-400">—</span> 對應研究問題</p>
                                 <p className="flex items-center gap-2"><span className="text-emerald-400 font-bold drop-shadow-[0_0_5px_currentColor] w-16">🔍 批判</span> <span className="text-slate-400">—</span> 檢視限制與信度</p>
                             </div>
                             <div className="border-t border-slate-700/50 pt-4 mt-4 space-y-2">
@@ -1245,7 +1245,7 @@ export const DataDetectiveGame = () => {
                                     }`}>
                                     {current.errorLayer === 'descriptive' ? '📊 描述層出錯' :
                                         current.errorLayer === 'interpretive' ? '🧠 詮釋層出錯' :
-                                            current.errorLayer === 'relevance' ? '🎯 回扣層出錯' : '🔍 批判層出錯'}
+                                            current.errorLayer === 'relevance' ? '🎯 呼應層出錯' : '🔍 批判層出錯'}
                                 </span>
                             </div>
                         )}

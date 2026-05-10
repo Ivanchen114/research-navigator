@@ -79,7 +79,7 @@ export const PhantomDataHub = () => {
                     <h1 className="text-4xl font-black text-white tracking-tight mb-1">幽靈數據</h1>
                     <div className="text-slate-400 font-mono text-sm tracking-widest mb-6">PHANTOM DATA</div>
                     <p className="text-slate-400 leading-relaxed max-w-xl">
-                        三年前，一份得獎研究報告的數據可能是偽造的。更危險的是，製造那份數據的工具，正在校園裡悄悄流傳。你有五週時間，用五種研究方法，找出真相。
+                        三年前，一份得獎研究報告的數據出現可疑之處；同時，一套能快速生成研究資料的工具，正在校園裡流傳。你有五週時間，用五種研究方法，比對線索、檢查證據，提出一個有根據、可被追問的判斷。
                     </p>
                 </div>
 

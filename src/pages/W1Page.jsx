@@ -198,7 +198,7 @@ export const W1Page = () => {
                                 {SUSPECTS.map(s => (
                                     <div key={s.id} className="border border-[var(--border)] rounded-lg overflow-hidden flex flex-col">
                                         <div className="p-3 px-4 bg-[var(--paper)] border-b border-[var(--border)] text-[11px] font-mono text-[var(--ink-light)]">
-                                            嫌疑犯 #{s.id}
+                                            偽裝者 #{s.id}
                                         </div>
                                         <div className="p-4 text-[13px] text-[var(--ink-mid)] leading-relaxed flex-1 bg-white">
                                             <div dangerouslySetInnerHTML={{ __html: s.content.replace(/\n/g, '<br/>').replace(/想像：/g, '<strong>想像：</strong>').replace(/期待：/g, '<strong>期待：</strong>') }} />
@@ -250,7 +250,7 @@ export const W1Page = () => {
                                         </div>
                                         <div className="p-5 text-[13px] text-[var(--ink-mid)] leading-[1.8] space-y-3">
                                             <p>7 號是老師<strong>特意叫 AI 生成</strong>的——Prompt 只有一句：「請用高中生的口吻寫一段對研究課的想像與期待。」</p>
-                                            <p>AI 可以隨心所欲地模仿任何語氣。它之所以能騙過你，不是因為 AI 太強，而是因為——<strong>很多人平常寫東西就很空泛</strong>。沒有個人細節、沒有具體場景、沒有自己的話，AI 隨便寫就能混進去。</p>
+                                            <p>AI 能寫出很合理、很像人的文字。<strong>真正值得追問的不是「像不像人」</strong>，而是：這些細節從哪裡來？有沒有真實經驗或證據支撐？說這段話的人，願不願意為它負責？所以這門課不是要你寫得不像 AI，而是要你<strong>說得出：哪些內容是你真的看見、查過、想過，並願意負責的</strong>。</p>
                                             <p>換句話說：<strong>如果你寫得跟 AI 一樣，那你的存在感在哪？</strong></p>
                                         </div>
                                     </div>
@@ -338,7 +338,7 @@ export const W1Page = () => {
                             </div>
 
                             <div className="p-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)]/15 text-[13px] text-[var(--ink-mid)]">
-                                💡 <strong>結論：</strong>我是大腦（提問與解讀），AI 是手腳（運算）。缺一不可——但方向永遠由人來定。
+                                💡 <strong>結論：</strong>人負責方向、判準與解讀；AI 協助整理、分類與產生草稿。能不能採用，最後仍由人判斷。
                             </div>
 
                             <ThinkChoice

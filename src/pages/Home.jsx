@@ -38,8 +38,8 @@ export const Home = () => {
         <div className="hero-inner">
           <div className="hero-left">
             <div className="hero-kicker">SSSH &nbsp;·&nbsp; 研究方法與專題 &nbsp;·&nbsp; 高一必修</div>
-            <h1>松山高中<br /><span className="hl">研究方法與專題</span><br />AI 陪你做研究</h1>
-            <p className="hero-sub">這不是幫你寫作業的工具，而是你的研究教練。透過人機協作，把複雜的研究方法變得像通關遊戲一樣有跡可循。</p>
+            <h1>松山高中<br /><span className="hl">研究方法與專題</span><br />學會提問、判斷與研究表達</h1>
+            <p className="hero-sub">AI 可以協助整理資料、改寫文字、產生草稿。但<strong>研究問題、證據判斷與最後結論，仍然要由你負責</strong>——這個網站陪你走完 18 週，把複雜的研究方法變得有跡可循。</p>
           </div>
           <div className="hero-stats">
             <div className="stat"><div className="stat-n">W0–W17</div><div className="stat-label">課程週次</div></div>
@@ -108,7 +108,7 @@ export const Home = () => {
               fontWeight: 700,
               marginBottom: 12,
               letterSpacing: '0.1em',
-            }}>三大目標 · 你要學會裁決三個對象</div>
+            }}>三大目標 · 裁決力的三個練習對象</div>
             <ul style={{
               fontSize: 13.5,
               lineHeight: 2.0,
@@ -117,9 +117,9 @@ export const Home = () => {
               padding: 0,
               margin: 0,
             }}>
-              <li>① <strong style={{ color: '#fff' }}>裁決外部論述</strong>：AI、新聞、文獻、網紅引用——能問「樣本？因果？還是相關？」</li>
-              <li>② <strong style={{ color: '#fff' }}>裁決自己論述</strong>：寫研究時能指出「我這話不能說，因為 ___」</li>
-              <li>③ <strong style={{ color: '#fff' }}>裁決協作對象</strong>：能挑 AI 輸出的雷、能給同學具體可行動的建議</li>
+              <li>① <strong style={{ color: '#fff' }}>判斷外部資訊</strong>：AI、新聞、文獻、網紅引用——能問「樣本？因果？還是相關？」</li>
+              <li>② <strong style={{ color: '#fff' }}>檢查自己的說法</strong>：寫研究時能指出「我這話不能說，因為 ___」</li>
+              <li>③ <strong style={{ color: '#fff' }}>管理協作過程</strong>：能挑 AI 輸出的雷、能給同學具體可行動的建議</li>
             </ul>
           </div>
           <p style={{
@@ -239,7 +239,7 @@ export const Home = () => {
               <span className="ph-range">W11 – W12</span>
             </div>
             <div className="week-grid wg-4">
-              <WeekCard num="W11" icon={<FlaskConical size={18} className="text-[#9090b0]" />} title="預試與倫理" desc="拿模板填工具 + 座位表 1 對 1 預試 + 倫理同意書 + 施測啟動。" path="/w11" />
+              <WeekCard num="W11" icon={<FlaskConical size={18} className="text-[#9090b0]" />} title="預試與倫理" desc="拿模板填工具 + 座位表一對一預試 + 倫理同意書 + 施測啟動。" path="/w11" />
               <WeekCard num="W12" icon={<Rocket size={18} className="text-[#9090b0]" />} title="期中短報" desc="各組 3min Pitch + 1min QA，全班同儕回饋當擋板。" path="/w12" />
             </div>
           </div>
@@ -255,7 +255,7 @@ export const Home = () => {
             <div className="week-grid wg-5">
               <WeekCard num="W13" icon={<Rocket size={18} className="text-[#9090b0]" />} title="資料整理週" desc="raw → 分析表：5 法對照 + 範本／彙整 + 動手整理 + 繳交 Google Sheet 連結。" path="/w13" />
               <WeekCard num="W14" icon={<BarChart2 size={18} className="text-[#9090b0]" />} title="數據轉譯" desc="四大圖表選擇、格式規範、描述＋詮釋寫作。" path="/w14" mission={{ tag: 'DECADE', name: '行動代號：解碼', path: '/game/chart-matcher' }} />
-              <WeekCard num="W15" icon={<FileText size={18} className="text-[#9090b0]" />} title="研究結論" desc="四層結論寫作：描述、詮釋、回扣文獻、批判限制。" path="/w15" mission={{ tag: 'FILTER', name: '行動代號：濾鏡', path: '/game/data-detective' }} />
+              <WeekCard num="W15" icon={<FileText size={18} className="text-[#9090b0]" />} title="研究結論" desc="四層結論寫作：描述、詮釋、呼應文獻、批判限制。" path="/w15" mission={{ tag: 'FILTER', name: '行動代號：濾鏡', path: '/game/data-detective' }} />
               <WeekCard num="W16" icon={<Palette size={18} className="text-[#9090b0]" />} title="簡報與海報" desc="七章報告組裝、AI 潤色縫合、海報設計。" path="/w16" />
               <WeekCard num="W17" icon={<Trophy size={18} className="text-[#9090b0]" />} title="成果發表" desc="策展人登場，A/B 組輪替，學術投資貼紙。" path="/w17" />
             </div>

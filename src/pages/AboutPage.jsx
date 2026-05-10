@@ -24,7 +24,7 @@ export const AboutPage = () => {
           <h1>不只是教學網站<br />是一座<span className="hl">研究訓練場</span></h1>
           <p className="lead">
             松山高中「研究方法與專題」校訂必修課程的教學輔助平台。
-            我們把遊戲化機制寫進學科能力的骨架裡，讓高一學生在通關的過程中，真正學會做研究。
+            我們把遊戲化機制寫進學科能力的骨架裡，讓高一學生在通關的過程中，完成一次完整的初階研究歷程。
           </p>
         </div>
       </div>
@@ -34,7 +34,7 @@ export const AboutPage = () => {
         {/* STATS */}
         <div className="stats-row">
           <div className="sr-cell"><div className="sr-n">18</div><div className="sr-label">教學週次</div></div>
-          <div className="sr-cell"><div className="sr-n">6</div><div className="sr-label">技能挑戰</div></div>
+          <div className="sr-cell"><div className="sr-n">6</div><div className="sr-label">互動任務</div></div>
           <div className="sr-cell"><div className="sr-n">10</div><div className="sr-label">敘事章節</div></div>
           <div className="sr-cell"><div className="sr-n">5</div><div className="sr-label">AI-RED 原則</div></div>
         </div>
@@ -56,7 +56,7 @@ export const AboutPage = () => {
             </div>
             <p>
               很多教學網站的遊戲化只是貼徽章、加排行榜——本質上還是「做完作業換獎勵」的行為主義套路。
-              這個站不一樣：六個技能挑戰各自對應一項研究能力維度，玩的過程本身就是在練能力，不是「練完能力再來玩」。
+              這個站不一樣：六個互動任務各自對應一項研究能力維度，玩的過程本身就是在練能力，不是「練完能力再來玩」。
             </p>
             <div className="example">
               <strong>靶心</strong>練問題聚焦、<strong>獵狐</strong>練引用判斷、<strong>濾鏡</strong>練數據篩選、<strong>防線</strong>練研究倫理、<strong>裝備</strong>練方法選擇、<strong>解碼</strong>練圖表解讀——六個挑戰最終匯入探員檔案的六角能力雷達圖。
@@ -79,7 +79,7 @@ export const AboutPage = () => {
             </p>
             <div className="example">
               <strong>Timeline</strong>（盤點整學期紀錄）→ <strong>Curate</strong>（挑選 + 雙層反思）→ <strong>Export</strong>（一鍵列印 A4 襯線版 PDF）。
-              全程在瀏覽器端，不上傳、不監控；主權在學生手上。
+              全程在瀏覽器端，不上傳、不監控；資料留在學生自己手上。
             </div>
           </div>
 
@@ -116,7 +116,7 @@ export const AboutPage = () => {
             </p>
             <div className="example">
               每個遊戲結束自動寫入成績，探員檔案即時換算為百分比，並根據總體表現給予「特務軍階」。
-              老師在課堂上只需要投影 Dossier 頁面，就能看到全班能力分布趨勢。
+              學生可以在自己的 Dossier 頁面看到能力分布；教師則可透過課堂展示、學生匯出或回報，掌握學習狀況。
             </div>
           </div>
 
@@ -131,7 +131,7 @@ export const AboutPage = () => {
               AI-RED 五原則（歸屬、提問、引用、評估、紀錄）貫穿 18 週課程。
               前幾週的學習單有完整的 AI 使用引導與記錄欄位，
               後期逐步簡化為三行「AI 使用簡記」，讓學生從被引導走向自主反思。
-              搭配 Prompt 實驗室，學生學的不只是「怎麼用 AI」，而是「怎麼負責任地用 AI 做研究」。
+              搭配 Prompt 實驗室，學生學的不只是「怎麼使用 AI」，而是<strong>如何在 AI 協助下保留自己的提問、判斷、證據與責任</strong>。
             </p>
           </div>
         </div>

@@ -60,7 +60,7 @@ export const W3Data = {
                     icon: "🌉",
                     title: "Step 2 暖身｜W2 → W3 銜接 + 8 病症介紹",
                     desc: "回顧 W2 探究意圖（『原石』），介紹 8 種題目病症（A 抽象哲學／B 算命占卜／C 百科全書／D 個案／E 太私／F 玄學／G 無聊／H 無範圍）。",
-                    tags: ["回扣 W2", "病症觀念"]
+                    tags: ["呼應 W2", "病症觀念"]
                 },
                 {
                     timeStart: "0:08",
@@ -170,9 +170,9 @@ export const W3Data = {
                     colorClass: "c1",
                     icon: "✨",
                     title: "Step 5｜AI 共診定案（Part 5 AI 7 步）",
-                    desc: "先根據 Part 4 自己寫出專屬初稿 → 請 AI 診斷 → 比對差異 → AI 提供 3 方案 → 自己選 → AI 優化 → 最終定案 + AIRED。",
-                    tags: ["AI 7 步", "最終定案", "AIRED"],
-                    additionalNotes: "Step 1 自寫初稿 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 方案 → Step 5 自己選 → Step 6 問 AI 優化 → Step 7 最終定案 + AIRED",
+                    desc: "先根據 Part 4 自己寫出專屬初稿 → 請 AI 診斷 → 比對差異 → AI 提供 3 方案 → 自己選 → AI 優化 → 最終定案 + AI-RED。",
+                    tags: ["AI 7 步", "最終定案", "AI-RED"],
+                    additionalNotes: "Step 1 自寫初稿 → Step 2 問 AI 診斷 → Step 3 比對差異 → Step 4 問 AI 給 3 方案 → Step 5 自己選 → Step 6 問 AI 優化 → Step 7 最終定案 + AI-RED",
                     keyPoint: "🎯 最重要的不是 AI 生出幾句漂亮話，而是學生能不能說出：『我為什麼選這個版本，因為它做得到。』"
                 },
                 {
@@ -340,7 +340,7 @@ export const W1Data = {
                     title: "七、 解讀數據：人在迴圈中",
                     desc: "教師示範如何解讀 AI 的數字，賦予教學意義（人的判斷）。總結人與 AI 的分工。",
                     tags: ["解讀分析", "人機分工"],
-                    keyPoint: "🎯 教師是大腦（提問與解讀），AI 是手腳（運算）。"
+                    keyPoint: "🎯 人負責方向、判準與解讀；AI 協助整理、分類與產生草稿。"
                 },
                 {
                     timeStart: "0:35",
@@ -411,7 +411,7 @@ export const W2Data = {
                     colorClass: "c3",
                     icon: "🌉",
                     title: "一、 暖身概念（Step 1 觀念建立 · 前段）",
-                    desc: "回扣 W1 生活觀察種子，點出「問為什麼」是爛問題，導入把好奇心變成好問題的需求。",
+                    desc: "呼應 W1 生活觀察種子，點出「問為什麼」是爛問題，導入把好奇心變成好問題的需求。",
                     tags: ["舊證連結", "點出盲點"]
                 },
                 {
@@ -473,7 +473,7 @@ export const W2Data = {
                     title: "六、 探究意圖生成器（Step 4 AI 協作 · 三拍）",
                     desc: "拍 2：學生餵 Prompt 給 AI，請 AI 把選定假設翻譯成 A/B/C 三種句型。拍 3：學生比對自判 vs AI 建議，選一個真正打動的。",
                     tags: ["AI 實作", "三拍流程", "AI-RED 紀錄"],
-                    keyPoint: "🔍 AI 是放大鏡，你才是眼睛——AI 給選項，人做最終裁奪。"
+                    keyPoint: "🔍 AI 是放大鏡，你才是眼睛——AI 給選項，人做最終判斷。"
                 },
                 {
                     timeStart: "0:35",
@@ -836,9 +836,9 @@ export const W5Data = {
                 {
                     timeStart: "0:40", timeEnd: "0:48", duration: "8 min",
                     colorClass: "c5", icon: "🤖",
-                    title: "十二、 AIRED（optional）+ 檢核清單走讀",
+                    title: "十二、 AI-RED（optional）+ 檢核清單走讀",
                     desc: "AI-RED 敘事紀錄（操作型定義可能用 AI 發散候選版本）+ 本週檢核清單 4 項打勾。",
-                    tags: ["AIRED", "檢核"]
+                    tags: ["AI-RED", "檢核"]
                 },
                 {
                     timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
@@ -1044,7 +1044,7 @@ export const W7Data = {
         {
             prefix: "①",
             title: "手動搜索",
-            subtitle: "不准用 AI 一鍵幫找",
+            subtitle: "先手動搜尋,建立查找路徑",
             desc: "華藝四步：關鍵字 → 搜尋 → 限縮 → 標題摘要全文",
             colorConfig: "r"
         },
@@ -1088,7 +1088,7 @@ export const W7Data = {
                     timeStart: "0:15", timeEnd: "0:40", duration: "25 min",
                     colorClass: "c1", icon: "👀",
                     title: "三、 華藝實戰：找到第一篇",
-                    desc: "登入碩博士論文系統，獨立找出 1 篇符合題目的文獻——不准用 AI 幫找。",
+                    desc: "登入碩博士論文系統，獨立找出 1 篇符合題目的文獻——先靠自己手動建立查找路徑。",
                     tags: ["華藝實戰", "獨立找尋"],
                     keyPoint: "⚠️ AI 找文獻容易給虛構書目（內容農場、捏造作者）——這週訓練學生自己找。"
                 },
@@ -1124,8 +1124,8 @@ export const W7Data = {
                 {
                     timeStart: "0:40", timeEnd: "0:48", duration: "8 min",
                     colorClass: "c5", icon: "💭",
-                    title: "七、 反思 + AIRED",
-                    desc: "1 題反思：今天最容易誤判的是哪張證物？AIRED 紀錄（optional）。",
+                    title: "七、 反思 + AI-RED",
+                    desc: "1 題反思：今天最容易誤判的是哪張證物？AI-RED 紀錄（optional）。",
                     tags: ["後設認知"]
                 },
                 {
@@ -1422,7 +1422,7 @@ export const W9Data = {
                     colorClass: "c4",
                     icon: "🤖",
                     title: "六、 Step 4 AI 工作坊（雙模式）",
-                    desc: "選教學型（卡關章節請 AI 給範例）或驗收型（有初稿請 AI 找盲點）；複製 prompt 帶回家跑（深度思考模式）；預想式寫 AIRED A/I/E/D，R 回家補。",
+                    desc: "選教學型（卡關章節請 AI 給範例）或驗收型（有初稿請 AI 找盲點）；複製 prompt 帶回家跑（深度思考模式）；預想式寫 AI-RED A/I/E/D，R 回家補。",
                     tags: ["雙模式", "完整對話繳交"]
                 },
                 {
@@ -1559,7 +1559,7 @@ export const W10Data = {
                     colorClass: "c1",
                     icon: "🤖",
                     title: "五、 Step 3 AI 工作坊（雙模式 + 不用 AI 三選一）",
-                    desc: "選教學型（卡關請 AI 給範例）／驗收型（有題目請 AI 找毛病）／不用 AI（自己練手）三選一；完整對話繳到 GC；寫 AIRED 紀錄。",
+                    desc: "選教學型（卡關請 AI 給範例）／驗收型（有題目請 AI 找毛病）／不用 AI（自己練手）三選一；完整對話繳到 GC；寫 AI-RED 紀錄。",
                     tags: ["三模式", "完整對話繳交"]
                 },
                 {
@@ -1641,7 +1641,7 @@ export const W11Data = {
         },
         {
             prefix: "②",
-            title: "座位表 1 對 1 跨方法 Pilot",
+            title: "座位表一對一跨方法預試（Pilot）",
             subtitle: "雙向紀錄 + 自我檢核",
             desc: "對方不一定同方法，模擬真實受測者；4 件事每組都要做（知情/計時/觀察/雙向紀錄）",
             colorConfig: "b"
@@ -1712,7 +1712,7 @@ export const W11Data = {
         },
         {
             badge: "第二節",
-            title: "座位表 1 對 1 Pilot × 倫理 × 施測啟動",
+            title: "座位表一對一預試（Pilot） × 倫理 × 施測啟動",
             duration: 50,
             hasBreakAfter: false,
             stages: [
@@ -1723,7 +1723,7 @@ export const W11Data = {
                     colorClass: "c4",
                     icon: "🗺",
                     title: "五、 Step 3 配對指示 + 4 件事說明",
-                    desc: "老師投影座位表 1 對 1 跨方法配對。讀「當作真的施測 4 件事」：知情同意短版／計時／專注觀察／雙向紀錄。",
+                    desc: "老師投影座位表一對一跨方法配對。讀「當作真的施測 4 件事」：知情同意短版／計時／專注觀察／雙向紀錄。",
                     tags: ["座位表", "跨方法"]
                 },
                 {
@@ -1778,7 +1778,7 @@ export const W11Data = {
         {
             icon: "🧪",
             label: "Pilot 發現",
-            text: "座位表 1 對 1 跨方法 Pilot<br><small style=\"font-size:11px;color:#888;\">當研究者紀錄 + 自我檢核</small>"
+            text: "座位表一對一跨方法預試（Pilot）<br><small style=\"font-size:11px;color:#888;\">當研究者紀錄 + 自我檢核</small>"
         },
         {
             icon: "⚖",
@@ -1802,7 +1802,7 @@ export const W11Data = {
 
 export const W12Data = {
     id: "W12",
-    title: "期中進度短報 · 同儕擋板",
+    title: "期中進度短報 · 同儕把關",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: pacingArc.map((item, idx) => ({
@@ -2147,7 +2147,7 @@ export const W15Data = {
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
-        { label: '第一節', value: '四層公式 + 回扣層精練' },
+        { label: '第一節', value: '四層公式 + 呼應層精練' },
         { label: '第二節', value: '批判層 + AI 輔助整合' },
         { label: '課業產出', value: '完整四層結論段落' },
         { label: '帶去 W15', value: '結論定稿，準備簡報' }
@@ -2161,13 +2161,13 @@ export const W15Data = {
         {
             prefix: "①",
             title: "四層寫作法",
-            subtitle: "描述 / 詮釋 / 回扣 / 批判",
+            subtitle: "描述 / 詮釋 / 呼應 / 批判",
             desc: "建立完整、嚴謹的研究結論結構",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "回扣層核心",
+            title: "呼應層核心",
             subtitle: "連結發現與研究問題",
             desc: "確保研究有頭有尾，回答最初的疑問",
             colorConfig: "b"
@@ -2176,7 +2176,7 @@ export const W15Data = {
     periods: [
         {
             badge: "第一節",
-            title: "四層公式與回扣精練",
+            title: "四層公式與呼應精練",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -2206,8 +2206,8 @@ export const W15Data = {
                     duration: "20 min",
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "實作：撰寫回扣層草稿",
-                    desc: "學生翻閱 W3 題目，對比現有發現，填寫學習單回扣層草稿。",
+                    title: "實作：撰寫呼應層草稿",
+                    desc: "學生翻閱 W3 題目，對比現有發現，填寫學習單呼應層草稿。",
                     tags: ["個人實作", "連回題目"]
                 }
             ]

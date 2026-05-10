@@ -185,7 +185,7 @@ function W2Step4RefCard() {
         return (
             <BackfillField
                 dataKey="w2-abc-judgment"
-                label="⚠️ 還沒偵測到「AI 協作」第一輪的挑選——想直接從定稿階段開始？把『我選假設 ___，因為 ___，這是 X 型』貼這裡，下方 scaffold 會根據 ABC 型給你翻譯提示。"
+                label="⚠️ 還沒偵測到「AI 協作」第一輪的挑選——想直接從定稿階段開始？把『我選假設 ___，因為 ___，這是 X 型』貼這裡，下方會根據 ABC 型給你翻譯句型提示。"
                 placeholder={'例：我選假設①「考試壓力」，因為這個變項最容易設計問卷量測。我判斷是 A 型（影響型）。'}
                 buttonLabel="補上挑選＋判斷"
             />
@@ -194,9 +194,9 @@ function W2Step4RefCard() {
 
     const ABC_LABELS = { A: '影響型', B: '比較型', C: '深究型' };
     const ABC_HINT = {
-        A: '建議用 scaffold 第 1 條：「我想探究『___』如何影響『___』」',
-        B: '建議用 scaffold 第 2 條：「我想比較『___』和『___』的差異」',
-        C: '建議用 scaffold 第 3 條：「我想深究『___』背後的原因」',
+        A: '建議套用句型 1：「我想探究『___』如何影響『___』」',
+        B: '建議套用句型 2：「我想比較『___』和『___』的差異」',
+        C: '建議套用句型 3：「我想深究『___』背後的原因」',
     };
 
     return (
@@ -573,7 +573,7 @@ export const ProblemFocus = () => {
                             </div>
 
                             <div className="w2-notice" style={{ margin: 0 }}>
-                                💡 拿著你選定的假設問自己：你最想知道的是「影響」、「差異」還是「原因」？這個判斷由你來做，不准問 AI！
+                                💡 拿著你選定的假設問自己：你最想知道的是「影響」、「差異」還是「原因」？這一步先由你判斷，不急著問 AI。
                             </div>
 
                             {/* 理解檢核 */}
@@ -600,7 +600,7 @@ export const ProblemFocus = () => {
                     content: (
                         <div className="flex flex-col gap-8 prose-zh">
                             <div>
-                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2 · 第一節課 · 禁止使用 AI</div>
+                                <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.12em] mb-3">PART 2 · 第一節課 · 先自己觀察與發散</div>
                                 <h3 className="font-serif text-[22px] md:text-[24px] font-bold text-[var(--ink)] mb-4 leading-[1.4]">先用範例練手感</h3>
                                 <p className="text-[15px] md:text-[16px] text-[var(--ink-mid)] leading-[1.85]">
                                     用下方兩個範例場景試跑「現象 → 落差 → 展開假設」三步。3 分鐘 / 場景，節奏快、不分享。做完按 Next 進「人腦練習」階段，換你自己的 W1 觀察上場。
@@ -761,7 +761,7 @@ export const ProblemFocus = () => {
                             {/* 第三輪：人腦定稿（保留/採用/混合） */}
                             <div>
                                 <p className="text-[14px] md:text-[15px] text-[var(--ink-mid)] leading-[1.85]">
-                                    <strong className="text-[var(--ink)]">第三輪 · 人腦定稿：</strong>看完 AI 審核，決定怎麼定稿——<strong className="text-[var(--ink)]">保留自己的</strong>（AI 說 OK 或你不認同它的改寫）／<strong className="text-[var(--ink)]">採 AI 改寫</strong>（它的版本更精準）／<strong className="text-[var(--ink)]">混合</strong>（取雙方各一半）。⚠️ AI 不是裁判，你才是。
+                                    <strong className="text-[var(--ink)]">第三輪 · 人腦定稿：</strong>看完 AI 審核，決定怎麼定稿——<strong className="text-[var(--ink)]">保留自己的</strong>（AI 說 OK 或你不認同它的改寫）／<strong className="text-[var(--ink)]">採 AI 改寫</strong>（它的版本更精準）／<strong className="text-[var(--ink)]">混合</strong>（取雙方各一半）。⚠️ AI 可以提供建議，但最後要由你判斷是否採用。
                                 </p>
                             </div>
 

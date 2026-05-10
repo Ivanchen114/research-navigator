@@ -32,7 +32,7 @@ const AI_ROLES = [
 const RESEARCH_STAGES = [
   { id: 'topic', name: '問題意識與對焦', promptTemplate: '我正在進行關於「[TOPIC]」的研究。目前我的研究問題是「[QUESTION]」。請針對這個題目的「可執行性」與「研究價值」進行初步評估，並指出是否有「百科全書病」或「抽象哲學病」的風險。' },
   { id: 'lit_review', name: '文獻回顧與整理', promptTemplate: '針對「[TOPIC]」這個主題，我已經蒐集了以下關鍵字：[KEYWORDS]。請幫我架構一個初步的文獻回顧地圖，並說明為了支持「[QUESTION]」，我該重點閱讀哪一類的文獻？' },
-  { id: 'methodology', name: '研究方法與工具', promptTemplate: '我的研究題目是「[QUESTION]」，我打算使用「[METHOD]」法。請幫我模擬 5 位受訪者/受測者可能的回應，並指出我的工具設計中是否存在「誘導性提問」或「變因失控」的缺陷。' },
+  { id: 'methodology', name: '研究方法與工具', promptTemplate: '我的研究題目是「[QUESTION]」，我打算使用「[METHOD]」法。請幫我預測 5 種可能出現的受訪者/受測者反應類型，用來檢查我的題目是否清楚（⚠️ 這些只是試題檢查用的模擬，不可當成正式研究資料）。並指出我的工具設計中是否存在「誘導性提問」或「變因失控」的缺陷。' },
   { id: 'analysis', name: '數據分析與詮釋', promptTemplate: '我蒐集到了以下原始數據:[DATA]。請根據這些數據，提出 3 個可能的詮釋方向，並提醒我如何避免「倖存者偏差」或「過度推論」。' }
 ];
 
@@ -66,7 +66,7 @@ const PROMPT_COMPARISONS = [
 
 祝你研究順利！如有需要，歡迎進一步討論。`,
     good: '你是一位量化研究專家。我想研究「高中生睡眠時間與段考成績的關係」，打算用問卷法收集 120 位學生的資料。請評估：(1) 這個題目的可執行性；(2) 問卷可能遇到的變因失控風險；(3) 建議的樣本抽樣方式。',
-    goodWhy: '角色 + 具體題目 + 方法 + 明確要 AI 做什麼（三個編號任務）。AI 會給結構化、可用的回答。',
+    goodWhy: '角色 + 具體題目 + 方法 + 明確要 AI 做什麼（三個編號任務）。AI 比較可能給結構清楚、方便你檢查的回應；採不採用，仍要回到你的研究判斷。',
     goodOutput: `## (1) 可執行性評估
 ✅ 可執行，但需要先釐清三個定義：
 ・「睡眠時間」：平日還是平日+假日平均？計入午睡嗎？
@@ -131,7 +131,7 @@ const PROMPT_COMPARISONS = [
 
 如果還有其他問題，歡迎繼續詢問！`,
     good: '你剛才提到的第 2 點「樣本選擇偏差」，可以舉一個高中校園研究的具體案例嗎？並說明這個偏差會如何影響結論的推論範圍。',
-    goodWhy: 'Prompt 工程核心能力：迭代追問。指定要延伸哪一點 + 要求具體範例 + 限定情境（高中校園）。',
+    goodWhy: 'AI 協作的核心能力：針對回應繼續追問、檢查與修正。指定要延伸哪一點 + 要求具體範例 + 限定情境（高中校園）。',
     goodOutput: `## 具體案例：志願者偏誤（Volunteer Bias）
 
 情境：某研究者想探討「高中生社團參與動機」，
@@ -302,9 +302,9 @@ ${template}
             </span>
           </div>
           <p className="text-[14px] text-[var(--pl-ink-mid)] leading-[1.95] max-w-3xl mb-3">
-            依 <strong className="text-[var(--pl-ink)]">角色 → 階段 → 素材</strong> 三步驟，幫你組出對 AI 提問的高品質 prompt。
-            每個步驟旁邊點開「💡 為什麼這樣寫」，你會看到背後的 prompt 工程原理。
-            下方還有「Prompt 對照診所」可以自學——沒有老師在旁邊也看得懂。
+            依「<strong className="text-[var(--pl-ink)]">角色 → 研究階段 → 你的素材</strong>」三步驟，幫你把研究任務說清楚，再請 AI 協助檢查、補盲點或提供範例。
+            重點不是寫出漂亮 prompt，而是讓 AI 回應能回到你的研究問題、資料與判準。
+            下方「Prompt 對照診所」可以自學——沒有老師在旁邊也看得懂。
           </p>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-[var(--pl-gold-pale)] border border-[var(--pl-gold)]/40 text-[12px] text-[var(--pl-gold)]">
             💡 <strong>定位：</strong>課後自學工具，課堂主流程不依賴此頁
@@ -315,20 +315,20 @@ ${template}
         <section className="mb-12 border-2 border-[var(--pl-gold)] rounded-[10px] overflow-hidden bg-[var(--pl-gold-pale)]">
           <div className="px-6 py-4 bg-[var(--pl-ink)] text-white flex items-center gap-3">
             <Lightbulb size={18} className="text-[var(--pl-gold)]" />
-            <h2 className="font-serif text-[18px] font-bold tracking-wide">寫 AI 指令的兩種範式 — 先讀這個再開始</h2>
+            <h2 className="font-serif text-[18px] font-bold tracking-wide">向 AI 說明研究任務的兩種方式 — 先讀這個再開始</h2>
           </div>
 
           <div className="p-6 md:p-8">
             <p className="text-[13.5px] text-[var(--pl-ink-mid)] leading-[1.9] mb-5 max-w-3xl">
-              寫 prompt 有兩種根本不同的思路。一種是<strong className="text-[var(--pl-ink)]">規範流程</strong>（叫 AI 按步驟做），一種是<strong className="text-[var(--pl-ink)]">界定終點</strong>（告訴 AI 什麼算成功）。模型推理能力提升後，第二種會釋放出第一種釋放不了的能力。
+              向 AI 交代任務有兩種思路。一種是<strong className="text-[var(--pl-ink)]">規範流程</strong>（叫 AI 按步驟做），一種是<strong className="text-[var(--pl-ink)]">界定終點</strong>（告訴 AI 什麼結果算好、有什麼限制、可以依據哪些資料）。任務越複雜，第二種越能讓 AI 幫到位。
             </p>
 
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               {/* 流程式 */}
               <div className="bg-white border border-[var(--pl-border)] rounded-[8px] p-5">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[10px] font-mono tracking-wider text-[var(--pl-danger)] uppercase">舊範式</span>
-                  <span className="text-[14px] font-bold text-[var(--pl-ink)]">流程式 · 規範步驟</span>
+                  <span className="text-[10px] font-mono tracking-wider text-[var(--pl-danger)] uppercase">步驟式</span>
+                  <span className="text-[14px] font-bold text-[var(--pl-ink)]">規範步驟</span>
                 </div>
                 <p className="text-[12px] text-[var(--pl-ink-mid)] mb-3 leading-relaxed">
                   把使用者預設的解題路徑寫死，AI 只能照走。
@@ -347,8 +347,8 @@ ${template}
               {/* 成果式 */}
               <div className="bg-white border-2 border-[var(--pl-accent)] rounded-[8px] p-5">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[10px] font-mono tracking-wider text-[var(--pl-accent)] uppercase">新範式</span>
-                  <span className="text-[14px] font-bold text-[var(--pl-ink)]">成果式 · 界定終點</span>
+                  <span className="text-[10px] font-mono tracking-wider text-[var(--pl-accent)] uppercase">成果式</span>
+                  <span className="text-[14px] font-bold text-[var(--pl-ink)]">界定終點</span>
                 </div>
                 <p className="text-[12px] text-[var(--pl-ink-mid)] mb-3 leading-relaxed">
                   描述「好的成果長什麼樣子」、「約束條件」，留給 AI 選最有效的解題路徑。
@@ -367,7 +367,7 @@ ${template}
 
             {/* 四欄位 */}
             <div className="bg-white border border-[var(--pl-border)] rounded-[8px] p-5 mb-5">
-              <p className="text-[13px] font-bold text-[var(--pl-ink)] mb-3">📐 成果式 prompt 的四個欄位（OpenAI 文件原話）</p>
+              <p className="text-[13px] font-bold text-[var(--pl-ink)] mb-3">📐 請 AI 協助前，先說清楚四件事</p>
               <ul className="text-[12.5px] text-[var(--pl-ink-mid)] leading-[1.95] space-y-1.5 list-disc pl-5">
                 <li><strong>好的成果長什麼樣子</strong> — 你會怎麼判斷它是好的？</li>
                 <li><strong>哪些約束條件至關重要</strong> — 篇幅、語氣、對象、不能出現什麼？</li>
@@ -384,7 +384,7 @@ ${template}
               </p>
               <p className="text-[12px] text-white/65 leading-relaxed mt-3">
                 只要這句講清楚，剩下的 prompt 工程都是裝飾。<br />
-                <span className="text-white/45">依據：OpenAI GPT-5 系列起、Anthropic Claude Opus 4 系列起，官方 prompt 工程指南建議轉向 outcome-first 框架。</span>
+                <span className="text-white/45">原則：任務越複雜，越要說清楚目標、限制、可用資料與輸出格式。</span>
               </p>
             </div>
           </div>
@@ -400,7 +400,7 @@ ${template}
                 <UserCircle2 size={13} />
                 <span className="pl-step-num">Step 01</span>
                 <span>·</span>
-                <span>設定 AI 角色</span>
+                <span>請 AI 扮演哪種研究專家</span>
               </label>
               <div className="grid grid-cols-1 gap-2.5">
                 {AI_ROLES.map(role => (
@@ -631,7 +631,7 @@ ${template}
                   {/* Bad */}
                   <div className="border-l-3 border-l-rose-300 bg-rose-50/40 p-4 rounded-r-md flex flex-col">
                     <div className="flex items-center gap-1.5 text-rose-700 font-bold text-[11px] uppercase tracking-wider mb-2 pl-mono">
-                      <XCircle size={13} /> 爛 Prompt
+                      <XCircle size={13} /> 模糊提問
                     </div>
                     <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-rose-100 pl-mono leading-[1.8] mb-3">
                       {c.bad}
@@ -645,7 +645,7 @@ ${template}
                   {/* Good */}
                   <div className="border-l-3 border-l-emerald-400 bg-emerald-50/40 p-4 rounded-r-md flex flex-col">
                     <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px] uppercase tracking-wider mb-2 pl-mono">
-                      <CheckCircle2 size={13} /> 好 Prompt
+                      <CheckCircle2 size={13} /> 清楚提問
                     </div>
                     <div className="text-[13px] text-[var(--pl-ink)] bg-white p-3 rounded border border-emerald-100 pl-mono leading-[1.8] mb-3">
                       {c.good}
@@ -663,7 +663,7 @@ ${template}
           {/* 自學小結 */}
           <div className="mt-8 bg-[var(--pl-ink)] text-slate-100 p-7 rounded-md">
             <div className="pl-mono flex items-center gap-2 text-[var(--pl-gold)] font-bold text-[11px] uppercase tracking-widest mb-4">
-              <GraduationCap size={14} /> 自學小結 · 好 Prompt 的五要素
+              <GraduationCap size={14} /> 自學小結 · 清楚提問的五要素
             </div>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {[
@@ -688,7 +688,7 @@ ${template}
             <p className="text-[12.5px] text-slate-400 mt-5 leading-[1.9]">
               下次寫 prompt 前，先在腦中快速過一次這五格——缺一格就補一格。<br />
               這五要素跟上方的「<strong className="text-white">成果先行</strong>」是同一回事：<strong className="text-white">五要素是骨架、成果式是內容</strong>。<br />
-              習慣之後你會發現，「<strong className="text-white">問得好</strong>」比「<strong className="text-white">換更好的 AI</strong>」有用得多。
+              「<strong className="text-white">問得清楚</strong>」比「<strong className="text-white">換更強的 AI</strong>」更重要——但採不採用，最後仍由你依研究目的判斷。
             </p>
           </div>
         </div>

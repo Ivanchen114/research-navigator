@@ -1302,7 +1302,7 @@ export const Wizard = () => {
                     <section className="bg-[var(--accent-light)]/30 border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-[var(--accent)] flex items-center justify-center text-[12px] font-bold font-mono">4</span>
-                            <span className="font-bold text-[13px]">🎯 我選一個 → 寫成最終定案題目（AI 做不到的！）</span>
+                            <span className="font-bold text-[13px]">🎯 我選一個 → 寫成最終定案題目（我負責判斷）</span>
                             <span className="ml-auto text-[10px] font-mono font-bold text-white">不能跳過</span>
                         </div>
                         <div className="p-5 space-y-3">

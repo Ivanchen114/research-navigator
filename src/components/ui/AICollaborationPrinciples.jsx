@@ -16,18 +16,18 @@ import { Brain, Target, FileText, Lightbulb, GraduationCap, Swords } from 'lucid
 const ROLE_DESC = {
     assistant: {
         emoji: '🛠️',
-        label: 'AI = 整理夥伴（雙身：老師 / 助理）',
-        tip: '依下方你選的模式變身——🎓 教學型時當老師教你分析表怎麼設；🥊 驗收型時當助理依你定的結構幫你填內容、找盲點。',
+        label: 'AI = 整理夥伴（教學型：老師 / 驗收型：助理）',
+        tip: '依下方你選的模式切換角色——🎓 教學型時當老師教你分析表怎麼設；🥊 驗收型時當助理依你定的結構協助整理內容、指出可能漏掉的角度。',
     },
     mirror: {
         emoji: '🪞',
-        label: 'AI = 視覺化夥伴（雙身：老師 / 反思鏡）',
-        tip: '依下方你選的模式變身——🎓 教學型時當老師示範資料能畫什麼圖；🥊 驗收型時當反思鏡畫你選的圖、戳你沒看到的趨勢。',
+        label: 'AI = 視覺化夥伴（教學型：老師 / 驗收型：反思鏡）',
+        tip: '依下方你選的模式切換角色——🎓 教學型時當老師示範資料能畫什麼圖；🥊 驗收型時當反思鏡畫你選的圖、提醒你沒看到的趨勢。',
     },
     critic: {
         emoji: '🥊',
-        label: 'AI = 寫作夥伴（雙身：老師 / 教練）',
-        tip: '依下方你選的模式變身——🎓 教學型時當老師示範極簡範例給你照寫；🥊 驗收型時當教練壓力測試你的初稿、找漏洞。',
+        label: 'AI = 寫作夥伴（教學型：老師 / 驗收型：教練）',
+        tip: '依下方你選的模式切換角色——🎓 教學型時當老師示範極簡範例給你照寫；🥊 驗收型時當教練壓力測試你的初稿、指出問題。',
     },
 };
 
@@ -44,7 +44,7 @@ const PRINCIPLES = [
     {
         num: '2',
         title: 'AI 是壓力測試器 / 老師，不是答案機',
-        body: 'AI 的價值是「找你想不到的角度、戳你的盲點」或「示範一次給你照做」，不是給標準答案讓你複製。',
+        body: 'AI 的價值是「找你想不到的角度、指出可能漏掉的問題」或「示範一次給你照做」，不是給標準答案讓你複製。',
         tagline: 'AI 找漏洞 / 給範例，你做決定',
         accent: '#7C3AED',
         bg: '#F5F3FF',
@@ -65,7 +65,7 @@ const STEPS = [
     { n: '①', label: '準備', desc: '想清楚自己在哪：完全不會 / 有概念了 / 有初版了' },
     { n: '②', label: '指令', desc: '依模式給 prompt（教學型「請示範」/ 驗收型「請找漏洞」）' },
     { n: '③', label: '驗收', desc: '檢查 AI 回應：幻覺？跑偏？我自己改寫過了嗎？' },
-    { n: '④', label: '決策', desc: '採納哪些、改哪些、為什麼——這就是 AIRED 的 D' },
+    { n: '④', label: '決策', desc: '採納哪些、改哪些、為什麼——這就是 AI-RED 的 D' },
 ];
 
 const MODES_INFO = [
@@ -75,7 +75,7 @@ const MODES_INFO = [
         when: '我不知道怎麼下手',
         prompt_form: '「請示範一個極簡範例，給我可以照著做的步驟」',
         risk: '被動接受 AI 框架',
-        cure: 'AI 給範例後，你自己改一次',
+        cureLabel: '因應', cure: 'AI 給範例後，你自己改一次',
         accent: '#059669',
         bg: '#F0FDF4',
         icon: GraduationCap,
@@ -86,7 +86,7 @@ const MODES_INFO = [
         when: '我有初版了',
         prompt_form: '「我寫了 X，請從研究方法老師角度找 3 個問題」',
         risk: 'AI 改寫太多就變成 AI 寫的',
-        cure: 'AI 只指問題，改寫由你',
+        cureLabel: '因應', cure: 'AI 只指問題，改寫由你',
         accent: '#DC2626',
         bg: '#FEF2F2',
         icon: Swords,
@@ -127,7 +127,7 @@ const AICollaborationPrinciples = ({ week = '13', role = 'assistant', showRoleCa
                     <div>
                         <p className="text-[12px] font-bold text-[var(--ink)] mb-2">🌗 AI 雙模式：能力光譜兩端都合法</p>
                         <p className="text-[11px] text-[var(--ink-mid)] mb-2 leading-relaxed">
-                            不會的請 AI 教，會的請 AI 檢查。選對模式才是關鍵。
+                            自己先試一次；卡關時請 AI 給範例，初版完成後請 AI 協助檢查。選對模式才是關鍵。
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {MODES_INFO.map((m, i) => {

@@ -332,7 +332,7 @@ export const CitationDetectiveGame = () => {
                     <div className="text-7xl mb-6 animate-pulse drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">🔍</div>
                     <h1 className="text-3xl md:text-5xl font-['Noto_Serif_TC',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 mb-2 tracking-widest drop-shadow-sm">行動代號：獵狐</h1>
                     <div className="text-sm md:text-base font-bold text-amber-300/80 mb-6 bg-amber-950/40 inline-block px-3 py-1 rounded border border-amber-500/20 tracking-wider">
-                        🎯 文獻真偽辨識與學術倫理審查
+                        🎯 引用方式辨識與學術倫理審查
                     </div>
                     <div className="flex items-center justify-center gap-4 mb-6 relative">
                         <div className="h-px bg-gradient-to-r from-transparent via-slate-500 to-transparent flex-1"></div>
@@ -719,7 +719,7 @@ export const CitationDetectiveGame = () => {
                         <div className="flex-1 flex flex-col animate-in fade-in slide-in-from-bottom-4 py-2">
                             <div className={`shrink-0 p-4 md:p-6 mb-6 rounded-sm border-2 text-center shadow-sm ${getLastAnswerStatus() === 'full' ? 'bg-emerald-900/40 border-emerald-500/60 text-emerald-300' : getLastAnswerStatus() === 'partial' ? 'bg-amber-900/40 border-amber-500/60 text-amber-300' : 'bg-red-900/40 border-red-500/60 text-red-300'}`}>
                                 <div className="text-2xl md:text-3xl font-black mb-2 flex items-center justify-center gap-3">
-                                    {getLastAnswerStatus() === 'full' ? <><CheckCircle2 size={32} /> 完美破案！</> : getLastAnswerStatus() === 'partial' ? <><AlertTriangle size={32} /> 部分正確</> : <><XCircle size={32} /> 判斷錯誤</>}
+                                    {getLastAnswerStatus() === 'full' ? <><CheckCircle2 size={32} /> 判斷到位！</> : getLastAnswerStatus() === 'partial' ? <><AlertTriangle size={32} /> 部分正確</> : <><XCircle size={32} /> 判斷錯誤</>}
                                 </div>
                                 <div className="text-sm md:text-base font-bold opacity-90 tracking-wide">本題得分：+{userAnswers[userAnswers.length - 1]?.points} (總分: {score})</div>
                             </div>

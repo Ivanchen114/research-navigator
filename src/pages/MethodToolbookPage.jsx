@@ -72,8 +72,8 @@ const MethodToolbookPage = () => {
                 kicker="研究工具 · 方法工具書"
                 title="5 種方法的"
                 accentTitle="完整工具書"
-                subtitle="速查手冊：寫題目時翻查、Pilot 修工具時翻查、分析時也能回查。先看「概觀」+「教師影片」建立全局，再切到自己方法 tab 看細節。"
-                chain="跨週使用——W10 寫題目、W11 Pilot 修工具、W12 施測、W14 分析時都可以回來查。"
+                subtitle="速查手冊：寫題目時翻查、預試（Pilot）修工具時翻查、分析時也能回查。先看「概觀」+「教師影片」建立全局，再切到自己方法 tab 看細節。"
+                chain="跨週使用——W10 寫研究工具、W11 預試（Pilot）修工具、W12 施測、W14 分析時都可以回來查。"
                 meta={[
                     { label: '使用週次', value: 'W10 / W11 / W12 / W14（跨週）' },
                     { label: '5 種方法', value: '問卷／訪談／實驗／觀察／文獻' },
@@ -114,7 +114,7 @@ const MethodToolbookPage = () => {
                             <ol className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] list-decimal pl-5 space-y-0.5">
                                 <li>先看本頁的 <strong>V→R→F 三大判準</strong>（5 法共通）</li>
                                 <li>切到「<strong>教師影片</strong>」tab 看老師親拍 4 集</li>
-                                <li>切到自己方法的 tab 看細節（題型／原則／雷／範例 + AI prompt）</li>
+                                <li>切到自己方法的 tab 看細節（題型／原則／常見錯誤／範例）；需要時再用 AI 檢核提示協助修正</li>
                                 <li>回計畫書第六章寫題目；卡關時隨時回來查</li>
                             </ol>
                         </div>
@@ -144,13 +144,13 @@ const MethodToolbookPage = () => {
 
                         {/* 雙模式光譜（簡介） */}
                         <div className="bg-[#F8F8FB] border border-[var(--accent)] rounded-[var(--radius-unified)] p-4">
-                            <p className="text-[13px] font-bold text-[var(--accent)] mb-2">🌗 用 AI 協作的兩種模式（W10/14/15 都會用到）</p>
+                            <p className="text-[13px] font-bold text-[var(--accent)] mb-2">🌗 需要 AI 協助時的兩種用法（W10/14/15 都會用到）</p>
                             <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-2">
-                                AI 是雙向工具——<strong>不會的請 AI 教，會的請 AI 檢查</strong>。選對模式才是關鍵。每個方法的 tab 內都有對應的 AI 啟動 prompt（教學型）。
+                                <strong>自己先試一次；卡關時請 AI 給範例，初版完請 AI 協助檢查。</strong>選對模式才是關鍵。每個方法的 tab 內都有對應的 AI 啟動 prompt（教學型）。
                             </p>
                             <ul className="text-[12px] text-[var(--ink-mid)] leading-relaxed list-disc pl-5 space-y-1">
                                 <li>🎓 <strong>教學型</strong>：我不會 → 請 AI 給範例（看完自己改寫一次）</li>
-                                <li>🥊 <strong>驗收型</strong>：我有初版 → 請 AI 找毛病（不要替我改寫）</li>
+                                <li>🥊 <strong>驗收型</strong>：我有初版 → 請 AI 依判準指出問題（不要替我改寫）</li>
                                 <li>🚫 <strong>不用 AI</strong>：自己練手——也是合法選擇</li>
                             </ul>
                         </div>
@@ -543,7 +543,7 @@ const MethodToolbookPage = () => {
                 {/* 回 W10 連結 */}
                 <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 flex items-center justify-between mt-12">
                     <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-1">看完了？回 W10 寫題目</p>
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-1">看完了？回 W10 寫研究工具</p>
                         <p className="text-[11.5px] text-[var(--ink-mid)]">寫題目時遇到問題隨時回來查。</p>
                     </div>
                     <Link

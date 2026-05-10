@@ -176,7 +176,7 @@ export const LiteratureReview = () => {
         // v2 鏈：W7 找文獻搬到的 dataKey；舊鍵 w5-found-paper fallback 容錯
         const w5Val = (records['w7-found-paper'] || records['w5-found-paper'] || '').trim();
         setW5Paper(w5Val);
-        // 如果 w6-sandwich-ref 還是空的，自動帶入 W5 的文獻
+        // 如果 w8-sandwich-ref 還是空的，自動帶入 W7 的文獻
         if (w5Val && !records['w8-sandwich-ref']) {
             records['w8-sandwich-ref'] = w5Val;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
@@ -202,11 +202,16 @@ export const LiteratureReview = () => {
             icon: '🔍',
             content: (
                 <div className="space-y-8 prose-zh">
+                    {/* ── 模擬文獻聲明 ── */}
+                    <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12.5px] text-[#7F1D1D] leading-relaxed">
+                        ⚠️ <strong>提醒</strong>：本頁部分文獻範例（如「王大明（2022）」「陳美玲（2021）」等）為<strong>課堂練習用的模擬素材</strong>，不可直接當成正式研究來源。正式計畫書與期末報告，<strong>只能使用自己查到、可追溯來源的文獻</strong>（W7 找到的 A 級文獻才是合格起點）。
+                    </div>
+
                     {/* ── 觀念 1 ── */}
                     <div className="section-head"><h2>觀念：換字抄襲 vs. 真正的改寫</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
 
                     <div className="notice notice-accent text-[13px] leading-relaxed">
-                        偵探社的工作只有一件事——<strong>找出文獻裡的問題，然後寫出一份任何人都挑不出毛病的文獻探討。</strong><br /><br />
+                        偵探社的工作只有一件事——<strong>找出文獻使用中的問題，寫出一段來源清楚、改寫到位、能連回自己研究題目的文獻探討。</strong><br /><br />
                         第一種犯罪手法叫<strong>換字抄襲</strong>：結構一模一樣、骨架一模一樣，只是穿了一件不同的衣服。
                     </div>
 
@@ -431,7 +436,7 @@ export const LiteratureReview = () => {
                                 </div>
                                 <div className="px-5 pb-4 pt-2">
                                     <ThinkRecord
-                                        dataKey={`w6-sandwich-${layer.layer === 1 ? 'claim' : layer.layer === 2 ? 'evidence' : 'analysis'}`}
+                                        dataKey={`w8-sandwich-${layer.layer === 1 ? 'claim' : layer.layer === 2 ? 'evidence' : 'analysis'}`}
                                         prompt={`第 ${layer.layer} 層 ${layer.role}：`}
                                         scaffold={
                                             layer.layer === 1
@@ -669,8 +674,8 @@ export const LiteratureReview = () => {
                         </div>
                     </div>
 
-                                        {/* AIRED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="8" hint="寫文獻探討可能用 AI 幫忙潤稿" optional={true} />
+                                        {/* AI-RED 敘事紀錄（循序漸進：五欄 → 一段話） */}
+                    <AIREDNarrative week="8" hint="若用 AI 協助潤稿——請確認它沒有改變原文意思、沒有新增不存在的文獻或數據。" optional={true} />
 
                     {/* 一鍵複製 */}
                     <ExportButton
@@ -746,7 +751,7 @@ export const LiteratureReview = () => {
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W8"
                 title="文獻偵探社："
                 accentTitle="識破假改寫，寫出真文獻"
-                subtitle="偵探社的工作只有一件事——找出文獻裡的問題，然後寫出一份任何人都挑不出毛病的文獻探討。今天要學會識破兩種常見犯罪手法：換字抄襲與文獻堆砌，並親手寫出合格的文獻探討段落。"
+                subtitle="偵探社的工作只有一件事——找出文獻使用中的問題，寫出一段來源清楚、改寫到位、能連回自己研究題目的文獻探討。今天要學會識破兩種常見犯罪手法：換字抄襲與文獻堆砌，並親手寫出合格的文獻探討段落。"
                 chain="W7 找到一堆文獻——但要怎麼用？這週教你『接話』：別人說 X，你怎麼順著接到自己的研究上。"
                 meta={[
                     { label: '本週任務', value: '觀念 3 招 + 改寫偵錯 + 三明治' },

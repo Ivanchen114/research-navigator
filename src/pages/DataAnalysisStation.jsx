@@ -471,7 +471,7 @@ export const DataAnalysisStation = () => {
             <div className="flex items-center justify-between border-b border-[#dddbd5] pb-4 mb-12">
                 <div className="text-[11px] font-mono text-[#8888aa] flex items-center gap-2">
                     研究方法與專題 / 自學速查 /
-                    <span className="text-[#1a1a2e] font-bold">Prompt 範本庫</span>
+                    <span className="text-[#1a1a2e] font-bold">資料分析檢核站</span>
                 </div>
                 <div className="flex items-center gap-3">
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">
@@ -487,14 +487,14 @@ export const DataAnalysisStation = () => {
             <div className="max-w-[800px] mb-8">
                 <div className="font-mono text-[11px] font-bold text-[#8888aa] tracking-widest uppercase mb-4 flex items-center gap-2">
                     <Database size={12} />
-                    Prompt 範本庫 · 自學速查
+                    資料分析檢核站 · 自學速查
                 </div>
                 <h1 className="font-serif text-[40px] font-bold leading-[1.2] text-[#1a1a2e] mb-5 tracking-[-0.01em]">
                     想做<span className="text-[#2d5be3]">進階分析？</span>
                 </h1>
                 <p className="text-[16px] text-[#4a4a6a] leading-relaxed mb-3">
-                    這裡是 5 法的 Prompt 範本速查（Step 1-5）——課堂主流程不依賴此頁，
-                    若 W13 整理完想做<strong>交叉分析、主題編碼、跨個案比較</strong>等進階分析才會用到。
+                    這裡整理 5 種研究方法常見的分析步驟（Step 1-5）——你可以先看每一步要完成什麼，再視需要使用 AI 協助整理、檢查或產生表格。
+                    課堂主流程不依賴此頁；若 W13 整理完想做<strong>交叉分析、主題編碼、跨個案比較</strong>等進階分析，再回來查。
                 </p>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-[#FFFBEB] border border-[#FCD34D] text-[12px] text-[#92400E]">
                     💡 <strong>定位：</strong>課後自學速查，不是課堂必修
@@ -550,7 +550,7 @@ export const DataAnalysisStation = () => {
 
                 <div className="p-6">
 
-                    {/* ── 資料分析 Prompts ───────────────────────── */}
+                    {/* ── 資料分析步驟 ───────────────────────── */}
                     <div className="mb-1">
                         <div className="flex items-center gap-2 mb-3">
                             <Zap size={14} className="text-[#c9a84c]" />
@@ -626,7 +626,7 @@ export const DataAnalysisStation = () => {
             <div className="mb-6 border border-[#dddbd5] rounded-[8px] overflow-hidden">
                 <div className="bg-[#2d5be3] px-5 py-3 flex items-center gap-2.5">
                     <Brain size={14} className="text-white" />
-                    <span className="text-[12px] font-bold text-white">好 Prompt 的底層邏輯——先懂這個，才知道怎麼改</span>
+                    <span className="text-[12px] font-bold text-white">好分析的底層邏輯——先說清楚資料、任務與判準</span>
                 </div>
                 <div className="bg-white p-5">
                     <div className="flex items-stretch gap-0 mb-5 border border-[#dddbd5] rounded-[6px] overflow-hidden text-center">
@@ -663,7 +663,7 @@ export const DataAnalysisStation = () => {
                             <div className="text-[11px] text-[#4a4a6a] leading-relaxed">先問「幫我整理數據格式」→ 再問「描述性統計」→ 再問「詮釋意義」。一次給太多，AI 會亂。</div>
                         </div>
                         <div className="bg-[#fffbeb] border border-amber-200 rounded-[6px] px-4 py-3">
-                            <div className="text-[11px] font-bold text-amber-700 mb-1.5">你才是裁判，AI 是助手</div>
+                            <div className="text-[11px] font-bold text-amber-700 mb-1.5">你負責判斷，AI 只能協助整理</div>
                             <div className="text-[11px] text-[#4a4a6a] leading-relaxed">AI 只看到你給的片段，不懂你的研究脈絡。它的「詮釋」要批判性地讀，不是直接複製進報告。</div>
                         </div>
                     </div>
@@ -684,7 +684,7 @@ export const DataAnalysisStation = () => {
                             <span className="text-[12px] font-bold text-[#1a1a2e]">選「思考型」不選「快捷」</span>
                         </div>
                         <p className="text-[12px] text-[#4a4a6a] leading-relaxed mb-2">
-                            資料分析需要推理，用 <span className="font-bold text-[#1a1a2e]">Gemini 3 思考型</span>（或 Pro），快捷版容易給出粗淺答案。其他 AI 也類似，選推理能力較強的版本。
+                            資料分析需要推理，建議用 <span className="font-bold text-[#1a1a2e]">Gemini 思考型／Pro 模式</span>（快捷版容易給出粗淺答案）。<span className="text-[#888]">若版本更新，原則：選推理較強的模式，並回到原始資料檢查 AI 輸出。</span>
                         </p>
                         <div className="text-[10px] font-mono bg-[#f0ede6] border border-[#dddbd5] rounded px-2.5 py-1.5 text-[#4a4a6a]">
                             Gemini 3：快捷 / 思考型 ✓ / Pro ✓
@@ -696,7 +696,7 @@ export const DataAnalysisStation = () => {
                             <span className="text-[12px] font-bold text-[#1a1a2e]">圖表／矩陣整理模式</span>
                         </div>
                         <p className="text-[12px] text-[#4a4a6a] leading-relaxed mb-2">
-                            <span className="font-bold text-emerald-700">問卷、實驗、觀察</span>的分析結果通常圖表化；<span className="font-bold text-violet-700">訪談、文獻</span>則需要矩陣與對照表。完成基本分析後，可切換 Canvas 讓 AI 直接輸出。
+                            <span className="font-bold text-emerald-700">問卷、實驗、觀察</span>的分析結果通常圖表化；<span className="font-bold text-violet-700">訪談、文獻</span>則需要矩陣與對照表。完成基本分析後，可請 AI 協助整理成圖表或矩陣草稿（Canvas），<strong>再由小組檢查是否符合資料</strong>。
                         </p>
                         <div className="text-[10px] font-mono bg-emerald-50 border border-emerald-200 rounded px-2.5 py-1.5 text-emerald-700">
                             先完成基本分析，再做視覺整理
@@ -708,7 +708,7 @@ export const DataAnalysisStation = () => {
                             <span className="text-[12px] font-bold text-[#1a1a2e]">直接上傳檔案更準確</span>
                         </div>
                         <p className="text-[12px] text-[#4a4a6a] leading-relaxed mb-2">
-                            有 Excel / CSV 的話，直接上傳比貼文字更準確，AI 能讀取完整數據而不是片段。上傳前記得把姓名改成編號（匿名化）。
+                            有 Excel / CSV 的話，直接上傳比貼文字更準確，AI 較能依完整資料協助整理；<strong>但仍可能誤讀欄位或產生錯誤摘要</strong>，輸出後要回到原始資料檢查。上傳前記得把姓名改成編號（匿名化）。
                         </p>
                         <div className="text-[10px] font-mono bg-violet-50 border border-violet-200 rounded px-2.5 py-1.5 text-violet-700">
                             上傳前先完成匿名化

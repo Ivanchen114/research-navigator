@@ -424,7 +424,7 @@ export const PhantomCh4 = () => {
                             <SectionLabel icon={<CheckCircle size={13} />} text="分析完成" color="text-cyan-400" />
                             <h2 className="text-xl font-black text-cyan-300 mt-3 mb-4">拼圖成形</h2>
                             <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                                你完成了一份嚴密且無法反駁的文獻分析報告：你核實指出了不存在的引用來源、記錄了不可能的時間戳異常，並將報告原始設定的異常完美分佈完整呈現。這份冰冷的證據鏈，已經為最終章的實證重現舖好決戰舞台。
+                                你完成了一份嚴謹且可被檢查的文獻分析報告：你核實指出了不存在的引用來源、記錄了不可能的時間戳異常，並將報告原始設定的異常分佈完整呈現。這些證據已經為最終章的實證重現建立清楚方向。
                             </p>
                             <div className="border-t border-slate-700/50 pt-5">
                                 <div className="font-mono text-[10px] text-cyan-500/70 tracking-widest mb-3 uppercase">Fragments Compiled</div>

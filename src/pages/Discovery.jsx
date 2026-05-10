@@ -41,7 +41,7 @@ export const Discovery = () => {
                 偵探特訓班：<span className="text-[var(--accent)] italic not-serif">The Detective Camp</span>
             </h1>
             <p className="text-[15px] text-[var(--ink-mid)] leading-relaxed mb-8 max-w-[600px]">
-                研究不是死讀書，研究是現場辦案。今天你不是學生，你是偵探——三個試煉，三把劍，找出真相。
+                研究不是只會背書，研究是現場辦案。今天你不是學生，你是偵探——三個試煉，三把劍，找出真相。
             </p>
 
             <div className="meta-strip" style={{ '--cols': 3 }}>
@@ -237,7 +237,7 @@ export const Discovery = () => {
             <div className="border border-[#dddbd5] rounded-[10px] overflow-hidden bg-white mb-10">
                 <div className="px-5 py-3.5 bg-[#f0ede6] border-b border-[#dddbd5] flex items-center gap-2.5">
                     <span className="font-mono text-[10px] bg-[#1a1a2e] text-white px-2 py-0.5 rounded-[3px] tracking-wider uppercase">試煉三</span>
-                    <span className="font-bold text-sm text-[#1a1a2e]">挑戰全知者——AI 的盲點</span>
+                    <span className="font-bold text-sm text-[#1a1a2e]">測試 AI 的邊界——哪些事需要現場</span>
                     <span className="text-[12px] text-[#8888aa] ml-auto">問 AI 它回答不了的問題</span>
                 </div>
                 <div className="p-5">
@@ -263,7 +263,7 @@ export const Discovery = () => {
                         <div className="px-4 py-3 bg-[#f0ede6] border-b border-[#dddbd5] text-[12px] font-bold text-[#1a1a2e]">💡 研究者的價值在哪裡？</div>
                         <div className="p-4 text-[13px] text-[#4a4a6a] leading-relaxed bg-white">
                             AI 擅長回答全球性的一般知識。但它不知道<strong>在地的、個人的、此時此刻的</strong>真相。<br /><br />
-                            研究者的價值，就是發現 AI 不知道的事。這就是為什麼你要親自<strong>調查、訪談、觀察</strong>——沒有人能代替你去現場。
+                            研究者的價值，不是只找 AI 不知道的事，而是<strong>親自調查、訪談、觀察</strong>，取得可以被追問、可以被檢查的證據。
                         </div>
                     </div>
                 </div>
@@ -325,7 +325,7 @@ export const Discovery = () => {
                     {[
                         '說出什麼是不注意視盲，並解釋它和研究的關係',
                         '用自己的話說明三把劍：觀察力、假設檢定、批判思考',
-                        '解釋為什麼研究者的價值在於發現 AI 不知道的事',
+                        '解釋為什麼研究者要親自調查、訪談、觀察，取得可被追問的證據',
                         '在海龜湯完成至少一次假設 → 提問 → 修正的循環'
                     ].map((item, i) => (
                         <div key={i} className="bg-white p-4.5 flex gap-2.5 items-start">

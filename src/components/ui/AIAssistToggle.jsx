@@ -97,7 +97,7 @@ export default function AIAssistToggle({
             <div className="px-4 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                 <span className="text-[14px]">🤖</span>
                 <span className="font-bold text-[13px] text-[var(--ink)] flex-1">{title}</span>
-                <span className="text-[10px] font-mono text-[var(--ink-light)] hidden md:inline">{forceAI ? 'AI 必跑' : 'OPT-IN'}</span>
+                <span className="text-[10px] font-mono text-[var(--ink-light)] hidden md:inline">{forceAI ? 'AI 對照任務' : 'OPT-IN'}</span>
                 {choice && !forceAI && (
                     <button
                         onClick={reset}
@@ -138,7 +138,7 @@ export default function AIAssistToggle({
                         >
                             <span className="text-[16px]">✍️</span>
                             <strong className="block text-[13px] text-[var(--ink)] mt-0.5">自己寫</strong>
-                            <span className="text-[11px] text-[var(--ink-mid)] block">跳過 AI，直接進下方填寫區</span>
+                            <span className="text-[11px] text-[var(--ink-mid)] block">這一步先不用 AI，直接進下方填寫區</span>
                         </button>
                     </div>
                 </div>
@@ -162,7 +162,7 @@ export default function AIAssistToggle({
                     )}
 
                     <div className="bg-[var(--danger-light)] border-l-[3px] border-[var(--danger)] p-3 rounded-[4px] text-[12px] text-[var(--ink)] leading-relaxed">
-                        <strong>⚠️ 必填記錄：</strong>用了 AI 就要留下判斷軌跡（AIRED 精神：Decide 要留證）。下方紀錄欄沒填 → Export 會缺這一格，代表你還沒完成這個環節。
+                        <strong>⚠️ 必填記錄：</strong>用了 AI 就要留下判斷軌跡（AI-RED 精神：Decide 要留證）。下方紀錄欄沒填 → Export 會缺這一格，代表你還沒完成這個環節。
                     </div>
 
                     <ThinkRecord

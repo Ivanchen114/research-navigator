@@ -417,7 +417,7 @@ export const FindTrapsReport = () => {
             </div>
 
             <HeroBlock
-                kicker="📺 W13~W15 跨週之鏡 · AI 反面教材"
+                kicker="📺 W13~W15 跨週之鏡 · AI 草稿找雷練習"
                 title="AI 寫的研究報告："
                 accentTitle="哪裡有問題？"
                 subtitle="這份 AI 端到端寫的研究報告，看起來圖文並茂，但暗藏 13 個學術紅線——同時也是 W13（資料整理）→ W14（視覺化）→ W15（結論）三週要學的 17 條規則的反例集合。"
@@ -506,7 +506,7 @@ export const FindTrapsReport = () => {
 
                     <p className="text-[11.5px] text-[#7F1D1D] italic mt-3 pt-3 border-t border-[#FCA5A5] leading-[1.85]">
                         💡 看完 prompt 跟雜訊資料，再去下方看 AI 寫了什麼。<strong>記住兩件事</strong>：
-                        <br />（1）AI 沒做錯，是 <strong>prompt 沒給規則</strong>。
+                        <br />（1）AI 會照規則做事——但<strong>規則要由研究者設定與驗收</strong>。
                         <br />（2）研究類問題對 AI 的<strong>邏輯精度與專業度要求很高</strong>——一般模型在這領域容易出錯，但只要 <strong>prompt 寫得好、規則設清楚</strong>，這些雷都可以避開。
                     </p>
                 </div>
@@ -1096,7 +1096,7 @@ export const FindTrapsReport = () => {
 - 描述：純報資料看到的趨勢（含具體數字）
 - 推論：克制版本，含「可能」「初步」「值得後續研究」
 - 限制：4 條以上具體限制
-- 回扣：跟最初研究問題對話
+- 呼應：跟最初研究問題對話
 
 【圖表 + 分析】
 [貼圖 + 表]`}</pre>
@@ -1139,7 +1139,7 @@ export const FindTrapsReport = () => {
 - 描述：純報資料看到的趨勢（含具體數字）
 - 推論：克制版本，含「可能」「初步」「值得後續研究」
 - 限制：4 條以上具體限制
-- 回扣：跟最初研究問題對話
+- 呼應：跟最初研究問題對話
 
 【圖表 + 分析】
 [貼圖 + 表]`}</span>
@@ -1213,7 +1213,7 @@ export const FindTrapsReport = () => {
                         </p>
                         <ul className="text-[11.5px] leading-[1.95] text-white/85 space-y-1.5 list-none pl-0">
                             <li>· 老師現在告訴你規則 → 你照做<span className="text-white/55">（拐杖期）</span></li>
-                            <li>· 未來 AI 告訴你規則 → 你裁決<span className="text-white/55">（自學期）</span></li>
+                            <li>· 未來 AI 告訴你規則 → 你判斷取捨<span className="text-white/55">（自學期）</span></li>
                             <li>· 最後 你自己提出規則 → 你成為研究者<span className="text-white/55">（成熟期）</span></li>
                         </ul>
                     </div>

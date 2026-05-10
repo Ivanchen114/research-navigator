@@ -656,7 +656,7 @@ export const W5MeasurePage = () => {
                     />
 
                     {/* AI-RED 敘事紀錄 — optional */}
-                    <AIREDNarrative week="5" hint="操作型定義可能會用 AI 發散候選版本——記錄一次最關鍵的互動。" optional={true} />
+                    <AIREDNarrative week="5" hint="若用 AI 發散操作型定義候選版本——請說明你怎麼判斷哪一版能測、哪一版太模糊不能用。" optional={true} />
 
                     {/* 一鍵複製 */}
                     <ExportButton
