@@ -653,6 +653,84 @@ export const W9Page = () => {
                         </div>
                     )}
 
+                    {/* 🤝 組內合議方法登記（W9 第一個紀錄點 · 點按鈕＋寫理由） */}
+                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
+                        <p className="text-[14px] font-bold text-[var(--accent)] mb-2">🤝 開工前先合議：你們組要用什麼方法？（5 分鐘）</p>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
+                            W4 你<strong>個人</strong>選了一個方法，但 W6 組隊後<strong>可能改</strong>——這 5 分鐘<strong>組內合議</strong>：
+                            <strong>第三章方法是上層決策</strong>，第四章變項／第五章對象都要依它展開。<strong>邊寫邊改方法 = 後面章節重寫</strong>。
+                        </p>
+
+                        {/* 跨週連結：回 W4 方法地圖決策樹 */}
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-2.5 mb-3 flex items-center justify-between gap-3">
+                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                💡 不確定該選哪個方法？回 <strong className="text-[var(--ink)]">W4 方法地圖</strong>看「兩層判斷決策樹」（自己收集 vs 分析文本 → 5 法分流），再回來點選。
+                            </p>
+                            <a
+                                href="/w4"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[11.5px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
+                            >
+                                🗺️ 回 W4 看
+                            </a>
+                        </div>
+
+                        {/* 5 按鈕：方法點選（同步寫 w9-my-method + w8-tool-method） */}
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">① 點選組內合議的主方法（單選 · 之後可改）</p>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-2">
+                            {METHOD_OPTIONS.map((m) => {
+                                const picked = selectedMethod === m.id;
+                                return (
+                                    <button
+                                        key={m.id}
+                                        type="button"
+                                        onClick={() => handleMethodSelect(m.id)}
+                                        className="text-center p-3 rounded-[var(--radius-unified)] border-2 transition-all"
+                                        style={{
+                                            background: picked ? 'var(--accent)' : '#fff',
+                                            borderColor: picked ? 'var(--accent)' : 'var(--border)',
+                                            color: picked ? '#fff' : 'var(--ink-mid)',
+                                            fontWeight: picked ? 700 : 500,
+                                        }}
+                                    >
+                                        <div className="flex items-center justify-center gap-1 text-[12.5px]">
+                                            {m.icon}
+                                            <span>{m.label}</span>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {selectedMethod && (
+                            <>
+                                <div className="bg-[#F0FDF4] border border-[#86EFAC] rounded p-2 mb-1.5 text-[11.5px] text-[#166534]">
+                                    ✅ 已選：{METHOD_OPTIONS.find(m => m.id === selectedMethod)?.label} —— 網站會把這個方法自動帶入 W9-W15 的所有相關區塊（包括計畫書範本、工具書、AI prompt、檢核表）
+                                </div>
+                                <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-2 mb-3 text-[11.5px] text-[#991B1B]">
+                                    ⚠️ <strong>方法決定後，W10 整本工具設計都會跟著走</strong>。下週 W10 前若要改方法，<strong>先找老師討論</strong>，不要自己換——換了等於工具設計重來。
+                                </div>
+                            </>
+                        )}
+
+                        {/* 合議理由 + 補充方法（合一） */}
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2 mt-3">② 合議理由 + 補充方法（如果有）</p>
+                        <ThinkRecord
+                            dataKey="w9-method-reason"
+                            prompt="為什麼選這個方法？有沒有補充方法？"
+                            scaffold={[
+                                '主方法：（上方按鈕已選 · 這格寫理由即可）',
+                                '為什麼選這個：（跟研究問題對得上嗎？樣本好取得嗎？組內成員擅長嗎？）',
+                                '跟 W4 個人選的相比：（一樣／改了。改的話為什麼？）',
+                                '補充方法：（如有，例：「先問卷找趨勢 N=80 → 再訪談補深度 N=6」；沒有就留空）',
+                            ]}
+                            rows={6}
+                        />
+                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
+                            ✏️ 寫完複製到<strong>計畫書第六章「研究方法」段落</strong>。Solo 或單飛？直接寫你個人決定的方法即可（跟 W4 一樣或改了都行）。
+                        </p>
+                    </div>
+
                     {/* 第四章核心概念：依方法分流（method-aware）+ 每個術語白話解釋 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[760px]">
                         <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 你的計畫書「第四章」要寫什麼？</p>
@@ -661,24 +739,8 @@ export const W9Page = () => {
                         </p>
 
                         {!selectedMethod && (
-                            <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-3 mb-3">
-                                <p className="text-[12.5px] font-bold text-[#92400E] mb-1.5">👇 點一個方法，現場看你的第四章核心概念</p>
-                                <p className="text-[11px] text-[#78350F] mb-2.5 leading-relaxed">
-                                    可以多試幾個比較。下方「組內合議」區會同步紀錄你的選擇——確定後到那裡寫合議理由。
-                                </p>
-                                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                                    {METHOD_OPTIONS.map((m) => (
-                                        <button
-                                            key={m.id}
-                                            type="button"
-                                            onClick={() => handleMethodSelect(m.id)}
-                                            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-[6px] border-2 border-[#FCD34D] bg-white hover:border-[#F59E0B] hover:bg-[#FEF3C7] transition-colors cursor-pointer"
-                                        >
-                                            <span className="text-[#B45309]">{m.icon}</span>
-                                            <span className="text-[11px] font-bold text-[#92400E]">{m.label}</span>
-                                        </button>
-                                    ))}
-                                </div>
+                            <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-3 mb-3 text-[12px] text-[#92400E] leading-relaxed">
+                                ⚠️ 還沒選方法 —— 請先在<strong>上方「組內合議方法」區</strong>選一個方法（會同步顯示這裡）。想先看 5 法第四章長什麼樣？展開最下方「5 法對照表」。
                             </div>
                         )}
 
@@ -816,84 +878,6 @@ export const W9Page = () => {
                                 <strong>本質差異</strong>：量化先有變項再收資料；質性是先收資料、主題從資料浮現。所以叫法不能合一。
                             </p>
                         </details>
-                    </div>
-
-                    {/* 🤝 組內合議方法登記（W9 第一個紀錄點 · 點按鈕＋寫理由） */}
-                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
-                        <p className="text-[14px] font-bold text-[var(--accent)] mb-2">🤝 開工前先合議：你們組要用什麼方法？（5 分鐘）</p>
-                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
-                            W4 你<strong>個人</strong>選了一個方法，但 W6 組隊後<strong>可能改</strong>——這 5 分鐘<strong>組內合議</strong>：
-                            <strong>第三章方法是上層決策</strong>，第四章變項／第五章對象都要依它展開。<strong>邊寫邊改方法 = 後面章節重寫</strong>。
-                        </p>
-
-                        {/* 跨週連結：回 W4 方法地圖決策樹 */}
-                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-2.5 mb-3 flex items-center justify-between gap-3">
-                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
-                                💡 不確定該選哪個方法？回 <strong className="text-[var(--ink)]">W4 方法地圖</strong>看「兩層判斷決策樹」（自己收集 vs 分析文本 → 5 法分流），再回來點選。
-                            </p>
-                            <a
-                                href="/w4"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[11.5px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
-                            >
-                                🗺️ 回 W4 看
-                            </a>
-                        </div>
-
-                        {/* 5 按鈕：方法點選（同步寫 w9-my-method + w8-tool-method） */}
-                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">① 點選組內合議的主方法（單選 · 之後可改）</p>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-2">
-                            {METHOD_OPTIONS.map((m) => {
-                                const picked = selectedMethod === m.id;
-                                return (
-                                    <button
-                                        key={m.id}
-                                        type="button"
-                                        onClick={() => handleMethodSelect(m.id)}
-                                        className="text-center p-3 rounded-[var(--radius-unified)] border-2 transition-all"
-                                        style={{
-                                            background: picked ? 'var(--accent)' : '#fff',
-                                            borderColor: picked ? 'var(--accent)' : 'var(--border)',
-                                            color: picked ? '#fff' : 'var(--ink-mid)',
-                                            fontWeight: picked ? 700 : 500,
-                                        }}
-                                    >
-                                        <div className="flex items-center justify-center gap-1 text-[12.5px]">
-                                            {m.icon}
-                                            <span>{m.label}</span>
-                                        </div>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                        {selectedMethod && (
-                            <>
-                                <div className="bg-[#F0FDF4] border border-[#86EFAC] rounded p-2 mb-1.5 text-[11.5px] text-[#166534]">
-                                    ✅ 已選：{METHOD_OPTIONS.find(m => m.id === selectedMethod)?.label}（W9-W15 會帶入這個）
-                                </div>
-                                <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-2 mb-3 text-[11.5px] text-[#991B1B]">
-                                    ⚠️ <strong>方法決定後，W10 整本工具設計都會跟著走</strong>。下週 W10 前若要改方法，<strong>先找老師討論</strong>，不要自己換——換了等於工具設計重來。
-                                </div>
-                            </>
-                        )}
-
-                        {/* 合議理由 + 補充方法（合一） */}
-                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2 mt-3">② 合議理由 + 補充方法（如果有）</p>
-                        <ThinkRecord
-                            dataKey="w9-method-reason"
-                            prompt="為什麼選這個方法？有沒有補充方法？"
-                            scaffold={[
-                                '主方法：（上方按鈕已選 · 這格寫理由即可）',
-                                '為什麼選這個：（跟研究問題對得上嗎？樣本好取得嗎？組內成員擅長嗎？）',
-                                '跟 W4 個人選的相比：（一樣／改了。改的話為什麼？）',
-                                '補充方法：（如有，例：「先問卷找趨勢 N=80 → 再訪談補深度 N=6」；沒有就留空）',
-                            ]}
-                            rows={6}
-                        />
-                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
-                            ✏️ 寫完複製到<strong>計畫書第六章「研究方法」段落</strong>。Solo 或單飛？直接寫你個人決定的方法即可（跟 W4 一樣或改了都行）。
-                        </p>
                     </div>
 
                     {/* 1-5 章觀念複習地圖（不是個人素材清單，是觀念口訣）*/}
