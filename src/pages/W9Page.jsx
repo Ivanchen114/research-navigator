@@ -653,44 +653,169 @@ export const W9Page = () => {
                         </div>
                     )}
 
-                    {/* 名詞白話化：變項（高一第一次正式接觸） */}
-                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[720px]">
-                        <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂一個詞：變項（W9 開始大量出現）</p>
+                    {/* 第四章核心概念：依方法分流（method-aware）+ 每個術語白話解釋 */}
+                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[760px]">
+                        <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 你的計畫書「第四章」要寫什麼？</p>
                         <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
-                            「變項」就是<strong>研究中會改變、會被測量的因素</strong>。例如「滑手機時間」「成績」「年級」都是變項。
-                            實驗法分三種角色：
+                            五種研究方法的第四章<strong>名稱與核心概念都不一樣</strong>——這是研究方法論的本質差異，不是用詞偏好。下方依你選的方法顯示對應內容；想看其他方法可展開最下方對照表。
                         </p>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                            <div className="bg-white border-2 border-[#2563EB] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#2563EB] mb-1">🎛️ 自變項</p>
-                                <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed mb-1">你動手調整的</p>
-                                <p className="text-[11px] text-[#1E40AF] italic">例：實驗組聽音樂、對照組安靜</p>
+
+                        {!selectedMethod && (
+                            <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-3 mb-3">
+                                <p className="text-[12.5px] font-bold text-[#92400E] mb-1.5">👇 點一個方法，現場看你的第四章核心概念</p>
+                                <p className="text-[11px] text-[#78350F] mb-2.5 leading-relaxed">
+                                    可以多試幾個比較。下方「組內合議」區會同步紀錄你的選擇——確定後到那裡寫合議理由。
+                                </p>
+                                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                    {METHOD_OPTIONS.map((m) => (
+                                        <button
+                                            key={m.id}
+                                            type="button"
+                                            onClick={() => handleMethodSelect(m.id)}
+                                            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-[6px] border-2 border-[#FCD34D] bg-white hover:border-[#F59E0B] hover:bg-[#FEF3C7] transition-colors cursor-pointer"
+                                        >
+                                            <span className="text-[#B45309]">{m.icon}</span>
+                                            <span className="text-[11px] font-bold text-[#92400E]">{m.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="bg-white border-2 border-[#7C3AED] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#7C3AED] mb-1">📈 依變項</p>
-                                <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-1">跟著變、你想測的</p>
-                                <p className="text-[11px] text-[#5B21B6] italic">例：記憶測驗分數</p>
+                        )}
+
+                        {/* 問卷組 */}
+                        {selectedMethod === 'questionnaire' && (
+                            <div className="bg-white border-2 border-[#3B82F6] rounded p-3 mb-3">
+                                <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📋 你的第四章：<span className="text-[#1D4ED8]">變項設計</span></p>
+                                <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed mb-3">問卷研究的核心是「找變項之間的關係」。三種角色：</p>
+                                <div className="space-y-2 text-[11.5px]">
+                                    <div className="border-l-3 border-[#7C3AED] bg-[#F5F3FF] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#5B21B6] mb-0.5">🎯 依變項<span className="font-normal text-[#7C3AED]"> — 你想解釋的「結果」（被影響的東西）</span></p>
+                                        <p className="text-[#4C1D95] italic">例：自評睡眠品質（5 點量表）</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#2563EB] bg-[#EFF6FF] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#1E40AF] mb-0.5">🎛️ 自變項<span className="font-normal text-[#2563EB]"> — 你猜會影響結果的因子</span></p>
+                                        <p className="text-[#1E3A8A] italic">例：每天滑手機時數</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#059669] bg-[#F0FDF4] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#065F46] mb-0.5">👤 背景變項<span className="font-normal text-[#059669]"> — 個人屬性，可能也會影響結果</span></p>
+                                        <p className="text-[#047857] italic">例：年級、性別、補習頻率</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="bg-white border-2 border-[#059669] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#059669] mb-1">🔒 控制變項</p>
-                                <p className="text-[11.5px] text-[#065F46] leading-relaxed mb-1">要保持一樣、避免干擾</p>
-                                <p className="text-[11px] text-[#047857] italic">例：同考卷、同教室、同時段</p>
+                        )}
+
+                        {/* 訪談組 */}
+                        {selectedMethod === 'interview' && (
+                            <div className="bg-white border-2 border-[#7C3AED] rounded p-3 mb-3">
+                                <p className="text-[13px] font-bold text-[#5B21B6] mb-2">🎤 你的第四章：<span className="text-[#6D28D9]">訪談主題框架</span></p>
+                                <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-3">訪談研究先把研究問題拆成 3-5 個「要追問的大主題」——每個主題在第六章會展開成一組訪談題。</p>
+                                <div className="space-y-2 text-[11.5px]">
+                                    <div className="border-l-3 border-[#7C3AED] bg-[#F5F3FF] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#5B21B6] mb-0.5">📌 主題<span className="font-normal text-[#7C3AED]"> — 一個大方向，下面展開 1 主問題 + 2-3 個追問</span></p>
+                                        <p className="text-[#4C1D95] italic">例：研究補習動機 → 主題 1「家長期待」、主題 2「同儕壓力」、主題 3「自我需求」</p>
+                                    </div>
+                                </div>
+                                <div className="bg-[#FEF3C7] border-l-3 border-[#F59E0B] rounded-r p-2.5 mt-2 text-[11px] text-[#92400E] leading-relaxed">
+                                    ⚠️ <strong>主題 ≠ 變項</strong>：主題是事後從訪談稿<strong>歸納</strong>出來的「意義模式」，不是事先操弄的因子——這是質性研究的本質。
+                                </div>
                             </div>
-                        </div>
-                        <p className="text-[11px] text-[#1E40AF] italic leading-relaxed">
-                            💡 不是所有方法都叫「變項」——問卷叫「<strong>題目／構面</strong>」、訪談叫「<strong>主題</strong>」、觀察叫「<strong>行為類別</strong>」、文獻分析叫「<strong>分析維度</strong>」。下方對照表有完整對應。
-                        </p>
-                        {/* 📖 同義詞補充：主題 / 維度 是什麼 */}
-                        <div className="bg-white border border-[#BFDBFE] rounded p-2.5 mt-3">
-                            <p className="text-[11.5px] font-bold text-[#1E40AF] mb-1">📖 「主題／維度」是什麼意思？</p>
-                            <p className="text-[11px] text-[#1E3A8A] leading-relaxed">
-                                <strong>主題</strong>（訪談用）= 你想從訪談裡聽到的「分類」，例如研究補習動機就會聽到「家長期待／同儕壓力／自我需求」這 3 個主題。
+                        )}
+
+                        {/* 實驗組 */}
+                        {selectedMethod === 'experiment' && (
+                            <div className="bg-white border-2 border-[#DC2626] rounded p-3 mb-3">
+                                <p className="text-[13px] font-bold text-[#991B1B] mb-2">🧪 你的第四章：<span className="text-[#B91C1C]">變項設計（自/依/控制）</span></p>
+                                <p className="text-[11.5px] text-[#7F1D1D] leading-relaxed mb-3">實驗法核心：操作自變項、測量依變項、把其他可能影響結果的因子「控制住」。</p>
+                                <div className="space-y-2 text-[11.5px]">
+                                    <div className="border-l-3 border-[#2563EB] bg-[#EFF6FF] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#1E40AF] mb-0.5">🎛️ 自變項<span className="font-normal text-[#2563EB]"> — 你動手調整的因子</span></p>
+                                        <p className="text-[#1E3A8A] italic">例：實驗組聽古典音樂、對照組安靜</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#7C3AED] bg-[#F5F3FF] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#5B21B6] mb-0.5">📈 依變項<span className="font-normal text-[#7C3AED]"> — 測量的結果</span></p>
+                                        <p className="text-[#4C1D95] italic">例：5 分鐘記憶測驗分數</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#059669] bg-[#F0FDF4] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#065F46] mb-0.5">🔒 控制變項<span className="font-normal text-[#059669]"> — 保持一樣，避免干擾</span></p>
+                                        <p className="text-[#047857] italic">例：同考卷、同教室、同時段</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 觀察組 */}
+                        {selectedMethod === 'observation' && (
+                            <div className="bg-white border-2 border-[#059669] rounded p-3 mb-3">
+                                <p className="text-[13px] font-bold text-[#065F46] mb-2">👁️ 你的第四章：<span className="text-[#047857]">觀察維度設計</span></p>
+                                <p className="text-[11.5px] text-[#065F46] leading-relaxed mb-3">觀察研究依「參與 vs 非參與」分兩種記錄方式：</p>
+                                <div className="space-y-2 text-[11.5px]">
+                                    <div className="border-l-3 border-[#059669] bg-[#F0FDF4] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#065F46] mb-0.5">📋 編碼類別<span className="font-normal text-[#059669]"> — 非參與觀察用，把行為分類的標籤</span></p>
+                                        <p className="text-[#047857] italic">例：學生分心行為 → 滑手機 / 跟同學講話 / 看窗外 / 其他</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#0EA5E9] bg-[#F0F9FF] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#075985] mb-0.5">📌 關鍵事件記錄維度<span className="font-normal text-[#0EA5E9]"> — 參與觀察用，每件事要記的欄位</span></p>
+                                        <p className="text-[#0C4A6E] italic">例：發生時間／參與者／情境／反應</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 文獻組 */}
+                        {selectedMethod === 'literature' && (
+                            <div className="bg-white border-2 border-[#D97706] rounded p-3 mb-3">
+                                <p className="text-[13px] font-bold text-[#92400E] mb-2">📚 你的第四章：<span className="text-[#B45309]">分析架構</span></p>
+                                <p className="text-[11.5px] text-[#78350F] leading-relaxed mb-3">文獻分析依子類型（歷史 / 內容 / 論述 / 敘事）有不同架構——共同骨架是「維度 × 單位 × 編碼」。</p>
+                                <div className="space-y-2 text-[11.5px]">
+                                    <div className="border-l-3 border-[#D97706] bg-[#FEF3C7] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#92400E] mb-0.5">📐 分析維度<span className="font-normal text-[#D97706]"> — 看每篇資料時抓的比較欄位</span></p>
+                                        <p className="text-[#78350F] italic">例：研究 YouTuber 標題 → 數字 / 情緒詞 / 問句 / 視覺符號 這 4 個維度</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#B45309] bg-[#FEF3C7] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#92400E] mb-0.5">📦 分析單位<span className="font-normal text-[#B45309]"> — 你用多大顆粒度當「一筆資料」</span></p>
+                                        <p className="text-[#78350F] italic">例：一篇文章 / 一個段落 / 一句話 / 一個詞</p>
+                                    </div>
+                                    <div className="border-l-3 border-[#92400E] bg-[#FEF3C7] p-2.5 rounded-r">
+                                        <p className="font-bold text-[#92400E] mb-0.5">🏷️ 編碼表<span className="font-normal text-[#92400E]"> — 把資料分類的工具</span></p>
+                                        <p className="text-[#78350F] italic">例：每筆資料勾選對應類別（情緒詞=正面/負面/中性）</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 5 法對照表（收合）*/}
+                        <details className="bg-white border border-[#BFDBFE] rounded p-2.5 mb-2">
+                            <summary className="cursor-pointer text-[11.5px] font-bold text-[#1E40AF]">📊 想看其他方法的第四章長什麼樣？</summary>
+                            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
+                                {[
+                                    { m: '📋 問卷', sec: '變項設計', core: '依變項 / 自變項 / 背景變項', ex: '滑手機時數 → 自評睡眠品質' },
+                                    { m: '🎤 訪談', sec: '訪談主題框架', core: '主題 1/2/3（每個下面 1 主問 + 2-3 追問）', ex: '補習動機 → 家長期待 / 同儕壓力 / 自我需求' },
+                                    { m: '🧪 實驗', sec: '變項設計', core: '自變項 / 依變項 / 控制變項', ex: '是否聽音樂 → 記憶測驗分數' },
+                                    { m: '👁️ 觀察', sec: '觀察維度設計', core: '編碼類別（非參與）/ 關鍵事件維度（參與）', ex: '分心行為 → 滑手機 / 講話 / 看窗外' },
+                                    { m: '📚 文獻', sec: '分析架構', core: '分析維度 / 分析單位 / 編碼表', ex: 'YouTuber 標題 → 數字 / 情緒詞 / 問句 / 視覺符號' },
+                                ].map((r, i) => (
+                                    <div key={i} className="bg-[#F9FAFB] border border-[#E5E7EB] rounded p-2">
+                                        <p className="font-bold text-[#1E40AF] mb-0.5">{r.m} <span className="text-[#6B7280] font-normal">第四章「{r.sec}」</span></p>
+                                        <p className="text-[#1E3A8A]"><span className="font-bold">核心：</span>{r.core}</p>
+                                        <p className="text-[#5B21B6] italic mt-0.5">例：{r.ex}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </details>
+
+                        {/* 進階：質性 vs 量化方法論差異 */}
+                        <details className="bg-white border border-[#BFDBFE] rounded p-2.5">
+                            <summary className="cursor-pointer text-[11.5px] font-bold text-[#1E40AF]">📖 進階：為什麼用詞不一樣？（質性 vs 量化）</summary>
+                            <p className="text-[11px] text-[#1E3A8A] leading-relaxed mt-2">
+                                <strong>變項</strong>（量化）：研究者<strong>事先操作或測量</strong>的屬性。先定變項 → 收資料 → 看變項間關係。用於問卷、實驗。
                                 <br />
-                                <strong>分析維度</strong>（文獻用）= 你看每篇文獻時想抓的「比較欄位」，例如研究 YouTuber 標題就抓「數字／情緒詞／問句／視覺符號」這 4 個維度。
+                                <strong>主題</strong>（質性）：從資料中<strong>歸納浮現</strong>的「意義模式」（Braun & Clarke 主題分析法）。先定研究主題 → 訪談 → 編碼歸納主題。用於訪談、焦點團體。
                                 <br />
-                                本質都是<strong>變項在不同方法的化身</strong>——名字不同，做的事一樣。
+                                <strong>維度</strong>（兩者皆可）：構念的子層面或分析的軸向。觀察的編碼類別、文獻的分析欄位都屬此類。
+                                <br />
+                                <strong>本質差異</strong>：量化先有變項再收資料；質性是先收資料、主題從資料浮現。所以叫法不能合一。
                             </p>
-                        </div>
+                        </details>
                     </div>
 
                     {/* 🤝 組內合議方法登記（W9 第一個紀錄點 · 點按鈕＋寫理由） */}

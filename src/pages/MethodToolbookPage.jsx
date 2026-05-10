@@ -393,37 +393,44 @@ const MethodToolbookPage = () => {
                                 <table className="w-full text-[12px] border-collapse">
                                     <thead>
                                         <tr className="bg-[var(--paper-warm)]">
-                                            <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold w-[120px]">類型</th>
+                                            <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold w-[110px]">類型</th>
                                             <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold">用途</th>
                                             <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold">例子</th>
-                                            <th className="border border-[var(--border)] px-2 py-1.5 text-left font-bold w-[180px]">工具範本</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {kit.structure.types.map((t, i) => (
                                             <tr key={i}>
-                                                <td className="border border-[var(--border)] px-2 py-1.5 font-bold text-[var(--ink)]">{t.name}</td>
-                                                <td className="border border-[var(--border)] px-2 py-1.5 text-[var(--ink-mid)]">{t.use}</td>
-                                                <td className="border border-[var(--border)] px-2 py-1.5 text-[var(--ink-light)]">{t.ex}</td>
-                                                <td className="border border-[var(--border)] px-2 py-1.5">
-                                                    {t.url ? (
-                                                        <a
-                                                            href={t.url}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-2.5 py-1 rounded text-[10.5px] font-bold hover:opacity-90 transition-opacity no-underline whitespace-nowrap"
-                                                        >
-                                                            📄 複製範本
-                                                        </a>
-                                                    ) : (
-                                                        <span className="text-[10.5px] text-[var(--ink-light)]">—</span>
-                                                    )}
-                                                </td>
+                                                <td className="border border-[var(--border)] px-2 py-1.5 font-bold text-[var(--ink)] align-top">{t.name}</td>
+                                                <td className="border border-[var(--border)] px-2 py-1.5 text-[var(--ink-mid)] align-top">{t.use}</td>
+                                                <td className="border border-[var(--border)] px-2 py-1.5 text-[var(--ink-light)] align-top">{t.ex}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
+
+                            {/* 範本下載區（只有設了 url 的題型才顯示，目前只有文獻分析 4 子類型有範本）*/}
+                            {kit.structure.types.some(t => t.url) && (
+                                <div className="bg-[#FEF3C7] border border-[#F59E0B]/40 rounded-[var(--radius-unified)] p-3 mb-3">
+                                    <p className="text-[12px] font-bold text-[#92400E] mb-2 flex items-center gap-1.5">
+                                        📄 範本下載（點按鈕一鍵複製到自己的 Google Drive）
+                                    </p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        {kit.structure.types.filter(t => t.url).map((t, i) => (
+                                            <a
+                                                key={i}
+                                                href={t.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center justify-center gap-1.5 bg-[var(--accent)] text-white px-3 py-2 rounded text-[11.5px] font-bold hover:opacity-90 transition-opacity no-underline"
+                                            >
+                                                📄 {t.name} 範本
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             <div className="bg-[var(--accent-light)] border-l-3 border-[var(--accent)] rounded-r-[6px] p-2.5 text-[12px] text-[var(--ink-mid)] leading-[1.7] whitespace-pre-line">
                                 <span className="font-bold text-[var(--ink)]">推薦結構：</span>{kit.structure.template}
                             </div>
