@@ -4,6 +4,8 @@ import CourseArc from '../components/ui/CourseArc';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import GroupSizeSelector from '../components/ui/GroupSizeSelector';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
+import BraveScientistReflection from '../components/ui/BraveScientistReflection';
 import './W17.css';
 import {
     ArrowLeft,
@@ -19,38 +21,40 @@ import {
  *  資料常數（對齊真實簡報 + 學習單 + 教案）
  * ══════════════════════════════════════ */
 
-/* 90 分鐘活動主流程 + 5 分準備 + 5 分收尾 = 100 分鐘 */
+/* 100 分鐘：5 分布置 + 上半場 40 + 5 分中場休息 + 下半場 40 + 10 分收尾 */
 const SCHEDULE = [
     { time: '0:00-0:05', activity: '場地布置 + 輪值規則確認', mode: '全班', icon: '🪑' },
-    { time: '0:05-0:50', activity: '上半場 Gallery Walk（45 分鐘）', mode: '依組數輪值', icon: '🎨' },
-    { time: '0:50-0:55', activity: '中場休息（換水 / 上廁所）', mode: '休息', icon: '☕' },
-    { time: '0:55-1:40', activity: '下半場 Gallery Walk（45 分鐘）', mode: '依組數輪值', icon: '🎨' },
-    { time: '1:40-1:45', activity: '收尾：填完兩份學習單最後欄位 + 老師結語', mode: '個人', icon: '🏆' },
+    { time: '0:05-0:45', activity: '上半場 Gallery Walk（40 分鐘）', mode: '依組數輪值', icon: '🎨' },
+    { time: '0:45-0:50', activity: '中場休息（換水 / 上廁所）', mode: '休息', icon: '☕' },
+    { time: '0:50-1:30', activity: '下半場 Gallery Walk（40 分鐘）', mode: '依組數輪值', icon: '🎨' },
+    { time: '1:30-1:40', activity: '收尾：填完兩份學習單最後欄位 + 老師結語', mode: '個人', icon: '🏆' },
 ];
 
 /* 評分 4 向度（B 方案：完整度=門檻、其餘三向度合佔 100%）*/
 const RUBRIC_LISTENER = [
     { dim: '✅ 完整度', weight: '門檻', desc: '聽滿 4 組 + 4 張筆記卡無空白。未達標 → 整份直接降一級。' },
-    { dim: '📝 內容具體度', weight: '35%', desc: '能具體描述各組的研究問題、方法、發現。例（A）「他們用問卷比較段考前/平時，發現借書區人數差 3 倍」；例（C）「研究很有趣」。' },
+    { dim: '📝 內容具體度', weight: '35%', desc: '能具體描述各組的研究問題、方法、發現。量化例（A）「他們用問卷比較段考前/平時，發現借書區人數差 3 倍」；質性例（A）「他們訪談 5 位熬夜學生，3 個主題裡『家長期待』反覆出現」；例（C）「研究很有趣」。' },
     { dim: '❓ 提問品質', weight: '30%', desc: '針對方法、結論或延伸應用提問。例（A）「為什麼樣本只取 1 個班？」；例（C）「為什麼選這個題目？」。' },
     { dim: '💡 反思深度', weight: '35%', desc: '連結自身經驗或學習，提出獨到見解。例（A）「這組讓我想到我自己研究的盲點，下次想複製他們的編碼方式」；例（C）「我覺得他做得很棒」。' },
 ];
 const RUBRIC_PRESENTER = [
     { dim: '✅ 完整度', weight: '門檻', desc: '分享滿 4 場 + 反思 4 題無空白。未達標 → 整份直接降一級。' },
-    { dim: '📋 問題記錄', weight: '35%', desc: '具體記錄聽眾提問內容（不是「有人問問題」而是「他問 ___」）。例（A）「他問：你怎麼處理只填一直線的無效問卷？」；例（C）「有人問樣本」。' },
-    { dim: '🔁 應答反思', weight: '30%', desc: '反思自己的回應好不好、哪題答不出來。例（A）「第 2 場我答不出『信效度』，因為我自己也不太懂——回家要補」；例（C）「都答得不錯」。' },
-    { dim: '💡 反思深度', weight: '35%', desc: '從聽眾提問與互動，提出對研究的具體改進方向。例（A）「3 個聽眾都問樣本太小，下次要擴大到 3 個班」；例（C）「研究還可以更好」。' },
+    { dim: '📋 問題記錄', weight: '35%', desc: '具體記錄聽眾提問內容（不是「有人問問題」而是「他問 ___」）。量化例（A）「他問：你怎麼處理只填一直線的無效問卷？」；質性例（A）「他問：你怎麼避免引導受訪者照你想的方向回答？」；例（C）「有人問樣本」。' },
+    { dim: '🔁 應答反思', weight: '30%', desc: '反思自己的回應好不好、哪題答不出來。量化例（A）「第 2 場我答不出『信效度』，因為我自己也不太懂——回家要補」；質性例（A）「第 1 場我答不出『主題飽和度』，回家要查」；例（C）「都答得不錯」。' },
+    { dim: '💡 反思深度', weight: '35%', desc: '從聽眾提問與互動，提出對研究的具體改進方向。量化例（A）「3 個聽眾都問樣本太小，下次要擴大到 3 個班」；質性例（A）「3 個聽眾都問訪談太短／不夠深入，下次每場至少 30 分鐘並追問到主題飽和」；例（C）「研究還可以更好」。' },
 ];
 
 const JOURNEY_MAP = [
     { weeks: 'W1', ability: '初心', desc: '對 AI 的第一印象與第一判斷' },
-    { weeks: 'W3-W4', ability: '問題意識', desc: '提出有意義的研究問題' },
-    { weeks: 'W6', ability: '證據基礎', desc: '學術閱讀與批判性思考' },
-    { weeks: 'W8-W10', ability: '科學嚴謹', desc: '設計與執行的品質意識' },
-    { weeks: 'W11-W12', ability: '執行力', desc: '在不確定中持續推進' },
-    { weeks: 'W13-W15', ability: '洞察力', desc: '從數據中讀出意義' },
+    { weeks: 'W2-W4', ability: '問題意識', desc: '提出有意義的研究問題、選對方法' },
+    { weeks: 'W5-W6', ability: '工具設計', desc: '操作型定義與研究工具的精準設計' },
+    { weeks: 'W7-W8', ability: '證據基礎', desc: '學術閱讀與批判性思考' },
+    { weeks: 'W9-W10', ability: '計劃整合', desc: '整合研究設計，完成研究計劃書定稿' },
+    { weeks: 'W11', ability: '科學嚴謹', desc: '預試、倫理審查與工具設計書' },
+    { weeks: 'W12', ability: '執行力', desc: '期中短報、同儕把關，施測前最後擋板' },
+    { weeks: 'W13-W15', ability: '洞察力', desc: '資料整理、圖表分析到研究結論' },
     { weeks: 'W16', ability: '溝通力', desc: '向他人清楚表達自己的發現' },
-    { weeks: 'W17', ability: '整合反思', desc: '回顧整學期 AI 協作的學習' },
+    { weeks: 'W17', ability: '整合反思', desc: '以發表回顧整學期研究歷程，接受同儕提問的檢驗' },
 ];
 
 const DOS_AND_DONTS = {
@@ -86,38 +90,43 @@ const W17Page = () => {
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W17"
+                todo={[
+                  { label: '今天做什麼', value: '顧攤分享 4 場、走動聆聽 4 組，填完兩份紙本學習單。' },
+                  { label: '為什麼做', value: '海報都印好了——最後一件事是站出去說、坐下來聽，讓研究被真正的人讀到。' },
+                  { label: '今天交什麼', value: '兩份紙本學習單（個人作業，課堂收齊）。' },
+                ]}
+                question="被問之後，我的研究站得住嗎？"
                 title="最終發表 Gallery Walk · "
                 accentTitle="策展日"
                 subtitle="像逛美術館一樣，自由走動聆聽各組的研究成果。每個人都有兩個身分——上半場顧攤分享、下半場走動聆聽（依組人數輪值）。紙本學習單兩份在課堂上填，這頁是行前說明 + 評分規準。"
                 chain="W16 報告海報都好了——這週做最後一件事：站出去說、坐下來聽。其他組也會站出去——你會聽到 12 種完全不同的研究故事。"
                 meta={[
-                    { label: '活動時長', value: '90 分鐘（含 5 分休息）' },
-                    { label: '報告者任務', value: '至少分享 4 場（每場 5-8 分鐘）' },
-                    { label: '聆聽者任務', value: '至少聆聽 4 組 + 主動提問' },
-                    { label: '繳交', value: '兩份紙本學習單（個人作業）' },
+                    { label: '第一節', value: 'Round 1 顧攤（上半場）+ Round 2 聆聽（上半場）' },
+                    { label: '第二節', value: 'Round 3 顧攤（下半場）+ Round 4 聆聽（下半場）+ 收尾' },
+                    { label: '課堂產出', value: '兩份紙本學習單（個人作業，課堂收齊）' },
+                    { label: '前置要求', value: '海報已印 A1（老師提前印好）+ 兩份空白紙本學習單' },
                 ]}
             />
             {/* 改用 Home.jsx 的 5-phase studentArc 格式（原本 7-段細分屬 pacingArc） */}
             <CourseArc items={[
-                { wk: 'W0–W3', name: '問題意識' , past: true },
-                { wk: 'W4–W8', name: '研究規劃', past: true },
-                { wk: 'W9–W10', name: '計畫定稿', past: true },
-                { wk: 'W11–W12', name: '執行檢核', past: true },
-                { wk: 'W13–W17', name: '分析與發表', now: true },
+                { wk: 'W0–W3', name: '問題意識', status: 'past' },
+                { wk: 'W4–W8', name: '研究規劃', status: 'past' },
+                { wk: 'W9–W10', name: '計畫定稿', status: 'past' },
+                { wk: 'W11–W12', name: '執行檢核', status: 'past' },
+                { wk: 'W13–W17', name: '分析與發表', status: 'now' },
             ]} />
 
             {/* W17 沒有 lessonMaps W17Data，本節任務直接 inline 寫 */}
             <TaskCard
                 weekNumber="W17"
                 weekTitle="成果發表 · Gallery Walk"
-                duration="100 分鐘 · 含 5 分休息"
+                duration="100 分鐘 · 含中場休息與收尾"
                 tasks={[
                     '報告者：分享 4 場（每場 5–8 分鐘）',
                     '聆聽者：聆聽 4 組 + 主動提問（至少各一次）',
@@ -189,9 +198,9 @@ const W17Page = () => {
                                 title: '1 人（Solo）',
                                 content: (
                                     <div>
-                                        <p style={{ marginBottom: 6 }}><strong>上半場 45 分</strong>：顧攤（分享 4-5 場，每場 5-8 分鐘）</p>
+                                        <p style={{ marginBottom: 6 }}><strong>上半場 40 分</strong>：顧攤（分享 4-5 場，每場 5-8 分鐘）</p>
                                         <p style={{ marginBottom: 6 }}><strong>中場休息 5 分</strong></p>
-                                        <p style={{ marginBottom: 6 }}><strong>下半場 45 分</strong>：聆聽（聽 4-5 組）</p>
+                                        <p style={{ marginBottom: 6 }}><strong>下半場 40 分</strong>：聆聽（聽 4-5 組）</p>
                                         <p style={{ fontSize: 11, color: '#92400E', marginTop: 8 }}>💡 Solo 比較吃力，建議下半場集中聽 4 組就好，留時間填學習單。</p>
                                     </div>
                                 ),
@@ -200,8 +209,8 @@ const W17Page = () => {
                                 title: '2 人組',
                                 content: (
                                     <ul className="list-disc pl-4 space-y-1">
-                                        <li><strong>A：上半場 45 分顧攤</strong>，下半場 45 分聆聽</li>
-                                        <li><strong>B：上半場 45 分聆聽</strong>，下半場 45 分顧攤</li>
+                                        <li><strong>A：上半場 40 分顧攤</strong>，下半場 40 分聆聽</li>
+                                        <li><strong>B：上半場 40 分聆聽</strong>，下半場 40 分顧攤</li>
                                     </ul>
                                 ),
                             },
@@ -209,11 +218,11 @@ const W17Page = () => {
                                 title: '3 人組',
                                 content: (
                                     <div>
-                                        <p style={{ marginBottom: 6 }}>每人輪值 30 分鐘顧攤，其他時間聆聽：</p>
+                                        <p style={{ marginBottom: 6 }}>每人輪值約 27 分鐘顧攤，其他時間聆聽：</p>
                                         <ul className="list-disc pl-4 space-y-1">
-                                            <li><strong>A 顧攤</strong>：0:05–0:35（上半場前 30 分）</li>
-                                            <li><strong>B 顧攤</strong>：0:35–1:05（橫跨中場）</li>
-                                            <li><strong>C 顧攤</strong>：1:05–1:40（下半場後 35 分）</li>
+                                            <li><strong>A 顧攤</strong>：0:05–0:32（上半場前段）</li>
+                                            <li><strong>B 顧攤</strong>：0:32–1:03（橫跨中場）</li>
+                                            <li><strong>C 顧攤</strong>：1:03–1:30（下半場後段）</li>
                                         </ul>
                                     </div>
                                 ),
@@ -222,8 +231,8 @@ const W17Page = () => {
                                 title: '4 人組',
                                 content: (
                                     <ul className="list-disc pl-4 space-y-1">
-                                        <li><strong>A、B：上半場 45 分顧攤</strong>，下半場 45 分聆聽</li>
-                                        <li><strong>C、D：上半場 45 分聆聽</strong>，下半場 45 分顧攤</li>
+                                        <li><strong>A、B：上半場 40 分顧攤</strong>，下半場 40 分聆聽</li>
+                                        <li><strong>C、D：上半場 40 分聆聽</strong>，下半場 40 分顧攤</li>
                                     </ul>
                                 ),
                             },
@@ -235,19 +244,30 @@ const W17Page = () => {
             {/* 雙角色任務卡 */}
             <div className="w17-hint-grid" style={{ marginTop: 16 }}>
                 <div className="w17-hint-card" style={{ background: '#FEF3C7', border: '1px solid #FDE68A' }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#92400E' }}>
-                        <Mic size={14} style={{ verticalAlign: -2 }} /> 🎤 報告者任務
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                        <ContentTypeChip type="做" />
+                        <span style={{ fontWeight: 700, fontSize: 13, color: '#92400E' }}>
+                            <Mic size={14} style={{ verticalAlign: -2 }} /> 🎤 報告者任務
+                        </span>
                     </div>
                     <div style={{ color: '#92400E', fontSize: 12, lineHeight: 1.85 }}>
                         <strong>你的任務</strong>：向來訪的同學介紹你的研究<br />
                         <strong>每場 5-8 分鐘</strong>：研究動機 → 方法過程 → 主要發現<br />
                         <strong>至少分享 4 場</strong>才算完成任務<br />
                         <strong>記錄聽眾提問</strong>到「報告者學習單」
+                        <div style={{ marginTop: 8, padding: '8px 10px', background: '#FFFBEB', border: '1px dashed #F59E0B', borderRadius: 4 }}>
+                            <strong>📌 依方法不同，「主要發現」呈現重點：</strong><br />
+                            • <strong>量化（問卷/實驗/觀察）</strong>：報數字 + 比較（X% / 平均差 / 前後變化）<br />
+                            • <strong>質性（訪談/文獻）</strong>：報主題 + 代表引文 / 文本案例
+                        </div>
                     </div>
                 </div>
                 <div className="w17-hint-card" style={{ background: '#EFF6FF', border: '1px solid #BFDBFE' }}>
-                    <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8, color: '#1E40AF' }}>
-                        <BookOpen size={14} style={{ verticalAlign: -2 }} /> 👂 聆聽者任務
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                        <ContentTypeChip type="做" />
+                        <span style={{ fontWeight: 700, fontSize: 13, color: '#1E40AF' }}>
+                            <BookOpen size={14} style={{ verticalAlign: -2 }} /> 👂 聆聽者任務
+                        </span>
                     </div>
                     <div style={{ color: '#1E40AF', fontSize: 12, lineHeight: 1.85 }}>
                         <strong>你的任務</strong>：走動聆聽其他組的研究<br />
@@ -397,20 +417,13 @@ const W17Page = () => {
                 </div>
             </div>
 
-            {/* 學期 AI 協作反思 — 已搬到 W14 寫，W17 是抽問日 */}
-            <div className="card" style={{ marginTop: 16, padding: 16, background: '#FEF3C7', borderColor: '#D97706', borderWidth: 2 }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: '#92400E', margin: 0 }}>🎯 學期 AI 協作反思（今日抽問日）</p>
-                    <span style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: '#92400E', background: 'white', padding: '2px 8px', borderRadius: 4, border: '1px solid #D97706', flexShrink: 0 }}>跨週作業</span>
-                </div>
-                <p style={{ fontSize: 12, color: '#78350F', lineHeight: 1.75, marginBottom: 10 }}>
-                    這份反思你應該已在 <strong>W14</strong> 寫完了——回頭打開 <Link to="/w14" style={{ color: '#92400E', fontWeight: 700, textDecoration: 'underline' }}>W14 頁面</Link> 翻到「學期 AI 協作反思」block 看你當時寫的內容。<br />
-                    <strong>今天 Gallery Walk 中段老師會隨機點 3 位同學現場分享</strong>你 W14 寫的內容——所以你現在要做的事是：<strong>翻出來複習一下，準備好 1-2 句精華</strong>。
+            {/* Brave Scientist 反思 — Gallery Walk 後 / W18 前回來填 */}
+            <div style={{ marginTop: 16 }}>
+                <p className="text-[11.5px] text-[var(--ink-light)] italic mb-2">
+                    ＊選填收束反思——Gallery Walk 結束後、或 W18 前，回來填這一格。<br />
+                    你剛被人當場追問過自己的研究，那個當下就是這格最好的素材。這是你整學期數位紀錄的最後一筆。
                 </p>
-                <div style={{ background: 'white', border: '1px dashed #D97706', borderRadius: 4, padding: '10px 14px', fontSize: 11.5, color: '#92400E', lineHeight: 1.8 }}>
-                    📌 <strong>沒在 W14 寫過怎麼辦？</strong>馬上補——5 分鐘寫完即可。但被點到時就承認「我在 W14 沒寫，現場想一個給你」，誠實比裝有寫更尊重大家。<br />
-                    💡 <strong>抽問問題會是哪個？</strong>三選一隨機：①「最讓你改變想法的一次 AI 協作」②「AI-RED 五字裡你最常忘的是哪一個？為什麼」③「你會推薦學弟妹怎麼用 AI 做研究？」
-                </div>
+                <BraveScientistReflection dataKey="w17-brave-scientist" />
             </div>
 
             {/* 本週結束，你應該要會 — B 標準格式 */}
@@ -431,6 +444,20 @@ const W17Page = () => {
                         </div>
                     ))}
                 </div>
+            </div>
+
+            {/* 學習歷程策展室 CTA */}
+            <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4" style={{ marginTop: 24 }}>
+                <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">🎓 學期收尾</span>
+                    <span className="text-[14px] font-bold text-[#1E40AF]">把這學期變成你的作品</span>
+                </div>
+                <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                    W1 到 W17 的思考紀錄都在瀏覽器裡。前往策展室，挑出 10 個代表你思考變化的關鍵時刻，匯出成 PDF。
+                </p>
+                <Link to="/portfolio" className="inline-flex items-center gap-2 bg-[#1E40AF] text-white text-[13px] font-bold px-4 py-2 rounded-[var(--radius-unified)] hover:bg-[#1E3A8A] transition-colors">
+                    前往學習歷程策展室 →
+                </Link>
             </div>
 
             {/* 全課程旅程 */}

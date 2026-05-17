@@ -1,166 +1,113 @@
-import React, { useState, useEffect } from 'react';
-import { BarChart3, Eye, Bot, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { BarChart3 } from 'lucide-react';
 
 /**
- * W14 選圖判斷檢核卡 — 學生先選圖+寫理由 → AI 助理可幫檢核 → 人定案
- *
- * 教學重點：
- *   - W14 不是教「會用工具畫圖」，是教「會選對的圖呈現資料」
- *   - 學生不會用試算表沒關係，可以給 Gemini AI canvas 畫
- *   - 但選圖判斷必須學生自己做（不能 prompt「幫我選最適合的圖」）
- *
- * Props:
- * - dataKey：localStorage 儲存鍵
+ * W14 選圖引導卡（靜態流程引導，不填網頁）
+ * - 點選圖表類型查看說明與對應軸提示
+ * - 引導去 Google Slides 記錄選圖決策
+ * - 圓餅圖無 XY 軸，自動換成「類別 / 比例」
  */
 
 const CHART_TYPES = [
-    { id: 'scatter', label: '散佈圖', use: '看兩個連續變項的關聯（如 X 與 Y 是否一起變動）' },
-    { id: 'bar', label: '長條圖', use: '比較不同類別的數值（有/沒有、高/中/低分組對比）' },
-    { id: 'line', label: '折線圖', use: '看時間序列趨勢（每天、每週的變化）' },
-    { id: 'pie', label: '圓餅圖', use: '看「組成比例」（各類別佔總體的百分比）' },
-    { id: 'mixed', label: '混合圖', use: '同一張圖看兩個不同尺度的指標（左軸/右軸）' },
+    {
+        id: 'bar',
+        label: '長條圖',
+        use: '比較不同類別的數值（有 / 沒有、高 / 中 / 低分組對比）',
+        axes: { x: '橫軸：類別（如：高 / 中 / 低手機使用組）', y: '縱軸：數值（如：平均段考成績）' },
+    },
+    {
+        id: 'scatter',
+        label: '散佈圖',
+        use: '看兩個連續變項的關聯（X 與 Y 是否一起變動）',
+        axes: { x: '橫軸：一個連續變項（如：每日手機使用時數）', y: '縱軸：另一個連續變項（如：段考成績）' },
+    },
+    {
+        id: 'line',
+        label: '折線圖',
+        use: '看時間序列趨勢（每天、每週的變化）',
+        axes: { x: '橫軸：時間單位（如：第 1 週 / 第 2 週…）', y: '縱軸：你在追蹤的數值' },
+    },
+    {
+        id: 'pie',
+        label: '圓餅圖',
+        use: '看組成比例（各類別佔總體的百分比）',
+        axes: { x: '類別：有哪幾種選項？（加總必須 = 100%）', y: '比例：每個類別佔幾%？' },
+        noPie: true,
+    },
+    {
+        id: 'mixed',
+        label: '混合圖',
+        use: '同一張圖看兩個不同尺度的指標（左軸 / 右軸）',
+        axes: { x: '橫軸：共用的類別或時間軸', y: '左軸 / 右軸：兩個不同單位的指標' },
+    },
 ];
 
-const PROMPT_RULES = [
-    '✗ 禁用：「幫我把資料畫成最適合的圖」（這把選圖判斷外包了）',
-    '✓ 允許：「我選散佈圖，X 軸 = 睡眠時數，Y 軸 = 專注力，請幫我畫」',
-    '✓ 允許：「我畫了長條圖，請檢查標題是否中性、軸是否清楚」',
-];
-
-export const ChartChoiceChecker = ({ dataKey = 'w14-chart-choice' }) => {
-    const [data, setData] = useState({
-        chartType: '',
-        xAxis: '',
-        yAxis: '',
-        reason: '',
-    });
-    const [showAITip, setShowAITip] = useState(false);
-
-    useEffect(() => {
-        const saved = localStorage.getItem(dataKey);
-        if (saved) {
-            try { setData(JSON.parse(saved)); } catch {}
-        }
-    }, [dataKey]);
-
-    const update = (col, value) => {
-        const next = { ...data, [col]: value };
-        setData(next);
-        localStorage.setItem(dataKey, JSON.stringify(next));
-    };
+export const ChartChoiceChecker = () => {
+    const [selected, setSelected] = useState(null);
+    const chart = CHART_TYPES.find(t => t.id === selected);
 
     return (
-        <div className="my-6">
-            <div className="bg-[#F5F3FF] border-2 border-[#8B5CF6] rounded-[var(--radius-unified)] p-4 md:p-5">
-                <div className="flex items-center gap-2 mb-2">
-                    <BarChart3 size={20} className="text-[#7C3AED]" />
-                    <h3 className="font-bold text-[15px] text-[#7C3AED] m-0">📊 選圖判斷檢核卡</h3>
+        <div className="rounded-[var(--radius-unified)] border-2 border-[#C4B5FD] bg-[#F5F3FF] p-4 flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+                <BarChart3 size={18} className="text-[#7C3AED]" />
+                <p className="font-bold text-[13.5px] text-[#7C3AED] m-0">選圖引導</p>
+            </div>
+
+            {/* 五種圖選擇 */}
+            <div>
+                <p className="text-[12px] text-[#5B21B6] font-bold mb-2">① 點一種圖，看它適合什麼情況</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {CHART_TYPES.map(t => (
+                        <button
+                            key={t.id}
+                            onClick={() => setSelected(selected === t.id ? null : t.id)}
+                            className={`text-left p-2.5 rounded border-2 text-[12px] leading-[1.7] transition-colors ${
+                                selected === t.id
+                                    ? 'bg-[#7C3AED] text-white border-[#6D28D9]'
+                                    : 'bg-white text-[var(--ink)] border-[#C4B5FD] hover:bg-[#EDE9FE]'
+                            }`}
+                        >
+                            <p className="font-bold m-0 mb-0.5">{t.label}</p>
+                            <p className="text-[10.5px] m-0 opacity-90">{t.use}</p>
+                        </button>
+                    ))}
                 </div>
-                <p className="text-[12px] text-[#5B21B6] leading-[1.85] mb-4">
-                    <strong>動手前先決定：</strong>用哪種圖、X 軸放什麼、Y 軸放什麼。決定好<strong>再讓 AI 幫你畫</strong>——選圖判斷必須是你做。
+            </div>
+
+            {/* 選了之後：顯示軸的說明 */}
+            {chart && (
+                <div className="rounded border-2 border-[#7C3AED] bg-white p-3 flex flex-col gap-2">
+                    <p className="font-bold text-[12.5px] text-[#7C3AED] m-0">
+                        {chart.label}　的軸怎麼設定？
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <div className="bg-[#F5F3FF] rounded p-2">
+                            <p className="text-[10px] font-bold text-[#7C3AED] uppercase tracking-wider mb-1">
+                                {chart.noPie ? '類別' : '② 橫軸 X'}
+                            </p>
+                            <p className="text-[12px] text-[#4C1D95] leading-relaxed m-0">{chart.axes.x}</p>
+                        </div>
+                        <div className="bg-[#F5F3FF] rounded p-2">
+                            <p className="text-[10px] font-bold text-[#7C3AED] uppercase tracking-wider mb-1">
+                                {chart.noPie ? '比例' : '③ 縱軸 Y'}
+                            </p>
+                            <p className="text-[12px] text-[#4C1D95] leading-relaxed m-0">{chart.axes.y}</p>
+                        </div>
+                    </div>
+                    {chart.noPie && (
+                        <p className="text-[11px] text-[#DC2626] bg-[#FEF2F2] rounded px-2 py-1 m-0">
+                            ⚠️ 圓餅圖沒有 XY 軸——各類別加總必須等於 100%，否則不能用圓餅圖。
+                        </p>
+                    )}
+                </div>
+            )}
+
+            {/* 去 Google Slides 記錄 */}
+            <div className="rounded border border-[#BAE6FD] bg-[#F0F9FF] px-3 py-2.5">
+                <p className="text-[12px] text-[#0369A1] leading-relaxed m-0">
+                    🖊️ 決定好後，把以下三件事記在<strong>小組 Google Slides / Doc</strong>：<br />
+                    <span className="text-[11.5px]">① 選哪種圖　② 橫縱軸（或類別 / 比例）各放什麼　③ 為什麼選這種圖（一句話）</span>
                 </p>
-
-                {/* Step 1: 選圖類型 */}
-                <div className="mb-4">
-                    <p className="font-bold text-[12.5px] text-[#5B21B6] mb-2">① 你選哪種圖？</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                        {CHART_TYPES.map(t => (
-                            <button
-                                key={t.id}
-                                onClick={() => update('chartType', t.id)}
-                                className={`text-left p-2.5 rounded border-2 text-[12px] leading-[1.7] transition-colors ${
-                                    data.chartType === t.id
-                                        ? 'bg-[#8B5CF6] text-white border-[#7C3AED]'
-                                        : 'bg-white text-[var(--ink)] border-[#C4B5FD] hover:bg-[#EDE9FE]'
-                                }`}
-                            >
-                                <p className="font-bold m-0 mb-0.5">{t.label}</p>
-                                <p className="text-[10.5px] m-0 opacity-90">{t.use}</p>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Step 2: 軸 + 理由 */}
-                {data.chartType && (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                            <div>
-                                <p className="font-bold text-[12px] text-[#5B21B6] mb-1">② X 軸（橫軸）放什麼？</p>
-                                <input
-                                    value={data.xAxis}
-                                    onChange={e => update('xAxis', e.target.value)}
-                                    placeholder="例：睡眠時數（小時）"
-                                    className="w-full text-[12.5px] p-2 bg-white border border-[#C4B5FD] rounded focus:outline-none focus:border-[#7C3AED]"
-                                />
-                            </div>
-                            <div>
-                                <p className="font-bold text-[12px] text-[#5B21B6] mb-1">③ Y 軸（縱軸）放什麼？</p>
-                                <input
-                                    value={data.yAxis}
-                                    onChange={e => update('yAxis', e.target.value)}
-                                    placeholder="例：自評專注力（1-10 分）"
-                                    className="w-full text-[12.5px] p-2 bg-white border border-[#C4B5FD] rounded focus:outline-none focus:border-[#7C3AED]"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <p className="font-bold text-[12px] text-[#5B21B6] mb-1">④ 為什麼選這種圖？</p>
-                            <textarea
-                                value={data.reason}
-                                onChange={e => update('reason', e.target.value)}
-                                placeholder="例：我們有兩個連續變項（睡眠 vs 專注力），想看是否有關聯——散佈圖最適合呈現點分佈與趨勢。"
-                                rows={2}
-                                className="w-full text-[12.5px] leading-[1.85] p-2 bg-white border border-[#C4B5FD] rounded resize-y focus:outline-none focus:border-[#7C3AED]"
-                            />
-                        </div>
-                    </>
-                )}
-
-                {/* AI 助理檢核（教學型）*/}
-                <button
-                    onClick={() => setShowAITip(!showAITip)}
-                    className="inline-flex items-center gap-1 text-[12px] font-bold px-3 py-1.5 rounded text-white bg-[#7C3AED] hover:bg-[#6D28D9]"
-                >
-                    <Bot size={13} /> {showAITip ? '收起' : '看 AI 助理檢核 prompt'}
-                </button>
-
-                {showAITip && (
-                    <div className="mt-3 bg-white border-l-4 border-[#7C3AED] rounded-r p-3">
-                        <p className="font-bold text-[12px] text-[#5B21B6] mb-2 flex items-center gap-1">
-                            <CheckCircle2 size={13} /> 把以下 prompt 貼給 Gemini / ChatGPT，讓 AI 幫你檢核
-                        </p>
-                        <pre className="bg-[#F5F3FF] text-[11.5px] font-mono text-[#5B21B6] p-2 rounded whitespace-pre-wrap leading-[1.8] mb-3">
-{`我選了 ${data.chartType || '___'} 圖，X 軸 = ${data.xAxis || '___'}，Y 軸 = ${data.yAxis || '___'}。
-我的選圖理由是：${data.reason || '___'}
-
-請幫我檢核（用 W14 視覺化紅線）：
-1. 這個圖型適合呈現我的兩個變項嗎？
-2. X / Y 軸放對了嗎（變數類型對應正確）？
-3. 我的理由有沒有踩到「圖表標題用因果語氣」「過度修飾趨勢詞」這類雷？
-
-只給我建議，不要直接告訴我答案——我自己決定要不要採納。`}
-                        </pre>
-                        <p className="text-[11px] text-[#5B21B6] italic m-0 leading-[1.85]">
-                            💡 <strong>注意</strong>：AI 是助理（檢核 + 給建議），不是決策者。最後選哪種圖、要不要採納建議——<strong>你自己決定</strong>。
-                        </p>
-                    </div>
-                )}
-
-                {/* prompt 規則提醒 */}
-                <details className="mt-4 bg-white border border-[#C4B5FD] rounded">
-                    <summary className="cursor-pointer px-3 py-2 text-[11.5px] font-bold text-[#5B21B6] hover:bg-[#F5F3FF]">
-                        📛 給 AI 畫圖時的紅線（點開看）▼
-                    </summary>
-                    <ul className="border-t border-[#C4B5FD] p-3 list-none space-y-1 m-0">
-                        {PROMPT_RULES.map((rule, i) => (
-                            <li key={i} className="text-[11.5px] text-[var(--ink-mid)] leading-[1.85]">
-                                {rule}
-                            </li>
-                        ))}
-                    </ul>
-                </details>
             </div>
         </div>
     );

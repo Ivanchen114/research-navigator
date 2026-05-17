@@ -8,7 +8,7 @@ import ThinkRecord from '../components/ui/ThinkRecord';
 import Checklist from '../components/ui/Checklist';
 import PromptBlock from '../components/ui/PromptBlock';
 import StepEngine from '../components/ui/StepEngine';
-import ExportButton from '../components/ui/ExportButton';
+import StepBriefing from '../components/ui/StepBriefing';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
@@ -17,9 +17,15 @@ import AIModePicker from '../components/ui/AIModePicker';
 import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
 import TrapRewritePractice from '../components/ui/TrapRewritePractice';
 import { readRecords } from '../components/ui/ThinkRecord';
+import { ModeProvider, useMode } from '../context/ModeContext';
+import { useProjector } from '../context/ProjectorContext';
+import ModeSwitch from '../components/ui/ModeSwitch';
+import DepthBlock from '../components/ui/DepthBlock';
+import RecordDrawer from '../components/ui/RecordDrawer';
+import ExportButton from '../components/ui/ExportButton';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import {
     Database,
-    Brain,
     Route,
     FileCheck,
     ArrowRight,
@@ -28,7 +34,6 @@ import {
     Flame,
     ClipboardCheck,
     Bot,
-    Hand,
     ShieldAlert,
 } from 'lucide-react';
 
@@ -36,29 +41,43 @@ import {
  *  資料常數
  * ══════════════════════════════════════ */
 
-/* 5 法 原始資料 → 分析表 對照 */
+/* 5 法 原始資料 → 分析表 對照
+ * 統一大主題：高中生手機使用與學習表現／課堂專注的關係
+ * raw  → 字串（原始資料是散亂的，保留「亂」的感覺）
+ * table → { headers, rows, note } 物件（整理後用格子顯示）
+ */
 const METHOD_TABLE = [
     {
         id: 'survey',
         emoji: '📋',
         name: '問卷法',
         rawSrc: 'Google Forms 後台回應 / 紙本',
-        rawState: '⚠️ 還沒整理',
-        targetTable: '一張「題號（欄）× 樣本（列）」的乾淨表',
+        targetTable: '每個人一列，每題一欄，格子裡填代碼數字',
         steps: '匯出 CSV → 刪無效樣本 → 變項代碼化 → 標 N',
         accent: '#2563EB',
         example: {
-            topic: '高中生手機使用調查',
-            raw: `時間戳記              姓名      Q1每天用幾小時   Q2主要用途
-2026/4/15 14:23   小明      4-6 小時         娛樂(看影片)
-2026/4/15 14:30   阿美      2-4 小時         社交
-2026/4/15 14:32   小華      6 小時以上       娛樂+社交
-2026/4/15 14:40   阿翔      （沒填）         （沒填）  ← 無效樣本`,
-            table: `樣本編號  性別  年級   Q1代碼    Q2_娛樂  Q2_社交  Q2_學習
-S001     M    高一    3(4-6h)   1        0        0
-S002     F    高二    2(2-4h)   0        1        0
-S003     F    高一    4(6h+)    1        1        0
-N=85（已扣除 4 份無效）`,
+            topic: '高中生手機使用與學習成績調查',
+            question: '高中生每天使用手機的時間與學習成績之間，有沒有關聯？',
+            variables: '計畫書第二章定義了三個要測的東西：\n①「每日手機使用時間」（Q1，四個選項）\n②「手機主要用途」（Q2，學習／社交／娛樂／短影音，複選）\n③「學習表現」（Q3，最近一次段考成績區間，自填）\n→ 這三項就是分析表的欄位來源，整理前先對照確認\n\n⚠️ 注意：這份研究只能看「手機使用時間和成績是否一起變化」的關聯，不能直接說手機使用造成成績變好或變差。分析時用「關聯」「趨勢」，不要用「影響」「造成」。',
+            raw: {
+                headers: ['時間戳記', 'Q1 每天用幾小時', 'Q2 主要用途', 'Q3 段考成績區間'],
+                rows: [
+                    ['2026/4/15 14:23', '4–6 小時', '短影音、聊天', '70–79 分'],
+                    ['2026/4/15 14:30', '1–2 小時', '查資料、看教學', '80–89 分'],
+                    ['2026/4/15 14:32', '6 小時以上', '短影音+遊戲', '60–69 分'],
+                    ['2026/4/15 14:40', '（沒填）', '（沒填）', '（沒填）← 無效'],
+                ],
+            },
+            table: {
+                headers: ['樣本編號', 'Q1 時間', 'Q2_學習', 'Q2_社交', 'Q2_娛樂', 'Q2_短影音', 'Q3 成績'],
+                rows: [
+                    ['S001', '3', '0', '0', '0', '1', '3'],
+                    ['S002', '1', '1', '0', '0', '0', '4'],
+                    ['S003', '4', '0', '0', '1', '1', '2'],
+                    ['…', '…', '…', '…', '…', '…', '…'],
+                ],
+                note: 'N=85（已扣除 4 份無效）\n代碼 Q1：1=2h以下　2=2–4h　3=4–6h　4=6h以上\n代碼 Q3：5=90+　4=80–89　3=70–79　2=60–69　1=60以下',
+            },
         },
     },
     {
@@ -66,29 +85,30 @@ N=85（已扣除 4 份無效）`,
         emoji: '🎤',
         name: '訪談法',
         rawSrc: '錄音 / 逐字稿',
-        rawState: '❌ 完全沒整理',
-        targetTable: '主題編碼表「議題（欄）× 受訪者（列）× 出現次數」',
-        steps: '逐字稿 → 主題編碼 → 統計各議題出現頻次',
+        targetTable: '每位受訪者一列，每個主題一欄，格子裡填「提到幾次」',
+        steps: '逐字稿（訪談錄音打成文字）→ 主題編碼（幫每段話貼分類標籤）→ 統計各議題出現次數',
         accent: '#7C3AED',
         example: {
-            topic: '高中生補習動機',
-            raw: `受訪者 A（03:42）：「我媽都說補習是為我好，但我
-其實覺得是同學都在補，所以我也不能不補……」
+            topic: '高中生如何理解手機對學習的影響',
+            question: '高中生自己怎麼看待手機使用對學習的幫助與干擾？他們有沒有試過控制？',
+            variables: '計畫書第二章原本只列兩個類目（幫助/干擾），讀完逐字稿後擴充成四個：\n①學習用途（查資料、看教學影片）\n②分心來源（通知、IG、遊戲）\n③自我控制方式（關通知、放遠、定時）\n④對手機的態度（矛盾、接受、排斥）\n\n訪談的分類可以根據資料修正，但每次新增或合併類別，都要記下：我改了什麼？為什麼這樣改？這樣才是研究，不是整理心得。',
+            raw: `受訪者 A（03:42）：「我本來只是要查單字，結果
+查完就順手滑 IG，後來發現半小時過去了……」
 
-受訪者 B（07:15）：「補習老實講就是一種習慣啦，從
-國中就這樣，我也沒想過為什麼。」
+受訪者 B（07:15）：「我會用手機看教學影片，所以
+不一定都是壞事，但旁邊跳通知就會分心。」
 
-受訪者 C（02:30）：「我自己想補的，因為數學真的很爛
-不補考不好。」`,
-            table: `受訪者  家長期待  同儕壓力  習慣性  自我需求
-A       2 次     1 次     0       0
-B       0       0        2       0
-C       1       0        1       1
-N=6 位受訪者
-
-📌 編碼規則：本範例計「次數」（同一人提 2 次=2）。
-若改計「人數」（同一人提 5 次仍算 1 人），表格內值改為 0/1。
-研究時自己決定，並在編碼規則中寫明——通常質性訪談用人數、量化頻率分析用次數。`,
+受訪者 C（02:30）：「我試過把手機放外面，但
+還是會忍不住走出去拿。」`,
+            table: {
+                headers: ['受訪者', '學習用途', '分心來源', '自我控制', '態度'],
+                rows: [
+                    ['A', '1 次', 'IG/通知', '沒有方法', '矛盾'],
+                    ['B', '3 次', '通知', '關通知', '接受'],
+                    ['C', '0', '遊戲', '放遠', '排斥'],
+                ],
+                note: 'N=6 位受訪者\n📌 同一人提到同一類目多次就逐次計。「計次數」還是「計人數」，研究時自己決定並寫清楚。',
+            },
         },
     },
     {
@@ -96,24 +116,28 @@ N=6 位受訪者
         emoji: '🧪',
         name: '實驗法',
         rawSrc: '實驗紀錄表 docx',
-        rawState: '⚠️ 還沒整理',
-        targetTable: '「組別 × 變項 × 數值」結果表（前測/後測）',
+        targetTable: '每個受試者一列，前測分數、後測分數、差值各一欄',
         steps: '紀錄抽出 → 結構化 → 計算組別均值/差值',
         accent: '#059669',
         example: {
-            topic: '背景音樂對記憶測驗的影響',
+            topic: '手機通知對閱讀理解的影響實驗',
+            question: '閱讀時手機通知開啟，會不會讓閱讀理解測驗的表現變差？',
+            variables: '計畫書第二章的操作型定義：\n①「自變項」：通知狀態（通知開啟組 / 手機收起組）\n②「依變項」：閱讀理解小測驗分數（10 題）\n③「控制變項」：閱讀時間固定 8 分鐘\n→ 差值（通知組 vs. 關通知組均分差）是衡量效果的指標',
             raw: `2026/4/15 第一節（手寫紀錄）
-小明（音樂組）前測 75，後測 82
-小華（安靜組）前測 80，後測 85
-小美（音樂組）前測 65，後測 70
-（散頁手寫，數字部分潦草）`,
-            table: `受試者  組別      前測  後測  差值
-P01    音樂組    75    82    +7
-P02    安靜組    80    85    +5
-P03    音樂組    65    70    +5
-...
-組別均值差：音樂 +6.2 / 安靜 +4.8
-N=24（音樂 12 + 安靜 12）`,
+P01（通知組）閱測 7 分，完成時間 9 分鐘，碰手機 3 次
+P02（關通知組）閱測 9 分，完成時間 7 分鐘，碰手機 0 次
+P03（通知組）閱測 6 分，完成時間 10 分鐘，碰手機 4 次
+（散頁手寫，部分數字潦草）`,
+            table: {
+                headers: ['受試者', '組別', '閱測分數', '完成時間(分)', '碰手機次數'],
+                rows: [
+                    ['P01', '通知組', '7', '9', '3'],
+                    ['P02', '關通知組', '9', '7', '0'],
+                    ['P03', '通知組', '6', '10', '4'],
+                    ['…', '…', '…', '…', '…'],
+                ],
+                note: '組別均分：通知組 6.8 / 關通知組 8.5\nN=24（通知 12 + 關通知 12）',
+            },
         },
     },
     {
@@ -121,24 +145,30 @@ N=24（音樂 12 + 安靜 12）`,
         emoji: '👀',
         name: '觀察法',
         rawSrc: '04_觀察紀錄表.xlsx（多份）',
-        rawState: '⚠️ 半結構化（還要彙整）',
-        targetTable: '彙整成「行為類別 × 次數/時間」總表',
+        targetTable: '每種行為一列，每節觀察一欄，格子裡填「出現幾次」',
         steps: '多份紀錄 → 行為類別合併 → 加總頻次',
         accent: '#D97706',
         example: {
-            topic: '高一自習課專注行為',
-            raw: `2026/4/15 第六節（第一次觀察）
-13:30 - 小組 A：書寫
-13:35 - 小組 A：滑手機
-13:40 - 小組 A：組內聊天
-13:45 - 小組 A：書寫
-（共 4 節，30 次取樣 × 4）`,
-            table: `行為類別     第一節  第二節  第三節  第四節  總次數
-書寫專注     8       5       6       4       23 (19%)
-滑手機       12      14      11      13      50 (42%)
-組內聊天     6       8       9       7       30 (25%)
-其他         4       3       4       6       17 (14%)
-N=4 節 × 30 次取樣 = 120 筆`,
+            topic: '自習課手機使用與專注行為觀察',
+            question: '學生在自習課中，手機使用行為與專注行為各佔多少比例？',
+            variables: '計畫書第二章把「課堂行為」定義成四種可觀察類目：\n①書寫/閱讀（專注）\n②課業查詢（用手機查資料，視為有效使用）\n③滑手機（非學習用途）\n④聊天或離座\n→ 每次取樣記錄當下屬哪一類，填進紀錄表',
+            raw: `2026/4/15 第六節自習（第一次觀察）
+13:10 - A 同學：書寫
+13:15 - A 同學：看手機螢幕（非課業）
+13:20 - A 同學：書寫
+13:25 - A 同學：與鄰座說話
+（共觀察 4 節，每節每 5 分鐘取樣一次）`,
+            table: {
+                headers: ['行為類別', '第 1 節觀察', '第 2 節觀察', '第 3 節觀察', '第 4 節觀察', '總次數'],
+                rows: [
+                    ['書寫/閱讀', '8', '5', '6', '4', '23 (19%)'],
+                    ['課業查詢(手機)', '2', '1', '1', '2', '6 (5%)'],
+                    ['滑手機(非課業)', '12', '14', '11', '13', '50 (42%)'],
+                    ['聊天/離座', '6', '8', '9', '7', '30 (25%)'],
+                    ['其他', '2', '2', '3', '4', '11 (9%)'],
+                ],
+                note: 'N=4 節 × 30 次取樣 = 120 筆',
+            },
         },
     },
     {
@@ -146,24 +176,26 @@ N=4 節 × 30 次取樣 = 120 筆`,
         emoji: '📚',
         name: '文獻分析法',
         rawSrc: '05a-d 編碼表.xlsx',
-        rawState: '⚠️ 半結構化（還要彙整）',
-        targetTable: '彙整成可視化用表（時間軸 / 立場分布 / 詞頻）',
+        targetTable: '每篇文獻一列，分析類目各一欄，格子裡填你的編碼結果',
         steps: '多份編碼 → 主題彙整 → 製作分析欄位',
         accent: '#DC2626',
         example: {
-            topic: 'YouTuber 影片標題吸睛策略分析',
-            raw: `05a 編碼表（單篇）
-標題：「我吃了 100 個漢堡會怎樣？！瘋狂挑戰！」
-作者：A 頻道
-日期：2026/3/15
-觀看數：120 萬`,
-            table: `標題編號  作者     數字  情緒詞   問句  驚嘆號  觀看(萬)
-T001     A 頻道   有    瘋狂     有    !!     120
-T002     B 頻道   無    驚人     無    無      45
-T003     A 頻道   有    無       有    !       89
-...
-含數字+情緒詞+問句的標題平均觀看數=A 頻道風格
-N=20 部影片`,
+            topic: '手機使用與學習表現相關研究分析',
+            question: '現有研究如何解釋手機使用與學習表現之間的關係？結論一致嗎？',
+            variables: '⚠️ 文獻分析不是把每篇文章摘要一次，而是把不同文章放進同一張表，比較它們怎麼回答同一個問題。\n\n計畫書第二章定義了四個分析類目：\n①手機使用的定義方式（時間/目的/情境）\n②學習表現的測量方式（成績/專注/自評）\n③研究主要發現（正關聯/負關聯/無明顯關係）\n④研究限制（樣本少/自填資料/無法推論因果）\n→ 每篇文獻逐欄編碼，整理後才能比較不同研究的說法',
+            raw: `文章 A：研究每日使用時間與學期成績的關係
+文章 B：研究課堂通知干擾對注意力的影響
+文章 C：研究用手機查資料是否提升學習效率
+（各篇格式不同，結論說法各異）`,
+            table: {
+                headers: ['文獻', '手機使用定義', '學習表現指標', '主要發現', '研究限制'],
+                rows: [
+                    ['A', '每日使用時數', '學期成績', '使用時間高→成績趨低', '自填資料'],
+                    ['B', '通知干擾次數', '注意力測驗', '通知多→專注趨降', '樣本少(N=30)'],
+                    ['C', '學習用途比例', '學習效率自評', '查資料有關聯', '無法推論因果'],
+                ],
+                note: 'N=12 篇',
+            },
         },
     },
 ];
@@ -174,7 +206,7 @@ const AI_RISKS = [
         title: '幻覺',
         emoji: '👻',
         body: 'AI 會自動「補」沒有的資料、虛構引用語錄、編造你沒提過的類別。看起來合理，實際上是憑空生成。',
-        safeguard: '對照 raw 逐筆驗收，特別是 AI 加上去你沒輸入的東西。',
+        safeguard: '對照原始資料逐筆驗收，特別是 AI 加上去你沒輸入的東西。',
     },
     {
         title: '跑偏',
@@ -192,7 +224,7 @@ const AI_RISKS = [
 
 /* AI 能與不能的對照 */
 const AI_CAN_DO = [
-    '把 CSV 清理乾淨（刪空白、統一格式）',
+    '整理 CSV 格式（刪空白列、統一格式）',
     '依你的規則計算（差值、均值、頻次）',
     '套用你定義的分類規則做初步編碼',
     '統一命名（如「滑手機」「玩手機」合併）',
@@ -205,34 +237,6 @@ const AI_CANNOT_DO = [
     '幫你判斷哪筆樣本算「無效」',
     '替你讀懂訪談裡的語氣、情境、潛台詞',
     '保證沒有幻覺——你不驗收就是賭運氣',
-];
-
-/* 兩條路線 */
-const ROUTES = [
-    {
-        id: 'manual',
-        emoji: '🧑',
-        title: '路線 A · 純人工整理',
-        suit: '適合：訪談、文獻分析法／資料量少／想練手感',
-        pros: ['完全掌握資料', '不用擔心 AI 幻覺', '研究的核心智力訓練都你自己做'],
-        cons: ['花時間（特別是訪談組）', '量大時容易疲勞出錯'],
-        accent: '#2563EB',
-        bg: '#EFF6FF',
-        border: '#BFDBFE',
-        icon: Hand,
-    },
-    {
-        id: 'ai-assist',
-        emoji: '🤖',
-        title: '路線 B · AI 輔助整理',
-        suit: '適合：實驗、問卷、觀察法／資料量大／結構化處理',
-        pros: ['速度快', 'AI 處理重複性勞動', '你專心驗收 + 思考'],
-        cons: ['有幻覺風險，必須驗收', '不能用在「定義分類」這步', '訪談、文獻組要加抽樣比對'],
-        accent: '#7C3AED',
-        bg: '#F5F3FF',
-        border: '#DDD6FE',
-        icon: Bot,
-    },
 ];
 
 /* 3 個分析表範本（給沒整理的方法） */
@@ -313,7 +317,7 @@ const STATUS_OPTIONS = [
         bg: '#F0FDF4',
         border: '#86EFAC',
         icon: Coffee,
-        guide: '今天課程結尾把「原始資料 + 整理後分析表」雙繳到 Classroom，再到 Step 5 寫一行「我下週想怎麼呈現這份資料」。下週 W14 開機速度會比別組快一截。',
+        guide: '今天課程結尾雙線繳交——小組：原始資料 + 整理後分析表連結；個人：W13 歷程 docx（雷 #9 改寫 + AI-RED 如有）。下週 W14 開機速度會比別組快一截。',
     },
     {
         id: 'warning',
@@ -339,14 +343,22 @@ const STATUS_OPTIONS = [
 
 /* ExportButton 欄位 */
 const EXPORT_FIELDS = [
-    { key: 'w13-data-state', label: '我的原始資料現況', question: '我手上原本的資料是什麼樣子？來自哪裡？' },
-    { key: 'w13-table-structure', label: '我的分析表結構（必做）', question: '欄位名稱列表 + 列數 + N 值 + 編碼類別（如果是訪談/觀察/文獻）' },
+    // 小組產出（計畫書/工具書/Google Sheet）不在這裡記錄
+    { key: 'w13-table-link', label: '小組分析表連結（Google Sheet）', question: '整理後分析表的雲端連結——W14 會帶這條連結進來' },
+    { key: 'w13-progress-status', label: '整理進度自評', question: '🟢 已成型／🟡 半成品／🔴 還在掙扎' },
+    // 個人 AI 使用紀錄
     { key: 'w13-ai-validation', label: 'AI 輔助驗收紀錄（用了 AI 必填）', question: '我做了哪些驗收？發現 AI 哪裡跑偏 / 幻覺？' },
     { key: 'w13-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: '我用哪種方式繳交完整對話？（A 私人留言 / B 文件上傳並貼連結）' },
-    { key: 'w13-classroom-submit', label: 'Classroom 繳交檢核', question: '已勾選的繳交項目' },
-    { key: 'w13-progress-status', label: '整理進度自評', question: '🟢 已成型／🟡 半成品／🔴 還在掙扎' },
-    { key: 'w13-w14-question', label: 'W14 資料呈現規劃', question: '下週我想怎麼呈現這份資料？（圖／表／摘要／混合）' },
     { key: 'w13-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 整理資料的最重要互動（A-I-R-E-D 五要素）' },
+    // 個人反思與練習
+    { key: 'w13-trap-rewrite-9', label: '雷 #9 改寫練習（個人繳交項）', question: '把「疑似」這種模糊剔除規則改成事前可驗證的句型' },
+    // 行政繳交
+    { key: 'w13-classroom-submit', label: 'Classroom 繳交檢核', question: '已勾選的繳交項目' },
+];
+
+/* — RecordDrawer：不匯出、但要在總覽顯示的「元件自帶 dataKey」— */
+const RECORD_EXTRA_FIELDS = [
+    { key: 'w13-ai-mode', label: 'AI 使用模式選擇', store: 'records' },
 ];
 
 /* ══════════════════════════════════════
@@ -389,41 +401,49 @@ const ProgressSelector = ({ value, onChange }) => {
 };
 
 /* ══════════════════════════════════════
- *  路線選擇兩按鈕
+ *  DataGrid：把 { headers, rows, note } 渲染成真格子
+ *  若傳入字串，退回 <pre> 顯示（相容舊格式）
  * ══════════════════════════════════════ */
 
-const ROUTE_KEY = 'w13-route-pick';
-
-const RouteSelector = ({ value, onChange }) => {
+const DataGrid = ({ data }) => {
+    if (typeof data === 'string') {
+        return (
+            <pre className="text-[10.5px] text-[var(--ink-mid)] bg-white border border-[var(--border)] rounded p-2 overflow-x-auto whitespace-pre leading-relaxed font-mono">
+                {data}
+            </pre>
+        );
+    }
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {ROUTES.map(r => {
-                const Icon = r.icon;
-                const picked = value === r.id;
-                return (
-                    <button
-                        key={r.id}
-                        type="button"
-                        onClick={() => onChange(r.id)}
-                        className="text-left rounded-[var(--radius-unified)] border-2 p-5 transition-all"
-                        style={{
-                            background: picked ? r.bg : '#fff',
-                            borderColor: picked ? r.accent : 'var(--border)',
-                            boxShadow: picked ? '0 0 0 3px rgba(0,0,0,0.04)' : 'none',
-                        }}
-                    >
-                        <div className="flex items-center gap-2 mb-2">
-                            <Icon size={18} style={{ color: r.accent }} />
-                            <span className="font-bold text-[14px]" style={{ color: r.accent }}>{r.title}</span>
-                        </div>
-                        <p className="text-[11px] text-[var(--ink-mid)] mb-3 leading-relaxed">{r.suit}</p>
-                        <div className="text-[11px] text-[var(--ink)] leading-relaxed space-y-1">
-                            <p><strong>優點：</strong>{r.pros.join('、')}</p>
-                            <p><strong>缺點：</strong>{r.cons.join('、')}</p>
-                        </div>
-                    </button>
-                );
-            })}
+        <div>
+            <div className="overflow-x-auto rounded border border-[var(--border)] bg-white">
+                <table className="w-full text-[10.5px] border-collapse min-w-max">
+                    <thead>
+                        <tr className="bg-[#F3F4F6]">
+                            {data.headers.map((h, i) => (
+                                <th key={i} className="px-2.5 py-1.5 text-left font-bold text-[var(--ink)] border-b border-r border-[var(--border)] last:border-r-0 whitespace-nowrap">
+                                    {h}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.rows.map((row, i) => (
+                            <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAF9]'}>
+                                {row.map((cell, j) => (
+                                    <td key={j} className="px-2.5 py-1.5 text-[var(--ink-mid)] border-b border-r border-[var(--border)] last:border-r-0 whitespace-nowrap">
+                                        {cell}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            {data.note && (
+                <p className="text-[10px] text-[var(--ink-light)] mt-1.5 leading-relaxed whitespace-pre-line">
+                    {data.note}
+                </p>
+            )}
         </div>
     );
 };
@@ -432,17 +452,13 @@ const RouteSelector = ({ value, onChange }) => {
  *  主頁面
  * ══════════════════════════════════════ */
 
-const W13AutonomyPage = () => {
+const W13PageContent = () => {
+    const { mode } = useMode();
+    const { projector } = useProjector();
     const [status, setStatus] = useState(() => {
         try {
             const r = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
             return r[STATUS_KEY] || '';
-        } catch { return ''; }
-    });
-    const [route, setRoute] = useState(() => {
-        try {
-            const r = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-            return r[ROUTE_KEY] || '';
         } catch { return ''; }
     });
     const [aiMode, setAiMode] = useState(() => {
@@ -460,17 +476,17 @@ const W13AutonomyPage = () => {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(r));
         } catch {}
     };
-    const handleRoute = (id) => {
-        setRoute(id);
+
+    const handleAiMode = (mode) => {
+        setAiMode(mode);
         try {
             const r = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-            r[ROUTE_KEY] = id;
+            r['w13-ai-mode'] = mode;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(r));
         } catch {}
     };
 
     const picked = STATUS_OPTIONS.find(o => o.id === status);
-    const pickedRoute = ROUTES.find(r => r.id === route);
 
     /* 從先前週次抓題目和方法 */
     const saved = readRecords();
@@ -483,6 +499,13 @@ const W13AutonomyPage = () => {
             icon: <Database size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '節奏', text: '跟老師做（第一節前半，約 20 分鐘）' },
+                            { label: '學', text: '3 條資料整理紅線：異常值 ≠ 直接剔除 / 規則要事前明示 / 保留原始紀錄' },
+                            { label: '做', text: '去「找雷挑戰」找出 AI 報告踩了哪幾條雷（10 分鐘）' },
+                        ]}
+                    />
                     {/* ⭐ 開場·必看：AI 報告找雷大挑戰（連到反面教材頁）*/}
                     <Link
                         to="/find-traps"
@@ -498,7 +521,8 @@ const W13AutonomyPage = () => {
                             老師用 Gemini 跑了一份「研究報告」——你能找出學術紅線（共 13 個）嗎？
                         </p>
                         <p className="text-[12px] text-white/85 leading-[1.85]">
-                            進入頁面前，先記住一件事：<strong className="text-[#FCD34D]">AI 會照規則做事——但規則要由研究者設定與驗收</strong>。本週我們要學的就是怎麼把判斷力寫進 prompt 裡，並親自驗收 AI 的輸出。
+                            進入頁面前，先記住一件事：<strong className="text-[#FCD34D]">AI 會照規則做事——但規則要由研究者設定與驗收</strong>。本週我們要學的就是怎麼把判斷力寫進 prompt 裡，並親自驗收 AI 的輸出。<br /><br />
+                            <span className="text-[11.5px] italic text-white/70">💡 老師已在課堂開場帶完找雷練習？請直接往下進 Step 2 動手整理。這張卡保留作為自學入口或課後複習。</span>
                         </p>
                         <span className="inline-flex items-center gap-1 mt-3 text-[12.5px] font-bold text-[#FCD34D]">
                             點進去找雷 →
@@ -507,15 +531,19 @@ const W13AutonomyPage = () => {
 
                     {/* 開場：純觀念，先不談 AI */}
                     <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[15px] font-bold text-[var(--ink)] mb-2">📦 任務：原始資料 → 可分析的表</p>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[15px] font-bold text-[var(--ink)]">📦 任務：原始資料 → 可分析的表</p>
+                        </div>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            W11-W12 你蒐集到一堆原始資料（問卷回應／逐字稿／實驗紀錄／觀察表／編碼表）。
-                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、<strong>N 值</strong>明確的乾淨表，下週 W14 才畫得了圖。
+                            W11-W12 你蒐集到一堆原始資料（問卷回應／逐字稿（訪談錄音打成文字）／實驗紀錄／觀察表／編碼表）。
+                            本週要把它變成「<strong>分析表</strong>」——欄位清楚、<strong>N 值</strong>明確、可分析也<strong>可追溯</strong>（保留原始資料與處理紀錄），下週 W14 才畫得了圖。
                             先看看 5 法的對照，找到自己這組對應的轉換路徑。
                         </p>
                     </div>
 
-                    {/* 📖 4 個詞卡：N 值／半結構化／編碼類別／代碼化（先定義再用，仿 W9 變項詞卡格式） */}
+                    {/* 📖 4 個詞卡 — 名詞白話化 explainer，深度補充 */}
+                    <DepthBlock title="4 個詞說明">
                     <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[760px]">
                         <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂 4 個詞（W13 開始大量出現）</p>
                         <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
@@ -547,16 +575,14 @@ const W13AutonomyPage = () => {
                             💡 <strong>編碼類別</strong>是「貼標籤」（質性的分類）；<strong>代碼化</strong>是「把標籤換成數字」（為了能丟進 Excel／統計軟體算）。順序是先編碼、再代碼。
                         </p>
                     </div>
+                    </DepthBlock>
 
                     {/* 5 法對照表 */}
                     <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📊 5 種方法 · 原始資料 → 分析表 對照</p>
-                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            <strong>怎麼讀標籤？</strong>
-                            「<span className="font-mono text-[#DC2626]">❌ 完全沒整理</span>」= 還是錄音／手寫狀態；
-                            「<span className="font-mono text-[#D97706]">⚠️ 還沒整理</span>」= 數位但沒結構；
-                            「<span className="font-mono text-[#D97706]">⚠️ 半結構化（還要彙整）</span>」= 已有單份結構但<strong>多份還沒合在一起</strong>，<strong className="text-[var(--accent)]">還是要做 Step 2 彙整</strong>，不是「不用做」。
-                        </p>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">📊 5 種方法 · 原始資料 → 分析表 對照</p>
+                        </div>
                         <div className="grid grid-cols-1 gap-3">
                             {METHOD_TABLE.map((m) => (
                                 <div
@@ -567,10 +593,6 @@ const W13AutonomyPage = () => {
                                     <div className="px-4 py-2 flex items-center gap-2 bg-[var(--paper-warm)] border-b border-[var(--border)]">
                                         <span className="text-[16px]">{m.emoji}</span>
                                         <span className="text-[13px] font-bold text-[var(--ink)]">{m.name}</span>
-                                        <span className="ml-auto text-[10px] font-mono px-2 py-0.5 rounded-[2px]"
-                                            style={{ background: m.accent, color: '#fff' }}>
-                                            {m.rawState}
-                                        </span>
                                     </div>
                                     <div className="px-4 py-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-[12px]">
                                         <div>
@@ -586,26 +608,40 @@ const W13AutonomyPage = () => {
                                             <p className="text-[var(--ink-mid)] leading-snug">{m.steps}</p>
                                         </div>
                                     </div>
-                                    {m.example && (
+                                    {/* 範例 details：投影顯示時隱藏（details 不吃 projector context，用 !projector 收掉）*/}
+                                    {m.example && !projector && (
                                         <details className="border-t border-[var(--border)]">
                                             <summary className="cursor-pointer px-4 py-2 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2 text-[12px]">
                                                 <span className="font-bold" style={{ color: m.accent }}>📋 看範例：{m.example.topic}</span>
                                                 <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
                                             </summary>
-                                            <div className="border-t border-[var(--border)] px-4 py-3 bg-[#FAFAF9] grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                <div>
-                                                    <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#991B1B' }}>
-                                                        <span className="inline-block w-2 h-2 rounded-full bg-[#FCA5A5]"></span>
-                                                        ❌ 原始（雜亂、無法分析）
-                                                    </p>
-                                                    <pre className="text-[10.5px] text-[var(--ink-mid)] bg-white border border-[var(--border)] rounded p-2 overflow-x-auto whitespace-pre leading-relaxed font-mono">{m.example.raw}</pre>
+                                            <div className="border-t border-[var(--border)] px-4 py-3 bg-[#FAFAF9] flex flex-col gap-3">
+                                                {/* Layer 1：研究問題 */}
+                                                <div className="rounded bg-[#EFF6FF] border border-[#BFDBFE] p-3">
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5 text-[#1E40AF]">🔍 研究問題</p>
+                                                    <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed">{m.example.question}</p>
                                                 </div>
-                                                <div>
-                                                    <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#166534' }}>
-                                                        <span className="inline-block w-2 h-2 rounded-full bg-[#86EFAC]"></span>
-                                                        ✅ 整理後（可分析的表）
-                                                    </p>
-                                                    <pre className="text-[10.5px] text-[var(--ink)] bg-white border border-[var(--border)] rounded p-2 overflow-x-auto whitespace-pre leading-relaxed font-mono">{m.example.table}</pre>
+                                                {/* Layer 2：欄位來源（計畫書第二章） */}
+                                                <div className="rounded bg-[#F5F3FF] border border-[#DDD6FE] p-3">
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5 text-[#5B21B6]">📐 欄位來源（計畫書第二章操作型定義）</p>
+                                                    <pre className="text-[11px] text-[#4C1D95] leading-relaxed whitespace-pre-wrap font-sans">{m.example.variables}</pre>
+                                                </div>
+                                                {/* Layer 3：原始 vs 分析表 */}
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div>
+                                                        <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#991B1B' }}>
+                                                            <span className="inline-block w-2 h-2 rounded-full bg-[#FCA5A5]"></span>
+                                                            ❌ 原始（雜亂、無法分析）
+                                                        </p>
+                                                        <DataGrid data={m.example.raw} />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#166534' }}>
+                                                            <span className="inline-block w-2 h-2 rounded-full bg-[#86EFAC]"></span>
+                                                            ✅ 整理後（可分析的表）
+                                                        </p>
+                                                        <DataGrid data={m.example.table} />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </details>
@@ -615,15 +651,33 @@ const W13AutonomyPage = () => {
                         </div>
                     </div>
 
-                    {/* 自我定位 */}
-                    <ThinkRecord
-                        dataKey="w13-data-state"
-                        prompt="① 我手上的原始資料現在是什麼狀態？"
-                        scaffold={[
-                            '我的原始資料來源：（Google Forms / 逐字稿 / 04 紀錄表…）',
-                            '目前數量：（N=__；已收齊 / 還缺 __）',
-                            '結構狀態：（雜亂 / 半結構化 / 已分類）',
-                        ]}
+                    {/* 自我定位 — 靜態提示，不用填網頁，小組狀態在 Google Sheet 管 */}
+                    <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] px-4 py-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                        <div className="flex items-center gap-2 mb-1.5">
+                            <ContentTypeChip type="做" />
+                            <p className="font-bold text-[var(--ink)]">① 先確認手上的資料狀態</p>
+                        </div>
+                        <p>原始資料來自哪裡？（Google Forms / 逐字稿 / 04 紀錄表…）數量有幾份？已收齊還是還缺？</p>
+                        <p className="mt-1 text-[11.5px] text-[var(--ink-light)] italic">確認清楚再往下——這是整理前最重要的一步，不要還沒點清楚就開始動資料。</p>
+                    </div>
+
+                    {/* 雷 #9 改寫練習 — 規則要事前明示剛教完，觀念最新鮮時練（個人繳交項）*/}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">雷 #9 改寫練習（個人繳交項）</p>
+                    </div>
+                    <p className="text-[11.5px] text-[var(--ink-light)] italic mb-2">
+                        💡 還沒看過 Step 2 的 3-step 流程？先快速瀏覽一遍，再回來想剔除規則「為什麼要事前定」，改起來會更有感。
+                    </p>
+                    <TrapRewritePractice
+                        trapNumber={9}
+                        stage="W13"
+                        title="剔除規則模糊"
+                        wrong="剔除疑似填答不認真的樣本。"
+                        issue="「疑似」是研究員主觀判斷，不是事前訂定的標準。學術上必須先寫好客觀規則，再依規則篩。"
+                        hint="把「疑似」拿掉。改寫成「依事前標準剔除 ___」這種可被檢驗的句型。"
+                        shouldDo="依事前標準剔除：核心欄位空白者（編號 11、21）、明顯無意義填答（編號 23 填 test）。"
+                        dataKey="w13-trap-rewrite-9"
                     />
                 </div>
             ),
@@ -633,80 +687,178 @@ const W13AutonomyPage = () => {
             icon: <Route size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">🧑 純人工整理 · 大家先動手做一遍</p>
-                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            結構定好了，現在依結構逐筆把資料填進去。<strong>不用急著用 AI</strong>——
-                            人工整理是研究的基本功，先親手做一輪你才知道資料長什麼樣子。
-                            想試 AI 輔助？下一步「補充·AI 輔助」會教你怎麼用，<strong>且不一定要用</strong>。
+                    <StepBriefing
+                        lines={[
+                            { label: '節奏', text: '小組工作（第一節後半 + 第二節，課堂主時間）' },
+                            { label: '做', text: '把原始資料整理成分析表——欄位對得上操作型定義，N 值清楚，能回答研究問題' },
+                        ]}
+                    />
+
+                    {/* 動手前警戒語 — 在這裡才是真正「動手前」*/}
+                    <ResearcherRedlines mode="warning" stage="W13" />
+
+                    {/* ① 任務核心句卡：把 Step 2 的底層邏輯講清楚 */}
+                    <div className="p-5 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[14px] font-bold text-[var(--ink)]">📦 這週你要做的事</p>
+                        </div>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85]">
+                            你現在不是要把資料整理得很漂亮而已。<br />
+                            你要做的是：把原始資料整理成一張表，
+                            讓它<strong className="text-[var(--ink)]">能回答你的研究問題</strong>，
+                            也能<strong className="text-[var(--ink)]">對得上你計畫書裡的操作型定義</strong>。
+                        </p>
+                        <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed mt-2 italic">
+                            換句話說：每一欄資料都要有理由——要嘛能幫你回答研究問題，要嘛能對應你當初說好的觀察或測量方式。
                         </p>
                     </div>
 
-                    {/* 純人工執行步驟 */}
-                    <div className="rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] p-5">
-                        <p className="text-[14px] font-bold text-[#1E40AF] mb-3">📋 動手整理執行步驟</p>
-                        <div className="space-y-3 text-[12px] text-[#1E3A8A] leading-relaxed">
-                            <div>
-                                <p className="font-bold mb-1">逐步操作（通用）：</p>
-                                <ol className="list-decimal pl-5 space-y-1">
-                                    <li>打開你的 Google Sheet（已建好欄位 header）</li>
-                                    <li>依結構逐筆填入</li>
-                                    <li>每填 10 筆做一次抽檢（避免疲勞錯誤）</li>
-                                    <li>檢查 N 值是否標清楚</li>
-                                </ol>
-                            </div>
-                            {(() => {
-                                const METHOD_OPS = [
-                                    { id: 'survey', match: ['問卷'], label: '📋 問卷組', body: <p>下載 Google Forms CSV → 貼進 Sheet → <strong>第一輪先刪空白／未完整作答的列</strong>（這就是「無效樣本」）→ 變項代碼化（例：「非常同意/同意/普通/不同意/非常不同意」改成 5/4/3/2/1）→ 標 N。</p> },
-                                    { id: 'interview', match: ['訪談'], label: '🎤 訪談組（最花時間，安排給課後）', body: <p>開新 Sheet 建欄：受訪者代號 / 主題 1 / 主題 2 / 主題 3...（從研究問題反推 5-8 個主題）→ <strong>邊讀逐字稿，遇到主題出現就在對應格 +1</strong>，並把該段話的「行號或時間戳」記在備註欄 → 全篇讀完一個受訪者再換下一個。</p> },
-                                    { id: 'experiment', match: ['實驗'], label: '🧪 實驗組', body: <p>從紀錄表抽出每位受試者的：編號 / 組別 / 前測值 / 後測值 → 算<strong>差值（後 - 前）</strong>→ 計算各組均值差 → <strong>確認實驗組與對照組 N 數一致</strong>（不一致 = 對照組無效）。</p> },
-                                    { id: 'observation', match: ['觀察'], label: '👀 觀察組', body: <p>把多份觀察紀錄表攤開 → <strong>統一行為類別命名</strong>（「滑手機」「玩手機」要合併還是拆開？先決定）→ 新建總表「行為類別 × 觀察時段」逐格加總頻次。</p> },
-                                    { id: 'literature', match: ['文獻'], label: '📚 文獻組', body: <p>把 05a-d 編碼表單篇彙整 → 依研究問題決定彙整維度（時間軸／立場／詞頻）→ 新建分析表「分析維度（欄）× 文獻篇（列）」逐格填值 → 標 N（總文獻篇數）。</p> },
-                                ];
-                                const myOp = METHOD_OPS.find(m => m.match.some(k => myMethod && myMethod.includes(k)));
-                                const others = myOp ? METHOD_OPS.filter(m => m.id !== myOp.id) : METHOD_OPS;
-                                return (
-                                    <>
-                                        {myOp && (
-                                            <div className="mt-2 rounded border-2 border-[#1E40AF] bg-[#EFF6FF] p-3">
-                                                <p className="text-[10px] font-mono text-[#1E40AF] mb-1 tracking-wider">YOUR GROUP</p>
-                                                <p className="font-bold text-[12px] text-[#1E40AF] mb-1">{myOp.label}</p>
-                                                <div className="text-[11.5px] text-[#1E3A8A] leading-relaxed">{myOp.body}</div>
-                                            </div>
-                                        )}
-                                        <details className="mt-2 rounded border border-[#BFDBFE] bg-white">
-                                            <summary className="cursor-pointer px-3 py-2 hover:bg-[#EFF6FF] flex items-center gap-2">
-                                                <span className="text-[12px] font-bold text-[#1E40AF]">{myOp ? '📂 想看其他方法的具體操作？（點開）' : '📋 5 法分流 · 看自己組的操作（點開）'}</span>
-                                                <span className="ml-auto text-[10px] font-mono text-[#1E40AF]">▼</span>
-                                            </summary>
-                                            <div className="border-t border-[#BFDBFE] p-3 grid grid-cols-1 gap-2 text-[11.5px] text-[#1E3A8A] leading-relaxed">
-                                                {others.map(m => (
-                                                    <div key={m.id}>
-                                                        <p className="font-bold mb-0.5">{m.label}</p>
-                                                        {m.body}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </details>
-                                    </>
-                                );
-                            })()}
-                            <div className="hidden">
-                            </div>
-                            <div className="border-t border-[#BFDBFE] pt-3">
-                                <p className="font-bold mb-1">老師巡視重點：</p>
-                                <ul className="list-disc pl-5 space-y-1">
-                                    <li>欄位是否對應研究問題</li>
-                                    <li><strong>編碼類別</strong>（=分類項目，例：「家長期待」「同儕壓力」）是否<strong>不重疊</strong>（一筆資料只能歸一類，不會同時屬於兩類）</li>
-                                    <li>是否有不知道怎麼編的「灰色資料」（這需要老師討論）</li>
-                                </ul>
-                            </div>
+                    {/* ② 欄位從哪裡來 — 計畫書第二章就是分析表欄位的來源 */}
+                    <div className="rounded-[var(--radius-unified)] border-l-4 border-[#059669] border border-[var(--border)] bg-[#F0FDF4] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[13px] font-bold text-[#166534]">🗝️ 你的欄位名稱已經在計畫書裡了</p>
+                        </div>
+                        <p className="text-[12px] text-[#166534] leading-relaxed mb-3">
+                            W9 計畫書第二章「關鍵詞操作型定義」，就是在預先設計分析表的欄位名稱——只是那時候還沒有資料可以填進去。
+                            現在資料有了，第二章的定義就變成你的欄位。<strong className="text-[#166534]">你不需要從零想欄位，打開計畫書就有了。</strong>
+                        </p>
+                        <div className="bg-white border border-[#86EFAC] rounded p-3 text-[12px] text-[#166534] leading-relaxed mb-3">
+                            <p className="font-bold mb-1.5">三步起手式：</p>
+                            <ol className="list-decimal pl-4 space-y-1.5 marker:font-bold">
+                                <li><strong>打開計畫書第二章</strong>，把你的操作型定義貼出來。</li>
+                                <li><strong>確認資料對不對得上</strong>：你實際收到的資料，能不能填進這些定義？</li>
+                                <li><strong>對得上 → 直接當欄位；對不上 → 修正欄位名稱</strong>，並記一句話「原本定義是＿，改成＿，因為＿」。</li>
+                            </ol>
+                        </div>
+                        <div className="bg-[#FEF9C3] border border-[#FDE047] rounded p-2.5 text-[11.5px] text-[#713F12] leading-relaxed">
+                            <strong>🎤 訪談組特別說明：</strong>你的欄位（主題編碼類目）幾乎一定要在讀完逐字稿之後才能定稿——讀完才知道受訪者真正聊了哪些主題，計畫書裡沒預到的都可能冒出來。<strong>這不是做錯，是質性研究的正常流程。</strong>你只需要把「原本計畫的類目」和「調整後的類目」都記下來就好。
                         </div>
                     </div>
 
+                    {/* ④ 計畫書第二章對照提示 — 靜態指引，不要求填網頁 */}
+                    <div className="rounded-[var(--radius-unified)] border border-dashed border-[#7C3AED] bg-[#F5F3FF] px-4 py-3 text-[12px] text-[#5B21B6] leading-relaxed">
+                        <div className="flex items-center gap-2 mb-1">
+                            <ContentTypeChip type="做" />
+                            <span className="font-bold">✏️ 現在打開計畫書第二章</span>
+                        </div>
+                        <span>——你的關鍵詞操作型定義就在那裡，把它對照你要建的分析表欄位。這份文件才是你們組的正式紀錄，不用把內容抄到這裡。</span>
+                    </div>
+
+                    {/* ③ 整理時照這 3 步（欄位確認後的操作流程）*/}
+                    <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white p-5">
+                        <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[14px] font-bold text-[var(--ink)]">📋 確認欄位之後，照這 3 步整理</p>
+                        </div>
+                        <ol className="list-decimal pl-5 space-y-2 text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                            <li>
+                                <strong className="text-[var(--ink)]">在 Google Sheet 建欄位</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)]"> ── 每一欄都要有用途，不要亂放資料。</span>
+                            </li>
+                            <li>
+                                <strong className="text-[var(--ink)]">一筆一筆放資料</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)]"> ── 看得懂就整理；看不懂就標「待確認」，不要硬猜。</span>
+                            </li>
+                            <li>
+                                <strong className="text-[var(--ink)]">最後檢查</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)]"> ── 這張表能不能幫我下週做圖表、寫結果？</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    {/* ④ 交前自我檢查 */}
+                    <div className="rounded-[var(--radius-unified)] border-l-4 border-[var(--success)] border border-[var(--border)] bg-white p-4">
+                        <div className="flex items-center gap-2 mb-2.5">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">✅ 交之前，問自己四句話</p>
+                        </div>
+                        <ol className="list-decimal pl-5 space-y-1.5 text-[12px] text-[var(--ink-mid)] leading-relaxed marker:font-bold marker:text-[var(--success)]">
+                            <li>
+                                <strong className="text-[var(--ink)]">這一欄跟我的研究問題有關嗎？</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)] block mt-0.5">沒關的欄位，不要硬放進分析表。</span>
+                            </li>
+                            <li>
+                                <strong className="text-[var(--ink)]">這一欄對應哪一個操作型定義？</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)] block mt-0.5">如果說不出來，代表它可能只是資料，不一定是證據。</span>
+                            </li>
+                            <li>
+                                <strong className="text-[var(--ink)]">同一筆資料會不會被我分到兩個太像的類別？</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)] block mt-0.5">例如：「滑手機」和「看通知」如果分不清楚，就要先重新定義。</span>
+                            </li>
+                            <li>
+                                <strong className="text-[var(--ink)]">有沒有我看不懂、不能確定的資料？</strong>
+                                <span className="text-[11.5px] text-[var(--ink-light)] block mt-0.5">不要硬猜，先標「待確認」，下課前問老師。</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    {/* ⑤ 各方法補充 + 問卷組範例 — 收進 DepthBlock */}
+                    <DepthBlock title="各方法補充說明">
+                        <p className="text-[12px] font-bold text-[var(--ink)] mb-2">📂 其他方法怎麼整理資料？</p>
+                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            每一法都用「先做什麼 → 再做什麼 → 最後檢查什麼」的短句。詳細操作 SOP 請查
+                            <a href="/tools/methods" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline font-bold">方法工具書</a>。
+                        </p>
+                        <div className="grid grid-cols-1 gap-2.5 text-[11.5px] leading-relaxed">
+                            <div className="bg-white border border-[#BFDBFE] rounded p-2.5">
+                                <p className="font-bold text-[#1E40AF] mb-1">📋 問卷組</p>
+                                <p className="text-[var(--ink-mid)] m-0">刪掉無效回覆（空白、亂填、關鍵題未填）→ 確認每題對應哪個操作型定義 → 把文字選項轉成數字代碼（如：非常同意=5…非常不同意=1）→ 標出有效回覆數 N。</p>
+                            </div>
+                            <div className="bg-white border border-[var(--border)] rounded p-2.5">
+                                <p className="font-bold text-[#7C3AED] mb-1">🎤 訪談組</p>
+                                <p className="text-[var(--ink-mid)] m-0">整理逐字稿或摘要 → 讀完才定稿編碼類目 → 標出代表性引言 → 檢查分類對應研究問題。</p>
+                            </div>
+                            <div className="bg-white border border-[var(--border)] rounded p-2.5">
+                                <p className="font-bold text-[#D97706] mb-1">👀 觀察組</p>
+                                <p className="text-[var(--ink-mid)] m-0">彙整多份紀錄表 → 把行為類別統一 → 加總各類別頻次 → 確認類別對應操作型定義。</p>
+                            </div>
+                            <div className="bg-white border border-[var(--border)] rounded p-2.5">
+                                <p className="font-bold text-[#059669] mb-1">🧪 實驗組</p>
+                                <p className="text-[var(--ink-mid)] m-0">結構化每次測量紀錄 → 算出差值（後測－前測）→ 標出異常值 → 分組（自變項）準備比較。</p>
+                            </div>
+                            <div className="bg-white border border-[var(--border)] rounded p-2.5">
+                                <p className="font-bold text-[#DC2626] mb-1">📚 文獻分析組</p>
+                                <p className="text-[var(--ink-mid)] m-0">整理每篇文獻的重點 → 依分析類目逐篇編碼 → 找出不同文獻的相同與分歧之處 → 確認能回答研究問題。</p>
+                            </div>
+                        </div>
+                    </DepthBlock>
+
+                    {/* ② 交前個人檢查 — 4 項短勾選；分析表本體在 Google Sheet，這格只留勾選痕跡（Checklist 用同一 dataKey 序列化字串存）*/}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">分析表結構確認</p>
+                    </div>
+                    <Checklist
+                        dataKey="w13-table-structure"
+                        prompt="② 交之前，逐項勾選確認"
+                        items={[
+                            '欄位有對應研究問題',
+                            '欄位有對應操作型定義',
+                            '不確定的資料有標「待確認」',
+                            '分析表連結已貼上',
+                        ]}
+                    />
+
+                    {/* 分析表連結 — 獨立欄位，W14「從 W13 帶過來」卡會讀這條 w13-table-link */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">貼上分析表連結</p>
+                    </div>
+                    <ThinkRecord
+                        dataKey="w13-table-link"
+                        prompt="📎 貼分析表連結，並說明欄位數、N 值及整理狀態（例：共 8 欄，N=72，已代碼化）"
+                        placeholder="Google Sheet 連結 → 欄位數：？　N 值：？　整理狀態：已完成 / 部分完成 / 進行中&#10;記得把權限設成「知道連結的人可以檢視」——下週 W14 會直接帶這條進來。"
+                        rows={2}
+                    />
+
                     {/* 進度自評 */}
                     <div>
-                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📍 整理進度自評（誠實標記）</p>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">📍 整理進度自評（誠實標記）</p>
+                        </div>
                         <p className="text-[12px] text-[var(--ink-mid)] mb-3">
                             <strong className="text-[var(--success)]">100% 不影響分數、不公告排名</strong>——選 🔴 不會被點名也不扣分，只是讓老師巡視時知道誰先看。誠實標記=老師能更快來找你。
                         </p>
@@ -732,9 +884,19 @@ const W13AutonomyPage = () => {
             icon: <Bot size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '節奏', text: '個人自主，可跳過' },
+                            { label: '做', text: 'AI 當助理（不當研究者）：用它做你已能用人腦做的事，可跳過' },
+                            { label: '注意', text: '有用 AI 就留 AI-RED 紀錄' },
+                        ]}
+                    />
                     {/* 核心原則（一句話帶過開場 + 任務定位） */}
                     <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB]">
-                        <p className="text-[15px] font-bold text-[var(--accent)] mb-2">🧠 核心原則：腦袋先有架構，AI 才幫得上忙</p>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[15px] font-bold text-[var(--accent)]">🧠 核心原則：腦袋先有架構，AI 才幫得上忙</p>
+                        </div>
                         <p className="text-[12px] text-[var(--ink)] leading-relaxed">
                             純人工整理就夠完成本週任務；想試 AI 也行——但記住：
                             <strong>「結構怎麼設」由你決定（已在 Step 2 寫好）；「內容怎麼填」才可以交給 AI。</strong>
@@ -742,16 +904,9 @@ const W13AutonomyPage = () => {
                         </p>
                     </div>
 
-                    {/* AI 能/不能 + 三風險 收合（需要時點開） */}
-                    <details className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white">
-                        <summary className="cursor-pointer px-5 py-3 flex items-center justify-between hover:bg-[var(--paper-warm)] transition-colors">
-                            <span className="text-[13px] font-bold text-[var(--ink)] flex items-center gap-2">
-                                <ShieldAlert size={14} className="text-[#DC2626]" />
-                                📋 AI 風險速查 · AI 能/不能做什麼 + 三大風險（點開展開）
-                            </span>
-                            <span className="text-[10px] font-mono text-[var(--ink-light)]">▼</span>
-                        </summary>
-                        <div className="px-5 py-4 border-t border-[var(--border)] flex flex-col gap-4">
+                    {/* AI 能/不能 + 三風險 — 深度補充（AI 會犯的錯）*/}
+                    <DepthBlock title="常見錯誤">
+                        <div className="flex flex-col gap-4">
                             {/* AI 能 vs 不能 */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-4">
@@ -787,13 +942,15 @@ const W13AutonomyPage = () => {
                                 </p>
                             </div>
                         </div>
-                    </details>
+                    </DepthBlock>
 
-                    {/* AI 協作三原則 + 對話四步驟（W13/14/15 共用） */}
-                    <AICollaborationPrinciples week="13" role="assistant" showRoleCard={false} />
+                    {/* AI 協作三原則 + 對話四步驟（W13/14/15 共用）— 深度補充 */}
+                    <DepthBlock title="AI 使用提醒">
+                        <AICollaborationPrinciples week="13" role="assistant" showRoleCard={false} />
+                    </DepthBlock>
 
                     {/* AI 模式選擇（含 standalone 不用 AI） */}
-                    <AIModePicker week="13" taskName="資料整理" onChange={setAiMode} />
+                    <AIModePicker week="13" taskName="資料整理" onChange={handleAiMode} />
 
                     {/* standalone：不用 AI */}
                     {aiMode === 'standalone' && (
@@ -801,7 +958,7 @@ const W13AutonomyPage = () => {
                             <p className="text-[14px] font-bold text-[#1E40AF] mb-2">🚫 你選擇不用 AI</p>
                             <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
                                 完全 OK——純人工整理已經足以完成本週任務。回到 Step 3 繼續動手填表，
-                                記得每填 10 筆抽檢一次，並在下一步繳交分析表連結。
+                                記得每填 10 筆抽檢一次。下一步（Step 4）雙線繳交：小組交分析表連結、個人匯出 W13 歷程 docx。
                             </p>
                         </div>
                     )}
@@ -845,7 +1002,9 @@ const W13AutonomyPage = () => {
 【任務】
 依我提供的「分析表結構」與「編碼規則」，把原始資料逐筆填入。
 不要自行新增類別、不要替我重新定義變項。
-遇到不確定的資料，標 ❓ 並列出疑問。
+不要自行補空白值、推測答案，或把模糊回答改成明確答案。
+不要覆蓋原始資料——填入的是另一份分析表，原始資料要保留。
+遇到不確定的資料，標 ❓ 並列出疑問，不要自己決定。
 
 【分析表結構】
 欄位：___（貼你的欄位清單）
@@ -892,8 +1051,11 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                                 <p className="text-[12px] font-bold text-[#991B1B] mb-2 flex items-center gap-2">
                                     <ShieldAlert size={14} /> 訪談組／文獻組 · 額外驗收門檻（非常重要）
                                 </p>
-                                <p className="text-[11px] text-[#7F1D1D] leading-relaxed mb-2">
+                                <p className="text-[11px] text-[#7F1D1D] leading-relaxed mb-1">
                                     這兩組的編碼<strong>就是研究本身</strong>。AI 全做完，你不抽樣比對，等於放棄判斷。
+                                </p>
+                                <p className="text-[11px] text-[#B91C1C] italic mb-2">
+                                    ⏱ 30% 抽樣比對約需 30 分鐘——若課堂時間不夠，課後完成再更新 AI 驗收紀錄即可。
                                 </p>
                                 <ul className="text-[11px] text-[#7F1D1D] leading-relaxed space-y-1 mb-3">
                                     <li>☐ 隨機抽 30% 樣本，<strong>我自己編碼一次</strong></li>
@@ -901,7 +1063,7 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                                     <li>☐ 差異率 &gt;20%：重新定義類別 + 重編一輪</li>
                                     <li>☐ 把差異最大的 2-3 筆寫進「AI 驗收紀錄」</li>
                                 </ul>
-                                <div className="bg-white border border-[#FCA5A5] rounded p-3">
+                                <DepthBlock title="看完整範例">
                                     <p className="text-[11.5px] font-bold text-[#991B1B] mb-2">📖 「差異」怎麼算？什麼算 1 筆差異</p>
                                     <div className="grid md:grid-cols-2 gap-2 text-[11px] text-[#7F1D1D]">
                                         <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-2">
@@ -931,10 +1093,14 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                                             <li>再抽 10% 樣本，每個人重做一次，看這次大家有沒有對上 —— 約 10 分鐘</li>
                                         </ol>
                                     </div>
-                                </div>
+                                </DepthBlock>
                             </div>
 
                             {/* AI 驗收紀錄 */}
+                            <div className="flex items-center gap-2 mb-1">
+                                <ContentTypeChip type="做" />
+                                <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI 驗收紀錄</p>
+                            </div>
                             <ThinkRecord
                                 dataKey="w13-ai-validation"
                                 prompt="③ AI 輔助驗收紀錄（用了 AI 必填）"
@@ -957,10 +1123,67 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
             icon: <FileCheck size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
-                    {/* 跨工具：Prompt 範本庫（自學） */}
+                    <StepBriefing
+                        lines={[
+                            { label: '交出', text: '小組：原始資料連結 + 整理後分析表連結' },
+                            { label: '交出', text: '個人：頁面上方「我的紀錄」匯出 → 貼 Classroom（資料紅線自查、AI-RED 如有）' },
+                        ]}
+                    />
+
+                    {/* 雙線繳交主卡 — W13 期中接點 */}
+                    <div className="bg-white border-2 border-[#10B981] rounded-[var(--radius-unified)] overflow-hidden">
+                        <div className="bg-[#10B981] text-white px-4 py-2 font-bold text-[13px]">
+                            📦 W13 結束前完成兩類繳交
+                        </div>
+                        <div className="p-4 space-y-4">
+                            {/* 小組作業 */}
+                            <div className="border-l-4 border-[#0284C7] bg-[#F0F9FF] rounded-r-[6px] p-3">
+                                <p className="font-bold text-[13.5px] text-[#075985] mb-1.5">一、小組作業｜資料整理成果</p>
+                                <ul className="text-[12.5px] text-[#0C4A6E] leading-[1.85] list-disc pl-5 space-y-1">
+                                    <li><strong>原始資料雲端連結</strong>（依方法不同：Form 回應表／逐字稿／觀察紀錄／實驗紀錄／文獻編碼）</li>
+                                    <li><strong>整理後分析表連結</strong>（建議 Google Sheet，W14 直接接圖表）</li>
+                                </ul>
+                                <p className="text-[11.5px] text-[#0C4A6E] italic mt-2 pt-2 border-t border-[#0284C7]/30">
+                                    💡 兩份都要——原始的不要刪，讀者要能比對你的整理過程（L04 保留處理紀錄）。
+                                </p>
+                            </div>
+
+                            {/* 個人作業 */}
+                            <div className="border-l-4 border-[#7C3AED] bg-[#F5F3FF] rounded-r-[6px] p-3">
+                                <p className="font-bold text-[13.5px] text-[#5B21B6] mb-1.5">二、個人作業｜匯出網頁紀錄 → 貼 Classroom</p>
+                                <p className="text-[12.5px] text-[#4C1D95] leading-[1.85] mb-2">
+                                    點頁面上方的 <strong>「我的紀錄」</strong>，匯出本週填寫內容，貼到 Classroom 老師開的文件。重點幾件：
+                                </p>
+                                <ul className="text-[12px] text-[#4C1D95] leading-[1.85] list-decimal pl-5 space-y-0.5">
+                                    <li><strong>雷 #9 改寫練習</strong>（在「認識資料」步驟已練，確認有寫）</li>
+                                    <li><strong>AI-RED 與完整 AI 對話</strong>（若有用 AI）</li>
+                                </ul>
+                            </div>
+
+                            {/* 個人作業怎麼交說明 */}
+                            <div className="rounded-[var(--radius-unified)] border-2 border-[#7C3AED] bg-[#F5F3FF] p-4">
+                                <p className="text-[13px] font-bold text-[#5B21B6] mb-1">📁 個人作業怎麼交？</p>
+                                <p className="text-[12.5px] text-[#4C1D95] leading-[1.8] m-0">
+                                    回到頁面最上方，點「我的紀錄」按鈕 → 匯出本週填寫內容 → 複製後貼到 Classroom 老師開的文件。
+                                </p>
+                            </div>
+
+                            {/* 繳交收尾 */}
+                            <div className="bg-[#FEF3C7] border border-[#F59E0B] rounded-[6px] p-3">
+                                <p className="text-[12.5px] font-bold text-[#92400E] leading-[1.85]">
+                                    ✅ 全部完成後，到 <strong>Classroom 按下「繳交」</strong>。
+                                </p>
+                                <p className="text-[11.5px] text-[#92400E] italic mt-1.5">
+                                    🎯 一句話原則：<strong>小組交資料成果，個人交資料責任紀錄。</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 跨工具：資料分析檢核站（自學） */}
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 flex items-center justify-between gap-3">
                         <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            💡 整理完想做更進階的分析？例如：<strong>交叉分析</strong>（兩個變項對著比，例：「性別 × 補習動機」）、<strong>主題編碼</strong>（從質性資料找主題）、<strong>跨個案比較</strong>（不同案例之間比一比）——回 <strong className="text-[var(--ink)]">Prompt 範本庫</strong>看 5 法 Step 2-5 的進階 prompt（自學用，不影響本週繳交）。
+                            💡 整理完想做更進階的分析？例如：<strong>交叉分析</strong>（兩個變項對著比，例：「性別 × 補習動機」）、<strong>主題編碼</strong>（從質性資料找主題）、<strong>跨個案比較</strong>（不同案例之間比一比）——回 <strong className="text-[var(--ink)]">資料分析檢核站</strong>看 5 法的進階分析步驟與輔助提示（自學用，不影響本週繳交）。
                         </p>
                         <a
                             href="/analysis-station"
@@ -972,67 +1195,60 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                         </a>
                     </div>
 
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <p className="text-[14px] font-bold text-[var(--ink)] mb-1">📤 下課前 10 分鐘 · 兩條繳交動線</p>
-                        <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex flex-col gap-1">
-                            <span>📁 <strong>Classroom 繳：</strong>原始資料雲端連結 + 整理後分析表連結（用了 AI 的學生再加完整對話）</span>
-                            <span>📝 <strong>網頁繳：</strong>下方檢核清單 + W14 資料呈現規劃（用了 AI 補 AI-RED）</span>
-                        </div>
-                    </div>
-
                     {/* Classroom 繳交檢核 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">繳交檢核</p>
+                    </div>
                     <Checklist
                         dataKey="w13-classroom-submit"
-                        prompt="④ Classroom 繳交檢核（勾選你已繳的項目）"
+                        prompt="④ Classroom 雙線繳交檢核（勾選已繳項目）"
                         items={[
-                            '原始資料雲端連結（Google Sheets / Excel / 逐字稿等）已繳',
-                            '整理後分析表雲端連結已繳（含欄位、N 值清楚）',
-                            '雲端權限設定為「知道連結的人可以檢視」',
-                            '訪談組／文獻組：已清個資（姓名改代號 A、B、C）',
-                            '用了 AI 的學生：完整對話紀錄（私人留言或文件連結）已繳',
+                            '【小組】原始資料雲端連結（Form 回應表／逐字稿／觀察紀錄／實驗紀錄／文獻編碼）已繳',
+                            '【小組】整理後分析表雲端連結已繳（含欄位、N 值清楚）',
+                            '【小組】雲端權限設定為「知道連結的人可以檢視」',
+                            '【小組】訪談組／文獻組：已清個資（姓名改代號 A、B、C）',
+                            '【個人】W13 網頁歷程 docx 已匯出',
+                            '【個人】雷 #9 改寫練習已寫（事前可驗證的剔除規則）',
+                            '【個人】若有用 AI：完整對話紀錄 + AI-RED 已繳',
+                            'Classroom 已按下「繳交」鈕',
                         ]}
                     />
 
-                    {/* W14 資料呈現規劃：資料呈現方式（不限於圖） */}
-                    <ThinkRecord
-                        dataKey="w13-w14-question"
-                        prompt="⑤ W14 我想怎麼呈現這份資料？"
-                        scaffold={[
-                            '我想呈現的訊息（選 1 個 最值得讓讀者看到的）：',
-                            '我考慮的呈現方式（1-3 種就好，別貪多）：',
-                            '若用圖表，可能的類型：（折線／圓餅／長條／散佈）',
-                        ]}
-                    />
-                    <details className="mt-2 rounded border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <summary className="cursor-pointer px-3 py-2 text-[12px] font-bold text-[var(--ink)] hover:bg-white">
-                            📊 看 5 法的呈現範例（點開）
-                        </summary>
-                        <div className="px-4 py-3 border-t border-[var(--border)]">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-[11.5px] border-collapse">
-                                    <thead>
-                                        <tr className="bg-white border-b border-[var(--border)]">
-                                            <th className="p-2 text-left font-bold">方法</th>
-                                            <th className="p-2 text-left font-bold">想呈現的訊息（範例）</th>
-                                            <th className="p-2 text-left font-bold">呈現方式（範例）</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">📋 問卷</td><td className="p-2">5 點量表分布</td><td className="p-2">長條圖 / 圓餅</td></tr>
-                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">🎤 訪談</td><td className="p-2">主題出現頻次</td><td className="p-2">橫向長條圖 + 引用佳句框</td></tr>
-                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">🧪 實驗</td><td className="p-2">前後測差異</td><td className="p-2">折線圖 + 組間均值表</td></tr>
-                                        <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">👀 觀察</td><td className="p-2">行為類別佔比</td><td className="p-2">圓餅圖 / 時間軸折線</td></tr>
-                                        <tr><td className="p-2 font-bold">📚 文獻</td><td className="p-2">立場分布 / 時間軸</td><td className="p-2">時間軸 + 圓餅</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    {/* W14 橋接提示 — 靜態，呈現方式由小組討論決定，不用填網頁 */}
+                    <div className="rounded-[var(--radius-unified)] border border-dashed border-[var(--accent)] bg-white px-4 py-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                        <p className="font-bold text-[var(--accent)] mb-1">→ 進 W14 前，組內先想好一件事</p>
+                        <p>這份分析表最值得讓讀者看到的是什麼？打算用圖還是表來說？下週第一步就從這裡開始。</p>
+                    </div>
+                    {/* 5 法呈現範例 — 深度補充 */}
+                    <DepthBlock title="看完整範例">
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-[11.5px] border-collapse">
+                                <thead>
+                                    <tr className="bg-white border-b border-[var(--border)]">
+                                        <th className="p-2 text-left font-bold">方法</th>
+                                        <th className="p-2 text-left font-bold">想呈現的訊息（範例）</th>
+                                        <th className="p-2 text-left font-bold">呈現方式（範例）</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">📋 問卷</td><td className="p-2">5 點量表分布</td><td className="p-2">長條圖 / 圓餅</td></tr>
+                                    <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">🎤 訪談</td><td className="p-2">各主題下的代表觀點</td><td className="p-2">引文表（主題 × 受訪者代表引文）+ 主題矩陣</td></tr>
+                                    <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">🧪 實驗</td><td className="p-2">前後測差異</td><td className="p-2">折線圖 + 組間均值表</td></tr>
+                                    <tr className="border-b border-[var(--border)]"><td className="p-2 font-bold">👀 觀察</td><td className="p-2">行為類別佔比</td><td className="p-2">圓餅圖 / 時間軸折線</td></tr>
+                                    <tr><td className="p-2 font-bold">📚 文獻</td><td className="p-2">立場分布 / 時間軸</td><td className="p-2">時間軸 + 圓餅</td></tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </details>
+                    </DepthBlock>
 
                     {/* AI-RED（依 AI Mode 條件分流） */}
                     {(aiMode === 'teach' || aiMode === 'verify') ? (
                         <div className="rounded-[var(--radius-unified)] border-2 border-[#DDD6FE] bg-[#F5F3FF] p-4">
-                            <p className="text-[12px] font-bold text-[#5B21B6] mb-2">🤖 用了 AI · AI-RED 紀錄（必填）</p>
+                            <div className="flex items-center gap-2 mb-2">
+                                <ContentTypeChip type="交出" />
+                                <p className="text-[12px] font-bold text-[#5B21B6]">🤖 用了 AI · AI-RED 紀錄（必填）</p>
+                            </div>
                             <p className="text-[11px] text-[#4C1D95] mb-3 leading-relaxed">
                                 你用了 AI 整理資料，必須留下完整的 A-I-R-E-D 紀錄——這是學術倫理，也是讓你之後讀書摘時記得自己做了什麼決定。
                                 <strong>注意：</strong>AI-RED 是「事後重述一次最關鍵的互動」；上方還要繳<strong>完整對話</strong>，兩者不衝突。
@@ -1071,10 +1287,22 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                         </div>
                     </div>
 
-                    <ExportButton
-                        weekLabel="W13 資料整理週：原始資料 → 分析表"
-                        fields={EXPORT_FIELDS}
-                    />
+                    {/* 一鍵複製繳交 */}
+                    <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
+                            <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
+                            <span className="text-[14px] font-bold text-[#1E40AF]">複製 W13 學習紀錄 → 貼 Google Classroom</span>
+                        </div>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            包含：原始資料現況／分析表結構連結／最危險整理陷阱／AI 驗收紀錄（如有）／雷 #9 改寫。
+                        </p>
+                        <ExportButton
+                            weekLabel="W13 資料整理週：原始資料 → 分析表"
+                            fields={EXPORT_FIELDS}
+                            buttonText="複製 W13 學習紀錄"
+                        />
+                    </div>
 
                     {/* 下週預告 */}
                     <div className="p-6 rounded-[var(--radius-unified)] bg-[var(--ink)] text-white">
@@ -1089,7 +1317,8 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                             </div>
                             <div>
                                 <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[var(--accent)] mb-1">你要帶來</div>
-                                <p className="text-[rgba(255,255,255,0.85)] m-0">本週的<strong>分析表連結</strong>。沒帶 = 下週只能空轉，看別組做圖。</p>
+                                <p className="text-[rgba(255,255,255,0.85)] m-0">本週<strong>小組的分析表連結</strong>。沒帶 = 下週只能空轉，看別組做圖。</p>
+                                <p className="text-[rgba(255,255,255,0.65)] text-[11.5px] italic mt-1 mb-0">💡 個人作業（W13 歷程 docx）是你自己對紅線的理解證明，W14 不會用到——但別忘了交。</p>
                             </div>
                         </div>
                         <div className="mt-5 flex justify-end">
@@ -1121,20 +1350,61 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 </div>
             </div>
 
-            {/* HERO */}
+            {/* HERO — 第一屏只留三句（spec §6-1）*/}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W13"
+                question="我的資料整理好，可以分析了嗎？"
                 title="資料整理週："
                 accentTitle="把原始資料變成可分析的表"
-                subtitle="腦袋先有架構，AI 才幫得上忙。今天的核心：你決定分析表的結構（這就是研究本身），先動手做一輪純人工整理；想學 AI 協作可選用。AI 是助理，不是研究者。"
-                chain="W11-W12 用第六章工具蒐集到一堆原始資料。本週把它變成「分析表」——欄位清楚、N 值（每組／每筆樣本的數量）明確，下週 W14 才畫得了圖。"
+                todo={[
+                    { label: '今天做什麼', value: '把 W11-W12 的原始資料整理成一張可分析的表。' },
+                    { label: '為什麼做', value: '表的欄位和 N 值要清楚，下週才畫得了圖、做得了分析。' },
+                    { label: '今天交什麼', value: '小組＝原始資料＋分析表連結；個人＝W13 歷程 docx。' },
+                ]}
+                chain="W11 工具設計書完成、W12 短報拿到全班回饋——資料也收了幾週，W13 要把原始資料整理成可分析的乾淨表格，下週才能畫圖。"
                 meta={[
-                    { label: '本週任務', value: '5 法對照 · 定義架構（必做）· 動手整理 · 補充 AI（可選）· 繳連結' },
-                    { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '結構成型的分析表 + 原始/整理後資料雙繳 Classroom' },
-                    { label: '帶去 W14', value: '原始資料 + 整理後分析表（兩份都繳 Classroom）' },
+                  { label: '第一節', value: '5 法對照（你的方法該長成什麼表格結構）+ 純人工整理一輪' },
+                  { label: '第二節', value: 'AI 協作整理（選用）+ 完成分析表 + 繳交' },
+                  { label: '課堂產出', value: '小組：原始資料 + 分析表連結；個人：W13 歷程 docx' },
+                  { label: '前置要求', value: 'W11-W12 蒐集的原始資料（問卷回收 / 訪談錄音轉文字 / 實驗數據）' },
                 ]}
             />
+
+            {/* 三模式切換 */}
+            <ModeSwitch />
+
+            {/* 自學補課路線 — 只在自學模式顯示（spec §5）*/}
+            {mode === 'self-study' && (
+                <div className="my-5 rounded-[var(--radius-unified)] border-2 border-[#0284C7] bg-[#F0F9FF] p-4 md:p-5">
+                    <p className="text-[14px] font-bold text-[#075985] mb-1">📖 自學補課路線 · W13 可「部分自學」</p>
+                    <p className="text-[11.5px] text-[#0C4A6E] leading-[1.7] mb-3">
+                        5 法對照、4 個詞、分析表結構觀念、AI 風險與驗收原則、雷 #9 改寫都能自學；分析表結構與編碼類別不重疊要老師確認，小組原始＋分析表連結要回組整合。
+                    </p>
+                    <ol className="text-[12px] text-[#0C4A6E] leading-[1.85] list-none m-0 p-0 space-y-1">
+                        <li><strong>① 先看：</strong>Step 1（5 法對照找自己這組／4 個詞）＋ Step 3 的 AI 風險與驗收原則</li>
+                        <li><strong>② 做：</strong>Step 2 拿自己 W11-W12 原始資料，定義分析表結構、動手整理一輪</li>
+                        <li><strong>③ 補紀錄：</strong>原始資料現況／分析表結構＋連結／（用 AI 則補驗收紀錄）／雷 #9 改寫</li>
+                        <li><strong>④ 交：</strong>個人 W13 歷程 docx（雷 #9 改寫、AI-RED 如有）</li>
+                        <li><strong>⑤ 需要找人：</strong>分析表結構、編碼類別不重疊要老師確認；小組原始＋分析表連結回組整合</li>
+                    </ol>
+                    <div className="mt-3 pt-3 border-t border-[#0284C7]/30">
+                        <p className="text-[12px] font-bold text-[#075985] mb-1">⛑️ 最低完成版（缺課學生：至少做到這些才算補到核心）</p>
+                        <p className="text-[11.5px] text-[#0C4A6E] leading-[1.85] m-0">
+                            ① 完成一張分析表結構（欄位＋N 值，可以資料還沒填滿）　② 在網頁寫下分析表結構紀錄　③ 完成雷 #9 改寫　④ 匯出 W13 歷程 docx
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {/* 我的紀錄抽屜 — 兩模式都能開（spec §3 方案 A：總覽＋匯出，input 留 Step）*/}
+            <RecordDrawer
+                weekLabel="W13 資料整理週：原始資料 → 分析表"
+                fields={EXPORT_FIELDS}
+                extraFields={RECORD_EXTRA_FIELDS}
+            />
+
+            {/* 為什麼是這週 + 本週資訊 — 深度補充 */}
+
             <CourseArc items={[
                 { wk: 'W1-W2', name: '探索階段\nRED 公約', status: 'past' },
                 { wk: 'W3-W4', name: '題目決定\n方法地圖', status: 'past' },
@@ -1155,7 +1425,7 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                     '純人工整理一輪 — 動手做、不靠 AI（你決定結構就是研究本身）',
                     'AI 協作（選用）— AI 當助理、不當研究者',
                 ]}
-                exportReminder="繳交 Google Sheet 連結 → W14 的圖表選擇從這裡接力"
+                exportReminder="小組繳交原始資料與分析表連結；個人繳交 W13 歷程 docx。完成後到 Classroom 按「繳交」。"
             />
 
             {(myTopic || myMethod) && (
@@ -1175,9 +1445,6 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 </div>
             )}
 
-            {/* W13 任務前警戒語 — 3 條核心紅線（task-time 可隨時查）*/}
-            <ResearcherRedlines mode="warning" stage="W13" />
-
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
@@ -1186,23 +1453,19 @@ ___（貼你的原始資料；訪談組貼逐字稿、問卷組貼 CSV）
                 flat
             />
 
-            {/* W13 改寫練習 — 反糾察隊配套（不只挑錯，動手寫對的）*/}
-            <TrapRewritePractice
-                trapNumber={9}
-                stage="W13"
-                title="剔除規則模糊"
-                wrong="剔除疑似填答不認真的樣本。"
-                issue="「疑似」是研究員主觀判斷，不是事前訂定的標準。學術上必須先寫好客觀規則，再依規則篩。"
-                hint="把「疑似」拿掉。改寫成「依事前標準剔除 ___」這種可被檢驗的句型。"
-                shouldDo="依事前標準剔除：核心欄位空白者（編號 11、21）、明顯無意義填答（編號 23 填 test）。"
-                dataKey="w13-trap-rewrite-9"
-            />
-
-            {/* W13 階段紅線完整版 — 5 條 · 做完反思用 */}
-            <ResearcherRedlines mode="subset" stage="W13" collapsible />
+            {/* W13 階段紅線完整版 — 5 條 · 深度補充 */}
+            <DepthBlock title="W13 研究員紅線（完整版）">
+                <ResearcherRedlines mode="subset" stage="W13" />
+            </DepthBlock>
         </div>
     );
 };
+
+const W13AutonomyPage = () => (
+    <ModeProvider week="W13">
+        <W13PageContent />
+    </ModeProvider>
+);
 
 export { W13AutonomyPage };
 export default W13AutonomyPage;

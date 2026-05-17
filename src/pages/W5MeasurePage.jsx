@@ -2,12 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ClinicPage.css';
 import CourseArc from '../components/ui/CourseArc';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
+import StepBriefing from '../components/ui/StepBriefing';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import BackfillField from '../components/ui/BackfillField';
 import { readRecords } from '../components/ui/ThinkRecord';
@@ -34,7 +36,7 @@ const METHOD_STRATEGIES = [
         bg: 'var(--accent-light)',
         formula: '題目選項 ＝ 操作型定義',
         desc: '每題對應一個指標，用具體量表／時段／頻次。設計題目時就同步寫好操作型定義——學生看選項就知道要怎麼答。',
-        example: '核心概念：高中生壓力\n操作型定義：\n  ❶「過去一週熬夜超過 12 點的次數」（具體計次，0-7 次）\n  ❷「PSS-10 壓力量表分數」（5 點李克特，10 題加總）',
+        example: '核心概念：高中生壓力\n操作型定義：\n  ❶「過去一週熬夜超過 12 點的次數」（具體計次，0-7 次）\n  ❷「常用心理壓力問卷得分」（共 10 題、每題 1-5 分打分後加總；這份問卷有個正式名字叫 PSS-10）',
     },
     {
         id: 'interview',
@@ -54,7 +56,7 @@ const METHOD_STRATEGIES = [
         bg: '#fef3c7',
         formula: '自變項 + 依變項 + 控制變項　全部要寫',
         desc: '最嚴格——三類變項都要操作化到「不同人來做也得到一樣的結果」。少寫一條就不算實驗了。',
-        example: '研究：聽古典音樂能否提升短期記憶？\n自變項：聽巴哈賦格 30 分鐘 vs 安靜休息 30 分鐘\n依變項：10 個不相關名詞、5 分鐘記憶後立即回憶得分（0-10 分）\n控制變項：相同房間光線、午後同一時段、受試者前一晚睡 ≥ 6 小時',
+        example: '研究：聽古典音樂能否提升短期記憶？\n自變項：聽古典音樂（巴哈賦格）30 分鐘 vs 安靜休息 30 分鐘\n依變項：10 個不相關名詞、5 分鐘記憶後立即回憶得分（0-10 分）\n控制變項：相同房間光線、午後同一時段、受試者前一晚睡 ≥ 6 小時',
     },
     {
         id: 'observation',
@@ -73,8 +75,8 @@ const METHOD_STRATEGIES = [
         color: '#6b21a8',
         bg: '#f5f3ff',
         formula: '分析單位 + 編碼類別 ＝ 操作型定義',
-        desc: '4 子類型各自的操作型定義方式不同——挑你 W9 會選的子類型對應寫。',
-        example: '② 歷史文獻分析　時間軸切點：每 10 年一個段落，內含關鍵事件 ≥ 3 件\n③ 內容分析　詞彙計次：「民主」每出現 1 次計 1（含複合詞如民主化）\n④ 論述分析　話語策略類別：強調／淡化／批評（雙人編碼一致率 ≥ 80%）\n⑤ 敘事分析　情節結構：開展（背景）／轉折（衝突）／結局（收束）三段式',
+        desc: '4 種文獻分析方向的操作型定義方式不同——先挑一種最接近你題目的方向來寫（看時間變化／詞彙出現／立場說法／故事結構）。',
+        example: '② 歷史文獻分析　時間軸切點：每 10 年一個段落，內含關鍵事件 ≥ 3 件\n③ 內容分析　詞彙計次：「民主」每出現 1 次計 1（含複合詞如民主化）\n④ 論述分析　話語策略類別：強調／淡化／批評（兩人各自分類，對完答案後一致八成以上，才算定義夠清楚）\n⑤ 敘事分析　情節結構：開展（背景）／轉折（衝突）／結局（收束）三段式',
     },
 ];
 
@@ -96,7 +98,7 @@ function detectMethodId(rawMethod) {
 
 /* 同一概念三方法對照範例（用「高中生壓力」當共同概念）*/
 const PRESSURE_DEMO = [
-    { icon: '📋', tag: '量化（問卷）', text: '「過去一週熬夜超過 12 點的次數」+「PSS-10 量表分數」' },
+    { icon: '📋', tag: '量化（問卷）', text: '「過去一週熬夜超過 12 點的次數」+「心理壓力問卷得分（10 題加總）」' },
     { icon: '🎤', tag: '質性（訪談）', text: '「請描述最近一次你覺得『壓力大』的具體事件」（口述事件編碼）' },
     { icon: '👀', tag: '行為（觀察）', text: '「自習課滑手機 ≥ 5 秒、發呆 ≥ 30 秒、頻繁站起的次數」' },
 ];
@@ -221,9 +223,18 @@ export const W5MeasurePage = () => {
             icon: '📎',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '確認 W4 主方法已帶入' },
+                            { label: '學', text: '為什麼這週要做操作型定義：讓「誰來測都一樣」' },
+                        ]}
+                    />
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
                         <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">為什麼是這週</div>
-                        <h2 className="text-[18px] font-bold text-[var(--ink)] mb-2">把抽象概念變成可測指標</h2>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <h2 className="text-[18px] font-bold text-[var(--ink)]">把抽象概念變成可測指標</h2>
+                        </div>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
                             W4 你選了方法，但「選了方法」≠「知道怎麼問／怎麼測」。「壓力」「動機」「學習效果」這類抽象詞——
                             <strong className="text-[var(--ink)]">不操作化，下週你連問卷／訪綱／觀察表都寫不出來</strong>。
@@ -254,7 +265,7 @@ export const W5MeasurePage = () => {
 
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-4 text-[13px] text-[var(--ink-mid)] leading-relaxed">
                         <p className="font-bold text-[var(--ink)] mb-2">🎯 這週目標</p>
-                        <p>把 W2 那一句模糊的好奇 → W4 那個方法 → 寫成「下週可以實際蒐集答案」的<strong className="text-[var(--ink)]">具體機制</strong>。寫完之後，下週博覽會看你題目、看你方法選得準不準的同學，就會知道「你真的知道自己要測什麼」。</p>
+                        <p>把 W2 那一句模糊的好奇 → W4 選定的方法 → 寫成「下週可以實際蒐集資料」的<strong className="text-[var(--ink)]">具體做法</strong>。寫完之後，下週 W6 海報博覽會，同學看你的海報時，就能知道：你要研究什麼、用什麼方法蒐集資料、實際要測的是什麼。</p>
                     </div>
                 </div>
             ),
@@ -266,9 +277,15 @@ export const W5MeasurePage = () => {
             icon: '📐',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '操作型定義：把抽象概念變成「誰來測都一樣」的可觀察指標' },
+                        ]}
+                    />
                     <div className="bg-white border-2 border-[var(--gold)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--gold)] text-white flex items-center gap-2">
                             <Ruler size={16} />
+                            <ContentTypeChip type="學" />
                             <span className="font-bold text-[14px]">關鍵概念　·　操作型定義</span>
                         </div>
                         <div className="p-5 space-y-4">
@@ -276,11 +293,32 @@ export const W5MeasurePage = () => {
                                 把抽象概念（壓力、學習效果、動機……）變成<strong>具體、可觀察、可測量</strong>的指標——具體到「不同人來測也得到一樣的數字／類別」。
                             </p>
 
-                            {/* 同一概念三方法對照範例 */}
+                            {/* 入門範例：上課專心（先看簡單版，再進階） */}
+                            <div className="bg-[var(--success-light)] border-l-3 border-[var(--success)] p-4 rounded-r-[6px]">
+                                <p className="text-[12.5px] font-bold text-[var(--success)] mb-2">📍 先看最簡單的：上課專心怎麼定義？</p>
+                                <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.75] mb-3">
+                                    「專心」聽起來抽象，但研究不能只寫「他看起來很認真」。研究要問：<strong>我看什麼？怎麼記？什麼算有？什麼算沒有？</strong>
+                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div className="bg-white p-3 rounded-[6px] border border-[var(--success)]/20">
+                                        <div className="text-[11px] font-mono text-[var(--success)] font-bold mb-1">✓ 正例</div>
+                                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.7]">在 10 分鐘內，學生看向講者或教材、做筆記、回應問題</p>
+                                    </div>
+                                    <div className="bg-white p-3 rounded-[6px] border border-[var(--danger)]/20">
+                                        <div className="text-[11px] font-mono text-[var(--danger)] font-bold mb-1">✗ 反例</div>
+                                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.7]">滑手機、趴睡、持續聊天、做其他科作業</p>
+                                    </div>
+                                </div>
+                                <p className="text-[12px] text-[var(--ink)] italic mt-3 leading-[1.7]">
+                                    💡 <strong>越抽象的概念，越要說清楚：我用什麼資料代表它？</strong>——這就是這週要練的。下面再看更挑戰的例子。
+                                </p>
+                            </div>
+
+                            {/* 進階範例：同一概念三方法對照（高中生壓力） */}
                             <div className="bg-[var(--gold-light)] border-l-3 border-[var(--gold)] p-3 rounded-r-[6px]">
-                                <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">範例（同一個概念，不同方法的操作型定義）</p>
-                                <p className="text-[12.5px] text-[var(--ink-mid)] mb-2">
-                                    抽象概念：<strong className="text-[var(--ink)]">「高中生壓力」</strong>
+                                <p className="text-[12.5px] font-bold text-[var(--ink)] mb-2">進階範例（同一個概念，不同方法會得到不同操作型定義）</p>
+                                <p className="text-[12.5px] text-[var(--ink-mid)] mb-2 leading-[1.7]">
+                                    抽象概念：<strong className="text-[var(--ink)]">「高中生壓力」</strong>——比「上課專心」更抽象，看不見，但同樣可以操作化。
                                 </p>
                                 <div className="space-y-2">
                                     {PRESSURE_DEMO.map((d, i) => (
@@ -301,7 +339,7 @@ export const W5MeasurePage = () => {
                                 <ul className="text-[12px] text-[var(--ink-mid)] leading-[1.8] list-none space-y-0.5">
                                     <li>· <strong>W3 具體疫苗（空→實）</strong>：題目層做粗具體化（「壓力對學生影響」→「高一段考前手機使用時數」）</li>
                                     <li>· <strong>W4 兩層判斷的方法選擇</strong>：你選定了「用什麼工具去測」</li>
-                                    <li>· <strong>W5 操作型定義（本格）</strong>：把每個變項精細化到「誰來測都得到一樣的數字／類別」</li>
+                                    <li>· <strong>W5 操作型定義（就是這週）</strong>：把每個變項精細化到「誰來測都得到一樣的數字／類別」</li>
                                 </ul>
                                 <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">底層邏輯一樣：把模糊換成可數可看可記。差別只在抽象層級越來越細。</p>
                             </div>
@@ -309,6 +347,7 @@ export const W5MeasurePage = () => {
                             {/* 三件事檢核 — 三大卡片視覺強化 */}
                             <div className="space-y-3 pt-2">
                                 <div className="flex items-center gap-2">
+                                    <ContentTypeChip type="注意" />
                                     <span className="text-[10px] font-mono font-bold bg-[var(--danger)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">關鍵原則</span>
                                     <span className="text-[14px] font-bold text-[var(--ink)]">操作型定義要做到 3 件事</span>
                                 </div>
@@ -340,12 +379,13 @@ export const W5MeasurePage = () => {
                     <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
                             <span className="text-[14px]">📝</span>
+                            <ContentTypeChip type="學" />
                             <span className="font-bold text-[14px]">集體共寫示範　·　跟著老師跑一題：「上課專心」</span>
                             <span className="ml-auto text-[10px] font-mono opacity-80 tracking-wider">5 MIN</span>
                         </div>
                         <div className="p-5 space-y-3">
                             <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
-                                下半節要寫自己題目前——先看老師完整跑一題。題目選大家都熟的「<strong className="text-[var(--ink)]">上課專心</strong>」，假設用 <strong>👀 觀察法</strong>。展開順序：① 抽核心概念 → ② 寫操作型定義 → ③ 列正反例 → ④ 三件事檢核。
+                                下半節要寫自己題目前——先看老師完整跑一題。題目<strong className="text-[var(--ink)]">沿用開頭看過的「上課專心」</strong>（刻意用熟例子，讓你專心看「流程」、不被新概念分心），假設用 <strong>👀 觀察法</strong>。展開順序：① 抽核心概念 → ② 寫操作型定義 → ③ 列正反例 → ④ 三件事檢核。
                             </p>
 
                             <details className="bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border)]">
@@ -411,6 +451,10 @@ export const W5MeasurePage = () => {
                                 💡 <strong>看完老師示範，下半節寫你自己的題目時這樣跑</strong>——把「上課專心」換成你題目裡那個最抽象的詞。同樣 4 步驟。
                             </div>
 
+                            <div className="bg-[#f5f3ff] border-l-3 border-[#6b21a8] p-3 rounded-r-[6px] text-[12px] text-[var(--ink)] leading-relaxed">
+                                📚 <strong>文獻分析組看這裡</strong>：你的「操作型定義」不是「怎麼測一個人」，而是「要從文獻裡抓什麼」——先定<strong>分析單位</strong>（一篇？一段？一個年代？）再定<strong>編碼類別</strong>（要貼哪些標籤）。下一步 Step 3 的「📚 文獻分析」卡有完整公式和範例。
+                            </div>
+
                             <div className="bg-[var(--accent-light)] border border-[var(--accent)] rounded-[6px] p-3 text-[12px] text-[var(--ink)] leading-relaxed flex items-start gap-2">
                                 <span className="text-[16px]">📚</span>
                                 <div className="flex-1">
@@ -418,6 +462,21 @@ export const W5MeasurePage = () => {
                                     <Link to="/tools/operationalize" className="text-[var(--accent)] font-bold hover:underline ml-1">📐 操作型定義範例庫</Link>
                                     <span className="text-[var(--ink-light)] ml-1">（自學）</span>
                                 </div>
+                            </div>
+
+                            {/* 先學再練：跑完示範，立刻用自己的關鍵詞試一行 */}
+                            <div className="border-t border-[var(--border)] pt-4 mt-2">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <ContentTypeChip type="練" />
+                                    <p className="text-[12.5px] font-bold text-[var(--ink)]">現在換你試一行——把「上課專心」換成你題目裡最抽象的詞</p>
+                                </div>
+                                <ThinkRecord
+                                    dataKey="w5-step2-quick-try"
+                                    prompt="跑一行：核心概念 → 操作型定義（不用完整，先寫出來）"
+                                    placeholder="例：「手機依賴」→ 操作型定義：自評量表（PSS 改版）得分 ≥ 25 分，或每日解鎖次數 ≥ 60 次（手機螢幕使用記錄）"
+                                    scaffold={['我的核心概念：___', '操作型定義初稿：___', '（正例／反例可以之後到 Step 4 補）']}
+                                    rows={3}
+                                />
                             </div>
                         </div>
                     </div>
@@ -431,6 +490,61 @@ export const W5MeasurePage = () => {
             icon: '🧰',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '點開你 W4 主方法那張卡，看該方法的操作化公式' },
+                            { label: '注意', text: '有輔助方法的也要看對應的卡' },
+                        ]}
+                    />
+
+                    {/* 術語小辭典 — Step 3 專業詞密度高，先給可查的定義 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[12px] font-bold text-[var(--ink)]">📒 先看懂這幾個詞（看不懂可隨時翻回來）</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                            {[
+                                {
+                                    term: '自變項／依變項／控制變項',
+                                    def: '實驗裡：你「動手改的」是自變項、「想看會不會跟著變的」是依變項、「刻意維持不變、不讓它干擾」的是控制變項。',
+                                    when: '🧪 實驗組',
+                                    whenColor: '#d97706',
+                                },
+                                {
+                                    term: '編碼類別',
+                                    def: '事後把一堆口述／文字／行為分門別類貼標籤的那組「標籤名單」。',
+                                    when: '🎤 訪談組・📚 文獻分析組',
+                                    whenColor: '#7c3aed',
+                                },
+                                {
+                                    term: '雙人編碼／一致率',
+                                    def: '兩個人各自照同一份標籤名單分一次，看看有多少分類是一樣的（目標至少八成，學術上寫「一致率 ≥ 80%」）——一致越高，代表你的定義越清楚。獨立研究或兩人組，可邀同學或老師對一次你的分類結果，同樣有效。',
+                                    when: '🎤 訪談組・📚 文獻分析組・👀 觀察組',
+                                    whenColor: '#7c3aed',
+                                },
+                                {
+                                    term: '分析單位',
+                                    def: '你一次「拿來分析的最小一塊」是什麼：一篇社論？一段話？一個十年？先講清楚才能編碼。',
+                                    when: '🎤 訪談組・📚 文獻分析組',
+                                    whenColor: '#7c3aed',
+                                },
+                                {
+                                    term: '李克特量表',
+                                    def: '「非常不同意 1 分～非常同意 5 分」這種用分數勾選的題目格式，是問卷裡最常見的設計方式。拿現成的就好——例如 PSS-10 是一份已驗證的心理壓力問卷（共 10 題，加總得分代表壓力強度）。',
+                                    when: '📋 問卷組',
+                                    whenColor: 'var(--accent)',
+                                },
+                            ].map(({ term, def, when, whenColor }) => (
+                                <div key={term} className="bg-white border border-[var(--border)] rounded-[6px] p-3 space-y-1.5">
+                                    <p className="text-[12.5px] font-bold text-[var(--ink)]">{term}</p>
+                                    <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.7]">{def}</p>
+                                    <p className="text-[10.5px] font-mono" style={{ color: whenColor }}>用於：{when}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         每種方法操作化的「公式」不一樣。先點開你 W4 選的那張看細節——其他四張可以後再看（如果有用輔助方法的話也要看）。
                     </p>
@@ -465,7 +579,8 @@ export const W5MeasurePage = () => {
                         <div className="rounded-[var(--radius-unified)] overflow-hidden border-2" style={{ borderColor: activeStrategy.color }}>
                             <div className="px-5 py-3 flex items-center gap-3" style={{ background: activeStrategy.bg }}>
                                 <span className="text-[22px]">{activeStrategy.icon}</span>
-                                <div className="flex-1">
+                                <div className="flex-1 flex items-center gap-2">
+                                    <ContentTypeChip type="學" />
                                     <span className="font-bold text-[15px]" style={{ color: activeStrategy.color }}>{activeStrategy.name}的操作型定義策略</span>
                                 </div>
                             </div>
@@ -492,6 +607,31 @@ export const W5MeasurePage = () => {
                             研究對象不是人——例如「植物澆水量對生長的影響」——常見組合是 <strong>👀 觀察 + 🧪 實驗</strong>。觀察的操作型定義要寫「測什麼指標、用什麼工具測、隔多久測一次」（例：株高用尺，每 3 天量一次，量到分支點）。實驗的自／依／控制變項要全部操作化。
                         </p>
                     </div>
+
+                    {/* 先學再練：看完你的方法卡，說出公式 */}
+                    <div className="border-t border-[var(--border)] pt-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="練" />
+                            <p className="text-[12.5px] font-bold text-[var(--ink)]">
+                                看完你的方法卡——用一句話說出你的操作型定義公式
+                            </p>
+                        </div>
+                        <ThinkRecord
+                            dataKey="w5-step3-formula-check"
+                            prompt="我的方法（W4）的操作型定義公式是？"
+                            placeholder={
+                                activeStrategy
+                                    ? `${activeStrategy.icon} ${activeStrategy.name}：公式 = ${activeStrategy.formula}\n\n用我自己的話說：…`
+                                    : '先點選上方你 W4 的方法，看完卡片後用自己的話說出公式'
+                            }
+                            scaffold={[
+                                `我用的是 ${activeStrategy ? activeStrategy.name : '___'}`,
+                                '這個方法的操作型定義公式是：___',
+                                '我題目裡要「測」的那個變項，照這個公式應該寫成：___',
+                            ]}
+                            rows={3}
+                        />
+                    </div>
                 </div>
             ),
         },
@@ -502,6 +642,23 @@ export const W5MeasurePage = () => {
             icon: '✍️',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '拿 W4 主方法 + 題目，寫核心概念、操作型定義、正反例三格' },
+                        ]}
+                    />
+
+                    {/* 現場檢核點 — Codex 建議：動筆前第一個可執行動作 */}
+                    <div className="bg-[var(--danger-light)] border-2 border-[var(--danger)]/40 rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-1.5">
+                            <ContentTypeChip type="注意" />
+                            <p className="text-[13px] font-bold text-[#7F1D1D]">✋ 動筆前，先做這一件事</p>
+                        </div>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.75]">
+                            拿出你 W4 的題目，把裡面<strong className="text-[var(--ink)]">「最抽象、不能直接看到、需要再定義一次才能測」</strong>的詞<strong className="text-[var(--ink)]">圈出來</strong>。圈完，那個（或那兩個）詞就是下面三格要操作化的核心概念——圈好再往下寫。
+                        </p>
+                    </div>
+
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         把剛剛看到的策略套到你 W4 的題目上。三格都寫——核心概念、操作型定義、正反例。
                     </p>
@@ -527,6 +684,7 @@ export const W5MeasurePage = () => {
                     <div className="bg-white border-2 border-[var(--gold)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--gold)] text-white flex items-center gap-2">
                             <span className="text-[14px]">🎯</span>
+                            <ContentTypeChip type="練" />
                             <span className="font-bold text-[14px]">寫之前先暖身：核心概念抽取（1 分鐘）</span>
                         </div>
                         <div className="p-5 space-y-3">
@@ -565,11 +723,15 @@ export const W5MeasurePage = () => {
                             </details>
 
                             <div className="bg-[var(--accent-light)] border-l-3 border-[var(--accent)] p-3 rounded-r-[6px] text-[12px] text-[var(--ink)] leading-relaxed">
-                                💡 <strong>抽核心概念的口訣</strong>：把題目裡那些「**沒辦法直接看到、需要再定義一次才能測**」的詞圈出來。**通常是兩個**——A 和 B 都要操作化。
+                                💡 <strong>抽核心概念的口訣</strong>：把題目裡那些「**沒辦法直接看到、需要再定義一次才能測**」的詞圈出來。**通常是 1-2 個**——多數題目有 A、B 兩個概念都要操作化；少數題目只聚焦單一概念（例：「校園各角落的噪音高低分布」核心概念就只有「噪音」一個），那就把那一個寫到夠細。
                             </div>
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">主線記錄：核心概念 + 操作型定義 + 正反例</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w5-core-concept"
                         prompt="① 你題目最關鍵的核心概念是什麼？"
@@ -582,11 +744,11 @@ export const W5MeasurePage = () => {
                         dataKey="w5-operationalize"
                         prompt={`② 用你的方法（${methodInfo ? methodInfo.icon + ' ' + methodInfo.name : '___ 法'}），這個概念怎麼測／怎麼問／怎麼觀察？`}
                         placeholder={
-                            methodId === 'survey' ? '例：用 PSS-10 量表 5 點李克特，10 題加總得分作為「壓力」分數。'
+                            methodId === 'survey' ? '例：用現成心理壓力問卷（10 題，每題 1-5 分），加總得分作為「壓力」分數。（這份問卷學術上叫 PSS-10）'
                                 : methodId === 'interview' ? '例：訪綱問「最近一次主動學習的具體事件」，編碼類別為「自發性 ＋ 時間／地點／引發者三要素」。'
                                 : methodId === 'experiment' ? '例：自變項＝音樂組／安靜組；依變項＝記憶測驗得分；控制變項＝光線、時段、作息。'
                                 : methodId === 'observation' ? '例：行為類別＝視線離開課本連續 ≥ 5 秒；正例：滑手機、發呆；反例：換姿勢、揉眼睛。'
-                                : methodId === 'literature' ? '例：分析單位＝每篇社論一段；編碼類別＝民主、權威、自由（雙人編碼一致率 ≥ 80%）。'
+                                : methodId === 'literature' ? '例：分析單位＝每篇社論一段；編碼類別＝民主、權威、自由。（兩人各自分完再對答案，一致八成以上才算定義清楚）'
                                 : '對應你選的方法，把核心概念變成可實際蒐集的指標。'
                         }
                         scaffold={['核心概念：___', `操作型定義：___`, '蒐集方式（具體到誰用什麼工具量／怎麼問／怎麼編碼）：___']}
@@ -614,7 +776,7 @@ export const W5MeasurePage = () => {
 
                     {/* 下游告知 */}
                     <p className="text-[11.5px] text-[var(--ink-light)] italic leading-relaxed">
-                        💡 這格寫的會在 <strong>W7-W8 計畫書</strong>用到（第二章變項要套用）；<strong>W9 寫工具</strong>時每題／每觀察項都要對應。<strong className="text-[var(--ink)]">寫一次、用三次。</strong>
+                        💡 這格寫的會在 <strong>W9 研究計畫書</strong>用到（計畫書裡寫操作型定義、寫變項設計的章節都要直接套用）；<strong>W10 寫工具</strong>時每題／每觀察項都要對應。<strong className="text-[var(--ink)]">寫一次、用三次。</strong>
                     </p>
                 </div>
             ),
@@ -626,6 +788,12 @@ export const W5MeasurePage = () => {
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '寫反思，整理 W5 學習紀錄' },
+                        ]}
+                    />
+
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -647,6 +815,10 @@ export const W5MeasurePage = () => {
                     </div>
 
                     {/* 反思一題 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">反思記錄</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w5-reflect"
                         prompt="✍️ 反思：把抽象概念變可測，最難的一步是什麼？你怎麼克服？"
@@ -656,11 +828,27 @@ export const W5MeasurePage = () => {
                     />
 
                     {/* AI-RED 敘事紀錄 — optional */}
-                    <AIREDNarrative week="5" hint="若用 AI 發散操作型定義候選版本——請說明你怎麼判斷哪一版能測、哪一版太模糊不能用。" optional={true} />
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="交出" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI-RED 敘事紀錄（選填）</p>
+                    </div>
+                    <AIREDNarrative week="5" hint="若用 AI 發散操作型定義候選版本，請說明你怎麼判斷哪一版能測、哪一版太模糊不能用。AI 可以提供候選寫法，但最後採用哪個定義，必須由你判斷。" optional={true} />
 
-                    {/* 一鍵複製 */}
+                    {/* 最後一步：複製繳交 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="交出" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">繳交</p>
+                    </div>
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[var(--accent-light)] p-4 px-5">
+                        <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--accent)] font-bold mb-1">📤 最後一步</div>
+                        <p className="text-[14px] text-[var(--ink)] font-bold leading-[1.7]">
+                            複製 W5 學習紀錄，貼到 Google Classroom 繳交。
+                        </p>
+                    </div>
+
                     <ExportButton
                         weekLabel="W5 操作型定義"
+                        buttonText="複製 W5 學習紀錄"
                         fields={EXPORT_FIELDS}
                     />
 
@@ -673,7 +861,7 @@ export const W5MeasurePage = () => {
                         <div className="next-week-content">
                             <div className="next-week-col">
                                 <div className="next-week-label">W6 主題</div>
-                                <p className="next-week-text">海報博覽會 + 組隊（含 Solo）——把你 W3 題目 + W4 方法 + W5 操作型定義做成一張海報，Gallery Walk 走讀後找合題夥伴或單飛獨行。</p>
+                                <p className="next-week-text">海報博覽會 + 組隊（含 Solo）——把你 W3 題目 + W4 方法 + W5 操作型定義做成一張海報，走讀觀摩後找題目方向接近的夥伴組隊，或自己一個人做（Solo）。</p>
                             </div>
                             <div className="next-week-col">
                                 <div className="next-week-label">你要帶來</div>
@@ -700,9 +888,8 @@ export const W5MeasurePage = () => {
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -715,15 +902,21 @@ export const W5MeasurePage = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W5"
+                todo={[
+                  { label: '今天做什麼', value: '把 W4 題目的核心概念，寫成「誰來測都一樣」的操作型定義。' },
+                  { label: '為什麼做', value: 'W4 方法選好了，但概念還沒變成可測量的東西——不操作化，下週海報根本講不清楚。' },
+                  { label: '今天交什麼', value: '核心概念 + 操作型定義 + 正反例（三格）。' },
+                ]}
+                question="我說的這個詞，怎麼讓人看見？"
                 title="操作型定義："
                 accentTitle="把好奇變可測"
                 subtitle="W4 選了方法，但「壓力／動機／學習效果」這類抽象詞——不操作化，下週你連問卷／訪綱／觀察表都寫不出來。這週把題目最關鍵的概念變成「誰來測都得到一樣的數字／類別」。"
-                chain="W3 你決定了題目、W4 你選了方法——但題目裡那個最抽象的詞（壓力／動機／效果）還沒交代『怎麼測』。這週把它釘死。"
+                chain="W3 你決定了題目、W4 你選了方法——但題目裡那個最抽象的詞（壓力／動機／效果）還沒交代『怎麼測』。這週把它講清楚、定下來。"
                 meta={[
-                    { label: '課堂節奏', value: '帶入 → 操作型定義概念 → 5 法策略 → 為自己寫 → 反思' },
-                    { label: '時長', value: '100 MINS' },
+                    { label: '第一節', value: '帶入 + 操作型定義概念 + 5 法策略（正例 / 反例 / 同義詞 / 測量 / 情境）' },
+                    { label: '第二節', value: '為自己題目寫操作型定義 + 同儕交叉對照 + 反思' },
                     { label: '課堂產出', value: '核心概念 + 操作型定義 + 正反例（三格）' },
-                    { label: '帶去 W6', value: '操作型定義（海報必填內容、博覽會講題）' },
+                    { label: '前置要求', value: 'W4 定案題目（含主要方法）' },
                 ]}
             />
             <CourseArc items={[

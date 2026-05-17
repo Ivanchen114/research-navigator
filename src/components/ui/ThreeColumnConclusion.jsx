@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Check, AlertTriangle, X } from 'lucide-react';
 
+/* 與 ThinkRecord / AIModePicker 共用的聚合儲存——讓 ExportButton（readRecords）撈得到。
+ * 元件本身仍把 JSON 物件存在自己的 dataKey（給還原 state 用），這裡額外寫一份人類可讀字串。 */
+const STORE_KEY = 'rib_think_records';
+
+function writeStore(key, value) {
+    try {
+        const r = JSON.parse(localStorage.getItem(STORE_KEY)) || {};
+        r[key] = value;
+        localStorage.setItem(STORE_KEY, JSON.stringify(r));
+    } catch { /* localStorage 不可用時忽略 */ }
+}
+
+function buildReadable({ supported, inferred, forbidden }) {
+    const parts = [];
+    if (supported && supported.trim()) parts.push(`【能直接說】\n${supported.trim()}`);
+    if (inferred && inferred.trim()) parts.push(`【要謹慎說】\n${inferred.trim()}`);
+    if (forbidden && forbidden.trim()) parts.push(`【絕對不能說】\n${forbidden.trim()}`);
+    return parts.join('\n\n');
+}
+
 /**
  * W15 三欄結論寫作鷹架 — 把每句話分類成「資料支持 / 推論 / 不能說」
  *
@@ -18,14 +38,20 @@ export const ThreeColumnConclusion = ({ dataKey = 'w15-three-column' }) => {
     useEffect(() => {
         const saved = localStorage.getItem(dataKey);
         if (saved) {
-            try { setData(JSON.parse(saved)); } catch {}
+            try {
+                const parsed = JSON.parse(saved);
+                setData(parsed);
+                // 一次性：把既有資料同步成可讀字串進 rib_think_records
+                writeStore(dataKey, buildReadable(parsed));
+            } catch {}
         }
     }, [dataKey]);
 
     const update = (col, value) => {
         const next = { ...data, [col]: value };
         setData(next);
-        localStorage.setItem(dataKey, JSON.stringify(next));
+        localStorage.setItem(dataKey, JSON.stringify(next)); // 元件自己的 JSON 儲存（還原 state 用）
+        writeStore(dataKey, buildReadable(next));            // 額外寫人類可讀字串供 ExportButton/RecordDrawer
     };
 
     return (

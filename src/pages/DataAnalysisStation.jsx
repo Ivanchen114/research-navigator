@@ -477,9 +477,6 @@ export const DataAnalysisStation = () => {
                     <span className="bg-[#f0ede6] text-[#1a1a2e] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">
                         自學參考
                     </span>
-                    <span className="bg-[#1a1a2e] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">
-                        AI-RED · I
-                    </span>
                 </div>
             </div>
 

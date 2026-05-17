@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CourseArc from '../components/ui/CourseArc';
+import StepBriefing from '../components/ui/StepBriefing';
 import './ToolRefinementPage.css';
-import ThinkRecord from '../components/ui/ThinkRecord';
+// import ThinkRecord from '../components/ui/ThinkRecord'; // W10 全改提示卡，元件不再使用
 import PromptBlock from '../components/ui/PromptBlock';
-import ThinkChoice from '../components/ui/ThinkChoice';
-import Checklist from '../components/ui/Checklist';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
 import AIDialogSubmission from '../components/ui/AIDialogSubmission';
@@ -12,22 +11,17 @@ import AIModePicker from '../components/ui/AIModePicker';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
-import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
 import GroupSizeSelector from '../components/ui/GroupSizeSelector';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import { W10Data } from '../data/lessonMaps';
 import { readRecords } from '../components/ui/ThinkRecord';
 import {
-    CheckCircle2,
-    Bot,
     Users,
-    Copy,
-    Check,
-    Zap,
     Map,
 } from 'lucide-react';
-import { TOOL_DESC_KIT, LIT_SUBTYPES, W10_THINK_CHOICES, TEACHING_VIDEOS } from '../data/methodToolbook';
+import { TOOL_DESC_KIT } from '../data/methodToolbook';
 
 /* ══════════════════════════════════════
  *  資料常數
@@ -55,187 +49,6 @@ const TEMPLATES = {
     literature:    { url: 'https://drive.google.com/drive/folders/1-UtVZM8dyo20s2vbnx3UCWm-lR8YROU6',                name: '05_文獻分析_工具（資料夾，依子類型挑）' },
 };
 
-/* — 工具檢核共用前置：進度自評（W10 第一節學生工具還在雛形，給 AI 校準） — */
-const TOOL_CHECK_INTRO = `【我的工具進度自評】（從「方向／雛形／精修／定版」擇一填入）：___
-
-【四階段定義】
-- 方向：只有概念，題目／流程還沒展開
-- 雛形：題目／訪綱寫出來但粗糙
-- 精修：題目完整但要打磨用詞
-- 定版：要繳交了
-
-【請依進度給對應深度的回饋】
-- 方向：只檢「設計方向能否回答研究問題」，給「該補什麼」清單，不要挑用詞
-- 雛形：檢「結構＋邏輯」，挑明顯漏洞（漏題、選項不全、雙重問題等）
-- 精修：挑用詞、追問設計、選項邊界等細節
-- 定版：做最後一輪挑刺
-
-`;
-
-/* — 各方法 AI 檢核 Prompt — */
-const AI_PROMPTS = {
-    questionnaire: TOOL_CHECK_INTRO + `我設計了一份問卷，請幫我檢查：
-1. 有沒有問題不清楚？
-2. 選項是否完整、互斥？
-3. 有沒有雙重否定或雙重問題？
-4. 倫理考量是否足夠（知情同意、隱私保護）？
-5. 給我具體修改建議。
-
-【貼上你的問卷】`,
-    interview: TOOL_CHECK_INTRO + `我設計了訪談大綱，請幫我檢查：
-1. 問題是否開放式？
-2. 追問設計是否合理？
-3. 順序是否流暢（從簡單到深層）？
-4. 倫理考量是否足夠？
-5. 給我具體修改建議。
-
-【貼上你的訪談大綱】`,
-    experiment: TOOL_CHECK_INTRO + `我設計了一個實驗，請幫我檢查：
-1. 自變項與依變項的操作型定義清楚嗎？
-2. 控制變項有遺漏嗎？
-3. 實驗流程有邏輯漏洞嗎？
-4. 倫理考量是否足夠？
-5. 給我具體修改建議。
-
-【貼上你的實驗設計】`,
-    observation: TOOL_CHECK_INTRO + `我設計了觀察紀錄表，請幫我檢查：
-1. 觀察行為的定義夠具體嗎？（是外顯行為而非推測？）
-2. 記錄方式來得及嗎？
-3. 觀察時段和地點設定合理嗎？
-4. 倫理考量是否足夠？
-5. 給我具體修改建議。
-
-【貼上你的觀察紀錄表設計】`,
-    literature: TOOL_CHECK_INTRO + `我設計了文獻分析架構（依我的子類型，可能是時間軸／編碼表／框架軸線／情節結構），請幫我檢查：
-1. 搜尋策略（關鍵字、篩選標準）夠精準嗎？
-2. 我的分析架構（編碼類別／軸線／時序／情節單位）能回答研究問題嗎？
-3. 納入／排除標準合理嗎？
-4. 來源品質分級方式合適嗎？
-5. 【內容/論述分析適用】編碼者一致率怎麼確保？
-6. 給我具體修改建議。
-
-【貼上你的文獻分析架構】`,
-};
-
-const GENERIC_PROMPT = `我設計了一份研究工具，請幫我檢查：
-1. 有沒有不清楚的地方？
-2. 設計有什麼邏輯漏洞？
-3. 倫理考量足夠嗎？
-4. 給我具體修改建議。
-
-【貼上你的工具內容】`;
-
-/* ── W10 整本計畫書 AI 檢核 Prompt（進度容錯版 — 跨方法通用） ── */
-const PLAN_FULL_CHECK_PROMPT = `【建議使用 AI 的「深度思考／推理模式」】
-（Gemini 的 Thinking 模式、ChatGPT 的 o1 或 Pro、Claude 的 Extended Thinking 等——選你慣用 AI 的深度推理版本。整本檢核值得多等幾分鐘。）
-
-你是高中專題指導顧問。以下是我的整本計畫書，請注意：學生在 W10 課堂剛把第六章工具寫到雛形，「不是每章都到完成度」。我會在開頭告訴你**每章目前的進度階段**，請就「該階段該有的品質」做檢核，不要對草稿用定版的標準苛責。
-
-【我目前的進度自評】（請學生填完再貼進來；每章從「方向／雛形／精修／定版」擇一填入）
-- 第 1 章（題目／動機／問題）：___
-- 第 2 章（文獻探討）：___（文獻數量：___ 篇）
-- 第 3 章（研究方法）：___
-- 第 4 章（變項／主題／維度）：___
-- 第 5 章（研究對象／抽樣）：___
-- 第 6 章（研究工具）：___ ← W10 第一節剛寫
-- 第 7-13 章（執行／時程／倫理／參考文獻等）：___
-
-【四階段定義 — AI 請依此校準回饋深度】
-- 方向：只有概念句，還沒展開 → 你只檢「方向對不對」，給「該補什麼」清單
-- 雛形：段落寫出來但粗糙 → 你檢「結構＋邏輯一致」，指出明顯漏洞
-- 精修：內容完整但要打磨 → 你檢「精度＋論證強度」，可以挑用詞與引用
-- 定版：要繳交了 → 做最後一輪挑刺
-
-【整本檢核重點 — 跨章一致性比單章品質更重要】
-這是 W10 整本檢核的核心：不是再挑一次每章的單章品質，而是檢查**章與章之間是不是邏輯通**。
-
-1. 【方向 → 方法】第 1-3 章的研究問題，能不能用第 3 章寫的方法回答？（例：問題在問「為什麼」卻選量化問卷 → 方向跟方法不對）
-2. 【方法 → 工具】第 3 章的方法跟第 6 章的工具是否一致？工具能真的測到第 4 章的變項嗎？
-3. 【變項 → 工具】第 4 章每個變項，第 6 章工具裡都有對應題目／訪綱／觀察項？有沒有漏？
-4. 【對象 → 抽樣 → 工具】第 5 章的對象是否能填答／受訪？工具難度跟對象的程度匹配嗎？
-5. 【倫理紅線】整本（特別是第 3、6、7 章）有無倫理風險？知情同意有沒有寫進工具？
-6. 【執行可行性】時程跟樣本量是否可達成？（例：要訪 30 人但時程只 2 週 = 不可行）
-
-【回應格式】
-請依「① 進度判讀（你看到我各章是哪個階段）→ ② 跨章不一致清單（哪幾章邏輯沒通）→ ③ 工具最該優先修的 3 件事（這是 W10 重點）→ ④ 課後優先補完清單」四段回。
-不用替我修改，只要指出問題點與建議方向。
-
-【以下貼上你的計畫書全本（即使是草稿、半成品都貼，並在每章開頭標註自己的進度階段）】`;
-
-
-
-
-
-/* — AI 的限制 — */
-const AI_LIMITS = [
-    { icon: '👁️', title: 'AI 看的是「文字」', desc: '看不到實際填答或訪談時的感受' },
-    { icon: '🏫', title: 'AI 不知道「文化脈絡」', desc: '高中生的用語習慣、本校的特殊情況' },
-    { icon: '⏱️', title: 'AI 不知道「實際可行性」', desc: '問卷會不會太長、訪談會不會太久，實際試填才知道' },
-];
-
-/* — 各方法配對指示 — */
-const PAIRING_INSTRUCTIONS = {
-    questionnaire: '找另一組同學互填問卷。填完後記錄：哪題不清楚？哪個選項不知道怎麼選？花了多久填完？',
-    interview: '兩人一組互相模擬訪談。一人當訪談者、一人當受訪者，訪完後交換。注意：哪個問題讓你卡住？哪個追問太尬？',
-    experiment: '找同學實際跑一遍實驗流程。記錄：指令清楚嗎？需要多久？有沒有突發狀況？',
-    observation: '去實際場域試觀察 10 分鐘。記錄：來得及嗎？分類明確嗎？有沒有行為你歸不了類？',
-    literature: '請同學看你的分析架構（時間軸／編碼表／框架軸線／情節結構）。問他：架構看得懂嗎？單位／類別有沒有多餘或遺漏？能回答你的研究問題嗎？',
-};
-
-/* — ExportButton 欄位 — */
-const EXPORT_FIELDS = [
-    /* Step 1：第六章填具體題目 */
-    { key: 'w10-entry-self-report', label: '入場自報（W9 計畫書完成度）', question: '第 1-5 章完成狀況' },
-    { key: 'w10-w9-feedback-quick', label: 'W9 老師回饋快速摘要', question: '老師對 W9 計畫書第一~五章的主要建議' },
-    { key: 'w10-tool-design-notes', label: '工具設計關鍵決策', question: '第六章工具設計中的 2-3 個關鍵決定' },
-    /* Step 3：老師諮詢區 */
-    { key: 'w10-teacher-consult', label: '老師諮詢區紀錄', question: '老師指出的主要問題 + 我修了什麼' },
-    /* Step 4：AI 工作坊 */
-    { key: 'w10-ai-mode', label: 'AI 使用模式', question: '🎓 教學型（不知怎麼設計題目請示範）/ 🥊 驗收型（有題目初稿請找毛病）' },
-    { key: 'w10-ai-dialog-submission', label: 'AI 完整對話繳交方式（必填）', question: 'A 私人留言 / B 文件上傳並貼連結' },
-    /* Step 2：七到十三章 + AI-RED + 課後待補 */
-    { key: 'w10-aired-record', label: 'W10 完整 AI-RED 敘事', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
-    { key: 'w10-postclass-todo', label: '課後待補清單', question: '哪幾章還想再動，配 W11 老師回饋對照' },
-];
-
-/* ══════════════════════════════════════
- *  內部元件：可複製 Prompt 框
- * ══════════════════════════════════════ */
-
-const CopyablePrompt = ({ text }) => {
-    const [copied, setCopied] = useState(false);
-    const handleCopy = useCallback(() => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        }).catch(() => {
-            /* fallback: select + copy */
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        });
-    }, [text]);
-
-    return (
-        <div className="w10-prompt-box">
-            <div className="w10-prompt-header">
-                <span className="w10-prompt-label">
-                    <Bot size={14} /> AI 檢核 Prompt — 複製後貼到 AI 對話窗
-                </span>
-                <button onClick={handleCopy} className="w10-copy-btn">
-                    {copied ? <><Check size={12} /> 已複製</> : <><Copy size={12} /> 複製</>}
-                </button>
-            </div>
-            <pre className="w10-prompt-text">{text}</pre>
-        </div>
-    );
-};
-
 /* ══════════════════════════════════════
  *  內部元件：W10 入口自檢（W9 計畫書 1-5 章完成度）
  * ══════════════════════════════════════ */
@@ -252,16 +65,15 @@ const PrepStatusCheck = ({ methodId }) => {
     });
     const template = TEMPLATES[methodId];
 
-    /* 第零層檢測：有沒有做過 W9？計畫書 checklist / 方法選擇 / AI-RED 全空 = 沒來上課 */
+    /* 第零層檢測：W9 有沒有做過？以 W9 寫入的研究方法登記（w9-my-method）為準。
+     * 註：舊版還查 w9-plan-ch1-checklist / w9-aired-record，但 W9 早已不寫這兩個 key，移除避免死判斷。 */
     const w9SkippedEntirely = (() => {
         try {
-            const saved = readRecords();
-            const hasChecklist = saved['w9-plan-ch1-checklist']?.trim();
-            const hasMethod = saved['w9-my-method']?.trim();
-            const hasAired = saved['w9-aired-record']?.trim();
-            return !hasChecklist && !hasMethod && !hasAired;
+            return !readRecords()['w9-my-method']?.trim();
         } catch { return false; }
     })();
+
+    const [noneAcknowledged, setNoneAcknowledged] = useState(false);
 
     const select = (s) => {
         setStatus(s);
@@ -282,21 +94,21 @@ const PrepStatusCheck = ({ methodId }) => {
                 </div>
                 <div className="p-5 space-y-3 text-[13px] text-[var(--ink)]">
                     <p className="leading-relaxed">
-                        W10 的工具設計需要建立在 <strong>W9 計畫書第一~五章的地基</strong>上。網頁讀不到你的 W9 checklist、方法選擇、AI-RED——代表 W9 沒做。
+                        W10 的工具設計需要建立在 <strong>W9 計畫書第一~五章的地基</strong>上。網頁讀不到你 W9 登記的研究方法——代表 W9 沒做。
                     </p>
                     <p className="leading-relaxed">
-                        硬要在 W10 補做 W9 的量 = 同時跑兩週份的思考，效率最差。請先回 W9 把 Step 3 五章地基工程做完再回來。
+                        硬要在 W10 補做 W9 的量 = 同時跑兩週份的思考，效率最差。請先回 W9 把計畫書 1-5 章地基做完再回來。
                     </p>
                     <div className="flex flex-col md:flex-row gap-2 pt-1">
                         <a
                             href="/w9"
                             className="flex items-center justify-center gap-2 bg-[var(--ink)] hover:bg-black text-white rounded-[8px] px-4 py-3 no-underline transition-colors text-[13px] font-bold"
                         >
-                            回 W9 工具設計基礎 →
+                            回 W9 計畫書 1-5 章地基 →
                         </a>
                     </div>
                     <p className="text-[11px] text-[var(--ink-mid)] bg-white border border-[var(--border)] rounded-[4px] p-2 leading-relaxed">
-                        💡 <strong className="text-[var(--ink)]">如果你有做 W9 但資料不見了</strong>（換裝置、清過瀏覽器快取），請回 W9 重填最基本的 Step 3 變項 / 題目（10-15 分鐘），W10 才能繼續。
+                        💡 <strong className="text-[var(--ink)]">如果你有做 W9 但資料不見了</strong>（換裝置、清過瀏覽器快取），請回 W9 重新登記研究方法（組內合議方法的按鈕），W10 才能繼續。
                     </p>
                 </div>
             </div>
@@ -393,6 +205,19 @@ const PrepStatusCheck = ({ methodId }) => {
                         <p className="text-[11px] bg-white border border-[var(--border)] rounded-[4px] p-2 text-[var(--ink-mid)]">
                             💡 <strong className="text-[var(--ink)]">誠實面對：</strong>硬做工具會讓 W11 Pilot Test 與倫理審查連帶出錯——錯在上游，下游會放大。補完通知老師是最快回到正軌的方式。
                         </p>
+
+                        {!noneAcknowledged ? (
+                            <button
+                                onClick={() => setNoneAcknowledged(true)}
+                                className="w-full mt-2 py-3 px-4 bg-[var(--danger)] hover:opacity-90 text-white font-bold text-[13px] rounded-[8px] transition-opacity"
+                            >
+                                我了解了，本節先補章節，之後繼續 W10 →
+                            </button>
+                        ) : (
+                            <div className="mt-2 bg-white border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                ✅ <strong className="text-[var(--ink)]">已確認。</strong>請先補齊 W9 第 2-5 章，補完後可回來繼續 Step 2 方法工具書 + Step 3 工具設計。
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -458,6 +283,11 @@ export const ToolRefinementPage = () => {
             icon: '🔧',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '開 GC 看 W9 老師回饋，把 ★★★ 必改項列出來，今天就修，分工確認' },
+                        ]}
+                    />
                     {/* 入場擋板：W9 完成狀態自檢 */}
                     <PrepStatusCheck methodId={detectedMethodId} />
 
@@ -470,12 +300,14 @@ export const ToolRefinementPage = () => {
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
                             老師已在 <strong>Google Classroom</strong> 發回 W9 計畫書的批改。請先打開看過，把老師<strong className="text-[var(--ink)]">最主要</strong>的一兩句建議記下來——這些建議會影響你今天第六章工具設計的方向。
                         </p>
-                        <ThinkRecord
-                            dataKey="w10-w9-feedback-quick"
-                            prompt="老師對我 W9 計畫書最主要的建議是？"
-                            placeholder="例：第四章變項太多要砍、第五章抽樣方式要改、第三章文獻對應不夠清楚⋯⋯"
-                            rows={3}
-                        />
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
+                                <strong className="text-[var(--ink)]">怎麼做：</strong>打開 GC 看老師批改 → <strong className="text-[var(--accent)]">直接在計畫書 docx 對應章節旁邊寫一句註解</strong>（或用 Word 註解功能）。
+                            </p>
+                            <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
+                                💡 例：第四章變項太多要砍／第五章抽樣方式要改／第三章文獻對應不夠清楚⋯⋯不在這格寫，直接在 docx 邊註。
+                            </p>
+                        </div>
                         <details className="mt-3 rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB] overflow-hidden">
                             <summary className="cursor-pointer px-4 py-2.5 hover:bg-[#FEF3C7] transition-colors flex items-center gap-2">
                                 <span className="text-[12px] font-bold text-[#92400E]">⚠️ 老師還沒批 / 我還沒拿到回饋——點開看怎麼辦</span>
@@ -502,74 +334,90 @@ export const ToolRefinementPage = () => {
                         <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                             W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把計畫書 1-5 章補完 + 第六章填具體題目</strong>。
                         </p>
+                        <div className="flex items-center gap-2 mb-1">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">確認 W9 進度、分工</p>
+                        </div>
                         <div className="w7-notice w7-notice-gold">
-                            🎯 <strong>本節目標：計畫書 1-5 章定稿 + 第六章「填具體題目」</strong>（不是工具實體——實體 W11 第一節做）。內容寫在 <strong>計畫書</strong> 上，網頁只記過程紀錄與 AI-RED。
+                            🎯 <strong>本節目標：計畫書 1-5 章定稿 + 第六章「填具體題目」</strong>（不是本組工具設計書——實體 W11 第一節做）。內容寫在 <strong>計畫書</strong> 上，網頁只記過程紀錄與 AI-RED。
                         </div>
                     </div>
 
-                    {/* 🤝 1-4 人分章工作流（第六章工具設計） */}
-                    <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF] max-w-[720px]">
-                        <p className="text-[14px] font-bold text-[#075985] mb-2">🤝 第六章工具設計分工（看你的隊型）</p>
-                        <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed mb-3">
-                            工具是一份大家共寫——但分工要清楚不要全擠著寫題目。<strong>核心三角色：主稿 / 對照 / AI 諮詢</strong>。人多就多一個倫理檢查。
-                        </p>
-                        <GroupSizeSelector
-                            items={{
-                                1: {
-                                    title: '1 人（Solo）',
-                                    content: (
-                                        <p className="leading-relaxed">
-                                            自己 50 分鐘只能寫到主架構——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
-                                        </p>
-                                    ),
-                                },
-                                2: {
-                                    title: '2 人組',
-                                    content: (
-                                        <ul className="list-disc pl-4 space-y-0.5">
-                                            <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
-                                            <li><strong>B 對照</strong>：拿本週工具品質基礎（三大標準 + 5 大錯誤）逐題挑刺</li>
-                                        </ul>
-                                    ),
-                                },
-                                3: {
-                                    title: '3 人組',
-                                    content: (
-                                        <ul className="list-disc pl-4 space-y-0.5">
-                                            <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
-                                            <li><strong>B 對照</strong>：三大標準 + 錯誤類型逐題挑</li>
-                                            <li><strong>C AI 諮詢</strong>：用工具 prompt 跑 AI，整理建議給組員看</li>
-                                        </ul>
-                                    ),
-                                },
-                                4: {
-                                    title: '4 人組',
-                                    content: (
-                                        <ul className="list-disc pl-4 space-y-0.5">
-                                            <li><strong>A 主稿</strong></li>
-                                            <li><strong>B 對照</strong>：方向＋精度（本週三大標準）</li>
-                                            <li><strong>C AI 諮詢</strong></li>
-                                            <li><strong>D 倫理＋文獻檢查</strong>：工具不踩倫理紅線、跟第二章文獻對得上</li>
-                                        </ul>
-                                    ),
-                                },
-                            }}
-                        />
-                        <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mt-3 pt-2 border-t border-[#0EA5E9]/30">
-                            ⏱️ <strong>時間建議</strong>：前 5 分鐘分工 → 各自 35 分鐘做 → 最後 10 分鐘聚回來互讀整合。
-                        </p>
-                    </div>
+                    {/* 🤝 分工 + 第六章填題目（可收合） */}
+                    <details open className="rounded-[var(--radius-unified)] border border-[var(--border)] overflow-hidden max-w-[720px]">
+                        <summary className="cursor-pointer px-5 py-3 bg-[var(--paper-warm)] hover:bg-[#E9E9E9] transition-colors flex items-center justify-between list-none">
+                            <span className="text-[13px] font-bold text-[var(--ink)]">📋 第六章分工說明 + 填題目提醒</span>
+                            <span className="text-[11px] font-mono text-[var(--ink-mid)]">▼ 讀完可收合</span>
+                        </summary>
+                        <div className="p-4 space-y-4 bg-white">
+                            {/* 🤝 1-4 人分章工作流（第六章工具設計） */}
+                            <div className="p-5 rounded-[var(--radius-unified)] border-2 border-[#0EA5E9] bg-[#F0F9FF]">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <ContentTypeChip type="做" />
+                                    <p className="text-[14px] font-bold text-[#075985]">🤝 第六章工具設計分工（看你的隊型）</p>
+                                </div>
+                                <p className="text-[12.5px] text-[#0C4A6E] leading-relaxed mb-3">
+                                    工具是一份大家共寫——但分工要清楚不要全擠著寫題目。<strong>核心三角色：主稿 / 對照 / AI 諮詢</strong>。人多就多一個倫理檢查。
+                                </p>
+                                <GroupSizeSelector
+                                    items={{
+                                        1: {
+                                            title: '1 人（Solo）',
+                                            content: (
+                                                <p className="leading-relaxed">
+                                                    自己 50 分鐘只能寫到主架構——別追求完美。寫完後找<strong>另一組同學試填</strong>（W11 Pilot 預演），他能挑出你看不到的盲點。
+                                                </p>
+                                            ),
+                                        },
+                                        2: {
+                                            title: '2 人組',
+                                            content: (
+                                                <ul className="list-disc pl-4 space-y-0.5">
+                                                    <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
+                                                    <li><strong>B 對照</strong>：拿本週工具品質基礎（三大標準 + 5 大錯誤）逐題挑刺</li>
+                                                </ul>
+                                            ),
+                                        },
+                                        3: {
+                                            title: '3 人組',
+                                            content: (
+                                                <ul className="list-disc pl-4 space-y-0.5">
+                                                    <li><strong>A 主稿</strong>：寫題目／訪綱／流程</li>
+                                                    <li><strong>B 對照</strong>：三大標準 + 錯誤類型逐題挑</li>
+                                                    <li><strong>C AI 諮詢</strong>：用工具 prompt 跑 AI，整理建議給組員看</li>
+                                                </ul>
+                                            ),
+                                        },
+                                        4: {
+                                            title: '4 人組',
+                                            content: (
+                                                <ul className="list-disc pl-4 space-y-0.5">
+                                                    <li><strong>A 主稿</strong></li>
+                                                    <li><strong>B 對照</strong>：方向＋精度（本週三大標準）</li>
+                                                    <li><strong>C AI 諮詢</strong></li>
+                                                    <li><strong>D 倫理＋文獻檢查</strong>：工具不踩倫理紅線、跟第三章文獻對得上</li>
+                                                </ul>
+                                            ),
+                                        },
+                                    }}
+                                />
+                                <p className="text-[11.5px] text-[#0C4A6E] leading-relaxed mt-3 pt-2 border-t border-[#0EA5E9]/30">
+                                    ⏱️ <strong>時間建議</strong>：前 5 分鐘分工 → 各自 35 分鐘做 → 最後 10 分鐘聚回來互讀整合。
+                                </p>
+                            </div>
 
-                    {/* 第六章在計畫書 直接填題目 */}
-                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
-                        <div className="flex items-center gap-2 mb-2 flex-wrap">
-                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">第六章</span>
-                            <span className="font-bold text-[14px] text-[var(--ink)]">打開 計畫書第六章填題目，對照 Step 2 工具書寫</span>
+                            {/* 第六章在計畫書 直接填題目 */}
+                            <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5">
+                                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                    <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">第六章</span>
+                                    <span className="font-bold text-[14px] text-[var(--ink)]">打開 計畫書第六章填題目，對照 Step 2 工具書寫</span>
+                                </div>
+                                <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
+                                    這節只在紙上設計題目；做成 Google Form／紙本訪綱／印觀察表是 W11 的事。
+                                </p>
+                            </div>
                         </div>
-                        <p className="text-[12px] text-[var(--ink-light)] leading-relaxed">
-                            這節只在紙上設計題目；做成 Google Form／紙本訪綱／印觀察表是 W11 的事。
-                        </p>
-                    </div>
+                    </details>
 
                     {/* ▶ 下一頁預告：Step 2 工具書自學教案 */}
                     <div className="w7-notice w7-notice-gold">
@@ -585,6 +433,15 @@ export const ToolRefinementPage = () => {
             icon: '📚',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '你那個方法的工具書 4 區塊：題型 / 原則 / 陷阱 / 範例 + 4 集影片' },
+                        ]}
+                    />
+                    <div className="flex items-center gap-2 mb-2">
+                        <ContentTypeChip type="學" />
+                        <p className="text-[13px] font-bold text-[var(--ink)]">方法工具書（跨週速查手冊）</p>
+                    </div>
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
                         工具書是<strong className="text-[var(--ink)]">跨週使用的速查手冊</strong>——獨立放在「研究工具庫」下，含 V→R→F 三大判準 + 4 集老師親拍影片 + 5 法 4 區塊（題型／原則／常見錯誤／完整範例）+ AI 啟動 prompt。看完回計畫書第六章寫題目，寫題目卡住可隨時回去查。
                     </p>
@@ -652,11 +509,19 @@ export const ToolRefinementPage = () => {
             icon: '🤖',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '選 AI 模式（教學型/驗收型/不用 AI）→ 跑 Prompt → 保留完整對話' },
+                        ]}
+                    />
                     {/* 開場：明示可選 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB] max-w-[720px]">
-                        <p className="text-[14px] font-bold text-[var(--accent)] mb-1">🤖 AI 工作坊（可選 · 不用也合法）</p>
+                        <div className="flex items-center gap-2 mb-1">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[14px] font-bold text-[var(--accent)]">🤖 AI 工作坊（可選 · 不用也合法）</p>
+                        </div>
                         <p className="text-[12.5px] text-[var(--ink)] leading-relaxed">
-                            把第六章題目寫到計畫書後，<strong>想試 AI 就試</strong>——驗收（找毛病）／教學（給範例）／<strong>不用 AI 全靠自己</strong> 三選一。
+                            把第六章題目寫到計畫書後，<strong>想試 AI 就試</strong>——驗收（找毛病）／教學（給範例）／<strong>不用 AI · 自己先試</strong> 三選一。
                             下方 AIModePicker 有「🚫 不用 AI」選項，選了會自動略過後續 prompt 與對話繳交。本週第六章工具設計<strong>純人工也能完成</strong>。
                         </p>
                     </div>
@@ -682,6 +547,16 @@ export const ToolRefinementPage = () => {
                             return (
                                 <div className="rounded-[var(--radius-unified)] border-2 border-[#86EFAC] bg-[#F0FDF4] p-4 space-y-3">
                                     <p className="text-[13px] font-bold text-[#166534]">🎓 教學型 Prompt — {kit.label}（從零到一）</p>
+                                    {/* 方法偵測提醒 */}
+                                    {detectedMethodId ? (
+                                        <p className="text-[11px] bg-white border border-[#86EFAC] rounded-[4px] px-2.5 py-1.5 text-[#166534] leading-relaxed">
+                                            ✅ 偵測到你的方法：<strong>{kit.label}</strong>（不對？<a href="/w9" className="underline font-bold">回 W9 重新登記方法</a>後這裡會自動切換）
+                                        </p>
+                                    ) : (
+                                        <p className="text-[11px] bg-[#FEF3C7] border border-[#FCD34D] rounded-[4px] px-2.5 py-1.5 text-[#92400E] leading-relaxed">
+                                            ⚠️ 未偵測到你的方法，<strong>預設顯示問卷組</strong>——請<a href="/w9" className="underline font-bold">回 W9 重新登記研究方法</a>，完成後這裡會自動切換。
+                                        </p>
+                                    )}
                                     <p className="text-[11.5px] text-[#166534] leading-relaxed">
                                         把 [方括號] 內容換成你的東西再貼給 AI。<strong>AI 給「方向」就好</strong>，實際題目自己寫到計畫書，看完範例後自己改寫一次。
                                     </p>
@@ -748,6 +623,11 @@ ___（貼題目／訪綱／流程／編碼表）
             icon: '🧑‍🏫',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '帶計畫書第六章到諮詢區找老師當場檢查，拿具體建議' },
+                        ]}
+                    />
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[760px]">
                         你在計畫書第六章寫了題目——<strong className="text-[var(--ink)]">帶著計畫書到諮詢區找老師</strong>。老師當場檢查、給建議。
                     </p>
@@ -762,7 +642,10 @@ ___（貼題目／訪綱／流程／編碼表）
                             <p>② 沒被抽到的組可以主動到諮詢區排隊</p>
                             <p>③ <strong>帶著「計畫書」找老師</strong>（含第六章寫好的題目）</p>
                             <p>④ 老師當場挑出主要問題、給修改方向</p>
-                            <p>⑤ 回座位修題目，把老師的回饋寫進下方 ThinkRecord</p>
+                            <p>⑤ 回座位修題目，把老師的回饋<strong className="text-[var(--accent)]">直接寫進計畫書 docx 邊註</strong>並立刻修第六章</p>
+                            <div className="mt-3 pt-3 border-t border-[var(--border)] bg-[#FFFBEB] rounded-[6px] p-3 text-[12px] text-[#78350F] leading-relaxed">
+                                ⏳ <strong>還沒被叫到的組：</strong>不要空等——回座位繼續在計畫書 docx 做你的進度（1-5 章還沒補完的先補、已補完的繼續完善第六章題目），或到 Step 3 跑 AI 工作坊。叫到名字再去，不用在旁邊站著等。
+                            </div>
                         </div>
                     </div>
 
@@ -770,15 +653,17 @@ ___（貼題目／訪綱／流程／編碼表）
                         💡 <strong>為什麼用老師諮詢取代自查？</strong>學生看自己題目都覺得 OK——盲區大。老師有經驗，能挑出你看不到的問題。隨機抽組會讓你準備充分。
                     </div>
 
-                    {/* ThinkRecord 紀錄老師回饋 */}
-                    <ThinkRecord
-                        dataKey="w10-teacher-consult"
-                        prompt="諮詢後的紀錄"
-                        scaffold={[
-                            '老師指出的主要問題：（題號 + 老師回饋）',
-                            '我修了什麼：（具體修改）',
-                        ]}
-                    />
+                    {/* 諮詢紀錄展示卡 — 直接寫在 docx 邊註，不在網頁 */}
+                    <div className="bg-[var(--paper-warm)] border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-4">
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📝 諮詢後直接在計畫書 docx 邊註寫</p>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            <strong className="text-[var(--accent)]">不在這格寫</strong>——老師當場給的建議：
+                        </p>
+                        <div className="bg-white border border-[var(--border)] rounded-[6px] p-3 text-[12px] text-[var(--ink-mid)] leading-[1.8]">
+                            <p>① <strong>老師指出的主要問題</strong>：題號 + 老師回饋 → <strong className="text-[var(--accent)]">直接在第六章對應題目旁邊註</strong></p>
+                            <p>② <strong>我修了什麼</strong>：具體修改 → <strong className="text-[var(--accent)]">改在第六章 docx 上，邊註留改動歷程</strong></p>
+                        </div>
+                    </div>
 
                     {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
@@ -794,8 +679,13 @@ ___（貼題目／訪綱／流程／編碼表）
             icon: '📤',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '第七到十三章補完（八+九(三) 草稿即可 / 十~十二勾選即可 / 十三章把 W7 文獻套 APA）' },
+                        ]}
+                    />
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        本週任務：把第七到十三章補完，整本繳到 <strong className="text-[var(--ink)]">Google Classroom</strong>。下週 W11 拿到老師第三次建議再修，並做<strong className="text-[var(--ink)]">實體工具轉換</strong>（題目轉成 Google Form／印紙本訪綱）。
+                        本週任務：把第七到十三章補完，整本繳到 <strong className="text-[var(--ink)]">Google Classroom</strong>。下週 W11 拿到老師第三次建議再修，並做<strong className="text-[var(--ink)]">本組工具設計書</strong>（題目升級成工具設計書 + Google Form／印紙本訪綱載具）。
                     </p>
 
                     {/* 第八章 + 第九章(三) 草稿備註（給學生看的） */}
@@ -810,7 +700,7 @@ ___（貼題目／訪綱／流程／編碼表）
                         <div className="bg-[#FFFBEB] border-l-4 border-[#D97706] rounded-r-[8px] p-4 mb-3 max-w-[760px]">
                             <p className="text-[13px] font-bold text-[#92400E] mb-1">⚠️ 「草稿」是什麼意思？</p>
                             <ul className="text-[12.5px] text-[#78350F] leading-[1.85] list-disc pl-5 space-y-0.5">
-                                <li><strong>第八章資料分析方式</strong>——寫一句話「預計用 ___ 分析」就好（如：「Excel 算次數分布、SPSS 跑相關係數」）。<u>不需要</u>寫詳細統計步驟，你還沒看到資料長怎樣。</li>
+                                <li><strong>第八章資料分析方式</strong>——寫一句話「預計用 ___ 分析」就好（如：「用 Excel 算次數分布和平均」）。<u>不需要</u>寫詳細統計步驟，你還沒看到資料長怎樣；分析工具 W14 老師會帶。</li>
                                 <li><strong>第九章 (三) 可能的限制與改進</strong>——寫 1-2 條你<u>現在就想得到</u>的（如：「樣本只有本校、無法推論」）。其他要等做完才知道，<u>不要硬猜</u>。</li>
                             </ul>
                             <p className="text-[11.5px] text-[#92400E] italic mt-2 pt-2 border-t border-[#D97706]/30">
@@ -837,7 +727,7 @@ ___（貼題目／訪綱／流程／編碼表）
                                 { ch: '十', t: '研究倫理（已預列 4 原則 + 17 個 ☐ 勾選項，勾選＋微調）', stage: '雛形' },
                                 { ch: '十一', t: '時程表 W9-W17（對照課表填每週做什麼）', stage: '雛形' },
                                 { ch: '十二', t: 'AI 使用聲明（已預列聲明條款 + 3 個 ☐ 勾選項）', stage: '雛形' },
-                                { ch: '十三', t: '參考文獻（已給 APA 範例，列 W5-W6 找的文獻 ≥3 筆）', stage: '雛形' },
+                                { ch: '十三', t: '參考文獻（已給 APA 範例，列 W7 找的文獻 ≥3 筆）', stage: '雛形' },
                             ].map((r, i) => (
                                 <div key={i} className="grid grid-cols-[60px_1fr_70px] border-b border-[var(--border)] last:border-b-0 text-[12.5px]">
                                     <div className="px-3 py-2.5 font-mono font-bold text-[var(--accent)]">{r.ch}</div>
@@ -847,11 +737,15 @@ ___（貼題目／訪綱／流程／編碼表）
                             ))}
                         </div>
                         <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2">
-                            💡 第十、十一、十二章在範本內已是勾選項／預填條款，是<strong>最快寫完的三章</strong>；第十三章把 W5-W6 找過的文獻 3 筆套 APA 格式即可。
+                            💡 第十、十一、十二章在範本內已是勾選項／預填條款，是<strong>最快寫完的三章</strong>；第十三章把 W7 找過的文獻 3 筆套 APA 格式即可。
                         </p>
                     </div>
 
                     {/* W10 完整 AI-RED */}
+                    <div className="flex items-center gap-2 mb-2">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[13px] font-bold text-[var(--ink)]">AI-RED 反思紀錄</p>
+                    </div>
                     <AIREDNarrative
                         week="10"
                         hint="本週用 AI 檢核整本計畫書（教學型卡關處給範例 / 驗收型整本找盲點）"
@@ -859,23 +753,32 @@ ___（貼題目／訪綱／流程／編碼表）
 
                     {/* 繳交驗收 + 課後待補清單 */}
                     <div>
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            繳交驗收 + 寫課後待補清單
-                        </h4>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
+                            <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)]">
+                                繳交驗收 + 寫課後待補清單
+                            </h4>
+                        </div>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
                             檢查整本計畫書 13 章都到本節要求的進度，上傳 Google Classroom W10 作業區。寫一份「課後待補清單」——你自己知道哪些章還粗、哪幾題還想動的，記下來，W11 拿到老師回饋時可以對照。
                         </p>
-                        <ThinkRecord
-                            dataKey="w10-postclass-todo"
-                            prompt="課後待補清單（你自己知道哪幾章還想再動）"
-                            placeholder={'例：\n第七章流程還沒寫完，等 W11 確定工具實體後再補\n第八章資料分析方式現只寫一句「預計用 Excel」，等 W14 看到數據再展開\n第九章(三) 限制改進現只寫一條，等 W15 結論時再補\n第十章倫理「不傷害」這條我還不確定要怎麼寫'}
-                            scaffold={['還想動的章節：要做什麼（為什麼）']}
-                            rows={5}
-                        />
+                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
+                                <strong className="text-[var(--ink)]">怎麼做：</strong>在計畫書 docx 末尾加一段 <strong className="text-[var(--accent)]">「課後待補」筆記區</strong>——自己列出哪幾章還想再動，<strong>W11 拿到老師回饋時可以對照</strong>。
+                            </p>
+                            <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 leading-[1.85]">
+                                💡 例：<br />
+                                ・第七章流程還沒寫完，等 W11 確定本組工具設計書後再補<br />
+                                ・第八章現只寫一句「預計用 Excel」，等 W14 看到數據再展開<br />
+                                ・第九章(三) 限制現只寫一條，等 W15 結論時再補<br />
+                                ・第十章倫理「不傷害」這條還不確定怎麼寫<br />
+                                <strong>不在這格寫，直接在 docx 末尾建「課後待補」段落。</strong>
+                            </p>
+                        </div>
                     </div>
 
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 整本繳交完成 → W11 第一節讀老師 GC 回饋 → 修星號項 → 拿模板填工具實體。
+                        ✅ 整本繳交完成 → W11 第一節讀老師 GC 回饋 → 修星號項 → 拿模板填本組工具設計書。
                     </div>
                 </div>
             ),
@@ -887,8 +790,14 @@ ___（貼題目／訪綱／流程／編碼表）
             icon: '🔔',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '交出', text: '上傳計畫書 docx 到 Google Classroom' },
+                            { label: '做', text: '對照本週要會 4 項確認完成，讀 W11 預告' },
+                        ]}
+                    />
                     <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        本節最後一段：把整本計畫書匯出資料、確認 GC 已上傳，讀 W11 預告。<strong className="text-[var(--ink)]">老師會在 W11 上課前把整本檢核回饋發到 GC（含★星號等級）</strong>——你下週進教室第一件事就是讀回饋。
+                        本節最後一段：把整本計畫書匯出資料、確認 GC 已上傳，讀 W11 預告。<strong className="text-[var(--ink)]">老師會在 W11 上課前把整本檢核回饋發到 GC（含★星號等級：★★★ 必改、★★ 建議改、★ 提醒；W11 第一節會帶你逐項處理）</strong>——你下週進教室第一件事就是讀回饋。
                     </p>
 
                     {/* ExportButton */}
@@ -915,36 +824,42 @@ ___（貼題目／訪綱／流程／編碼表）
                     {/* 繳交說明卡（取代 ExportButton：W9-W10 主產出是計畫書本身） */}
                     <div className="bg-[#F0FDF4] border-2 border-[var(--success)] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
                         <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
                             <span className="text-[18px]">📤</span>
                             <span className="font-bold text-[14px] text-[var(--ink)]">本週繳交</span>
                             <span className="text-[10.5px] font-mono text-[var(--ink-light)] ml-1">TO CLASSROOM</span>
                         </div>
                         <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] mb-3">
-                            這週主產出是<strong className="text-[var(--ink)]">計畫書 docx 定稿</strong>。把網頁 ThinkRecord 寫好的內容複製到計畫書對應章節，繳交時：
+                            這週主產出是<strong className="text-[var(--ink)]">計畫書 docx 整本定稿</strong>（13 章）。
                         </p>
-                        <ol className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] list-decimal pl-5 space-y-1">
-                            <li><strong>計畫書 docx 定稿</strong>（必繳）— 老師會在 W11 上課前批改回饋（含★星號等級）</li>
-                            <li><strong>AI 完整對話連結／文件</strong>（有用 AI 才繳）— 跟計畫書一起貼到 Classroom 本週作業</li>
+                        <ol className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] list-decimal pl-5 space-y-2">
+                            <li><strong>打開 W9 的計畫書繼續編輯</strong>——就是 W9 那份，從 Google Classroom W9 作業區找回自己的副本，不用開新的</li>
+                            <li><strong>全組分章撰寫</strong>——開共用連結讓組員一起編輯（7-13 章今天補完）</li>
+                            <li><strong>組長代表上傳到 Classroom W10 作業區</strong>（整本 docx）——老師會在 W11 上課前批改回饋（含 ★★★ 等級）</li>
+                            <li><strong>有用 AI 另附完整對話連結</strong>——貼到 Classroom 同一作業的留言欄</li>
                         </ol>
                         <p className="text-[11.5px] text-[var(--ink-light)] italic mt-3 pt-3 border-t border-[var(--border)] leading-[1.85]">
-                            💡 網頁本身是<strong>自學導引手冊</strong>——你寫的 ThinkRecord 留在瀏覽器，<strong>期末（W17）會一次匯出 W3-W17 全部歷程</strong>。本週不用單獨匯出網頁紀錄。
+                            💡 W10 不需匯出網頁紀錄；繳交計畫書 docx 整本即可。若有使用 AI，另附完整 AI 對話連結。
                         </p>
                     </div>
 
-                    {/* W11 預告（新流程：第一節工具實體 + 第二節 Pilot+倫理+施測） */}
+                    {/* W11 預告（新流程：第一節本組工具設計書 + 第二節 Pilot+倫理+施測） */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
                         <div className="flex items-center gap-2 mb-3">
                             <Users size={20} className="text-[var(--danger)]" />
-                            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">W11 預告 · 工具實體 × 跨方法預試 × 倫理 × 施測啟動</span>
+                            <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-[var(--danger)] uppercase">W11 預告 · 本組工具設計書 × 跨方法預試 × 倫理 × 施測啟動</span>
                         </div>
                         <div className="font-bold text-[17px] md:text-[18px] mb-3 leading-tight">
-                            下週兩節分明：第一節做工具實體、第二節做跨方法預試
+                            下週兩節分明：第一節做本組工具設計書、第二節做跨方法預試
                         </div>
                         <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
-                            <strong className="text-white">第一節（50 min）</strong>：讀老師 GC 回饋 → 修星號項 → 拿模板填**工具實體完整版**（依方法：問卷／訪綱／實驗／觀察／文獻分析架構）。
+                            <strong className="text-white">第一節（50 min）</strong>：讀老師 GC 回饋 → 修星號項 → 拿模板填**本組工具設計書完整版**（依方法：問卷／訪綱／實驗／觀察／文獻分析架構）。
                         </p>
                         <p className="text-[13px] text-white/85 leading-[1.9] mb-3">
-                            <strong className="text-white">第二節（50 min）</strong>：跨方法預試（Pilot）互測 20 min（座位圖配對）→ 雙向紀錄 5 min → 倫理快速 10 min → 施測啟動 10 min。
+                            <strong className="text-white">第二節（50 min）</strong>：跨方法預試（Pilot）互測 20 min（座位表配對）→ 雙向紀錄 5 min → 倫理快速 10 min → 施測啟動 10 min。
+                        </p>
+                        <p className="text-[12px] text-white/75 leading-[1.85] mb-3 pt-3 border-t border-white/20">
+                            🔍 <strong className="text-white">先看懂兩個詞</strong>：預試（Pilot）＝正式施測前找 2-3 人試填／試訪，抓出真人會卡住的題目；跨方法互測＝老師用座位表排位，你跟對面不同方法組的同學一對一互當受測者。W11 進場有完整說明。
                         </p>
                         <p className="text-[12.5px] text-white/70 leading-[1.9] font-mono">
                             課後任務：對照「課後待補清單」，把第八章草稿先補一輪（W11 拿到回饋會更清楚要怎麼寫）
@@ -972,7 +887,6 @@ ___（貼題目／訪綱／流程／編碼表）
                     >
                         <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
                 </div>
             </div>
 
@@ -985,13 +899,19 @@ ___（貼題目／訪綱／流程／編碼表）
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W10"
+                todo={[
+                  { label: '今天做什麼', value: '看方法工具書、在第六章填具體題目、找老師諮詢，把七到十三章補到可以繳交的程度。' },
+                  { label: '為什麼做', value: 'W9 地基立了但工具細節還沒到執行程度——這週整本定稿，是後續施測的唯一根據。' },
+                  { label: '今天交什麼', value: '計畫書整本 13 章 docx（含 AI 對話連結）。' },
+                ]}
+                question="我的工具問得到我要的資料嗎？"
                 title="計畫書 · "
                 accentTitle="整本定稿"
-                subtitle="W10 = 把計畫書寫到定稿。第一節：方法工具書（含 4 集教學影片）+ 在計畫書第六章寫題目。第二節：AI 工作坊自查 → 老師諮詢區把關 → 七到十三章補完 → 整本繳到 Google Classroom。下週 W11 拿到老師第三次建議再修工具，並把題目轉成施測載具（Google Form／紙本）+ 跨班 Pilot。"
+                subtitle="W10 = 把計畫書寫到定稿。第一節：方法工具書（含 4 集教學影片）+ 在計畫書第六章寫題目。第二節：AI 工作坊自查 → 老師諮詢區把關 → 七到十三章補完 → 整本繳到 Google Classroom。下週 W11 拿到老師第三次建議再修工具，並把題目轉成施測載具（Google Form／紙本）+ 跨方法 Pilot 互測。"
                 chain="W9 計畫書 1-5 章地基立起來了——但工具細節還沒寫到能執行的程度。這週把第六章的訪綱／問卷題／實驗流程寫到位。"
                 meta={[
-                    { label: '第一節 ① + ②', value: '開場 + 第六章流程提醒 → 工具書自學教案（5 法 4 區塊）→ 回計畫書 寫題目' },
-                    { label: '第二節 ③ + ④', value: '七到十三章 × 整本繳交 → 繳交確認 + W11 預告' },
+                    { label: '第一節', value: '開場 + 第六章流程提醒 → 工具書自學教案（5 法 4 區塊）→ 回計畫書寫題目' },
+                    { label: '第二節', value: 'AI 工作坊（可選）→ 老師諮詢區 → 七到十三章補完 → 整本繳交' },
                     { label: '課堂產出', value: '計畫書 整本（13 章；8、9-(三) 草稿即可）' },
                     { label: '前置要求', value: 'W9 計畫書第 1-5 章雛形（含第四章變項／主題）' },
                 ]}
@@ -1012,7 +932,7 @@ ___（貼題目／訪綱／流程／編碼表）
                 duration={`${W10Data.duration} 分鐘 · ${W10Data.durationDesc}`}
                 tasks={[
                     '方法工具書 + 4 集教學影片 — 5 法 4 區塊速覽',
-                    '自我與同儕診斷 — 自己挑 → 同學挑 → AI 補漏',
+                    '老師諮詢區 — 帶計畫書找老師檢查、改題目',
                     'AI 工作坊（雙模式）+ 計畫書整本繳交',
                 ]}
                 exportReminder="繳交計畫書整本（含第七到十三章）+ AI 對話記錄"
@@ -1021,7 +941,7 @@ ___（貼題目／訪綱／流程／編碼表）
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
-                prevWeek={{ label: '回 W9 工具設計', to: '/w9' }}
+                prevWeek={{ label: '回 W9 計畫書 1-5 章地基', to: '/w9' }}
                 nextWeek={{ label: '前往 W11 倫理審查', to: '/w11' }}
             flat
             />

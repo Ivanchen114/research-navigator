@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import './ClinicPage.css';
 import CourseArc from '../components/ui/CourseArc';
 import ThinkRecord from '../components/ui/ThinkRecord';
-import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
-import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
+import StepBriefing from '../components/ui/StepBriefing';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     Map,
@@ -25,6 +24,12 @@ import {
 import LessonMap from '../components/ui/LessonMap';
 import BackfillField from '../components/ui/BackfillField';
 import { W4Data } from '../data/lessonMaps';
+import { ModeProvider, useMode } from '../context/ModeContext';
+import ModeSwitch from '../components/ui/ModeSwitch';
+import DepthBlock from '../components/ui/DepthBlock';
+import RecordDrawer from '../components/ui/RecordDrawer';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
+import ExportButton from '../components/ui/ExportButton';
 
 /* ══════════════════════════════════════
  *  資料常數
@@ -66,10 +71,10 @@ const METHODS = [
     {
         icon: '📚', name: '文獻分析法', id: 'literature', color: '#6b21a8', bg: '#f5f3ff',
         purpose: '把現成文本（論文、史料、報導、書籍、貼文）當成「研究對象」分析它本身——不是自己出去收一手資料。',
-        strength: 'W9 會分 4 個子類型細講：② 歷史文獻分析（時間軸推因）／③ 內容分析（編碼計次）／④ 論述分析（話語立場）／⑤ 敘事分析（情節結構）。',
-        weakness: '詮釋主觀性高（同份文本不同人會有不同編碼），需多人獨立編碼以提高信度；資料受限於既有文本，遇到資料缺口無法另外問人。',
+        strength: '能處理大量已存在的文本（論文、史料、報導、貼文），不必出門接觸受訪者，資料取得相對容易。',
+        weakness: '同一份文本，不同人看會有不同解讀，需要多人交叉檢查；資料受限於既有文本，遇到缺口無法另外問人。',
         when: '你的研究材料就是「別人已產生的文本」，而你要分析的是這些文本本身的模式、立場、結構或變化。',
-        note: '⚠️ 文獻分析 ≠ 文獻回顧。如果你只想整理前人研究，請把主方法改成問卷／訪談／實驗／觀察，把回顧放第三章。'
+        note: '⚠️ 文獻分析 ≠ 文獻回顧。如果你只想整理前人研究，請把主方法改成問卷／訪談／實驗／觀察——「整理前人研究」是每組都會做的部分，不是你的主方法。'
     },
 ];
 
@@ -93,16 +98,16 @@ const DECISION_TREE = {
                 terminal: true,
                 method: { name: '文獻分析法', icon: '📚', color: '#6b21a8' },
                 subtypes: [
-                    { num: '②', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」' },
-                    { num: '③', name: '內容分析', when: '統計文本中詞彙／主題的頻率（量化）' },
-                    { num: '④', name: '論述分析', when: '看話語怎麼建構立場、誰被說／怎麼被說' },
-                    { num: '⑤', name: '敘事分析', when: '從文本抓情節結構、角色、轉折' },
+                    { num: '①', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」' },
+                    { num: '②', name: '內容分析', when: '統計文本中詞彙／主題的頻率（量化）' },
+                    { num: '③', name: '論述分析', when: '看話語怎麼建構立場、誰被說／怎麼被說' },
+                    { num: '④', name: '敘事分析', when: '從文本抓情節結構、角色、轉折' },
                 ],
             },
         ],
     },
     l2: {
-        question: 'L2 第二層　自己收集的話，三題獨立判斷（挑最貼近你題目的那條）',
+        question: 'L2 第二層　自己收集的話，三題挑最貼近你題目的那一條（不必都答）。某些選項會寫「改看 ❶／❸」——意思是那條路不適合你，換另一題看。',
         items: [
             {
                 id: 'q1',
@@ -119,7 +124,7 @@ const DECISION_TREE = {
                 q: '你能不能主動改變一個條件，然後量另一個怎麼變？',
                 options: [
                     { label: '能操控（A 組做、B 組不做）', method: { name: '實驗', icon: '🧪', color: '#d97706' } },
-                    { label: '不能操控', method: { name: '排除實驗 → 回 ❶ 或 ❸ 判斷', icon: '↩️', color: 'var(--ink-light)', isFallback: true } },
+                    { label: '不能操控', method: { name: '不適合實驗——改看 ❶ 或 ❸', icon: '→', color: 'var(--ink-light)', isFallback: true } },
                 ],
             },
             {
@@ -128,7 +133,7 @@ const DECISION_TREE = {
                 q: '你想抓「真實行為／自然現象」，還是「人的想法態度」？',
                 options: [
                     { label: '真實行為／自然現象', method: { name: '觀察', icon: '👀', color: 'var(--success)' } },
-                    { label: '想法態度', method: { name: '📋 問卷 / 🎤 訪談（回 ❶）', icon: '🔁', color: 'var(--ink-light)', isFallback: true } },
+                    { label: '想法態度', method: { name: '想法態度 → 改看 ❶（問卷／訪談）', icon: '→', color: 'var(--ink-light)', isFallback: true } },
                 ],
             },
         ],
@@ -137,7 +142,7 @@ const DECISION_TREE = {
     scienceNote: {
         icon: '🌱',
         title: '自然科學分流（理化、生物、地科…）',
-        body: '研究對象不是人——例如「球從多高落下回彈高度」「植物澆水量對生長的影響」——L2 ❸ 的「真實行為／自然現象」就是這類。常見組合：👀 觀察（記錄真實現象）+ 🧪 實驗（主動操控條件，量另一個怎麼變）。',
+        body: '研究對象不是人——例如「球從多高落下回彈高度」「植物澆水量對生長的影響」「校園不同角落一天內的噪音／氣溫分布」——L2 ❸ 的「真實行為／自然現象」就是這類。常見組合：👀 觀察（記錄真實現象）+ 🧪 實驗（主動操控條件，量另一個怎麼變）。',
     },
 };
 
@@ -279,17 +284,16 @@ const THINK_CHOICES = [
     },
 ];
 
-/* — ExportButton 欄位 — */
+/* — RecordDrawer 匯出欄位 — */
 const EXPORT_FIELDS = [
     { key: 'w4-my-topic', label: '我的 W4 定案題目' },
     { key: 'w4-layer1', label: '第一層判斷', question: '我的資料要自己收集，還是分析已有文本？' },
-    { key: 'w4-layer2', label: '第二層判斷', question: '最關鍵的那一條分科問題，以及我的回答' },
-    { key: 'w4-main-method', label: '我選定的主要方法', question: '問卷/訪談/實驗/觀察/文獻？' },
+    { key: 'w4-layer2', label: '第二層判斷', question: '最關鍵的那一條判斷問題，以及我的回答' },
+    { key: 'w4-main-method', label: '我選定的主要方法', question: '問卷／訪談／實驗／觀察／文獻分析法？' },
     { key: 'w4-reason', label: '選擇理由', question: '為什麼選這個方法？請引用兩層判斷中的某一條' },
     { key: 'w4-aux-method', label: '輔助方法', question: '需要輔助方法嗎？是什麼？為什麼？' },
     { key: 'w4-reflect-confused', label: '反思 1：最易搞混的方法', question: '你最容易搞混的兩種方法是哪兩個？關鍵差別在哪一條兩層判斷？' },
     { key: 'w4-reflect-literature', label: '反思 2：文獻 vs 文獻分析', question: '「文獻回顧」與「文獻分析法」的差別是什麼？你的題目會走哪一條？' },
-    { key: 'w4-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
 ];
 
 /* ══════════════════════════════════════
@@ -312,7 +316,7 @@ const DecisionTree = () => {
     /* 統整推薦：找出有效（非 fallback）的方法 */
     const synthesis = (() => {
         if (l1Choice === 'literature') {
-            return { primary: { name: '文獻分析法', icon: '📚' }, support: [], note: '主方法 = 📚 文獻分析法。W9 會挑一個子類型細講（② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事）。' };
+            return { primary: { name: '文獻分析法', icon: '📚' }, support: [], note: '主方法 = 📚 文獻分析法。W9 會挑一個子類型細講（① 歷史 / ② 內容 / ③ 論述 / ④ 敘事）。' };
         }
         if (l1Choice === 'collect') {
             const valids = [];
@@ -386,7 +390,7 @@ const DecisionTree = () => {
                 <svg
                     viewBox="0 0 920 580"
                     className="block mx-auto"
-                    style={{ width: '100%', minWidth: '720px', maxWidth: '820px', height: 'auto' }}
+                    style={{ width: '100%', minWidth: '560px', maxWidth: '820px', height: 'auto' }}
                 >
                     {/* ============ 連線 ============ */}
                     <path d="M 440 60 C 440 95, 270 100, 270 130" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
@@ -469,7 +473,7 @@ const DecisionTree = () => {
                             ❷ 能不能主動改一個條件，量另一個怎麼變？
                         </text>
                         <Leaf qid="q2" idx={0} x={20} y={400} w={220} h={42} label="能操控（A 做、B 不做）" method="🧪 實驗" color="#d97706" />
-                        <Leaf qid="q2" idx={1} x={260} y={400} w={220} h={42} label="不能操控" method="↩ 回 ❶／❸" color="#888" fallback />
+                        <Leaf qid="q2" idx={1} x={260} y={400} w={220} h={42} label="不能操控" method="改看 ❶ 或 ❸" color="#888" fallback />
 
                         {/* Q3 */}
                         <rect x={20} y={462} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
@@ -477,7 +481,7 @@ const DecisionTree = () => {
                             ❸ 真實行為／自然現象　vs　想法態度？
                         </text>
                         <Leaf qid="q3" idx={0} x={20} y={514} w={220} h={42} label="真實行為／自然現象" method="👀 觀察" color="var(--success)" />
-                        <Leaf qid="q3" idx={1} x={260} y={514} w={220} h={42} label="想法態度" method="📋／🎤（回 ❶）" color="#888" fallback />
+                        <Leaf qid="q3" idx={1} x={260} y={514} w={220} h={42} label="想法態度" method="改看 ❶（問卷／訪談）" color="#888" fallback />
                     </g>
 
                     {/* ============ 文獻分支（右半）============ */}
@@ -490,10 +494,10 @@ const DecisionTree = () => {
                         </text>
 
                         {[
-                            { num: '②', name: '歷史文獻分析', when: '從史料切時間軸、追問「為什麼」', y: 270 },
-                            { num: '③', name: '內容分析',     when: '統計文本中詞彙／主題的頻率（量化）', y: 324 },
-                            { num: '④', name: '論述分析',     when: '看話語怎麼建構立場、誰被說／怎麼被說', y: 378 },
-                            { num: '⑤', name: '敘事分析',     when: '從文本抓情節結構、角色、轉折', y: 432 },
+                            { num: '①', name: '歷史文獻分析', when: '分析歷史事件、追問時代脈絡', y: 270 },
+                            { num: '②', name: '內容分析',     when: '統計文章裡的詞彙或主題出現頻率', y: 324 },
+                            { num: '③', name: '論述分析',     when: '分析文本的立場與說話方式', y: 378 },
+                            { num: '④', name: '敘事分析',     when: '分析故事情節結構與角色發展', y: 432 },
                         ].map(s => (
                             <g key={s.num}>
                                 <rect x={500} y={s.y} width={400} height={44} rx={6} fill="white" stroke="#e0d5f5" strokeWidth="1.5" />
@@ -503,7 +507,7 @@ const DecisionTree = () => {
                             </g>
                         ))}
                         <text x={500} y={500} fontSize="10" fill="#999" fontStyle="italic">
-                            （W9 計畫書與工具會挑一個子類型細講分析架構）
+                            （選了文獻分析法？展開下方說明欄，看四種子類型怎麼挑）
                         </text>
                     </g>
                 </svg>
@@ -512,10 +516,11 @@ const DecisionTree = () => {
                 <div className="mx-5 mt-3 mb-1 bg-[#FEF3C7] border-l-4 border-[#D97706] rounded-r-[6px] p-3">
                     <p className="text-[12.5px] font-bold text-[#7F1D1D] mb-0.5">⚠️ 文獻「分析」≠ 文獻「回顧」</p>
                     <p className="text-[11.5px] text-[#7F1D1D] leading-relaxed">
-                        <strong>回顧</strong> = 整理前人說法（每個方法第三章都做，不算主方法）；
+                        <strong>回顧</strong> = 整理前人說法（不管你選哪個方法都要做的「前人說了什麼」整理，不算主方法）；
                         <strong>分析</strong> = 把文本當研究對象（只有文獻組要做）。
                     </p>
                 </div>
+
             </div>
 
             {/* 自然科學分流卡 + 統整推薦（HTML） */}
@@ -525,7 +530,7 @@ const DecisionTree = () => {
                         🌱 自然科學分流（理化、生物、地科…）
                     </p>
                     <p className="text-[12px] text-[#065f46] leading-relaxed">
-                        研究對象不是人——例如「球從多高落下回彈高度」「植物澆水量對生長的影響」——L2 ❸ 走「真實行為／自然現象」。常見組合：👀 觀察（記錄真實現象）+ 🧪 實驗（主動操控條件，量另一個怎麼變）。
+                        研究對象不是人——例如「球從多高落下回彈高度」「植物澆水量對生長的影響」「校園不同角落一天內的噪音／氣溫分布」——L2 ❸ 走「真實行為／自然現象」。常見組合：👀 觀察（記錄真實現象）+ 🧪 實驗（主動操控條件，量另一個怎麼變）。
                     </p>
                 </div>
 
@@ -552,7 +557,8 @@ const DecisionTree = () => {
  *  主元件
  * ══════════════════════════════════════ */
 
-export const W4Page = () => {
+const W4PageContent = () => {
+    const { mode } = useMode();
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [expandedMethod, setExpandedMethod] = useState(null);
     const [choiceResults, setChoiceResults] = useState([]);
@@ -565,6 +571,7 @@ export const W4Page = () => {
 
     /* W3 定案題目帶入（讓 W4 把它放上方法地圖）*/
     const [w3Topic, setW3Topic] = useState('');
+    const [topicKey, setTopicKey] = useState(0); // 強制 ThinkRecord re-mount 以讀取注入值
 
     useEffect(() => {
         const refresh = () => {
@@ -572,11 +579,12 @@ export const W4Page = () => {
             const topic = saved['w3-final-topic']?.trim();
             if (topic) {
                 setW3Topic(topic);
-                // auto-fill w4-my-topic if empty
+                // auto-fill w4-my-topic if empty，並強制 ThinkRecord re-mount
                 if (!saved['w4-my-topic']?.trim()) {
                     const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
                     all['w4-my-topic'] = topic;
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+                    setTopicKey(k => k + 1);
                 }
             } else {
                 setW3Topic('');
@@ -600,10 +608,14 @@ export const W4Page = () => {
         if (selections[currentQ] !== undefined) return;
         const newSelections = { ...selections, [currentQ]: optLabel };
         setSelections(newSelections);
-        if (currentQ < QUIZ_QUESTIONS.length - 1) {
-            setTimeout(() => setCurrentQ(prev => prev + 1), 900);
-        } else {
-            setTimeout(() => setQuizDone(true), 900);
+        const isCorrect = optLabel === QUIZ_QUESTIONS[currentQ].answer;
+        if (isCorrect) {
+            /* 答對才自動跳；答錯留時間看 hint，由學生自己按「下一題」 */
+            if (currentQ < QUIZ_QUESTIONS.length - 1) {
+                setTimeout(() => setCurrentQ(prev => prev + 1), 900);
+            } else {
+                setTimeout(() => setQuizDone(true), 900);
+            }
         }
     };
 
@@ -629,17 +641,35 @@ export const W4Page = () => {
                         認識五種研究方法的目的與限制，再用「兩層判斷架構」決定你的題目該用哪種。
                     </p>
 
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '量化 vs 質性兩種取向，5 種研究方法，兩層判斷架構（誰 + 要問什麼）' },
+                        ]}
+                    />
+
+                    <div className="bg-[var(--accent-light)] border-l-4 border-[var(--accent)] rounded-r-[6px] p-4 max-w-[720px]">
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-1">📍 這個 Step 是你的「方法地圖」</p>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] m-0">
+                            兩種取向 + 5 種方法 + 決策樹，三樣都是<strong className="text-[var(--ink)]">工具書，不是現在要背的</strong>。今天真正要做的只有一件事——<strong className="text-[var(--ink)]">判斷你自己的題目該走哪條路</strong>。看不懂的方法先跳過，選到再回來查。
+                        </p>
+                    </div>
+
                     {/* 量化 vs 質性 */}
+                    <div className="flex items-center gap-2 mb-2">
+                        <ContentTypeChip type="學" />
+                        <p className="text-[13px] font-bold text-[var(--ink)]">量化 vs 質性：所有方法的兩種取向</p>
+                    </div>
                     <div className="rounded-[var(--radius-unified)] overflow-hidden border border-[var(--border)]">
                         <div className="bg-[var(--ink)] px-5 py-3 flex items-center gap-2">
                             <span className="text-[16px]">🌳</span>
-                            <span className="text-white font-bold text-[13px]">所有方法的兩條根</span>
+                            <span className="text-white font-bold text-[13px]">所有方法的兩種取向</span>
                             <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">先有這個，再看五種方法</span>
                         </div>
                         <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
                             <div className="p-5 bg-[var(--accent-light)]">
                                 <div className="text-[11px] font-mono font-bold text-[var(--accent)] uppercase tracking-wider mb-2">📊 量化研究</div>
-                                <p className="text-[13px] text-[var(--ink)] font-medium mb-3">把世界轉換成數字，找規律、比較差異</p>
+                                <p className="text-[13px] text-[var(--ink)] font-medium mb-1">把世界轉換成數字，找規律、比較差異</p>
+                                <p className="text-[11.5px] text-[var(--ink-light)] mb-3">＝ 用數字、統計、圖表來回答</p>
                                 <div className="space-y-1.5">
                                     {[
                                         '想知道「有多少人」「什麼比例」「哪個高」',
@@ -654,7 +684,8 @@ export const W4Page = () => {
                             </div>
                             <div className="p-5 bg-[#f5f3ff]">
                                 <div className="text-[11px] font-mono font-bold text-[#7c3aed] uppercase tracking-wider mb-2">📖 質性研究</div>
-                                <p className="text-[13px] text-[var(--ink)] font-medium mb-3">理解人的意義、經驗與脈絡，挖深層原因</p>
+                                <p className="text-[13px] text-[var(--ink)] font-medium mb-1">理解人的意義、經驗與脈絡，挖深層原因</p>
+                                <p className="text-[11.5px] text-[var(--ink-light)] mb-3">＝ 用文字描述、不靠數字來回答</p>
                                 <div className="space-y-1.5">
                                     {[
                                         '想知道「為什麼」「怎麼想的」「背後故事」',
@@ -669,11 +700,15 @@ export const W4Page = () => {
                             </div>
                         </div>
                         <div className="px-5 py-3 bg-[#fef3c7] border-t border-[var(--border)] text-[12px] text-[#92400e]">
-                            💡 <strong>混合方法</strong>：一個研究可以兩條路都走。例如：用問卷收集比例（量化），再用訪談挖原因（質性）。分科三問 ❶ 其實就是在問你想走哪條根。
+                            💡 <strong>混合方法</strong>：一個研究可以兩種取向都走。例如：用問卷收集比例（量化），再用訪談挖原因（質性）。判斷三問 ❶ 其實就是在問你想走哪一種取向。
                         </div>
                     </div>
 
                     {/* 五種方法卡 */}
+                    <div className="flex items-center gap-2 mb-2">
+                        <ContentTypeChip type="學" />
+                        <p className="text-[13px] font-bold text-[var(--ink)]">五種研究方法：目的、強項、限制</p>
+                    </div>
                     <div className="space-y-3">
                         {METHODS.map((m) => {
                             const isOpen = expandedMethod === m.id;
@@ -723,9 +758,17 @@ export const W4Page = () => {
                     </div>
 
                     {/* 兩層判斷　·　互動決策樹 */}
+                    <div className="flex items-center gap-2 mb-2">
+                        <ContentTypeChip type="學" />
+                        <p className="text-[13px] font-bold text-[var(--ink)]">兩層判斷決策樹：互動練習</p>
+                    </div>
                     <DecisionTree />
 
                     {/* 理解檢核 1 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="練" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">理解檢核</p>
+                    </div>
                     <ThinkChoice
                         dataKey="w4-tc1"
                         prompt={THINK_CHOICES[0].prompt}
@@ -735,27 +778,13 @@ export const W4Page = () => {
                         onAnswer={handleChoice(THINK_CHOICES[0].id, THINK_CHOICES[0].prompt)}
                     />
 
-                    {/* 🎮 遊戲彩蛋入口（前移版）— 老師講完 5 方法+兩層判斷後，介紹這個遊戲讓學生自選玩 */}
-                    <div className="bg-gradient-to-br from-[#1F2937] to-[#0F172A] border-l-4 border-[var(--danger)] p-5 rounded-r-lg text-white shadow-xl max-w-[760px]">
-                        <div className="flex items-center gap-2 mb-2">
-                            <ShieldAlert className="text-[var(--danger)]" size={20} />
-                            <h3 className="text-[15px] font-bold m-0">🎮 R.I.B. 單元挑戰｜行動代號：裝備</h3>
-                            <span className="ml-auto text-[10px] font-mono text-white/60 uppercase tracking-wider">自選遊戲</span>
-                        </div>
-                        <p className="text-[12.5px] text-white/85 mb-3 leading-relaxed">
-                            研究方法是探員的裝備——你能在時限內分辨每種方法的適用場景嗎？老師會試玩示範；想驗收 5 方法判斷的同學，自己進去玩。
-                        </p>
-                        <Link to="/game/tool-quiz" className="inline-flex items-center gap-2 bg-[var(--danger)] text-white px-4 py-2 rounded font-bold text-[12.5px] hover:opacity-90 transition-colors no-underline">
-                            進入裝備挑戰 <ArrowRight size={14} />
-                        </Link>
-                    </div>
                 </div>
             ),
         },
 
-        /* ─── Step 2：分科判斷測驗 ─── */
+        /* ─── Step 2：方法判斷測驗 ─── */
         {
-            title: '分科判斷測驗',
+            title: '方法判斷測驗',
             icon: '🎯',
             content: (
                 <div className="space-y-6 prose-zh">
@@ -763,7 +792,17 @@ export const W4Page = () => {
                         10 題選擇題，驗收你對兩層判斷架構的理解。做完之後注意自己錯在哪幾題——Step 4 反思會用到。
                     </p>
 
+                    <StepBriefing
+                        lines={[
+                            { label: '練', text: '做 10 題方法判斷選擇題，記下錯在哪幾題' },
+                        ]}
+                    />
+
                     {/* 理解檢核 2（在測驗前暖身） */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="練" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">理解檢核</p>
+                    </div>
                     <ThinkChoice
                         dataKey="w4-tc2"
                         prompt={THINK_CHOICES[1].prompt}
@@ -773,10 +812,14 @@ export const W4Page = () => {
                         onAnswer={handleChoice(THINK_CHOICES[1].id, THINK_CHOICES[1].prompt)}
                     />
 
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="練" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">方法判斷 10 題測驗</p>
+                    </div>
                     {!quizStarted ? (
                         <div className="bg-[var(--ink)] rounded-[var(--radius-unified)] p-8 text-center text-white">
                             <div className="text-[40px] mb-4">🎯</div>
-                            <h3 className="text-[18px] font-bold mb-2">分科判斷測驗</h3>
+                            <h3 className="text-[18px] font-bold mb-2">方法判斷測驗</h3>
                             <p className="text-[var(--ink-light)] text-[13px] mb-6">10 題 · 每題選一個答案 · 選完自動跳下題</p>
                             <button
                                 onClick={() => setQuizStarted(true)}
@@ -873,8 +916,20 @@ export const W4Page = () => {
                                 {selections[currentQ] !== undefined && (
                                     <div className={`mt-4 px-4 py-3 rounded-[var(--radius-unified)] text-[12px] animate-in zoom-in-95 ${selections[currentQ] === QUIZ_QUESTIONS[currentQ].answer ? 'bg-[var(--success-light)] text-[var(--success)]' : 'bg-[var(--danger-light)] text-[var(--danger)]'}`}>
                                         💡 {QUIZ_QUESTIONS[currentQ].hint}
-                                        {currentQ < 9 && (
+                                        {selections[currentQ] === QUIZ_QUESTIONS[currentQ].answer && currentQ < 9 && (
                                             <span className="text-[var(--ink-light)] ml-2">（自動跳題中…）</span>
+                                        )}
+                                        {selections[currentQ] !== QUIZ_QUESTIONS[currentQ].answer && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    if (currentQ < QUIZ_QUESTIONS.length - 1) setCurrentQ(prev => prev + 1);
+                                                    else setQuizDone(true);
+                                                }}
+                                                className="ml-3 px-3 py-1 rounded-[6px] bg-[var(--danger)] text-white font-bold text-[11px]"
+                                            >
+                                                {currentQ < QUIZ_QUESTIONS.length - 1 ? '看完了，下一題 →' : '看完了，看結果 →'}
+                                            </button>
                                         )}
                                     </div>
                                 )}
@@ -895,16 +950,14 @@ export const W4Page = () => {
                         把剛學到的兩層判斷用在你真實的研究題目上。這才是今天最重要的事。
                     </p>
 
-                    {/* W3 帶入卡（有 → 自動帶入；沒 → 現場補上）*/}
-                    {w3Topic ? (
-                        <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--accent-light)] border border-[var(--accent)] text-[13px]">
-                            <span className="text-[16px]">📎</span>
-                            <div>
-                                <span className="font-bold text-[var(--accent)]">自動帶入 W3 定案題目</span>
-                                <p className="text-[var(--ink-mid)] mt-0.5">{w3Topic}</p>
-                            </div>
-                        </div>
-                    ) : (
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '用兩層判斷為自己 W3 定案題目選一個主方法，寫出選擇理由' },
+                        ]}
+                    />
+
+                    {/* W3 帶入失敗時才顯示補填框 */}
+                    {!w3Topic && (
                         <BackfillField
                             dataKey="w3-final-topic"
                             label="⚠️ 沒偵測到你 W3 的定案題目——把你上週寫的研究題目貼這裡，下方自動帶入。"
@@ -913,8 +966,13 @@ export const W4Page = () => {
                         />
                     )}
 
-                    {/* 我的本週題目（從 W3 帶入，可微調）*/}
+                    {/* 我的本週題目（從 W3 自動帶入，可微調）*/}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">我這週的研究題目</p>
+                    </div>
                     <ThinkRecord
+                        key={topicKey}
                         dataKey="w4-my-topic"
                         prompt="我這週要選方法的題目"
                         placeholder="貼上或輸入你在 W3 定案的研究題目…"
@@ -933,6 +991,10 @@ export const W4Page = () => {
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">第一層判斷紀錄</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-layer1"
                         prompt="第一層判斷"
@@ -953,21 +1015,76 @@ export const W4Page = () => {
                         </div>
                     </div>
 
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">第二層判斷紀錄</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-layer2"
                         prompt="第二層判斷"
-                        placeholder="最關鍵的那一條分科問題是 ❶/❷/❸，我的回答是……"
+                        placeholder="最關鍵的那一條判斷問題是 ❶/❷/❸，我的回答是……"
                         rows={3}
                     />
 
                     {/* 主要方法 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">主要方法選定</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-main-method"
                         prompt="我選定的主要方法"
-                        placeholder="問卷/訪談/實驗/觀察/文獻（如果是文獻，請寫明用途：文獻回顧/歷史分析/內容分析）"
+                        placeholder="問卷／訪談／實驗／觀察／文獻分析法（如果是文獻分析法，請寫明子類型：歷史文獻／內容分析／論述分析／敘事分析）"
                         rows={2}
                     />
 
+                    {/* 文獻分析四子類型 — 選了文獻分析法才需要看，放在主方法正下方 */}
+                    <DepthBlock title="📚 選了文獻分析法？這裡選子類型">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-[1.75] mb-3">
+                            文獻分析法還要再決定一件事：你要「分析」的方向是什麼？下面四種各有不同的分析邏輯，選一種最接近你題目的，然後在上方主方法格補上子類型名稱。
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {[
+                                {
+                                    num: '①', name: '歷史文獻分析',
+                                    when: '你的題目有「時間軸」——想追溯某個事件、政策、現象是怎麼演變的',
+                                    example: '例：台灣教育政策對課外補習的態度，1990 年代到現在有什麼轉變？',
+                                },
+                                {
+                                    num: '②', name: '內容分析',
+                                    when: '你想「計算」某些詞或主題在大量文章裡出現幾次、比例多高（量化文字）',
+                                    example: '例：近五年台灣報紙報導 AI 時，「危險」和「機會」哪個詞出現更多次？',
+                                },
+                                {
+                                    num: '③', name: '論述分析',
+                                    when: '你想看文本的「立場和說話方式」——誰被怎麼描述、用了什麼語氣或框架',
+                                    example: '例：不同媒體報導同一件事，用的形容詞和角度有什麼差異？',
+                                },
+                                {
+                                    num: '④', name: '敘事分析',
+                                    when: '你想拆解「故事結構」——情節怎麼鋪陳、角色怎麼被塑造、有哪些轉折',
+                                    example: '例：分析三部台灣電影，主角面對挫折的處理方式有什麼共同模式？',
+                                },
+                            ].map(s => (
+                                <div key={s.num} className="bg-white border border-[#e0d5f5] rounded-[6px] p-4">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-[14px] font-bold text-[#6b21a8]">{s.num}</span>
+                                        <span className="text-[13px] font-bold text-[#6b21a8]">{s.name}</span>
+                                    </div>
+                                    <p className="text-[12px] text-[var(--ink-mid)] leading-[1.7] mb-2">{s.when}</p>
+                                    <p className="text-[11.5px] text-[var(--ink-light)] italic leading-[1.65]">{s.example}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-[11.5px] text-[var(--ink-light)] mt-3 leading-[1.7]">
+                            💡 W9 計畫書寫到「研究方法」那章時，老師會再帶你把選定的子類型細化到「分析架構」——現在只要挑好哪一種就行。
+                        </p>
+                    </DepthBlock>
+
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">選擇理由</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-reason"
                         prompt="選擇理由（請引用兩層判斷中的某一條）"
@@ -976,6 +1093,10 @@ export const W4Page = () => {
                         rows={3}
                     />
 
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">輔助方法</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-aux-method"
                         prompt="輔助方法（如果需要）"
@@ -984,14 +1105,69 @@ export const W4Page = () => {
                         rows={2}
                     />
 
+                    {/* 🆕 常見誤診糾正 4 種 — 選完方法後的壓力測試 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="注意" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">4 種常見誤診：選完方法先檢查</p>
+                    </div>
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[var(--danger)]/30 overflow-hidden">
+                        <div className="p-4 px-5 bg-[var(--danger-light)] border-b border-[var(--danger)]/20">
+                            <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--danger)] font-bold mb-1">主治醫師巡房</div>
+                            <h4 className="font-serif text-[17px] font-bold text-[var(--ink)] leading-[1.5]">選完方法，先檢查 4 種常見誤診</h4>
+                            <p className="text-[12.5px] text-[var(--ink-mid)] mt-2 leading-[1.75]">
+                                學生選完方法後，最容易掉進這 4 種坑——對照你的選擇，有沒有踩到？
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
+                            {[
+                                {
+                                    name: '誤診問卷',
+                                    symptom: '「我選問卷，但核心問題問的是『為什麼』。」',
+                                    fix: '問卷只能測表面症狀（多少人、什麼比例）。如果核心是原因脈絡，必須轉診訪談科——或以訪談為主、問卷為輔。',
+                                },
+                                {
+                                    name: '來源不明',
+                                    symptom: '「我說不清楚資料是自己去收集，還是用現存文本。」',
+                                    fix: '回 L1 第一層先釐清：問問自己——這份資料是你親自去問／觀察／實驗「產生」的，還是別人早就「寫下來」的？',
+                                },
+                                {
+                                    name: '模糊文獻',
+                                    symptom: '「我想用文獻分析法，但不知道是哪一種。」',
+                                    fix: '你要整理前人的發現（回顧），還是追溯歷史原因（歷史文獻），還是分析文本內容頻率（內容分析），還是看話語怎麼建構立場（論述分析）？',
+                                },
+                                {
+                                    name: '貪多嚼不爛',
+                                    symptom: '「我覺得我要同時用問卷 + 訪談 + 觀察！」',
+                                    fix: '先確定「主治方法」——哪個方法最能直接回答你的最核心問題？其他方法當輔助即可。同時做 3 種等於 3 個半成品。',
+                                },
+                            ].map((d, i) => (
+                                <div key={i} className="p-4 px-5 bg-white flex flex-col gap-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="bg-[var(--danger)] text-white text-[11px] font-bold font-mono px-2 py-0.5 rounded">{`誤診 ${i + 1}`}</span>
+                                        <span className="font-bold text-[14px] text-[var(--ink)]">{d.name}</span>
+                                    </div>
+                                    <div className="mt-1 p-3 rounded-[6px] bg-[var(--danger-light)] text-[12.5px] text-[var(--ink)] italic leading-[1.7]">
+                                        🤒 症狀：{d.symptom}
+                                    </div>
+                                    <div className="mt-1 p-3 rounded-[6px] bg-[var(--success-light)] text-[12.5px] text-[var(--ink)] leading-[1.7]">
+                                        💡 糾正：{d.fix}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="p-3 px-5 bg-[var(--paper)] border-t border-[var(--border)] text-[11.5px] text-[var(--ink-light)] leading-[1.7]">
+                            ✋ <strong>沒踩到 = 過關，可繼續往下。踩到一條以上 = 回上方修改你的方法選擇</strong>，再進同儕挑戰。
+                        </div>
+                    </div>
+
                     {/* 同儕挑戰：對 Step 3 的方法選擇做挑戰 */}
-                    <div className="w6-notice w6-notice-gold">
+                    <div className="bg-[#fef3c7] border-l-4 border-[#D97706] rounded-r-[6px] p-4 text-[12.5px] text-[#92400e] leading-[1.75]">
                         🎯 寫完方法選擇後，跟旁邊的人說一遍：「我用 ___ 法，因為 ___」。讓對方挑戰你：「你要的真的是比例還是原因？」「資料是自己收集還是分析別人寫的？」「如果是問卷，題目問的是什麼，問卷能回答嗎？」
                     </div>
 
                     {/* ➡️ 下週預告：W5 操作型定義 */}
-                    <div className="w6-notice w6-notice-gold">
-                        ➡️ 方法選好了——但選了方法不等於知道「怎麼問／怎麼測」。<strong>下週 W5</strong> 會教你把抽象概念（壓力、學習效果、動機……）變成「誰來測都得到一樣的數字／類別」的<strong>操作型定義</strong>，那是這週題目→下週工具的橋。
+                    <div className="bg-[#fef3c7] border-l-4 border-[#D97706] rounded-r-[6px] p-4 text-[12.5px] text-[#92400e] leading-[1.75]">
+                        ➡️ 方法選好了——但選了方法不等於知道「怎麼問／怎麼測」。<strong>下週 W5</strong> 會教你把抽象概念（壓力、學習效果、動機……）變成「誰來測都得到一樣的數字／類別」的<strong>操作型定義</strong>，那是這週「選方法」→ 下週「設計可蒐集資料」之間的橋。
                     </div>
                 </div>
             ),
@@ -1007,19 +1183,33 @@ export const W4Page = () => {
                         這週只回答兩題——但都要寫到「自己也能說服自己」為止。這兩題是這週能不能真的會選方法的分水嶺。
                     </p>
 
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '寫 2 題反思：最易搞混的兩種方法 + 為什麼選你選的方法' },
+                        ]}
+                    />
+
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">反思 1：最易搞混的方法</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-reflect-confused"
-                        prompt="1. 你最容易搞混的兩種方法是哪兩個？關鍵差別在哪一條兩層判斷？"
-                        placeholder="例：我最容易搞混觀察法和實驗法。差別在 L2 ❷——實驗會主動改變一個條件再量結果，觀察只是默默紀錄真實行為，不介入。"
-                        scaffold={['我最容易搞混 ___ 和 ___', '關鍵差別在 L2 第 ___ 條（❶／❷／❸）', '具體是…']}
+                        prompt="1. 回顧 Step 2 你答錯的題目——那幾題最容易搞混的是哪兩種方法？關鍵差別在哪一條兩層判斷？"
+                        placeholder="例：我在 Step 2 第 5、8 題答錯，搞混了觀察法和實驗法。差別在 L2 ❷——實驗會主動改變一個條件再量結果，觀察只是默默紀錄真實行為，不介入。"
+                        scaffold={['Step 2 我答錯的題目：第 ___ 題', '搞混的是 ___ 和 ___', '關鍵差別在 L2 第 ___ 條（❶／❷／❸）', '具體是…']}
                         rows={4}
                     />
 
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">反思 2：文獻回顧 vs 文獻分析</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w4-reflect-literature"
                         prompt="2. 「文獻回顧」與「文獻分析法」的差別是什麼？你的題目會走哪一條？"
-                        placeholder="例：文獻回顧是整理前人研究（每個方法第三章都做），文獻分析是把文本當研究對象。我的題目走『文獻分析』，因為我想分析 IG 貼文標題的用詞模式，會走 ③ 內容分析子類型。"
-                        scaffold={['「文獻回顧」是 ___（用途）', '「文獻分析」是 ___（用途）', '我的題目走 ___（回顧 / 分析）', '（若走分析）子類型可能是 ___（② 歷史 / ③ 內容 / ④ 論述 / ⑤ 敘事）']}
+                        placeholder="例：文獻回顧是整理前人研究（每組都要做的「前人說了什麼」），文獻分析是把文本當研究對象。我的題目走『文獻分析』，因為我想分析 IG 貼文標題的用詞模式，會走「內容分析」子類型。"
+                        scaffold={['「文獻回顧」是 ___（用途）', '「文獻分析」是 ___（用途）', '我的題目走 ___（回顧 / 分析）', '（若走分析）子類型可能是 ___（① 歷史 / ② 內容 / ③ 論述 / ④ 敘事）']}
                         rows={5}
                     />
                 </div>
@@ -1032,6 +1222,12 @@ export const W4Page = () => {
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '對照本週要會項目，整理 W4 學習紀錄' },
+                        ]}
+                    />
+
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -1052,15 +1248,30 @@ export const W4Page = () => {
                         </div>
                     </div>
 
-                                        {/* AI-RED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="4" hint="判斷研究方法時可能用 AI 對選項做情境測驗" optional={true} />
+                    {/* W4 不開放 AI 協作原則卡 */}
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[var(--gold)]/40 bg-[var(--gold-light)] p-4 px-5">
+                        <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--gold)] font-bold mb-1">本週原則 · 不開放 AI 協作</div>
+                        <p className="text-[13.5px] text-[var(--ink)] leading-[1.75]">
+                            這週先練自己判斷方法。<strong>AI 可以幫你列選項，但不能替你決定哪一種方法最適合你的題目。</strong>所以 W4 沒有 AI-RED 要填，W5 用到 AI 時恢復。
+                        </p>
+                    </div>
 
-                    {/* 一鍵複製 */}
-                    <ExportButton
-                        weekLabel="W4 認識 5 法 + 選方法"
-                        fields={EXPORT_FIELDS}
-                        choices={choiceResults}
-                    />
+                    {/* 一鍵複製繳交 */}
+                    <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
+                            <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
+                            <span className="text-[14px] font-bold text-[#1E40AF]">複製 W4 學習紀錄 → 貼 Google Classroom</span>
+                        </div>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            包含：方法地圖選擇／常見誤診練習／AI 輔助紀錄（如有）。W5 操作型定義課會接這份。
+                        </p>
+                        <ExportButton
+                            weekLabel="W4 方法地圖"
+                            fields={EXPORT_FIELDS}
+                            buttonText="複製 W4 學習紀錄"
+                        />
+                    </div>
 
                     {/* 遊戲彩蛋 */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
@@ -1085,7 +1296,7 @@ export const W4Page = () => {
                         <div className="next-week-content">
                             <div className="next-week-col">
                                 <div className="next-week-label">W5 主題</div>
-                                <p className="next-week-text">操作型定義專週——把這週選定的方法接到「具體可測的指標」。學「壓力／動機／學習效果」這類抽象概念怎麼變成「誰來測都得到一樣數字」的測量項目，是這週題目→下週博覽會的橋。</p>
+                                <p className="next-week-text">操作型定義專週——把這週選定的方法接到「具體可測的指標」。學「壓力／動機／學習效果」這類抽象概念怎麼變成「誰來測都得到一樣數字」的測量項目，這是「**選方法→設計可蒐集資料**」之間的橋。</p>
                             </div>
                             <div className="next-week-col">
                                 <div className="next-week-label">你要帶來</div>
@@ -1106,15 +1317,14 @@ export const W4Page = () => {
                     <span className="hidden md:inline">研究方法與專題 / 研究規劃 / </span><span className="text-[var(--ink)] font-bold">方法地圖 W4</span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
-                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">50 MINS</span>
+                    <span className="bg-[var(--paper-warm)] text-[var(--ink)] text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">100 MINS</span>
                     <ResetWeekButton weekPrefix="w4-" />
                     <button
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -1124,20 +1334,61 @@ export const W4Page = () => {
                 </div>
             )}
 
-            {/* PAGE HEADER — Hero Block */}
+            {/* PAGE HEADER — Hero Block（第一屏只留三句，spec §6-1）*/}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W4"
+                question="我的問題該用什麼方法回答？"
                 title="方法地圖："
                 accentTitle="從題目找方法"
-                subtitle="你的題目適合用什麼方法？今天先認識五種方法，再用兩層判斷的互動決策樹推理，最後用 10 題情境測驗驗收——結束前你要能說出：我的題目適合用 ___ 法，因為 ___。"
-                chain="W3 你決定了題目——但「題目」不會自動變成「資料」。這週把你的題目放上方法地圖，做一個決定：要用哪一種方法去收／去問／去看？"
+                todo={[
+                    { label: '今天做什麼', value: '把 W3 題目放上方法地圖，用兩層判斷選定主要方法。' },
+                    { label: '為什麼做', value: '題目不會自動變成資料——得先決定用哪種方法去收集。' },
+                    { label: '今天交什麼', value: '個人＝W4 學習紀錄（含主要方法＋選擇理由，帶去 W5）。' },
+                ]}
+                chain="W3 題目定案了——但有了題目還不知道怎麼蒐集資料。W4 用方法地圖給題目配上對的研究方法。"
                 meta={[
-                    { label: '課堂節奏', value: '五種方法 → 互動決策樹 → 情境測驗 → 為自己題目選路' },
-                    { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: '為題目選定主要方法（+ 輔助方法）並寫出理由' },
-                    { label: '帶去 W5', value: '主要方法 + 選擇理由（W5 操作型定義要用）' },
+                  { label: '第一節', value: '5 種方法認識 + 兩層判斷（L1 自蒐文獻分流、L2 三題判斷）' },
+                  { label: '第二節', value: '為自己 W3 題目選主方法 + 寫選擇理由' },
+                  { label: '課堂產出', value: '個人 W4 學習紀錄（含主要方法 + 選擇理由，帶去 W5）' },
+                  { label: '前置要求', value: 'W3 定案題目' },
                 ]}
             />
+
+            {/* 三模式切換 */}
+            <ModeSwitch />
+
+            {/* 自學補課路線 — 只在自學模式顯示（spec §5；W4 為 full 週）*/}
+            {mode === 'self-study' && (
+                <div className="my-5 rounded-[var(--radius-unified)] border-2 border-[#0284C7] bg-[#F0F9FF] p-4 md:p-5">
+                    <p className="text-[14px] font-bold text-[#075985] mb-1">📖 自學補課路線 · W4 可「完整自學」</p>
+                    <p className="text-[11.5px] text-[#0C4A6E] leading-[1.7] mb-3">
+                        W4 核心是「認識方法 → 兩層判斷 → 為自己題目選定主方法 → 寫理由 → 兩題反思」，全是個人作業。互動元件（五方法卡、決策樹、10 題測驗、2 個理解檢核）都自帶即時回饋，自學可獨立完成。
+                    </p>
+                    <ol className="text-[12px] text-[#0C4A6E] leading-[1.85] list-none m-0 p-0 space-y-1">
+                        <li><strong>① 先看：</strong>Step 1 量化／質性兩種取向 ＋ 五種方法卡 ＋ 互動決策樹（兩層判斷）</li>
+                        <li><strong>② 做：</strong>Step 1 理解檢核暖身、Step 2 兩層判斷 10 題測驗、Step 3 為自己 W3 定案題目選主方法、Step 4 兩題反思</li>
+                        <li><strong>③ 補紀錄：</strong>我的 W4 題目／第一層判斷／第二層判斷／主要方法／選擇理由／輔助方法／反思 1（最易搞混的方法）／反思 2（文獻 vs 文獻分析）</li>
+                        <li><strong>④ 交：</strong>整理 W4 學習紀錄，依老師指定方式上傳到 Google Classroom</li>
+                        <li><strong>⑤ 本週可完整自學</strong>——Step 3 的「同儕挑戰」沒有同學時，用同 Step 的「4 種常見誤診」卡自我檢查即可（同目的）。W4 本週設計上不使用 AI 選方法，沒有 AI-RED 要填。</li>
+                    </ol>
+                    <div className="mt-3 pt-3 border-t border-[#0284C7]/30">
+                        <p className="text-[12px] font-bold text-[#075985] mb-1">⛑️ 最低完成版（缺課學生：至少做到這些才算補到核心）</p>
+                        <p className="text-[11.5px] text-[#0C4A6E] leading-[1.85] m-0">
+                            ① 看懂五種方法各自的目的與適用情境　② 用兩層判斷（L1 自蒐／文獻、L2 三題分流）為題目選一條路　③ Step 3 為自己 W3 定案題目選出主要方法（帶去 W5，必填）＋寫一句選擇理由　④ Step 4 寫完兩題反思　⑤ 整理 W4 紀錄上傳 Classroom
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {/* 我的紀錄抽屜 — 兩模式都能開（spec §3 方案 A：總覽＋匯出，input 留 Step）*/}
+            <RecordDrawer
+                weekLabel="W4 方法地圖"
+                fields={EXPORT_FIELDS}
+                choices={choiceResults}
+            />
+
+            {/* 為什麼是這週 + 本週資訊 — 深度補充 */}
+
             <CourseArc items={[
                     { wk: 'W1-W2', name: '探索階段\nRED 公約', status: 'past' },
                     { wk: 'W3', name: '題目決定\n8 病症會診', status: 'past' },
@@ -1154,8 +1405,8 @@ export const W4Page = () => {
                 weekTitle={W4Data.title}
                 duration={`${W4Data.duration} 分鐘 · ${W4Data.durationDesc}`}
                 tasks={[
-                    '認識 5 種研究方法（問卷／訪談／實驗／觀察／文獻）',
-                    '兩層判斷練習 — L1 自蒐／文獻分流，L2 三題分科',
+                    '認識 5 種研究方法（問卷／訪談／實驗／觀察／文獻分析法）',
+                    '兩層判斷練習 — L1 自蒐／文獻分流，L2 三題方法判斷',
                     '為自己 W3 定案題目選主方法 + 寫一句理由',
                 ]}
                 exportReminder="匯出方法選擇紀錄 → W5 直接拿主方法做操作型定義"
@@ -1171,3 +1422,9 @@ export const W4Page = () => {
         </div>
     );
 };
+
+export const W4Page = () => (
+    <ModeProvider week="W4">
+        <W4PageContent />
+    </ModeProvider>
+);

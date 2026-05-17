@@ -8,6 +8,7 @@ import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
+import StepBriefing from '../components/ui/StepBriefing';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 import LessonMap from '../components/ui/LessonMap';
 import { W8Data } from '../data/lessonMaps';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import '../pages/LiteratureReview.css';
 
 /* ══════════════════════════════════════
@@ -42,9 +44,9 @@ const PLAGIARISM_COMPARE = {
 
 /* — 觀念 2：三明治引用法 — */
 const SANDWICH_LAYERS = [
-    { layer: 1, role: '觀點句', emoji: '🍞', color: 'var(--accent)', func: '說出你的論點（Claim）', example: '社群媒體的過度使用可能對青少年心理健康造成負面影響。' },
-    { layer: 2, role: '引用句', emoji: '🥩', color: 'var(--danger)', func: '引用支持的研究（Evidence）', example: '陳美玲（2021）針對北部高中生的研究發現，每日使用社群媒體超過三小時者，焦慮量表得分顯著較高。' },
-    { layer: 3, role: '分析句', emoji: '🍞', color: 'var(--success)', func: '解釋為什麼重要（Analysis）', example: '這顯示社群媒體使用量與情緒狀態之間存在關聯，長時間使用可能不利於心理健康。' },
+    { layer: 1, role: '觀點句', emoji: '🍞', color: 'var(--accent)', func: '說出你的論點', example: '社群媒體的過度使用可能對青少年心理健康造成負面影響。' },
+    { layer: 2, role: '引用句', emoji: '🥩', color: 'var(--danger)', func: '引用支持的研究', example: '陳美玲（2021）針對北部高中生的研究發現，每日使用社群媒體超過三小時者，焦慮量表得分顯著較高。' },
+    { layer: 3, role: '分析句', emoji: '🍞', color: 'var(--success)', func: '解釋為什麼重要', example: '這顯示社群媒體使用量與情緒狀態之間存在關聯，長時間使用可能不利於心理健康。' },
 ];
 
 /* — 觀念 3：多文獻整合 — */
@@ -144,7 +146,7 @@ const EXPORT_FIELDS = [
     { key: 'w8-sandwich-analysis', label: '三明治：分析句', question: '第 3 層分析句——這個證據說明了什麼？跟你的研究有什麼關係？' },
     { key: 'w8-lit-review', label: '文獻探討段落（演練3）', question: '用三篇文獻寫出至少 5 句的文獻探討，最後一句連回你的研究題目' },
     { key: 'w8-peer-review', label: '同儕幫我審查的結果', question: '同儕幫你審查演練 3 後，給了什麼具體建議？你根據建議修改了什麼？' },
-    { key: 'w8-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w8-aired-record', label: 'AI-RED 敘事紀錄', question: '若用 AI 協助檢查三明治三層／連回題目／翻譯英文摘要，請記錄這次互動；未使用可留白。' },
 ];
 
 /* ══════════════════════════════════════
@@ -165,23 +167,43 @@ export const LiteratureReview = () => {
     /* 句型工具箱展開 */
     const [showToolkit, setShowToolkit] = useState(false);
 
+    /* 符號說明展開（演練 1 原文之後） */
+    const [showSymbolHelp, setShowSymbolHelp] = useState(false);
+
     /* 同儕會診勾選 */
     const [peerChecks, setPeerChecks] = useState({ 'pr-rewrite': '', 'pr-cite': '', 'pr-logic': '', 'pr-link': '' });
 
-    /* W5 文獻帶入 */
-    const [w5Paper, setW5Paper] = useState('');
+    /* W7 文獻帶入 */
+    const [w7Paper, setW7Paper] = useState('');
+
+    const W8_INTERACTIVE_KEY = 'research-navigator-w8-interactive';
 
     useEffect(() => {
         const records = readRecords();
-        // v2 鏈：W7 找文獻搬到的 dataKey；舊鍵 w5-found-paper fallback 容錯
-        const w5Val = (records['w7-found-paper'] || records['w5-found-paper'] || '').trim();
-        setW5Paper(w5Val);
+        // v2 鏈：W7 找文獻的 dataKey；舊鍵 w5-found-paper fallback 容錯（pre-Wave-C 命名遷移）
+        const w7Val = (records['w7-found-paper'] || records['w5-found-paper'] || '').trim();
+        setW7Paper(w7Val);
         // 如果 w8-sandwich-ref 還是空的，自動帶入 W7 的文獻
-        if (w5Val && !records['w8-sandwich-ref']) {
-            records['w8-sandwich-ref'] = w5Val;
+        if (w7Val && !records['w8-sandwich-ref']) {
+            records['w8-sandwich-ref'] = w7Val;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
         }
+        // 載入互動狀態（勾選、素材包選擇）
+        try {
+            const saved = JSON.parse(localStorage.getItem(W8_INTERACTIVE_KEY) || '{}');
+            if (saved.checksA) setChecksA(saved.checksA);
+            if (saved.checksB) setChecksB(saved.checksB);
+            if (saved.selectedPack) setSelectedPack(saved.selectedPack);
+            if (saved.peerChecks) setPeerChecks(saved.peerChecks);
+        } catch (e) { /* ignore */ }
     }, []);
+
+    // Task #7：持久化互動狀態
+    useEffect(() => {
+        try {
+            localStorage.setItem(W8_INTERACTIVE_KEY, JSON.stringify({ checksA, checksB, selectedPack, peerChecks }));
+        } catch (e) { /* ignore */ }
+    }, [checksA, checksB, selectedPack, peerChecks]);
 
     const trackChoice = useCallback((question, selected, correct) => {
         setChoiceResults(prev => {
@@ -202,17 +224,29 @@ export const LiteratureReview = () => {
             icon: '🔍',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '換字抄襲 vs 真正改寫的差別，用「遮蓋測試」判斷' },
+                            { label: '練', text: '抓學生甲乙的問題，自寫一段正確改寫' },
+                        ]}
+                    />
                     {/* ── 模擬文獻聲明 ── */}
                     <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12.5px] text-[#7F1D1D] leading-relaxed">
                         ⚠️ <strong>提醒</strong>：本頁部分文獻範例（如「王大明（2022）」「陳美玲（2021）」等）為<strong>課堂練習用的模擬素材</strong>，不可直接當成正式研究來源。正式計畫書與期末報告，<strong>只能使用自己查到、可追溯來源的文獻</strong>（W7 找到的 A 級文獻才是合格起點）。
                     </div>
 
                     {/* ── 觀念 1 ── */}
-                    <div className="section-head"><h2>觀念：換字抄襲 vs. 真正的改寫</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                    <div className="section-head">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <h2>觀念：換字抄襲 vs. 真正的改寫</h2>
+                        </div>
+                        <div className="line"></div><span className="mono">15 分鐘</span>
+                    </div>
 
                     <div className="notice notice-accent text-[13px] leading-relaxed">
                         偵探社的工作只有一件事——<strong>找出文獻使用中的問題，寫出一段來源清楚、改寫到位、能連回自己研究題目的文獻探討。</strong><br /><br />
-                        第一種犯罪手法叫<strong>換字抄襲</strong>：結構一模一樣、骨架一模一樣，只是穿了一件不同的衣服。
+                        第一個常見地雷叫<strong>換字抄襲</strong>：結構一模一樣、骨架一模一樣，只是穿了一件不同的衣服。
                     </div>
 
                     <p className="section-desc">
@@ -255,7 +289,13 @@ export const LiteratureReview = () => {
                     </div>
 
                     {/* ── 演練 1 ── */}
-                    <div className="section-head mt-12"><h2>演練 1：改寫偵錯</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                    <div className="section-head mt-12">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="練" />
+                            <h2>演練 1：改寫偵錯</h2>
+                        </div>
+                        <div className="line"></div><span className="mono">15 分鐘</span>
+                    </div>
                     <p className="section-desc">
                         讀原文，審查學生甲和學生乙的改寫版本，找出問題，然後自己寫一個正確的改寫。
                     </p>
@@ -265,6 +305,34 @@ export const LiteratureReview = () => {
                         <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider mb-3">▌ 原文發現（請勿抄寫這段）</div>
                         <p className="text-[14px] leading-relaxed">{ORIGINAL_PASSAGE.text}</p>
                     </div>
+
+                    {/* Task #5：符號說明（遇到才查，不是進門就讀） */}
+                    <button
+                        onClick={() => setShowSymbolHelp(prev => !prev)}
+                        className="text-[12px] font-mono text-[var(--accent)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+                    >
+                        {showSymbolHelp ? '▼ 收起符號說明' : '▶ 看不懂 N / p / 顯著？展開符號說明'}
+                    </button>
+                    {showSymbolHelp && (
+                        <div className="space-y-3 animate-in">
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-lg p-4">
+                                <p className="text-[12px] font-bold text-[var(--ink)] mb-2">📒 先看懂這幾個統計符號（本週文獻範例會一直出現）</p>
+                                <ul className="text-[12px] text-[var(--ink-mid)] leading-[1.7] space-y-1.5 list-none">
+                                    <li><strong className="text-[var(--ink)]">N</strong>　＝ 樣本數，研究找了幾個人。（N = 326 就是調查了 326 人）</li>
+                                    <li><strong className="text-[var(--ink)]">p</strong>　＝ 統計顯著性。p &lt; .05 代表「這結果幾乎不可能是巧合」，數字越小越可靠（p &lt; .01 比 p &lt; .05 更強）。</li>
+                                    <li><strong className="text-[var(--ink)]">「顯著」</strong>　是統計用語，指「差異大到不像巧合」，不是口語的「很明顯」。</li>
+                                    <li className="text-[var(--accent)]">👉 改寫文獻時，<strong>N 和 p 的數字要原樣保留</strong>（那是研究事實，不是你的話）——你只改「說法」，不改「數據」。</li>
+                                </ul>
+                            </div>
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-lg p-4">
+                                <p className="text-[12px] font-bold text-[var(--ink)] mb-2">📒 兩個容易混的用詞</p>
+                                <ul className="text-[12px] text-[var(--ink-mid)] leading-[1.7] space-y-1.5 list-none">
+                                    <li><strong className="text-[var(--ink)]">文獻探討 ＝ 文獻回顧</strong>　同一件事的兩種說法——讀別人的研究、整理成自己的論述。計畫書裡這一章正式名稱叫「文獻回顧」。（跟 W4 的「文獻分析<strong>法</strong>」不同——那是一種研究方法。）</li>
+                                    <li><strong className="text-[var(--ink)]">文中引用 vs 參考書目</strong>　本週用「文中引用」：句子裡寫（作者，年份）。W7 教的 APA 格式是「參考書目」，列在報告文末。兩種都要、功能不一樣：一個標在句子裡、一個列在最後。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    )}
 
                     {/* 學生甲 */}
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
@@ -367,8 +435,20 @@ export const LiteratureReview = () => {
             icon: '🥪',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '三明治三層：觀點句 + 引用句 + 分析句' },
+                            { label: '練', text: '用 W7 找到的那篇文獻寫一個完整三明治段落' },
+                        ]}
+                    />
                     {/* ── 觀念 2 ── */}
-                    <div className="section-head"><h2>觀念：三明治引用法</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                    <div className="section-head">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <h2>觀念：三明治引用法</h2>
+                        </div>
+                        <div className="line"></div><span className="mono">15 分鐘</span>
+                    </div>
                     <p className="section-desc">
                         文獻引用不是甩出一句別人說的話——<strong>你要告訴讀者這句話為什麼重要。</strong>
                     </p>
@@ -389,7 +469,7 @@ export const LiteratureReview = () => {
                     </div>
 
                     <div className="notice notice-gold text-[12px]">
-                        💡 <strong>第 3 層是最常被省略的，也是最關鍵的。</strong>少了它，你的引用就是沒有結論的案件。三層合起來，才是完整的引用。
+                        💡 <strong>第 3 層是最常被省略的，也是最關鍵的。</strong>少了它，你的引用就是沒有結論的案件。<strong>分析句卡住怎麼辦？問自己一句：「這篇研究告訴我的事，對我自己的題目有什麼用？」</strong>——這個答案就是你的分析句。
                     </div>
 
                     <ThinkChoice
@@ -405,9 +485,15 @@ export const LiteratureReview = () => {
                     />
 
                     {/* ── 演練 2 ── */}
-                    <div className="section-head mt-12"><h2>演練 2：三明治實戰</h2><div className="line"></div><span className="mono">10 分鐘</span></div>
+                    <div className="section-head mt-12">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="練" />
+                            <h2>演練 2：三明治實戰</h2>
+                        </div>
+                        <div className="line"></div><span className="mono">10 分鐘</span>
+                    </div>
                     <p className="section-desc">
-                        用你上週（W5）找到的那篇文獻，寫出一個完整的三明治引用。三格，觀點句、引用句、分析句，每格至少一句話。
+                        用你上週（W7）找到的那篇文獻，寫出一個完整的三明治引用。三格，觀點句、引用句、分析句，每格至少一句話。
                     </p>
 
                     <div className="notice notice-gold text-[12px]">
@@ -417,11 +503,11 @@ export const LiteratureReview = () => {
                         ③ 分析句要解釋這篇研究對你的研究題目<strong>有什麼意義</strong>，不能只是把引用句換個說法再說一遍。
                     </div>
 
-                    {/* 選用文獻（已在頁頂顯示 W5 文獻；此處讓學生確認或換篇） */}
+                    {/* 選用文獻（已在頁頂顯示 W7 文獻；此處讓學生確認或換篇） */}
                     <ThinkRecord
                         dataKey="w8-sandwich-ref"
-                        prompt="我選用的文獻（已自動帶入 W5 那篇；想換可改）"
-                        scaffold={['用 W5 找到的那篇', '或：換一篇來自 ___（標題、作者、年份）']}
+                        prompt="我選用的文獻（已自動帶入 W7 那篇；想換可改）"
+                        scaffold={['用 W7 找到的那篇', '或：換一篇來自 ___（標題、作者、年份）']}
                         rows={2}
                     />
 
@@ -443,7 +529,7 @@ export const LiteratureReview = () => {
                                                 ? ['我認為…', '…可能對…造成影響。']
                                                 : layer.layer === 2
                                                     ? ['某某（年份）的研究發現…', '其中具體指出…']
-                                                    : ['這個發現說明了…', '對我的研究而言，這意味著…']
+                                                    : ['這個發現說明了…', '對我的研究而言，這意味著…', '（分析句不是換個說法重說引用——問自己：這對我的研究題目有什麼意義？）']
                                         }
                                         rows={3}
                                     />
@@ -467,14 +553,29 @@ export const LiteratureReview = () => {
             icon: '📝',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '從四組素材包選一組，用 3 篇文獻寫一段 ≥5 句的文獻探討，最後一句連回題目' },
+                        ]}
+                    />
                     {/* ── 觀念 3 ── */}
-                    <div className="section-head"><h2>觀念：多文獻整合原則</h2><div className="line"></div><span className="mono">10 分鐘</span></div>
+                    <div className="section-head">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <h2>觀念：多文獻整合原則</h2>
+                        </div>
+                        <div className="line"></div><span className="mono">10 分鐘</span>
+                    </div>
                     <p className="section-desc">
                         文獻探討不是把三篇摘要排排站——<strong>是用自己的論述邏輯把三篇的發現串起來。</strong>
                     </p>
 
                     <div className="notice notice-danger text-[12px] mb-4">
                         ⚠️ <strong>最常見的失敗版本：</strong>「王小明（2020）發現……李大華（2021）發現……陳阿花（2022）發現……」三行三個研究各說各的，然後停。這不是文獻探討，這是證據陳列室。
+                    </div>
+
+                    <div className="notice notice-accent text-[12px] mb-4">
+                        🔗 <strong>怎麼「串」？先從兩篇開始：</strong>每讀完一篇，就問「這篇和上一篇——說的<strong>一樣</strong>？<strong>補充</strong>了新角度？還是<strong>反駁</strong>了？」答案決定你用哪個連接詞：一樣用「同樣地」、補充用「進一步」、反駁用「然而」。三篇，就是做兩次這樣的對話。
                     </div>
 
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
@@ -490,14 +591,35 @@ export const LiteratureReview = () => {
                         ))}
                     </div>
 
-                    {/* ── 演練 3 ── */}
-                    <div className="section-head mt-12"><h2>演練 3：結案報告——文獻探討寫作</h2><div className="line"></div><span className="mono">15 分鐘</span></div>
+                    {/* ── 演練 3（選做）── */}
+                    <div className="section-head mt-12">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
+                            <h2>演練 3：結案報告——文獻探討寫作</h2>
+                        </div>
+                        <div className="line"></div>
+                        <span className="mono">15 分鐘</span>
+                        <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-[3px] bg-[#D1FAE5] text-[#065F46] border border-[#6EE7B7]">強烈建議做（W9 直接接這份）</span>
+                    </div>
                     <p className="section-desc">
-                        從老師提供的四組素材包中選一組，讀裡面三篇研究的摘要，寫出一段完整的文獻探討。
+                        從老師提供的四組素材包中選一組，讀裡面三篇研究的摘要，寫出一段完整的文獻探討。<br />
+                        <span className="text-[12px] text-[var(--ink-light)]">💡 這段寫完可以直接放進 W9 計畫書第三章——強烈建議課堂完成；時間不夠可課後補，但 W9 開始前要完成。</span>
                     </p>
+
+                    {/* 任務分工說明卡——回應「為什麼這裡不用我自己 W7 找的文獻」 */}
+                    <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-[var(--radius-unified)] p-3.5">
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
+                            <strong className="text-[#1E40AF]">📌 為什麼這裡不用你 W7 找的那篇文獻？</strong>——演練 2 你已經用 <strong>W7 那 1 篇</strong>練了三明治三層；演練 3 要練「3 篇文獻整合」，但 W7 你只找了 1 篇，所以用<strong>課堂素材包</strong>來練「同意／補充／反駁」的串連邏輯。<span className="text-[#1E3A8A]">下週 W9 起，你會陸續補自己研究主題的第 2、第 3 篇真文獻，那時候才用 W7 找到的真文獻寫正式版。</span>
+                        </p>
+                    </div>
 
                     <div className="notice notice-danger text-[12px]">
                         ⚠️ <strong>寫作要求：</strong>至少 5 句、三篇文獻都要帶到、每提到一篇都要有（作者，年份）、不可以逐條抄寫素材、要用自己的話整合、<strong>最後一句要連回自己的研究題目。</strong>
+                    </div>
+
+                    {/* 素材包區模擬文獻警示重複——GPT v1 #7 命中：學生常忽略頂部警示 */}
+                    <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12px] text-[#7F1D1D] leading-relaxed">
+                        ⚠️ <strong>再次提醒（重要）</strong>：下方四組素材包裡的文獻（王大明／陳美玲／林政達等）是為了讓你練「<strong>怎麼整合文獻</strong>」設計的<strong>模擬素材</strong>，不是真實研究來源。<strong className="text-[#991B1B]">正式報告與計畫書只能用你 W7 自己查到、可追溯的文獻</strong>——千萬不要把這些假名字搬到正式報告。
                     </div>
 
                     {/* 素材包選擇 */}
@@ -584,11 +706,24 @@ export const LiteratureReview = () => {
          * STEP 4: 同儕會診
          * ────────────────────────────────────── */
         {
-            title: '同儕會診：互相驗屍',
+            title: '同儕會診：互相複診',
             icon: '🏥',
             content: (
                 <div className="space-y-8 prose-zh">
-                    <div className="section-head"><h2>同儕會診：互相驗屍</h2><div className="line"></div><span className="mono">10 分鐘</span></div>
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '兩人交換段落，用 4 項審查（改寫/引用/邏輯/連回題目）給具體建議' },
+                        ]}
+                    />
+                    <div className="section-head">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
+                            <h2>同儕會診：互相複診</h2>
+                        </div>
+                        <div className="line"></div>
+                        <span className="mono">10 分鐘</span>
+                        <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-[3px] bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]">選做（做了演練三才做）</span>
+                    </div>
                     <p className="section-desc">
                         兩人一組，交換演練 3 的文獻探討段落。依照四個審查項目，給出具體修改建議。<strong>不要寫「很好」「很清楚」——那叫敷衍結案。</strong>
                     </p>
@@ -652,6 +787,11 @@ export const LiteratureReview = () => {
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '對照本週要會 6 項，寫 AIRED（可選），整理 W8 學習紀錄' },
+                        ]}
+                    />
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -662,9 +802,9 @@ export const LiteratureReview = () => {
                                 '用遮蓋測試判斷改寫品質——看結構，不看表面',
                                 '三明治引用法——觀點句、引用句、分析句缺一不可',
                                 '多文獻整合——不是排排站，是串成有邏輯的段落',
-                                '演練 1：找出甲乙的改寫問題，並寫出自己的正確改寫',
-                                '演練 2：用 W5 文獻寫出完整三明治引用',
-                                '演練 3：用三篇文獻寫出文獻探討，最後一句連回題目',
+                                '演練 1（必做）：找出甲乙的改寫問題，並寫出自己的正確改寫',
+                                '演練 2（必做）：用 W7 文獻寫出完整三明治引用',
+                                '演練 3（選做）：用三篇文獻寫出文獻探討，最後一句連回題目',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
                                     <CheckCircle2 size={16} className="text-[var(--success)] mt-0.5 flex-shrink-0" />
@@ -675,14 +815,25 @@ export const LiteratureReview = () => {
                     </div>
 
                                         {/* AI-RED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="8" hint="若用 AI 協助潤稿——請確認它沒有改變原文意思、沒有新增不存在的文獻或數據。" optional={true} />
+                    <AIREDNarrative week="8" hint="W8 AI 邊界：可請 AI 檢查三明治三層完不完整／最後一句有沒有連回題目／翻譯英文摘要；不可讓 AI 寫整段文獻探討或「改寫」原文（容易變成換字抄襲）。" optional={true} />
 
-                    {/* 一鍵複製 */}
-                    <ExportButton
-                        weekLabel="W8 文獻偵探社"
-                        fields={EXPORT_FIELDS}
-                        choices={choiceResults}
-                    />
+                    {/* 一鍵複製 · Export 醒目化 */}
+                    <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
+                            <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
+                            <span className="text-[14px] font-bold text-[#1E40AF]">複製 W8 學習紀錄 → 貼 Google Classroom</span>
+                        </div>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            包含：偵錯紀錄／我的改寫／三明治三層／演練 3 文獻探討段落／同儕審查／AIRED（如有）。W9 計畫書第三章（文獻回顧）會接這份。
+                        </p>
+                        <ExportButton
+                            weekLabel="W8 文獻偵探社"
+                            fields={EXPORT_FIELDS}
+                            choices={choiceResults}
+                            buttonText="複製 W8 學習紀錄"
+                        />
+                    </div>
 
                     {/* 遊戲彩蛋 */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--danger)] p-6 rounded-r-lg text-white shadow-xl">
@@ -698,21 +849,30 @@ export const LiteratureReview = () => {
                         </Link>
                     </div>
 
-                    {/* 下週預告 */}
+                    {/* 下週預告（W9 計畫書地基——文獻探討段落會搬進第三章 文獻回顧） */}
                     <div className="next-week-preview">
                         <div className="next-week-header">
                             <span className="next-week-badge">NEXT WEEK</span>
-                            <h3 className="next-week-title">W7 預告</h3>
+                            <h3 className="next-week-title">W9 預告：把今天的文獻探討段落搬進計畫書第三章（文獻回顧）</h3>
                         </div>
                         <div className="next-week-content">
                             <div className="next-week-col">
-                                <div className="next-week-label">W7 主題</div>
-                                <p className="next-week-text">研究診所——根據你的研究方法（問卷/訪談/實驗/觀察/文獻）掛號分流，學習對應的研究設計。</p>
+                                <div className="next-week-label">W9 主題</div>
+                                <p className="next-week-text">研究計畫書 1-5 章地基——把 W3 題目 / W7 文獻 / W8 文獻探討段落 / W4 方法整合成完整計畫書骨架。</p>
                             </div>
                             <div className="next-week-col">
-                                <div className="next-week-label">你要帶來</div>
-                                <p className="next-week-text">確認你的 <strong>How（研究方法）</strong>。W4 的 5W1H 裡你填了什麼方法？那就是你下週要去的科別。</p>
+                                <div className="next-week-label">你今天的成果會變成什麼</div>
+                                <p className="next-week-text">
+                                    你今天的「<strong>演練 3 文獻探討段落</strong>」會在 W9 開場自動帶入——直接搬進<strong>計畫書第三章（文獻回顧）</strong>，不用重寫。
+                                    所以今天要寫好寫滿（≥ 5 句、三篇文獻、最後一句連回題目），下週才接得上。
+                                </p>
                             </div>
+                        </div>
+                        <div className="mt-3 p-3 rounded-[6px] bg-[#FEF3C7] border border-[#D97706]/30 text-[12px] text-[#78350F] leading-relaxed">
+                            🔗 <strong>跨週連結提醒</strong>：W7 找文獻 → W8 寫文獻探討 → W9 計畫書第三章（文獻回顧）。今天寫得越紮實，下週越輕鬆。
+                        </div>
+                        <div className="mt-3 p-3 rounded-[6px] bg-[#EDE9FE] border border-[#7C3AED]/30 text-[12px] text-[#4C1D95] leading-relaxed">
+                            ・W12 短報時文獻需要口語串接：「<strong>A 發現⋯⋯但 B 指出⋯⋯C 再補⋯⋯</strong>」——現在練好這個結構，W12 才不慌。
                         </div>
                     </div>
                 </div>
@@ -736,7 +896,6 @@ export const LiteratureReview = () => {
                     >
                         <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · A</span>
                 </div>
             </div>
 
@@ -749,15 +908,21 @@ export const LiteratureReview = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W8"
+                todo={[
+                  { label: '今天做什麼', value: '識破換字抄襲、練改寫三招，用三明治法寫出第一段文獻探討。' },
+                  { label: '為什麼做', value: 'W7 找到文獻但光有文獻不夠——要會「接話」，把別人的研究變成支撐自己題目的根據。' },
+                  { label: '今天交什麼', value: '改寫偵錯紀錄 + 三明治三層段落（直接搬進 W9 第三章）。' },
+                ]}
+                question="別人的研究，怎麼變成我研究的根據？"
                 title="文獻偵探社："
                 accentTitle="識破假改寫，寫出真文獻"
-                subtitle="偵探社的工作只有一件事——找出文獻使用中的問題，寫出一段來源清楚、改寫到位、能連回自己研究題目的文獻探討。今天要學會識破兩種常見犯罪手法：換字抄襲與文獻堆砌，並親手寫出合格的文獻探討段落。"
+                subtitle="偵探社的工作只有一件事——找出文獻使用中的問題，寫出一段來源清楚、改寫到位、能連回自己研究題目的文獻探討。今天要學會識破兩個常見地雷：換字抄襲與文獻堆砌，並親手寫出合格的文獻探討段落。"
                 chain="W7 找到一堆文獻——但要怎麼用？這週教你『接話』：別人說 X，你怎麼順著接到自己的研究上。"
                 meta={[
-                    { label: '本週任務', value: '觀念 3 招 + 改寫偵錯 + 三明治' },
-                    { label: '時長', value: '100 MINS' },
-                    { label: '前置要求', value: 'W5 找到的文獻一篇' },
-                    { label: '課堂產出', value: '三明治改寫稿（給 W7-W8 王牌文獻用）' },
+                    { label: '第一節', value: '改寫三招（同義字替換偵錯 + 句構轉換 + 縮寫摘要）' },
+                    { label: '第二節', value: '三明治法寫文獻探討段落（引言 + 文獻 + 連結）' },
+                    { label: '課堂產出', value: '改寫偵錯紀錄 + 三明治段落（直接搬進 W9 第三章）' },
+                    { label: '前置要求', value: 'W7 找到的 A/B 級文獻一篇（需帶電腦可存取）' },
                 ]}
             />
             <CourseArc items={W8Data.courseArc} />
@@ -767,37 +932,37 @@ export const LiteratureReview = () => {
                 weekTitle={W8Data.title}
                 duration={`${W8Data.duration} 分鐘 · ${W8Data.durationDesc}`}
                 tasks={[
-                    '遮蓋測試 — 識破自己的「換字抄襲」',
-                    '三明治引用 — 觀點 + 引用 + 分析，寫一段示範',
-                    '多文獻整合 — 提煉故事而不堆砌',
+                    '【必做】遮蓋測試 — 識破自己的「換字抄襲」，寫出正確改寫',
+                    '【必做】三明治引用 — 觀點 + 引用 + 分析，用 W7 找的文獻寫一段示範',
+                    '【選做】多文獻整合 — 用三篇文獻寫完整文獻探討段落（做了 W9 更順）',
                 ]}
-                exportReminder="匯出文獻探討初稿 → W9 計畫書第二章直接用"
+                exportReminder="匯出 W8 紀錄 → 做了演練三的同學，W9 計畫書第三章可以直接用"
             />
 
             {/* 📚 W7 偵察成果回顧（W8 開場銜接 — 放在 Step 之前最顯眼處） */}
-            {w5Paper ? (
+            {w7Paper ? (
                 <div className="mb-8 p-5 rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[var(--accent-light)]/30">
                     <div className="flex items-center gap-2 mb-2">
                         <span className="text-[18px]">📎</span>
-                        <span className="font-bold text-[14px] text-[var(--ink)]">你 W5 的偵察成果——今天會繼續用這篇</span>
+                        <span className="font-bold text-[14px] text-[var(--ink)]">你 W7 的偵察成果——今天會繼續用這篇</span>
                     </div>
                     <div className="bg-white border border-[var(--accent)]/30 rounded-[6px] p-3 mb-2">
-                        <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">📑 你找到的那篇</div>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{w5Paper}</p>
+                        <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">📑 你 W7 找到的那篇</div>
+                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{w7Paper}</p>
                     </div>
                     <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                        今天 Step 1 的「三明治改寫練習」會直接拿這篇當素材。<strong>不用重找</strong>——W7 找文獻、W8 寫文獻，是同一條線。
+                        今天的「三明治改寫練習」會直接拿這篇當素材。<strong>不用重找</strong>——W7 找文獻、W8 寫文獻，是同一條線。
                     </p>
                 </div>
             ) : (
                 <div className="mb-8 p-5 rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
-                    <p className="text-[13px] font-bold text-[#991B1B] mb-2">⚠️ 沒讀到你的 W5 文獻——你 W5 沒做完？</p>
+                    <p className="text-[13px] font-bold text-[#991B1B] mb-2">⚠️ 沒讀到你的 W7 文獻——你 W7 沒做完？</p>
                     <p className="text-[12px] text-[#7F1D1D] leading-relaxed mb-2">
-                        本週要拿你 W5 找到的那篇文獻當改寫練習素材。如果 W5 還沒做完，請先：
+                        本週要拿你 W7 找到的那篇文獻當改寫練習素材。如果 W7 還沒做完，請先：
                     </p>
                     <ul className="text-[12px] text-[#7F1D1D] leading-relaxed list-disc pl-5 space-y-1 mb-3">
                         <li>回 <Link to="/w7" className="font-bold underline">W7 文獻搜尋入門</Link> 至少找一篇文獻、寫進「找到的第一篇文獻」欄</li>
-                        <li>或：暫時拿課程資料夾／同學手上的文獻當素材，課後補回 W5</li>
+                        <li>或：暫時拿課程資料夾／同學手上的文獻當素材，課後補回 W7</li>
                     </ul>
                     <p className="text-[11px] text-[#991B1B] italic">
                         ※ 沒文獻可練 = 今天的三明治改寫練習會空轉，不要硬撐。

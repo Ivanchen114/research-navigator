@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { useProjector } from '../../context/ProjectorContext';
 
 /**
  * StepEngine — 一屏一任務分步導覽
@@ -15,6 +16,7 @@ import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
  */
 
 export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat = false, className = '' }) {
+  const { projector } = useProjector();
   const [current, setCurrent] = useState(0);
   const total = steps.length;
   const topRef = useRef(null);
@@ -41,49 +43,76 @@ export default function StepEngine({ steps, prevWeek, nextWeek, weekCode, flat =
 
   return (
     <div className={`step-engine ${className}`} ref={topRef}>
-      {/* STEP 計數器 — 當前步驟 / 總步驟 */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.18em]">
-          STEP {current + 1} <span className="text-[var(--border-mid)]">/ {total}</span>
-        </div>
-        {steps[current]?.title && (
-          <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em]">
-            {steps[current].title}
+      {/* STEP 計數器 — 當前步驟 / 總步驟（投影顯示時改用下方精簡導覽列，這條隱藏）*/}
+      {!projector && (
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.18em]">
+            STEP {current + 1} <span className="text-[var(--border-mid)]">/ {total}</span>
           </div>
-        )}
-      </div>
+          {steps[current]?.title && (
+            <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase tracking-[0.1em]">
+              {steps[current].title}
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* TAB 列 — flat 模式下多一條分隔線，替代白框面板的視覺邊界 */}
-      <nav
-        className={`flex gap-1 mb-6 overflow-x-auto ${
-          flat ? 'pb-3 border-b border-[var(--border)]' : 'pb-1'
-        }`}
-      >
-        {steps.map((step, i) => {
-          const isActive = i === current;
-          const isPast = i < current;
-          return (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className={`
-                flex items-center gap-1.5 px-3 py-2 rounded-[8px] text-[13px] font-mono
-                whitespace-nowrap transition-all flex-shrink-0
-                ${isActive
-                  ? 'bg-[var(--ink)] text-white font-bold shadow-sm'
-                  : isPast
-                    ? 'bg-[var(--success-light)] text-[var(--success)] font-medium'
-                    : 'bg-[var(--paper-warm)] text-[var(--ink-light)] hover:text-[var(--ink-mid)] hover:bg-[var(--paper)]'
-                }
-              `}
-            >
-              <span className="text-[12px]">{step.icon || `${i + 1}`}</span>
-              <span>{step.title}</span>
-              {isPast && <span className="text-[10px]">✓</span>}
-            </button>
-          );
-        })}
-      </nav>
+      {/* 導覽列 — 投影顯示：精簡成「當前 step」單行；一般顯示：完整 tab 列 */}
+      {projector ? (
+        <nav className="flex items-center justify-center gap-4 mb-6 pb-3 border-b border-[var(--border)]">
+          <button
+            onClick={() => goTo(current - 1)}
+            disabled={isFirst}
+            className="flex items-center justify-center w-9 h-9 rounded-[8px] text-[var(--ink-mid)] hover:bg-[var(--paper-warm)] disabled:opacity-25 disabled:cursor-default transition-colors"
+            aria-label="上一步"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <span className="flex items-center gap-2 text-[var(--ink)]">
+            <span className="font-mono text-[12px] text-[var(--ink-light)]">STEP {current + 1} / {total}</span>
+            <span className="text-[16px] font-bold">· {steps[current]?.title}</span>
+          </span>
+          <button
+            onClick={() => goTo(current + 1)}
+            disabled={isLast}
+            className="flex items-center justify-center w-9 h-9 rounded-[8px] text-[var(--ink-mid)] hover:bg-[var(--paper-warm)] disabled:opacity-25 disabled:cursor-default transition-colors"
+            aria-label="下一步"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </nav>
+      ) : (
+        <nav
+          className={`flex gap-1 mb-6 overflow-x-auto ${
+            flat ? 'pb-3 border-b border-[var(--border)]' : 'pb-1'
+          }`}
+        >
+          {steps.map((step, i) => {
+            const isActive = i === current;
+            const isPast = i < current;
+            return (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className={`
+                  flex items-center gap-1.5 px-3 py-2 rounded-[8px] text-[13px] font-mono
+                  whitespace-nowrap transition-all flex-shrink-0
+                  ${isActive
+                    ? 'bg-[var(--ink)] text-white font-bold shadow-sm'
+                    : isPast
+                      ? 'bg-[var(--success-light)] text-[var(--success)] font-medium'
+                      : 'bg-[var(--paper-warm)] text-[var(--ink-light)] hover:text-[var(--ink-mid)] hover:bg-[var(--paper)]'
+                  }
+                `}
+              >
+                <span className="text-[12px]">{step.icon || `${i + 1}`}</span>
+                <span>{step.title}</span>
+                {isPast && <span className="text-[10px]">✓</span>}
+              </button>
+            );
+          })}
+        </nav>
+      )}
 
       {/* 內容面板 */}
       <div

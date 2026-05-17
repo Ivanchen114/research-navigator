@@ -17,6 +17,7 @@ export const pacingArc = [
 export const W3Data = {
     id: "W3",
     title: "題目健檢與 AI 協作工作坊",
+    selfStudyStatus: "full", // 三模式架構 spec §5：個人診斷／下刀／AI 協作定案皆個人作業；Step 2 小組診斷是個人練習的平行難度軌、可替代
     duration: 100,
     durationDesc: "2 節課",
     coreConcepts: [
@@ -59,7 +60,7 @@ export const W3Data = {
                     colorClass: "c3",
                     icon: "🌉",
                     title: "Step 2 暖身｜W2 → W3 銜接 + 8 病症介紹",
-                    desc: "回顧 W2 探究意圖（『原石』），介紹 8 種題目病症（A 抽象哲學／B 算命占卜／C 百科全書／D 個案／E 太私／F 玄學／G 無聊／H 無範圍）。",
+                    desc: "回顧 W2 研究問題（『原石』），介紹 8 種題目病症（A 抽象哲學／B 算命占卜／C 百科全書／D 主觀偏見／E 是非廢話／F 觀落陰／G 方法無效／H 變因失控）。",
                     tags: ["呼應 W2", "病症觀念"]
                 },
                 {
@@ -90,8 +91,8 @@ export const W3Data = {
                     colorClass: "c4",
                     icon: "💪",
                     title: "Step 2｜個人診斷練習（30 題選 2，禁用 AI）",
-                    desc: "學生從 30 題爛題目中自行選 2 題，不准用 AI，先靠自己診斷、寫出修正版題目。",
-                    tags: ["個人練習", "學習單 Part 2", "🚫 禁用 AI"]
+                    desc: "學生從 30 題爛題目中自行選 2 題，先不用 AI，靠自己診斷、寫出修正版題目。",
+                    tags: ["個人練習", "學習單 Part 2", "先不用 AI"]
                 },
                 {
                     timeStart: "0:40",
@@ -100,7 +101,7 @@ export const W3Data = {
                     colorClass: "c5",
                     icon: "🧠",
                     title: "Step 2 小組｜黃卡／紅卡會診",
-                    desc: "每組從黃卡或紅卡中選 1 題，不准用 AI，一起診斷、把個人判斷說出來並與組員協商。",
+                    desc: "每組從黃卡或紅卡中選 1 題，先不用 AI，一起診斷、把個人判斷說出來並與組員協商。",
                     tags: ["小組共作", "高階挑戰", "學習單 Part 2 第二表格"]
                 },
                 {
@@ -138,9 +139,9 @@ export const W3Data = {
                     duration: "8 min",
                     colorClass: "c2",
                     icon: "📖",
-                    title: "Step 3｜4 把刀心路歷程展開卡",
-                    desc: "看 4 個爛題目範例（追星文化／快樂感／2030 職業／課堂專注度），對應 4 把刀。每張卡先自己想 30 秒、再點開看老練研究者的心路獨白。",
-                    tags: ["互動展開", "心路歷程", "看示範"]
+                    title: "Step 3｜4 把刀心路歷程展開卡 + 兩條救活路徑示範",
+                    desc: "看 4 個爛題目範例（追星文化／快樂感／2030 職業／課堂專注度），對應 4 把刀。每張卡先自己想 30 秒、再點開看老練研究者的心路獨白。最後展示「同一個爛題目（手機+專注度）可走兩條路徑救活」——A 換具體指標、B 放棄概念改測結果。",
+                    tags: ["互動展開", "心路歷程", "兩條救活路徑"]
                 },
                 {
                     timeStart: "0:13",
@@ -228,11 +229,12 @@ export const W3Data = {
 export const W1Data = {
     id: "W1",
     title: "研究方法啟動：模仿遊戲與人機協作",
+    selfStudyStatus: "partial", // 三模式架構 spec §5：模仿遊戲／AI-RED 公約可自學，小組討論與現場人機協作示範需課堂
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
         { label: '本週任務', value: '找出偽裝者 + 簽署公約' },
-        { label: '課課產出', value: '好奇心種子' },
+        { label: '課堂產出', value: 'AI-RED 簽署 + 生活觀察種子' },
         { label: '下週預告', value: '你觀察到的生活現象' }
     ],
     courseArc: pacingArc.map(item => ({
@@ -249,9 +251,9 @@ export const W1Data = {
         },
         {
             prefix: "②",
-            title: "三件 AI 做不到的事",
+            title: "不能外包的三件事",
             subtitle: "品味、接觸、判斷",
-            desc: "學會駕馭 AI 而非被 AI 取代",
+            desc: "AI 可以做很多，但這三件事的判斷與責任不能交給它",
             colorConfig: "g"
         }
     ],
@@ -269,8 +271,8 @@ export const W1Data = {
                     colorClass: "c3",
                     icon: "✍️",
                     title: "一、 暖身：我與研究的距離",
-                    desc: "寫下對研究的想法與生活中好奇的現象。建立真實作品對照基準。",
-                    tags: ["個人寫作", "生活觀察"]
+                    desc: "寫下自己的研究經驗（沒做過也 OK），建立真實作品的起點。生活觀察種子刻意延後到收尾，讓學生經歷課程後再寫。",
+                    tags: ["個人寫作", "研究經驗"]
                 },
                 {
                     timeStart: "0:10",
@@ -300,8 +302,8 @@ export const W1Data = {
                     colorClass: "c2",
                     icon: "📝",
                     title: "四、 簽署 AI-RED 公約",
-                    desc: "講解 AI-RED 五步驟，學生簽署承諾書。",
-                    tags: ["倫理規範", "簽署儀式", "AI-RED"]
+                    desc: "講解 AI-RED 五字（Ascribe / Inquire / Reference / Evaluate / Document）、人機分工、理解檢核。學生在每個字母下選一條最像自己的承諾，五字都選完才解鎖簽名區，親手簽下姓名。",
+                    tags: ["倫理規範", "親手簽署", "AI-RED 五字"]
                 }
             ]
         },
@@ -313,44 +315,54 @@ export const W1Data = {
             stages: [
                 {
                     timeStart: "0:00",
-                    timeEnd: "0:10",
-                    duration: "10 min",
+                    timeEnd: "0:06",
+                    duration: "6 min",
                     colorClass: "c3",
                     icon: "💡",
-                    title: "五、 建立問題意識 & 蒐集資料",
-                    desc: "老師提出問題意識，讓學生填寫 Google 表單蒐集數據（人的行動）。",
-                    tags: ["問題意識", "數據蒐集"]
+                    title: "五、 確認研究問題 & 現場收資料",
+                    desc: "投影示範研究問題：「松山高一學生認為的『研究』是偏工具操作型還是思維探究型？」學生填 Google 表單回答「你認為做研究是什麼？」——你就是研究參與者。教學備註：「先有分類框架」屬演繹型研究（帶假設看資料，對比歸納型，W4 展開）——此概念僅教師知道，不在學生頁出現。",
+                    tags: ["問題意識", "現場收資料", "演繹型研究"]
                 },
                 {
-                    timeStart: "0:10",
-                    timeEnd: "0:25",
-                    duration: "15 min",
+                    timeStart: "0:06",
+                    timeEnd: "0:14",
+                    duration: "8 min",
                     colorClass: "c4",
                     icon: "🤖",
-                    title: "六、 AI 實況分析",
-                    desc: "老師實作將收集的資料丟給 AI，展示 AI 高速整理與分類資料的能力（AI 協助）。",
-                    tags: ["AI 實地展演", "資料處理"]
+                    title: "六、 AI 實況分析（AI-RED 的 I）",
+                    desc: "投影完整 Prompt 範本（角色 + 任務 + 分類定義 + 步驟編號 + 資料），把學生回答貼進去送出，看 AI 即時生成分類與比例。",
+                    tags: ["AI 實地展演", "Prompt 範本", "AI-RED I"]
                 },
                 {
-                    timeStart: "0:25",
-                    timeEnd: "0:35",
-                    duration: "10 min",
+                    timeStart: "0:14",
+                    timeEnd: "0:22",
+                    duration: "8 min",
                     colorClass: "c1",
                     icon: "🧠",
-                    title: "七、 解讀數據：人在迴圈中",
-                    desc: "教師示範如何解讀 AI 的數字，賦予教學意義（人的判斷）。總結人與 AI 的分工。",
-                    tags: ["解讀分析", "人機分工"],
-                    keyPoint: "🎯 人負責方向、判準與解讀；AI 協助整理、分類與產生草稿。"
+                    title: "七、 揭穿 AI 漂亮歸納（AI-RED 的 E + D）",
+                    desc: "回頭比對原始資料，找出 AI 美化或省略的地方（例如把「研究是被老師逼著做的事」歸到「其他」）。老師親手寫誠實版結論。",
+                    tags: ["回頭比對", "AI-RED E", "AI-RED D"],
+                    keyPoint: "🎯 AI 給的歸納漂亮 ≠ 正確。人負責方向與解讀，AI 協助整理。"
                 },
                 {
-                    timeStart: "0:35",
-                    timeEnd: "0:50",
-                    duration: "15 min",
+                    timeStart: "0:22",
+                    timeEnd: "0:32",
+                    duration: "10 min",
                     colorClass: "c2",
                     icon: "🎯",
-                    title: "八、 品味、接觸、判斷",
-                    desc: "總結這學期要練的三件事：品味（問好問題）、接觸（拿真實數據）、判斷（批判思考）。",
-                    tags: ["核心價值", "課程預告"]
+                    title: "八、 不能外包的三件事",
+                    desc: "「30 秒 vs 18 週」轉折——如果 AI 30 秒就能分析完，為什麼還要花 18 週？答案：品味（決定哪個問題值得研究）、接觸（親自觀察訪問）、判斷（回頭檢查 AI 漂亮歸納）。",
+                    tags: ["核心價值", "課程預告", "責任不能外包"]
+                },
+                {
+                    timeStart: "0:32",
+                    timeEnd: "0:50",
+                    duration: "18 min",
+                    colorClass: "c3",
+                    icon: "🌱",
+                    title: "九、 生活觀察種子 + 匯出繳交",
+                    desc: "經歷完整課程後，學生寫下一個讓自己有感的生活現象——這是 W2 研究問題的起點。投影探員系統、按 ExportButton 一鍵複製、貼到 Google Classroom 繳交。",
+                    tags: ["生活觀察", "W2 銜接", "課堂繳交"]
                 }
             ]
         }
@@ -358,8 +370,13 @@ export const W1Data = {
     summaries: [
         {
             icon: "📝",
-            label: "課堂產出",
-            text: "AI-RED 公約簽署<br><small style=\"font-size:11px;color:#888;\">歷程紀錄承諾</small>"
+            label: "課堂產出 1",
+            text: "AI-RED 公約簽署<br><small style=\"font-size:11px;color:#888;\">五字逐條承諾、親手簽下姓名</small>"
+        },
+        {
+            icon: "🌱",
+            label: "課堂產出 2",
+            text: "生活觀察種子<br><small style=\"font-size:11px;color:#888;\">W2 研究問題的起點</small>"
         }
     ],
     legends: [
@@ -374,6 +391,7 @@ export const W1Data = {
 export const W2Data = {
     id: "W2",
     title: "問題意識的覺醒",
+    selfStudyStatus: "full", // 三模式架構 spec §5：全為個人作業（四段式練習、AI 協作、寫研究問題），無小組或老師示範環節
     duration: 100,
     durationDesc: "2 節課",
     courseArc: pacingArc.map((item, idx) => ({
@@ -420,10 +438,10 @@ export const W2Data = {
                     duration: "15 min",
                     colorClass: "c1",
                     icon: "🧠",
-                    title: "二、 四段式思考框架與示範（Step 1 觀念建立 · 後段）",
-                    desc: "講解觀察、落差、展開假設、鎖定研究問題。以圖書館現象示範完整拆解。",
-                    tags: ["概念講解", "教師示範"],
-                    keyPoint: "⚠️ 步驟 3（展開假設）必須列 3-5 個，不能只想一個就鎖死——研究的起點是承認「答案可能不只一個」。"
+                    title: "二、 四段式思考框架 + ABC 三型 + 三焦點示範（Step 1 觀念建立 · 後段）",
+                    desc: "講解觀察、落差、展開假設、鎖定研究問題，以圖書館段考爆滿示範。展示「同一個觀察可以切出三種研究問題」（空間錯位 / 時間斷層 / 環境悖論），對應 ABC 三型句型。",
+                    tags: ["概念講解", "教師示範", "三焦點示範"],
+                    keyPoint: "⚠️ 步驟 3（展開假設）必須列 3-5 個，不能只想一個就鎖死——研究的起點是承認「答案可能不只一個」，同一個現象往往能切出多個焦點。"
                 },
                 {
                     timeStart: "0:20",
@@ -433,7 +451,7 @@ export const W2Data = {
                     icon: "🖼️",
                     title: "三、 圖片轉化戰（Step 2 暖身練習）",
                     desc: "看合成圖兩個場景（垃圾爆滿 / 課堂失序），用 Tab 切換各做一輪「現象 → 落差 → 展開假設」。",
-                    tags: ["情境練習", "快速實作", "🚫 禁用 AI"]
+                    tags: ["情境練習", "快速實作", "先不用 AI"]
                 },
                 {
                     timeStart: "0:35",
@@ -443,7 +461,7 @@ export const W2Data = {
                     icon: "✍️",
                     title: "四、 改寫你的 W1 觀察（Step 3 人腦練習）",
                     desc: "拿 W1 自己的生活觀察種子，用四段框架的前三步重寫。這是後面所有 step 的起點。",
-                    tags: ["個人創作", "聚焦核心", "🚫 禁用 AI"]
+                    tags: ["個人創作", "聚焦核心", "先不用 AI"]
                 }
             ]
         },
@@ -459,9 +477,9 @@ export const W2Data = {
                     duration: "10 min",
                     colorClass: "c1",
                     icon: "🧩",
-                    title: "五、 ABC 探究句型 + 拍 1 自選假設（Step 4 AI 協作 · 前段）",
-                    desc: "介紹影響型 (A)、比較型 (B)、深究型 (C)。學生從上一段的 3-5 個假設挑一個、寫選它的理由、判斷 ABC 型。全程禁用 AI。",
-                    tags: ["概念講解", "人腦先行", "🚫 拍 1 禁 AI"],
+                    title: "五、 第一輪 · 自選假設 + 自寫研究問題（Step 4 AI 協作 · 前段）",
+                    desc: "學生從上一段的 3-5 個假設挑一個、寫選它的理由、判斷 ABC 型、自寫一句研究問題草稿。這一輪先人腦行動，AI 還沒上場。",
+                    tags: ["概念講解", "人腦先行", "第一輪不用 AI"],
                     keyPoint: "🎯 「挑哪個假設」「定哪一型」是研究設計決定，必須由你做。"
                 },
                 {
@@ -470,10 +488,10 @@ export const W2Data = {
                     duration: "25 min",
                     colorClass: "c5",
                     icon: "✨",
-                    title: "六、 探究意圖生成器（Step 4 AI 協作 · 三拍）",
-                    desc: "拍 2：學生餵 Prompt 給 AI，請 AI 把選定假設翻譯成 A/B/C 三種句型。拍 3：學生比對自判 vs AI 建議，選一個真正打動的。",
-                    tags: ["AI 實作", "三拍流程", "AI-RED 紀錄"],
-                    keyPoint: "🔍 AI 是放大鏡，你才是眼睛——AI 給選項，人做最終判斷。"
+                    title: "六、 研究問題審核器（Step 4 AI 協作 · 三輪流程）",
+                    desc: "第二輪：把第一輪寫的研究問題草稿給 AI 做結構審核 + 改寫建議。第三輪：學生比對自寫 vs AI 建議，決定保留自己的、採 AI 改寫、還是混合。",
+                    tags: ["AI 實作", "三輪流程", "AI-RED 紀錄"],
+                    keyPoint: "🔍 AI 是審核者，不是答題者。順序倒了就變成 AI 主導、你背書。"
                 },
                 {
                     timeStart: "0:35",
@@ -481,8 +499,8 @@ export const W2Data = {
                     duration: "15 min",
                     colorClass: "c3",
                     icon: "🏆",
-                    title: "七、 探究意圖定案 + 反思 + 繳交（Step 5 + Step 6）",
-                    desc: "寫最終探究意圖完整句（帶去 W3 的版本）→ 反思卡在四段哪一段 → 一鍵匯出貼到 Google Classroom。預告 W3 題目健檢。",
+                    title: "七、 研究問題定案 + 反思 + 繳交（Step 5 + Step 6）",
+                    desc: "寫最終研究問題完整句（帶去 W3 的版本）→ 反思卡在四段哪一段 → 按「複製 W2 學習紀錄」貼到 Google Classroom。預告 W3 題目健檢。",
                     tags: ["最終產出", "反思", "繳交"]
                 }
             ]
@@ -517,6 +535,7 @@ export const W2Data = {
 export const W4Data = {
     id: "W4",
     title: "方法地圖：認識方法 + 兩層判斷",
+    selfStudyStatus: "full", // 三模式架構 spec §5：全為個人作業（五方法／兩層判斷／為自己題目選方法／兩題反思）；本週不使用 AI、無 AI-RED；同儕挑戰可用「4 種常見誤診」自查卡替代
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
@@ -635,9 +654,9 @@ export const W4Data = {
                     duration: "15 min",
                     colorClass: "c2",
                     icon: "🩺",
-                    title: "七、 Step 3 為題目選路 — 兩層判斷 + 方法 + 理由",
-                    desc: "ThinkRecord 連寫 5 格：L1 判斷／L2 判斷／主要方法／選擇理由（必引用兩層判斷某條）／輔助方法（如需）。",
-                    tags: ["個人應用", "理由表態"]
+                    title: "七、 Step 3 為題目選路 — 兩層判斷 + 方法 + 理由 + 誤診自查",
+                    desc: "ThinkRecord 連寫 5 格：L1 判斷／L2 判斷／主要方法／選擇理由（必引用兩層判斷某條）／輔助方法（如需）。寫完對照「常見誤診糾正 4 種」紅色卡片自查：誤診問卷／來源不明／模糊文獻／貪多嚼不爛——踩到任一條就回頭修。",
+                    tags: ["個人應用", "理由表態", "誤診自查"]
                 },
                 {
                     timeStart: "0:20",
@@ -655,7 +674,7 @@ export const W4Data = {
                     duration: "13 min",
                     colorClass: "c5",
                     icon: "💭",
-                    title: "九、 Step 4 反思 4 題",
+                    title: "九、 Step 4 兩題反思",
                     desc: "兩題核心反思：最易搞混的方法（含 L2 對齊）、文獻回顧 vs 文獻分析法——後設認知收束。",
                     tags: ["後設認知", "整理收束"]
                 },
@@ -666,7 +685,7 @@ export const W4Data = {
                     colorClass: "c3",
                     icon: "🏁",
                     title: "十、 Step 5 回顧繳交 + W5 預告",
-                    desc: "AI-RED 敘事紀錄（optional）→ ExportButton 匯出 → 上傳 Google Classroom。預告 W5 操作型定義：把方法接到「可實際蒐集」的指標。",
+                    desc: "AI-RED 敘事紀錄（optional）→ 按「複製 W4 學習紀錄」貼到 Google Classroom 繳交。預告 W5 操作型定義：把方法接到「可實際蒐集」的指標。",
                     tags: ["成果繳交", "下週預告"]
                 }
             ]
@@ -755,7 +774,7 @@ export const W5Data = {
                 {
                     timeStart: "0:05", timeEnd: "0:15", duration: "10 min",
                     colorClass: "c1", icon: "📐",
-                    title: "二、 操作型定義是什麼 + 「壓力」三方法對照範例",
+                    title: "二、 操作型定義是什麼：上課專心入門 + 壓力進階範例",
                     desc: "概念講解：把抽象變成可測。展示「高中生壓力」用問卷／訪談／觀察各自的操作型定義。",
                     tags: ["概念講解", "範例對照"]
                 },
@@ -817,7 +836,7 @@ export const W5Data = {
                     title: "九、 寫三格——核心概念 + 操作型定義 + 正反例",
                     desc: "ThinkRecord 連寫三格。placeholder/scaffold 會根據 W4 方法動態切換對應範例。",
                     tags: ["個人實作", "兌現點"],
-                    keyPoint: "⚠️ 寫一次、用三次：W7-W8 計畫書、W9 工具設計都會用到。"
+                    keyPoint: "⚠️ 寫一次、用三次：W9 計畫書（第二章+第四章）、W10 工具設計都會用到。"
                 },
                 {
                     timeStart: "0:25", timeEnd: "0:31", duration: "6 min",
@@ -897,14 +916,14 @@ export const W6Data = {
             prefix: "①",
             title: "三件齊一張",
             subtitle: "題目+方法+操作型定義",
-            desc: "把 W3-W5 三週累積的東西塞進 A4 四格手寫海報",
+            desc: "把 W3-W5 三週累積的東西塞進 A4 五格手寫海報",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "三色便利貼",
-            subtitle: "粉紅 / 黃 / 藍",
-            desc: "認可 / 具體建議 / 想問的問題——回饋要可執行",
+            title: "一人一條",
+            subtitle: "聽完寫最關鍵那一條",
+            desc: "走讀時 3 位同學各在你海報⑤格寫一條最重要回饋——讚美／建議／疑問都好",
             colorConfig: "b"
         },
         {
@@ -930,25 +949,32 @@ export const W6Data = {
                     tags: ["連貫鏈", "目標建立"]
                 },
                 {
-                    timeStart: "0:02", timeEnd: "0:27", duration: "25 min",
+                    timeStart: "0:02", timeEnd: "0:07", duration: "5 min",
+                    colorClass: "c4", icon: "🎯",
+                    title: "二、 動機升級檢核（網頁寫）",
+                    desc: "W3 一句話動機常空泛——三個自答題（具體畫面／對誰有意義／你的困惑）拉具體，重寫成 3-5 句版貼海報③格。",
+                    tags: ["跨週升級", "結構化鷹架"]
+                },
+                {
+                    timeStart: "0:07", timeEnd: "0:27", duration: "20 min",
                     colorClass: "c2", icon: "🎨",
-                    title: "二、 Step 1 海報製作（A4 紙本手寫）",
-                    desc: "四格範本：① 題目 ② 主方法 ③ 核心概念+操作型定義 ④ 為什麼想研究這個。動機格在網頁寫，標題優化可選 AI。",
+                    title: "三、 Step 1 海報製作（A4 紙本手寫）",
+                    desc: "五格範本：① 吸睛標題 ② 學術副標 ③ 升級版研究動機 ④ 研究方法（核心概念+操作型定義，這格最大）⑤ 同儕回饋區（留白）。先紙本手寫，標題優化最後可選 AI。",
                     tags: ["紙本手寫", "先人後 AI"],
-                    keyPoint: "⚠️ 不准用 AI 寫內容——只有最後標題優化可以開 AI。"
+                    keyPoint: "⚠️ 先自己寫內容——①-④格都自己寫（⑤格留白給走讀），標題優化最後一步才開 AI。"
                 },
                 {
                     timeStart: "0:27", timeEnd: "0:30", duration: "3 min",
                     colorClass: "c3", icon: "📋",
-                    title: "三、 Gallery Walk 規則說明",
-                    desc: "ABCD 四輪走讀（每輪 5 min）+ 三色便利貼規則：粉紅認可 / 黃建議 / 藍提問。",
+                    title: "四、 Gallery Walk 規則說明",
+                    desc: "四輪走讀（每輪 5 min）+ 一人一條原則：聽完報告，在海報⑤格寫一條最關鍵回饋（讚美／建議／疑問皆可，聚焦不貪多）。",
                     tags: ["規則說明", "走讀準備"]
                 },
                 {
                     timeStart: "0:30", timeEnd: "0:50", duration: "20 min",
                     colorClass: "c5", icon: "👀",
-                    title: "四、 Step 2 四輪走讀（每輪 5 min）",
-                    desc: "ABCD 輪流坐鎮報告，其他人移動聆聽 + 貼便利貼。重點挑戰問題：「正反例分得開嗎？」",
+                    title: "五、 Step 2 四輪走讀（每輪 5 min）",
+                    desc: "ABCD 輪流坐鎮報告，其他人移動聆聽——聽完每人在那張海報⑤格寫一條最重要回饋。重點挑戰問題：「正反例分得開嗎？」",
                     tags: ["走讀", "同儕回饋"]
                 }
             ]
@@ -962,36 +988,36 @@ export const W6Data = {
                 {
                     timeStart: "0:00", timeEnd: "0:08", duration: "8 min",
                     colorClass: "c2", icon: "📝",
-                    title: "五、 走讀回饋紀錄",
-                    desc: "回到座位讀自己海報蒐集的便利貼，挑最重要 3 條寫進 ThinkRecord。",
+                    title: "六、 走讀回饋紀錄",
+                    desc: "回到座位讀自己海報⑤格上 3 位同學寫的回饋，整理進網頁——挑最關鍵那條留待 Step 5 反思。",
                     tags: ["個人寫作", "回饋整理"]
                 },
                 {
                     timeStart: "0:08", timeEnd: "0:23", duration: "15 min",
                     colorClass: "c4", icon: "🤝",
-                    title: "六、 Step 3 找合題夥伴 / 確認 Solo",
+                    title: "七、 Step 3 找合題夥伴 / 確認 Solo",
                     desc: "看走讀回饋判斷：題目近 + 方法互補的同學湊合題；題目核心只能自己做的選 Solo。雙路線判斷指引並列。",
                     tags: ["路線判斷", "個別決策"]
                 },
                 {
                     timeStart: "0:23", timeEnd: "0:43", duration: "20 min",
                     colorClass: "c2", icon: "🛤️",
-                    title: "七、 Step 4 路線決定",
-                    desc: "Team 線：3 人合題 + 隊員分工 + 合題理由（3 格）。Solo 線：嚴格 5 項全寫——非 Solo 不可的理由 / 4 章工作量規劃 / 三大風險 / 求援計畫 / Plan B。",
+                    title: "八、 Step 4 路線決定",
+                    desc: "Team 線：3 人合題 + 隊員分工 + 合題理由（3 格）。Solo 線：嚴格 5 項全寫——非 Solo 不可的理由 / 後續工作時間規劃 / 三大風險 / 求援計畫 / Plan B。",
                     tags: ["個人實作", "雙路線"],
                     keyPoint: "⚠️ Solo 5 項不全會在 W12 中期短報被退件——這是契約。"
                 },
                 {
                     timeStart: "0:43", timeEnd: "0:48", duration: "5 min",
                     colorClass: "c5", icon: "💭",
-                    title: "八、 Step 5 反思",
-                    desc: "1 題反思：走讀蒐集的便利貼裡，最戳到你的 1 條是什麼？怎麼處理？",
+                    title: "九、 Step 5 反思",
+                    desc: "1 題反思：走讀蒐集的回饋裡，最有用的 1 條是什麼？你會怎麼處理？",
                     tags: ["後設認知", "回饋處理"]
                 },
                 {
                     timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
                     colorClass: "c3", icon: "🏁",
-                    title: "九、 ExportButton 匯出 + W7 預告",
+                    title: "十、 ExportButton 匯出 + W7 預告",
                     desc: "一鍵複製本週紀錄貼 Google Classroom。預告 W7 文獻搜尋入門（A-D 證據分級＋華藝四步）。",
                     tags: ["成果繳交", "下週預告"]
                 }
@@ -1007,7 +1033,7 @@ export const W6Data = {
         {
             icon: "👀",
             label: "同儕驗收",
-            text: "Gallery Walk 4 輪 + 三色便利貼<br><small style=\"font-size:11px;color:#888;\">收到別人才看得到的盲點</small>"
+            text: "Gallery Walk 4 輪 + 一人一條<br><small style=\"font-size:11px;color:#888;\">收到別人才看得到的盲點</small>"
         },
         {
             icon: "🛤️",
@@ -1173,7 +1199,7 @@ export const W8Data = {
         { label: '第一節', value: '識破換字抄襲 + 三明治引用法' },
         { label: '第二節', value: '多文獻整合 + 同儕審查' },
         { label: '課堂產出', value: '5 句以上文獻探討段落（連回題目）' },
-        { label: '帶去 W9', value: '文獻探討段落（計畫書第二章地基）' }
+        { label: '帶去 W9', value: '文獻探討段落（計畫書第三章 文獻回顧地基）' }
     ],
     courseArc: pacingArc.map((item, idx) => ({
         ...item,
@@ -1279,7 +1305,7 @@ export const W8Data = {
                     timeStart: "0:48", timeEnd: "0:50", duration: "2 min",
                     colorClass: "c3", icon: "🏁",
                     title: "九、 ExportButton + W9 預告",
-                    desc: "預告 W9 計畫書 1-5 章——這段文獻探討會直接搬進計畫書第二章。",
+                    desc: "預告 W9 計畫書 1-5 章——這段文獻探討會直接搬進計畫書第三章（文獻回顧）。",
                     tags: ["成果繳交", "下週預告"]
                 }
             ]
@@ -1299,7 +1325,7 @@ export const W8Data = {
         {
             icon: "🌉",
             label: "兌現點",
-            text: "W7 找文獻 → W8 寫文獻 → W9 第二章<br><small style=\"font-size:11px;color:#ccc;\">寫一次、用一學期</small>"
+            text: "W7 找文獻 → W8 寫文獻 → W9 第三章<br><small style=\"font-size:11px;color:#ccc;\">寫一次、用一學期</small>"
         }
     ],
     legends: [
@@ -1324,23 +1350,23 @@ export const W9Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "讀 W8 老師回饋",
-            subtitle: "把建議納入計畫書修正",
-            desc: "進場 5 分鐘看 GC 批改；W8 老師主要建議用一兩句記下",
+            title: "小組盤點 W2-W8 成果",
+            subtitle: "確認共識 + 納入同儕建議",
+            desc: "用 1-5 章地圖對照你們組的題目／方法／操作型定義／文獻；W6 走讀 + W8 同儕審查建議一併納入",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "第一章動機擴寫",
-            subtitle: "W3 一句話 → W9 一段話（3 問鷹架）",
-            desc: "對照 W3 個人 vs W8 組內題目；用「情境/空缺/解決什麼」3 問擴寫；含學生實例 + 4 種常犯錯誤",
+            title: "1-5 章寫法導引（五分頁）",
+            subtitle: "一章一個分頁＝參考架、不鎖序、不收填寫",
+            desc: "一→五章寫法原則 + 錯誤範例 + 去 docx 指示；每分頁開頭有「題目變了沒」判斷卡；第四章依方法分流",
             colorConfig: "y"
         },
         {
             prefix: "③",
-            title: "計畫書 2-5 章組裝",
-            subtitle: "在計畫書把第二到五章寫到雛形",
-            desc: "2 文獻、3 研究方法、4 變項定義、5 抽樣對象——W2-W8 素材整合 + 分章工作流",
+            title: "計畫書組裝工作流",
+            subtitle: "分章工作流 + 5 法模板 + 進度分級",
+            desc: "第一章全組共識、二~五章組員分章平行寫；依方法挑計畫書模板，把 1-5 章寫到雛形",
             colorConfig: "b"
         },
         {
@@ -1354,7 +1380,7 @@ export const W9Data = {
     periods: [
         {
             badge: "第一節",
-            title: "讀回饋 × 計畫書 1-5 章組裝（前段）",
+            title: "開場盤點 × 五章寫法導引 × 計畫書組裝（前段）",
             duration: 50,
             hasBreakAfter: true,
             stages: [
@@ -1365,7 +1391,7 @@ export const W9Data = {
                     colorClass: "c3",
                     icon: "📢",
                     title: "一、 開場：本週目標",
-                    desc: "把計畫書 1-5 章寫到雛形，整合 W2-W8 素材 + W8 老師回饋。工具品質與第六章題目設計移到 W10。"
+                    desc: "把計畫書 1-5 章寫到雛形，整合 W2-W8 素材 + W6/W8 同儕回饋。工具品質與第六章題目設計移到 W10。"
                 },
                 {
                     timeStart: "0:05",
@@ -1373,9 +1399,9 @@ export const W9Data = {
                     duration: 10,
                     colorClass: "c2",
                     icon: "📬",
-                    title: "二、 Step 1 讀 W8 老師回饋 + 1-5 章地圖",
-                    desc: "打開 GC 看 W8 批改，記下老師最主要的一兩句建議；對照 1-5 章地圖確認每章對應的 W2-W8 素材。",
-                    tags: ["W8 回饋", "章節地圖"]
+                    title: "二、 Step 1 小組盤點 W2-W8 成果 + 組內合議方法",
+                    desc: "用 1-5 章地圖對照你們組的題目／方法／操作型定義／文獻在哪寫過、確認共識；W6 走讀 + W8 同儕審查建議一併納入；組內合議主方法（5 按鈕）。",
+                    tags: ["W2-W8 盤點", "章節地圖", "方法合議"]
                 },
                 {
                     timeStart: "0:15",
@@ -1383,9 +1409,9 @@ export const W9Data = {
                     duration: 20,
                     colorClass: "c4",
                     icon: "🔥",
-                    title: "三、 Step 2 第一章動機擴寫",
-                    desc: "對照 W3 個人 vs W8 組內題目，用 3 問（情境/空缺/解決什麼）把動機從一句話擴成一段。看學生實例 + 4 種常犯錯誤對照。",
-                    tags: ["W3→W9 橋", "3 問鷹架"]
+                    title: "三、 Step 2 1-5 章寫法導引（五分頁）",
+                    desc: "老師導覽五個分頁，重點放「哪些章可搬、哪些要重想」的判斷 + 重章一（動機 3 問）和章四（方法分流）；其餘章組員分頭時自翻。",
+                    tags: ["五分頁參考架", "題目變動判斷", "章一/章四重點"]
                 },
                 {
                     timeStart: "0:35",
@@ -1393,9 +1419,9 @@ export const W9Data = {
                     duration: 15,
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "四、 Step 3 計畫書組裝（前段：第二章）",
-                    desc: "依分章工作流分配誰寫哪章；先把第二章關鍵詞操作型定義寫到雛形。",
-                    tags: ["分章工作流", "第二章"]
+                    title: "四、 Step 3 計畫書組裝（第一章全組共識 + 分章啟動）",
+                    desc: "依分章工作流分配誰寫哪章；第一章全組先一起做（題目／動機共識），二~五章組員分頭啟動。",
+                    tags: ["分章工作流", "第一章共識"]
                 }
             ]
         },
@@ -1411,9 +1437,9 @@ export const W9Data = {
                     duration: 30,
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "五、 Step 3 計畫書組裝（後段：第三、四、五章）",
-                    desc: "第五章對象/抽樣/人數定版；第三、四章寫骨架（文獻 2-3 篇 + 變項清單，定版留課後）。",
-                    tags: ["分章工作流", "第三、四、五章"]
+                    title: "五、 Step 3 計畫書組裝（組員分章平行寫 2-5 章）",
+                    desc: "組員分章平行寫：第五章對象/抽樣/人數定版；第三、四章寫骨架（文獻 2-3 篇 + 變項清單，定版留課後）。",
+                    tags: ["分章平行寫", "第三、四、五章"]
                 },
                 {
                     timeStart: "0:30",
@@ -1442,7 +1468,7 @@ export const W9Data = {
         {
             icon: "📋",
             label: "核心產出",
-            text: "計畫書 1-5 章雛形<br><small style=\"font-size:11px;color:#888;\">W2-W8 素材整合 + W8 建議納入</small>"
+            text: "計畫書 1-5 章雛形<br><small style=\"font-size:11px;color:#888;\">W2-W8 素材整合 + W6/W8 同儕建議納入</small>"
         },
         {
             icon: "🤖",
@@ -1484,9 +1510,9 @@ export const W10Data = {
         },
         {
             prefix: "②",
-            title: "自我與同儕診斷",
-            subtitle: "自己挑 → 同學挑 → AI 補漏",
-            desc: "V→R→F 自查 + 雷區小測驗 + 跨組同儕互審。AI 工作坊只負責挑不出但覺得怪的",
+            title: "老師諮詢區把關",
+            subtitle: "AI 跑過 → 帶計畫書找老師當場檢查",
+            desc: "AI 工作坊先做第一輪自查（教學型/驗收型/不用 AI 三選一），再帶到老師諮詢區把關（隨機抽組 + 主動排隊）",
             colorConfig: "b"
         },
         {
@@ -1521,7 +1547,7 @@ export const W10Data = {
                     colorClass: "c3",
                     icon: "🎯",
                     title: "二、 Step 1 開場 + 第六章流程",
-                    desc: "本節目標：在 docx 第六章寫題目。方法從 W9 自動帶入；必要時手動切換。",
+                    desc: "本節目標：在計畫書第六章寫題目。方法從 W9 自動帶入；必要時手動切換。",
                     tags: ["方法分流"]
                 },
                 {
@@ -1540,7 +1566,7 @@ export const W10Data = {
                     duration: "15 min",
                     colorClass: "c2",
                     icon: "✍️",
-                    title: "四、 Step 2 docx 第六章寫題目（前段）",
+                    title: "四、 Step 2 計畫書第六章寫題目（前段）",
                     desc: "依方法寫題目雛形：問卷／訪談／實驗／觀察／文獻分析架構。網頁 ThinkRecord 只記 2-3 個關鍵決定。",
                     tags: ["docx 動手", "第六章雛形"]
                 }
@@ -1589,7 +1615,7 @@ export const W10Data = {
                     colorClass: "c5",
                     icon: "🔮",
                     title: "八、 Step 6 繳交確認 + W11 預告",
-                    desc: "ExportButton 匯出網頁紀錄；W11 拿到老師第三次建議再修工具 + 實體工具轉換（Google Form／紙本）+ 跨班 Pilot。",
+                    desc: "ExportButton 匯出網頁紀錄；W11 拿到老師第三次建議再修 + 完成本組工具設計書（含 Google Form／紙本載具）+ 跨方法 Pilot 互測。",
                     tags: ["匯出", "W11 預告"]
                 }
             ]
@@ -1609,7 +1635,7 @@ export const W10Data = {
         {
             icon: "📅",
             label: "課後任務",
-            text: "等老師第三次建議<br><small style=\"font-size:11px;color:#ccc;\">W11 實體工具轉換 + 跨班 Pilot</small>"
+            text: "等老師第三次建議<br><small style=\"font-size:11px;color:#ccc;\">W11 本組工具設計書 + 跨方法 Pilot 互測</small>"
         }
     ],
     legends: [
@@ -1623,7 +1649,7 @@ export const W10Data = {
 
 export const W11Data = {
     id: "W11",
-    title: "工具實體 × 跨方法 Pilot × 倫理 × 施測啟動",
+    title: "本組工具設計書 × 跨方法 Pilot × 倫理 × 期中報告繳交",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: pacingArc.map((item, idx) => ({
@@ -1634,7 +1660,7 @@ export const W11Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "工具實體（題目轉載具）",
+            title: "本組工具設計書（題目轉載具）",
             subtitle: "Google Form / 訪綱卡 / 紀錄表",
             desc: "W10 寫題目，W11 把題目搬到能施測的載具上；含關鍵呈現決策",
             colorConfig: "r"
@@ -1655,9 +1681,9 @@ export const W11Data = {
         },
         {
             prefix: "④",
-            title: "工具繳交",
-            subtitle: "Classroom 繳工具實體 + 上課歷程 docx",
-            desc: "工具實體（Form／訪綱／紀錄表）連結 + 一鍵匯出歷程 docx 一起貼到 Classroom；老師收回統一給回饋",
+            title: "期中報告繳交",
+            subtitle: "小組：計畫書 + 工具設計書｜個人：W11 歷程 docx",
+            desc: "小組繳交完整計畫書與本組工具設計書；個人匯出 W11 歷程 docx。完成後到 Classroom 按「繳交」。老師主要依工具設計書與 Pilot／倫理紀錄給回饋。",
             colorConfig: "y"
         }
     ],
@@ -1695,7 +1721,7 @@ export const W11Data = {
                     colorClass: "c1",
                     icon: "🛠️",
                     title: "三、 Step 2 拿模板 + W10 vs W11 分工說明",
-                    desc: "依主方法／補充方法／文獻子類型，下載對應的工具實體模板（Google Form 範本／訪綱／紀錄表）。明確：今天不改題目內容，只把寫好的題目搬上載具。",
+                    desc: "依主方法／補充方法／文獻子類型，下載對應的本組工具設計書模板（Google Form 範本／訪綱／紀錄表）。明確：今天不改題目內容，只把寫好的題目搬上載具。",
                     tags: ["GDrive 模板", "5 法分流"]
                 },
                 {
@@ -1706,7 +1732,7 @@ export const W11Data = {
                     icon: "🧱",
                     title: "四、 Step 2 把題目搬上載具",
                     desc: "問卷轉 Form／訪綱印卡／紀錄表設欄位／文獻編碼表填類別。載具本體留在學生手上（不在網頁填連結），下節 Pilot 直接用，改完再隨計畫書一起繳到 GC。",
-                    tags: ["工具實體", "5 法分流"]
+                    tags: ["本組工具設計書", "5 法分流"]
                 }
             ]
         },
@@ -1762,9 +1788,9 @@ export const W11Data = {
                     duration: "5 min",
                     colorClass: "c3",
                     icon: "🛫",
-                    title: "九、 Step 6 收尾：工具實體繳交 + W12 預告",
-                    desc: "5 min 內完成：① 工具實體連結貼到 Classroom 本週作業 ② 一鍵匯出網頁歷程 docx 一起貼（含 Pilot 紀錄、第二輪修正、倫理四原則）③ 看 W12 預告。老師收回工具書統一給回饋。",
-                    tags: ["工具繳交", "歷程匯出", "W12 預告"]
+                    title: "九、 Step 6 收尾：本組工具設計書繳交 + W12 預告",
+                    desc: "5 min 內完成兩類繳交：【小組】完整計畫書（W10 那份 G-Doc，依老師回饋修 ★★★，其他課後再修）+ 本組工具設計書（題目／變項對應／施測／Pilot 修正，上傳 Classroom 小組區，本週評分重點）。【個人】W11 歷程 docx（Pilot／修正／倫理），上傳 Classroom 個人區。完成後按 Classroom「繳交」，再看 W12 預告。",
+                    tags: ["期中報告繳交", "歷程匯出", "W12 預告"]
                 }
             ]
         }
@@ -1772,8 +1798,8 @@ export const W11Data = {
     summaries: [
         {
             icon: "🛠️",
-            label: "工具實體",
-            text: "題目搬上施測載具<br><small style=\"font-size:11px;color:#888;\">Google Form／訪綱卡／紀錄表</small>"
+            label: "本組工具設計書",
+            text: "第六章設計升級成工具設計書<br><small style=\"font-size:11px;color:#888;\">題目／變項對應／施測／Pilot 修正（本週評分重點）</small>"
         },
         {
             icon: "🧪",
@@ -1783,12 +1809,12 @@ export const W11Data = {
         {
             icon: "⚖",
             label: "倫理審查",
-            text: "倫理四原則 · 小組實踐紀錄<br><small style=\"font-size:11px;color:#888;\">老師收回工具書統一給回饋</small>"
+            text: "倫理四原則 · 小組實踐紀錄<br><small style=\"font-size:11px;color:#888;\">老師依本組工具設計書與 W11 歷程給回饋</small>"
         },
         {
             icon: "🛫",
-            label: "施測啟動",
-            text: "目標／時程／備案／啟動宣告<br><small style=\"font-size:11px;color:#ccc;\">W12 正式蒐集資料</small>"
+            label: "期中報告繳交",
+            text: "小組：計畫書 + 工具設計書｜個人：W11 歷程 docx<br><small style=\"font-size:11px;color:#ccc;\">樣本量／Plan B 已在計畫書第七、十一章，W12 期中短報老師問再口頭討論</small>"
         }
     ],
     legends: [
@@ -1935,6 +1961,7 @@ export const W12Data = {
 export const W13Data = {
     id: "W13",
     title: "資料整理週：把原始資料變成可分析的表",
+    selfStudyStatus: "partial", // 三模式架構 spec §5：5 法對照／4 詞／結構觀念可自學，動手整理巡視與小組成果需課堂
     description: "W11-W12 用第六章工具蒐集到一堆原始資料——但還不能直接交給 Gemini 畫圖。本週把它轉成「分析表」：欄位清楚、N 值明確，下週 W14 才畫得了圖。",
     periods: [
         {
@@ -1953,7 +1980,7 @@ export const W13Data = {
             title: "動手整理 × 收尾繳交",
             stages: [
                 { time: "0:00 - 0:35", title: "④ 動手整理（後段）", desc: "把資料填進分析表；進度自評（綠／黃／紅）；老師優先協助紅燈組。", tags: ["實作", "巡視"], colorClass: "lm-c2" },
-                { time: "0:35 - 0:50", title: "⑤ 收尾繳交", desc: "貼分析表連結（必繳）+ 寫表結構摘要 + 預告 W14 第一張圖；匯出。", tags: ["繳交", "預告"], colorClass: "lm-c3" }
+                { time: "0:35 - 0:50", title: "⑤ 雙線繳交 + 改寫練習 + W14 預告", desc: "【小組】繳原始資料連結 + 整理後分析表連結。【個人】匯出 W13 歷程 docx（雷 #9 改寫 + 自我遷移 + AI-RED 如有）。完成後到 Classroom 按「繳交」。", tags: ["雙線繳交", "改寫練習", "W14 預告"], colorClass: "lm-c3" }
             ]
         }
     ],
@@ -1970,8 +1997,8 @@ export const W13Data = {
         },
         {
             icon: "🔗",
-            label: "繳交分析表連結",
-            text: "Google Sheet 公開連結<br><small style=\"font-size:11px;color:#ccc;\">W14 直接讀取畫圖</small>"
+            label: "雙線繳交",
+            text: "小組：原始 + 分析表連結｜個人：W13 歷程 docx<br><small style=\"font-size:11px;color:#ccc;\">小組交資料成果，個人交資料責任紀錄</small>"
         }
     ],
     legends: [
@@ -1984,6 +2011,7 @@ export const W13Data = {
 export const W14Data = {
     id: "W14",
     title: "讓數據自己說話：圖表選擇與圖說寫作",
+    selfStudyStatus: "partial", // 三模式架構 spec §5：圖表＋圖說可自學，小組成果與老師巡視／抽問需課堂
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
@@ -2144,6 +2172,7 @@ export const W14Data = {
 export const W15Data = {
     id: "W15",
     title: "研究結論：四層寫作法",
+    selfStudyStatus: "partial", // 三模式架構 spec §5：四層架構／自查／雷#3 可自學，小組結論章整合回報告需課堂
     duration: 100,
     durationDesc: "2 節課",
     metaCards: [
@@ -2268,7 +2297,7 @@ export const W15Data = {
 
 export const W16Data = {
     id: "W16",
-    title: "報告撰寫與海報製作：從數據到故事",
+    title: "海報製作：兩張 A1 把研究說清楚",
     duration: 100,
     durationDesc: "2 節課",
     courseArc: pacingArc.map((item, idx) => ({
@@ -2279,129 +2308,119 @@ export const W16Data = {
     coreConcepts: [
         {
             prefix: "①",
-            title: "七步組裝",
-            subtitle: "搬運 → 縫合 → 潤色",
-            desc: "80% 內容前 15 週已寫完，現在只要組裝",
+            title: "海報＝期末報告",
+            subtitle: "7 項規準打分",
+            desc: "海報本身就是期末研究報告，不另寫 Word，依 7 項規準評分",
             colorConfig: "r"
         },
         {
             prefix: "②",
-            title: "AI 潤色校對",
-            subtitle: "縫合稿 + 人工校對",
-            desc: "AI 協助縫合與語氣調整，人工把關事實與邏輯",
+            title: "取捨而非縮印",
+            subtitle: "抓最重要的",
+            desc: "前 15 週內容已到位，海報空間有限，逼你抓出最重要的東西",
             colorConfig: "b"
         },
         {
             prefix: "③",
-            title: "海報設計",
-            subtitle: "A1 海報 + 發表預演",
-            desc: "把七章壓縮到一張海報，能在 3 分鐘內說完",
+            title: "三秒吸引力",
+            subtitle: "大 / 少 / 準 / 亮",
+            desc: "Gallery Walk 沒人讀論文，3 秒內被讀懂才有人停下來聽",
             colorConfig: "g"
         }
     ],
     periods: [
         {
             badge: "第一節",
-            title: "七步組裝 × AI 潤色 × 人工校對",
+            title: "海報入門 × 兩張 A1 架構",
             duration: 50,
             hasBreakAfter: true,
             stages: [
                 {
                     timeStart: "0:00",
                     timeStartFormatted: "00:00",
-                    duration: 5,
-                    colorClass: "c3",
-                    icon: "📦",
-                    title: "一、 開場：組裝出發",
-                    desc: "好消息：報告已寫完 80%。前 15 週學習單都是原料，今天只需搬運、縫合、潤色。",
-                    tags: ["動機", "框架"]
-                },
-                {
-                    timeStart: "0:05",
-                    timeStartFormatted: "00:05",
                     duration: 15,
                     colorClass: "c1",
-                    icon: "🧭",
-                    title: "二、 七步組裝清單",
-                    desc: "依七章清單逐項核對學習單來源：動機（W2）、文獻（W5-6）、方法（W8-11）、結果（W14）、結論（W15）。",
-                    tags: ["章節對照"]
+                    icon: "📋",
+                    title: "一、 海報入門 + 7 項規準",
+                    desc: "海報＝能 3 秒讀懂的研究報告。看懂 7 項評分規準（＝期末報告規準），規準五原始資料 zip 由組長代繳。",
+                    tags: ["評分規準", "定錨"]
                 },
                 {
-                    timeStart: "0:20",
-                    timeStartFormatted: "00:20",
+                    timeStart: "0:15",
+                    timeStartFormatted: "00:15",
+                    duration: 15,
+                    colorClass: "c1",
+                    icon: "🗺️",
+                    title: "二、 兩張 A1 七區塊架構",
+                    desc: "A1 #1 講為什麼＋怎麼做、A1 #2 講發現＋意義。7 區塊對應 7 規準；看視覺範本、下載乾淨版 PPT 模板。",
+                    tags: ["版面架構", "模板"]
+                },
+                {
+                    timeStart: "0:30",
+                    timeStartFormatted: "00:30",
                     duration: 20,
-                    colorClass: "c5",
-                    icon: "🤖",
-                    title: "三、 AI 組裝 Prompt",
-                    desc: "貼入七章素材與風格指引，讓 AI 產生縫合稿；同步記錄 AI-RED 五要素（A-I-R-E-D）。",
-                    tags: ["AI 協作", "AI-RED"]
-                },
-                {
-                    timeStart: "0:40",
-                    timeStartFormatted: "00:40",
-                    duration: 10,
-                    colorClass: "c4",
+                    colorClass: "c2",
                     icon: "🔍",
-                    title: "四、 人工校對",
-                    desc: "逐章檢查 AI 是否扭曲事實、補數據、跳結論；標出需要人工改寫的段落。",
-                    tags: ["把關", "AI 限制"]
+                    title: "三、 整理 7 區塊文字",
+                    desc: "先整理文字、不排版。對照規準找素材：動機 W2-3、文獻 W7-8、方法 W9-11、核心圖 W14、結論 W15。",
+                    tags: ["素材對照"]
                 }
             ]
         },
         {
             badge: "第二節",
-            title: "海報製作 × 發表預演 × 繳交",
+            title: "開模板製作 × 雙線繳交",
             duration: 50,
             hasBreakAfter: false,
             stages: [
                 {
                     timeStart: "0:00",
                     timeStartFormatted: "00:00",
-                    duration: 15,
+                    duration: 10,
                     colorClass: "c1",
-                    icon: "🗺️",
-                    title: "五、 海報規劃",
-                    desc: "A1 海報骨架：題目、動機、方法、關鍵圖、結論、限制。先畫手稿版面，再開工。",
-                    tags: ["版面配置", "視覺層級"]
+                    icon: "🎯",
+                    title: "四、 開模板 + 5 法核心呈現",
+                    desc: "換內容不改版面。核心呈現依方法分流：問卷量化圖／實驗前後測／觀察頻率／訪談主題矩陣／文獻依子類型。",
+                    tags: ["核心呈現", "方法分流"]
                 },
                 {
-                    timeStart: "0:15",
-                    timeStartFormatted: "00:15",
+                    timeStart: "0:10",
+                    timeStartFormatted: "00:10",
                     duration: 25,
                     colorClass: "c2",
                     icon: "🎨",
-                    title: "六、 海報製作",
-                    desc: "使用 Canva / Figma / Slides 模板填入內容，掌握三大準則：圖大於字、標題可讀、留白乾淨。",
-                    tags: ["核心產出"]
+                    title: "五、 動手做：大少準亮",
+                    desc: "套用大／少／準／亮 + 排版規範（對齊／字級／3 色／字體）。AI 可改標題、精簡句、給配色，不從零生成。",
+                    tags: ["核心產出", "AI 協作"]
                 },
                 {
-                    timeStart: "0:40",
-                    timeStartFormatted: "00:40",
-                    duration: 10,
-                    colorClass: "c5",
-                    icon: "🎙️",
-                    title: "七、 發表預演 + 繳交",
-                    desc: "組內 3 分鐘電梯簡報預演，繳交報告定稿與海報檔；預告 W17 策展人登場。",
-                    tags: ["預演", "銜接 W17"]
+                    timeStart: "0:35",
+                    timeStartFormatted: "00:35",
+                    duration: 15,
+                    colorClass: "c3",
+                    icon: "📤",
+                    title: "六、 製作紀錄 + 雙線繳交",
+                    desc: "3 格紀錄（進度／取捨／規準自查）+ AI-RED。小組交海報 PDF + 原始資料 zip，個人交網頁歷程 docx。",
+                    tags: ["收尾", "雙線繳交"]
                 }
             ]
         }
     ],
     summaries: [
         {
-            icon: "📄",
+            icon: "🖼️",
             label: "核心產出",
-            text: "研究報告定稿<br><small style=\"font-size:11px;color:#888;\">七章組裝完成</small>"
+            text: "兩張 A1 海報 PDF<br><small style=\"font-size:11px;color:#888;\">＝期末研究報告，7 項規準評分</small>"
         },
         {
-            icon: "🖼️",
-            label: "發表工具",
-            text: "A1 海報檔 + 3 分鐘簡報<br><small style=\"font-size:11px;color:#888;\">W17 成果發表用</small>"
+            icon: "📦",
+            label: "小組繳交",
+            text: "海報 PDF + 原始資料 zip<br><small style=\"font-size:11px;color:#888;\">規準五由組長代繳 GC</small>"
         },
         {
             icon: "🤖",
-            label: "AI 紀錄",
-            text: "組裝 Prompt + AI-RED 紀錄<br><small style=\"font-size:11px;color:#888;\">誠實揭露協作歷程</small>"
+            label: "個人繳交",
+            text: "W16 網頁歷程 docx + AI-RED<br><small style=\"font-size:11px;color:#888;\">製作進度／取捨／規準自查</small>"
         }
     ],
     legends: [

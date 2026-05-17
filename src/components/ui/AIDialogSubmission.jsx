@@ -77,7 +77,7 @@ const AIDialogSubmission = ({ week, taskName = 'AI 互動', required = true }) =
         return (
             <div className="rounded-[var(--radius-unified)] border border-[#D1D5DB] bg-[#F9FAFB] p-3">
                 <p className="text-[12px] text-[#6B7280] leading-relaxed">
-                    🚫 你選了「不用 AI · 全靠自己」——本次沒有 AI 對話需要繳交。請在下方 AI-RED 區寫一行為什麼選不用 AI。
+                    🚫 你選了「不用 AI · 自己先試」——本次沒有 AI 對話需要繳交。請在下方 AI-RED 區寫一行為什麼選不用 AI。
                 </p>
             </div>
         );

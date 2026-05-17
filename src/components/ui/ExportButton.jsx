@@ -19,6 +19,7 @@ export default function ExportButton({
   fields = [],
   choices = [],
   className = '',
+  buttonText = '',  // 自訂按鈕文字（建議格式：「複製 W1 學習紀錄」）；空字串時 fallback 用通用文字
 }) {
   const [copied, setCopied] = useState(false);
   const [emptyFields, setEmptyFields] = useState([]); // 學生還沒填的 fields，重新計算每次學生切回頁面時
@@ -147,7 +148,7 @@ export default function ExportButton({
         ) : (
           <>
             <Copy size={18} />
-            一鍵複製本堂課紀錄
+            {buttonText || '一鍵複製本堂課紀錄'}
           </>
         )}
       </button>

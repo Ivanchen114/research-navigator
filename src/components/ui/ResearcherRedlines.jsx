@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldAlert, ChevronRight, Eye, X, Check } from 'lucide-react';
 import { REDLINES, STAGE_THEME, getRedlinesByStage } from '../../data/redlines';
+import { useProjector } from '../../context/ProjectorContext';
 
 /**
  * 研究員紅線卡 — W13/W14/W15 跨週共用
@@ -17,6 +18,7 @@ import { REDLINES, STAGE_THEME, getRedlinesByStage } from '../../data/redlines';
 export const ResearcherRedlines = ({
     mode = 'subset',
     stage,
+    ids,             // 選填：指定只顯示哪幾條 id（warning 模式用）
     linkToFindTraps = true,
     linkToWeek = true,
     defaultOpen = false,
@@ -31,7 +33,7 @@ export const ResearcherRedlines = ({
     }
 
     if (mode === 'warning') {
-        return <WarningRedlines stage={stage} />;
+        return <WarningRedlines stage={stage} ids={ids} />;
     }
 
     return (
@@ -43,37 +45,87 @@ export const ResearcherRedlines = ({
     );
 };
 
-/* ─── 警戒語版（任務前用，只顯示 core 條目，極簡）─── */
-const WarningRedlines = ({ stage }) => {
-    const items = getRedlinesByStage(stage, 'core');
+/* ─── 警戒語版（任務前用，只顯示 core 條目，大框並排）─── */
+/* 投影顯示：只留「編號 + 短標題」，body/✗✓ 與底部說明隱藏 */
+const WarningRedlines = ({ stage, ids }) => {
+    const { projector } = useProjector();
+    let items = getRedlinesByStage(stage, 'core');
+    if (ids && ids.length > 0) items = items.filter(r => ids.includes(r.id));
     const theme = STAGE_THEME[stage];
     if (!theme || items.length === 0) return null;
 
+    // 手機單欄、桌機依數量決定欄數（1 條 → 1 欄，2 條 → 2 欄，其餘 → 3 欄）
+    const gridCols = items.length === 1 ? '' : items.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3';
+
     return (
-        <div className="my-6 max-w-[820px] mx-auto">
-            <div
-                className="rounded-[var(--radius-unified)] border-l-4 p-3 md:p-4"
-                style={{ borderColor: theme.accent, background: theme.bg }}
-            >
-                <div className="flex items-center gap-2 mb-2">
-                    <ShieldAlert size={16} style={{ color: theme.accent }} />
-                    <p className="font-bold text-[12.5px] m-0" style={{ color: theme.accent }}>
-                        ⚠️ 動手前·先看 {items.length} 條核心警戒語
-                    </p>
-                </div>
-                <ul className="space-y-1 list-none p-0 m-0">
-                    {items.map(r => (
-                        <li key={r.id} className="text-[12px] leading-[1.85] flex items-baseline gap-1.5" style={{ color: theme.accent }}>
-                            <span className="font-mono text-[10px] font-bold flex-shrink-0">{r.id}</span>
-                            <span className="font-bold">{r.title}</span>
-                            <span className="text-[var(--ink-mid)] font-normal">— {r.body}</span>
-                        </li>
-                    ))}
-                </ul>
-                <p className="text-[10.5px] italic mt-2 pt-2 border-t" style={{ color: theme.accent, borderColor: theme.border }}>
-                    💡 完整 {getRedlinesByStage(stage).length} 條（含進階）會在做完任務後出現，現在先記住這 {items.length} 條就好。
+        <div className="my-6 max-w-[860px] mx-auto">
+            {/* 標頭 */}
+            <div className="flex items-center gap-2 mb-3">
+                <ShieldAlert size={18} style={{ color: theme.accent }} />
+                <p className="font-bold text-[14px] m-0" style={{ color: theme.accent }}>
+                    ⚠️ 動手前·先看 {items.length} 條核心警戒語
                 </p>
             </div>
+
+            {/* 大框卡片 grid：手機 1 欄，桌機 N 欄 */}
+            <div className={`grid grid-cols-1 ${gridCols} gap-3`}>
+                {items.map(r => (
+                    <div
+                        key={r.id}
+                        className="rounded-[var(--radius-unified)] border-2 p-4 flex flex-col gap-2"
+                        style={{ borderColor: theme.accent, background: theme.bg }}
+                    >
+                        {/* ID 徽章 */}
+                        <span
+                            className="self-start font-mono text-[10px] font-bold px-2 py-0.5 rounded"
+                            style={{ background: theme.accent, color: 'white' }}
+                        >
+                            {r.id}
+                        </span>
+
+                        {/* 大標題 */}
+                        <p className="font-bold text-[15px] leading-snug m-0" style={{ color: theme.accent }}>
+                            {r.title}
+                        </p>
+
+                        {/* Body（投影模式隱藏）*/}
+                        {!projector && (
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85] m-0">
+                                {r.body}
+                            </p>
+                        )}
+
+                        {/* ✗ / ✓ 對照（投影模式隱藏）*/}
+                        {!projector && (r.wrong || r.right) && (
+                            <div className="space-y-1 mt-auto pt-2 border-t" style={{ borderColor: theme.border }}>
+                                {r.wrong && (
+                                    <div className="flex gap-1.5 items-start text-[11px] leading-[1.7]">
+                                        <X size={12} className="text-[#DC2626] mt-0.5 flex-shrink-0" />
+                                        <p className="m-0 text-[#7F1D1D]">
+                                            <span className="font-bold text-[#DC2626]">✗</span> {r.wrong}
+                                        </p>
+                                    </div>
+                                )}
+                                {r.right && (
+                                    <div className="flex gap-1.5 items-start text-[11px] leading-[1.7]">
+                                        <Check size={12} className="text-[#059669] mt-0.5 flex-shrink-0" />
+                                        <p className="m-0 text-[#065F46]">
+                                            <span className="font-bold text-[#059669]">✓</span> {r.right}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {/* 底部說明（投影模式隱藏）*/}
+            {!projector && (
+                <p className="text-[10.5px] italic mt-3" style={{ color: theme.accent }}>
+                    💡 完整 {getRedlinesByStage(stage).length} 條（含進階）會在做完任務後出現，現在先記住這 {items.length} 條就好。
+                </p>
+            )}
         </div>
     );
 };

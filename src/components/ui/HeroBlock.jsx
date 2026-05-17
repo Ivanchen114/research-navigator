@@ -8,6 +8,9 @@ import React from 'react';
  *   kicker       string — 左上細線旁的檔案編號，如 "R.I.B. 調查檔案 · 研究方法與專題 · W2"
  *   title        string — 主標黑色部分，如 "問題意識的覺醒："
  *   accentTitle  string — 金色斜體重點，如 "把好奇心變成好問題"
+ *   question     string — 本週中心問題（一句話，金色斜體強調，可選）
+ *   todo         array  — 第一屏三句規格（三模式架構 spec §6-1）：
+ *                         [{ label:'今天做什麼', value:'…' }, …]，最多三項
  *   subtitle     string — 副標內文
  *   chain        string — 「為什麼是這週」邏輯鏈接續句（與上週連貫，可選）
  *   meta         array  — [{ label, value }, ...]，底部四欄統計條（可選）
@@ -17,6 +20,8 @@ export default function HeroBlock({
     kicker,
     title,
     accentTitle,
+    question,
+    todo,
     subtitle,
     chain,
     meta,
@@ -54,6 +59,32 @@ export default function HeroBlock({
                         <span className="text-[#c9a84c] italic"> {accentTitle}</span>
                     )}
                 </h1>
+
+                {/* QUESTION — 本週中心問題（核心命題） */}
+                {question && (
+                    <div className="mb-6">
+                        <div className="text-[10px] font-mono text-[#c9a84c]/80 uppercase tracking-[0.15em] mb-2">中心問題</div>
+                        <p className="text-[17px] md:text-[20px] text-[#c9a84c] font-serif italic leading-[1.5] max-w-[680px]">
+                            {question}
+                        </p>
+                    </div>
+                )}
+
+                {/* TODO — 第一屏三句（今天做什麼／為什麼做／今天交什麼） */}
+                {todo && todo.length > 0 && (
+                    <div className="flex flex-col gap-2.5 max-w-[640px]">
+                        {todo.map((t, i) => (
+                            <div key={i} className="flex gap-3">
+                                <span className="text-[11px] font-mono text-[#c9a84c] uppercase tracking-[0.12em] pt-1 flex-shrink-0 w-[76px]">
+                                    {t.label}
+                                </span>
+                                <span className="text-[14px] md:text-[15px] text-white/90 leading-[1.7]">
+                                    {t.value}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* SUBTITLE */}
                 {subtitle && (

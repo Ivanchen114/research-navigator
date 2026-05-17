@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Menu, X, PanelLeftClose, PanelLeftOpen, Projector } from 'lucide-react';
 import { Footer } from '../components/Footer';
+import { useProjector } from '../context/ProjectorContext';
 
 export const Layout = () => {
+    const { projector, toggleProjector } = useProjector();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(() => {
         if (typeof window === 'undefined') return false;
@@ -60,7 +62,7 @@ export const Layout = () => {
                 { name: '方法工具書', path: '/tools/methods' },
                 { name: '操作型定義範例', path: '/tools/operationalize' },
                 { name: 'AI 協作實驗室（自學）', path: '/prompt-lab' },
-                { name: 'Prompt 範本庫（自學）', path: '/analysis-station' },
+                { name: '資料分析檢核站（自學）', path: '/analysis-station' },
                 { name: 'AI 報告找雷挑戰', path: '/find-traps' },
             ]
         },
@@ -212,10 +214,10 @@ export const Layout = () => {
                 />
             )}
 
-            {/* SIDEBAR */}
+            {/* SIDEBAR — 投影顯示時整個收掉（純顯示層覆寫，不動 isDesktopCollapsed 狀態）*/}
             <aside
                 className={`fixed top-0 left-0 z-50 w-[240px] h-screen bg-white border-r border-[#dddbd5] flex flex-col transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-                    } ${isDesktopCollapsed ? 'md:-translate-x-full' : 'md:translate-x-0'}`}
+                    } ${(isDesktopCollapsed || projector) ? 'md:-translate-x-full' : 'md:translate-x-0'}`}
             >
                 {/* Brand Header */}
                 <div className="p-[24px_20px_20px] border-b border-[#dddbd5] flex items-start justify-between gap-2">
@@ -230,16 +232,25 @@ export const Layout = () => {
                             松山高中 SSSH
                         </div>
                     </div>
-                    {/* 桌面版收合按鈕 */}
+                    {/* 收合 / 關閉按鈕（桌面：收合；手機：關閉 overlay）*/}
                     <button
-                        onClick={toggleDesktopSidebar}
-                        className="hidden md:flex shrink-0 w-7 h-7 items-center justify-center rounded-[6px] text-[#8888aa] hover:bg-[#f8f7f4] hover:text-[#1a1a2e] transition-colors"
+                        onClick={() => { toggleDesktopSidebar(); setIsMobileMenuOpen(false); }}
+                        className="flex shrink-0 w-7 h-7 items-center justify-center rounded-[6px] text-[#8888aa] hover:bg-[#f8f7f4] hover:text-[#1a1a2e] transition-colors"
                         title="收合側邊欄"
                         aria-label="收合側邊欄"
                     >
                         <PanelLeftClose size={16} />
                     </button>
                 </div>
+
+                {/* 投影顯示開關 — 手機版放選單裡（桌機用右上浮動鈕）*/}
+                <button
+                    onClick={() => { toggleProjector(); setIsMobileMenuOpen(false); }}
+                    className="md:hidden flex items-center gap-2 mx-[20px] my-3 px-3 py-2 rounded-[6px] border border-[#dddbd5] text-[12px] text-[#4a4a6a] hover:bg-[#f8f7f4] hover:text-[#1a1a2e] transition-colors"
+                >
+                    <Projector size={14} />
+                    投影顯示（老師上課用）
+                </button>
 
                 {/* Navigation Links */}
                 <nav id="mobile-sidebar-nav" className="flex-1 py-4 overflow-y-auto">
@@ -313,8 +324,8 @@ export const Layout = () => {
                 </div>
             </aside>
 
-            {/* 桌面版浮動展開按鈕（僅於收合時顯示） */}
-            {isDesktopCollapsed && (
+            {/* 桌面版浮動展開按鈕（僅於收合時顯示；投影顯示時不顯示）*/}
+            {isDesktopCollapsed && !projector && (
                 <button
                     onClick={toggleDesktopSidebar}
                     className="hidden md:flex fixed top-4 left-4 z-40 w-10 h-10 items-center justify-center rounded-[8px] bg-white border border-[#dddbd5] text-[#4a4a6a] hover:text-[#1a1a2e] hover:border-[#2d5be3] hover:shadow-md transition-all"
@@ -325,24 +336,43 @@ export const Layout = () => {
                 </button>
             )}
 
-            {/* MAIN CONTENT AREA */}
-            <div className={`flex flex-col flex-1 w-full min-w-0 transition-[margin] duration-300 ease-in-out ${isDesktopCollapsed ? 'md:ml-0' : 'md:ml-[240px]'}`}>
-                {/* Mobile Header */}
-                <div className="md:hidden bg-white border-b border-[#dddbd5] p-3 flex justify-between items-center z-20 sticky top-0">
-                    <div className="flex items-center gap-2">
-                        <img src="/songshan-logo.svg" alt="松山高中" className="w-6 h-6 bg-white border border-[#dddbd5] rounded p-0.5" />
-                        <h1 className="font-['Noto_Serif_TC',serif] font-bold text-[14px] text-[#1a1a2e]">研究方法與專題</h1>
-                    </div>
+            {/* 投影顯示開關 — 全域浮動。OFF：桌機右上小鈕；ON：一律可見的退出鈕（手機誤開也找得到路）*/}
+            {projector ? (
+                <button
+                    onClick={toggleProjector}
+                    className="fixed top-3 right-3 z-[60] flex items-center gap-1.5 px-3 py-2 rounded-[8px] bg-[#1a1a2e] text-white text-[12px] font-bold shadow-lg hover:opacity-90 transition-opacity"
+                    title="退出投影顯示"
+                >
+                    <Projector size={15} />
+                    退出投影
+                </button>
+            ) : (
+                <button
+                    onClick={toggleProjector}
+                    className="hidden md:flex fixed top-4 right-4 z-40 w-10 h-10 items-center justify-center rounded-[8px] bg-white border border-[#dddbd5] text-[#4a4a6a] hover:text-[#1a1a2e] hover:border-[#2d5be3] hover:shadow-md transition-all"
+                    title="投影顯示（老師上課用）"
+                    aria-label="開啟投影顯示"
+                >
+                    <Projector size={18} />
+                </button>
+            )}
+
+            {/* MAIN CONTENT AREA — 投影顯示時不留 sidebar 邊距 */}
+            <div className={`flex flex-col flex-1 w-full min-w-0 transition-[margin] duration-300 ease-in-out ${(isDesktopCollapsed || projector) ? 'md:ml-0' : 'md:ml-[240px]'}`}>
+                {/* Mobile 漢堡按鈕 — 浮動於左上角，不佔垂直空間。
+                    投影顯示時隱藏；md 斷點以下（含高縮放）才顯示。
+                    對齊桌面版 isDesktopCollapsed 按鈕的視覺語言。 */}
+                {!projector && (
                     <button
                         onClick={toggleMobileMenu}
-                        className="text-[#4a4a6a] focus:outline-none p-1"
+                        className="md:hidden fixed top-4 left-4 z-40 w-10 h-10 flex items-center justify-center rounded-[8px] bg-white border border-[#dddbd5] text-[#4a4a6a] hover:text-[#1a1a2e] hover:border-[#2d5be3] hover:shadow-md transition-all"
                         aria-label={isMobileMenuOpen ? '關閉選單' : '開啟選單'}
                         aria-expanded={isMobileMenuOpen}
                         aria-controls="mobile-sidebar-nav"
                     >
-                        {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                        {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
                     </button>
-                </div>
+                )}
 
                 <main className="flex-1 w-full relative">
                     <Outlet />

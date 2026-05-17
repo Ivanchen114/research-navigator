@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './layouts/Layout';
 import { Home } from './pages/Home';
+import { ProjectorProvider } from './context/ProjectorContext';
 
 /* Eager: Layout 與 Home 是首屏必載；其餘 route 懶載入以減少首包大小。
    .then(m => ({ default: m.X ?? m.default })) — 兼容 named export 與 default export 兩種情況 */
@@ -57,9 +58,32 @@ const RouteFallback = () => (
   <div style={{ padding: 40, textAlign: 'center', fontFamily: 'Noto Sans TC, sans-serif', color: '#4a4a6a' }}>載入中…</div>
 );
 
+class RouteErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 32, fontFamily: 'monospace', background: '#fff0f0', border: '2px solid #f00', margin: 16, borderRadius: 8 }}>
+          <strong style={{ color: '#c00', fontSize: 16 }}>⚠️ 頁面發生錯誤（Error Boundary 攔截）</strong>
+          <pre style={{ marginTop: 12, fontSize: 12, color: '#333', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+            {this.state.error?.message}
+            {'\n\n'}
+            {this.state.error?.stack}
+          </pre>
+          <button onClick={() => this.setState({ error: null })} style={{ marginTop: 12, padding: '6px 16px', cursor: 'pointer' }}>重試</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <ProjectorProvider>
+      <RouteErrorBoundary>
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -118,6 +142,8 @@ function App() {
           </Route>
         </Routes>
       </Suspense>
+      </RouteErrorBoundary>
+      </ProjectorProvider>
     </BrowserRouter>
   );
 }

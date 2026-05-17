@@ -40,9 +40,17 @@ export const Discovery = () => {
             <h1 className="font-serif text-4xl font-bold leading-tight text-[var(--ink)] mb-2 tracking-tight">
                 偵探特訓班：<span className="text-[var(--accent)] italic not-serif">The Detective Camp</span>
             </h1>
-            <p className="text-[15px] text-[var(--ink-mid)] leading-relaxed mb-8 max-w-[600px]">
+            <p className="text-[15px] text-[var(--ink-mid)] leading-relaxed mb-6 max-w-[600px]">
                 研究不是只會背書，研究是現場辦案。今天你不是學生，你是偵探——三個試煉，三把劍，找出真相。
             </p>
+
+            {/* 中心問題（W0）*/}
+            <div className="mb-8 pl-4 border-l-4 border-[var(--accent)] max-w-[640px]">
+                <div className="text-[10px] font-mono text-[var(--accent)] uppercase tracking-[0.15em] mb-1.5">中心問題</div>
+                <p className="text-[17px] text-[var(--ink)] font-serif italic leading-[1.5]">
+                    AI 能幫我做研究的哪些事？哪些不能交給它？
+                </p>
+            </div>
 
             <div className="meta-strip" style={{ '--cols': 3 }}>
                 {[

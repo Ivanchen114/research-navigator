@@ -25,6 +25,22 @@ import {
 } from '../data/portfolioRegistry';
 
 /* ══════════════════════════════════════
+ *  研究能力成長地圖（策展參考用）
+ * ══════════════════════════════════════ */
+const ABILITY_MAP = [
+  { weeks: 'W1', ability: '初心', desc: '對 AI 的第一印象與第一判斷' },
+  { weeks: 'W2-W4', ability: '問題意識', desc: '提出有意義的研究問題、選對方法' },
+  { weeks: 'W5-W6', ability: '工具設計', desc: '操作型定義與研究工具的精準設計' },
+  { weeks: 'W7-W8', ability: '證據基礎', desc: '學術閱讀與批判性思考' },
+  { weeks: 'W9-W10', ability: '計劃整合', desc: '整合研究設計，完成研究計劃書定稿' },
+  { weeks: 'W11', ability: '科學嚴謹', desc: '預試、倫理審查與工具設計書' },
+  { weeks: 'W12', ability: '執行力', desc: '期中短報、同儕把關，施測前最後擋板' },
+  { weeks: 'W13-W15', ability: '洞察力', desc: '資料整理、圖表分析到研究結論' },
+  { weeks: 'W16', ability: '溝通力', desc: '向他人清楚表達自己的發現' },
+  { weeks: 'W17', ability: '整合反思', desc: '以發表回顧整學期研究歷程，接受同儕提問的檢驗' },
+];
+
+/* ══════════════════════════════════════
  *  Portfolio 學習歷程策展室
  *  三階段：Timeline（盤點）→ Curate（策展）→ Export（列印）
  * ══════════════════════════════════════ */
@@ -141,7 +157,7 @@ export const Portfolio = () => {
             { label: 'Step 1', value: '盤點：瀏覽整學期紀錄' },
             { label: 'Step 2', value: '策展：選出 10 個關鍵時刻' },
             { label: 'Step 3', value: '匯出：列印成 PDF' },
-            { label: '保存位置', value: '全部存在你的瀏覽器，不上傳' },
+            { label: '保存位置', value: '全部存在你的瀏覽器，不上傳——換裝置或清除 Cache 會遺失，策展前確認各週都已貼到 Classroom' },
           ]}
         />
       </div>
@@ -239,6 +255,30 @@ export const Portfolio = () => {
             title={`挑出 ${MAX_CURATED} 個關鍵時刻`}
             desc={`不求量、求質。選那些你當時寫完還記得、或現在回看覺得有分量的那幾則。對每一個選中的時刻，加上兩句話：當時為什麼寫、現在怎麼看。`}
           />
+
+          {/* 研究能力成長地圖 — 策展前參考 */}
+          <div className="mb-8 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] overflow-hidden">
+            <div className="px-4 py-3 border-b border-[var(--border)] flex items-center gap-2">
+              <Sparkles size={14} className="text-[var(--ink-light)]" />
+              <span className="text-[11px] font-bold tracking-widest uppercase text-[var(--ink-light)]">
+                研究能力成長地圖 · 策展提示
+              </span>
+            </div>
+            <div className="p-4">
+              <p className="text-[12px] text-[var(--ink-light)] leading-relaxed mb-3">
+                試著在每個能力階段都選 1–2 個時刻，讓你的策展呈現完整的成長弧線，而不只是集中在某幾週。
+              </p>
+              <div className="grid grid-cols-1 gap-[1px] bg-[var(--border)]">
+                {ABILITY_MAP.map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 px-3 py-2 bg-white text-[12px]">
+                    <span className="font-mono text-[10px] text-[var(--ink-light)] w-14 shrink-0">{item.weeks}</span>
+                    <span className="font-bold text-[var(--accent)] w-16 shrink-0">{item.ability}</span>
+                    <span className="text-[var(--ink-mid)]">{item.desc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {selectedCount === 0 && allMoments.length > 0 && (
             <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 mb-6 text-[13px] text-[var(--ink-light)]">

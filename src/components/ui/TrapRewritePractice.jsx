@@ -21,6 +21,21 @@ const STAGE_THEME = {
     W15: { accent: '#E11D48', bg: '#FFF1F2', border: '#FDA4AF' },
 };
 
+/* 與 ThinkRecord / AIModePicker 共用同一個聚合儲存——讓 ExportButton（readRecords）撈得到。
+ * 舊版曾把 dataKey 寫成獨立的 top-level localStorage key，掛載時做一次性遷移撿回來。 */
+const STORE_KEY = 'rib_think_records';
+
+function readStore() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch { return {}; }
+}
+
+function writeStore(key, value) {
+    const r = readStore();
+    r[key] = value;
+    localStorage.setItem(STORE_KEY, JSON.stringify(r));
+}
+
 export const TrapRewritePractice = ({
     trapNumber,
     stage = 'W15',
@@ -37,14 +52,23 @@ export const TrapRewritePractice = ({
 
     useEffect(() => {
         if (!dataKey) return;
-        const saved = localStorage.getItem(dataKey);
-        if (saved) setText(saved);
+        const store = readStore();
+        if (store[dataKey] !== undefined) {
+            setText(store[dataKey]);
+        } else {
+            // 一次性遷移：舊版存在獨立 localStorage key，撿回聚合儲存
+            const legacy = localStorage.getItem(dataKey);
+            if (legacy) {
+                setText(legacy);
+                writeStore(dataKey, legacy);
+            }
+        }
     }, [dataKey]);
 
     const handleChange = (e) => {
         const val = e.target.value;
         setText(val);
-        if (dataKey) localStorage.setItem(dataKey, val);
+        if (dataKey) writeStore(dataKey, val);
     };
 
     return (

@@ -4,6 +4,7 @@ import './W11.css';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import Checklist from '../components/ui/Checklist';
 import StepEngine from '../components/ui/StepEngine';
+import StepBriefing from '../components/ui/StepBriefing';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
@@ -11,6 +12,7 @@ import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
 import { readRecords } from '../components/ui/ThinkRecord';
 import { W11Data } from '../data/lessonMaps';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import {
     CheckCircle2,
     Bot,
@@ -213,7 +215,7 @@ const PILOT_INSTRUCTIONS = {
 };
 
 
-/* — 工具實體模板（與 W9/W10 同步；W11 第一節「把題目轉成施測載具」用）— */
+/* — 本組工具設計書模板（與 W9/W10 同步；W11 第一節「把題目轉成施測載具」用）— */
 const INSTRUMENT_TEMPLATES = {
     questionnaire: { url: 'https://docs.google.com/document/d/1tu-WF_JitJIwBZBHrrgm3MeFMDykpm_gGZoyrB4UkOI/copy',    name: '01_問卷_工具',          tip: '把 W10 的題目貼進去 → 轉 Google Form 或印紙本' },
     interview:     { url: 'https://docs.google.com/document/d/1BU6XyNxdwng6I15pwYXfRs-zwKgDDyF_EVc2T6uUCrs/copy',    name: '02_訪綱_工具',          tip: '貼題目 → 印成訪綱卡片，方便訪談時翻看' },
@@ -242,12 +244,14 @@ const EXPORT_FIELDS = [
     /* Step 1：入場 + 讀回饋 + 修星號項 */
     { key: 'w11-w10-feedback-quick', label: 'W10 老師回饋快速摘要', question: '老師對 W10 整本計畫書的主要建議（含星號等級）' },
     { key: 'w11-star-fix', label: '星號項修補紀錄', question: '老師標★的項目我打算怎麼補？' },
-    /* Step 2：工具實體本體留在學生手上，繳交時隨計畫書一起上傳 GC（這裡不收欄位）*/
+    /* Step 2：本組工具設計書本體留在學生手上，繳交時隨計畫書一起上傳 GC（這裡不收欄位）*/
     /* Step 3：Pilot 互測 */
     { key: 'w11-pilot-partner', label: 'Pilot Test 對象', question: '座位表配對到誰？對方是哪個方法？' },
     { key: 'w11-pilot-findings', label: 'Pilot Test 發現', question: '當研究者時對方的回饋 + 你自己觀察到的工具卡點' },
-    /* Step 4：倫理 + 施測啟動 */
+    { key: 'w11-pilot-as-subject', label: 'Pilot 受測者感受', question: '當你當受測者時：有沒有想說不想回答、不確定資料用途、或感覺不填不行？' },
+    /* Step 4：工具修正 */
     { key: 'w11-tool-final-revision', label: '工具第二輪修正', question: '根據 Pilot 回饋要改載具的哪幾點' },
+    /* Step 5：倫理 */
     { key: 'w11-ethics-self-review', label: '倫理四原則 · 小組實踐紀錄', question: '對照四原則（知情同意/保密/不傷害/自願）我們組的研究分別怎麼做' },
 ];
 
@@ -289,7 +293,7 @@ const CopyablePrompt = ({ text, label }) => {
 };
 
 /* ══════════════════════════════════════
- *  老師秘密審查按鈕（⚖ 連續點 5 次觸發）
+ *  老師秘密審查按鈕（⚖ 連續點 10 次觸發 — 防學生誤觸）
  * ══════════════════════════════════════ */
 
 const TEACHER_OPTIONS = ['陳育詮老師', '陳詩雯老師'];
@@ -424,6 +428,210 @@ const TeacherApprovalBadge = () => {
 };
 
 /* ══════════════════════════════════════
+ *  倫理情境判斷測驗
+ * ══════════════════════════════════════ */
+
+const QUIZ_STORAGE_KEY = 'w11-ethics-quiz';
+const THINK_STORAGE_KEY = 'rib_think_records';
+
+const ETHICS_QUIZ = [
+    {
+        id: 'q1',
+        scenario: '你們想研究同學午休在做什麼，就在教室角落安靜觀察記錄，沒有告訴任何人。',
+        hasIssue: true,
+        principle: '知情同意',
+        explanation: '即使是觀察，受試者也有知道自己被研究的權利。沒有告知就觀察，侵犯了知情同意原則。',
+    },
+    {
+        id: 'q2',
+        scenario: '問卷第一頁寫：「本研究探討同學睡眠習慣，結果匿名，不會讓老師看到，預計3分鐘，可以選擇不填。」',
+        hasIssue: false,
+        principle: '知情同意',
+        explanation: '說明了研究目的、匿名、不影響成績、可以不填——知情同意做到位了。',
+    },
+    {
+        id: 'q3',
+        scenario: '訪談好朋友，他說了一些對老師不滿的話，你覺得很有價值，直接放進報告。',
+        hasIssue: true,
+        principle: '保密',
+        explanation: '即使是好朋友，訪談內容也需要保密。放進報告前應先取得對方同意，並匿名處理。',
+    },
+    {
+        id: 'q4',
+        scenario: '訪談前問受訪者：「我可以錄音方便整理嗎？你可以說不要，我改用筆記。」',
+        hasIssue: false,
+        principle: '知情同意＋自願性',
+        explanation: '主動說明錄音用途，並給對方拒絕的空間——這是好的研究倫理實踐。',
+    },
+    {
+        id: 'q5',
+        scenario: '在班群發問卷，附上一句「拜託大家填一下，我要交作業了」。',
+        hasIssue: true,
+        principle: '自願性',
+        explanation: '「拜託」＋「要交作業」會讓人覺得不填過意不去，壓縮了自願的空間。',
+    },
+    {
+        id: 'q6',
+        scenario: '問卷裡原本有一題「你有沒有跟父母吵過架」，討論後覺得太私人，決定拿掉。',
+        hasIssue: false,
+        principle: '不傷害',
+        explanation: '主動意識到題目可能讓人不舒服，並作出調整——這正是「不傷害」原則的實踐。',
+    },
+    {
+        id: 'q7',
+        scenario: '問卷裡有一題：「你覺得你的家庭經濟狀況屬於哪一類？（偏低／中等／偏高）」',
+        hasIssue: true,
+        principle: '不傷害',
+        explanation: '家庭經濟狀況是敏感資訊，可能讓填答者感到不舒服。除非研究必要，應避免直接詢問。',
+    },
+    {
+        id: 'q8',
+        scenario: '報告裡所有受訪者都改成「受訪者A、受訪者B」，不寫真名或班級。',
+        hasIssue: false,
+        principle: '保密',
+        explanation: '匿名化處理保護了受訪者的身份，符合保密原則。',
+    },
+    {
+        id: 'q9',
+        scenario: '你設計了一個假的詐騙網站，讓同學「不知情地」點進去測試他們會不會被騙。事後你打算告訴大家：「開個玩笑～其實是研究！」',
+        hasIssue: true,
+        principle: '知情同意＋不傷害',
+        explanation: '「事後揭露」不等於「事先同意」——同意必須在受試之前給出。而且被騙當下的焦慮、羞恥或被愚弄的感受，不會因為後來說是玩笑就消失。欺騙本身就是傷害。',
+    },
+    {
+        id: 'q10',
+        scenario: '你截圖幾個同學公開的 Instagram 貼文，分析他們的情緒狀態當作研究資料。',
+        hasIssue: true,
+        principle: '知情同意',
+        explanation: '即使是公開貼文，用來做研究分析仍需告知當事人並取得同意。「公開」≠「同意被研究」。',
+    },
+];
+
+const EthicsQuiz = () => {
+    const [answers, setAnswers] = useState(() => {
+        try {
+            const raw = localStorage.getItem(QUIZ_STORAGE_KEY);
+            return raw ? JSON.parse(raw) : {};
+        } catch { return {}; }
+    });
+
+    const answered = Object.keys(answers).length;
+    const correct = ETHICS_QUIZ.filter(q => answers[q.id] === q.hasIssue).length;
+    const allDone = answered === ETHICS_QUIZ.length;
+
+    const answer = (qId, hasIssue) => {
+        if (answers[qId] !== undefined) return;
+        setAnswers(prev => {
+            const next = { ...prev, [qId]: hasIssue };
+            try {
+                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(next));
+                const doneCount = Object.keys(next).length;
+                const correctCount = ETHICS_QUIZ.filter(q => next[q.id] === q.hasIssue).length;
+                const records = JSON.parse(localStorage.getItem(THINK_STORAGE_KEY) || '{}');
+                records['w11-ethics-self-review'] = `倫理情境判斷：答對 ${correctCount}／${doneCount} 題（共10題）`;
+                localStorage.setItem(THINK_STORAGE_KEY, JSON.stringify(records));
+            } catch { /* ignore */ }
+            return next;
+        });
+    };
+
+    const reset = () => {
+        setAnswers({});
+        try {
+            localStorage.removeItem(QUIZ_STORAGE_KEY);
+            const records = JSON.parse(localStorage.getItem(THINK_STORAGE_KEY) || '{}');
+            delete records['w11-ethics-self-review'];
+            localStorage.setItem(THINK_STORAGE_KEY, JSON.stringify(records));
+        } catch { /* ignore */ }
+    };
+
+    return (
+        <div className="space-y-3">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <ContentTypeChip type="練" />
+                    <span className="font-bold text-[13px] text-[var(--ink)]">倫理情境判斷</span>
+                    <span className="text-[11.5px] text-[var(--ink-light)]">— 有問題還是沒問題？</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="text-[11.5px] text-[var(--ink-mid)]">{answered} / {ETHICS_QUIZ.length}</span>
+                    {allDone && (
+                        <span className={`text-[11.5px] font-bold px-2 py-0.5 rounded ${
+                            correct >= 8 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                        }`}>答對 {correct} 題</span>
+                    )}
+                    {answered > 0 && (
+                        <button onClick={reset} type="button"
+                            className="text-[10.5px] text-[var(--ink-light)] hover:text-[var(--ink)] underline">
+                            重做
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {ETHICS_QUIZ.map((q, idx) => {
+                const userAns = answers[q.id];
+                const isAnswered = userAns !== undefined;
+                const isCorrect = isAnswered && userAns === q.hasIssue;
+
+                return (
+                    <div key={q.id} className={`border rounded-[var(--radius-unified)] overflow-hidden transition-all ${
+                        isAnswered
+                            ? isCorrect ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'
+                            : 'border-[var(--border)] bg-white'
+                    }`}>
+                        <div className="p-3.5">
+                            <div className="flex items-start gap-2 mb-3">
+                                <span className="text-[10.5px] font-mono bg-[var(--paper-warm)] border border-[var(--border)] px-1.5 py-0.5 rounded text-[var(--ink-mid)] flex-shrink-0 mt-0.5">
+                                    {String(idx + 1).padStart(2, '0')}
+                                </span>
+                                <p className="text-[13px] text-[var(--ink)] leading-relaxed">{q.scenario}</p>
+                            </div>
+                            {!isAnswered ? (
+                                <div className="flex gap-2">
+                                    <button type="button" onClick={() => answer(q.id, true)}
+                                        className="flex-1 py-2 rounded-[6px] border-2 border-[#EF4444] text-[#EF4444] text-[12.5px] font-bold hover:bg-red-50 transition-colors">
+                                        ⚠️ 有問題
+                                    </button>
+                                    <button type="button" onClick={() => answer(q.id, false)}
+                                        className="flex-1 py-2 rounded-[6px] border-2 border-[#10B981] text-[#10B981] text-[12.5px] font-bold hover:bg-green-50 transition-colors">
+                                        ✅ 沒問題
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className={`rounded-[6px] px-3 py-2.5 ${isCorrect ? 'bg-green-100' : 'bg-red-100'}`}>
+                                    <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
+                                        <span className={`text-[12px] font-bold ${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
+                                            {isCorrect ? '✓ 正確' : `✗ 答錯了——正確答案是「${q.hasIssue ? '有問題' : '沒問題'}」`}
+                                        </span>
+                                        <span className="ml-auto text-[10.5px] font-mono px-1.5 py-0.5 bg-white/70 rounded text-[var(--ink-mid)]">
+                                            {q.principle}
+                                        </span>
+                                    </div>
+                                    <p className="text-[12px] text-[var(--ink)] leading-relaxed">{q.explanation}</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                );
+            })}
+
+            {allDone && (
+                <div className={`rounded-[var(--radius-unified)] p-4 text-center border ${
+                    correct >= 8 ? 'bg-green-50 border-green-300' : 'bg-yellow-50 border-yellow-300'
+                }`}>
+                    <p className={`font-bold text-[15px] ${correct >= 8 ? 'text-green-700' : 'text-yellow-700'}`}>
+                        {correct >= 8
+                            ? `答對 ${correct}/10，倫理意識不錯！`
+                            : `答對 ${correct}/10，回頭看看答錯的題目。`}
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+/* ══════════════════════════════════════
  *  主元件
  * ══════════════════════════════════════ */
 
@@ -477,9 +685,15 @@ export const W11Page = () => {
             icon: '📬',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '開 GC 看 W10 整本回饋，把 ★★★ 必改項列出來，今天就修' },
+                        ]}
+                    />
                     {/* 讀 W10 老師回饋 */}
                     <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
                         <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
                             <span className="text-[18px]">📬</span>
                             <span className="font-bold text-[14px] text-[var(--ink)]">先看老師對 W10 計畫書整本的回饋（5 分鐘）</span>
                         </div>
@@ -495,13 +709,14 @@ export const W11Page = () => {
                             rows={2}
                         />
                         <p className="text-[11px] text-[var(--ink-light)] leading-relaxed mt-2">
-                            💡 還沒拿到回饋？老師可能還在批。先往下做工具實體（Step 2），回饋拿到再回頭補這格。
+                            💡 還沒拿到回饋？老師可能還在批。先往下做本組工具設計書（Step 2），回饋拿到再回頭補這格。
                         </p>
                     </div>
 
                     {/* 星號等級說明 + 修補計畫 */}
                     <div className="bg-[#FFF7ED] border-2 border-[#EA580C] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
                         <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="做" />
                             <Star size={18} className="text-[#EA580C]" />
                             <span className="font-bold text-[14px] text-[#9A3412]">星號等級：找出必修項，今天修掉</span>
                         </div>
@@ -529,29 +744,55 @@ export const W11Page = () => {
                             placeholder="例：★★★ 1：第六章問卷題 5 跟題 8 在問同一件事 → 修法：刪題 8，把題 5 改成單一概念"
                             rows={6}
                         />
-                        <p className="text-[11.5px] text-[#9A3412] italic leading-relaxed mt-2 pt-2 border-t border-[#EA580C]/30">
-                            💡 沒有 ★★★ 也很好——代表整本基礎站得住，今天可以全力做工具實體。
-                        </p>
+                        <div className="mt-3 pt-3 border-t-2 border-[#EA580C]/40 bg-[#FFF7ED] -mx-5 -mb-5 px-5 py-3 rounded-b-[var(--radius-unified)]">
+                            <p className="text-[12.5px] text-[#9A3412] font-bold leading-relaxed">
+                                ⏱️ <strong>節奏壓住</strong>：今天課堂時間只先處理 ★★★ 必改項。★★、★ 請記下來，課後再修。
+                            </p>
+                            <p className="text-[11.5px] text-[#9A3412]/85 italic leading-relaxed mt-1">
+                                這節課主力不是重寫計畫書，而是<strong>完成本組工具設計書</strong>，因為第二節就要 Pilot。沒有 ★★★ 反而很好——代表整本基礎站得住，今天可以全力做工具設計書。
+                            </p>
+                        </div>
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 2：把題目轉成施測載具（工具實體）（第一節 35 min）─── */
+        /* ─── Step 2：把第六章設計升級成本組工具設計書（第一節 35 min）─── */
         {
-            title: '把題目轉成施測載具',
+            title: '把第六章設計升級成本組工具設計書',
             icon: '🛠️',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 入場說明：W10 vs W11 分工 */}
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '複製模板，把第六章升級成本組工具設計書（含題目、變項對應、施測方式、修正紀錄）' },
+                        ]}
+                    />
+
+                    {/* 兩個「書」命名對照卡 — 方法工具書（手冊）vs 本組工具設計書（產出） */}
+                    <div className="bg-[#FFFBEB] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-4 max-w-[760px]">
+                        <p className="text-[13px] font-bold text-[#92400E] mb-2">📖 方法工具書 vs 本組工具設計書 — 不要搞混</p>
+                        <div className="grid md:grid-cols-2 gap-2 text-[11.5px]">
+                            <div className="bg-white border border-[#F59E0B]/40 rounded-[6px] p-2.5">
+                                <p className="font-bold text-[#92400E] mb-0.5">📚 方法工具書（跨週共用）</p>
+                                <p className="text-[#78350F] leading-[1.7]">老師寫的速查手冊（<a href="/tools/methods" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] no-underline">/tools/methods</a>）：5 法的題型結構、設計原則、陷阱、範例。<strong>查資料用</strong>。</p>
+                            </div>
+                            <div className="bg-white border border-[#F59E0B]/40 rounded-[6px] p-2.5">
+                                <p className="font-bold text-[#92400E] mb-0.5">📝 本組工具設計書（本週產出）</p>
+                                <p className="text-[#78350F] leading-[1.7]">你們組要繳交的<strong>研究工具設計說明書</strong>：題目 + 變項對應 + 施測方式 + Pilot 修正紀錄。<strong>本週評分重點</strong>。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 入場說明：W10 vs W11 分工 + 本組工具設計書範圍 */}
                     <div className="bg-[#F0F9FF] border-l-4 border-[#0284C7] rounded-r-[var(--radius-unified)] p-4 max-w-[760px]">
                         <p className="text-[13px] font-bold text-[#075985] mb-2">📐 W10 vs W11 的分工提醒</p>
                         <p className="text-[12.5px] text-[#0C4A6E] leading-[1.85]">
-                            <strong>W10：</strong>在 計畫書 第六章<strong>填具體題目</strong>（紙上設計）。<br />
-                            <strong>W11 第一節（你現在這裡）：</strong>把那些題目<strong>轉成真的能施測的載具</strong>——問卷變 Google Form、訪綱印成卡片、紀錄表設好欄位。
+                            <strong>W10：</strong>在計畫書第六章<strong>填具體題目</strong>（紙上設計骨架）。<br />
+                            <strong>W11 第一節（你現在這裡）：</strong>把第六章設計<strong>升級成本組工具設計書</strong>——題目怎麼設計、對應哪個變項、怎麼施測、怎麼記錄、Pilot 後怎麼修。具體載具（Google Form／訪綱卡／紀錄表）只是<strong>本組工具設計書的入口</strong>，老師主要看的是工具設計書整份說明。
                         </p>
                         <p className="text-[12px] text-[#075985] italic mt-2 pt-2 border-t border-[#0284C7]/30">
-                            ⚠️ 今天<strong>不大改題目內容</strong>。題目修正回到 W10 計畫書 上改；今天主力是「把寫好的題目搬到能施測的載體上」。
+                            ⚠️ 今天<strong>不大改題目內容</strong>。第六章第一輪修正回到計畫書上改；今天主力是「把題目搬到施測載體 + 寫成可檢查、可施測、可修正的工具設計書」。
                         </p>
                     </div>
 
@@ -566,7 +807,7 @@ export const W11Page = () => {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 bg-[var(--accent)] text-white px-3 py-1.5 rounded-[var(--radius-unified)] font-bold text-[12px] hover:opacity-90 transition-opacity no-underline flex-shrink-0"
                         >
-                            📚 開工具書
+                            📚 開方法工具書
                         </a>
                     </div>
 
@@ -741,7 +982,7 @@ export const W11Page = () => {
                         <div className="bg-[#ECFDF5] border-2 border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[760px]">
                             <p className="text-[13px] font-bold text-[#064E3B] mb-2"><span className="text-[#10B981] mr-1">第 3 區</span>🧩 你登記了補充方法：{w8Secondary}</p>
                             <p className="text-[12px] text-[#065F46] leading-relaxed mb-3">
-                                補充方法的工具實體<strong>強烈建議今天一起做</strong>。下節 Pilot 互測時就能兩線一起測。
+                                補充方法的本組工具設計書<strong>強烈建議今天一起做</strong>。下節 Pilot 互測時就能兩線一起測。
                             </p>
                             <a
                                 href={INSTRUMENT_TEMPLATES[secondaryMethodKey].url}
@@ -796,27 +1037,35 @@ export const W11Page = () => {
                         </div>
                     )}
 
-                    {/* 繳交提示（精簡版） */}
+                    {/* 繳交預告（完整版在 Step 6） */}
                     <div className="bg-[#F0FDF4] border-l-4 border-[#10B981] rounded-r-[var(--radius-unified)] p-4 max-w-[760px]">
                         <p className="text-[13px] text-[#047857] leading-[1.85]">
-                            📤 <strong className="text-[#064E3B]">下節 Pilot 互測</strong>會用到這份工具，做好後放在自己手上。
-                            <strong className="text-[#064E3B]">W11 結束後</strong>再把<strong>計畫書 + 工具實體</strong>一起繳到 <strong>Google Classroom 本週作業區</strong>。
+                            📤 <strong className="text-[#064E3B]">本週是期中報告</strong>，下節 Pilot 互測也會用到這份工具。
+                            <strong className="text-[#064E3B]">W11 結束要繳兩類</strong>：
+                            <strong>① 小組作業</strong>＝完整計畫書 + 本組工具設計書（評分重點）·
+                            <strong>② 個人作業</strong>＝W11 網頁歷程 docx（Pilot／修正／倫理）。
+                            詳細繳交方式見 Step 6。
                         </p>
                     </div>
 
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 工具實體做好 → 下節用這份載具去 Pilot 互測 → 改完再一次繳交到 GC。
+                        ✅ 本組工具設計書做出第一版 → 下節 Pilot 互測 → 改完進 Step 4 第二輪修正。
                     </div>
                 </div>
             ),
         },
 
-        /* ─── Step 3：跨班 Pilot 互測（第二節 30 min）─── */
+        /* ─── Step 3：跨方法 Pilot 互測（第二節 30 min）─── */
         {
-            title: '跨班 Pilot 互測 + 雙向紀錄',
+            title: '跨方法 Pilot 互測 + 雙向紀錄',
             icon: '🧪',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '跟對面跨方法同學一對一 Pilot 互測，雙向紀錄對方卡點與自己盲點' },
+                        ]}
+                    />
                     {/* Pilot Test 是什麼？為什麼重要？*/}
                     <div className="bg-[#F0F9FF] border-2 border-[#0284C7] rounded-[var(--radius-unified)] p-5 max-w-[760px]">
                         <p className="text-[14px] font-bold text-[#075985] mb-2">🛩️ 什麼是 Pilot Test？</p>
@@ -827,7 +1076,7 @@ export const W11Page = () => {
                             <div className="bg-white border border-[#0284C7]/30 rounded-[6px] p-3">
                                 <p className="text-[12px] font-bold text-[#075985] mb-1">✅ 為什麼重要</p>
                                 <ul className="text-[11.5px] text-[#0C4A6E] leading-[1.7] list-disc pl-4 space-y-0.5">
-                                    <li>AI 看的是文字，<strong>看不到真人皺眉</strong>、回頭翻、選不出來的瞬間</li>
+                                    <li>AI 可以先幫你抓<strong>文字上的毛病</strong>；但真人預試才看得到：對方哪裡停住、皺眉、回頭看、選不出來</li>
                                     <li>同一句話<strong>你寫的人懂、別人不一定懂</strong>——文字盲點要靠真人測</li>
                                     <li>實際填答時間／流暢度，只有試了才知道</li>
                                 </ul>
@@ -861,7 +1110,7 @@ export const W11Page = () => {
                             <ol className="text-[12.5px] text-[#78350F] leading-[1.85] space-y-1.5 list-decimal pl-5">
                                 <li><strong>開始前讀「知情同意短版」給對方聽</strong>：「這是我的 Pilot 預試，預計 X 分鐘，回饋會被紀錄但不公開姓名，可以隨時停。可以開始嗎？」</li>
                                 <li><strong>計時</strong>：記錄開始／結束時間。實際時長跟你預估的差很多，就是訊號。</li>
-                                <li><strong>專注觀察</strong>：對方填／答／看的時候，留意他在哪一題卡住、皺眉、回頭翻——這些細節是 AI 抓不到的</li>
+                                <li><strong>專注觀察</strong>：對方填／答／看的時候，留意他在哪一題卡住、皺眉、回頭翻——這層現場反應屬於真人預試的領域，AI 看不到</li>
                                 <li><strong>雙向紀錄</strong>：你當「研究者」時記下對方的回饋；換你當「受測者」時，幫對方寫一段反思（你以為對方在研究什麼？實際感受？）</li>
                             </ol>
                             <p className="text-[11.5px] text-[#92400E] italic mt-2 pt-2 border-t border-[#D97706]/30">
@@ -892,9 +1141,12 @@ export const W11Page = () => {
 
                     {/* 研究者紀錄 */}
                     <div className="space-y-4">
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            Pilot 紀錄（你當研究者）
-                        </h4>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
+                            <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)]">
+                                Pilot 紀錄（你當研究者）
+                            </h4>
+                        </div>
 
                         {/* 觀察清單（預設依方法分流，可切換看別組）*/}
                         <div className="bg-[#FFFBEB] border-2 border-[#D97706] rounded-[var(--radius-unified)] p-4 max-w-[760px]">
@@ -938,7 +1190,7 @@ export const W11Page = () => {
                             )}
 
                             <p className="text-[11.5px] text-[#92400E] italic mt-3 pt-2 border-t border-[#D97706]/30">
-                                ⚠️ 這幾條<strong>任何一條都不允許答「沒有」</strong>——眼睛閉著也會看到。預設展示你的主方法；★ 是你的方法；想看別組可以切換。如果真的覺得「都沒問題」，下方有 AI 反向質問鷹架。
+                                ⚠️ <strong>不要只寫「沒問題」</strong>。如果真的沒看到明顯錯誤，至少寫一個<strong>「想再確認的地方」</strong>——哪一題可能太長？哪個選項可能不好選？哪個流程正式施測時可能卡住？預設展示你的主方法；★ 是你的方法；想看別組可以切換。Pilot 的重點不是證明工具完美，而是留下下一版可以檢查的線索。下方有 AI 反向質問鷹架可以幫你挖盲點。
                             </p>
                         </div>
 
@@ -982,6 +1234,24 @@ export const W11Page = () => {
                             rows={8}
                         />
 
+                        {/* 受測者感受 — 倫理意識錨點（Step 5 倫理審查會接回這格） */}
+                        <div className="bg-[#F5F3FF] border-2 border-[#7C3AED] rounded-[var(--radius-unified)] p-4">
+                            <div className="flex items-center gap-2 mb-2">
+                                <ContentTypeChip type="做" />
+                                <span className="font-bold text-[13px] text-[#5B21B6]">【你當受測者】你剛才的感受</span>
+                            </div>
+                            <p className="text-[12px] text-[#4C1D95] leading-relaxed mb-3">
+                                這格不是在找工具問題——是讓你記下<strong>自己當受測者的感受</strong>。下一個 Step 倫理審查會接回這裡：你剛才的感受，就是你的受測者可能有的感受。
+                            </p>
+                            <ThinkRecord
+                                dataKey="w11-pilot-as-subject"
+                                prompt="你當受測者的時候，有沒有這三種感覺？"
+                                defaultTemplate={'有沒有哪一刻想說「我不想回答這題」：\n有沒有不確定自己的資料會怎麼被用：\n有沒有感覺不填不行、好像一定要配合：'}
+                                placeholder="例：第三題問到家裡的補習費壓力，我猶豫了一下，不確定要不要寫真實狀況"
+                                rows={4}
+                            />
+                        </div>
+
                     </div>
 
                     {/* 📸 拍照存證（實體存在性證據 — 反偽造） */}
@@ -1024,8 +1294,8 @@ export const W11Page = () => {
                         <Checklist
                             dataKey="w11-pilot-self-check"
                             items={[
-                                '我寫的「對方回饋」是對方**真的說過**的話，不是我猜他想說的',
-                                '我自己觀察到的問題用了**自己的話**寫，不是照抄對方',
+                                '我寫的「對方回饋」是對方真的說過的話，不是我猜他想說的',
+                                '我自己觀察到的問題用了自己的話寫，不是照抄對方',
                                 '至少有一條問題是「我原本沒想到、預試後才發現」的——如果都是我預期內的，預試可能太流於形式',
                             ]}
                         />
@@ -1044,11 +1314,19 @@ export const W11Page = () => {
             icon: '🔧',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '把 Pilot 發現整理成 3-5 條具體修正，直接改載具與計畫書第六章' },
+                        ]}
+                    />
                     {/* 第二輪工具修正 */}
                     <div>
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            第二輪工具修正（根據 Pilot 回饋）
-                        </h4>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
+                            <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)]">
+                                第二輪工具修正（根據 Pilot 回饋）
+                            </h4>
+                        </div>
                         {/* AI 反向質問鷹架（從 Step 3 移過來：在這裡用最有意義） */}
                         <details className="bg-[#FEF2F2] border-2 border-[#DC2626] rounded-[var(--radius-unified)] p-4 max-w-[760px] mb-4">
                             <summary className="cursor-pointer text-[13px] font-bold text-[#991B1B]">😅 Step 3 全組覺得「都沒問題」？修不出東西嗎？ — AI 反向質問鷹架 ▼</summary>
@@ -1081,16 +1359,37 @@ export const W11Page = () => {
             icon: '⚖',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '學', text: '倫理四原則（知情同意 / 保密 / 不傷害 / 資料正確使用）' },
+                            { label: '做', text: '對照四原則，寫小組研究對應的具體實踐做法' },
+                        ]}
+                    />
+                    {/* 橋接：從 Pilot 受測者體驗到倫理意識 */}
+                    <div className="bg-[#F5F3FF] border-l-4 border-[#7C3AED] rounded-r-[var(--radius-unified)] p-4 max-w-[760px]">
+                        <p className="text-[14px] font-bold text-[#5B21B6] mb-2">你剛才的感受，你的受測者也會有。</p>
+                        <p className="text-[12.5px] text-[#4C1D95] leading-relaxed">
+                            Step 3 你填過（或接受過）對方的工具——你知道那種「這題我不太想回答」或「不確定我的資料怎麼用」的感覺。<strong>四原則是把那個感受系統化的工具</strong>，幫你逐項確認：你的工具不會讓你的受測者有同樣的不舒服。
+                        </p>
+                    </div>
+
                     {/* 請回頭審查小組的設計有無符合倫理審查 */}
                     <div>
-                        <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            請回頭審查小組的設計有無符合倫理審查
-                        </h4>
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="做" />
+                            <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)]">
+                                對照四原則：你們組要怎麼做？
+                            </h4>
+                        </div>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-4">
-                            下方四原則是研究倫理的基礎底線。對照你們組的研究設計，記錄這四個在自己的研究要怎麼實踐。
+                            四原則是研究倫理的底線架構。對照你剛才的受測者感受，逐項確認你們組的研究設計有沒有對應的保護措施。
                         </p>
 
                         {/* 四原則卡片（純顯示，不收輸入）*/}
+                        <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
+                            <span className="font-bold text-[13px] text-[var(--ink)]">倫理四原則</span>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
                             {ETHICS_QUESTIONS.map((q) => (
                                 <div key={q.id} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
@@ -1118,14 +1417,8 @@ export const W11Page = () => {
                             ))}
                         </div>
 
-                        {/* 合併紀錄欄 */}
-                        <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-4">
-                            <ThinkRecord
-                                dataKey="w11-ethics-self-review"
-                                prompt="請回頭審查小組的設計有無符合倫理審查，以及倫理審查在自己的研究要怎麼實踐"
-                                rows={8}
-                            />
-                        </div>
+                        {/* 倫理情境判斷測驗 */}
+                        <EthicsQuiz />
                     </div>
 
                 </div>
@@ -1136,18 +1429,53 @@ export const W11Page = () => {
             icon: '🚀',
             content: (
                 <div className="space-y-8 prose-zh">
-                    {/* 施測啟動 — 不填表，課堂結尾只做：工具實體繳交 + W12 預告 */}
+                    <StepBriefing
+                        lines={[
+                            { label: '交出', text: '小組：完整計畫書 + 本組工具設計書' },
+                            { label: '交出', text: '個人：W11 歷程 docx' },
+                        ]}
+                    />
+                    {/* 施測啟動 — W11 期中報告繳交（小組 + 個人雙線）+ W12 預告 */}
                     <div>
                         <h4 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2">
-                            施測啟動 · 收尾說明
+                            W11 期中報告繳交 · 收尾說明
                         </h4>
-                        <div className="bg-[#F0F9FF] border-l-4 border-[#0284C7] rounded-r-[var(--radius-unified)] p-4 mb-4 max-w-[760px]">
-                            <p className="text-[12.5px] text-[#0C4A6E] leading-[1.85]">
-                                樣本量／時程<strong>已在計畫書第七章+第十一章寫過</strong>——<u>這裡不重填</u>。<strong>Plan B 觸發條件</strong>（W13 進來前累計 &lt; X 份就啟動備案）等到 <strong>W12 期中短報</strong>老師問再口頭討論，現在不寫網頁。
-                            </p>
-                            <p className="text-[12px] text-[#0C4A6E] leading-[1.85] mt-2">
-                                ✅ 本節剩下的時間只做三件事：<strong>① 工具實體連結貼到 Classroom</strong> · <strong>② 一鍵匯出網頁歷程 docx 一起貼</strong>（含 Pilot 紀錄、第二輪修正、倫理四原則）· <strong>③ 看 W12 預告</strong>。老師會在 W11 結束後收回工具書統一給回饋。
-                            </p>
+
+                        {/* 雙線繳交卡 */}
+                        <div className="bg-white border-2 border-[#10B981] rounded-[var(--radius-unified)] overflow-hidden mb-4 max-w-[760px]">
+                            <div className="bg-[#10B981] text-white px-4 py-2 font-bold text-[13px]">
+                                📦 W11 結束前完成兩類繳交
+                            </div>
+                            <div className="p-4 space-y-4">
+                                {/* 小組作業 */}
+                                <div className="border-l-4 border-[#0284C7] bg-[#F0F9FF] rounded-r-[6px] p-3">
+                                    <p className="font-bold text-[13.5px] text-[#075985] mb-1.5">一、小組作業｜完整計畫書 + 本組工具設計書 <span className="text-[11px] font-mono bg-[#0284C7] text-white px-1.5 py-0.5 rounded ml-1">評分重點</span></p>
+                                    <ul className="text-[12.5px] text-[#0C4A6E] leading-[1.85] list-disc pl-5 space-y-1">
+                                        <li><strong>計畫書</strong>：W10 那份 Google 文件已依老師回饋完成 ★★★ 必改項。★★、★ 課後再修。<strong>Google 文件直改即同步、不用整本重傳</strong>。</li>
+                                        <li><strong>本組工具設計書</strong>：上傳到 Classroom 小組作業區。問卷組可附 Google Form 連結，但<strong>工具設計書本身仍要說明</strong>：題目設計 / 變項對應 / 施測方式 / Pilot 後修正。</li>
+                                    </ul>
+                                    <p className="text-[11.5px] text-[#0C4A6E] italic mt-2 pt-2 border-t border-[#0284C7]/30">
+                                        💡 第六章不完美沒關係——老師本週主要看的是<strong>工具設計書是否完整、可執行、能對應計畫書的研究問題</strong>。
+                                    </p>
+                                </div>
+
+                                {/* 個人作業 */}
+                                <div className="border-l-4 border-[#7C3AED] bg-[#F5F3FF] rounded-r-[6px] p-3">
+                                    <p className="font-bold text-[13.5px] text-[#5B21B6] mb-1.5">二、個人作業｜W11 網頁歷程 docx</p>
+                                    <p className="text-[12.5px] text-[#4C1D95] leading-[1.85]">
+                                        一鍵匯出 W11 網頁歷程，docx 內含<strong>你個人</strong>的：
+                                        Pilot 對象與發現／工具第二輪修正／倫理四原則實踐紀錄。<strong>上傳到 Classroom 個人作業區</strong>。
+                                    </p>
+                                </div>
+
+                                {/* 繳交收尾 */}
+                                <div className="bg-[#FEF3C7] border border-[#F59E0B] rounded-[6px] p-3">
+                                    <p className="text-[12.5px] font-bold text-[#92400E] leading-[1.85]">
+                                        ✅ 全部完成後，到 <strong>Classroom 按下「繳交」</strong>讓系統知道你任務完成。<br />
+                                        ⏰ 樣本量／時程／Plan B <strong>已在計畫書第七、十一章寫過，這裡不重填</strong>；Plan B 觸發條件等 W12 期中短報老師問再口頭討論。
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1159,10 +1487,10 @@ export const W11Page = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
-                                                '把計畫書題目轉成真的能施測的載具（Form／訪綱／紀錄表）',
+                                                '把第六章設計升級成本組工具設計書（題目 + 變項對應 + 施測方式 + 修正紀錄）',
                                                 '透過 一對一跨方法 Pilot 找出只有真人試跑才會暴露的工具問題',
                                                 '對照倫理四原則紀錄小組研究的具體實踐方式',
-                                                '繳交：工具實體連結 + 上課歷程 docx（含 Pilot 紀錄、倫理四原則紀錄）',
+                                                '繳兩類：小組＝完整計畫書 + 本組工具設計書（評分重點）；個人＝W11 歷程 docx',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                     <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>
@@ -1172,10 +1500,22 @@ export const W11Page = () => {
                         </div>
                     </div>
 
-                    <ExportButton
-                        weekLabel="W11 Pilot Test + 倫理審查 + 施測啟動"
-                        fields={EXPORT_FIELDS}
-                    />
+                    {/* 一鍵複製繳交 */}
+                    <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
+                            <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
+                            <span className="text-[14px] font-bold text-[#1E40AF]">複製 W11 學習紀錄 → 貼 Google Classroom</span>
+                        </div>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            包含：W10 回饋摘要／星號項修補紀錄／Pilot 互測紀錄／倫理審查確認／施測啟動準備。
+                        </p>
+                        <ExportButton
+                            weekLabel="W11 預試與倫理"
+                            fields={EXPORT_FIELDS}
+                            buttonText="複製 W11 學習紀錄"
+                        />
+                    </div>
 
                     {/* W12 預告：期中進度短報 */}
                     <div className="bg-[var(--ink)] border-l-4 border-[var(--accent)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
@@ -1243,7 +1583,6 @@ export const W11Page = () => {
                     >
                         <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · E</span>
                 </div>
             </div>
 
@@ -1256,15 +1595,22 @@ export const W11Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W11"
+                todo={[
+                  { label: '今天做什麼', value: '把計畫書第六章升級成本組工具設計書，Pilot 一對一互測、記錄發現與修正。' },
+                  { label: '為什麼做', value: 'W10 計畫書定稿但還沒真正施測——先試一遍找出真人才看到的坑，也是期中評分點。' },
+                  { label: '今天交什麼', value: '小組：完整計畫書 + 工具設計書；個人：W11 歷程 docx。' },
+                ]}
+                question="我的工具拿出去能用嗎？倫理過得了嗎？"
                 title="預試與倫理："
-                accentTitle="施測啟動前的最後一道檢核"
-                subtitle="W10 把題目寫到 計畫書 上，這週把題目轉成真的能施測的載具——然後 一對一跨方法 Pilot（預試：正式上場前先抓 1-2 個人試跑，找真人會卡住的地方）找出只有真人試跑才會暴露的工具問題、過倫理、宣告施測啟動。"
-                chain="W10 計畫書定稿、第六章工具題目寫好了——但別急著真的施測。先找少數人試一遍（Pilot 預試），避免上場才發現坑。"
+                accentTitle="期中報告：本組工具設計書 × Pilot 預試"
+                subtitle="W10 已繳交計畫書，老師給了一次建議。W11 先看回饋、修 ★★★ 必改項；主力是把第六章設計升級成本組工具設計書——然後 一對一跨方法 Pilot 找出真人才看得到的工具問題、過倫理、宣告施測啟動。本週是期中評分點：小組交完整計畫書與工具設計書、個人交 W11 歷程 docx。"
+                chain="W10 計畫書定稿、第六章工具題目寫好了——但別急著真的施測。先把第六章設計升級成本組工具設計書，找少數人試一遍（Pilot 預試），避免上場才發現坑。"
                 meta={[
-                    { label: '第一節', value: '讀 W10 回饋 + 修星號項 + 把題目轉成施測載具' },
+                    { label: '第一節', value: '讀 W10 回饋 + 修 ★★★ + 製作本組工具設計書' },
                     { label: '第二節', value: '座位表一對一 Pilot 互測 + 倫理 + 施測啟動' },
-                    { label: '課堂產出', value: '工具實體 + Pilot 發現 + 倫理審查通過 + 施測計畫' },
-                    { label: '前置要求', value: 'W10 計畫書已繳交（題目寫在 計畫書 第六章）' },
+                    { label: '小組產出', value: '完整計畫書 + 本組工具設計書（W11 期中報告評分依據）' },
+                    { label: '個人產出', value: 'W11 歷程 docx：Pilot 紀錄 + 工具修正 + 倫理四原則' },
+                    { label: '前置要求', value: 'W10 計畫書已繳交（題目寫在計畫書第六章）' },
                 ]}
             />
             <CourseArc items={[
@@ -1282,18 +1628,18 @@ export const W11Page = () => {
                 weekTitle={W11Data.title}
                 duration={`${W11Data.duration} 分鐘 · ${W11Data.durationDesc}`}
                 tasks={[
-                    '工具實體化（題目 → Google Form / 訪綱卡 / 紀錄表）',
+                    '把計畫書第六章設計升級成本組工具設計書（題目 + 變項對應 + 施測方式 + 修正紀錄）',
                     '座位表一對一 跨方法 Pilot — 紀錄 + 自我檢核',
                     '倫理四原則自查 → 啟動施測',
                 ]}
-                exportReminder="Classroom 繳交工具實體連結 + 上課歷程 docx → 老師收回統一給回饋"
+                exportReminder="小組作業交完整計畫書與工具設計書；個人作業交 W11 歷程 docx。工具設計書是本週評分重點，完成後按 Classroom「繳交」。"
             />
 
             {/* STEP ENGINE */}
             <StepEngine
                 steps={steps}
                 prevWeek={{ label: '回 W10 工具精進', to: '/w10' }}
-                nextWeek={{ label: '前往 W12 研究執行', to: '/w12' }}
+                nextWeek={{ label: '前往 W12 期中短報', to: '/w12' }}
             flat
             />
         </div>

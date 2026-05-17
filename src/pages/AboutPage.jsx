@@ -26,6 +26,28 @@ export const AboutPage = () => {
             松山高中「研究方法與專題」校訂必修課程的教學輔助平台。
             我們把遊戲化機制寫進學科能力的骨架裡，讓高一學生在通關的過程中，完成一次完整的初階研究歷程。
           </p>
+
+          {/* 課程三句承諾 */}
+          <div style={{
+            marginTop: 28,
+            padding: '20px 24px',
+            background: 'rgba(255, 255, 255, 0.08)',
+            borderLeft: '4px solid #FFD166',
+            borderRadius: 8,
+            maxWidth: 720,
+          }}>
+            <p style={{ fontSize: 13, color: '#FFD166', fontWeight: 700, marginBottom: 10, letterSpacing: '0.05em' }}>
+              ✦ 我們訓練學生在 AI 時代學會三件事
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8, fontSize: 15, lineHeight: 1.85 }}>
+              <p>📌 <strong>問得出問題</strong>——不是找答案，而是學會問一個可以被研究的問題</p>
+              <p>🔍 <strong>查得到證據</strong>——不是抄資料，而是學會判斷哪些資料可信</p>
+              <p>⚖️ <strong>說得出限制</strong>——不把話說滿，承認研究還沒解決什麼</p>
+            </div>
+            <p style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.15)', fontSize: 13, fontStyle: 'italic', opacity: 0.85 }}>
+              核心命題：<strong>AI 可以幫你把研究變順，但不能替你把研究變真。</strong>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -133,6 +155,44 @@ export const AboutPage = () => {
               後期逐步簡化為三行「AI 使用簡記」，讓學生從被引導走向自主反思。
               搭配 Prompt 實驗室，學生學的不只是「怎麼使用 AI」，而是<strong>如何在 AI 協助下保留自己的提問、判斷、證據與責任</strong>。
             </p>
+
+            {/* AI 可做 / 不能替你做對照表 */}
+            <div style={{ marginTop: 16 }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#5B21B6', marginBottom: 10 }}>
+                📋 6 階段 AI 協作邊界
+              </p>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '100px 1fr 1fr',
+                gap: 1,
+                background: '#E5E7EB',
+                border: '1px solid #E5E7EB',
+                borderRadius: 8,
+                overflow: 'hidden',
+                fontSize: 12.5,
+              }}>
+                <div style={{ padding: '10px 12px', background: '#F9FAFB', fontWeight: 700, color: '#374151' }}>階段</div>
+                <div style={{ padding: '10px 12px', background: '#F0FDF4', fontWeight: 700, color: '#065F46' }}>✅ AI 可以幫你</div>
+                <div style={{ padding: '10px 12px', background: '#FEF2F2', fontWeight: 700, color: '#991B1B' }}>❌ AI 不能替你做</div>
+                {[
+                  { stage: '發想', ok: '列問題、找角度、指出題目太大太空', no: '決定自己真正想研究什麼' },
+                  { stage: '文獻', ok: '整理資料、摘要來源、比較觀點', no: '判斷資料是否可信' },
+                  { stage: '方法', ok: '檢查問卷題目、訪談題綱、實驗變因', no: '決定方法是否合適' },
+                  { stage: '分析', ok: '整理表格、提出可能趨勢', no: '面對資料不如預期時誠實' },
+                  { stage: '結論', ok: '找論證漏洞、提醒限制', no: '承認研究限制' },
+                  { stage: '發表', ok: '整理簡報、模擬評審提問', no: '公開回答追問' },
+                ].map((r, i) => (
+                  <React.Fragment key={i}>
+                    <div style={{ padding: '10px 12px', background: '#fff', fontWeight: 700, color: '#374151' }}>{r.stage}</div>
+                    <div style={{ padding: '10px 12px', background: '#fff', color: '#065F46', lineHeight: 1.7 }}>{r.ok}</div>
+                    <div style={{ padding: '10px 12px', background: '#fff', color: '#991B1B', lineHeight: 1.7 }}>{r.no}</div>
+                  </React.Fragment>
+                ))}
+              </div>
+              <p style={{ marginTop: 10, fontSize: 12, color: '#6B7280', fontStyle: 'italic' }}>
+                右欄是研究者的不可外包責任——AI 越強，這些越要由人扛住。
+              </p>
+            </div>
           </div>
         </div>
 

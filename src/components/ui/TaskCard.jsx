@@ -27,7 +27,7 @@ export const TaskCard = ({
     return (
         <section
             className="task-card border-2 border-[#1a1a2e] bg-[#fafaf6] rounded-[10px] p-6 mb-10 shadow-[0_2px_0_#1a1a2e]"
-            aria-label="本節任務卡"
+            aria-label="本週任務卡"
         >
             {/* 標題列 */}
             <header className="flex items-baseline gap-3 mb-4 border-b border-[#dddbd5] pb-3">
@@ -35,7 +35,7 @@ export const TaskCard = ({
                     {weekNumber}
                 </span>
                 <h2 className="font-['Noto_Serif_TC',serif] text-[18px] font-bold text-[#1a1a2e] leading-tight">
-                    本節任務 · {weekTitle}
+                    本週任務 · {weekTitle}
                 </h2>
                 {duration && (
                     <span className="ml-auto text-[11px] text-[#8888aa] flex items-center gap-1 font-['DM_Mono',monospace]">

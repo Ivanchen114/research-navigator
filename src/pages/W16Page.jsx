@@ -10,6 +10,7 @@ import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import LessonMap from '../components/ui/LessonMap';
 import { W16Data } from '../data/lessonMaps';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import {
     Layout,
     PenTool,
@@ -93,7 +94,8 @@ const W16Page = () => {
 
                     {/* 7 項評分規準（對齊期末規準）*/}
                     <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
+                        <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <ContentTypeChip type="學" />
                             <Award size={16} /> 海報怎麼被評分？— 7 項規準（總分 100）
                         </div>
                         <div className="card-body">
@@ -115,6 +117,7 @@ const W16Page = () => {
                                 ))}
                             </div>
                             <div style={{ marginTop: 12, padding: '10px 14px', background: '#FFFBEB', borderLeft: '3px solid #F59E0B', borderRadius: 4, fontSize: 12, color: '#92400E', lineHeight: 1.8 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}><ContentTypeChip type="注意" /></div>
                                 ⚠️ <strong>規準五（資料完整性 10%）海報放不下原始資料</strong>——組長要把問卷原稿／訪談逐字稿／實驗紀錄壓成 zip，上傳到 Google Classroom（檔名：<code>組別_原始資料.zip</code>）。<strong>逾期未交者該項以不及格計。</strong>
                             </div>
                         </div>
@@ -208,9 +211,14 @@ const W16Page = () => {
                             <Download size={16} /> 海報 PowerPoint 模板下載
                         </div>
                         <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
+                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 8 }}>
                                 這份就是你要動手改的<strong>乾淨版 PPT</strong>。版面已對齊 7 項規準，你要把自己的研究內容整理進 7 個區塊，並貼上最能呈現研究發現的核心視覺，最後匯出 PDF 給老師印 A1。
                             </p>
+                            <div style={{ fontSize: 12, lineHeight: 1.8, color: '#4B5563', background: '#F9FAFB', border: '1px dashed #D1D5DB', borderRadius: 8, padding: '10px 14px', marginBottom: 12 }}>
+                                💡 <strong>這只是參考模板——以下都可以自由調整：</strong><br />
+                                🎨 配色主題（換主題色，建議不超過 3 色）／🖼️ 照片與插圖（研究現場、問卷截圖、自製圖表）／✍️ 標題字體與大小／🌈 背景底紋或漸層／🔲 區塊內文字與圖的比例<br />
+                                <span style={{ color: '#DC2626', fontWeight: 700 }}>不能動的</span>：7 個區塊的存在與對應內容（規準有對應，改掉會影響評分）。
+                            </div>
                             <a
                                 href="/templates/research-poster-template-clean.pptx"
                                 download
@@ -275,18 +283,18 @@ const W16Page = () => {
                     {/* 替換內容流程 */}
                     <div className="card" style={{ marginTop: 16 }}>
                         <div className="card-header">
-                            <FileText size={16} /> 第二步：替換內容（不改版面）
+                            <FileText size={16} /> 第二步：整理內容（不改版面）
                         </div>
                         <div className="card-body">
                             <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
-                                模板的 7 個區塊位置已對齊規準，<strong>不要改動版面</strong>。你只做兩件事：
+                                模板版面已對齊評分規準，<strong>不要改動版面</strong>。但版面只是容器——<strong>內容要由你決定哪些留下、哪些刪掉</strong>。具體兩個動作：
                             </p>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
                                 <div style={{ padding: '10px 14px', background: '#fff', fontSize: 12.5, lineHeight: 1.85 }}>
-                                    <strong style={{ color: 'var(--accent)' }}>① 替換每格的文字</strong>——把「請置換」的 placeholder 換成你的研究內容（題目、動機、文獻、方法、結論）
+                                    <strong style={{ color: 'var(--accent)' }}>① 整理每格的內容</strong>——把「請置換」的 placeholder 換成你研究的精華（題目、動機、文獻、方法、結論）。這一步<strong>不是直接複製計畫書</strong>，要思考海報空間有限，每格只留最重要的
                                 </div>
                                 <div style={{ padding: '10px 14px', background: '#fff', fontSize: 12.5, lineHeight: 1.85 }}>
-                                    <strong style={{ color: 'var(--accent)' }}>② 替換 A1 #2 的核心呈現</strong>——把示範圖刪掉，貼上你 W14 做的最關鍵的那張圖（複製貼上即可，置中對齊）
+                                    <strong style={{ color: 'var(--accent)' }}>② 整理 A1 #2 的核心呈現</strong>——把示範圖刪掉，<strong>從 W14 多張圖中選一張最能代表研究發現的</strong>貼上去（質性組可放主題矩陣或關鍵引文卡，置中對齊）
                                 </div>
                             </div>
                             <p style={{ fontSize: 12, color: 'var(--ink-light)', marginTop: 12, fontStyle: 'italic' }}>
@@ -312,7 +320,7 @@ const W16Page = () => {
                                     { m: '📋 問卷', show: '量化圖表',     ex: '長條圖（人次比較）／圓餅圖（比例）／量表平均值分布／交叉表' },
                                     { m: '🧪 實驗', show: '前後測比較',   ex: '實驗組 vs 對照組柱狀圖／折線圖（時間變化）／效應量標註' },
                                     { m: '👀 觀察', show: '行為頻率統計', ex: '行為類別 × 次數柱狀圖／時間分布熱圖／空間分布示意圖' },
-                                    { m: '🎤 訪談', show: '主題編碼 + Quote', ex: '主題分類矩陣（主題 × 受訪者）／3 個關鍵 quote 卡（含受訪者代號 P1/P2/P3）' },
+                                    { m: '🎤 訪談', show: '主題編碼 + 代表引文', ex: '主題分類矩陣（主題 × 受訪者）／3 個關鍵引文卡（含受訪者代號 P1/P2/P3）' },
                                     { m: '📚 文獻分析',  show: '依子類型而異',  ex: '② 歷史：時間軸／因果鏈圖｜③ 內容：編碼計次表／詞頻長條圖／共現矩陣｜④ 論述：立場光譜圖／話語對照表／框架分類｜⑤ 敘事：情節結構圖／角色關係圖' },
                                 ].map((r, i) => (
                                     <React.Fragment key={i}>
@@ -330,7 +338,8 @@ const W16Page = () => {
 
                     {/* 視覺四字訣 */}
                     <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
+                        <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <ContentTypeChip type="學" />
                             <Eye size={16} /> 第四步：3 秒吸引力法則（大、少、準、亮）
                         </div>
                         <div className="card-body">
@@ -351,7 +360,8 @@ const W16Page = () => {
 
                     {/* 排版規範（規準七 50%）*/}
                     <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
+                        <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <ContentTypeChip type="注意" />
                             <Award size={16} /> 排版規範（規準七 50% · 模板已內建）
                         </div>
                         <div className="card-body">
@@ -377,7 +387,7 @@ const W16Page = () => {
                                 · <strong>標題吸睛改寫</strong>：把你研究題目原版貼給 AI，請它「保持原意，改成更吸引人的問句或驚人數字版」<br />
                                 · <strong>結論句精簡</strong>：把 W15 寫的結論貼給 AI，請它「壓縮成 2 句話的海報結論」<br />
                                 · <strong>圖示／配色建議</strong>：可以請 AI 提供視覺方向，但最後要檢查是否符合你的研究主題與資料，<strong>不要為了好看改變研究意思</strong>。<br />
-                                <span style={{ color: 'var(--ink-light)', fontStyle: 'italic' }}>⚠️ 不要叫 AI 從零生成整張海報內容——你的研究內容只有你才知道對不對。AI 只能修飾，不能取代。</span>
+                                <span style={{ color: 'var(--ink-light)', fontStyle: 'italic' }}>⚠️ 不要叫 AI 從零生成整張海報內容——你的研究內容只有你才知道對不對。AI 可以協助標題改寫、句子精簡、圖示與配色建議；但<strong>不能替你決定研究內容，也不能改變你的研究結論</strong>。</span>
                             </div>
                         </div>
                     </div>
@@ -393,7 +403,8 @@ const W16Page = () => {
                 <div className="prose-zh">
                     {/* 上課紀錄 3 欄 */}
                     <div className="card">
-                        <div className="card-header">
+                        <div className="card-header" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <ContentTypeChip type="做" />
                             <Target size={16} /> 上課紀錄（3 格 + AI-RED）
                         </div>
                         <div className="card-body">
@@ -426,6 +437,7 @@ const W16Page = () => {
                                     '我最沒把握第 ___ 項（一/二/三/四/五/六/七）',
                                     '原因：___',
                                     'W17 前我要 ___（具體動作 + 期限）',
+                                    '組長確認：原始資料 zip 是否已上傳 GC？（是 / 否，預計 ___ 前完成）',
                                 ]}
                                 rows={4}
                             />
@@ -434,9 +446,13 @@ const W16Page = () => {
 
                     {/* AI-RED */}
                     <div style={{ marginTop: 16 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                            <ContentTypeChip type="交出" />
+                            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>AI-RED 敘事紀錄</span>
+                        </div>
                         <AIREDNarrative
                             week="16"
-                            hint="本週可能用 AI 做的事：寫海報標題、潤色 3 個發現的句子、生成示意圖"
+                            hint="本週可能用 AI 做的事：寫海報標題、潤色發現句、生成視覺素材（示意圖／背景）。注意：AI 可協助視覺素材，但不可捏造或改造研究數據圖表——核心呈現用 W14 的真實圖表。"
                             optional={true}
                         />
                     </div>
@@ -449,7 +465,7 @@ const W16Page = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-[var(--border)]">
                             {[
                                 '看懂期末 7 項規準，知道海報哪一格對應哪一項評分',
-                                '在兩張 A1 海報內把 7 個區塊填齊，不漏任何規準項目',
+                                '在兩張 A1 海報內把 7 個區塊整理清楚，每項規準都有對應內容',
                                 '依視覺技巧（大／少／準／亮）做取捨——不是塞越多越好',
                                 '依排版規範（對齊／字級／3 色／字體）製作海報——這也是評分項',
                             ].map((item, i) => (
@@ -461,10 +477,22 @@ const W16Page = () => {
                         </div>
                     </div>
 
-                    <ExportButton
-                        weekLabel="W16 海報製作（製作過程紀錄）"
-                        fields={EXPORT_FIELDS}
-                    />
+                    {/* 一鍵複製繳交 */}
+                    <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="交出" />
+                            <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
+                            <span className="text-[14px] font-bold text-[#1E40AF]">複製 W16 學習紀錄 → 貼 Google Classroom</span>
+                        </div>
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
+                            包含：製作進度自評／內容取捨紀錄／7 項規準自查／AI-RED 敘事紀錄（如有）。
+                        </p>
+                        <ExportButton
+                            weekLabel="W16 海報製作（製作過程紀錄）"
+                            fields={EXPORT_FIELDS}
+                            buttonText="複製 W16 學習紀錄"
+                        />
+                    </div>
 
                     {/* W17 預告 */}
                     <div className="card" style={{ marginTop: 16, background: '#1a1a2e', border: 'none' }}>
@@ -501,7 +529,6 @@ const W16Page = () => {
                     >
                         <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -514,6 +541,12 @@ const W16Page = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W16"
+                todo={[
+                  { label: '今天做什麼', value: '把研究核心壓縮進兩張 A1 海報的七個區塊，完成 W17 上場版本。' },
+                  { label: '為什麼做', value: 'W15 寫完四層次結論——現在要把它變成 3 秒可讀的視覺版，下週就是真人來問的場子。' },
+                  { label: '今天交什麼', value: '海報 PDF（送老師印 A1）+ 原始資料 zip（組長）+ 個人 W16 網頁歷程。' },
+                ]}
+                question="別人看得懂我怎麼得到結論嗎？"
                 title="海報製作 · "
                 accentTitle="兩張 A1 把研究說清楚"
                 subtitle="期末成果不是 Word 報告，是兩張 A1 海報。本週把 W1-W15 累積的研究內容，整理成 7 個清楚區塊，下週 W17 上場。海報本身就是期末研究報告——依 7 項規準打分。"
@@ -521,18 +554,18 @@ const W16Page = () => {
                 meta={[
                     { label: '第一節', value: '海報入門 + 7 項規準 + 兩張 A1 架構' },
                     { label: '第二節', value: '線框圖 + 視覺技巧 + 製作 + 收尾繳交' },
-                    { label: '課堂產出', value: '兩張 A1 海報雛形（PPT 檔）+ 製作紀錄' },
-                    { label: '帶去 W17', value: '匯出 PDF 給老師印 A1，組長另繳原始資料 zip 至 GC' },
+                    { label: '課堂產出', value: '兩張 A1 海報（課堂完成雛形 → 課後補完匯出 PDF）+ 製作紀錄' },
+                    { label: '前置要求', value: 'W15 研究結論章初稿 + W14 圖表圖說（海報素材來源）' },
                 ]}
             />
             <CourseArc items={[
-                    { wk: 'W1-W2', name: '探索階段\nRED公約', past: true },
-                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', past: true },
-                    { wk: 'W5-W8', name: '操作型定義／海報／文獻', past: true },
-                    { wk: 'W9-W11', name: '工具設計\n倫理審查', past: true },
-                    { wk: 'W11-W13', name: '執行階段\n自主研究', past: true },
-                    { wk: 'W14-W15', name: '數據轉譯\n圖表結論', past: true },
-                    { wk: 'W16-W17', name: '海報製作\nGallery Walk', now: true },
+                    { wk: 'W1-W2', name: '探索階段\nRED公約', status: 'past' },
+                    { wk: 'W3-W4', name: '題目診斷\n方法地圖', status: 'past' },
+                    { wk: 'W5-W8', name: '操作型定義／海報／文獻', status: 'past' },
+                    { wk: 'W9-W11', name: '工具設計\n倫理審查', status: 'past' },
+                    { wk: 'W11-W13', name: '執行階段\n自主研究', status: 'past' },
+                    { wk: 'W14-W15', name: '數據轉譯\n圖表結論', status: 'past' },
+                    { wk: 'W16-W17', name: '海報製作\nGallery Walk', status: 'now' },
                 ]} />
 
             <TaskCard
@@ -544,7 +577,7 @@ const W16Page = () => {
                     '海報架構：模板下載 + 5 法核心呈現對照',
                     '海報製作：直接開模板改 + 上課紀錄 3 格 + 收尾繳交',
                 ]}
-                exportReminder="繳交報告完稿 + 海報 PDF → W17 Gallery Walk 用"
+                exportReminder="小組繳交海報 PDF + 原始資料 zip（組長代繳）；個人繳交 W16 網頁歷程 docx → W17 Gallery Walk 用"
             />
 
             {/* STEP ENGINE */}

@@ -2,12 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ClinicPage.css';
 import CourseArc from '../components/ui/CourseArc';
+import ContentTypeChip from '../components/ui/ContentTypeChip';
 import ThinkRecord from '../components/ui/ThinkRecord';
 import AIREDNarrative from '../components/ui/AIREDNarrative';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import ExportButton from '../components/ui/ExportButton';
+import StepBriefing from '../components/ui/StepBriefing';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import BackfillField from '../components/ui/BackfillField';
 import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
@@ -44,14 +46,14 @@ const POSTER_CELLS = [
     {
         num: '②',
         title: '副標（學術版題目）',
-        desc: '從 W3 定案題目抄過來（正式版本，幫同學確認你做什麼）',
+        desc: '副標＝你 W3 定稿的學術版完整題目，直接抄過來（幫同學確認你做什麼）',
         source: 'W3',
         size: 'normal',
         tips: [
             '✅ 看得出 Who（誰）＋ Where（場域）＋ 變因（測什麼）',
-            '✅ 自變項在前、依變項在後（「夜間滑手機 → 翌日專注力」這個方向）',
+            '✅ 自變項在前、依變項在後——「夜間滑手機 → 翌日專注力」（只有實驗／問卷相關研究適用；訪談／觀察可用「___ 對 ___ 的 ___」格式）',
             '✅ 用「之相關性／差異／影響」的學術句型',
-            '💡 W3 已經寫好定稿，直接抄不用重編',
+            '💡 W3 學術題目已定稿，副標可沿用（注意：副標≠動機，動機③格要升級重寫）',
         ],
     },
     {
@@ -70,7 +72,7 @@ const POSTER_CELLS = [
     {
         num: '④',
         title: '研究方法（這格最大）',
-        desc: '主方法（W4）+ 核心概念 + 操作型定義（W5）——三件齊。同學要靠這格判斷你題目能不能合題。',
+        desc: '主方法（W4）+ 核心概念 + 操作型定義（W5）——三件齊。同學要靠這格判斷能不能跟你合題（把方向相近的題目合成一個大題）。',
         source: 'W4 + W5',
         size: 'big',
         tips: [
@@ -142,9 +144,9 @@ const FEEDBACK_EXAMPLES = [
         focus: '方法符合度',
         color: 'accent',
         when: '當你看到 owner 沒交代清楚的地方——問出他需要思考的問題',
-        good: '「為什麼選問卷不選日記法？你想測『夜間使用』，問卷靠回憶可能不準——日記法可能更貼近真實行為。」',
+        good: '「為什麼選問卷不選觀察法？你想測『夜間使用』，問卷靠回憶可能不準——直接截圖手機的螢幕使用時間可能更貼近真實行為。」',
         bad: '「為什麼這樣？」「真的嗎？」',
-        badWhy: '沒方向也沒戳到關鍵——owner 答「對啊我覺得這樣比較好」就過去了，沒幫他真的思考。',
+        badWhy: '沒指出真正需要思考的地方——owner 答「對啊我覺得這樣比較好」就過去了，沒幫他真的思考。',
     },
 ];
 
@@ -158,7 +160,7 @@ const VAGUE_TO_CONCRETE = [
     {
         focus: '方法',
         vague: '方法不太對',
-        concrete: '方法用問卷可能不夠——你想測「夜間使用」，靠回憶不準，建議改日記法（每晚記）或截圖螢幕使用時間',
+        concrete: '方法用問卷可能不夠——你想測「夜間使用」，靠回憶不準，建議改用觀察法（每天截圖螢幕使用時間記錄）',
     },
     {
         focus: '對象',
@@ -176,9 +178,9 @@ const SOLO_REQUIREMENTS = [
     },
     {
         id: 'workload',
-        label: '② 一個人扛 4 章的時間規劃',
-        hint: '計畫書 5 章節（W7-W10 寫）＋ 工具設計（W9）＋ 預試（W11）＋ 施測＋分析（W12-W14）＋ 結論發表（W15-W17）。寫具體哪一週做哪章、每週至少花幾小時。',
-        scaffold: ['第二章（文獻回顧）：W___ 完成，預估 ___ 小時', '第三章（方法）：W___ 完成', '第四章（工具設計）：W___ 完成', '預試：W___', '施測 + 分析：W___', '結論 + 發表：W___'],
+        label: '② 一個人完成後續工作的時間規劃',
+        hint: '後續主要任務：研究計畫書（W7-W10）＋ 工具設計（W9）＋ 預試（W11）＋ 施測+分析（W12-W14）＋ 結論發表（W15-W17）。寫具體哪一週做什麼、每週至少花幾小時。',
+        scaffold: ['文獻回顧：W___ 完成，預估 ___ 小時', '方法定稿：W___ 完成', '工具設計：W___ 完成', '預試：W___', '施測 + 分析：W___', '結論 + 發表：W___'],
     },
     {
         id: 'risk',
@@ -205,18 +207,19 @@ const EXPORT_FIELDS = [
     { key: 'w6-from-w3-topic', label: 'W3 帶入：題目' },
     { key: 'w6-from-w4-method', label: 'W4 帶入：主方法' },
     { key: 'w6-from-w5-operationalize', label: 'W5 帶入：操作型定義' },
+    { key: 'w6-motivation-upgraded', label: '升級版研究動機（3-5 句）', question: 'W3 一句話 → 升級成含畫面+意義對象+困惑的 3-5 句版' },
     { key: 'w6-walk-feedback', label: '走讀蒐集到的回饋（3 位同學一人一條）', question: '海報⑤格上 3 位同學各寫了什麼？' },
     { key: 'w6-route', label: '路線選擇', question: 'Team 合題組隊 / Solo 單飛' },
     { key: 'w6-team-topic', label: '【Team 線】合題後的共同題目' },
     { key: 'w6-team-members', label: '【Team 線】隊員與分工' },
     { key: 'w6-team-rationale', label: '【Team 線】合題理由', question: '為什麼這幾個人題目可以合？合題後核心問題是？' },
     { key: 'w6-solo-reason', label: '【Solo 線】非 Solo 不可的理由' },
-    { key: 'w6-solo-workload', label: '【Solo 線】一個人 4 章時間規劃' },
+    { key: 'w6-solo-workload', label: '【Solo 線】後續工作時間規劃' },
     { key: 'w6-solo-risk', label: '【Solo 線】三大風險' },
     { key: 'w6-solo-rescue', label: '【Solo 線】求援計畫' },
     { key: 'w6-solo-planb', label: '【Solo 線】Plan B' },
     { key: 'w6-reflect', label: '反思：走讀最重要的 1 條回饋', question: '哪一條建議最有用？你怎麼處理？' },
-    { key: 'w6-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（可能用在標題優化）' },
+    { key: 'w6-aired-record', label: 'AI-RED 敘事紀錄', question: '如果你用 AI 優化海報標題，請記錄這次互動；若未使用 AI，可留白。' },
 ];
 
 /* ══════════════════════════════════════
@@ -327,7 +330,7 @@ function TeamMembersInput({ dataKey = 'w6-team-members' }) {
                             type="text"
                             value={m.role}
                             onChange={e => update(idx, 'role', e.target.value)}
-                            placeholder={idx === 0 ? '例：統籌＋第三章方法' : idx === 1 ? '例：第二章文獻回顧' : '例：第四章工具設計＋資料分析'}
+                            placeholder={idx === 0 ? '例：統籌＋第二章操作型定義' : idx === 1 ? '例：第三章文獻回顧' : '例：第四章變項設計＋第六章工具'}
                             className={`${inputCls} flex-1`}
                         />
                     </div>
@@ -443,11 +446,23 @@ export const W6PosterTeamPage = () => {
             icon: '🎨',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '把 W3 題目 + W4 方法 + W5 操作型定義抄到 A4 海報 5 格上' },
+                        ]}
+                    />
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
                         <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">PART 1 · 25 MIN</div>
-                        <h2 className="text-[18px] font-bold text-[var(--ink)] mb-2">用紙本 A4 手寫四格海報</h2>
+                        <h2 className="text-[18px] font-bold text-[var(--ink)] mb-2">用紙本 A4 手寫五格海報</h2>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                            這張海報要在第二節給其他組看 + 收建議。<strong className="text-[var(--ink)]">不准用 AI 寫內容</strong>——前面三週累積的東西自己抄上去，AI 只能在標題優化時用。
+                            這張海報要在第二節給其他組看 + 收建議。<strong className="text-[var(--ink)]">先不用 AI 寫內容</strong>——前面三週累積的東西自己抄上去，AI 只能在標題優化時用。
+                        </p>
+                    </div>
+
+                    {/* 範例多樣性提醒——範例常用「夜間滑手機」是因為這題討論度高，學生不要被框住 */}
+                    <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-[var(--radius-unified)] p-3.5">
+                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed">
+                            <strong className="text-[#1E40AF]">📌 範例題材只是占位</strong>——下方海報範本與 placeholder 常用「夜間滑手機 → 翌日專注力」是因為這題討論度高、各種陷阱都涵蓋到。<strong className="text-[var(--ink)]">你的題目當然可以是其他題材</strong>：補習文化、班級座位與發問、考前整理筆記效益、短影音與閱讀專注、家庭餐桌話題、社團選擇⋯⋯<span className="text-[#1E3A8A]">看範例學「怎麼寫」就好，題目用你自己 W3 定的那個。</span>
                         </p>
                     </div>
 
@@ -485,6 +500,7 @@ export const W6PosterTeamPage = () => {
                     {/* 海報五格範本——研究方法格佔大 */}
                     <div>
                         <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
                             <span className="text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">範本</span>
                             <span className="text-[14px] font-bold text-[var(--ink)]">A4 紙手寫五格——這五格分別寫什麼</span>
                         </div>
@@ -528,24 +544,57 @@ export const W6PosterTeamPage = () => {
                         <div className="flex items-start gap-3 px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--gold-light)] border border-[var(--gold)] text-[12.5px]">
                             <span className="text-[16px]">🔥</span>
                             <div className="flex-1">
-                                <span className="font-bold text-[#7a6020]">你 W3 寫過的研究動機（直接抄到海報③格）</span>
+                                <span className="font-bold text-[#7a6020]">你 W3 寫過的研究動機（一句話版）</span>
                                 <p className="text-[#7a6020] mt-1 italic whitespace-pre-wrap">「{w3Motivation}」</p>
                                 <p className="text-[11px] text-[var(--ink-light)] mt-2">
-                                    💡 寫海報時可以原句照抄，或經過 W4 / W5 之後潤飾——但動機的核心不要動。
+                                    💡 這是題目剛定下來那天趁熱寫的第一版——下方升級成 3-5 句版再貼海報。
                                 </p>
                             </div>
                         </div>
                     ) : (
                         <BackfillField
                             dataKey="w3-motivation"
-                            label="⚠️ 沒偵測到你 W3 寫的研究動機——回想一下：你訂題目那週是為什麼想研究這個？補一句貼這裡，海報③格直接抄。"
+                            label="⚠️ 沒偵測到你 W3 寫的研究動機——回想一下：你訂題目那週是為什麼想研究這個？補一句貼這裡，下方升級用。"
                             placeholder="例：我自己段考前每次熬夜滑手機，隔天念書效率超差——想證明這個感覺是真的。"
                             buttonLabel="補上 W3 動機"
                         />
                     )}
 
+                    {/* ★ 動機升級檢核卡：W3 一句話版常空泛，題目穩定一週後升級成 3-5 句版 */}
+                    <div className="bg-[var(--accent-light)] border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                            <ContentTypeChip type="學" />
+                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">升級 · 5 min</span>
+                            <span className="text-[14px] font-bold text-[var(--ink)]">動機升級檢核：一句話 → 3-5 句</span>
+                        </div>
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                            W3 那句話是題目剛定下來時趁熱寫的第一版，先抓住了當下的直覺。題目穩定一週了，現在<strong className="text-[var(--ink)]">花 5 分鐘</strong>用三個自答題把它拉具體——海報③格抄這個升級版。
+                        </p>
+                        <div className="bg-white border border-[var(--border)] rounded-[8px] p-3 mb-3">
+                            <div className="text-[11px] font-mono font-bold text-[var(--ink-light)] uppercase tracking-wider mb-2">三個自答題（腦中過一遍，不用寫出來）</div>
+                            <ul className="text-[12.5px] text-[var(--ink-mid)] leading-[1.8] list-none space-y-1.5">
+                                <li><span className="font-bold text-[var(--ink)]">① 具體畫面</span>——這題目讓你想到的具體場景／人／事？（不是「我覺得很有趣」）</li>
+                                <li><span className="font-bold text-[var(--ink)]">② 對誰有意義</span>——做完之後，<strong>具體哪一類人</strong>會因此得到什麼？</li>
+                                <li><span className="font-bold text-[var(--ink)]">③ 你還沒答案的困惑</span>——一個你自己到現在都還沒搞懂的問題？</li>
+                            </ul>
+                        </div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[12px] font-bold text-[var(--ink-mid)]">升級版研究動機（3-5 句）</p>
+                        </div>
+                        <ThinkRecord
+                            dataKey="w6-motivation-upgraded"
+                            prompt="🎯 升級版研究動機（3-5 句，含畫面 + 意義對象 + 困惑）"
+                            placeholder="例：我自己段考前每次熬夜滑手機，隔天念書效率超差。班上至少 3 個同學也這樣，但大家都說『我有自制力』。我想實際測：高一段考前一週的夜間手機使用，跟隔天上課專注度真的有關嗎？如果有，希望給想戒手機的同學一份具體數據——不是『手機不好』的大道理，而是『熬夜滑手機 1 小時，隔天專注度降低多少』這種能拿來看的數字。"
+                            scaffold={['具體畫面（自己／同學某個瞬間）：___', '對誰有意義（具體某類人）：___', '我想搞清楚的困惑：___']}
+                        />
+                        <p className="text-[11px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
+                            💡 三格 scaffold 不是強迫格式——是品質檢核。如果你只能填出一格、其他兩格空白，代表動機還是空泛，回去 W3 把題目想清楚。
+                        </p>
+                    </div>
+
                     <div className="bg-[var(--gold-light)] border-l-4 border-[var(--gold)] p-3 rounded-r-[6px] text-[12.5px] text-[#7a6020] leading-relaxed">
-                        ⏰ <strong>限時 25 min</strong>：A4 紙、彩色筆、四格手寫——清楚、可看就好，別追求漂亮。
+                        ⏰ <strong>限時 25 min</strong>：A4 紙、彩色筆、五格手寫（⑤格留白給走讀同學）——清楚、可看就好，別追求漂亮。海報③格抄上方升級版動機。
                     </div>
                 </div>
             ),
@@ -553,10 +602,15 @@ export const W6PosterTeamPage = () => {
 
         /* ─── Step 2：Gallery Walk ─── */
         {
-            title: 'Gallery Walk · 海報觀摩',
+            title: '畫廊走讀（Gallery Walk）· 海報觀摩',
             icon: '👀',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '走讀其他組海報，每組留一條最關鍵的回饋；輪到你顧攤時記下 3 條建議' },
+                        ]}
+                    />
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
                         <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">PART 2 · 23 MIN</div>
                         <h2 className="text-[18px] font-bold text-[var(--ink)] mb-2">四輪走讀 + 一人一條同儕回饋</h2>
@@ -565,9 +619,15 @@ export const W6PosterTeamPage = () => {
                         </p>
                     </div>
 
+                    {/* 怎麼讀這一節 — 三方說 Step 2 文字多，多數是邊走邊翻的參考材料 */}
+                    <div className="bg-[var(--gold-light)] border-l-4 border-[var(--gold)] p-3 rounded-r-[6px] text-[12.5px] text-[#7a6020] leading-relaxed">
+                        ⏱️ <strong>怎麼讀這一節</strong>：走讀前花 3 分鐘把下面「四輪走讀規則」看懂就能開始；後面的回饋提示、黃金原則、三類型範例是<strong>邊走邊翻的參考材料</strong>，不用一次讀完。
+                    </div>
+
                     {/* 4 輪走讀規則 */}
                     <div>
                         <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
                             <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">規則</span>
                             <span className="text-[14px] font-bold text-[var(--ink)]">四輪走讀（每輪 5 min）</span>
                         </div>
@@ -590,6 +650,7 @@ export const W6PosterTeamPage = () => {
                     {/* 寫回饋的提示——挑一條最重要的寫 */}
                     <div>
                         <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
                             <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">提示</span>
                             <span className="text-[14px] font-bold text-[var(--ink)]">當聽眾時——挑「最關鍵」那一條寫</span>
                         </div>
@@ -610,6 +671,7 @@ export const W6PosterTeamPage = () => {
                     <div className="bg-[var(--ink)] text-white rounded-[var(--radius-unified)] p-5">
                         <div className="flex items-center gap-2 mb-2">
                             <span className="text-[20px]">🏆</span>
+                            <ContentTypeChip type="學" />
                             <span className="text-[11px] font-mono font-bold bg-[var(--gold)] text-[var(--ink)] px-2 py-0.5 rounded-[3px] uppercase tracking-wider">黃金原則</span>
                             <span className="text-[15px] font-bold">具體 ＞ 抽象、可執行 ＞ 觀感</span>
                         </div>
@@ -637,6 +699,7 @@ export const W6PosterTeamPage = () => {
                     {/* 三種類型範例——讚美/建議/疑問都是好回饋；每種正反例對照 */}
                     <div>
                         <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
                             <span className="text-[10px] font-mono font-bold bg-[var(--success)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">範例</span>
                             <span className="text-[14px] font-bold text-[var(--ink)]">「最關鍵的一條」長什麼樣——三種都好</span>
                         </div>
@@ -683,10 +746,14 @@ export const W6PosterTeamPage = () => {
                     </div>
 
                     {/* 走讀後紀錄——3 位聽眾各一條 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">謄回饋：把 3 位同學寫的一條整理下來</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w6-walk-feedback"
                         prompt="✍️ 走讀結束回到座位——把你海報⑤格 3 位同學寫的回饋謄到這裡"
-                        placeholder={'例：\n同學 A：操作型定義『滑手機』沒講多久才算（建議改 ≥ 30 min）\n同學 B：為什麼選問卷不選日記法？日記法可能更貼近你想要的「夜間使用」\n同學 C：研究動機很真——但「對之後想戒手機的同學有幫助」可以寫成具體誰'}
+                        placeholder={'例：\n同學 A：操作型定義『滑手機』沒講多久才算（建議改 ≥ 30 min）\n同學 B：為什麼選問卷不選觀察法？直接截圖螢幕使用時間可能更貼近你想要的「夜間使用」\n同學 C：研究動機很真——但「對之後想戒手機的同學有幫助」可以寫成具體誰'}
                         scaffold={['同學 A：___', '同學 B：___', '同學 C：___']}
                         rows={6}
                     />
@@ -700,11 +767,36 @@ export const W6PosterTeamPage = () => {
             icon: '🤝',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '看走讀回饋：題目可行嗎？有沒有適合合題的組別？' },
+                        ]}
+                    />
+
+                    {/* 「合題」定義 — claude+codex 共識：W1-W5 從未出現此詞 */}
+                    <div className="bg-[var(--accent-light)] border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-4">
+                        <div className="flex items-center gap-2 mb-1.5">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[12.5px] font-bold text-[var(--ink)]">💡 先講清楚「合題」是什麼</p>
+                        </div>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.8]">
+                            <strong className="text-[var(--ink)]">合題 ＝ 把 2-3 個方向相近的題目，合成一個更大的題目，各人分工研究不同面向。</strong>
+                            不是「兩個人共用同一題」，也不是「題目接近就硬湊」——是合起來之後，核心問題比各自單做更精彩。
+                        </p>
+                    </div>
+
+                    {/* W4/W5 沒有浪費 — 合題前的心理定錨 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border-mid,var(--border))] rounded-[var(--radius-unified)] px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-[1.85]">
+                        <span className="font-bold text-[var(--ink)]">💬 W4/W5 的工作沒有浪費。</span>{' '}
+                        你在 W4 做的方法判斷、W5 的操作型定義，是你帶進合題桌的籌碼——合題夥伴看你海報第④格，就是在評估這些。
+                        合題不是你的題目輸掉，是你的題目找到盟友，一起做比各自單做更大的問題。
+                    </div>
+
                     <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-5">
                         <div className="text-[11px] font-mono text-[var(--ink-mid)] tracking-wider mb-1">PART 3 · 15 MIN</div>
                         <h2 className="text-[18px] font-bold text-[var(--ink)] mb-2">看走讀結果決定路線</h2>
                         <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
-                            走讀蒐集的便利貼透露兩件事：① 別人覺得你題目可不可行 ② 哪些同學的題目跟你近、可以合題。下一步：<strong className="text-[var(--ink)]">找夥伴 OR 確認自己 Solo</strong>。
+                            走讀蒐集到的回饋透露兩件事：① 別人覺得你題目可不可行 ② 哪些同學的題目跟你近、可以合題。下一步：<strong className="text-[var(--ink)]">找夥伴 OR 確認自己 Solo</strong>。
                         </p>
                     </div>
 
@@ -712,18 +804,20 @@ export const W6PosterTeamPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="bg-[var(--accent-light)] border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-4">
                             <div className="flex items-center gap-2 mb-2">
+                                <ContentTypeChip type="學" />
                                 <Users size={18} className="text-[var(--accent)]" />
                                 <span className="text-[14px] font-bold text-[var(--ink)]">考慮 Team 合題的訊號</span>
                             </div>
                             <ul className="text-[12.5px] text-[var(--ink-mid)] leading-[1.85] list-none space-y-1">
                                 <li>· 走讀時遇到題目方向相近的同學</li>
                                 <li>· 你的方法跟某人可以互補（你問卷他訪談）</li>
-                                <li>· 黃便利貼建議「跟 ___ 合題」</li>
-                                <li>· 你覺得自己一個人扛 4 章很吃力</li>
+                                <li>· 同學的建議型回饋指向「跟 ___ 合題」</li>
+                                <li>· 你覺得自己一個人扛後續工作很吃力</li>
                             </ul>
                         </div>
                         <div className="bg-[#fef3c7] border-2 border-[#D97706] rounded-[var(--radius-unified)] p-4">
                             <div className="flex items-center gap-2 mb-2">
+                                <ContentTypeChip type="學" />
                                 <User size={18} className="text-[#D97706]" />
                                 <span className="text-[14px] font-bold text-[var(--ink)]">考慮 Solo 的訊號（要嚴格自評）</span>
                             </div>
@@ -738,7 +832,10 @@ export const W6PosterTeamPage = () => {
 
                     {/* 路線選擇按鈕 */}
                     <div>
-                        <div className="text-[13px] font-bold text-[var(--ink)] mb-3">📍 選一條路（之後可以變更但要重填）</div>
+                        <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="做" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">📍 選一條路（之後可以變更但要重填）</p>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <button
                                 onClick={() => pickRoute('team')}
@@ -754,7 +851,7 @@ export const W6PosterTeamPage = () => {
                                     <span className="font-bold text-[15px] text-[var(--ink)]">Team 合題組隊</span>
                                     {route === 'team' && <CheckCircle2 size={16} className="text-[var(--accent)] ml-auto" />}
                                 </div>
-                                <p className="text-[12px] text-[var(--ink-mid)]">3 人成組、共同題目、分工 4 章工作</p>
+                                <p className="text-[12px] text-[var(--ink-mid)]">3 人成組、共同題目、分工後續工作</p>
                             </button>
                             <button
                                 onClick={() => pickRoute('solo')}
@@ -770,7 +867,7 @@ export const W6PosterTeamPage = () => {
                                     <span className="font-bold text-[15px] text-[var(--ink)]">Solo 單飛獨行</span>
                                     {route === 'solo' && <CheckCircle2 size={16} className="text-[#D97706] ml-auto" />}
                                 </div>
-                                <p className="text-[12px] text-[var(--ink-mid)]">一個人扛全部——下一步要嚴格自評 5 項</p>
+                                <p className="text-[12px] text-[var(--ink-mid)]">一個人扛全部——下一步先寫承諾書 ①②（③④⑤ W7 細修）</p>
                             </button>
                         </div>
                     </div>
@@ -790,6 +887,11 @@ export const W6PosterTeamPage = () => {
             icon: '🛤️',
             content: (
                 <div className="space-y-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '正式選 Team（合題組隊）或 Solo（先寫承諾書 ①②）' },
+                        ]}
+                    />
                     {!route && (
                         <div className="bg-[#FEF2F2] border-2 border-[var(--danger)] rounded-[var(--radius-unified)] p-5">
                             <div className="flex items-center gap-2 mb-2">
@@ -816,6 +918,10 @@ export const W6PosterTeamPage = () => {
                                 </p>
                             </div>
 
+                            <div className="flex items-center gap-2 mb-1">
+                                <ContentTypeChip type="做" />
+                                <p className="text-[12px] font-bold text-[var(--ink-mid)]">合題後的共同題目</p>
+                            </div>
                             <ThinkRecord
                                 dataKey="w6-team-topic"
                                 prompt="① 合題後的共同題目"
@@ -829,6 +935,10 @@ export const W6PosterTeamPage = () => {
                                 <TeamMembersInput dataKey="w6-team-members" />
                             </div>
 
+                            <div className="flex items-center gap-2 mb-1">
+                                <ContentTypeChip type="做" />
+                                <p className="text-[12px] font-bold text-[var(--ink-mid)]">合題理由</p>
+                            </div>
                             <ThinkRecord
                                 dataKey="w6-team-rationale"
                                 prompt="③ 合題理由——為什麼這幾個人題目可以合？"
@@ -839,7 +949,7 @@ export const W6PosterTeamPage = () => {
                         </>
                     )}
 
-                    {/* Solo 線（嚴格 5 項）*/}
+                    {/* Solo 線（承諾書：W6 寫 ①②，③④⑤ W7 細修）*/}
                     {route === 'solo' && (
                         <>
                             <div className="bg-[#fef3c7] border-2 border-[#D97706] rounded-[var(--radius-unified)] p-5">
@@ -847,13 +957,13 @@ export const W6PosterTeamPage = () => {
                                     <User size={18} className="text-[#D97706]" />
                                     <span className="text-[14px] font-bold text-[#D97706] uppercase tracking-wider">SOLO 單飛獨行（嚴格自評）</span>
                                 </div>
-                                <h3 className="text-[16px] font-bold text-[var(--ink)] mb-2">下面 5 項全部要寫——這是你獨撐到 W17 的契約</h3>
+                                <h3 className="text-[16px] font-bold text-[var(--ink)] mb-2">Solo 承諾書——W6 先寫 ①②，③④⑤ 留到 W7 細修</h3>
                                 <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
-                                    Solo 不是「不想跟人合作」——是「題目客觀只能你一個人做」。下面 5 項是<strong className="text-[var(--danger)]">必填</strong>，少寫一項就會在 W11 預試、W12 中期短報、W14 結論寫作那邊崩盤。寫得越具體，你越扛得住。
+                                    Solo 不是「不想跟人合作」——是「題目客觀只能你一個人做」。今天課堂先把 <strong className="text-[var(--ink)]">① 為什麼非 Solo 不可</strong> 和 <strong className="text-[var(--ink)]">② 時間規劃骨架</strong> 寫清楚；③④⑤（風險／求援／Plan B）W7 開始會帶你逐項細修。寫得越具體，你越扛得住。
                                 </p>
                             </div>
 
-                            {/* Solo 5 項完整範本（卡關時開來看 1 個學生長什麼樣）*/}
+                            {/* Solo 承諾書完整範本（卡關時開來看 1 個學生長什麼樣）*/}
                             <details className="rounded-[var(--radius-unified)] border border-[#D97706] bg-[#FFFBEB] overflow-hidden">
                                 <summary className="cursor-pointer px-4 py-3 hover:bg-[#FEF3C7] transition-colors flex items-center gap-2">
                                     <span className="text-[14px]">📖</span>
@@ -866,6 +976,7 @@ export const W6PosterTeamPage = () => {
                                         <p className="text-[14px] font-bold text-[var(--ink)]">Yuki（高一）</p>
                                         <p className="text-[11.5px] text-[var(--ink-mid)] italic mt-1">題目：「我自己這 3 年補習經歷怎麼改變我的讀書方法」</p>
                                         <p className="text-[11px] text-[var(--ink-light)] italic mt-1">方法：自我訪談 + 寫個人日記（自己當研究對象）</p>
+                                        <p className="text-[11px] text-[#92400E] italic mt-1.5 leading-relaxed">＊Yuki 用的「自我訪談＋個人日記」屬於質性研究的「自我民族誌」，是 W4 五法的進階版、課程不要求；但如果你的題目核心就是「你自己」，這個方法 OK——選了請先跟老師確認操作方式。</p>
                                     </div>
 
                                     <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
@@ -874,7 +985,7 @@ export const W6PosterTeamPage = () => {
                                     </div>
 
                                     <div className="bg-white border border-[var(--border)] rounded-[6px] p-3">
-                                        <p className="font-bold text-[#92400E] mb-1">② 一個人扛 4 章的時間規劃</p>
+                                        <p className="font-bold text-[#92400E] mb-1">② 一個人完成後續工作的時間規劃</p>
                                         <ul className="text-[var(--ink-mid)] list-disc list-inside space-y-0.5">
                                             <li>W7-W8：找「補習文化／自我反思」相關文獻（約 6 小時）</li>
                                             <li>W9：寫回憶大綱——從國一到高一，列關鍵事件時間軸（3 小時）</li>
@@ -920,24 +1031,44 @@ export const W6PosterTeamPage = () => {
                                 </div>
                             </details>
 
-                            {SOLO_REQUIREMENTS.map((req, i) => (
-                                <div key={req.id}>
-                                    <div className="bg-[#fef3c7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] mb-2">
-                                        <p className="text-[12.5px] font-bold text-[#7F1D1D] mb-1">{req.label}</p>
-                                        <p className="text-[11.5px] text-[#92400E] leading-relaxed">{req.hint}</p>
+                            {SOLO_REQUIREMENTS.map((req, i) => {
+                                const w7Defer = i >= 2; /* ③④⑤ → W7 細修 */
+                                return (
+                                    <div key={req.id}>
+                                        <div className="bg-[#fef3c7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] mb-2">
+                                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                                <p className="text-[12.5px] font-bold text-[#7F1D1D]">{req.label}</p>
+                                                {w7Defer ? (
+                                                    <span className="text-[10px] font-mono font-bold bg-[#D97706] text-white px-1.5 py-0.5 rounded-[3px]">W7 細修</span>
+                                                ) : (
+                                                    <span className="text-[10px] font-mono font-bold bg-[#7F1D1D] text-white px-1.5 py-0.5 rounded-[3px]">W6 先寫</span>
+                                                )}
+                                            </div>
+                                            <p className="text-[11.5px] text-[#92400E] leading-relaxed">{req.hint}</p>
+                                        </div>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <ContentTypeChip type="做" />
+                                            <p className="text-[12px] font-bold text-[var(--ink-mid)]">{req.label}</p>
+                                        </div>
+                                        <ThinkRecord
+                                            dataKey={`w6-solo-${req.id}`}
+                                            prompt={req.label}
+                                            placeholder={
+                                                w7Defer
+                                                    ? 'W6 先想個方向、列幾條骨架就好——W7 開始老師會帶你逐項細修。'
+                                                    : req.id === 'workload'
+                                                        ? '先抓週次骨架就好，不必填到範本那麼細——W7 還會再修。'
+                                                        : '按上方 hint 的提示具體寫——這項是 Solo 申請的核心，要寫清楚。'
+                                            }
+                                            scaffold={req.scaffold}
+                                            rows={req.id === 'workload' ? 7 : 5}
+                                        />
                                     </div>
-                                    <ThinkRecord
-                                        dataKey={`w6-solo-${req.id}`}
-                                        prompt={req.label}
-                                        placeholder="按上方 hint 的提示具體寫——抽象寫的話 W12 中期短報老師會直接退件。"
-                                        scaffold={req.scaffold}
-                                        rows={req.id === 'workload' ? 7 : 5}
-                                    />
-                                </div>
-                            ))}
+                                );
+                            })}
 
-                            <div className="bg-[#FEF2F2] border-l-4 border-[var(--danger)] p-3 rounded-r-[6px] text-[12.5px] text-[#7F1D1D] leading-relaxed">
-                                ⚠️ <strong>Solo 契約提醒：</strong>這 5 項寫完後會送 ExportButton 一鍵匯出，老師審 Solo 申請時會逐條檢查。被退回就要重做或回 Team 線。
+                            <div className="bg-[#FFFBEB] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12.5px] text-[#92400E] leading-relaxed">
+                                💡 <strong>Solo 承諾書提醒：</strong>①② 寫完後會送 ExportButton 匯出，老師會看你的 Solo 申請、給你回饋。如果方向需要調整，下面有 3 條具體的路可以走——退件不是判死刑，是幫你把申請修得更穩。
                             </div>
 
                             {/* Solo 申請被退回的明確 fallback 流程 */}
@@ -948,13 +1079,13 @@ export const W6PosterTeamPage = () => {
                                 </summary>
                                 <div className="border-t border-[#FCD34D] p-4 bg-white space-y-3">
                                     <p className="text-[12px] text-[#78350F] leading-relaxed">
-                                        老師退回不是判你死刑——是告訴你「這 5 項裡有一項說服力不夠」。<strong>不要硬撐重寫一樣的內容</strong>，依老師的退件理由走以下 3 條路其中 1 條：
+                                        老師退回不是判你死刑——是告訴你「有一項說服力還不夠」。<strong>不要硬撐重寫一樣的內容</strong>，依老師的退件理由走以下 3 條路其中 1 條：
                                     </p>
 
                                     <div className="rounded border border-[#FCD34D] p-3 bg-[#FFFBEB]">
                                         <p className="text-[12.5px] font-bold text-[#92400E] mb-1.5">🔁 路 A · 修補 Solo 申請</p>
                                         <p className="text-[11.5px] text-[#78350F] leading-relaxed">
-                                            退件理由是「① 為什麼非 Solo 不可」說服力不夠？<strong>回 Step 3 走讀紀錄</strong>找具體證據（同學說「這題目別人接不上」「資料只有你能拿到」），再重寫第 ① 項。其他 4 項（時間規劃／三大風險／求援計畫／Plan B）若被點到，照同樣方式回前一個 Step 找素材。<br />
+                                            退件理由是「① 為什麼非 Solo 不可」說服力不夠？<strong>回 Step 3 走讀紀錄</strong>找具體證據（同學說「這題目別人接不上」「資料只有你能拿到」），再重寫第 ① 項。② 時間規劃若被點到，照同樣方式回前面的 Step 找素材補骨架。<br />
                                             <span className="text-[#92400E] font-mono text-[11px]">→ 重新交一次 Solo 申請（最多 2 次機會）</span>
                                         </p>
                                     </div>
@@ -962,7 +1093,7 @@ export const W6PosterTeamPage = () => {
                                     <div className="rounded border border-[#86EFAC] p-3 bg-[#F0FDF4]">
                                         <p className="text-[12.5px] font-bold text-[#166534] mb-1.5">🤝 路 B · 轉 Team 找合題夥伴</p>
                                         <p className="text-[11.5px] text-[#14532D] leading-relaxed">
-                                            兩次都被退？多數情況是「你的題目其實合得起來，只是你還沒找到對的人」。<strong>回 W2 觀察種子＋ABC 型句</strong>，找題目方向相近的同學（特別是核心問題類型相同——A 影響型 / B 比較型 / C 深究型 同型最容易合）；或<strong>回 W4 方法地圖</strong>看自己跟誰選同樣主方法，方法相同最容易共用工具。<br />
+                                            兩次都被退？多數情況是「你的題目其實合得起來，只是你還沒找到對的人」。<strong>回 W2 觀察種子＋ABC 型句</strong>，找題目方向相近的同學（特別是核心問題類型相同——影響型／比較型／深究型 同型最容易合）；或<strong>回 W4 方法地圖</strong>看自己跟誰選同樣主方法，方法相同最容易共用工具。<br />
                                             <span className="text-[#166534] font-mono text-[11px]">→ 切回上方「路線選擇」改選 Team，重走 Step 4 Team 線</span>
                                         </p>
                                     </div>
@@ -970,8 +1101,8 @@ export const W6PosterTeamPage = () => {
                                     <div className="rounded border border-[#BFDBFE] p-3 bg-[#EFF6FF]">
                                         <p className="text-[12.5px] font-bold text-[#1E40AF] mb-1.5">🔧 路 C · 縮小題目再 Solo</p>
                                         <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed">
-                                            老師退件常常是「題目太大、Solo 一個人扛不住」。<strong>回 W3 Wizard 的 4 把刀</strong>（範圍縮小／抽象具體化／對象可及化／方法可行化），把題目砍到「一個人 4 章絕對做得完」的規模——例如原本「全校學生」改「我們班 30 人」、原本「整學期」改「兩週」。題目縮小後再走 Solo 5 項通常會通。<br />
-                                            <span className="text-[#1E40AF] font-mono text-[11px]">→ 回 Step 4 重寫 Solo 5 項，特別是「② 一個人 4 章時間規劃」</span>
+                                            老師退件常常是「題目太大、Solo 一個人扛不住」。<strong>回 W3 Wizard 的 4 把刀</strong>（範圍縮小／抽象具體化／對象可及化／方法可行化），把題目砍到「一個人絕對做得完」的規模——例如原本「全校學生」改「我們班 30 人」、原本「整學期」改「兩週」。題目縮小後再寫 Solo 承諾書通常會通。<br />
+                                            <span className="text-[#1E40AF] font-mono text-[11px]">→ 回 Step 4 重寫 Solo 承諾書，特別是「② 時間規劃」</span>
                                         </p>
                                     </div>
 
@@ -992,6 +1123,11 @@ export const W6PosterTeamPage = () => {
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '做', text: '寫反思（最有用的同儕建議），整理 W6 學習紀錄' },
+                        ]}
+                    />
                     {/* 檢核清單 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
@@ -1001,7 +1137,7 @@ export const W6PosterTeamPage = () => {
                             {[
                                 '把 W3 題目 + W4 方法 + W5 操作型定義組成一張海報',
                                 '在 Gallery Walk 中收到 ≥ 3 條同儕回饋並寫下',
-                                '確定路線：Team 合題（3 人題目 + 分工）or Solo（嚴格 5 項全寫）',
+                                '確定路線：Team 合題（3 人題目 + 分工）or Solo（承諾書 ①② 寫完）',
                                 '能說出走讀最重要那條建議怎麼處理',
                             ].map((item, i) => (
                                 <div key={i} className="p-4 px-6 bg-white flex items-start gap-3">
@@ -1013,6 +1149,10 @@ export const W6PosterTeamPage = () => {
                     </div>
 
                     {/* 反思 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="做" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">反思：最有用的 1 條回饋 + 處理方式</p>
+                    </div>
                     <ThinkRecord
                         dataKey="w6-reflect"
                         prompt="✍️ 反思：走讀蒐集的回饋裡，最有用的 1 條是什麼？你怎麼處理？"
@@ -1022,11 +1162,26 @@ export const W6PosterTeamPage = () => {
                     />
 
                     {/* AI-RED optional */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="交出" />
+                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI-RED 敘事（選填）</p>
+                    </div>
                     <AIREDNarrative week="6" hint="海報標題優化可能用 AI——記錄一次最關鍵的互動。" optional={true} />
 
-                    {/* 一鍵複製 */}
+                    {/* 最後一步：複製繳交 */}
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[var(--accent-light)] p-4 px-5">
+                        <div className="flex items-center gap-2 mb-1">
+                            <ContentTypeChip type="交出" />
+                            <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--accent)] font-bold">📤 最後一步</div>
+                        </div>
+                        <p className="text-[14px] text-[var(--ink)] font-bold leading-[1.7]">
+                            複製 W6 學習紀錄，貼到 Google Classroom 繳交。
+                        </p>
+                    </div>
+
                     <ExportButton
                         weekLabel="W6 海報博覽會 + 組隊"
+                        buttonText="複製 W6 學習紀錄"
                         fields={EXPORT_FIELDS}
                     />
 
@@ -1039,7 +1194,7 @@ export const W6PosterTeamPage = () => {
                         <div className="next-week-content">
                             <div className="next-week-col">
                                 <div className="next-week-label">W7 主題</div>
-                                <p className="next-week-text">文獻搜尋入門——A-D 證據分級、華藝四步搜尋、APA 引用練習。為計畫書第二章（文獻回顧）打地基。</p>
+                                <p className="next-week-text">文獻搜尋入門——A-D 證據分級、華藝四步搜尋、APA 引用練習。為計畫書第三章（文獻回顧）打地基。</p>
                             </div>
                             <div className="next-week-col">
                                 <div className="next-week-label">你要帶來</div>
@@ -1066,9 +1221,8 @@ export const W6PosterTeamPage = () => {
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
-                    <span className="hidden md:inline-block bg-[var(--ink)] text-white text-[10px] font-bold px-2 py-0.5 rounded-[2px] font-mono">AI-RED · D</span>
                 </div>
             </div>
 
@@ -1081,15 +1235,21 @@ export const W6PosterTeamPage = () => {
             {/* PAGE HEADER — Hero Block */}
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W6"
+                todo={[
+                  { label: '今天做什麼', value: '把三週成果畫成 A4 海報、走讀全班收回饋，決定 Team 或 Solo。' },
+                  { label: '為什麼做', value: 'W3–W5 三件事齊了但只有自己看——這週讓全班驗證，同時確定後續研究路線。' },
+                  { label: '今天交什麼', value: 'A4 海報 + 走讀回饋紀錄 + 路線決定（Team 或 Solo）。' },
+                ]}
+                question="我們要選哪一個值得研究、也做得到的題目？"
                 title="海報博覽會："
-                accentTitle="Gallery Walk + 組隊"
-                subtitle="把 W3 題目 + W4 方法 + W5 操作型定義組成 A4 海報，Gallery Walk 收 3 位同學各一條最關鍵的回饋，最後做兩條路的決定：Team 合題組隊 or Solo 單飛（嚴格 5 項自評）。"
+                accentTitle="畫廊走讀 + 組隊"
+                subtitle="把 W3 題目 + W4 方法 + W5 操作型定義組成 A4 海報，走讀收 3 位同學各一條最關鍵的回饋，最後做兩條路的決定：Team 合題組隊 or Solo 單飛（先寫承諾書 ①②）。"
                 chain="W3-W5 三件齊了——但只有自己看不算數。這週把它們攤開讓全班看，收回饋、找夥伴或確認單飛——下週開始就是計畫書 + 工具設計的長線執行。"
                 meta={[
-                    { label: '課堂節奏', value: '海報製作 → Gallery Walk → 找合題夥伴 → 路線決定 → 反思' },
-                    { label: '時長', value: '100 MINS' },
-                    { label: '課堂產出', value: 'A4 海報 + 走讀回饋紀錄 + 路線決定（Team or Solo）' },
-                    { label: '帶去 W7', value: '題目／方法／路線——文獻搜尋的起點' },
+                    { label: '第一節', value: 'A4 海報製作（題目 + 方法 + 操作型定義）' },
+                    { label: '第二節', value: '博覽會走讀 + 回饋紀錄 + 路線決定（Team or Solo）' },
+                    { label: '課堂產出', value: 'A4 海報 + 走讀回饋紀錄 + 路線決定' },
+                    { label: '前置要求', value: 'W5 操作型定義 + W4 主方法 + W3 定案題目' },
                 ]}
             />
             <CourseArc items={[
@@ -1109,10 +1269,10 @@ export const W6PosterTeamPage = () => {
                 duration={`${W6Data.duration} 分鐘 · ${W6Data.durationDesc}`}
                 tasks={[
                     '三件齊一張 A4 海報 — 題目 + 方法 + 操作型定義',
-                    '走讀同學海報 + 三色便利貼回饋（粉紅／黃／藍）',
-                    '組隊（Team 合題）或 Solo 嚴格 5 項',
+                    '走讀同學海報 + 一人一條具體回饋（讚美／建議／疑問）',
+                    '組隊（Team 合題）或 Solo 承諾書（①②）',
                 ]}
-                exportReminder="匯出組隊結果（Team 名單 / Solo 自證書）→ 之後以隊伍為單位推進"
+                exportReminder="匯出組隊結果（Team 名單 / Solo 承諾書）→ 之後以隊伍為單位推進"
             />
 
             {/* STEP ENGINE */}
