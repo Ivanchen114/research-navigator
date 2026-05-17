@@ -16,7 +16,6 @@ import {
     ArrowLeft,
     AlertCircle,
     Clock,
-    Star,
     Map,
 } from 'lucide-react';
 
@@ -31,51 +30,6 @@ import {
 /* ══════════════════════════════════════
  *  資料常數
  * ══════════════════════════════════════ */
-
-/* — 評分基準（4 維 × 4 級）— */
-const RUBRIC = [
-    {
-        dim: 'A',
-        title: '計畫書定稿度',
-        levels: [
-            '1-5 章還沒寫完',
-            '1-5 章完整、第六章雛形',
-            '1-13 章都寫了，少數章節粗',
-            '全 13 章定稿級、跨章邏輯通',
-        ],
-    },
-    {
-        dim: 'B',
-        title: '本組工具設計書完成度',
-        levels: [
-            '還是 docx 上的題目',
-            '有載具但版型亂',
-            '載具完整可施測',
-            '載具 + 知情同意 + 紀錄表都齊全',
-        ],
-    },
-    {
-        dim: 'C',
-        title: 'Pilot 共識發現深度',
-        note: '看 W11 Pilot 紀錄文件評分——短報沒有獨立的 Pilot 段，但進度段（第 5 段）要帶一句「Pilot 後修了什麼」。',
-        levels: [
-            '寫「都沒發現」',
-            '找出最弱題但沒講為什麼',
-            '最弱題 + 全組合議出共通模式',
-            '共識 + 具體證據（多人 partner 都卡）+ 已修正',
-        ],
-    },
-    {
-        dim: 'D',
-        title: '報告清晰度',
-        levels: [
-            '念稿 / 超時 / 重點不明',
-            '大致講清楚但散',
-            '結構好、5 段都講到（含 3 篇文獻對話）',
-            '結構好 + 自然不念稿 + 在 3 分鐘內',
-        ],
-    },
-];
 
 /* — 短報卡 5 段（學生 W11 結束課後在 Form 填）— */
 /* 朗讀速率：高中生中速約 200 字/分鐘 ≈ 3.3 字/秒 → 30 秒 ~100 字、60 秒 ~200 字 */
@@ -196,7 +150,6 @@ const W12Page = () => {
                 tasks={[
                     '各組期中短報 — 3 分鐘報告 + 1 分鐘提問',
                     '全班同儕回饋 Form — 6 漏洞勾選 + 30 字建議 + 30 字學到什麼',
-                    '老師當場評分（4 維 × 4 級 = 16 分）',
                 ]}
                 exportReminder="收齊同儕回饋 → 下週調整研究設計依據"
             />
@@ -376,58 +329,6 @@ const W12Page = () => {
                     </div>
                 </div>
 
-                {/* 評分基準 */}
-                <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <ContentTypeChip type="學" />
-                        <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] flex items-center gap-2">
-                            <Star size={18} className="text-[#EA580C]" /> 評分基準（4 維 × 4 級 = 16 分滿分）
-                        </h3>
-                    </div>
-                    <div className="bg-[#FFFBEB] border border-[#FCD34D] rounded-[6px] p-3 mb-3 text-[12px] text-[#78350F] leading-relaxed">
-                        ⚖️ <strong>評分分流：</strong>
-                        <strong className="text-[#92400E]">A 維度</strong>看你 Classroom 上計畫書檔案實際狀態；
-                        <strong className="text-[#92400E]">C 維度（Pilot 共識）</strong>看你 W11 Pilot 紀錄文件評分（短報沒有獨立 Pilot 段，進度段帶一句即可）；
-                        <strong className="text-[#92400E]">B / D 維度</strong>主要看今天<strong>短報 5 段</strong>的表現。
-                        <strong>意思：</strong>就算短報講得不錯，計畫書如果停在第六章雛形，A 還是會低分；W11 Pilot 紀錄空白，C 還是會低分。
-                    </div>
-                    <h3 className="hidden">
-                    </h3>
-                    <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                        老師現場記分、私下給組長（不公告排名）。<strong>13-16 ★★★★ ／ 9-12 ★★★ ／ 5-8 ★★ ／ 4 ★</strong>。分數 ≤ 8 的組 W13 前要找老師談。
-                    </p>
-                    {/* rubric 術語小辭典 */}
-                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-3 mb-3">
-                        <p className="text-[12px] font-bold text-[var(--ink)] mb-1.5">📒 評分基準裡這幾個詞</p>
-                        <ul className="text-[11.5px] text-[var(--ink-mid)] leading-[1.8] list-none space-y-1">
-                            <li><strong className="text-[var(--ink)]">定稿度／跨章邏輯通</strong>　定稿度＝計畫書寫到多完整；跨章邏輯通＝題目／方法／變項／工具／文獻彼此對得上，不會第一章說做 A、第六章工具卻在測 B。</li>
-                            <li><strong className="text-[var(--ink)]">載具</strong>　＝你實際拿去施測的那份東西：Google Form／紙本訪綱／觀察紀錄表。</li>
-                            <li><strong className="text-[var(--ink)]">Pilot 共識發現</strong>　＝W11 預試後全組討論出的「共同弱點」——不是各人各自寫，是合議出一個共通模式。</li>
-                        </ul>
-                    </div>
-                    <div className="space-y-2">
-                        {RUBRIC.map((r) => (
-                            <details key={r.dim} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)]">
-                                <summary className="cursor-pointer px-4 py-2 text-[13px] font-bold text-[var(--ink)] flex items-center justify-between">
-                                    <span><span className="text-[var(--accent)] mr-2">{r.dim}.</span>{r.title}</span>
-                                    <span className="text-[11px] text-[var(--ink-light)] font-normal">展開 4 級 ▼</span>
-                                </summary>
-                                {r.note && (
-                                    <p className="px-4 pb-2 text-[11.5px] text-[var(--ink-light)] italic leading-[1.7]">📌 {r.note}</p>
-                                )}
-                                <div className="px-4 pb-3 grid grid-cols-1 md:grid-cols-4 gap-2 text-[11.5px]">
-                                    {r.levels.map((lv, i) => (
-                                        <div key={i} className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-2">
-                                            <p className="font-bold text-[var(--ink)]">{i + 1} 分</p>
-                                            <p className="text-[var(--ink-mid)] leading-[1.7] mt-0.5">{lv}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        ))}
-                    </div>
-                </div>
-
                 {/* 流程地圖 */}
                 <div>
                     <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2 flex items-center gap-2">
@@ -477,7 +378,6 @@ const W12Page = () => {
                                             '上台 3 分鐘短報自己的研究進度（題目 / 動機 / 方法 / 3 篇文獻 / 目前進度）',
                                             '聽完 12 組短報並用 Form 給每組具體回饋',
                                             '整理「聽別組學到什麼」並轉成自己組要改的事',
-                                            '接住老師當場 4 維 × 4 級評分，識別自己的弱項',
                         ].map((item, i) => (
                             <div key={i} className="p-4 px-5 bg-white flex items-start gap-3">
                                 <span className="text-[var(--success)] text-[16px] mt-0.5 flex-shrink-0">✓</span>

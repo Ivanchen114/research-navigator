@@ -71,6 +71,12 @@
   .prose-zh h3 { font-size: 16px; }
   .prose-zh h4 { font-size: 14px; }
 }
+/* 顯示級標題：優先序 (0,2,0) 高於 .prose-zh h4 (0,1,1)，不需要 inline style。
+ * text-display：大型展示標題（如技能卡主標）
+ * text-headline：中型強調標題（如跨段落引言）*/
+.prose-zh .text-display  { font-size: 48px; margin-top: 0; }
+.prose-zh .text-headline { font-size: clamp(28px, 4vw, 36px); margin-top: 0; }
+
 /* strong 顏色繼承父層——黑底卡片才不會看不見。
  * 原本是 color: var(--ink)，會強制塗深色，導致 bg-[var(--ink)] 黑卡上的 strong 隱形。
  * 改成 inherit 後：白底父層 → strong 仍是父層繼承的深色（行為不變）；黑底父層 text-white → strong 自動白色。 */

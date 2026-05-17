@@ -487,11 +487,13 @@ const W1PageContent = () => {
 
                             <StepBriefing
                                 lines={mode === 'self-study' ? [
-                                    { label: '做', text: '把下方模擬資料貼進 AI，用 Prompt 範本分析' },
-                                    { label: '練', text: '比對 AI 歸納 vs 原始 10 筆，找出 AI 省略或美化的地方' },
+                                    { label: '做', text: '把下方模擬資料貼進 AI，用提示詞範本分析' },
+                                    { label: '練', text: '比對 AI 歸納與原始 10 筆，找出 AI 省略或美化的地方' },
+                                    { label: '記', text: '寫下：人做了哪些步驟、AI 做了什麼、哪裡讓你意外' },
                                 ] : [
-                                    { label: '做', text: '填表單 → 看 AI 整理 → 回頭比對原始資料' },
-                                    { label: '練', text: '寫下「人做了什麼、AI 做了什麼」' },
+                                    { label: '看', text: '觀察老師示範：填表 → 貼提示詞 → 讀 AI 歸納' },
+                                    { label: '學', text: '看 AI-RED 五字如何對應剛才的每個動作' },
+                                    { label: '記', text: '寫下你觀察到的：人做了什麼、AI 做了什麼' },
                                 ]}
                             />
 
@@ -581,19 +583,15 @@ const W1PageContent = () => {
                                             <span className="text-[11px] text-[var(--ink-light)] font-mono">forms.gle/Hw2saiLWLR8HwGBH6</span>
                                         </div>
                                     </div>
-                                    <p className="text-[12px] text-[var(--ink-light)] leading-[1.75]">
-                                        ⚠️ <strong>寫真的</strong>——AI 等下會分析你們的回答。寫場面話、套漂亮詞，AI 會把你歸到「思維探究型」；如果你心裡覺得「研究就是被老師逼著做的事」，就誠實寫——那才是研究的起點。
-                                    </p>
                                 </div>
                                 </>
                             )}
 
-                            {/* 現場示範流程 · 第 3 步：Prompt 範本 — code block 深度補充 */}
-                            <DepthBlock title="看完整範例">
+                            {/* 現場示範流程 · 第 3 步：提示詞範本 */}
                             <div className="border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                                 <div className="p-3 px-4 bg-[var(--ink)] text-white flex items-center gap-2 flex-wrap">
                                     <span className="text-[10px] font-mono uppercase tracking-[0.1em] font-bold">現場示範 · 第 3 步</span>
-                                    <span className="text-[11px] text-white/70">Prompt 範本（這就是 AI-RED 的 I — Inquire）</span>
+                                    <span className="text-[11px] text-white/70">提示詞範本（這就是 AI-RED 的 I — Inquire）</span>
                                 </div>
                                 <pre className="p-5 bg-[#0f1419] text-[12.5px] font-mono text-[#fbbf24] leading-[1.85] overflow-x-auto whitespace-pre-wrap m-0">{`你是一位資深教育研究員。
 我想了解高一學生對「研究」的認知。
@@ -611,10 +609,9 @@ const W1PageContent = () => {
 資料如下：
 [貼上學生回答]`}</pre>
                                 <div className="p-3 px-5 bg-[var(--paper)] border-t border-[var(--border)] text-[11.5px] text-[var(--ink-light)] leading-[1.7]">
-                                    💡 注意 Prompt 的結構：<strong>角色 + 任務 + 分類定義 + 步驟編號 + 資料</strong>。這樣問，AI 才知道要用什麼資料、做什麼分析、輸出什麼結果——<strong>重點不是把 Prompt 寫漂亮，是把研究任務說清楚</strong>。W2 開始會反覆練這個。
+                                    💡 注意提示詞的結構：<strong>角色 + 任務 + 分類定義 + 步驟編號 + 資料</strong>。這樣問，AI 才知道要用什麼資料、做什麼分析、輸出什麼結果——<strong>重點不是把提示詞寫漂亮，是把研究任務說清楚</strong>。W2 開始會反覆練這個。
                                 </div>
                             </div>
-                            </DepthBlock>
 
                             {/* 現場示範流程 · 第 4 步：Evaluate 揭穿 */}
                             <div className="p-4 rounded-[var(--radius-unified)] bg-[var(--danger-light)] border border-[var(--danger)]/25">
@@ -661,7 +658,7 @@ const W1PageContent = () => {
                             {/* 30 秒 vs 18 週 轉折 */}
                             <div className="p-6 rounded-[var(--radius-unified)] bg-[var(--ink)] text-white text-center">
                                 <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--gold)] mb-3">轉折：你應該會有的疑問</div>
-                                <h4 className="font-serif text-[22px] md:text-[24px] font-bold leading-[1.55] mb-3">
+                                <h4 className="font-serif font-bold leading-[1.55] mb-3 text-headline">
                                     如果 AI 只要 <span className="text-[var(--gold)]">30 秒</span> 就能做完分析，<br />
                                     那我們為什麼要花 <span className="text-[var(--gold)]">18 週</span> 上這門課？
                                 </h4>
@@ -684,7 +681,7 @@ const W1PageContent = () => {
                                     <div key={i} className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden flex flex-col">
                                         <div className="p-5 pb-0">
                                             <div className="text-[28px] mb-3">{skill.icon}</div>
-                                            <h4 className="font-serif text-[16px] font-bold text-[var(--ink)]">{skill.title}</h4>
+                                            <h4 className="font-serif font-bold text-[var(--ink)] text-display">{skill.title}</h4>
                                             <div className="text-[10px] font-mono text-[var(--ink-light)] uppercase mb-3">{skill.en}</div>
                                             <p className="text-[12px] text-[var(--ink-mid)] leading-[1.65] mb-4">{skill.desc}</p>
                                         </div>
@@ -697,7 +694,7 @@ const W1PageContent = () => {
 
                             {/* 收尾標語 */}
                             <div className="p-5 rounded-[var(--radius-unified)] bg-[var(--gold-light)] border-2 border-[var(--gold)]/30 text-center">
-                                <p className="font-serif text-[18px] text-[var(--ink)] font-bold leading-[1.65]">
+                                <p className="font-serif text-[28px] text-[var(--ink)] font-bold leading-[1.55]">
                                     AI 不會自己想做研究，<br />
                                     <span className="text-[var(--accent)]">起點永遠是人的好奇心。</span>
                                 </p>
@@ -709,8 +706,10 @@ const W1PageContent = () => {
                             </div>
                             <ThinkRecord
                                 dataKey="w1-human-ai-observe"
-                                prompt="觀察老師的示範後，寫下你注意到的：哪些步驟是人做的？哪些是 AI 做的？有什麼讓你意外的嗎？"
-                                placeholder="例如：老師自己決定了研究問題，但讓 AI 幫忙整理文獻清單。意外的是…"
+                                prompt={mode === 'self-study'
+                                    ? '跑完自學版分析後，寫下你注意到的：人做了哪些步驟？AI 做了什麼？哪個地方讓你意外？'
+                                    : '觀察老師的示範後，寫下你注意到的：哪些步驟是人做的？哪些是 AI 做的？有什麼讓你意外的嗎？'}
+                                placeholder="例如：老師自己決定了研究問題，但讓 AI 幫忙整理和分類。意外的是…"
                                 scaffold={['人做的：…', 'AI 做的：…', '讓我意外的是…']}
                                 rows={4}
                             />
