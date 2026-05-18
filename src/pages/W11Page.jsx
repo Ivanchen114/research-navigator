@@ -649,11 +649,14 @@ export const W11Page = () => {
                             </p>
 
                             {/* 看其他組工具模板（彈性切換） */}
-                            <details className="mt-3 text-[12px]">
-                                <summary className="cursor-pointer text-[var(--ink-mid)] hover:text-[var(--ink)] inline-flex items-center gap-1">
-                                    📂 想看其他方法的工具模板？▼
+                            <details className="mt-4 border-2 border-dashed border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                <summary className="cursor-pointer px-4 py-3 bg-[var(--paper-warm)] hover:bg-[#EEE9E0] transition-colors flex items-center gap-2 font-bold text-[13.5px] text-[var(--ink)]">
+                                    <span className="text-[18px]">📂</span>
+                                    想看其他方法的工具模板？
+                                    <span className="ml-auto text-[11px] font-mono text-[var(--ink-light)]">點此展開 ▼</span>
                                 </summary>
-                                <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed mt-2 mb-2">
+                                <div className="px-4 pt-3 pb-1">
+                                <p className="text-[12px] text-[var(--ink-light)] leading-relaxed mb-2">
                                     參考用——例如想看別組怎麼設計工具、或自己有混合方法想多拿一份模板。
                                 </p>
                                 {(() => {
@@ -697,6 +700,7 @@ export const W11Page = () => {
                                         </>
                                     );
                                 })()}
+                                </div>
                             </details>
                         </div>
                     )}
