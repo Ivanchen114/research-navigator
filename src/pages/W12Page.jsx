@@ -306,9 +306,11 @@ const W12Page = () => {
                     <div className="grid grid-cols-2 gap-3">
                         <div className="bg-[#F0FDF4] border-2 border-[#10B981]/60 rounded-lg p-4 text-center">
                             <p className="text-[#065F46] text-[15px] font-bold leading-[1.7]">依回饋份數評分<br/>10 份滿分</p>
+                            <p className="text-[#065F46]/60 text-[11px] mt-1">不足 10 份依比例折算</p>
                         </div>
                         <div className="bg-[#FFF7ED] border-2 border-[#F59E0B]/60 rounded-lg p-4 text-center">
-                            <p className="text-[#92400E] text-[15px] font-bold leading-[1.7]">有寫具體建議<br/>品質加分</p>
+                            <p className="text-[#92400E] text-[15px] font-bold leading-[1.7]">老師看「學到什麼」<br/>評內容品質</p>
+                            <p className="text-[#92400E]/60 text-[11px] mt-1">有寫具體建議另外加分</p>
                         </div>
                     </div>{/* end 評分規準 */}
 
