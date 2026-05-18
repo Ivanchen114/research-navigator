@@ -248,91 +248,91 @@ const W16Page = () => {
             icon: <PenTool size={18} />,
             content: (
                 <div className="prose-zh">
-                    {/* 直接開模板：兩條路 */}
-                    <div className="card">
-                        <div className="card-header">
-                            <PenTool size={16} /> 第一步：打開模板，兩條路
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
-                                你已經在 Step 2 下載 <strong>乾淨版 PPT</strong>。直接開來改，不必從零畫——版面已經對齊 7 項規準。
-                            </p>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                                <div style={{ background: '#FEF3C7', border: '2px solid #F59E0B', borderRadius: 'var(--radius-unified)', padding: 14 }}>
-                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#92400E', marginBottom: 8 }}>路線 A · PowerPoint / Google 簡報 / Keynote</div>
-                                    <div style={{ fontSize: 12, lineHeight: 1.85, color: '#78350F' }}>
-                                        雙擊 PPT 檔，直接編輯。<br />
-                                        Google 簡報：上傳到 Drive 後右鍵「以 Google 簡報開啟」。<br />
-                                        Keynote：拖進 Keynote 自動轉檔。
+                    {/* 海報製作三步驟 — Timeline */}
+                    <div className="relative pl-8 mb-4">
+                        <div className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-[var(--border)]" />
+                        <div className="space-y-4">
+
+                            {/* 步驟一：打開模板 */}
+                            <div className="relative flex gap-3">
+                                <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#2563EB]">1</div>
+                                <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                    <p className="font-bold text-[13px] text-[#2563EB] mb-2">打開模板，兩條路</p>
+                                    <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
+                                        你已經在 Step 2 下載 <strong>乾淨版 PPT</strong>。直接開來改，不必從零畫——版面已經對齊 7 項規準。
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-3 mb-3">
+                                        <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-3">
+                                            <p className="text-[12px] font-bold text-[#92400E] mb-1.5">路線 A · PowerPoint / Google 簡報 / Keynote</p>
+                                            <p className="text-[11.5px] text-[#78350F] leading-relaxed">雙擊 PPT 檔，直接編輯。<br />Google 簡報：上傳到 Drive 後右鍵「以 Google 簡報開啟」。<br />Keynote：拖進 Keynote 自動轉檔。</p>
+                                        </div>
+                                        <div className="bg-[#EFF6FF] border-2 border-[#3B82F6] rounded-[var(--radius-unified)] p-3">
+                                            <p className="text-[12px] font-bold text-[#1E40AF] mb-1.5">路線 B · Canva（推薦給已有帳號）</p>
+                                            <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed">登入 Canva → 建立新設計 → 「上傳」標籤頁 → 把 PPT 拖進去。<br />Canva 自動轉成可編輯的圖文，每張 slide 變一頁設計。</p>
+                                        </div>
+                                    </div>
+                                    <div className="px-3 py-2.5 bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
+                                        💡 <strong>不論哪條路</strong>，做完匯出 <strong>PDF</strong> 給老師印 A1。Canva 也支援匯出 PDF（File → Download → PDF Print）。
                                     </div>
                                 </div>
-                                <div style={{ background: '#EFF6FF', border: '2px solid #3B82F6', borderRadius: 'var(--radius-unified)', padding: 14 }}>
-                                    <div style={{ fontSize: 13, fontWeight: 700, color: '#1E40AF', marginBottom: 8 }}>路線 B · Canva（推薦給已有 Canva 帳號）</div>
-                                    <div style={{ fontSize: 12, lineHeight: 1.85, color: '#1E3A8A' }}>
-                                        登入 Canva → 建立新設計 → 「上傳」標籤頁 → 把 PPT 拖進去。<br />
-                                        Canva 自動轉成可編輯的圖文，每張 slide 變一頁設計。
+                            </div>
+
+                            {/* 步驟二：整理內容 */}
+                            <div className="relative flex gap-3">
+                                <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#059669]">2</div>
+                                <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                    <p className="font-bold text-[13px] text-[#059669] mb-2">整理內容（不改版面）</p>
+                                    <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-2">
+                                        模板版面已對齊評分規準，<strong>不要改動版面</strong>。但版面只是容器——<strong>內容要由你決定哪些留下、哪些刪掉</strong>。
+                                    </p>
+                                    <div className="border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden mb-2">
+                                        <div className="px-3.5 py-2.5 bg-white text-[12px] leading-relaxed border-b border-[var(--border)]">
+                                            <strong className="text-[var(--accent)]">① 整理每格的內容</strong>——把「請置換」的 placeholder 換成你研究的精華（題目、動機、文獻、方法、結論）。這一步<strong>不是直接複製計畫書</strong>，要思考海報空間有限，每格只留最重要的。
+                                        </div>
+                                        <div className="px-3.5 py-2.5 bg-white text-[12px] leading-relaxed">
+                                            <strong className="text-[var(--accent)]">② 整理 A1 #2 的核心呈現</strong>——把示範圖刪掉，<strong>從 W14 多張圖中選一張最能代表研究發現的</strong>貼上去（質性組可放主題矩陣或關鍵引文卡，置中對齊）。
+                                        </div>
                                     </div>
+                                    <p className="text-[11.5px] text-[var(--ink-light)] italic leading-relaxed">
+                                        ⚠️ 千萬不要重新調整文字框位置或改色塊邊框——除非你很確定要做什麼。模板的對齊跟配色都是「規準七 50%」的依據。
+                                    </p>
                                 </div>
                             </div>
-                            <div style={{ marginTop: 12, padding: '12px 16px', background: 'var(--paper-warm)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', fontSize: 12, color: 'var(--ink-mid)', lineHeight: 1.85 }}>
-                                💡 <strong>不論哪條路</strong>，做完匯出 <strong>PDF</strong> 給老師印 A1。Canva 也支援匯出 PDF（File → Download → PDF Print）。
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* 替換內容流程 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <FileText size={16} /> 第二步：整理內容（不改版面）
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
-                                模板版面已對齊評分規準，<strong>不要改動版面</strong>。但版面只是容器——<strong>內容要由你決定哪些留下、哪些刪掉</strong>。具體兩個動作：
-                            </p>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
-                                <div style={{ padding: '10px 14px', background: '#fff', fontSize: 12.5, lineHeight: 1.85 }}>
-                                    <strong style={{ color: 'var(--accent)' }}>① 整理每格的內容</strong>——把「請置換」的 placeholder 換成你研究的精華（題目、動機、文獻、方法、結論）。這一步<strong>不是直接複製計畫書</strong>，要思考海報空間有限，每格只留最重要的
-                                </div>
-                                <div style={{ padding: '10px 14px', background: '#fff', fontSize: 12.5, lineHeight: 1.85 }}>
-                                    <strong style={{ color: 'var(--accent)' }}>② 整理 A1 #2 的核心呈現</strong>——把示範圖刪掉，<strong>從 W14 多張圖中選一張最能代表研究發現的</strong>貼上去（質性組可放主題矩陣或關鍵引文卡，置中對齊）
+                            {/* 步驟三：核心呈現 */}
+                            <div className="relative flex gap-3">
+                                <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#D97706]">3</div>
+                                <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                    <p className="font-bold text-[13px] text-[#D97706] mb-2">你的方法該放什麼到「核心呈現」？</p>
+                                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-2">
+                                        A1 #2 的「核心呈現」是 <strong>規準四（20%）</strong>的關鍵——5 種方法該放的東西不一樣：
+                                    </p>
+                                    <div className="border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                        <div className="grid grid-cols-[90px_130px_1fr] bg-[var(--paper-warm)] text-[10.5px] font-bold text-[var(--ink)]">
+                                            <div className="px-2.5 py-1.5 border-r border-b border-[var(--border)]">方法</div>
+                                            <div className="px-2.5 py-1.5 border-r border-b border-[var(--border)]">核心呈現</div>
+                                            <div className="px-2.5 py-1.5 border-b border-[var(--border)]">具體範例</div>
+                                        </div>
+                                        {[
+                                            { m: '📋 問卷',     show: '量化圖表',            ex: '長條圖（人次比較）／圓餅圖（比例）／量表平均值分布' },
+                                            { m: '🧪 實驗',     show: '前後測比較',           ex: '實驗組 vs 對照組柱狀圖／折線圖（時間變化）' },
+                                            { m: '👀 觀察',     show: '行為頻率統計',         ex: '行為類別 × 次數柱狀圖／時間分布熱圖' },
+                                            { m: '🎤 訪談',     show: '主題編碼 + 代表引文',  ex: '主題分類矩陣／3 個關鍵引文卡（P1/P2/P3）' },
+                                            { m: '📚 文獻分析', show: '依子類型而異',         ex: '歷史：時間軸｜內容：編碼計次表｜論述：立場光譜圖｜敘事：情節結構圖' },
+                                        ].map((r, i) => (
+                                            <div key={i} className={`grid grid-cols-[90px_130px_1fr] text-[11px] ${i < 4 ? 'border-b border-[var(--border)]' : ''}`}>
+                                                <div className="px-2.5 py-2 border-r border-[var(--border)] font-bold text-[var(--ink)]">{r.m}</div>
+                                                <div className="px-2.5 py-2 border-r border-[var(--border)] font-bold text-[var(--accent)]">{r.show}</div>
+                                                <div className="px-2.5 py-2 text-[var(--ink-mid)] leading-relaxed">{r.ex}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="text-[11px] text-[var(--ink-mid)] italic mt-2 leading-relaxed">
+                                        💡 訪談組／文獻組常見錯誤：硬塞長條圖（強行量化質性資料）→ 規準四 D。找對的呈現方式比硬塞圖表重要。
+                                    </p>
                                 </div>
                             </div>
-                            <p style={{ fontSize: 12, color: 'var(--ink-light)', marginTop: 12, fontStyle: 'italic' }}>
-                                ⚠️ 千萬不要重新調整文字框位置或改色塊邊框——除非你很確定要做什麼。模板的對齊跟配色都是「規準七 50%」的依據。
-                            </p>
-                        </div>
-                    </div>
 
-                    {/* 5 種方法核心呈現對照表 */}
-                    <div className="card" style={{ marginTop: 16 }}>
-                        <div className="card-header">
-                            <FileText size={16} /> 第三步：你的方法該放什麼到「核心呈現」？
-                        </div>
-                        <div className="card-body">
-                            <p style={{ fontSize: 13, lineHeight: 1.85, marginBottom: 12 }}>
-                                A1 #2 的「核心呈現」位置是 <strong>規準四（20%）</strong>的關鍵——但 5 種方法該放的東西不一樣。對照下表找你那種：
-                            </p>
-                            <div style={{ display: 'grid', gridTemplateColumns: '110px 150px 1fr', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 'var(--radius-unified)', overflow: 'hidden' }}>
-                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>方法</div>
-                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>核心呈現該放什麼</div>
-                                <div style={{ padding: '8px 10px', background: 'var(--paper-warm)', fontSize: 11, fontWeight: 700, color: 'var(--ink)' }}>具體範例</div>
-                                {[
-                                    { m: '📋 問卷', show: '量化圖表',     ex: '長條圖（人次比較）／圓餅圖（比例）／量表平均值分布／交叉表' },
-                                    { m: '🧪 實驗', show: '前後測比較',   ex: '實驗組 vs 對照組柱狀圖／折線圖（時間變化）／效應量標註' },
-                                    { m: '👀 觀察', show: '行為頻率統計', ex: '行為類別 × 次數柱狀圖／時間分布熱圖／空間分布示意圖' },
-                                    { m: '🎤 訪談', show: '主題編碼 + 代表引文', ex: '主題分類矩陣（主題 × 受訪者）／3 個關鍵引文卡（含受訪者代號 P1/P2/P3）' },
-                                    { m: '📚 文獻分析',  show: '依子類型而異',  ex: '② 歷史：時間軸／因果鏈圖｜③ 內容：編碼計次表／詞頻長條圖／共現矩陣｜④ 論述：立場光譜圖／話語對照表／框架分類｜⑤ 敘事：情節結構圖／角色關係圖' },
-                                ].map((r, i) => (
-                                    <React.Fragment key={i}>
-                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12.5, fontWeight: 700, color: 'var(--ink)' }}>{r.m}</div>
-                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 12, fontWeight: 700, color: 'var(--accent)' }}>{r.show}</div>
-                                        <div style={{ padding: '10px 10px', background: '#fff', fontSize: 11.5, color: 'var(--ink-mid)', lineHeight: 1.7 }}>{r.ex}</div>
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                            <p style={{ fontSize: 11.5, color: 'var(--ink-mid)', marginTop: 12, fontStyle: 'italic', lineHeight: 1.7 }}>
-                                💡 訪談組／文獻組常見錯誤：硬塞長條圖（強行量化質性資料）→ 規準四 D。<strong>找對的呈現方式比硬塞圖表重要。</strong>
-                            </p>
                         </div>
                     </div>
 

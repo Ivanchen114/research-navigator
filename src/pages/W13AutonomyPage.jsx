@@ -492,18 +492,28 @@ const W13PageContent = () => {
 
     const steps = [
         {
-            title: '認識資料',
+            title: '整理原則',
             icon: <Database size={18} />,
             content: (
                 <div className="flex flex-col gap-6 prose-zh">
                     <StepBriefing
                         lines={[
                             { label: '節奏', text: '跟老師做（第一節前半，約 20 分鐘）' },
-                            { label: '學', text: '3 條資料整理紅線：異常值 ≠ 直接剔除 / 規則要事前明示 / 保留原始紀錄' },
-                            { label: '做', text: '去「找雷挑戰」找出 AI 報告踩了哪幾條雷（10 分鐘）' },
+                            { label: '學', text: '資料整理 5 步驟 + 3 條學術紅線' },
+                            { label: '做', text: '寫出本組的剔除規則（個人繳交項）' },
                         ]}
                     />
-                    {/* ⭐ 開場·必看：AI 報告找雷大挑戰（連到反面教材頁）*/}
+
+                    {/* 任務說明 */}
+                    <div className="flex items-center gap-2 mb-1">
+                        <ContentTypeChip type="學" />
+                        <p className="text-[13px] font-bold text-[var(--ink)]">📦 任務：原始資料 → 可分析的表</p>
+                    </div>
+                    <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                        W11-W12 蒐集的<strong className="text-[var(--ink)]">原始資料</strong>本週要變成<strong className="text-[var(--ink)]">分析表</strong>——欄位清楚、N 值明確、可追溯。下週 W14 才畫得了圖。
+                    </p>
+
+                    {/* ⭐ 找雷大挑戰 */}
                     <Link
                         to="/find-traps"
                         className="block p-5 rounded-[var(--radius-unified)] bg-gradient-to-br from-[var(--ink)] to-[#1E293B] text-white shadow-xl no-underline hover:shadow-2xl transition-all hover:-translate-y-0.5"
@@ -526,58 +536,215 @@ const W13PageContent = () => {
                         </span>
                     </Link>
 
-                    {/* 任務說明 */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="學" />
-                        <p className="text-[13px] font-bold text-[var(--ink)]">📦 任務：原始資料 → 可分析的表</p>
-                    </div>
-                    <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
-                        W11-W12 蒐集的<strong className="text-[var(--ink)]">原始資料</strong>本週要變成<strong className="text-[var(--ink)]">分析表</strong>——欄位清楚、N 值明確、可追溯。下週 W14 才畫得了圖。
-                    </p>
-
-                    {/* 4 個詞：REF 層，按需查閱 */}
-                    <DepthBlock title="4 個詞說明">
-                    <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[760px]">
-                        <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂 4 個詞（W13 開始大量出現）</p>
-                        <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
-                            這 4 個詞下方的 5 法對照表會頻繁用到——先花 90 秒掃過。
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <div className="bg-white border-2 border-[#2563EB] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#2563EB] mb-1">🔢 N 值</p>
-                                <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed mb-1">每一欄、每一筆資料的<strong>樣本數量</strong>。</p>
-                                <p className="text-[11px] text-[#1E40AF] italic">例：訪了 8 人 → N = 8；收到 85 份問卷 → N = 85</p>
-                            </div>
-                            <div className="bg-white border-2 border-[#7C3AED] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#7C3AED] mb-1">🎙️ 半結構化訪談</p>
-                                <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-1">有大綱但允許追問的訪談形式——介於完全自由聊天和死板問卷之間。</p>
-                                <p className="text-[11px] text-[#5B21B6] italic">例：照訪綱問 5 大題，但聽到有意思的就追問</p>
-                            </div>
-                            <div className="bg-white border-2 border-[#059669] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#059669] mb-1">🏷️ 編碼類別</p>
-                                <p className="text-[11.5px] text-[#065F46] leading-relaxed mb-1">把文字資料分類的<strong>標籤</strong>。</p>
-                                <p className="text-[11px] text-[#047857] italic">例：把 8 位受訪者的答案分成「正面 / 中立 / 負面」3 類</p>
-                            </div>
-                            <div className="bg-white border-2 border-[#D97706] rounded p-2.5">
-                                <p className="text-[12px] font-bold text-[#D97706] mb-1">🔢 代碼化（變項代碼化）</p>
-                                <p className="text-[11.5px] text-[#7C2D12] leading-relaxed mb-1">把文字標籤轉成<strong>數字</strong>便於計算。</p>
-                                <p className="text-[11px] text-[#9A3412] italic">例：正面 = 1，中立 = 0，負面 = -1</p>
+                    {/* 資料整理通用 5 步驟 — Timeline 格式 */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-3">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">🔁 資料整理通用流程（5 步驟）</p>
+                        </div>
+                        <div className="relative pl-8">
+                            {/* 垂直連線 */}
+                            <div className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-[var(--border)]" />
+                            <div className="space-y-4">
+                                {[
+                                    { label: '訂剔除規則', desc: '在動手前就把「什麼叫無效」用可驗證的句子寫清楚——不能邊整理邊決定', accent: '#DC2626' },
+                                    { label: '清洗資料', desc: '依你訂的規則剔除無效筆，記錄「剔了幾份、原因」，保留原始檔案備查', accent: '#D97706' },
+                                    { label: '定分析表欄位', desc: '欄位從計畫書第二章操作型定義來——每個研究變項對應一欄，決定如何代碼化', accent: '#2563EB' },
+                                    { label: '填入 + 代碼化', desc: '把原始資料填進表格，文字選項轉數字（例：同意=5，不同意=1）', accent: '#059669' },
+                                    { label: '確認 N 值', desc: '每欄都要標 N（有效樣本數），確認全表一致，下週畫圖會一直用到', accent: '#7C3AED' },
+                                ].map(({ label, desc, accent }, i) => (
+                                    <div key={i} className="relative flex gap-3">
+                                        {/* 圓形 badge */}
+                                        <div
+                                            className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 shrink-0"
+                                            style={{ backgroundColor: accent }}
+                                        >
+                                            {i + 1}
+                                        </div>
+                                        <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                            <p className="font-bold text-[13px] mb-0.5" style={{ color: accent }}>{label}</p>
+                                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">{desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                        <p className="text-[11px] text-[#1E40AF] italic leading-relaxed mt-2.5">
-                            💡 <strong>編碼類別</strong>是「貼標籤」（質性的分類）；<strong>代碼化</strong>是「把標籤換成數字」（為了能丟進 Excel／統計軟體算）。順序是先編碼、再代碼。
-                        </p>
                     </div>
+
+                    {/* 4 個詞 REF */}
+                    <DepthBlock title="4 個詞說明（遇到不懂再查）">
+                        <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#BFDBFE] bg-[#EFF6FF] max-w-[760px]">
+                            <p className="text-[13px] font-bold text-[#1E40AF] mb-2">📖 先搞懂 4 個詞（W13 開始大量出現）</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <div className="bg-white border-2 border-[#2563EB] rounded p-2.5">
+                                    <p className="text-[12px] font-bold text-[#2563EB] mb-1">🔢 N 值</p>
+                                    <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed mb-1">每一欄、每一筆資料的<strong>樣本數量</strong>。</p>
+                                    <p className="text-[11px] text-[#1E40AF] italic">例：訪了 8 人 → N = 8；收到 85 份問卷 → N = 85</p>
+                                </div>
+                                <div className="bg-white border-2 border-[#7C3AED] rounded p-2.5">
+                                    <p className="text-[12px] font-bold text-[#7C3AED] mb-1">🎙️ 半結構化訪談</p>
+                                    <p className="text-[11.5px] text-[#4C1D95] leading-relaxed mb-1">有大綱但允許追問的訪談形式。</p>
+                                    <p className="text-[11px] text-[#5B21B6] italic">例：照訪綱問 5 大題，但聽到有意思的就追問</p>
+                                </div>
+                                <div className="bg-white border-2 border-[#059669] rounded p-2.5">
+                                    <p className="text-[12px] font-bold text-[#059669] mb-1">🏷️ 編碼類別</p>
+                                    <p className="text-[11.5px] text-[#065F46] leading-relaxed mb-1">把文字資料分類的<strong>標籤</strong>。</p>
+                                    <p className="text-[11px] text-[#047857] italic">例：把答案分成「正面 / 中立 / 負面」3 類</p>
+                                </div>
+                                <div className="bg-white border-2 border-[#D97706] rounded p-2.5">
+                                    <p className="text-[12px] font-bold text-[#D97706] mb-1">🔢 代碼化（變項代碼化）</p>
+                                    <p className="text-[11.5px] text-[#7C2D12] leading-relaxed mb-1">把文字標籤轉成<strong>數字</strong>便於計算。</p>
+                                    <p className="text-[11px] text-[#9A3412] italic">例：正面 = 1，中立 = 0，負面 = -1</p>
+                                </div>
+                            </div>
+                            <p className="text-[11px] text-[#1E40AF] italic leading-relaxed mt-2.5">
+                                💡 先編碼（貼標籤）→ 再代碼化（換成數字）。
+                            </p>
+                        </div>
                     </DepthBlock>
 
-                    {/* 5 法對照表：REF 層，按需查閱 */}
-                    <DepthBlock title="5 種方法對照（確認你的整理路徑）">
-                        {/* 5 法對照表 */}
+                    {/* 老師示範：5 步驟完整走一遍（問卷法範例） */}
                     <div>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-1">
                             <ContentTypeChip type="學" />
-                            <p className="text-[13px] font-bold text-[var(--ink)]">📊 5 種方法 · 原始資料 → 分析表 對照</p>
+                            <p className="text-[13px] font-bold text-[var(--ink)]">🎬 老師示範：問卷資料整理全流程</p>
                         </div>
+                        <p className="text-[11.5px] text-[var(--ink-mid)] mb-4">以「手機使用時間 vs. 學業成績」問卷（原始 87 份）為例，把 5 步驟跑一遍。</p>
+
+                        <div className="relative pl-8">
+                            <div className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-[var(--border)]" />
+                            <div className="space-y-4">
+
+                                {/* ① 訂剔除規則 */}
+                                <div className="relative flex gap-3">
+                                    <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#DC2626]">1</div>
+                                    <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                        <p className="font-bold text-[13px] text-[#DC2626] mb-1.5">訂剔除規則</p>
+                                        <div className="grid grid-cols-2 gap-2 text-[11.5px]">
+                                            <div className="bg-[#FEF2F2] border border-[#FCA5A5] rounded p-2.5">
+                                                <p className="text-[10px] font-mono text-[#DC2626] mb-1">✗ 模糊（不可用）</p>
+                                                <p className="text-[var(--ink-mid)]">剔除疑似不認真填答的問卷。</p>
+                                            </div>
+                                            <div className="bg-[#F0FDF4] border border-[#86EFAC] rounded p-2.5">
+                                                <p className="text-[10px] font-mono text-[#16A34A] mb-1">✓ 明確（事前訂定）</p>
+                                                <p className="text-[var(--ink-mid)]">剔除：① Q1 或 Q5 空白者；② 所有題填同一選項者（全 1 或全 5）</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ② 清洗資料 */}
+                                <div className="relative flex gap-3">
+                                    <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#D97706]">2</div>
+                                    <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                        <p className="font-bold text-[13px] text-[#D97706] mb-1.5">清洗資料</p>
+                                        <p className="text-[11px] text-[var(--ink-mid)] mb-2">依規則標記，共剔 4 份 → 有效 N = 83</p>
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full border-collapse text-[10.5px]">
+                                                <thead>
+                                                    <tr className="bg-[var(--paper-warm)]">
+                                                        <th className="border border-[var(--border)] px-2 py-1 text-left">編號</th>
+                                                        <th className="border border-[var(--border)] px-2 py-1 text-left">Q1 手機時間</th>
+                                                        <th className="border border-[var(--border)] px-2 py-1 text-left">Q5 成績</th>
+                                                        <th className="border border-[var(--border)] px-2 py-1 text-left">狀態</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr><td className="border border-[var(--border)] px-2 py-1">001</td><td className="border border-[var(--border)] px-2 py-1">2–4h</td><td className="border border-[var(--border)] px-2 py-1">80–89</td><td className="border border-[var(--border)] px-2 py-1 text-[#16A34A] font-bold">✓ 保留</td></tr>
+                                                    <tr className="bg-[#FEF2F2]"><td className="border border-[var(--border)] px-2 py-1">002</td><td className="border border-[var(--border)] px-2 py-1 text-[#DC2626]">（空白）</td><td className="border border-[var(--border)] px-2 py-1">70–79</td><td className="border border-[var(--border)] px-2 py-1 text-[#DC2626] font-bold">✗ 剔除①</td></tr>
+                                                    <tr><td className="border border-[var(--border)] px-2 py-1">003</td><td className="border border-[var(--border)] px-2 py-1">4h 以上</td><td className="border border-[var(--border)] px-2 py-1">60–69</td><td className="border border-[var(--border)] px-2 py-1 text-[#16A34A] font-bold">✓ 保留</td></tr>
+                                                    <tr className="bg-[#FEF2F2]"><td className="border border-[var(--border)] px-2 py-1">004</td><td className="border border-[var(--border)] px-2 py-1 text-[#DC2626]">全填 1</td><td className="border border-[var(--border)] px-2 py-1 text-[#DC2626]">全填 1</td><td className="border border-[var(--border)] px-2 py-1 text-[#DC2626] font-bold">✗ 剔除②</td></tr>
+                                                    <tr><td className="border border-[var(--border)] px-2 py-1 text-[var(--ink-light)]" colSpan={4}>… 以下 83 筆有效資料 …</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ③ 定分析表欄位 */}
+                                <div className="relative flex gap-3">
+                                    <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#2563EB]">3</div>
+                                    <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                        <p className="font-bold text-[13px] text-[#2563EB] mb-1.5">定分析表欄位</p>
+                                        <p className="text-[11px] text-[var(--ink-mid)] mb-2">欄位來自計畫書第二章操作型定義，每個變項對應一欄：</p>
+                                        <div className="grid grid-cols-2 gap-2 text-[11px]">
+                                            <div className="bg-[#EFF6FF] rounded p-2.5">
+                                                <p className="font-bold text-[#1D4ED8] mb-1">自變項</p>
+                                                <p className="text-[var(--ink-mid)]">手機日使用時間<br/><span className="text-[#6B7280]">→ 欄位：q1_phone_hr</span></p>
+                                            </div>
+                                            <div className="bg-[#EFF6FF] rounded p-2.5">
+                                                <p className="font-bold text-[#1D4ED8] mb-1">依變項</p>
+                                                <p className="text-[var(--ink-mid)]">上學期總平均成績<br/><span className="text-[#6B7280]">→ 欄位：q5_grade</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ④ 填入 + 代碼化 */}
+                                <div className="relative flex gap-3">
+                                    <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#059669]">4</div>
+                                    <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                        <p className="font-bold text-[13px] text-[#059669] mb-1.5">填入 + 代碼化</p>
+                                        <p className="text-[11px] text-[var(--ink-mid)] mb-2">文字選項轉數字，填入分析表：</p>
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full border-collapse text-[10.5px]">
+                                                <thead>
+                                                    <tr className="bg-[#F0FDF4]">
+                                                        <th className="border border-[#BBF7D0] px-2 py-1 text-left text-[#166534]">編號</th>
+                                                        <th className="border border-[#BBF7D0] px-2 py-1 text-left text-[#166534]">q1_phone_hr<br/><span className="font-normal text-[#6B7280]">2h以下=1 / 2-4h=2 / 4h↑=3</span></th>
+                                                        <th className="border border-[#BBF7D0] px-2 py-1 text-left text-[#166534]">q5_grade<br/><span className="font-normal text-[#6B7280]">90↑=5 / 80-89=4 / 70-79=3…</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr><td className="border border-[#BBF7D0] px-2 py-1">001</td><td className="border border-[#BBF7D0] px-2 py-1 font-bold text-[#059669]">2</td><td className="border border-[#BBF7D0] px-2 py-1 font-bold text-[#059669]">4</td></tr>
+                                                    <tr className="bg-[#F0FDF4]"><td className="border border-[#BBF7D0] px-2 py-1">003</td><td className="border border-[#BBF7D0] px-2 py-1 font-bold text-[#059669]">3</td><td className="border border-[#BBF7D0] px-2 py-1 font-bold text-[#059669]">3</td></tr>
+                                                    <tr><td className="border border-[#BBF7D0] px-2 py-1 text-[var(--ink-light)]" colSpan={3}>… 共 83 筆 …</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ⑤ 確認 N 值 */}
+                                <div className="relative flex gap-3">
+                                    <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#7C3AED]">5</div>
+                                    <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                        <p className="font-bold text-[13px] text-[#7C3AED] mb-1.5">確認 N 值</p>
+                                        <div className="flex items-center gap-3 bg-[#F5F3FF] rounded p-3 text-[12px]">
+                                            <span className="text-[22px] font-bold text-[#7C3AED]">N = 83</span>
+                                            <div className="text-[var(--ink-mid)] leading-relaxed">
+                                                原始 87 份，剔除 4 份（① Q1 空白 2 份；② 全填相同 2 份）<br/>
+                                                <span className="text-[10.5px]">兩欄筆數一致 ✓ → 可進 W14 畫圖</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ),
+        },
+        {
+            title: '依方法動手',
+            icon: <Route size={18} />,
+            content: (
+                <div className="flex flex-col gap-6 prose-zh">
+                    <StepBriefing
+                        lines={[
+                            { label: '節奏', text: '小組工作（第一節後半 + 第二節，課堂主時間）' },
+                            { label: '做', text: '對照你的研究方法，把原始資料整理成分析表' },
+                        ]}
+                    />
+
+                    {/* 5 法對照 — 直接展開，讓學生找到自己的方法 */}
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <ContentTypeChip type="學" />
+                            <p className="text-[13px] font-bold text-[var(--ink)]">📊 找你的方法 → 看整理路徑</p>
+                        </div>
+                        <p className="text-[11.5px] text-[var(--ink-mid)] mb-3">5 種方法的整理方式不一樣——先找到你這組用的方法，再往下做。</p>
                         <div className="grid grid-cols-1 gap-3">
                             {METHOD_TABLE.map((m) => (
                                 <div
@@ -603,7 +770,6 @@ const W13PageContent = () => {
                                             <p className="text-[var(--ink-mid)] leading-snug">{m.steps}</p>
                                         </div>
                                     </div>
-                                    {/* 範例 details：投影顯示時隱藏（details 不吃 projector context，用 !projector 收掉）*/}
                                     {m.example && !projector && (
                                         <details className="border-t border-[var(--border)]">
                                             <summary className="cursor-pointer px-4 py-2 hover:bg-[var(--paper-warm)] transition-colors flex items-center gap-2 text-[12px]">
@@ -611,17 +777,14 @@ const W13PageContent = () => {
                                                 <span className="ml-auto text-[10px] font-mono text-[var(--ink-light)]">▼</span>
                                             </summary>
                                             <div className="border-t border-[var(--border)] px-4 py-3 bg-[#FAFAF9] flex flex-col gap-3">
-                                                {/* Layer 1：研究問題 */}
                                                 <div className="rounded bg-[#EFF6FF] border border-[#BFDBFE] p-3">
                                                     <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5 text-[#1E40AF]">🔍 研究問題</p>
                                                     <p className="text-[11.5px] text-[#1E3A8A] leading-relaxed">{m.example.question}</p>
                                                 </div>
-                                                {/* Layer 2：欄位來源（計畫書第二章） */}
                                                 <div className="rounded bg-[#F5F3FF] border border-[#DDD6FE] p-3">
                                                     <p className="text-[10px] font-bold uppercase tracking-wider mb-1.5 text-[#5B21B6]">📐 欄位來源（計畫書第二章操作型定義）</p>
                                                     <pre className="text-[11px] text-[#4C1D95] leading-relaxed whitespace-pre-wrap font-sans">{m.example.variables}</pre>
                                                 </div>
-                                                {/* Layer 3：原始 vs 分析表 */}
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                     <div>
                                                         <p className="text-[10px] font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: '#991B1B' }}>
@@ -645,99 +808,61 @@ const W13PageContent = () => {
                             ))}
                         </div>
                     </div>
-                    </DepthBlock>
 
-                    {/* 雷 #9 改寫練習：練 */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="練" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">雷 #9 改寫練習（個人繳交項）</p>
-                    </div>
-                    <p className="text-[11.5px] text-[var(--ink-light)] italic mb-2">
-                        💡 還沒看過 Step 2 的 3-step 流程？先快速瀏覽一遍，再回來想剔除規則「為什麼要事前定」，改起來會更有感。
-                    </p>
-                    <TrapRewritePractice
-                        trapNumber={9}
-                        stage="W13"
-                        title="剔除規則模糊"
-                        wrong="剔除疑似填答不認真的樣本。"
-                        issue="「疑似」是研究員主觀判斷，不是事前訂定的標準。學術上必須先寫好客觀規則，再依規則篩。"
-                        hint="把「疑似」拿掉。改寫成「依事前標準剔除 ___」這種可被檢驗的句型。"
-                        shouldDo="依事前標準剔除：核心欄位空白者（編號 11、21）、明顯無意義填答（編號 23 填 test）。"
-                        dataKey="w13-trap-rewrite-9"
-                    />
-
-                                </div>
-            ),
-        },
-        {
-            title: '動手整理',
-            icon: <Route size={18} />,
-            content: (
-                <div className="flex flex-col gap-6 prose-zh">
-                    <StepBriefing
-                        lines={[
-                            { label: '節奏', text: '小組工作（第一節後半 + 第二節，課堂主時間）' },
-                            { label: '做', text: '把原始資料整理成分析表——欄位對得上操作型定義，N 值清楚，能回答研究問題' },
-                        ]}
-                    />
-
-                    {/* 動手前警戒語 — 在這裡才是真正「動手前」*/}
+                    {/* 動手前警戒語 */}
                     <ResearcherRedlines mode="warning" stage="W13" />
 
-                    {/* 步驟流程 */}
-                    <div className="space-y-3">
+                    {/* 步驟流程 — Timeline */}
+                    <div className="relative pl-8">
+                        <div className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-[var(--border)]" />
+                        <div className="space-y-4">
 
-                        {/* 步驟一：確認欄位 */}
-                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white overflow-hidden">
-                            <div className="px-4 py-2.5 bg-[#F0FDF4] border-b border-[#BBF7D0] flex items-center gap-2.5">
-                                <span className="font-mono text-[10px] font-bold bg-[#059669] text-white px-2 py-0.5 rounded-[3px]">步驟一</span>
-                                <span className="text-[13px] font-bold text-[#166534]">從計畫書拿欄位</span>
-                            </div>
-                            <div className="p-4 space-y-2.5">
-                                <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.8]">
-                                    W9 第二章「操作型定義」就是你的欄位來源——不用從零想，打開計畫書就有了。
-                                </p>
-                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1.5">
-                                    <div className="flex items-start gap-2"><span className="text-[var(--success)] font-bold mt-0.5">①</span><span><strong className="text-[var(--ink)]">對得上</strong>：直接用，欄位名稱照搬。</span></div>
-                                    <div className="flex items-start gap-2"><span className="text-[var(--success)] font-bold mt-0.5">②</span><span><strong className="text-[var(--ink)]">對不上</strong>：改欄位名，記一句「原本＿，改成＿，因為＿」。</span></div>
+                            {/* 步驟一 */}
+                            <div className="relative flex gap-3">
+                                <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#2563EB]">1</div>
+                                <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                    <p className="font-bold text-[13px] text-[#2563EB] mb-2">從計畫書拿欄位</p>
+                                    <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.8] mb-2">
+                                        W9 第二章「操作型定義」就是你的欄位來源——不用從零想，打開計畫書就有了。
+                                    </p>
+                                    <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1.5 mb-2">
+                                        <div className="flex items-start gap-2"><span className="text-[var(--success)] font-bold mt-0.5">①</span><span><strong className="text-[var(--ink)]">對得上</strong>：直接用，欄位名稱照搬。</span></div>
+                                        <div className="flex items-start gap-2"><span className="text-[var(--success)] font-bold mt-0.5">②</span><span><strong className="text-[var(--ink)]">對不上</strong>：改欄位名，記一句「原本＿，改成＿，因為＿」。</span></div>
+                                    </div>
+                                    <div className="bg-[#FEF9C3] border border-[#FDE047] rounded-[6px] px-3 py-2 text-[11.5px] text-[#713F12] leading-relaxed">
+                                        <strong>🎤 訪談組：</strong>類目要讀完逐字稿才能定稿——這是正常流程，把原始類目和調整後的都記下來就好。
+                                    </div>
                                 </div>
-                                <div className="bg-[#FEF9C3] border border-[#FDE047] rounded-[6px] px-3 py-2 text-[11.5px] text-[#713F12] leading-relaxed">
-                                    <strong>🎤 訪談組：</strong>類目要讀完逐字稿才能定稿——這是正常流程，把原始類目和調整後的都記下來就好。
+                            </div>
+
+                            {/* 步驟二 */}
+                            <div className="relative flex gap-3">
+                                <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#059669]">2</div>
+                                <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                    <p className="font-bold text-[13px] text-[#059669] mb-2">建表填資料</p>
+                                    <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1.5">
+                                        <div className="flex items-start gap-2"><span className="text-[#059669] font-bold mt-0.5">①</span><span>在 Google Sheet <strong className="text-[var(--ink)]">按欄位建欄</strong>，每欄都有用途。</span></div>
+                                        <div className="flex items-start gap-2"><span className="text-[#059669] font-bold mt-0.5">②</span><span><strong className="text-[var(--ink)]">逐筆填入</strong>；看不懂的標「待確認」，不要硬猜。</span></div>
+                                        <div className="flex items-start gap-2"><span className="text-[#059669] font-bold mt-0.5">③</span><span>填完問自己：<strong className="text-[var(--ink)]">這張表能不能幫我下週做圖表？</strong></span></div>
+                                    </div>
                                 </div>
                             </div>
+
+                            {/* 步驟三 */}
+                            <div className="relative flex gap-3">
+                                <div className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 bg-[#7C3AED]">3</div>
+                                <div className="flex-1 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3">
+                                    <p className="font-bold text-[13px] text-[#7C3AED] mb-2">交前自查</p>
+                                    <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1.5">
+                                        <div className="flex items-start gap-2"><span className="text-[#7C3AED] font-bold mt-0.5">✔</span><span>這一欄跟<strong className="text-[var(--ink)]">研究問題</strong>有關嗎？</span></div>
+                                        <div className="flex items-start gap-2"><span className="text-[#7C3AED] font-bold mt-0.5">✔</span><span>這一欄對應哪個<strong className="text-[var(--ink)]">操作型定義</strong>？</span></div>
+                                        <div className="flex items-start gap-2"><span className="text-[#7C3AED] font-bold mt-0.5">✔</span><span>同一筆資料<strong className="text-[var(--ink)]">不會被分到兩個太像的類別</strong>？</span></div>
+                                        <div className="flex items-start gap-2"><span className="text-[#7C3AED] font-bold mt-0.5">✔</span><span>看不懂的都已標<strong className="text-[var(--ink)]">「待確認」</strong>了嗎？</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-
-                        {/* 步驟二：建表填資料 */}
-                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white overflow-hidden">
-                            <div className="px-4 py-2.5 bg-[#EFF6FF] border-b border-[#BFDBFE] flex items-center gap-2.5">
-                                <span className="font-mono text-[10px] font-bold bg-[#2563EB] text-white px-2 py-0.5 rounded-[3px]">步驟二</span>
-                                <span className="text-[13px] font-bold text-[#1E40AF]">建表填資料</span>
-                            </div>
-                            <div className="p-4">
-                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1.5">
-                                    <div className="flex items-start gap-2"><span className="text-[#2563EB] font-bold mt-0.5">①</span><span>在 Google Sheet <strong className="text-[var(--ink)]">按欄位建欄</strong>，每欄都有用途。</span></div>
-                                    <div className="flex items-start gap-2"><span className="text-[#2563EB] font-bold mt-0.5">②</span><span><strong className="text-[var(--ink)]">逐筆填入</strong>；看不懂的標「待確認」，不要硬猜。</span></div>
-                                    <div className="flex items-start gap-2"><span className="text-[#2563EB] font-bold mt-0.5">③</span><span>填完問自己：<strong className="text-[var(--ink)]">這張表能不能幫我下週做圖表？</strong></span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 步驟三：交前自查 */}
-                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-white overflow-hidden">
-                            <div className="px-4 py-2.5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2.5">
-                                <span className="font-mono text-[10px] font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">步驟三</span>
-                                <span className="text-[13px] font-bold text-[var(--ink)]">交前自查</span>
-                            </div>
-                            <div className="p-4">
-                                <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed space-y-1.5">
-                                    <div className="flex items-start gap-2"><span className="text-[var(--ink-light)] font-bold mt-0.5">✔</span><span>這一欄跟<strong className="text-[var(--ink)]">研究問題</strong>有關嗎？</span></div>
-                                    <div className="flex items-start gap-2"><span className="text-[var(--ink-light)] font-bold mt-0.5">✔</span><span>這一欄對應哪個<strong className="text-[var(--ink)]">操作型定義</strong>？</span></div>
-                                    <div className="flex items-start gap-2"><span className="text-[var(--ink-light)] font-bold mt-0.5">✔</span><span>同一筆資料<strong className="text-[var(--ink)]">不會被分到兩個太像的類別</strong>？</span></div>
-                                    <div className="flex items-start gap-2"><span className="text-[var(--ink-light)] font-bold mt-0.5">✔</span><span>看不懂的都已標<strong className="text-[var(--ink)]">「待確認」</strong>了嗎？</span></div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
                     {/* ⑤ 各方法補充 + 問卷組範例 — 收進 DepthBlock */}

@@ -115,13 +115,32 @@ function HuayiSearchTutorial() {
             <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-2">
                 學校付費訂閱華藝，必須從**台北市教育局線上資料庫**登入才能下載全文。在校內或學校帳號登入後跑下面 5 步：
             </p>
-            <ol className="text-[12px] text-[#1E3A8A] leading-[1.85] list-none space-y-1 pl-1">
-                <li><span className="font-mono font-bold text-[#1E40AF] mr-2">①</span>松山高中首頁</li>
-                <li><span className="font-mono font-bold text-[#1E40AF] mr-2">②</span>學生專區 → 圖書借閱</li>
-                <li><span className="font-mono font-bold text-[#1E40AF] mr-2">③</span>選擇「電子書庫」頁籤</li>
-                <li><span className="font-mono font-bold text-[#1E40AF] mr-2">④</span>點選進入「臺北市教育局線上資料庫管理平台」（請先登入）</li>
-                <li><span className="font-mono font-bold text-[#1E40AF] mr-2">⑤</span>登入成功顯示「[北市教育局]」+ 你的名字 → 進入華藝線上圖書館</li>
-            </ol>
+            <div className="relative pl-8 mt-3">
+                {/* 垂直連線 */}
+                <div className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-[#BFDBFE]" />
+                <div className="space-y-3">
+                    {[
+                        { label: '松山高中首頁', desc: '打開瀏覽器前往松山高中首頁，或直接 Google「松山高中」', accent: '#2563EB' },
+                        { label: '學生專區 → 圖書借閱', desc: '點上方選單「學生專區」→ 選「圖書借閱」', accent: '#059669' },
+                        { label: '選擇「電子書庫」頁籤', desc: '進入圖書借閱頁面後，點頁面裡的「電子書庫」頁籤', accent: '#D97706' },
+                        { label: '點選進入臺北市教育局線上資料庫管理平台', desc: '在清單裡找到臺北市教育局線上資料庫管理平台並點入——此步需先用學校帳號登入', accent: '#DC2626' },
+                        { label: '登入成功 → 進入華藝', desc: '畫面上方顯示「[北市教育局]」+ 你的名字即代表成功，接著在平台內搜尋「華藝」或「Airiti」', accent: '#7C3AED' },
+                    ].map(({ label, desc, accent }, i) => (
+                        <div key={i} className="relative flex gap-3">
+                            <div
+                                className="absolute -left-8 w-6 h-6 rounded-full text-white text-[11px] font-bold font-mono flex items-center justify-center z-10 shrink-0"
+                                style={{ backgroundColor: accent }}
+                            >
+                                {i + 1}
+                            </div>
+                            <div className="flex-1 bg-white border border-[#BFDBFE] rounded-[var(--radius-unified)] px-4 py-2.5">
+                                <p className="font-bold text-[12.5px] mb-0.5" style={{ color: accent }}>{label}</p>
+                                <p className="text-[11.5px] text-[#1E3A8A]/70 leading-relaxed">{desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
             <p className="text-[11px] text-[#1E3A8A]/80 italic mt-2 leading-relaxed">
                 💡 沒從這條路徑進去 = 只能看摘要、不能下載全文（會跳付費頁）。Google Scholar 可以當輔助，但華藝是這週主場。
             </p>

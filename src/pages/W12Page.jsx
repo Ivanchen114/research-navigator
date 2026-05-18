@@ -172,12 +172,10 @@ const W12Page = () => {
                 {/* 兩張大字卡 — 課堂節奏 + 評分核心 */}
                 <div className="grid grid-cols-2 gap-3">
                     <div className="bg-[var(--accent)] rounded-lg p-4 text-center">
-                        <p className="text-white text-[16px] font-bold leading-[1.65]">每組 3 分鐘短報<br/>報完 → 立刻填回饋<br/>1 分鐘內</p>
-                        <p className="text-white/60 text-[11px] mt-1.5">不評自己組</p>
+                        <p className="text-white text-[16px] font-bold leading-[1.65]">每組 3 分鐘短報<br/>報完 → 1 分鐘內填回饋</p>
                     </div>
                     <div className="bg-[var(--ink)] rounded-lg p-4 text-center">
-                        <p className="text-white text-[16px] font-bold leading-[1.65]">一句有遷移的話<br/>比十句「加油」值錢</p>
-                        <p className="text-white/50 text-[11px] mt-1.5">學到什麼：從對方拿到什麼、用在哪</p>
+                        <p className="text-white text-[16px] font-bold leading-[1.65]">一個學習到的地方<br/>比十句「加油」值錢</p>
                     </div>
                 </div>
 
