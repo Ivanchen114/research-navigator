@@ -47,7 +47,7 @@ export const TaskCard = ({
             {/* 今天只做三件事 */}
             <div className="mb-4">
                 <div className="flex items-center gap-2 text-[12px] font-bold text-[#2d5be3] mb-3 uppercase tracking-wider font-['DM_Mono',monospace]">
-                    <ListChecks size={14} /> 今天只做三件事
+                    <ListChecks size={14} /> 今天只做{['零','一','二','三','四','五'][safeTasks.length] ?? safeTasks.length}件事
                 </div>
                 <ol className="space-y-2 text-[14px] text-[#1a1a2e] leading-[1.7]">
                     {safeTasks.map((t, i) => (

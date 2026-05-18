@@ -15,6 +15,7 @@ import {
     AlertCircle,
     Clock,
     Map,
+    ChevronDown,
 } from 'lucide-react';
 
 /* ══════════════════════════════════════
@@ -40,15 +41,6 @@ const REPORT_SECTIONS = [
     { idx: 5, time: '25 秒', title: '目前進度', desc: '計畫書到哪 / 本組工具設計書做到哪 / W11 Pilot 後修了什麼', limit: '80 字內 ≈ 25 秒' },
 ];
 
-/* — 100 min 課堂流程（對齊學校 50/10/50 作息）— */
-const LESSON_FLOW = [
-    { time: '0:00-0:05', label: '開場 + 規則', desc: '老師說明全堂規則：聽報告時就同步填回饋表，每組結束留 1 min 把沒填完的補完。', dur: 5 },
-    { time: '0:05-0:40', label: 'Round 1：7 組短報', desc: '每組 5 min（3 短報 + 1 老師提問 + 1 補填）。確認同儕回饋 Form 連結就位——每組填一份，不評自己組。', dur: 35 },
-    { time: '0:40-0:50', label: '緩衝', desc: '補填漏掉的回饋', dur: 10 },
-    { time: '0:50-1:00', label: '⚠️ 下課', desc: '學校作息', dur: 10 },
-    { time: '1:00-1:30', label: 'Round 2：6 組短報', desc: '同 Round 1 流程', dur: 30 },
-    { time: '1:30-1:50', label: '老師總結 + 收尾', desc: '集體痛點 + W13 督促名單（評分私下給，不公告）', dur: 20 },
-];
 
 
 /* ══════════════════════════════════════
@@ -74,6 +66,9 @@ const ToolInfoCard = ({ title, desc, icon }) => {
 
 const W12Page = () => {
     const [showLessonMap, setShowLessonMap] = useState(false);
+    const [showHoles, setShowHoles] = useState(false);
+    const [showQ2Ex, setShowQ2Ex] = useState(false);
+    const [showQ3Ex, setShowQ3Ex] = useState(false);
     const saved = readRecords();
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
     const mySecondary = saved['w8-tool-method-secondary'] || '';
@@ -142,9 +137,8 @@ const W12Page = () => {
                 duration={`${W12Data.duration} 分鐘 · ${W12Data.durationDesc}`}
                 tasks={[
                     '各組期中短報 — 3 分鐘報告 + 1 分鐘提問',
-                    '全班同儕回饋 Form — 6 漏洞勾選 + 30 字建議 + 30 字學到什麼',
+                    '全班同儕回饋 Form — 至少 10 組，必填「學到什麼」',
                 ]}
-                exportReminder="收齊同儕回饋 → 下週調整研究設計依據"
             />
 
             {/* ═══ SCROLLING CONTENT ═══ */}
@@ -155,36 +149,37 @@ const W12Page = () => {
                     <div className="flex items-center gap-2 mb-3">
                         <AlertCircle size={20} className="text-[#DC2626] flex-shrink-0" />
                         <ContentTypeChip type="注意" />
-                        <p className="text-[15px] font-bold text-[#991B1B]">⏰ 上課前先確認三件事</p>
+                        <p className="text-[15px] font-bold text-[#991B1B]">⏰ 上課前先確認兩件事</p>
                     </div>
                     <div className="space-y-2">
-                        {/* 項目 1 */}
                         <div className="flex gap-3 bg-[#FEE2E2] rounded-lg p-3">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DC2626] text-white text-[12px] font-bold flex items-center justify-center">1</span>
                             <div>
                                 <p className="text-[13.5px] font-bold text-[#7F1D1D]">⚠️ 計劃書＋工具書已繳交至小組作業區</p>
-                                <p className="text-[11.5px] text-[#991B1B] mt-0.5">明天截止——今天沒繳、明天補繳算遲交，老師批改期中成績用</p>
+                                <p className="text-[11.5px] text-[#991B1B] mt-0.5">繳交期限至 5/20（三）23:59——老師批改期中報告成績用，逾期算遲交</p>
                             </div>
                         </div>
-                        {/* 項目 2 */}
                         <div className="flex gap-3 bg-[#FEE2E2] rounded-lg p-3">
                             <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DC2626] text-white text-[12px] font-bold flex items-center justify-center">2</span>
                             <div>
-                                <p className="text-[13.5px] font-bold text-[#7F1D1D]">報告前填好短報 Google Form</p>
+                                <p className="text-[13.5px] font-bold text-[#7F1D1D]">報告前填好短報 Google Form（組長代填）</p>
                                 <p className="text-[11.5px] text-[#991B1B] mt-0.5">沒填 = 無法報告 = 沒有期中成績</p>
-                            </div>
-                        </div>
-                        {/* 項目 3 */}
-                        <div className="flex gap-3 bg-[#FEE2E2] rounded-lg p-3">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DC2626] text-white text-[12px] font-bold flex items-center justify-center">3</span>
-                            <div>
-                                <p className="text-[13.5px] font-bold text-[#7F1D1D]">手機上課準備好</p>
-                                <p className="text-[11.5px] text-[#991B1B] mt-0.5">課堂內要填同儕回饋 Form——每組一份，不評自己組</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {/* 兩張大字卡 — 課堂節奏 + 評分核心 */}
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-[var(--accent)] rounded-lg p-4 text-center">
+                        <p className="text-white text-[16px] font-bold leading-[1.65]">每組 3 分鐘短報<br/>報完 → 立刻填回饋<br/>1 分鐘內</p>
+                        <p className="text-white/60 text-[11px] mt-1.5">不評自己組</p>
+                    </div>
+                    <div className="bg-[var(--ink)] rounded-lg p-4 text-center">
+                        <p className="text-white text-[16px] font-bold leading-[1.65]">一句有遷移的話<br/>比十句「加油」值錢</p>
+                        <p className="text-white/50 text-[11px] mt-1.5">學到什麼：從對方拿到什麼、用在哪</p>
+                    </div>
+                </div>
 
                 {/* 前週資料帶入 */}
                 {myTopic && (
@@ -195,102 +190,127 @@ const W12Page = () => {
                     </div>
                 )}
 
-                {/* 三大課堂工具（每班老師獨立部署，連結走 GC）*/}
-                <div>
-                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-3">🔗 今天會用到的三個工具</h3>
-
-                    <div className="bg-[#FEF3C7] border-2 border-[#D97706] rounded-[var(--radius-unified)] p-4 mb-4">
-                        <p className="text-[13px] font-bold text-[#92400E] mb-1.5">⚠️ 連結要找你「自己班老師」發的</p>
-                        <p className="text-[12.5px] text-[#78350F] leading-relaxed">
-                            這個網頁全校共用，<strong>每班老師會建立自己班的 Form 和投影系統</strong>（避免兩班資料混在一起）。具體連結請到<strong className="text-[#92400E]">你自己班的 Google Classroom</strong> 找老師公告——<u>不要點別班同學分享的連結</u>，會填到別班老師的 Sheet。
-                        </p>
-                    </div>
-
-                    <div className="space-y-3">
-                        <ToolInfoCard
-                            icon="📝"
-                            title="① 短報 Google Form（W11 結束 → W12 上課前 8:00 截止）"
-                            desc="組長代填。5 段內容：題目 / 動機 / 方法+工具 / 文獻探討（3 篇 APA + 對話）/ 目前進度。連結到自己班 GC 找。"
-                        />
-                        <ToolInfoCard
-                            icon="🖥️"
-                            title="② 投影 Web App（老師上課時投影）"
-                            desc="各組短報內容輪播 + 計時器 + 即時同儕回饋彙整。報告者上台對著自己那頁講。連結老師上課會投影、不用學生點。"
-                        />
-                        <ToolInfoCard
-                            icon="✏️"
-                            title="③ 同儕回饋 Form（W12 課堂中填，每組 1 分鐘）"
-                            desc={'3 題：漏洞勾選（6 選 1）+ 給該組一句具體建議（30 字）+ 我學到什麼（30 字）。每組填一份（不評自己組）。連結到自己班 GC 找。'}
-                        />
-                    </div>
-                </div>
-
-                {/* 同儕回饋紅線 */}
+                {/* 同儕回饋 Form 說明 + 評分 */}
                 <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0FDF4] border-2 border-[#10B981]">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-1">
                         <ContentTypeChip type="做" />
-                        <p className="text-[14px] font-bold text-[#065F46]">📝 每聽完一組短報，填 3 題（1 分鐘內，不評自己組）</p>
+                        <p className="text-[14px] font-bold text-[#065F46]">✏️ 同儕回饋 Form — <span className="underline decoration-2">每個人</span>對每一組各填一份，至少 10 組</p>
                     </div>
+                    <p className="text-[11.5px] text-[#047857] mb-1">老師會提供 QR code。</p>
+                    <p className="text-[12px] font-bold text-[#065F46] bg-[#D1FAE5] rounded px-2 py-1 mb-3 inline-block">🧑‍💻 這是個人上課成績，不是組別——全組都要填自己的</p>
                     <ul className="text-[12.5px] text-[#047857] leading-[1.85] list-decimal pl-5 space-y-1">
                         <li><strong>這組最大的計畫漏洞是？</strong>（單選 6 個漏洞——下方定義）</li>
-                        <li><strong>給這組一句具體建議</strong>（30 字內、必填）</li>
-                        <li><strong>我從這組學到什麼？</strong>（30 字內、必填）</li>
+                        <li><strong>我從這組學到什麼？</strong>（30 字內，<strong>必填</strong>——把對方優點拿來修自己用）</li>
+                        <li><strong>給這組一句具體建議</strong>（30 字內，選填）</li>
                     </ul>
+                </div>
 
-                    {/* 30 字三句式範本（放在「給建議」說明旁）*/}
-                    <div className="mt-3 bg-white border border-[#10B981]/40 rounded-[var(--radius-unified)] p-3">
-                        <p className="font-bold text-[12.5px] text-[#065F46] mb-1">📋 第 2 題「30 字具體建議」三句式</p>
-                        <p className="text-[11.5px] text-[#047857] leading-[1.85]">
-                            「<strong>我發現___ → 建議改成___ → 理由___</strong>」。範例：「題 5 跟題 8 在問同個概念 → 建議刪題 8 → 受測者會疑惑」。
+                {/* 範本：必填「學到什麼」— 黑底金字 */}
+                <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                    <div className="px-4 py-2.5 bg-[var(--ink)] flex items-center justify-between">
+                        <p className="font-bold text-[13px] text-[#F59E0B]">📋 第 2 題「學到什麼」怎麼寫</p>
+                        <span className="text-[11px] text-[#F59E0B]/70 font-mono">必填</span>
+                    </div>
+                    <div className="px-4 py-3">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
+                            句型：「<strong className="text-[var(--ink)]">他們___做得好（或有___問題）→ 我們組也___，要改成___</strong>」
                         </p>
                     </div>
-
-                    {/* 6 漏洞定義 — 對齊新短報 5 段內容 */}
-                    <div className="mt-3 bg-white border border-[#10B981]/40 rounded-[var(--radius-unified)] p-3">
-                        <p className="font-bold text-[12.5px] text-[#065F46] mb-2">🎯 6 個漏洞選項是什麼意思？（對齊短報 5 段：題目 / 動機 / 方法 / 文獻 / 進度）</p>
-                        <div className="grid md:grid-cols-2 gap-2 text-[11.5px] leading-[1.75]">
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">① 題目模糊</p>
-                                <p className="text-[var(--ink-mid)]">一句話講不清楚 / 範圍太大太小 / 抽象到無法操作</p>
+                    <button onClick={() => setShowQ2Ex(v => !v)} className="w-full flex items-center justify-between px-4 py-2 bg-[var(--paper-warm)] border-t border-[var(--border)] text-left">
+                        <span className="text-[11.5px] font-bold text-[var(--ink)]">看正例 / 反例</span>
+                        <ChevronDown size={14} className={`text-[var(--ink-light)] transition-transform ${showQ2Ex ? 'rotate-180' : ''}`} />
+                    </button>
+                    {showQ2Ex && (
+                        <div className="px-4 pb-3 pt-2 space-y-2 text-[11.5px]">
+                            <div className="flex gap-2 bg-white border border-[#10B981]/50 rounded p-2.5">
+                                <span className="text-[#10B981] font-bold flex-shrink-0">✅</span>
+                                <span className="text-[#065F46]">「他們文獻三篇有互相比較觀點——我們組三篇只是各自介紹，要回去補一段比較。」</span>
                             </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">② 動機不充分</p>
-                                <p className="text-[var(--ink-mid)]">為什麼想做沒講清楚 / 動機跟題目連不起來</p>
+                            <div className="flex gap-2 bg-white border border-[#10B981]/50 rounded p-2.5">
+                                <span className="text-[#10B981] font-bold flex-shrink-0">✅</span>
+                                <span className="text-[#065F46]">「他們 Pilot 後刪掉重複題目很清楚——我們組還沒做這步，下週要補。」</span>
                             </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">③ 方法跟研究問題對不上</p>
-                                <p className="text-[var(--ink-mid)]">想知道因果卻用問卷（只能看相關）；想知道感受卻用是非題（要訪談才深）</p>
-                            </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">④ 文獻沒對話</p>
-                                <p className="text-[var(--ink-mid)]">3 篇都重複同一觀點 / 沒比較專家差異 / 沒講跟本研究的關係</p>
-                            </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">⑤ APA 格式錯誤</p>
-                                <p className="text-[var(--ink-mid)]">引用格式不對 / 缺資訊（年、卷、頁碼）/ 3 篇格式不一致</p>
-                            </div>
-                            <div className="bg-[var(--paper-warm)] rounded-[6px] p-2">
-                                <p className="font-bold text-[var(--ink)]">⑥ 進度落後或太籠統</p>
-                                <p className="text-[var(--ink-mid)]">計畫書章節停在某段沒進展 / 本組工具設計書還沒做出來 / 進度寫得太抽象</p>
+                            <div className="flex gap-2 bg-white border border-[#DC2626]/40 rounded p-2.5">
+                                <span className="text-[#DC2626] font-bold flex-shrink-0">❌</span>
+                                <span className="text-[#7F1D1D]">「他們表現很好，值得學習。」<span className="text-[#991B1B]/60 ml-1">沒指出具體哪裡、沒連回自己組</span></span>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="mt-3 grid md:grid-cols-2 gap-2 text-[11.5px]">
-                        <div className="bg-white border border-[#10B981]/40 rounded-[6px] p-2.5">
-                            <p className="font-bold text-[#065F46] mb-1">✅ 接受的建議寫法</p>
-                            <ul className="text-[#047857] leading-[1.8] list-disc pl-4 space-y-0.5">
-                                <li>「題目「XX 行為」太抽象，建議改成可觀察的指標（漏洞①）」</li>
-                                <li>「文獻 1 跟 3 都講同一件事，建議換一篇對立觀點（漏洞④）」</li>
-                                <li>「APA 缺卷期頁碼——格式：作者(年)。篇名。期刊, 卷(期), 頁碼（漏洞⑤）」</li>
-                            </ul>
-                        </div>
-                        <div className="bg-white border border-[#DC2626]/40 rounded-[6px] p-2.5">
-                            <p className="font-bold text-[#991B1B] mb-1">❌ 不接受（不算分）</p>
-                            <p className="text-[#7F1D1D] leading-[1.8]">「加油」「祝順利」「很棒」「不錯」「很好」這類沒內容的回饋——學到什麼也禁寫「都很棒」。</p>
-                        </div>
-                    </div>
+                    )}
                 </div>
+
+                {/* 範本：選填「具體建議」— 黑底金字 */}
+                <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                    <div className="px-4 py-2.5 bg-[var(--ink)] flex items-center justify-between">
+                        <p className="font-bold text-[13px] text-[#F59E0B]">📋 第 3 題「具體建議」怎麼寫</p>
+                        <span className="text-[11px] text-[#F59E0B]/70 font-mono">選填，寫了加分</span>
+                    </div>
+                    <div className="px-4 py-3">
+                        <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
+                            句型：「<strong className="text-[var(--ink)]">我發現___ → 建議改成___ → 理由___</strong>」
+                        </p>
+                    </div>
+                    <button onClick={() => setShowQ3Ex(v => !v)} className="w-full flex items-center justify-between px-4 py-2 bg-[var(--paper-warm)] border-t border-[var(--border)] text-left">
+                        <span className="text-[11.5px] font-bold text-[var(--ink)]">看正例 / 反例</span>
+                        <ChevronDown size={14} className={`text-[var(--ink-light)] transition-transform ${showQ3Ex ? 'rotate-180' : ''}`} />
+                    </button>
+                    {showQ3Ex && (
+                        <div className="px-4 pb-3 pt-2 space-y-2 text-[11.5px]">
+                            <div className="flex gap-2 bg-white border border-[#10B981]/50 rounded p-2.5">
+                                <span className="text-[#10B981] font-bold flex-shrink-0">✅</span>
+                                <span className="text-[#065F46]">「題 5 跟題 8 在問同個概念 → 建議刪題 8 → 受測者會疑惑、作答不一致。」</span>
+                            </div>
+                            <div className="flex gap-2 bg-white border border-[#10B981]/50 rounded p-2.5">
+                                <span className="text-[#10B981] font-bold flex-shrink-0">✅</span>
+                                <span className="text-[#065F46]">「文獻 2 沒說明出版年 → 建議補齊 APA 格式 → 計畫書引用會被扣分。」</span>
+                            </div>
+                            <div className="flex gap-2 bg-white border border-[#DC2626]/40 rounded p-2.5">
+                                <span className="text-[#DC2626] font-bold flex-shrink-0">❌</span>
+                                <span className="text-[#7F1D1D]">「建議你們加油繼續努力！」<span className="text-[#991B1B]/60 ml-1">沒有具體問題、沒有方向</span></span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* 6 漏洞定義（收合） */}
+                <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                        <button
+                            onClick={() => setShowHoles(h => !h)}
+                            className="w-full flex items-center justify-between px-3 py-2.5 text-left"
+                        >
+                            <p className="font-bold text-[12.5px] text-[#065F46]">🎯 6 個漏洞選項是什麼意思？</p>
+                            <ChevronDown size={15} className={`text-[#10B981] flex-shrink-0 transition-transform ${showHoles ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showHoles && (
+                            <div className="px-3 pb-3 grid md:grid-cols-2 gap-2 text-[11.5px] leading-[1.75]">
+                                {[
+                                    { t: '① 題目模糊', d: '一句話講不清楚 / 範圍太大太小 / 抽象到無法操作' },
+                                    { t: '② 動機不充分', d: '為什麼想做沒講清楚 / 動機跟題目連不起來' },
+                                    { t: '③ 方法跟研究問題對不上', d: '想知道因果卻用問卷；想知道感受卻用是非題' },
+                                    { t: '④ 文獻沒對話', d: '3 篇都重複同一觀點 / 沒比較專家差異 / 沒連回本研究' },
+                                    { t: '⑤ APA 格式錯誤', d: '引用格式不對 / 缺資訊（年、卷、頁碼）/ 3 篇不一致' },
+                                    { t: '⑥ 進度落後或太籠統', d: '章節停在某段 / 本組工具書還沒做出來 / 進度太抽象' },
+                                ].map(({ t, d }) => (
+                                    <div key={t} className="bg-[var(--paper-warm)] rounded-[6px] p-2">
+                                        <p className="font-bold text-[var(--ink)]">{t}</p>
+                                        <p className="text-[var(--ink-mid)]">{d}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+
+
+                    {/* 評分規準 */}
+                    <p className="mt-4 text-[11px] font-bold text-[var(--ink-mid)] uppercase tracking-wider font-mono mb-2">📊 本週評分規準</p>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-[#F0FDF4] border-2 border-[#10B981]/60 rounded-lg p-4 text-center">
+                            <p className="text-[#065F46] text-[15px] font-bold leading-[1.7]">依回饋份數評分<br/>10 份滿分</p>
+                        </div>
+                        <div className="bg-[#FFF7ED] border-2 border-[#F59E0B]/60 rounded-lg p-4 text-center">
+                            <p className="text-[#92400E] text-[15px] font-bold leading-[1.7]">有寫具體建議<br/>品質加分</p>
+                        </div>
+                    </div>{/* end 評分規準 */}
 
                 {/* 短報卡 5 段內容 */}
                 <div>
@@ -335,23 +355,7 @@ const W12Page = () => {
                     </div>
                 </div>
 
-                {/* 流程地圖 */}
-                <div>
-                    <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)] mb-2 flex items-center gap-2">
-                        <Clock size={18} /> 100 min 流程
-                    </h3>
-                    <div className="space-y-1.5">
-                        {LESSON_FLOW.map((s, i) => (
-                            <div key={i} className="flex gap-3 p-2.5 bg-white border border-[var(--border)] rounded-[6px] text-[12.5px]">
-                                <span className="font-mono text-[11px] text-[var(--ink-light)] w-[80px] flex-shrink-0">{s.time}</span>
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-bold text-[var(--ink)]">{s.label} <span className="text-[10px] font-mono text-[var(--ink-light)] ml-1">{s.dur} min</span></p>
-                                    <p className="text-[11.5px] text-[var(--ink-mid)] leading-[1.8] mt-0.5">{s.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+
 
                 {/* 課後反思（靜態思考題，不用繳交） */}
                 <div className="space-y-3">
@@ -370,64 +374,6 @@ const W12Page = () => {
                                 <p className="text-[13px] text-[var(--ink-mid)] leading-[1.75]">{q}</p>
                             </div>
                         ))}
-                    </div>
-                </div>
-
-                {/* 評分規準 */}
-                <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                    <div className="px-5 py-3 bg-[var(--ink)] flex items-center gap-2">
-                        <span className="text-white font-bold text-[13px]">📊 W12 上課分數評分規準</span>
-                        <span className="ml-auto text-white/60 text-[11px] font-mono">同儕回饋 Form 內容 + 參與度</span>
-                    </div>
-                    <div className="p-5 space-y-5">
-                        {/* 份數 */}
-                        <div>
-                            <p className="font-bold text-[13px] text-[var(--ink)] mb-2">① 回饋份數（量）</p>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                {[
-                                    { level: '✅ 滿分', desc: '12 組全填（每組都給回饋）', color: 'border-[var(--success)] bg-[#F0FDF4] text-[var(--success)]' },
-                                    { level: '🟡 及格', desc: '至少填 10 組', color: 'border-[#D97706] bg-[#FFFBEB] text-[#92400E]' },
-                                    { level: '❌ 低分', desc: '少於 10 組', color: 'border-[#DC2626] bg-[#FEF2F2] text-[#991B1B]' },
-                                ].map(({ level, desc, color }) => (
-                                    <div key={level} className={`border rounded p-3 ${color}`}>
-                                        <p className="font-bold text-[12px] mb-0.5">{level}</p>
-                                        <p className="text-[11.5px] leading-relaxed">{desc}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 品質 */}
-                        <div>
-                            <p className="font-bold text-[13px] text-[var(--ink)] mb-2">② 回饋品質（老師會抽查 3–5 份）</p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div className="border-2 border-[#DC2626] bg-[#FEF2F2] rounded p-3">
-                                    <p className="font-bold text-[12px] text-[#991B1B] mb-2">❌ 不計分——空洞型回饋</p>
-                                    <ul className="text-[12px] text-[#7F1D1D] leading-[1.85] space-y-1">
-                                        <li>・只寫「加油」「很棒」「不錯」→ 不計</li>
-                                        <li>・「計畫漏洞」全部不勾 → 扣分</li>
-                                        <li>・「我從這組學到什麼」少於 15 字 → 不計</li>
-                                        <li>・複製貼上同一句話給每組 → 不計</li>
-                                    </ul>
-                                </div>
-                                <div className="border-2 border-[var(--success)] bg-[#F0FDF4] rounded p-3">
-                                    <p className="font-bold text-[12px] text-[var(--success)] mb-2">✅ 計分——具體型回饋</p>
-                                    <ul className="text-[12px] text-[#065F46] leading-[1.85] space-y-1">
-                                        <li>・「計畫漏洞」勾選具體類別並說明原因</li>
-                                        <li>・「我學到什麼」提到對方問題 + 遷移到自己組</li>
-                                        <li>・「具體建議」援引課堂概念（W3/W9 等）加分</li>
-                                        <li>・文字有自己的觀察，不只勾選選項</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 總結 */}
-                        <div className="bg-[var(--paper-warm)] rounded p-3 border border-[var(--border)]">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
-                                💡 <strong>評分邏輯</strong>：老師看的不是你填了幾格，是你的回饋對那組有沒有幫助。一份有洞察的具體回饋，比十份「加油」值錢。
-                            </p>
-                        </div>
                     </div>
                 </div>
 
