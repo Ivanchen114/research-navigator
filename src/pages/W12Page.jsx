@@ -5,8 +5,6 @@ import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import LessonMap from '../components/ui/LessonMap';
 import './W12.css';
-import ThinkRecord from '../components/ui/ThinkRecord';
-import ExportButton from '../components/ui/ExportButton';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import { readRecords } from '../components/ui/ThinkRecord';
 import { W12Data } from '../data/lessonMaps';
@@ -52,11 +50,6 @@ const LESSON_FLOW = [
     { time: '1:30-1:50', label: '老師總結 + 收尾', desc: '集體痛點 + W13 督促名單（評分私下給，不公告）', dur: 20 },
 ];
 
-/* — ExportButton 欄位 — */
-const EXPORT_FIELDS = [
-    { key: 'w12-listening-takeaway', label: '聽完 12 組學到什麼', question: '哪一組的設計／Pilot 發現最讓你想回頭改自己的？' },
-    { key: 'w12-self-revision', label: '我們組要改什麼', question: '同儕回饋 + 老師評分後，W13 前要修的具體項目' },
-];
 
 /* ══════════════════════════════════════
  *  工具卡（不含連結 — 每班老師獨立部署，連結走 GC）
@@ -116,9 +109,9 @@ const W12Page = () => {
             <HeroBlock
                 kicker="R.I.B. 調查檔案 · 研究方法與專題 · W12"
                 todo={[
-                  { label: '今天做什麼', value: '上台 3 分鐘短報，用 Form 給每一組回饋，完成課後反思。' },
+                  { label: '今天做什麼', value: '上台 3 分鐘短報，用 Form 給每一組回饋。' },
                   { label: '為什麼做', value: 'W11 工具要上線了，先讓全班 30 雙眼睛找出你自己看不到的漏洞，報完才真的知道哪裡要修。' },
-                  { label: '今天交什麼', value: '同儕回饋 Form（12 份）+ 課後反思兩格。' },
+                  { label: '今天交什麼', value: '同儕回饋 Form（至少 10 組，建議全 12 組，回饋要具體有意義才算）。' },
                 ]}
                 question="還沒開始做之前，我的研究設計站得住嗎？"
                 title="期中進度短報 · "
@@ -159,26 +152,39 @@ const W12Page = () => {
 
                 {/* 入場警告 */}
                 <div className="mt-2 p-5 rounded-[var(--radius-unified)] border-2 border-[#DC2626] bg-[#FEF2F2]">
-                    <div className="flex items-start gap-3">
-                        <AlertCircle size={24} className="text-[#DC2626] flex-shrink-0 mt-0.5" />
-                        <div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <ContentTypeChip type="注意" />
-                                <p className="text-[15px] font-bold text-[#991B1B]">⏰ 上課前先確認三件事</p>
+                    <div className="flex items-center gap-2 mb-3">
+                        <AlertCircle size={20} className="text-[#DC2626] flex-shrink-0" />
+                        <ContentTypeChip type="注意" />
+                        <p className="text-[15px] font-bold text-[#991B1B]">⏰ 上課前先確認三件事</p>
+                    </div>
+                    <div className="space-y-2">
+                        {/* 項目 1 */}
+                        <div className="flex gap-3 bg-[#FEE2E2] rounded-lg p-3">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DC2626] text-white text-[12px] font-bold flex items-center justify-center">1</span>
+                            <div>
+                                <p className="text-[13.5px] font-bold text-[#7F1D1D]">⚠️ 計劃書＋工具書已繳交至小組作業區</p>
+                                <p className="text-[11.5px] text-[#991B1B] mt-0.5">明天截止——今天沒繳、明天補繳算遲交，老師批改期中成績用</p>
                             </div>
-                            <ol className="text-[12.5px] text-[#7F1D1D] leading-[1.85] list-decimal pl-5 space-y-1">
-                                <li>全組已在 W11-W12 之間自約 30 min 合議完研究設計（題目 / 動機 / 方法 / 文獻 3 篇 / 進度 / 預期蒐集）</li>
-                                <li>組長已在 <strong>今天 8:00 前</strong>填好短報 Google Form（沒填 = D 維度直接扣 4 分）</li>
-                                <li>每位同學手機 / 筆電上課準備好——課堂內要填同儕回饋 Form——每組一份，不評自己組</li>
-                            </ol>
+                        </div>
+                        {/* 項目 2 */}
+                        <div className="flex gap-3 bg-[#FEE2E2] rounded-lg p-3">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DC2626] text-white text-[12px] font-bold flex items-center justify-center">2</span>
+                            <div>
+                                <p className="text-[13.5px] font-bold text-[#7F1D1D]">報告前填好短報 Google Form</p>
+                                <p className="text-[11.5px] text-[#991B1B] mt-0.5">沒填 = 無法報告 = 沒有期中成績</p>
+                            </div>
+                        </div>
+                        {/* 項目 3 */}
+                        <div className="flex gap-3 bg-[#FEE2E2] rounded-lg p-3">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#DC2626] text-white text-[12px] font-bold flex items-center justify-center">3</span>
+                            <div>
+                                <p className="text-[13.5px] font-bold text-[#7F1D1D]">手機上課準備好</p>
+                                <p className="text-[11.5px] text-[#991B1B] mt-0.5">課堂內要填同儕回饋 Form——每組一份，不評自己組</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* 課後快速錨點 */}
-                <div className="flex justify-end -mt-2 mb-1">
-                    <a href="#reflection" className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] underline">↓ 課後反思在最下方</a>
-                </div>
 
                 {/* 前週資料帶入 */}
                 {myTopic && (
@@ -347,25 +353,82 @@ const W12Page = () => {
                     </div>
                 </div>
 
-                {/* 課後反思 */}
-                <div id="reflection" className="space-y-3">
+                {/* 課後反思（靜態思考題，不用繳交） */}
+                <div className="space-y-3">
                     <div className="flex items-center gap-2 mb-2">
-                        <ContentTypeChip type="做" />
-                        <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)]">📝 課後反思（聽完 12 組之後）</h3>
+                        <ContentTypeChip type="學" />
+                        <h3 className="font-serif text-[18px] md:text-[20px] font-bold text-[var(--ink)]">📝 聽完之後，自己想一想</h3>
                     </div>
-                    <ThinkRecord
-                        dataKey="w12-listening-takeaway"
-                        prompt="哪一組的設計／Pilot 發現最讓你想回頭改自己的？"
-                        placeholder="例：第 7 組的 Pilot 發現受訪者把『家庭壓力』理解成『經濟壓力』——讓我想到我們組的『學習壓力』可能也有類似歧義。"
-                        rows={4}
-                    />
-                    <ThinkRecord
-                        dataKey="w12-self-revision"
-                        prompt="同儕回饋 + 老師評分後，我們組 W13 前要修的具體項目是？"
-                        defaultTemplate={'要修 1：\n  → 怎麼改：\n  → 期限：\n\n要修 2：\n  → 怎麼改：\n  → 期限：'}
-                        placeholder="例：要修 1：第 5 題雙重問題（同儕第 8 票漏洞）→ 拆成兩題 → W13 前完成 Form 改版"
-                        rows={6}
-                    />
+                    <p className="text-[12px] text-[var(--ink-light)] italic">這兩個問題不用繳交——表單裡已有類似的反思題。自己想清楚就好。</p>
+                    <div className="space-y-2">
+                        {[
+                            '哪一組的設計／Pilot 發現最讓你想回頭改自己的？（對方的漏洞，你們組有沒有同樣的問題？）',
+                            '同儕回饋 + 老師評分後，我們組 W13 前要修的具體項目是什麼？（修什麼、怎麼改、誰負責、什麼時候完成？）',
+                        ].map((q, i) => (
+                            <div key={i} className="flex items-start gap-3 p-3.5 bg-[var(--paper-warm)] rounded-[var(--radius-unified)] border border-[var(--border)]">
+                                <span className="font-mono text-[11px] font-bold text-[var(--ink-light)] mt-0.5 flex-shrink-0">Q{i + 1}</span>
+                                <p className="text-[13px] text-[var(--ink-mid)] leading-[1.75]">{q}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 評分規準 */}
+                <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                    <div className="px-5 py-3 bg-[var(--ink)] flex items-center gap-2">
+                        <span className="text-white font-bold text-[13px]">📊 W12 上課分數評分規準</span>
+                        <span className="ml-auto text-white/60 text-[11px] font-mono">同儕回饋 Form 內容 + 參與度</span>
+                    </div>
+                    <div className="p-5 space-y-5">
+                        {/* 份數 */}
+                        <div>
+                            <p className="font-bold text-[13px] text-[var(--ink)] mb-2">① 回饋份數（量）</p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                {[
+                                    { level: '✅ 滿分', desc: '12 組全填（每組都給回饋）', color: 'border-[var(--success)] bg-[#F0FDF4] text-[var(--success)]' },
+                                    { level: '🟡 及格', desc: '至少填 10 組', color: 'border-[#D97706] bg-[#FFFBEB] text-[#92400E]' },
+                                    { level: '❌ 低分', desc: '少於 10 組', color: 'border-[#DC2626] bg-[#FEF2F2] text-[#991B1B]' },
+                                ].map(({ level, desc, color }) => (
+                                    <div key={level} className={`border rounded p-3 ${color}`}>
+                                        <p className="font-bold text-[12px] mb-0.5">{level}</p>
+                                        <p className="text-[11.5px] leading-relaxed">{desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 品質 */}
+                        <div>
+                            <p className="font-bold text-[13px] text-[var(--ink)] mb-2">② 回饋品質（老師會抽查 3–5 份）</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="border-2 border-[#DC2626] bg-[#FEF2F2] rounded p-3">
+                                    <p className="font-bold text-[12px] text-[#991B1B] mb-2">❌ 不計分——空洞型回饋</p>
+                                    <ul className="text-[12px] text-[#7F1D1D] leading-[1.85] space-y-1">
+                                        <li>・只寫「加油」「很棒」「不錯」→ 不計</li>
+                                        <li>・「計畫漏洞」全部不勾 → 扣分</li>
+                                        <li>・「我從這組學到什麼」少於 15 字 → 不計</li>
+                                        <li>・複製貼上同一句話給每組 → 不計</li>
+                                    </ul>
+                                </div>
+                                <div className="border-2 border-[var(--success)] bg-[#F0FDF4] rounded p-3">
+                                    <p className="font-bold text-[12px] text-[var(--success)] mb-2">✅ 計分——具體型回饋</p>
+                                    <ul className="text-[12px] text-[#065F46] leading-[1.85] space-y-1">
+                                        <li>・「計畫漏洞」勾選具體類別並說明原因</li>
+                                        <li>・「我學到什麼」提到對方問題 + 遷移到自己組</li>
+                                        <li>・「具體建議」援引課堂概念（W3/W9 等）加分</li>
+                                        <li>・文字有自己的觀察，不只勾選選項</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 總結 */}
+                        <div className="bg-[var(--paper-warm)] rounded p-3 border border-[var(--border)]">
+                            <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
+                                💡 <strong>評分邏輯</strong>：老師看的不是你填了幾格，是你的回饋對那組有沒有幫助。一份有洞察的具體回饋，比十份「加油」值錢。
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* 本週結束，你應該要會 — B 標準格式 */}
@@ -387,22 +450,6 @@ const W12Page = () => {
                     </div>
                 </div>
 
-                {/* 一鍵複製繳交 */}
-                <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <ContentTypeChip type="交出" />
-                        <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
-                        <span className="text-[14px] font-bold text-[#1E40AF]">複製 W12 學習紀錄 → 貼 Google Classroom</span>
-                    </div>
-                    <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
-                        包含：聽完 12 組的學習心得／本組 W13 前要修的具體項目。
-                    </p>
-                    <ExportButton
-                        weekLabel="W12 期中進度短報"
-                        fields={EXPORT_FIELDS}
-                        buttonText="複製 W12 學習紀錄"
-                    />
-                </div>
 
                 {/* W13 預告 */}
                 <div className="bg-[var(--ink)] border-l-4 border-[var(--accent)] p-5 md:p-6 rounded-r-lg text-white shadow-xl">
