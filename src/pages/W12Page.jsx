@@ -101,7 +101,7 @@ const W12Page = () => {
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                         type="button"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
                 </div>
             </div>
@@ -392,7 +392,7 @@ const W12Page = () => {
                     <div className="flex items-center gap-2 mb-2">
                         <ContentTypeChip type="交出" />
                         <span className="text-[10px] font-mono font-bold bg-[#1E40AF] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">📤 最後一步</span>
-                        <span className="text-[14px] font-bold text-[#1E40AF]">複製 WN 學習紀錄 → 貼 Google Classroom</span>
+                        <span className="text-[14px] font-bold text-[#1E40AF]">複製 W12 學習紀錄 → 貼 Google Classroom</span>
                     </div>
                     <p className="text-[12px] text-[#1E3A8A] leading-relaxed mb-3">
                         包含：聽完 12 組的學習心得／本組 W13 前要修的具體項目。

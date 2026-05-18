@@ -18,16 +18,17 @@ import { useProjector } from '../../context/ProjectorContext';
 
 const DEPTH_TITLES = ['想知道為什麼？', '看完整範例', '常見錯誤', 'AI 使用提醒', '延伸補充'];
 
-export default function DepthBlock({ title = '延伸補充', children }) {
+export default function DepthBlock({ title = '延伸補充', children, forceOpen = false }) {
     const { mode } = useMode();
     const { projector } = useProjector();
-    // 投影顯示一律收合；否則自學模式展開、上課模式收合
-    const defaultOpen = !projector && mode === 'self-study';
+    // 投影顯示一律收合；否則自學模式或 forceOpen 時展開、上課模式收合
+    const defaultOpen = !projector && (mode === 'self-study' || forceOpen);
     const [open, setOpen] = useState(defaultOpen);
 
     useEffect(() => {
-        setOpen(defaultOpen);
-    }, [defaultOpen]);
+        if (forceOpen) setOpen(true);   // forceOpen 變 true 時強制展開（e.g. 選了文獻分析法）
+        else setOpen(defaultOpen);
+    }, [defaultOpen, forceOpen]);
 
     const safeTitle = DEPTH_TITLES.includes(title) ? title : '延伸補充';
 

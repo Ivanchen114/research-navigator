@@ -225,7 +225,7 @@ const EXPORT_FIELDS = [
 /* ══════════════════════════════════════
  *  Team 隊員填空組件——3 名隊員，每位 4 欄填空
  * ══════════════════════════════════════ */
-const TEAM_LABELS = ['組長', '隊員 B', '隊員 C'];
+const TEAM_LABELS = ['組長', '隊員 B', '隊員 C', '隊員 D'];
 const EMPTY_MEMBERS = TEAM_LABELS.map(label => ({ label, cls: '', seat: '', name: '', role: '' }));
 
 /* 把 3 名 members 串成可讀字串（給老師 export 時看的格式）*/
@@ -242,7 +242,7 @@ function parseMembers(raw) {
     const result = EMPTY_MEMBERS.map(m => ({ ...m }));
     const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
     let curIdx = -1;
-    const memberRe = /^(組長|隊員\s?[BC])\s+(\d+)\s*班\s+(\d+)\s*號\s+(.+?)$/;
+    const memberRe = /^(組長|隊員\s?[BCD])\s+(\d+)\s*班\s+(\d+)\s*號\s+(.+?)$/;
     const roleRe = /^負責[:：]\s*(.+)$/;
     lines.forEach(line => {
         const m = line.match(memberRe);
@@ -250,7 +250,8 @@ function parseMembers(raw) {
             if (m[1] === '組長') curIdx = 0;
             else if (m[1].includes('B')) curIdx = 1;
             else if (m[1].includes('C')) curIdx = 2;
-            if (curIdx >= 0 && curIdx < 3) {
+            else if (m[1].includes('D')) curIdx = 3;
+            if (curIdx >= 0 && curIdx < 4) {
                 const name = m[4].trim();
                 result[curIdx] = {
                     ...result[curIdx],
@@ -330,14 +331,14 @@ function TeamMembersInput({ dataKey = 'w6-team-members' }) {
                             type="text"
                             value={m.role}
                             onChange={e => update(idx, 'role', e.target.value)}
-                            placeholder={idx === 0 ? '例：統籌＋第二章操作型定義' : idx === 1 ? '例：第三章文獻回顧' : '例：第四章變項設計＋第六章工具'}
+                            placeholder={idx === 0 ? '例：統籌＋第二章操作型定義' : idx === 1 ? '例：第三章文獻回顧' : idx === 2 ? '例：第四章變項設計＋第六章工具' : '例：第五章問卷設計＋資料整理'}
                             className={`${inputCls} flex-1`}
                         />
                     </div>
                 </div>
             ))}
             <p className="text-[11px] text-[var(--ink-light)] italic px-1">
-                💡 W7 計畫書時分工會更細（章節主筆 / 工具設計 / 資料分析）；這裡先把人到齊就好。
+                💡 1-4 人均可（Solo 也填這格，只填組長就好）。W7 計畫書時分工會更細；這裡先把人到齊就好。
             </p>
         </div>
     );
@@ -396,20 +397,32 @@ export const W6PosterTeamPage = () => {
     const [w5Concept, setW5Concept] = useState('');
     const [w5Operationalize, setW5Operationalize] = useState('');
 
-    /* 路線選擇 */
+    /* 路線選擇 — 只用 STORAGE_KEY dict，不另存獨立 key */
     const [route, setRoute] = useState(() => {
-        try { return localStorage.getItem('w6-route') || ''; } catch { return ''; }
+        try {
+            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            const v = saved['w6-route'] || '';
+            if (v.startsWith('Team')) return 'team';
+            if (v.startsWith('Solo')) return 'solo';
+            return '';
+        } catch { return ''; }
     });
 
     const pickRoute = useCallback((newRoute) => {
         setRoute(newRoute);
         try {
-            localStorage.setItem('w6-route', newRoute);
             const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
             all['w6-route'] = newRoute === 'team' ? 'Team 合題組隊' : newRoute === 'solo' ? 'Solo 單飛獨行' : '';
             localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
         } catch { /* ignore */ }
     }, []);
+
+    /* Export 欄位依路線過濾：未選時全顯示，選了 team 只顯示 team 欄，選了 solo 只顯示 solo 欄 */
+    const exportFields = EXPORT_FIELDS.filter(f => {
+        if (f.key.startsWith('w6-team-') && route !== 'team') return false;
+        if (f.key.startsWith('w6-solo-') && route !== 'solo') return false;
+        return true;
+    });
 
     useEffect(() => {
         const refresh = () => {
@@ -596,6 +609,9 @@ export const W6PosterTeamPage = () => {
                     <div className="bg-[var(--gold-light)] border-l-4 border-[var(--gold)] p-3 rounded-r-[6px] text-[12.5px] text-[#7a6020] leading-relaxed">
                         ⏰ <strong>限時 25 min</strong>：A4 紙、彩色筆、五格手寫（⑤格留白給走讀同學）——清楚、可看就好，別追求漂亮。海報③格抄上方升級版動機。
                     </div>
+
+                    {/* AI 用了嗎？標題優化的互動記下來 */}
+                    <AIREDNarrative week="6" hint="如果你用 AI 優化海報標題，記錄這次最關鍵的互動（沒用 AI 可以略過）。" optional={true} />
                 </div>
             ),
         },
@@ -647,102 +663,28 @@ export const W6PosterTeamPage = () => {
                         </div>
                     </div>
 
-                    {/* 寫回饋的提示——挑一條最重要的寫 */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <ContentTypeChip type="學" />
-                            <span className="text-[10px] font-mono font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">提示</span>
-                            <span className="text-[14px] font-bold text-[var(--ink)]">當聽眾時——挑「最關鍵」那一條寫</span>
+                    {/* 回饋原則 — 三條大字 + 反例 */}
+                    <div className="rounded-[var(--radius-unified)] border border-[var(--border)] overflow-hidden">
+                        <div className="px-4 py-2.5 bg-[var(--ink)] text-white text-[12px] font-bold">
+                            ✍️ 一人一條·好回饋讓對方知道「哪裡 → 怎麼改 → 為什麼」
                         </div>
-                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            聽完別人報告後，從下面五個面向<strong className="text-[var(--ink)]">挑你最有感的一個</strong>寫一條回饋——不用全部都寫。具體＞抽象（「對象太大」遠不如「『高中生』太大，建議縮成『松山高一』」）。
-                        </p>
-                        <div className="space-y-2">
-                            {FEEDBACK_PROMPTS.map((f, i) => (
-                                <div key={i} className="flex items-start gap-3 bg-white border border-[var(--border)] rounded-[var(--radius-unified)] p-3">
-                                    <span className="shrink-0 inline-flex items-center justify-center px-2 py-0.5 rounded-[4px] bg-[var(--accent-light)] text-[var(--accent)] text-[11px] font-bold whitespace-nowrap">{f.focus}</span>
-                                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed flex-1">{f.q}</p>
-                                </div>
-                            ))}
+                        <div className="divide-y divide-[var(--border)]">
+                            <div className="p-4 space-y-1.5">
+                                <p className="text-[16px] font-bold text-[var(--ink)]">① 具體 ＞ 模糊</p>
+                                <div className="flex gap-2 text-[12.5px]"><span className="text-[var(--danger)] font-mono font-bold shrink-0">❌</span><span className="text-[var(--ink-mid)]">「對象太大」</span></div>
+                                <div className="flex gap-2 text-[12.5px]"><span className="text-[var(--success)] font-mono font-bold shrink-0">✅</span><span className="text-[var(--ink)]">「『高中生』太大——縮成『松山高一甲班』，30 人兩週內問得到」</span></div>
+                            </div>
+                            <div className="p-4 space-y-1.5">
+                                <p className="text-[16px] font-bold text-[var(--ink)]">② 給改法 ＞ 給感覺</p>
+                                <div className="flex gap-2 text-[12.5px]"><span className="text-[var(--danger)] font-mono font-bold shrink-0">❌</span><span className="text-[var(--ink-mid)]">「建議再想一下操作型定義」</span></div>
+                                <div className="flex gap-2 text-[12.5px]"><span className="text-[var(--success)] font-mono font-bold shrink-0">✅</span><span className="text-[var(--ink)]">「『滑手機』沒說多久才算——補時間門檻（例：≥ 30 秒），下週寫問卷才不會卡」</span></div>
+                            </div>
+                            <div className="p-4 space-y-1.5">
+                                <p className="text-[16px] font-bold text-[var(--ink)]">③ 讚美、建議、疑問 都算好回饋</p>
+                                <div className="flex gap-2 text-[12.5px]"><span className="text-[var(--danger)] font-mono font-bold shrink-0">❌</span><span className="text-[var(--ink-mid)]">「寫得不錯！」「我覺得 OK！」</span></div>
+                                <div className="flex gap-2 text-[12.5px]"><span className="text-[var(--success)] font-mono font-bold shrink-0">✅</span><span className="text-[var(--ink)]">「動機有畫面——『段考前熬夜滑手機』比『手機成癮問題』真誠太多，保留這個第一人稱」</span></div>
+                            </div>
                         </div>
-                    </div>
-
-                    {/* 🏆 黃金原則：具體 + 可執行（凸顯重點，避免學生寫空泛回饋）*/}
-                    <div className="bg-[var(--ink)] text-white rounded-[var(--radius-unified)] p-5">
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="text-[20px]">🏆</span>
-                            <ContentTypeChip type="學" />
-                            <span className="text-[11px] font-mono font-bold bg-[var(--gold)] text-[var(--ink)] px-2 py-0.5 rounded-[3px] uppercase tracking-wider">黃金原則</span>
-                            <span className="text-[15px] font-bold">具體 ＞ 抽象、可執行 ＞ 觀感</span>
-                        </div>
-                        <p className="text-[13px] text-white/85 leading-relaxed mb-3">
-                            學生寫回饋最常踩的坑就是<strong className="text-[var(--gold)]">太空泛</strong>。空泛＝給了 owner 壓力但沒幫他改進。
-                            一條好回饋要能讓 owner 看完就知道：哪裡要改、改成什麼、為什麼。
-                        </p>
-                        <div className="space-y-2">
-                            {VAGUE_TO_CONCRETE.map((v, i) => (
-                                <div key={i} className="grid grid-cols-1 md:grid-cols-[80px_1fr_1fr] gap-2 md:gap-3 bg-white/5 rounded-[6px] p-3 text-[12px]">
-                                    <div className="text-[11px] font-mono text-white/50 uppercase tracking-wider md:pt-0.5">{v.focus}</div>
-                                    <div className="text-white/70 leading-relaxed">
-                                        <span className="text-[10px] font-mono text-[var(--danger)] mr-1">❌ NG</span>
-                                        「{v.vague}」
-                                    </div>
-                                    <div className="text-white leading-relaxed">
-                                        <span className="text-[10px] font-mono text-[var(--gold)] mr-1">✅ OK</span>
-                                        「{v.concrete}」
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 三種類型範例——讚美/建議/疑問都是好回饋；每種正反例對照 */}
-                    <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <ContentTypeChip type="學" />
-                            <span className="text-[10px] font-mono font-bold bg-[var(--success)] text-white px-2 py-0.5 rounded-[3px] uppercase tracking-wider">範例</span>
-                            <span className="text-[14px] font-bold text-[var(--ink)]">「最關鍵的一條」長什麼樣——三種都好</span>
-                        </div>
-                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            最關鍵 ≠ 一定要批評——<strong className="text-[var(--ink)]">讚美、建議、疑問三種都算好回饋</strong>。每張卡有正反例對照，看清楚「為什麼這條算具體、那條算空泛」。
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            {FEEDBACK_EXAMPLES.map((ex, i) => {
-                                const colorMap = {
-                                    success: { bg: 'bg-[var(--success-light)]', border: 'border-[var(--success)]', tag: 'bg-[var(--success)]' },
-                                    gold: { bg: 'bg-[var(--gold-light)]', border: 'border-[var(--gold)]', tag: 'bg-[var(--gold)]' },
-                                    accent: { bg: 'bg-[var(--accent-light)]', border: 'border-[var(--accent)]', tag: 'bg-[var(--accent)]' },
-                                };
-                                const c = colorMap[ex.color];
-                                return (
-                                    <div key={i} className={`${c.bg} border-2 ${c.border} rounded-[var(--radius-unified)] p-4 flex flex-col gap-2.5`}>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[20px]">{ex.icon}</span>
-                                            <span className={`text-[11px] font-mono font-bold text-white ${c.tag} px-2 py-0.5 rounded-[3px] uppercase tracking-wider`}>{ex.type}</span>
-                                        </div>
-                                        <div className="text-[11px] font-mono text-[var(--ink-light)] uppercase tracking-wider">面向：{ex.focus}</div>
-                                        <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed italic">{ex.when}</p>
-
-                                        {/* 好例 */}
-                                        <div className="bg-white rounded-[6px] p-2.5 border border-[var(--success)]/30">
-                                            <div className="text-[10px] font-mono font-bold text-[var(--success)] uppercase tracking-wider mb-1">✅ 好回饋</div>
-                                            <p className="text-[12px] text-[var(--ink)] leading-[1.85] font-medium">{ex.good}</p>
-                                        </div>
-
-                                        {/* 反例 */}
-                                        <div className="bg-[#FEF2F2] rounded-[6px] p-2.5 border border-[var(--danger)]/30">
-                                            <div className="text-[10px] font-mono font-bold text-[var(--danger)] uppercase tracking-wider mb-1">❌ 別這樣寫</div>
-                                            <p className="text-[12px] text-[var(--ink)] leading-relaxed mb-1">{ex.bad}</p>
-                                            <p className="text-[10.5px] text-[var(--ink-light)] italic leading-relaxed">為什麼不夠：{ex.badWhy}</p>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12.5px] text-[#7F1D1D] leading-relaxed">
-                        ⚠️ <strong>給聽眾的原則：</strong>一人一條、最關鍵那條。寫得具體 + 可執行（「操作型定義第 ___ 條建議改 ___」遠比「建議再想一下」有用）。
                     </div>
 
                     {/* 走讀後紀錄——3 位聽眾各一條 */}
@@ -756,6 +698,14 @@ export const W6PosterTeamPage = () => {
                         placeholder={'例：\n同學 A：操作型定義『滑手機』沒講多久才算（建議改 ≥ 30 min）\n同學 B：為什麼選問卷不選觀察法？直接截圖螢幕使用時間可能更貼近你想要的「夜間使用」\n同學 C：研究動機很真——但「對之後想戒手機的同學有幫助」可以寫成具體誰'}
                         scaffold={['同學 A：___', '同學 B：___', '同學 C：___']}
                         rows={6}
+                    />
+                    {/* 反思：Gallery Walk 最有用的 1 條回饋 */}
+                    <ThinkRecord
+                        dataKey="w6-reflect"
+                        prompt="✍️ 反思：走讀蒐集的回饋裡，最有用的 1 條是什麼？你怎麼處理？"
+                        placeholder="例：最有用的是「操作型定義『滑手機』沒講多久」——我自己以為夠清楚但對方一看就抓到漏洞。處理：把定義改成「視線停留手機螢幕 ≥ 30 秒，刷信息／滑社群／看影片都算」。"
+                        scaffold={['最有用的 1 條：___', '為什麼這條重要（我自己沒看到什麼）：___', '我準備怎麼處理：___']}
+                        rows={5}
                     />
                 </div>
             ),
@@ -851,7 +801,7 @@ export const W6PosterTeamPage = () => {
                                     <span className="font-bold text-[15px] text-[var(--ink)]">Team 合題組隊</span>
                                     {route === 'team' && <CheckCircle2 size={16} className="text-[var(--accent)] ml-auto" />}
                                 </div>
-                                <p className="text-[12px] text-[var(--ink-mid)]">3 人成組、共同題目、分工後續工作</p>
+                                <p className="text-[12px] text-[var(--ink-mid)]">1-4 人成組、共同題目、分工後續工作</p>
                             </button>
                             <button
                                 onClick={() => pickRoute('solo')}
@@ -875,6 +825,19 @@ export const W6PosterTeamPage = () => {
                     {!route && (
                         <div className="bg-[var(--paper-warm)] border border-dashed border-[var(--border)] rounded-[var(--radius-unified)] p-3 text-[12px] text-[var(--ink-light)] italic">
                             ⏳ 還沒選擇路線——下一步（Step 4）會根據你的選擇顯示對應內容。
+                        </div>
+                    )}
+                    {route && (
+                        <div className="flex items-center gap-3 px-4 py-3 bg-[var(--accent-light)] border-2 border-[var(--accent)] rounded-[var(--radius-unified)]">
+                            <CheckCircle2 size={18} className="text-[var(--accent)] flex-shrink-0" />
+                            <div className="flex-1">
+                                <p className="text-[13px] font-bold text-[var(--ink)]">
+                                    路線已選：{route === 'team' ? 'Team 合題組隊 👥' : 'Solo 單飛獨行 🏃'}
+                                </p>
+                                <p className="text-[12px] text-[var(--ink-mid)] mt-0.5">
+                                    → 前往 <strong>Step 4</strong> 完成{route === 'team' ? '組隊表單與合題理由' : '承諾書 ①②'}
+                                </p>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -912,7 +875,7 @@ export const W6PosterTeamPage = () => {
                                     <Users size={18} className="text-[var(--accent)]" />
                                     <span className="text-[14px] font-bold text-[var(--accent)] uppercase tracking-wider">TEAM 合題組隊</span>
                                 </div>
-                                <h3 className="text-[16px] font-bold text-[var(--ink)] mb-2">3 人成組 + 共同題目 + 分工</h3>
+                                <h3 className="text-[16px] font-bold text-[var(--ink)] mb-2">1-4 人成組 + 共同題目 + 分工</h3>
                                 <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
                                     合題的關鍵不是「題目接近就合」——是<strong>合題後核心問題更精彩</strong>。如果合題會把你和別人都拉去做大家都不想的題目，那就回 Solo。
                                 </p>
@@ -1117,9 +1080,9 @@ export const W6PosterTeamPage = () => {
             ),
         },
 
-        /* ─── Step 5：反思 + 繳交 ─── */
+        /* ─── Step 5：回顧與繳交 ─── */
         {
-            title: '反思 + 繳交',
+            title: '回顧與繳交',
             icon: '📋',
             content: (
                 <div className="space-y-8 prose-zh">
@@ -1149,24 +1112,6 @@ export const W6PosterTeamPage = () => {
                     </div>
 
                     {/* 反思 */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="做" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">反思：最有用的 1 條回饋 + 處理方式</p>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w6-reflect"
-                        prompt="✍️ 反思：走讀蒐集的回饋裡，最有用的 1 條是什麼？你怎麼處理？"
-                        placeholder="例：最有用的是「操作型定義『滑手機』沒講多久」——我自己以為夠清楚但對方一看就抓到漏洞。處理：把定義改成「視線停留手機螢幕 ≥ 30 秒，刷信息／滑社群／看影片都算」。"
-                        scaffold={['最有用的 1 條：___', '為什麼這條重要（我自己沒看到什麼）：___', '我準備怎麼處理：___']}
-                        rows={5}
-                    />
-
-                    {/* AI-RED optional */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="交出" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI-RED 敘事（選填）</p>
-                    </div>
-                    <AIREDNarrative week="6" hint="海報標題優化可能用 AI——記錄一次最關鍵的互動。" optional={true} />
 
                     {/* 最後一步：複製繳交 */}
                     <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[var(--accent-light)] p-4 px-5">
@@ -1182,7 +1127,7 @@ export const W6PosterTeamPage = () => {
                     <ExportButton
                         weekLabel="W6 海報博覽會 + 組隊"
                         buttonText="複製 W6 學習紀錄"
-                        fields={EXPORT_FIELDS}
+                        fields={exportFields}
                     />
 
                     {/* 下週預告 */}

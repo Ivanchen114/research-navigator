@@ -13,7 +13,6 @@ import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
-import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';
 import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
 import TrapRewritePractice from '../components/ui/TrapRewritePractice';
@@ -131,7 +130,6 @@ const EXPORT_FIELDS = [
     { key: 'w14-ai-blindspot', label: 'AI 找到的盲點（進階·驗收型必填）' },
     { key: 'w14-validation-check', label: '③ 圖表4 個格式規定驗收（必填）', question: '格式規定勾選（標題在上／N 值有標／資料來源在下）' },
     { key: 'w14-ai-pressure-test', label: 'AI 壓力測試後修正（進階·驗收型必填）' },
-    { key: 'w14-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人留言 / B 文件上傳並貼連結' },
     /* Step 6 回顧繳交 */
     { key: 'w14-trap-rewrite-11', label: '雷 #11 改寫練習（個人繳交項）', question: '把散佈圖圖說的「明顯」過度修飾改成謹慎版' },
     { key: 'w14-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 畫圖的最重要一次互動（A-I-R-E-D 五要素）' },
@@ -157,10 +155,22 @@ const ChartExercise = () => {
     });
     const options = ['A 圓餅圖', 'B 長條圖', 'C 折線圖', 'D 散佈圖'];
 
+    const syncToRecords = (next) => {
+        try {
+            const summary = EXERCISE_ITEMS.map((item, i) =>
+                `題${i + 1}：${next[i] || '（未選）'}（正解：${item.a}）`
+            ).join('\n');
+            const all = JSON.parse(localStorage.getItem('rib_think_records') || '{}');
+            all['w14-chart-exercise'] = summary;
+            localStorage.setItem('rib_think_records', JSON.stringify(all));
+        } catch {}
+    };
+
     const updateAnswer = (i, opt) => {
         const next = { ...answers, [i]: opt };
         setAnswers(next);
         try { localStorage.setItem('w14-chart-exercise-ans', JSON.stringify(next)); } catch {}
+        syncToRecords(next);
     };
     const revealAnswers = () => {
         setShowAnswers(true);
@@ -170,6 +180,7 @@ const ChartExercise = () => {
         setAnswers({});
         setShowAnswers(false);
         try { localStorage.removeItem('w14-chart-exercise-ans'); localStorage.removeItem('w14-chart-exercise-show'); } catch {}
+        syncToRecords({});
     };
 
     return (
@@ -239,7 +250,6 @@ const W14PageContent = () => {
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
     /* W13 跨週帶入 */
     const w13TableLink = saved['w13-table-link'] || '';
-    const w13W14Question = saved['w13-w14-question'] || '';
     /* AI 使用模式 */
     const [w14AiMode, setW14AiMode] = useState(() => {
         try {
@@ -428,12 +438,6 @@ const W14PageContent = () => {
                                     <p className="text-[12px] text-[#0C4A6E] break-all">{w13TableLink}</p>
                                 </div>
                             )}
-                            {w13W14Question && (
-                                <div>
-                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">你 W13 寫的「想怎麼呈現」</p>
-                                    <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w13W14Question}</p>
-                                </div>
-                            )}
                         </div>
                     )}
 
@@ -482,7 +486,7 @@ const W14PageContent = () => {
                                 </p>
                                 <ChartChoiceChecker />
                                 <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed">
-                                    🖊️ 決定後把圖表類型、理由、圖表標題（圖一：___ N=___）記在<strong className="text-[var(--ink-mid)]">小組 Google Slides / Doc</strong>，不需要填在網頁上。上方的 ChartChoiceChecker 選完後會自動存入「我的紀錄」——確認有選就好，不用另外抄。
+                                    🖊️ 圖表類型、理由、標題記在<strong className="text-[var(--ink-mid)]">小組 Google Slides / Doc</strong>，網頁只需選完 ChartChoiceChecker 即可。
                                 </p>
                             </div>
                         </div>
@@ -754,11 +758,6 @@ ___
 請逐句指出問題＋給修改建議，最後的描述句由我自己改。`} />
                         </div>
                     </details>
-                    <div className="p-3 rounded-[var(--radius-unified)] border border-[#BAE6FD] bg-[#F0F9FF]">
-                        <p className="text-[12px] text-[#0369A1] leading-relaxed">
-                            🖊️ 描述句寫在<strong>小組 Google Slides / Doc</strong>，圖說跟圖放在一起。可以用上方 AI prompt 逐句核對後再放進去。
-                        </p>
-                    </div>
 
                     {/* ⑥ 推論 */}
                     <div className="p-4 rounded-[var(--radius-unified)] border-2 border-[#FCA5A5] bg-[#FEF2F2]">
@@ -776,15 +775,8 @@ ___
                             </div>
                         </DepthBlock>
                     </div>
-                    <div className="p-3 rounded-[var(--radius-unified)] border border-[#BAE6FD] bg-[#F0F9FF]">
-                        <p className="text-[12px] text-[#0369A1] leading-relaxed">
-                            🖊️ 推論句緊接在描述句下方，寫在<strong>小組 Google Slides / Doc</strong>。說「可能」，不說「一定」。
-                        </p>
-                    </div>
-
-                    {/* Step 3 定位說明 */}
-                    <div className="text-[11.5px] text-[var(--ink-light)] italic leading-relaxed border-t border-[var(--border)] pt-3">
-                        📌 描述句＋推論句是小組成果——完成後截圖，上傳到 Classroom 小組作業區，不用另外填在這裡。
+                    <div className="text-[11.5px] text-[var(--ink-light)] leading-relaxed border-t border-[var(--border)] pt-3">
+                        🖊️ 描述句＋推論句都寫在<strong className="text-[var(--ink-mid)]">小組 Google Slides / Doc</strong>，完成後截圖上傳 Classroom。說「可能」，不說「一定」。
                     </div>
                 </div>
             ),
@@ -832,11 +824,6 @@ ___
                         </p>
                         <AICollaborationPrinciples week="14" role="mirror" compact={false} />
                     </DepthBlock>
-
-                    {/* AI 反思鏡定位口訣 */}
-                    <p className="text-[12px] text-[var(--ink-mid)] italic leading-relaxed -mb-2">
-                        💡 W14 AI 的角色：幫你找你看不到的角度——答案還是你的。
-                    </p>
 
                     {/* AI 模式選擇 */}
                     <AIModePicker week="14" taskName="進階壓力測試" onChange={handleW14AiMode} />
@@ -973,8 +960,8 @@ ___
                                 </p>
                             </div>
 
-                            {/* 完整對話繳交 */}
-                            <AIDialogSubmission week="14" taskName="進階壓力測試對話" required={true} />
+                            {/* AI-RED 精簡反思紀錄 */}
+                            <AIREDNarrative week="14" hint="本週用 AI 進階壓測：A=使用的工具 / I=找盲點+壓測 prompt / R=AI 找到的盲點+風險 / E=我同意/不同意哪些 / D=採納哪些修正" />
                         </>
                     )}
 
@@ -1074,26 +1061,6 @@ ___
 
 
                     {/* AI-RED 敘事紀錄 — standalone 模式提示，其餘直接顯示 */}
-                    {w14AiMode !== 'standalone' && (w14AiMode === 'teach' || w14AiMode === 'verify' || !w14AiMode) && (
-                        <div className="flex items-center gap-2 mb-[-4px]">
-                            <ContentTypeChip type="交出" />
-                            <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI-RED 敘事紀錄</p>
-                        </div>
-                    )}
-                    {w14AiMode === 'standalone' ? (
-                        <div className="rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)] p-4">
-                            <p className="text-[13px] font-bold text-[var(--ink)] mb-1">✋ 純人工畫圖 · 進階壓測格略過</p>
-                            <p className="text-[11.5px] text-[var(--ink-mid)] leading-relaxed">
-                                你選擇全程不用 AI（包含畫圖）——AI-RED 進階壓測格自動略過。<br />
-                                <strong>但只要中途用了 AI（例如 Gemini 畫圖／檢查描述／改寫圖說），就要回 Step 4 切換 AI Mode 並補敘事紀錄</strong>——這是 W13 起的共識：用 AI 必交 AI-RED。
-                            </p>
-                        </div>
-                    ) : (w14AiMode === 'teach' || w14AiMode === 'verify') ? (
-                        <AIREDNarrative week="14" hint="本週用 AI 進階壓測：A=Gemini Pro / I=找盲點+壓測 prompt / R=AI 找到的盲點+風險 / E=我同意/不同意哪些 / D=採納哪些修正" />
-                    ) : (
-                        <AIREDNarrative week="14" hint="本週若有用 AI 進階檢核推論，記下最關鍵的一次互動" optional={true} />
-                    )}
-
                     {/* 學期 AI 協作反思（從 W17 移過來——這週的「人 vs AI 分工」最清楚，反思最有素材）*/}
                     <div className="mt-6 p-5 rounded-[var(--radius-unified)] border-2 border-[#D97706] bg-[#FEF3C7]">
                         <div className="flex items-start justify-between mb-2 gap-2">

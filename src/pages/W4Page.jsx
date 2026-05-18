@@ -146,6 +146,22 @@ const DECISION_TREE = {
     },
 };
 
+/* — L1/L2 互動選片常數 — */
+const L1_CHIPS = [
+    {
+        id: 'collect',
+        label: '自己收集新資料',
+        sub: '去問人、去觀察、去做實驗 → 繼續 L2',
+        notePlaceholder: '我要收集什麼資料？（一句話）',
+    },
+    {
+        id: 'literature',
+        label: '分析已有的文本／資料',
+        sub: '讀資料、看文件、找報告 → 文獻分析法',
+        notePlaceholder: '我要分析什麼文本？（一句話）',
+    },
+];
+
 const QUIZ_QUESTIONS = [
     {
         q: '「我想知道全校高一同學每天平均使用手機幾小時」→ 適合哪種方法？',
@@ -287,26 +303,34 @@ const THINK_CHOICES = [
 /* — RecordDrawer 匯出欄位 — */
 const EXPORT_FIELDS = [
     { key: 'w4-my-topic', label: '我的 W4 定案題目' },
-    { key: 'w4-layer1', label: '第一層判斷', question: '我的資料要自己收集，還是分析已有文本？' },
-    { key: 'w4-layer2', label: '第二層判斷', question: '最關鍵的那一條判斷問題，以及我的回答' },
+    { key: 'w4-layer1', label: 'L1 判斷：資料來源', question: '我的資料要自己收集，還是分析已有文本？' },
     { key: 'w4-main-method', label: '我選定的主要方法', question: '問卷／訪談／實驗／觀察／文獻分析法？' },
     { key: 'w4-reason', label: '選擇理由', question: '為什麼選這個方法？請引用兩層判斷中的某一條' },
     { key: 'w4-aux-method', label: '輔助方法', question: '需要輔助方法嗎？是什麼？為什麼？' },
     { key: 'w4-reflect-confused', label: '反思 1：最易搞混的方法', question: '你最容易搞混的兩種方法是哪兩個？關鍵差別在哪一條兩層判斷？' },
     { key: 'w4-reflect-literature', label: '反思 2：文獻 vs 文獻分析', question: '「文獻回顧」與「文獻分析法」的差別是什麼？你的題目會走哪一條？' },
+    { key: 'w4-ai-compare', label: 'AI 比對（選做）', question: 'AI 建議的方法是什麼？你同意還是不同意？', minLength: 0 },
 ];
 
 /* ══════════════════════════════════════
  *  互動決策樹組件
  * ══════════════════════════════════════ */
 
-const DecisionTree = () => {
+const DecisionTree = ({ onLitSelect = () => {} }) => {
     const [l1Choice, setL1Choice] = useState(null);
     const [l2Picks, setL2Picks] = useState({}); // { q1: 0|1, q2: 0|1, q3: 0|1 }
+
+    const pickL1 = (choice) => {
+        const next = l1Choice === choice ? null : choice;
+        setL1Choice(next);
+        setL2Picks({});
+        onLitSelect(next === 'literature');
+    };
 
     const reset = () => {
         setL1Choice(null);
         setL2Picks({});
+        onLitSelect(false);
     };
 
     const pickL2 = (qid, idx) => {
@@ -385,30 +409,27 @@ const DecisionTree = () => {
                 )}
             </div>
 
-            {/* SVG 視覺樹 */}
-            <div className="bg-[var(--paper-warm)] p-4 overflow-x-auto">
+            {/* SVG 視覺樹 — 垂直單欄排版，手機不需橫捲 */}
+            <div className="bg-[var(--paper-warm)] p-4">
                 <svg
-                    viewBox="0 0 920 580"
+                    viewBox="0 0 480 795"
                     className="block mx-auto"
-                    style={{ width: '100%', minWidth: '560px', maxWidth: '820px', height: 'auto' }}
+                    style={{ width: '100%', minWidth: '300px', maxWidth: '600px', height: 'auto' }}
                 >
-                    {/* ============ 連線 ============ */}
-                    <path d="M 440 60 C 440 95, 270 100, 270 130" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
-                    <path d="M 440 60 C 440 95, 610 100, 610 130" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
-                    <line x1="270" y1="180" x2="270" y2="200" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" />
-                    <line x1="650" y1="180" x2="650" y2="200" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" />
-                    {[267, 381, 495].map((qy, i) => (
-                        <g key={i} opacity={dimLeft ? 0.3 : 1}>
-                            <line x1="130" y1={qy} x2="130" y2={qy + 19} stroke="#999" strokeWidth="1.5" />
-                            <line x1="370" y1={qy} x2="370" y2={qy + 19} stroke="#999" strokeWidth="1.5" />
-                        </g>
-                    ))}
-                    <line x1="650" y1="252" x2="650" y2="266" stroke={dimRight ? '#ddd' : '#6b21a8'} strokeWidth="2" />
+                    {/* ============ ROOT → L1 連線 ============ */}
+                    <path d="M 240 63 C 240 88, 120 88, 120 105" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
+                    <path d="M 240 63 C 240 88, 360 88, 360 105" stroke={dimRight ? '#ddd' : '#666'} strokeWidth="2" fill="none" />
+
+                    {/* L1 左 → L2 連線 */}
+                    <line x1="120" y1="155" x2="120" y2="175" stroke={dimLeft ? '#ddd' : '#666'} strokeWidth="2" />
+
+                    {/* 文獻分析法 → 子類型 連線 */}
+                    <line x1="240" y1="564" x2="240" y2="583" stroke={dimRight ? '#ddd' : '#6b21a8'} strokeWidth="2" />
 
                     {/* ============ ROOT ============ */}
                     <g>
-                        <rect x={345} y={15} width={190} height={48} rx={10} fill="var(--ink)" />
-                        <text x={440} y={45} fontSize="14" fill="white" fontWeight="bold" textAnchor="middle">
+                        <rect x={145} y={15} width={190} height={48} rx={10} fill="var(--ink)" />
+                        <text x={240} y={44} fontSize="13" fill="white" fontWeight="bold" textAnchor="middle">
                             📍 你的資料要哪來？
                         </text>
                     </g>
@@ -416,19 +437,19 @@ const DecisionTree = () => {
                     {/* ============ L1 左：自蒐 ============ */}
                     <g
                         style={{ cursor: 'pointer' }}
-                        onClick={() => { setL1Choice(l1Choice === 'collect' ? null : 'collect'); setL2Picks({}); }}
+                        onClick={() => pickL1('collect')}
                         opacity={dimLeft ? 0.4 : 1}
                     >
                         <rect
-                            x={170} y={130} width={200} height={50} rx={8}
+                            x={10} y={105} width={220} height={50} rx={8}
                             fill={l1Choice === 'collect' ? 'var(--accent-light)' : 'white'}
                             stroke={l1Choice === 'collect' ? 'var(--accent)' : '#666'}
                             strokeWidth={l1Choice === 'collect' ? 2.5 : 1.5}
                         />
-                        <text x={270} y={155} fontSize="14" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
+                        <text x={120} y={130} fontSize="13" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
                             🔍 自己收集
                         </text>
-                        <text x={270} y={172} fontSize="10.5" textAnchor="middle" fill="#666">
+                        <text x={120} y={147} fontSize="10" textAnchor="middle" fill="#666">
                             問人 / 觀察 / 做實驗
                         </text>
                     </g>
@@ -436,77 +457,91 @@ const DecisionTree = () => {
                     {/* ============ L1 右：文獻 ============ */}
                     <g
                         style={{ cursor: 'pointer' }}
-                        onClick={() => { setL1Choice(l1Choice === 'literature' ? null : 'literature'); setL2Picks({}); }}
+                        onClick={() => pickL1('literature')}
                         opacity={dimRight ? 0.4 : 1}
                     >
                         <rect
-                            x={550} y={130} width={200} height={50} rx={8}
+                            x={250} y={105} width={220} height={50} rx={8}
                             fill={l1Choice === 'literature' ? '#f5f3ff' : 'white'}
                             stroke={l1Choice === 'literature' ? '#6b21a8' : '#666'}
                             strokeWidth={l1Choice === 'literature' ? 2.5 : 1.5}
                         />
-                        <text x={650} y={155} fontSize="14" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
+                        <text x={360} y={130} fontSize="13" fontWeight="bold" textAnchor="middle" fill="var(--ink)">
                             📚 分析現成文本
                         </text>
-                        <text x={650} y={172} fontSize="10.5" textAnchor="middle" fill="#666">
+                        <text x={360} y={147} fontSize="10" textAnchor="middle" fill="#666">
                             把文本當研究對象
                         </text>
                     </g>
 
-                    {/* ============ L2 三題分流（左半）============ */}
+                    {/* ============ L2 三題分流 ============ */}
                     <g opacity={dimLeft ? 0.35 : 1}>
-                        <text x={20} y={216} fontSize="11" fontWeight="bold" fill="#999" letterSpacing="0.5">
+                        <text x={15} y={190} fontSize="10.5" fontWeight="bold" fill="#999" letterSpacing="0.3">
                             L2 第二層 — 三題獨立分流（挑最貼近你題目的那條）
                         </text>
 
+                        {/* Q 連線（rect 底部 → leaf 頂部）*/}
+                        {[230, 327, 424].map((qy, i) => (
+                            <g key={i}>
+                                <line x1="122" y1={qy} x2="122" y2={qy + 13} stroke="#999" strokeWidth="1.5" />
+                                <line x1="357" y1={qy} x2="357" y2={qy + 13} stroke="#999" strokeWidth="1.5" />
+                            </g>
+                        ))}
+
                         {/* Q1 */}
-                        <rect x={20} y={234} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
-                        <text x={32} y={255} fontSize="12.5" fontWeight="bold" fill="var(--ink)">
+                        <rect x={10} y={198} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
+                        <text x={22} y={219} fontSize="12" fontWeight="bold" fill="var(--ink)">
                             ❶ 比例／數量／趨勢　vs　原因／脈絡／故事？
                         </text>
-                        <Leaf qid="q1" idx={0} x={20} y={286} w={220} h={42} label="比例／數量／趨勢" method="📋 問卷" color="var(--accent)" />
-                        <Leaf qid="q1" idx={1} x={260} y={286} w={220} h={42} label="原因／脈絡／故事" method="🎤 訪談" color="#7c3aed" />
+                        <Leaf qid="q1" idx={0} x={10}  y={243} w={225} h={42} label="比例／數量／趨勢" method="📋 問卷" color="var(--accent)" />
+                        <Leaf qid="q1" idx={1} x={245} y={243} w={225} h={42} label="原因／脈絡／故事" method="🎤 訪談" color="#7c3aed" />
 
                         {/* Q2 */}
-                        <rect x={20} y={348} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
-                        <text x={32} y={369} fontSize="12.5" fontWeight="bold" fill="var(--ink)">
+                        <rect x={10} y={295} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
+                        <text x={22} y={316} fontSize="12" fontWeight="bold" fill="var(--ink)">
                             ❷ 能不能主動改一個條件，量另一個怎麼變？
                         </text>
-                        <Leaf qid="q2" idx={0} x={20} y={400} w={220} h={42} label="能操控（A 做、B 不做）" method="🧪 實驗" color="#d97706" />
-                        <Leaf qid="q2" idx={1} x={260} y={400} w={220} h={42} label="不能操控" method="改看 ❶ 或 ❸" color="#888" fallback />
+                        <Leaf qid="q2" idx={0} x={10}  y={340} w={225} h={42} label="能操控（A 做、B 不做）" method="🧪 實驗" color="#d97706" />
+                        <Leaf qid="q2" idx={1} x={245} y={340} w={225} h={42} label="不能操控" method="改看 ❶ 或 ❸" color="#888" fallback />
 
                         {/* Q3 */}
-                        <rect x={20} y={462} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
-                        <text x={32} y={483} fontSize="12.5" fontWeight="bold" fill="var(--ink)">
+                        <rect x={10} y={392} width={460} height={32} rx={6} fill="#fff" stroke="#bbb" strokeWidth="1.5" />
+                        <text x={22} y={413} fontSize="12" fontWeight="bold" fill="var(--ink)">
                             ❸ 真實行為／自然現象　vs　想法態度？
                         </text>
-                        <Leaf qid="q3" idx={0} x={20} y={514} w={220} h={42} label="真實行為／自然現象" method="👀 觀察" color="var(--success)" />
-                        <Leaf qid="q3" idx={1} x={260} y={514} w={220} h={42} label="想法態度" method="改看 ❶（問卷／訪談）" color="#888" fallback />
+                        <Leaf qid="q3" idx={0} x={10}  y={437} w={225} h={42} label="真實行為／自然現象" method="👀 觀察" color="var(--success)" />
+                        <Leaf qid="q3" idx={1} x={245} y={437} w={225} h={42} label="想法態度" method="改看 ❶（問卷／訪談）" color="#888" fallback />
                     </g>
 
-                    {/* ============ 文獻分支（右半）============ */}
+                    {/* ============ 分隔線 ============ */}
+                    <line x1="10" y1="495" x2="470" y2="495" stroke="#d1d5db" strokeDasharray="4 3" strokeWidth="1.5" />
+                    <text x={240} y={513} fontSize="10.5" fontWeight="bold" fill="#6b21a8" textAnchor="middle">
+                        ▾ 選了「分析現成文本」→ 文獻分析法路線
+                    </text>
+
+                    {/* ============ 文獻分支（垂直） ============ */}
                     <g opacity={dimRight ? 0.35 : 1}>
-                        <rect x={540} y={210} width={220} height={42} rx={8}
+                        <rect x={115} y={522} width={250} height={42} rx={8}
                               fill={l1Choice === 'literature' ? '#f5f3ff' : 'white'}
                               stroke="#6b21a8" strokeWidth="2" />
-                        <text x={650} y={236} fontSize="13" fontWeight="bold" textAnchor="middle" fill="#6b21a8">
+                        <text x={240} y={548} fontSize="12.5" fontWeight="bold" textAnchor="middle" fill="#6b21a8">
                             📚 文獻分析法（主方法）
                         </text>
 
                         {[
-                            { num: '①', name: '歷史文獻分析', when: '分析歷史事件、追問時代脈絡', y: 270 },
-                            { num: '②', name: '內容分析',     when: '統計文章裡的詞彙或主題出現頻率', y: 324 },
-                            { num: '③', name: '論述分析',     when: '分析文本的立場與說話方式', y: 378 },
-                            { num: '④', name: '敘事分析',     when: '分析故事情節結構與角色發展', y: 432 },
+                            { num: '①', name: '歷史文獻分析', when: '分析歷史事件、追問時代脈絡',    y: 583 },
+                            { num: '②', name: '內容分析',     when: '統計文章裡的詞彙或主題出現頻率', y: 632 },
+                            { num: '③', name: '論述分析',     when: '分析文本的立場與說話方式',       y: 681 },
+                            { num: '④', name: '敘事分析',     when: '分析故事情節結構與角色發展',     y: 730 },
                         ].map(s => (
                             <g key={s.num}>
-                                <rect x={500} y={s.y} width={400} height={44} rx={6} fill="white" stroke="#e0d5f5" strokeWidth="1.5" />
-                                <text x={516} y={s.y + 22} fontSize="14" fontWeight="bold" fill="#6b21a8">{s.num}</text>
-                                <text x={540} y={s.y + 22} fontSize="13" fontWeight="bold" fill="#6b21a8">{s.name}</text>
-                                <text x={516} y={s.y + 38} fontSize="10.5" fill="#666">→ {s.when}</text>
+                                <rect x={10} y={s.y} width={460} height={44} rx={6} fill="white" stroke="#e0d5f5" strokeWidth="1.5" />
+                                <text x={24} y={s.y + 22} fontSize="13" fontWeight="bold" fill="#6b21a8">{s.num}</text>
+                                <text x={44} y={s.y + 22} fontSize="12.5" fontWeight="bold" fill="#6b21a8">{s.name}</text>
+                                <text x={24} y={s.y + 38} fontSize="10.5" fill="#666">→ {s.when}</text>
                             </g>
                         ))}
-                        <text x={500} y={500} fontSize="10" fill="#999" fontStyle="italic">
+                        <text x={10} y={784} fontSize="10" fill="#999" fontStyle="italic">
                             （選了文獻分析法？展開下方說明欄，看四種子類型怎麼挑）
                         </text>
                     </g>
@@ -561,13 +596,96 @@ const W4PageContent = () => {
     const { mode } = useMode();
     const [showLessonMap, setShowLessonMap] = useState(false);
     const [expandedMethod, setExpandedMethod] = useState(null);
+    const [litSelected, setLitSelected] = useState(false); // DecisionTree 選了「文獻」時同步過來
+
+    /* L1 chip 選擇狀態，持久化 */
+    const L1L2_KEY = 'w4-l1l2';
+    const loadL1L2 = () => { try { return JSON.parse(localStorage.getItem(L1L2_KEY) || '{}'); } catch { return {}; } };
+    const _ll = loadL1L2();
+    const [l1Pick, setL1PickRaw] = useState(() => _ll.l1Pick ?? null);
+    const [l1Note, setL1NoteRaw] = useState(() => _ll.l1Note ?? '');
+
+    const syncL1 = useCallback((l1p, l1n) => {
+        localStorage.setItem(L1L2_KEY, JSON.stringify({ l1Pick: l1p, l1Note: l1n }));
+        const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        const l1label = L1_CHIPS.find(c => c.id === l1p)?.label ?? '';
+        all['w4-layer1'] = l1p ? `我選擇：${l1label}${l1n ? '\n（' + l1n + '）' : ''}` : '';
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    }, []);
+
+    /* 主要方法 chip 選擇，持久化 */
+    const METHOD_PICK_KEY = 'w4-method-pick';
+    const LIT_SUB_KEY     = 'w4-lit-sub';
+    const [mainMethodPick, setMainMethodPickRaw] = useState(() => localStorage.getItem(METHOD_PICK_KEY) || null);
+    const [litSubPick,     setLitSubPickRaw]     = useState(() => localStorage.getItem(LIT_SUB_KEY)     || null);
+
+    const LIT_SUBTYPES = [
+        { id: 'history',   label: '歷史文獻分析', when: '追時間軸、演變脈絡' },
+        { id: 'content',   label: '內容分析',     when: '統計詞彙／主題頻率（量化）' },
+        { id: 'discourse', label: '論述分析',     when: '立場、框架、語氣' },
+        { id: 'narrative', label: '敘事分析',     when: '故事結構、角色、轉折' },
+    ];
+
+    const syncMethodToStorage = useCallback((methodId, subId) => {
+        const m   = METHODS.find(x => x.id === methodId);
+        const sub = LIT_SUBTYPES.find(x => x.id === subId);
+        const val = m ? (sub ? `${m.icon} ${m.name}（${sub.label}）` : `${m.icon} ${m.name}`) : '';
+        const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        all['w4-main-method'] = val;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    }, []);
+
+    const pickL1 = (id) => {
+        const next = l1Pick === id ? null : id;
+        setL1PickRaw(next);
+        setLitSubPickRaw(null);
+        localStorage.setItem(LIT_SUB_KEY, '');
+        // L1=literature → 主方法自動設為文獻分析法；其他情況重設
+        if (next === 'literature') {
+            setMainMethodPickRaw('literature');
+            localStorage.setItem(METHOD_PICK_KEY, 'literature');
+            syncMethodToStorage('literature', null);
+        } else {
+            setMainMethodPickRaw(null);
+            localStorage.setItem(METHOD_PICK_KEY, '');
+            syncMethodToStorage(null, null);
+        }
+        setLitSelected(next === 'literature');
+        syncL1(next, l1Note);
+    };
+    const changeL1Note = (v) => { setL1NoteRaw(v); syncL1(l1Pick, v); };
+
+    const pickMainMethod = (id) => {
+        const next = mainMethodPick === id ? null : id;
+        setMainMethodPickRaw(next);
+        localStorage.setItem(METHOD_PICK_KEY, next ?? '');
+        setLitSubPickRaw(null);
+        localStorage.setItem(LIT_SUB_KEY, '');
+        setLitSelected(next === 'literature');
+        syncMethodToStorage(next, null);
+    };
+    const pickLitSub = (id) => {
+        const next = litSubPick === id ? null : id;
+        setLitSubPickRaw(next);
+        localStorage.setItem(LIT_SUB_KEY, next ?? '');
+        syncMethodToStorage(mainMethodPick, next);
+    };
+
     const [choiceResults, setChoiceResults] = useState([]);
 
-    /* Quiz state */
-    const [quizStarted, setQuizStarted] = useState(false);
-    const [currentQ, setCurrentQ] = useState(0);
-    const [selections, setSelections] = useState({});
-    const [quizDone, setQuizDone] = useState(false);
+    /* Quiz state — 持久化到 localStorage，重整不清零 */
+    const QUIZ_KEY = 'w4-quiz';
+    const loadQuiz = () => {
+        try { return JSON.parse(localStorage.getItem(QUIZ_KEY) || '{}'); } catch { return {}; }
+    };
+    const saveQuiz = (patch) => {
+        try { localStorage.setItem(QUIZ_KEY, JSON.stringify({ ...loadQuiz(), ...patch })); } catch {}
+    };
+    const _q = loadQuiz();
+    const [quizStarted, setQuizStarted] = useState(() => !!_q.started);
+    const [currentQ,    setCurrentQ]    = useState(() => _q.currentQ ?? 0);
+    const [selections,  setSelections]  = useState(() => _q.selections ?? {});
+    const [quizDone,    setQuizDone]    = useState(() => !!_q.done);
 
     /* W3 定案題目帶入（讓 W4 把它放上方法地圖）*/
     const [w3Topic, setW3Topic] = useState('');
@@ -608,13 +726,16 @@ const W4PageContent = () => {
         if (selections[currentQ] !== undefined) return;
         const newSelections = { ...selections, [currentQ]: optLabel };
         setSelections(newSelections);
+        saveQuiz({ selections: newSelections });
         const isCorrect = optLabel === QUIZ_QUESTIONS[currentQ].answer;
         if (isCorrect) {
             /* 答對才自動跳；答錯留時間看 hint，由學生自己按「下一題」 */
             if (currentQ < QUIZ_QUESTIONS.length - 1) {
-                setTimeout(() => setCurrentQ(prev => prev + 1), 900);
+                setTimeout(() => {
+                    setCurrentQ(prev => { saveQuiz({ currentQ: prev + 1 }); return prev + 1; });
+                }, 900);
             } else {
-                setTimeout(() => setQuizDone(true), 900);
+                setTimeout(() => { setQuizDone(true); saveQuiz({ done: true }); }, 900);
             }
         }
     };
@@ -624,6 +745,7 @@ const W4PageContent = () => {
         setSelections({});
         setQuizDone(false);
         setQuizStarted(true);
+        saveQuiz({ currentQ: 0, selections: {}, done: false, started: true });
     };
 
     const score = Object.entries(selections).filter(([i, v]) => v === QUIZ_QUESTIONS[i].answer).length;
@@ -731,12 +853,28 @@ const W4PageContent = () => {
 
                                     {isOpen && (
                                         <div className="px-5 pb-5 border-t border-[var(--border)] animate-in slide-in-from-top-2 duration-150">
-                                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-3 mt-4 text-[13px]">
+                                            {/* ① 適用情境 — 最優先，chip 化 */}
+                                            <div className="mt-4 mb-4">
+                                                <div className="text-[10px] font-mono font-bold uppercase tracking-wider mb-2"
+                                                    style={{ color: m.color }}>適用情境（你的題目問的是這類問題嗎？）</div>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {m.when.match(/「[^」]+」/g)?.map(chip => (
+                                                        <span key={chip}
+                                                            className="inline-block px-2.5 py-1 text-[12px] font-bold rounded-[6px] border-2"
+                                                            style={{ color: m.color, borderColor: m.color, background: m.bg }}>
+                                                            {chip}
+                                                        </span>
+                                                    )) ?? (
+                                                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{m.when}</p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            {/* ② 目的 / 強項 / 弱點 */}
+                                            <div className="grid md:grid-cols-2 gap-x-8 gap-y-3 text-[13px]">
                                                 {[
                                                     { label: '目的', val: m.purpose },
                                                     { label: '強項', val: m.strength },
                                                     { label: '弱點', val: m.weakness },
-                                                    { label: '適用情境', val: m.when },
                                                 ].map(({ label, val }) => (
                                                     <div key={label}>
                                                         <div className="text-[10px] font-mono font-bold uppercase tracking-wider mb-1"
@@ -745,10 +883,11 @@ const W4PageContent = () => {
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="mt-4 px-4 py-3 rounded-[var(--radius-unified)] text-[12px] text-[var(--ink-mid)] flex gap-2"
-                                                style={{ background: m.bg }}>
-                                                <span className="text-[14px] shrink-0">⚠️</span>
-                                                <span>{m.note}</span>
+                                            {/* ③ ⚠️ 選前必讀 */}
+                                            <div className="mt-4 pl-4 py-3 border-l-4 text-[12.5px] text-[var(--ink)] leading-relaxed"
+                                                style={{ borderColor: m.color, background: m.bg }}>
+                                                <span className="font-bold mr-1" style={{ color: m.color }}>選前注意：</span>
+                                                {m.note}
                                             </div>
                                         </div>
                                     )}
@@ -757,12 +896,36 @@ const W4PageContent = () => {
                         })}
                     </div>
 
-                    {/* 兩層判斷　·　互動決策樹 */}
+                    {/* L1 概念卡（只說資料來源這一題，Step 3 再實際選） */}
                     <div className="flex items-center gap-2 mb-2">
                         <ContentTypeChip type="學" />
-                        <p className="text-[13px] font-bold text-[var(--ink)]">兩層判斷決策樹：互動練習</p>
+                        <p className="text-[13px] font-bold text-[var(--ink)]">判斷的第一題：資料從哪來？</p>
                     </div>
-                    <DecisionTree />
+                    <div className="rounded-[var(--radius-unified)] border border-[var(--border)] overflow-hidden bg-white">
+                        <div className="px-5 pt-4 pb-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="rounded-[8px] border-2 border-[var(--border)] p-4">
+                                    <div className="font-bold text-[13.5px] text-[var(--ink)] mb-1.5">🔍 自己去收集</div>
+                                    <div className="text-[12px] text-[var(--ink-mid)] leading-[1.75]">資料目前不存在，要你出門問人、去觀察、或做實驗才有。</div>
+                                    <div className="mt-3 flex flex-wrap gap-1.5">
+                                        {[{icon:'📋',name:'問卷'},{icon:'🎤',name:'訪談'},{icon:'🧪',name:'實驗'},{icon:'👀',name:'觀察'}].map(m => (
+                                            <span key={m.name} className="text-[11.5px] font-bold px-2 py-0.5 rounded-[5px] bg-[var(--accent-light)] text-[var(--accent)]">{m.icon} {m.name}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="rounded-[8px] border-2 border-[var(--border)] p-4">
+                                    <div className="font-bold text-[13.5px] text-[var(--ink)] mb-1.5">📚 分析已有文本</div>
+                                    <div className="text-[12px] text-[var(--ink-mid)] leading-[1.75]">資料已存在（論文、新聞、貼文、史料），你要分析它本身的內容，不是整理「前人說什麼」。</div>
+                                    <div className="mt-3">
+                                        <span className="text-[11.5px] font-bold px-2 py-0.5 rounded-[5px] bg-[#f5f3ff] text-[#6b21a8]">📚 文獻分析法</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-5 py-2.5 bg-[var(--paper-warm)] border-t border-[var(--border)] text-[11.5px] text-[var(--ink-light)]">
+                            💡 Step 3 會讓你用這個判斷為自己的研究題目實際選一次方法。現在先記住這個分岔就好。
+                        </div>
+                    </div>
 
                     {/* 理解檢核 1 */}
                     <div className="flex items-center gap-2 mb-1">
@@ -822,7 +985,7 @@ const W4PageContent = () => {
                             <h3 className="text-[18px] font-bold mb-2">方法判斷測驗</h3>
                             <p className="text-[var(--ink-light)] text-[13px] mb-6">10 題 · 每題選一個答案 · 選完自動跳下題</p>
                             <button
-                                onClick={() => setQuizStarted(true)}
+                                onClick={() => { setQuizStarted(true); saveQuiz({ started: true }); }}
                                 className="bg-[var(--accent)] hover:opacity-90 text-white font-bold px-8 py-3 rounded-[var(--radius-unified)] transition-colors text-[14px] flex items-center gap-2 mx-auto"
                             >
                                 開始測驗 <ArrowRight size={16} />
@@ -923,8 +1086,11 @@ const W4PageContent = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    if (currentQ < QUIZ_QUESTIONS.length - 1) setCurrentQ(prev => prev + 1);
-                                                    else setQuizDone(true);
+                                                    if (currentQ < QUIZ_QUESTIONS.length - 1) {
+                                                        setCurrentQ(prev => { saveQuiz({ currentQ: prev + 1 }); return prev + 1; });
+                                                    } else {
+                                                        setQuizDone(true); saveQuiz({ done: true });
+                                                    }
                                                 }}
                                                 className="ml-3 px-3 py-1 rounded-[6px] bg-[var(--danger)] text-white font-bold text-[11px]"
                                             >
@@ -966,80 +1132,125 @@ const W4PageContent = () => {
                         />
                     )}
 
-                    {/* 我的本週題目（從 W3 自動帶入，可微調）*/}
+                    {/* 我的本週題目（從 W3 自動帶入）*/}
                     <div className="flex items-center gap-2 mb-1">
                         <ContentTypeChip type="做" />
                         <p className="text-[12px] font-bold text-[var(--ink-mid)]">我這週的研究題目</p>
                     </div>
-                    <ThinkRecord
-                        key={topicKey}
-                        dataKey="w4-my-topic"
-                        prompt="我這週要選方法的題目"
-                        placeholder="貼上或輸入你在 W3 定案的研究題目…"
-                        rows={2}
-                    />
+                    {w3Topic ? (
+                        <div className="bg-[var(--accent-light)] border border-[var(--accent)] rounded-[var(--radius-unified)] px-4 py-3">
+                            <span className="text-[11px] font-mono font-bold text-[var(--accent)] tracking-wider block mb-1.5">📎 從 W3 帶入</span>
+                            <p className="text-[14px] text-[var(--ink)] leading-relaxed">{w3Topic}</p>
+                        </div>
+                    ) : (
+                        <ThinkRecord
+                            key={topicKey}
+                            dataKey="w4-my-topic"
+                            prompt="我這週要選方法的題目"
+                            placeholder="貼上或輸入你在 W3 定案的研究題目…"
+                            rows={2}
+                        />
+                    )}
 
-                    {/* 第一層判斷 */}
+                    {/* L1 互動選片 */}
                     <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
                             <span className="font-mono text-[10px] font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[3px]">L1</span>
                             <span className="font-bold text-[13px] text-[var(--ink)]">第一層判斷：資料從哪來？</span>
                         </div>
-                        <div className="p-5 text-[13px] text-[var(--ink-mid)] space-y-2">
-                            <p>□ 我要自己收集新資料（去問人、去觀察、去做實驗）→ 繼續第二層</p>
-                            <p>□ 我要分析已有的文本/資料 → 文獻分析法</p>
+                        <div className="p-4 space-y-3">
+                            <div className="flex flex-col gap-2 sm:flex-row">
+                                {L1_CHIPS.map(chip => {
+                                    const active = l1Pick === chip.id;
+                                    return (
+                                        <button
+                                            key={chip.id}
+                                            onClick={() => pickL1(chip.id)}
+                                            className={`flex-1 text-left px-4 py-3 rounded-[8px] border-2 transition-colors ${active ? 'border-[var(--accent)] bg-[var(--accent-light)]' : 'border-[var(--border)] hover:border-[var(--accent)]'}`}
+                                        >
+                                            <div className={`text-[13px] font-bold leading-snug ${active ? 'text-[var(--accent)]' : 'text-[var(--ink)]'}`}>{chip.label}</div>
+                                            <div className="text-[11px] text-[var(--ink-light)] mt-0.5">{chip.sub}</div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {l1Pick && (
+                                <div>
+                                    <div className="text-[11px] font-mono text-[var(--ink-mid)] mb-1">✍️ {L1_CHIPS.find(c => c.id === l1Pick)?.notePlaceholder}</div>
+                                    <textarea
+                                        value={l1Note}
+                                        onChange={e => changeL1Note(e.target.value)}
+                                        rows={1}
+                                        className="w-full px-3 py-2 text-[13px] border border-[var(--border)] rounded-[6px] bg-[var(--paper)] text-[var(--ink)] resize-none focus:outline-none focus:border-[var(--accent)]"
+                                        placeholder="用一句話說明…"
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="做" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">第一層判斷紀錄</p>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w4-layer1"
-                        prompt="第一層判斷"
-                        placeholder="我的資料要自己收集，因為……（或）我要分析已有文本，因為……"
-                        rows={2}
-                    />
-
-                    {/* 第二層判斷 */}
-                    <div className="bg-white border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
-                        <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center gap-2">
-                            <span className="font-mono text-[10px] font-bold bg-[var(--accent)] text-white px-2 py-0.5 rounded-[3px]">L2</span>
-                            <span className="font-bold text-[13px] text-[var(--ink)]">第二層判斷：問的是什麼？</span>
-                        </div>
-                        <div className="p-5 text-[13px] text-[var(--ink-mid)] space-y-2">
-                            <p>❶ 比例趨勢 vs 原因脈絡？我要的是：</p>
-                            <p>❷ 能否操控自變項？我要的是：</p>
-                            <p>❸ 真實行為 vs 想法態度？我要的是：</p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="做" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">第二層判斷紀錄</p>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w4-layer2"
-                        prompt="第二層判斷"
-                        placeholder="最關鍵的那一條判斷問題是 ❶/❷/❸，我的回答是……"
-                        rows={3}
-                    />
-
-                    {/* 主要方法 */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="做" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">主要方法選定</p>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w4-main-method"
-                        prompt="我選定的主要方法"
-                        placeholder="問卷／訪談／實驗／觀察／文獻分析法（如果是文獻分析法，請寫明子類型：歷史文獻／內容分析／論述分析／敘事分析）"
-                        rows={2}
-                    />
-
-                    {/* 文獻分析四子類型 — 選了文獻分析法才需要看，放在主方法正下方 */}
-                    <DepthBlock title="📚 選了文獻分析法？這裡選子類型">
+                    {/* L1 選完 → 直接選方法（collect → 4 方法；literature → 子類型）*/}
+                    {l1Pick === 'collect' && (
+                        <>
+                            <div className="flex items-center gap-2 mb-2">
+                                <ContentTypeChip type="做" />
+                                <p className="text-[12px] font-bold text-[var(--ink-mid)]">選定你的研究方法</p>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {METHODS.filter(m => m.id !== 'literature').map(m => {
+                                    const active = mainMethodPick === m.id;
+                                    return (
+                                        <button
+                                            key={m.id}
+                                            onClick={() => pickMainMethod(m.id)}
+                                            className="flex items-center gap-2 px-3.5 py-2.5 rounded-[8px] border-2 transition-colors text-left"
+                                            style={active
+                                                ? { borderColor: m.color, background: m.bg }
+                                                : { borderColor: 'var(--border)', background: 'white' }}
+                                        >
+                                            <span className="text-[16px]">{m.icon}</span>
+                                            <span className="text-[12.5px] font-bold" style={{ color: active ? m.color : 'var(--ink)' }}>{m.name}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
+                    {l1Pick === 'literature' && (
+                        <>
+                            <div className="flex items-center gap-2 mb-2">
+                                <ContentTypeChip type="做" />
+                                <p className="text-[12px] font-bold text-[var(--ink-mid)]">選定文獻分析子類型</p>
+                            </div>
+                            <div className="flex items-center gap-3 px-4 py-3 rounded-[8px] border-2 mb-3"
+                                style={{ borderColor: '#6b21a8', background: '#f5f3ff' }}>
+                                <span className="text-[18px]">📚</span>
+                                <div>
+                                    <div className="text-[13px] font-bold text-[#6b21a8]">文獻分析法</div>
+                                    <div className="text-[11px] text-[#6b21a8]/60">L1 已確定 → 再挑一個子類型</div>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {LIT_SUBTYPES.map(s => {
+                                    const active = litSubPick === s.id;
+                                    return (
+                                        <button
+                                            key={s.id}
+                                            onClick={() => pickLitSub(s.id)}
+                                            className="flex flex-col px-3 py-2.5 rounded-[8px] border-2 transition-colors text-left"
+                                            style={active
+                                                ? { borderColor: '#6b21a8', background: '#f5f3ff' }
+                                                : { borderColor: 'var(--border)', background: 'white' }}
+                                        >
+                                            <span className="text-[12px] font-bold" style={{ color: active ? '#6b21a8' : 'var(--ink)' }}>{s.label}</span>
+                                            <span className="text-[10.5px] text-[var(--ink-light)] mt-0.5">{s.when}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
+                    <DepthBlock title="延伸補充" forceOpen={litSelected}>
                         <p className="text-[12px] text-[var(--ink-mid)] leading-[1.75] mb-3">
                             文獻分析法還要再決定一件事：你要「分析」的方向是什麼？下面四種各有不同的分析邏輯，選一種最接近你題目的，然後在上方主方法格補上子類型名稱。
                         </p>
@@ -1104,6 +1315,63 @@ const W4PageContent = () => {
                         scaffold={['不需要', '（若需要）需要 ___ 法做輔助，因為…']}
                         rows={2}
                     />
+
+                    {/* AI 判斷比對（選做）*/}
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-[4px] border border-[var(--gold)]/50 bg-[var(--gold-light)] text-[var(--gold)]">可選</span>
+                        <span className="text-[11.5px] text-[var(--ink-light)]">完成上面必填後，有餘力再做</span>
+                    </div>
+                    <DepthBlock title="AI 使用提醒">
+                        <div className="space-y-4">
+                            <div className="flex items-start gap-2 px-3 py-2.5 bg-[var(--paper-warm)] rounded-[6px] border border-[var(--border-mid)]">
+                                <span className="text-[13px] shrink-0">⚠️</span>
+                                <p className="text-[12px] text-[var(--ink-mid)] leading-[1.7]">
+                                    <span className="font-bold text-[var(--ink)]">請先完成上面所有選擇，再打開這裡。</span><br />
+                                    這是「先自己判斷，再看 AI 怎麼說」的練習——若先看 AI，你的判斷就沒意義了。
+                                </p>
+                            </div>
+                            <div>
+                                <div className="flex items-center justify-between mb-1.5">
+                                    <span className="text-[11px] font-mono font-bold text-[var(--ink-mid)]">把下面的 prompt 貼進 Claude、ChatGPT 或 Gemini</span>
+                                    <button
+                                        onClick={() => {
+                                            const topic = (JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')||{})['w4-my-topic'] || '（你的題目）';
+                                            const prompt = `我的研究題目是：「${topic}」\n\n請幫我判斷這個題目適合哪種研究方法，並說明理由。\n\n判斷步驟：\n1. 我的資料要自己收集（去問人／觀察／做實驗），還是分析已有的文本？\n2. 如果是自己收集：適合問卷、訪談、實驗、還是觀察？\n   請根據我的題目說明為什麼選這個方法，而不是其他方法。\n3. 如果是分析已有文本：屬於哪種文獻分析（歷史文獻分析／內容分析／論述分析／敘事分析）？\n\n請直接給我你的判斷和理由，不需要問我問題。`;
+                                            navigator.clipboard.writeText(prompt).catch(() => {});
+                                        }}
+                                        className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-[5px] border border-[var(--border)] hover:bg-[var(--paper-warm)] transition-colors text-[var(--accent)]"
+                                    >
+                                        複製 prompt
+                                    </button>
+                                </div>
+                                <div className="bg-[var(--paper)] border border-[var(--border)] rounded-[6px] p-3 text-[11.5px] font-mono text-[var(--ink-mid)] leading-[1.8] whitespace-pre-wrap select-all">
+{`我的研究題目是：「你的題目貼這裡」
+
+請幫我判斷這個題目適合哪種研究方法，並說明理由。
+
+判斷步驟：
+1. 我的資料要自己收集（去問人／觀察／做實驗），還是分析已有的文本？
+2. 如果是自己收集：適合問卷、訪談、實驗、還是觀察？
+   請根據我的題目說明為什麼選這個方法，而不是其他方法。
+3. 如果是分析已有文本：屬於哪種文獻分析（歷史文獻分析／內容分析／論述分析／敘事分析）？
+
+請直接給我你的判斷和理由，不需要問我問題。`}
+                                </div>
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <ContentTypeChip type="做" />
+                                    <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI 說了什麼？你同意嗎？</p>
+                                </div>
+                                <ThinkRecord
+                                    dataKey="w4-ai-compare"
+                                    prompt="AI 判斷 vs 自己判斷"
+                                    placeholder="AI 建議的方法是 ___。我同意／不同意，因為……（如果不同意，是哪裡的判斷不一樣？）"
+                                    rows={3}
+                                />
+                            </div>
+                        </div>
+                    </DepthBlock>
 
                     {/* 🆕 常見誤診糾正 4 種 — 選完方法後的壓力測試 */}
                     <div className="flex items-center gap-2 mb-1">
@@ -1248,11 +1516,11 @@ const W4PageContent = () => {
                         </div>
                     </div>
 
-                    {/* W4 不開放 AI 協作原則卡 */}
+                    {/* W4 AI 使用原則卡 */}
                     <div className="rounded-[var(--radius-unified)] border-2 border-[var(--gold)]/40 bg-[var(--gold-light)] p-4 px-5">
-                        <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--gold)] font-bold mb-1">本週原則 · 不開放 AI 協作</div>
+                        <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--gold)] font-bold mb-1">本週原則 · AI 用法</div>
                         <p className="text-[13.5px] text-[var(--ink)] leading-[1.75]">
-                            這週先練自己判斷方法。<strong>AI 可以幫你列選項，但不能替你決定哪一種方法最適合你的題目。</strong>所以 W4 沒有 AI-RED 要填，W5 用到 AI 時恢復。
+                            這週先自己判斷方法，再用 AI 對照——順序不能反。<strong>Step 3 有一個「可選」的 AI 比對練習</strong>：自己選完方法後，把題目貼給 AI，看它怎麼判斷、你同不同意。有做的話記得填 AI-RED。
                         </p>
                     </div>
 
@@ -1369,7 +1637,7 @@ const W4PageContent = () => {
                         <li><strong>② 做：</strong>Step 1 理解檢核暖身、Step 2 兩層判斷 10 題測驗、Step 3 為自己 W3 定案題目選主方法、Step 4 兩題反思</li>
                         <li><strong>③ 補紀錄：</strong>我的 W4 題目／第一層判斷／第二層判斷／主要方法／選擇理由／輔助方法／反思 1（最易搞混的方法）／反思 2（文獻 vs 文獻分析）</li>
                         <li><strong>④ 交：</strong>整理 W4 學習紀錄，依老師指定方式上傳到 Google Classroom</li>
-                        <li><strong>⑤ 本週可完整自學</strong>——Step 3 的「同儕挑戰」沒有同學時，用同 Step 的「4 種常見誤診」卡自我檢查即可（同目的）。W4 本週設計上不使用 AI 選方法，沒有 AI-RED 要填。</li>
+                        <li><strong>⑤ 本週可完整自學</strong>——Step 3 的「同儕挑戰」沒有同學時，用同 Step 的「4 種常見誤診」卡自我檢查即可（同目的）。Step 3 有選做的 AI 比對練習，有做的話填 AI-RED 紀錄即可。</li>
                     </ol>
                     <div className="mt-3 pt-3 border-t border-[#0284C7]/30">
                         <p className="text-[12px] font-bold text-[#075985] mb-1">⛑️ 最低完成版（缺課學生：至少做到這些才算補到核心）</p>

@@ -12,7 +12,6 @@ import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import AICollaborationPrinciples from '../components/ui/AICollaborationPrinciples';
-import AIDialogSubmission from '../components/ui/AIDialogSubmission';
 import AIModePicker from '../components/ui/AIModePicker';
 import { ResearcherRedlines } from '../components/ui/ResearcherRedlines';
 import TrapRewritePractice from '../components/ui/TrapRewritePractice';
@@ -152,7 +151,6 @@ const EXPORT_FIELDS = [
     { key: 'w15-ai-feedback', label: 'AI 檢核建議紀錄' },
     { key: 'w15-judge-table', label: '判斷取捨紀錄' },
     { key: 'w15-final-draft', label: '最終四層結論草稿' },
-    { key: 'w15-ai-dialog-submission', label: 'AI 完整對話繳交方式（用了 AI 必填）', question: 'A 私人留言 / B 文件上傳並貼連結' },
     { key: 'w15-aired-record', label: 'AI-RED 敘事紀錄（用了 AI 必填）', question: '本週用 AI 壓力測試四層結論的最重要一次互動（A-I-R-E-D 五要素）' },
     { key: 'w15-trap-rewrite-3', label: '雷 #3 改寫練習（個人繳交項）', question: '把「證實了」這種武斷因果語氣改成研究員的保守版' },
 ];
@@ -160,7 +158,6 @@ const EXPORT_FIELDS = [
 /* — RecordDrawer：不匯出、但要在總覽顯示的「元件自帶 dataKey」— */
 const RECORD_EXTRA_FIELDS = [
     { key: 'w15-ai-mode', label: 'AI 使用模式選擇', store: 'records' },
-    { key: 'w15-brave-scientist', label: 'Brave Scientist 反思（選填·不匯出）', store: 'standalone' },
 ];
 
 /* ══════════════════════════════════════
@@ -256,9 +253,6 @@ const W15PageContent = () => {
     const myTopic = saved['w8-merged-topic'] || saved['w8-research-question'] || '';
     const myMethod = saved['w9-my-method'] || saved['w8-tool-method'] || '';
     const myQuestion = saved['w8-research-question'] || myTopic;
-    /* W14 跨週帶入 */
-    const w14Description = saved['w14-my-description'] || '';
-    const w14Inference = saved['w14-my-inference'] || '';
     /* 暖身配對練習 */
     const [warmupSel, setWarmupSel] = useState({ 1: '', 2: '', 3: '', 4: '' });
     const [warmupRevealed, setWarmupRevealed] = useState(false);
@@ -324,28 +318,6 @@ const W15PageContent = () => {
                         </div>
                     </div>
                     </DepthBlock>
-
-                    {/* 從 W14 帶入 — 描述/推論作為四層的雛型 */}
-                    {(w14Description || w14Inference) && (
-                        <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border-2 border-[#BAE6FD]">
-                            <p className="text-[13px] text-[#0369A1] font-bold mb-2">📂 你 W14 寫的（這就是四層結論的「描述+詮釋」雛型）</p>
-                            {w14Description && (
-                                <div className="mb-2">
-                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">🔵 W14 描述</p>
-                                    <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w14Description}</p>
-                                </div>
-                            )}
-                            {w14Inference && (
-                                <div>
-                                    <p className="text-[11px] text-[#075985] font-bold uppercase tracking-wider mb-1">🔴 W14 推論（=今天的「詮釋」）</p>
-                                    <p className="text-[12px] text-[#0C4A6E] leading-relaxed">{w14Inference}</p>
-                                </div>
-                            )}
-                            <p className="text-[11px] text-[#0369A1] italic mt-2 leading-relaxed border-t border-[#BAE6FD] pt-2">
-                                💡 W14 是針對「一張圖」寫的；本週要把這個雛型升級為整份研究的結論，再加兩層（呼應、批判）。
-                            </p>
-                        </div>
-                    )}
 
                     {/* W15 開場：今天多出哪兩層 */}
                     <div className="grid md:grid-cols-2 gap-3 text-[12px]">
@@ -608,15 +580,6 @@ const W15PageContent = () => {
                     {/* 動手前警戒語 */}
                     <ResearcherRedlines mode="warning" stage="W15" />
 
-                    <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                        <div className="flex items-center gap-2 mb-1">
-                            <ContentTypeChip type="做" />
-                            <p className="text-[14px] font-bold text-[var(--ink)]">✍️ 你先寫，AI 再幫你檢核</p>
-                        </div>
-                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                            先寫出粗糙版也可以，不要停在空白頁。第二節課可以用 AI 協助檢查與潤飾，但內容、邏輯與結論邊界仍要由你決定。<strong>不准停筆！</strong>
-                        </p>
-                    </div>
                     {myQuestion && (
                         <div className="p-4 rounded-[var(--radius-unified)] bg-[#F0F9FF] border border-[#BAE6FD]">
                             <p className="text-[12px] text-[#0369A1] font-bold mb-1">📂 你的研究問題</p>
@@ -625,7 +588,7 @@ const W15PageContent = () => {
                         </div>
                     )}
 
-                    {/* W15 三欄結論寫作鷹架 — DO 層，動筆前先把每句話分類 */}
+                    {/* W15 三欄結論寫作鷹架 */}
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <ContentTypeChip type="做" />
@@ -634,16 +597,13 @@ const W15PageContent = () => {
                         <ThreeColumnConclusion dataKey="w15-three-column" />
                     </div>
 
-                    {/* 動手寫四層初稿提示卡 — 網頁定位鐵律：長字寫在小組共筆/docx，網頁只收最終版（在 Step 3 自我檢視收 w15-final-draft）*/}
+                    {/* 動手寫四層初稿提示卡 */}
                     <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)] bg-[#F8F8FB] p-5">
                         <div className="flex items-center gap-2 mb-2">
                             <ContentTypeChip type="做" />
-                            <p className="text-[14px] font-bold text-[var(--accent)]">✍️ 動手寫四層結論初稿（在小組共筆／docx）</p>
+                            <p className="text-[14px] font-bold text-[var(--accent)]">✍️ 在小組共筆／docx 寫四層初稿</p>
                         </div>
-                        <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            先在<strong>小組共筆</strong>把四層初稿寫一輪。寫的時候照下面四層次：
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11.5px] leading-relaxed">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11.5px] leading-relaxed mb-3">
                             <div className="bg-white border border-[#BFDBFE] rounded p-2.5">
                                 <p className="font-bold text-[#2563EB] mb-0.5">🔵 描述</p>
                                 <p className="text-[var(--ink-mid)] m-0">我看到了什麼？（先報事實／數字）</p>
@@ -661,8 +621,8 @@ const W15PageContent = () => {
                                 <p className="text-[var(--ink-mid)] m-0">但這個結論不能說……</p>
                             </div>
                         </div>
-                        <p className="text-[11.5px] text-[var(--ink-light)] italic mt-3 leading-relaxed">
-                            💡 寫完初稿 → 進 Step 3 自我檢視 → 修正版貼到「四層結論最終版」格子。網頁不收初稿，避免重複打字。
+                        <p className="text-[11.5px] text-[var(--ink-light)] leading-relaxed">
+                            粗糙沒關係，<strong>不准停在空白頁</strong>。寫完 → Step 3 自查 → 修正版貼到「四層結論最終版」。網頁不收初稿。
                         </p>
                     </div>
                 </div>
@@ -1020,13 +980,6 @@ const W15PageContent = () => {
                                 />
                             </div>
 
-                            {/* 人工判斷取捨 */}
-                            <div className="p-4 rounded-[var(--radius-unified)] border border-[var(--border)] bg-[var(--paper-warm)]">
-                                <p className="text-[14px] font-bold text-[var(--ink)] mb-1">⚖️ 人工判斷 · 對照 AI 版本，逐條判斷</p>
-                                <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
-                                    AI 給你的是建議，不是答案。每一條都要決定：<strong>採納、不採納、還是修改後採納</strong>。
-                                </p>
-                            </div>
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
                                     <ContentTypeChip type="做" />
@@ -1049,8 +1002,8 @@ const W15PageContent = () => {
                                 </p>
                             </div>
 
-                            {/* 完整對話繳交 */}
-                            <AIDialogSubmission week="15" taskName="四層結論檢核對話" required={true} />
+                            {/* AI-RED 精簡反思紀錄 */}
+                            <AIREDNarrative week="15" hint="本週用 AI 壓力測試四層結論：A=使用的工具 / I=方法別 prompt / R=AI 找到的限制與盲點 / E=我同意/不同意哪些 / D=採納哪些修正" />
                         </>
                     )}
 
@@ -1075,19 +1028,6 @@ const W15PageContent = () => {
                             { label: '交出', text: '個人：頁面上方「我的紀錄」匯出 → 貼 Classroom（含四層結論、三欄自查、AI-RED 如有）' },
                         ]}
                     />
-                    {/* AI-RED 敘事紀錄（用了 AI 必填）*/}
-                    {(w15AiMode === 'teach' || w15AiMode === 'verify') ? (
-                        <>
-                            <div className="flex items-center gap-2 mb-1">
-                                <ContentTypeChip type="交出" />
-                                <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI-RED 紀錄（必填）</p>
-                            </div>
-                            <AIREDNarrative week="15" hint="本週用 AI 壓力測試四層結論：A=Gemini Pro / I=方法別 prompt / R=AI 找到的限制與盲點 / E=我同意/不同意哪些 / D=採納哪些修正" />
-                        </>
-                    ) : (
-                        <AIREDNarrative week="15" hint="本週若有用 AI 檢核四層結論，記下最關鍵的一次互動" optional={true} />
-                    )}
-
                     {/* 雙線繳交主卡 — 對齊 W13/W14 收尾節奏 */}
                     <div className="bg-white border-2 border-[#10B981] rounded-[var(--radius-unified)] overflow-hidden">
                         <div className="bg-[#10B981] text-white px-4 py-2 font-bold text-[13px]">

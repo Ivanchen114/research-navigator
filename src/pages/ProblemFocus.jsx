@@ -5,7 +5,6 @@ import ThinkChoice from '../components/ui/ThinkChoice';
 import StepEngine from '../components/ui/StepEngine';
 import HeroBlock from '../components/ui/HeroBlock';
 import TaskCard from '../components/ui/TaskCard';
-import AIREDNarrative from '../components/ui/AIREDNarrative';
 import ResetWeekButton from '../components/ui/ResetWeekButton';
 import CopyButton from '../components/ui/CopyButton';
 import StepBriefing from '../components/ui/StepBriefing';
@@ -27,22 +26,22 @@ import './ProblemFocus.css';
 
 const FOUR_STEPS = [
     {
-        step: 'STEP 1', name: '觀察現象', who: 'human', whotxt: '先由你觀察',
+        step: '階段一', short: '觀察', prefix: '', suffix: '現象', name: '觀察現象', who: 'human', whotxt: '先由你觀察',
         how: '像攝影機一樣，具體描述你看到的畫面。不解釋，只描述。',
         ex: '段考前圖書館閱覽室爆滿，連地板都坐人；旁邊的借書區和書架區空無一人，連燈都沒開全。',
     },
     {
-        step: 'STEP 2', name: '發現落差', who: 'both', whotxt: '人主導，AI 可協助',
+        step: '階段二', short: '落差', prefix: '發現', suffix: '', name: '發現落差', who: 'both', whotxt: '人主導，AI 可協助',
         how: '這裡有什麼矛盾？哪裡怪怪的？「應該是⋯但實際上⋯」',
         ex: '圖書館的核心存在應該是「借閱書籍」，但段考期間它變成了只有桌椅功能、沒有閱讀功能的大型K書房。大家湧向圖書館，卻完全不碰最珍貴的資源：書。',
     },
     {
-        step: 'STEP 3', name: '展開假設', who: 'both', whotxt: '⚠️ 先發散，別急著鎖死',
+        step: '階段三', short: '假設', prefix: '展開', suffix: '', name: '展開假設', who: 'both', whotxt: '⚠️ 先發散，別急著鎖死',
         how: '這個矛盾背後可能的解釋是什麼？至少 3 個、最多 5 個，不要只想一個就鎖死。',
         ex: '① 考試壓力推學生找個地方讀／② 同儕氛圍（看到別人讀就讀）／③ 圖書館的「讀書感」儀式／④ 空教室沒冷氣、沒安靜感／⑤ 家裡讀不下去。',
     },
     {
-        step: 'STEP 4', name: '鎖定研究問題', who: 'ai', whotxt: '人先挑，AI 協助修句',
+        step: '階段四', short: '鎖定', prefix: '', suffix: '研究問題', name: '鎖定研究問題', who: 'ai', whotxt: '人先挑，AI 協助修句',
         how: '從上一段假設中挑一個你最想先研究的，寫成 A／B／C 型句。AI 協助翻譯成學術語言，但「挑哪個」是你的研究設計決定。',
         ex: '【A型】我想探究「考試壓力」如何影響學生對「圖書館空間使用」的選擇。（從 ① 出發；②③ 留待後續研究）',
     },
@@ -87,14 +86,16 @@ const EXPORT_FIELDS = [
     { key: 'w2-practice2-phenomenon', label: '[暖身 ②課堂] 現象', question: '像攝影機一樣描述（暖身）' },
     { key: 'w2-practice2-gap', label: '[暖身 ②課堂] 落差', question: '應該是⋯但實際上⋯（暖身）' },
     { key: 'w2-practice2-hypotheses', label: '[暖身 ②課堂] 假設', question: '可能的 3-5 個解釋（暖身）' },
-    { key: 'w2-step1-phenomenon', label: 'Step 1 現象', question: '像攝影機一樣，你看到了什麼？（至少 30 字）' },
-    { key: 'w2-step2-gap', label: 'Step 2 落差', question: '哪裡跟你想的不一樣？矛盾在哪？' },
-    { key: 'w2-step3-question', label: 'Step 3 展開假設', question: '這個矛盾背後可能的 3-5 個解釋' },
+    { key: 'w2-step1-phenomenon', label: '階段一 現象', question: '像攝影機一樣，你看到了什麼？（至少 30 字）' },
+    { key: 'w2-step2-gap', label: '階段二 落差', question: '哪裡跟你想的不一樣？矛盾在哪？' },
+    { key: 'w2-step3-question', label: '階段三 展開假設', question: '這個矛盾背後可能的 3-5 個解釋' },
     { key: 'w2-abc-judgment', label: '第一輪：挑選假設＋ABC 型判斷', question: '你選哪個假設？為什麼選它？它屬於 A／B／C 哪型？' },
     { key: 'w2-rq-draft', label: '第一輪：研究問題草稿（自寫）', question: '你自己先寫一句研究問題（給 AI 審用的）' },
     { key: 'w2-ai-intent-choice', label: '第三輪：AI 審核後的決定', question: '審核後你決定保留自己的、採 AI 改寫、還是混合？' },
     { key: 'w2-final-intent', label: '最終研究問題', question: '你的最終研究問題（帶去 W3 的版本）' },
-    { key: 'w2-aired-record', label: 'AI-RED 敘事紀錄', question: '本週最重要的一次 AI 互動（A-I-R-E-D 五要素）' },
+    { key: 'w2-aired-ask', label: 'AI 互動：我問', question: '提示詞的核心是什麼？一句話' },
+    { key: 'w2-aired-said', label: 'AI 互動：AI 指出', question: 'AI 說我的問題出在哪？一句話' },
+    { key: 'w2-aired-decide', label: 'AI 互動：我決定', question: '保留 / 採用 / 混合，因為？' },
     { key: 'w2-reflect-stuck', label: '反思：卡在哪一段', question: '四段式框架你卡在哪一段？為什麼那段最難？' },
 ];
 
@@ -138,19 +139,19 @@ function W2Beat1RefCard() {
             </div>
             {phenomenon && (
                 <div className="flex items-baseline gap-2">
-                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[80px]">Step 1 現象</span>
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[80px]">階段一 現象</span>
                     <span className="text-[var(--ink-mid)] whitespace-pre-wrap line-clamp-2">{phenomenon}</span>
                 </div>
             )}
             {gap && (
                 <div className="flex items-baseline gap-2">
-                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[80px]">Step 2 落差</span>
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[80px]">階段二 落差</span>
                     <span className="text-[var(--ink-mid)] whitespace-pre-wrap line-clamp-2">{gap}</span>
                 </div>
             )}
             {hypotheses && (
                 <div className="flex items-start gap-2">
-                    <span className="text-[11px] font-mono font-bold text-[var(--accent)] shrink-0 w-[80px] mt-0.5">Step 3 假設</span>
+                    <span className="text-[11px] font-mono font-bold text-[var(--accent)] shrink-0 w-[80px] mt-0.5">階段三 假設</span>
                     <span className="text-[var(--ink)] whitespace-pre-wrap font-medium">{hypotheses}</span>
                 </div>
             )}
@@ -220,7 +221,7 @@ function W2Step4RefCard() {
             )}
             {question && (
                 <div className="flex items-start gap-2">
-                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px] mt-0.5">Step 3 假設</span>
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px] mt-0.5">階段三 假設</span>
                     <span className="text-[var(--ink)] whitespace-pre-wrap line-clamp-3">{question}</span>
                 </div>
             )}
@@ -232,7 +233,7 @@ function W2Step4RefCard() {
             )}
             {phenomenon && (
                 <div className="flex items-baseline gap-2">
-                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px]">Step 1 現象</span>
+                    <span className="text-[11px] font-mono font-bold text-[var(--ink-light)] shrink-0 w-[88px]">階段一 現象</span>
                     <span className="text-[var(--ink-mid)] whitespace-pre-wrap line-clamp-2">{phenomenon}</span>
                 </div>
             )}
@@ -455,13 +456,15 @@ function PracticeTabs() {
                 })}
             </div>
 
-            {/* 焦點提示 */}
-            <div
-                className="px-3 py-2 rounded-[var(--radius-unified)] text-[12px] font-medium"
-                style={{ background: tab.bg, color: tab.accent }}
-            >
-                👉 {tab.focus}
-            </div>
+            {/* 焦點提示（圖片載入失敗時隱藏，因為左右方位指示沒有意義） */}
+            {!imgError && (
+                <div
+                    className="px-3 py-2 rounded-[var(--radius-unified)] text-[12px] font-medium"
+                    style={{ background: tab.bg, color: tab.accent }}
+                >
+                    👉 {tab.focus}
+                </div>
+            )}
 
             {/* 三格快速 ThinkRecord */}
             <div className="space-y-3">
@@ -485,7 +488,7 @@ function PracticeTabs() {
                 />
             </div>
 
-            <div className="w2-notice block">❌ Step 3 不要只想一個假設就鎖死——研究的起點是承認「答案可能不只一個」。</div>
+            <div className="w2-notice block">❌ 階段三 不要只想一個假設就鎖死——研究的起點是承認「答案可能不只一個」。</div>
         </div>
     );
 }
@@ -652,12 +655,6 @@ const ProblemFocusContent = () => {
                                 ]}
                             />
 
-                            {/* 三套編號說明 — orientation 說明，深度補充 */}
-                            <DepthBlock title="三套編號說明">
-                            <div className="px-4 py-3 rounded-[var(--radius-unified)] bg-[var(--paper)] border border-dashed border-[var(--border)] text-[12px] text-[var(--ink-light)] leading-[1.8]">
-                                📐 <strong className="text-[var(--ink-mid)]">本週有三套編號，不衝突</strong>：① <strong>Step 1-6</strong> 是本週的課堂流程；② 表格裡的「觀察 / 落差 / 假設 / 鎖定」是<strong>四段式思考</strong>；③ Step 4 的「三輪」是 AI 協作的步驟。看到不同編號別緊張，它們是不同層次。
-                            </div>
-                            </DepthBlock>
 
                             {/* 「為什麼還不能研究」示範 — 白底 + 左側紅框，降低整塊彩度 */}
                             <div className="bg-white border border-[var(--border)] border-l-[3px] border-l-[var(--danger)] rounded-[8px] p-5 md:p-6">
@@ -681,16 +678,20 @@ const ProblemFocusContent = () => {
                                 <ContentTypeChip type="學" />
                                 <p className="text-[13px] font-bold text-[var(--ink)]">四段式思考框架</p>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {FOUR_STEPS.map((row, i) => (
-                                    <div key={i} className="flex items-start gap-3 p-3 bg-white rounded-[8px] border border-[var(--border)]">
-                                        <div className="shrink-0 w-7 h-7 flex items-center justify-center rounded font-mono font-bold text-[12px] text-white bg-[var(--accent)]">{i + 1}</div>
-                                        <div>
-                                            <div className="font-bold text-[13px] text-[var(--ink)] mb-0.5">{row.name}
-                                                <span className={`ml-2 text-[10px] font-mono font-normal px-1.5 py-0.5 rounded ${row.who === 'human' ? 'bg-[#ECFDF5] text-[#059669]' : row.who === 'ai' ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[var(--paper)] text-[var(--ink-light)]'}`}>{row.whotxt}</span>
-                                            </div>
-                                            <div className="text-[12px] text-[var(--ink-mid)] leading-[1.6]">{row.how}</div>
+                                    <div key={i} className="p-4 bg-white rounded-[10px] border border-[var(--border)] flex flex-col gap-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded font-mono font-bold text-[11px] text-white bg-[var(--accent)]">{i + 1}</div>
+                                            <span className="text-[10px] font-mono text-[var(--ink-light)]">{row.step}</span>
+                                            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${row.who === 'human' ? 'bg-[#ECFDF5] text-[#059669]' : row.who === 'ai' ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[var(--paper)] text-[var(--ink-light)]'}`}>{row.whotxt}</span>
                                         </div>
+                                        <div className="flex items-baseline gap-1 flex-wrap leading-[1.2]">
+                                            {row.prefix && <span className="font-serif text-[16px] text-[var(--ink-mid)]">{row.prefix}</span>}
+                                            <span className="font-serif font-bold text-[var(--ink)]" style={{ fontSize: '36px' }}>{row.short}</span>
+                                            {row.suffix && <span className="font-serif text-[16px] text-[var(--ink-mid)]">{row.suffix}</span>}
+                                        </div>
+                                        <div className="text-[12px] text-[var(--ink-mid)] leading-[1.6]">{row.how}</div>
                                     </div>
                                 ))}
                             </div>
@@ -714,69 +715,20 @@ const ProblemFocusContent = () => {
                                 <ContentTypeChip type="學" />
                                 <p className="text-[13px] font-bold text-[var(--ink)]">三種探究句型（A / B / C）</p>
                             </div>
-                            <div className="flex flex-col gap-1.5">
-                                {ABC_TYPES.map(card => (
-                                    <div key={card.l} className="flex items-center gap-3 p-2.5 px-3 bg-white rounded-[8px] border border-[var(--border)]">
-                                        <span className="shrink-0 w-6 h-6 flex items-center justify-center rounded font-mono font-bold text-[12px] text-white" style={{ background: card.l === 'A' ? '#16a34a' : card.l === 'B' ? '#0ea5e9' : '#7c3aed' }}>{card.l}</span>
-                                        <span className="font-bold text-[12.5px] text-[var(--ink)] shrink-0">{card.t}</span>
-                                        <span className="text-[12px] text-[var(--ink-mid)]">{card.p}</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <p className="text-[11.5px] text-[var(--ink-light)] mt-1">→ Step 4 挑假設時，每型的完整說明和例子會再出現。</p>
-
-                            {/* 三焦點示範卡 — worked example，深度補充 */}
-                            <DepthBlock title="看完整範例">
-                            <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)]/30 overflow-hidden">
-                                <div className="p-4 px-5 bg-[var(--accent-light)] border-b border-[var(--accent)]/20">
-                                    <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--accent)] font-bold mb-1">同一觀察 · 多種切法</div>
-                                    <h4 className="font-serif text-[17px] font-bold text-[var(--ink)] leading-[1.5]">同一個觀察，三種研究問題</h4>
-                                    <p className="text-[12.5px] text-[var(--ink-mid)] mt-2 leading-[1.75]">
-                                        「圖書館段考爆滿」——一個現象，可以切出三個完全不同的研究焦點。<strong>專業研究者的差別不是想出更多答案，而是看出同一個現象有幾種切法</strong>。
-                                    </p>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
-                                    {[
-                                        {
-                                            focus: '壓力越大，越往圖書館跑？',
-                                            contrast: '壓力 → 場所',
-                                            type: 'A',
-                                            typeColor: 'bg-[#16a34a]',
-                                            question: '段考壓力越大，高一學生是不是越傾向去圖書館讀書，而不是在家或空教室？壓力的高低真的會改變場所選擇嗎？',
-                                        },
-                                        {
-                                            focus: '考前爆滿，考後冷清',
-                                            contrast: '考前 vs 考後',
-                                            type: 'B',
-                                            typeColor: 'bg-[#0ea5e9]',
-                                            question: '大家考前擠爆圖書館，到底是為了「讀書效率」，還是為了緩解「如果不去就沒在讀書」的焦慮感？',
-                                        },
-                                        {
-                                            focus: '又吵又擠，卻覺得好讀書',
-                                            contrast: '安靜 vs 擁擠',
-                                            type: 'C',
-                                            typeColor: 'bg-[#7c3aed]',
-                                            question: '當圖書館變得又擠又吵時，為什麼學生還覺得那裡「比較好讀書」？這種「讀書氛圍」是怎麼產生的？',
-                                        },
-                                    ].map((f, i) => (
-                                        <div key={i} className="p-4 px-5 bg-white flex flex-col gap-2">
-                                            <div className="flex items-center gap-2">
-                                                <span className={`text-white text-[11px] font-bold font-mono px-2 py-0.5 rounded ${f.typeColor}`}>{f.type} 型</span>
-                                                <span className="text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">焦點 {i + 1}</span>
-                                            </div>
-                                            <div>
-                                                <div className="font-bold text-[14px] text-[var(--ink)]">{f.focus}</div>
-                                                <div className="text-[11px] font-mono text-[var(--ink-light)] mt-0.5">{f.contrast}</div>
-                                            </div>
-                                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.7] italic">「{f.question}」</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                {ABC_TYPES.map(card => {
+                                    const color = card.l === 'A' ? '#16a34a' : card.l === 'B' ? '#0ea5e9' : '#7c3aed';
+                                    const bg = card.l === 'A' ? '#f0fdf4' : card.l === 'B' ? '#f0f9ff' : '#faf5ff';
+                                    return (
+                                        <div key={card.l} className="p-4 rounded-[10px] border-2 flex flex-col gap-1.5" style={{ background: bg, borderColor: color + '50' }}>
+                                            <div className="font-mono font-bold leading-[1]" style={{ fontSize: '40px', color }}>{card.l}</div>
+                                            <div className="font-serif font-bold text-[22px] text-[var(--ink)] leading-[1.2]">{card.t}</div>
+                                            <div className="text-[12.5px] font-mono leading-[1.6]" style={{ color }}>{card.p}</div>
                                         </div>
-                                    ))}
-                                </div>
-                                <div className="p-3 px-5 bg-[var(--paper)] border-t border-[var(--border)] text-[11.5px] text-[var(--ink-light)] leading-[1.7]">
-                                    💡 注意：三個焦點都是<strong>同一個觀察</strong>切出來的——這就是 Step 3「先發散 3-5 個假設」的真正用意。<strong>不發散，你就只會看到第一個冒出來的角度</strong>。
-                                </div>
+                                    );
+                                })}
                             </div>
-                            </DepthBlock>
+                            <p className="text-[11.5px] text-[var(--ink-light)] mt-1">→ Step 4 挑假設時，每型的完整說明、範例和同一觀察三種切法會再出現。</p>
 
                             <div className="w2-notice" style={{ margin: 0 }}>
                                 💡 拿著你選定的假設問自己：你最想知道的是「影響」、「差異」還是「原因」？這一步先由你判斷，不急著問 AI。
@@ -827,7 +779,7 @@ const ProblemFocusContent = () => {
                 /* ──────── Step 3: 人腦練習（改寫 W1 觀察）──────── */
                 {
                     title: '人腦練習',
-                    icon: '🧠',
+                    icon: '✍️',
                     content: (
                         <div className="flex flex-col gap-8 prose-zh">
                             <div>
@@ -880,21 +832,21 @@ const ProblemFocusContent = () => {
 
                             <ThinkRecord
                                 dataKey="w2-step1-phenomenon"
-                                prompt="Step 1 現象：像攝影機一樣，你看到了什麼？（至少 30 字）"
+                                prompt="階段一 觀察現象：像攝影機一樣，你看到了什麼？（至少 30 字）"
                                 placeholder="描述你觀察到的具體畫面，不解釋，只描述…"
                                 scaffold={['在（地點），我看到…', '具體來說…', '（時間/頻率）…']}
                                 rows={3}
                             />
                             <ThinkRecord
                                 dataKey="w2-step2-gap"
-                                prompt="Step 2 落差：哪裡跟你想的不一樣？矛盾在哪？"
+                                prompt="階段二 發現落差：哪裡跟你想的不一樣？矛盾在哪？"
                                 placeholder="這裡有什麼矛盾？應該是…但實際上…"
                                 scaffold={['應該是…但實際上…', '奇怪的是…', '照理說…卻…']}
                                 rows={3}
                             />
                             <ThinkRecord
                                 dataKey="w2-step3-question"
-                                prompt="Step 3 展開假設：這個矛盾背後可能的解釋是什麼？至少 3 個、最多 5 個。先發散，不要只想一個就鎖死。"
+                                prompt="階段三 展開假設：這個矛盾背後可能的解釋是什麼？至少 3 個、最多 5 個。先發散，不要只想一個就鎖死。"
                                 placeholder={`① 可能是…\n② 也可能是…\n③ 還可能是…\n（最多到 ⑤）`}
                                 scaffold={[
                                     '① 可能是… / ② 也可能是… / ③ 還可能是…',
@@ -952,6 +904,59 @@ const ProblemFocusContent = () => {
                                     </div>
                                 ))}
                             </div>
+
+                            {/* 三焦點示範卡 — 從 Step 1 移來，「正要判型」時看範例效果最好 */}
+                            <DepthBlock title="看完整範例：同一觀察，三種切法">
+                            <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)]/30 overflow-hidden">
+                                <div className="p-4 px-5 bg-[var(--accent-light)] border-b border-[var(--accent)]/20">
+                                    <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--accent)] font-bold mb-1">同一觀察 · 多種切法</div>
+                                    <h4 className="font-serif text-[17px] font-bold text-[var(--ink)] leading-[1.5]">同一個觀察，三種研究問題</h4>
+                                    <p className="text-[12.5px] text-[var(--ink-mid)] mt-2 leading-[1.75]">
+                                        「圖書館段考爆滿」——一個現象，可以切出三個完全不同的研究焦點。<strong>專業研究者的差別不是想出更多答案，而是看出同一個現象有幾種切法</strong>。
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border)]">
+                                    {[
+                                        {
+                                            focus: '壓力越大，越往圖書館跑？',
+                                            contrast: '壓力 → 場所',
+                                            type: 'A',
+                                            typeColor: 'bg-[#16a34a]',
+                                            question: '段考壓力越大，高一學生是不是越傾向去圖書館讀書，而不是在家或空教室？壓力的高低真的會改變場所選擇嗎？',
+                                        },
+                                        {
+                                            focus: '考前爆滿，考後冷清',
+                                            contrast: '考前 vs 考後',
+                                            type: 'B',
+                                            typeColor: 'bg-[#0ea5e9]',
+                                            question: '大家考前擠爆圖書館，到底是為了「讀書效率」，還是為了緩解「如果不去就沒在讀書」的焦慮感？',
+                                        },
+                                        {
+                                            focus: '又吵又擠，卻覺得好讀書',
+                                            contrast: '安靜 vs 擁擠',
+                                            type: 'C',
+                                            typeColor: 'bg-[#7c3aed]',
+                                            question: '當圖書館變得又擠又吵時，為什麼學生還覺得那裡「比較好讀書」？這種「讀書氛圍」是怎麼產生的？',
+                                        },
+                                    ].map((f, i) => (
+                                        <div key={i} className="p-4 px-5 bg-white flex flex-col gap-2">
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-white text-[11px] font-bold font-mono px-2 py-0.5 rounded ${f.typeColor}`}>{f.type} 型</span>
+                                                <span className="text-[10px] font-mono uppercase tracking-[0.1em] text-[var(--ink-light)]">焦點 {i + 1}</span>
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-[14px] text-[var(--ink)]">{f.focus}</div>
+                                                <div className="text-[11px] font-mono text-[var(--ink-light)] mt-0.5">{f.contrast}</div>
+                                            </div>
+                                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.7] italic">「{f.question}」</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="p-3 px-5 bg-[var(--paper)] border-t border-[var(--border)] text-[11.5px] text-[var(--ink-light)] leading-[1.7]">
+                                    💡 注意：三個焦點都是<strong>同一個觀察</strong>切出來的——這就是 Step 3「先發散 3-5 個假設」的真正用意。<strong>不發散，你就只會看到第一個冒出來的角度</strong>。
+                                </div>
+                            </div>
+                            </DepthBlock>
 
                             <W2Beat1RefCard />
 
@@ -1060,7 +1065,7 @@ const ProblemFocusContent = () => {
                                     { label: 'C', text: '全部四個步驟都可以交給 AI' },
                                 ]}
                                 answer="B"
-                                feedback="Step 1 觀察、Step 2 落差、Step 3 列假設這些「動腦」的事必須你先做（AI 沒去過你的學校）。AI 真正幫得上的：Step 3 列完後提醒你可能漏想的角度，以及 Step 4 幫你檢查研究問題句型是否清楚。但研究設計決定（挑哪個假設、定哪一型）必須由你做。"
+                                feedback="階段一觀察、階段二落差、階段三列假設這些「動腦」的事必須你先做（AI 沒去過你的學校）。AI 真正幫得上的：階段三列完後提醒你可能漏想的角度，以及階段四幫你檢查研究問題句型是否清楚。但研究設計決定（挑哪個假設、定哪一型）必須由你做。"
                                 onAnswer={(selected, correct) => trackChoice('AI 可幫忙的步驟', selected, correct)}
                             />
                         </div>
@@ -1105,8 +1110,44 @@ const ProblemFocusContent = () => {
                                 rows={3}
                             />
 
-                            {/* AI-RED 敘事紀錄（對齊其他週） */}
-                            <AIREDNarrative week="2" hint="研究問題審核器是 W2 的 AI 核心工具——記錄一次最關鍵的互動。" optional={false} />
+                            {/* AI-RED 快速版（W2 專屬填空版，取代全格式 AI-RED） */}
+                            <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                <div className="px-4 py-2.5 bg-[var(--paper)] border-b border-[var(--border)] flex items-center gap-2">
+                                    <span className="text-[10px] font-mono font-bold uppercase tracking-[0.12em] text-[var(--ink-light)]">AI-RED · 快速版</span>
+                                    <span className="text-[10px] text-[var(--ink-light)]">— 三句話，2 分鐘填完</span>
+                                </div>
+                                <div className="px-4 pt-3 pb-1 text-[11.5px] text-[var(--ink-light)] leading-[1.7]">
+                                    W2 的 AI 互動細節已記錄在上方「研究問題審核器」Prompt 框裡，這裡只需要用三句話提煉最關鍵的決策過程，對應 AI-RED 的核心三要素。
+                                </div>
+                                <div className="p-4 space-y-3">
+                                    <ThinkRecord
+                                        dataKey="w2-aired-ask"
+                                        prompt="A（Ask 提問）我問 AI：提示詞的核心是什麼？一句話。"
+                                        placeholder="例：我請 AI 審核我的 A 型研究問題草稿，看結構有沒有清楚指出自變項和依變項。"
+                                        rows={2}
+                                    />
+                                    <ThinkRecord
+                                        dataKey="w2-aired-said"
+                                        prompt="I+R（Interact 互動 · Review 審視）AI 指出：它說我的問題出在哪？一句話。"
+                                        placeholder="例：AI 說我的依變項「選擇圖書館的傾向」不夠具體，無法量測。"
+                                        rows={2}
+                                    />
+                                    <ThinkRecord
+                                        dataKey="w2-aired-decide"
+                                        prompt="E+D（Evaluate 評估 · Decide 決定）我決定：保留 / 採用 / 混合，因為？"
+                                        placeholder="例：混合——保留我的時間範圍「段考前一週」，但採 AI 的改法把依變項改成「選擇圖書館作為主要讀書場所的比例」。"
+                                        rows={2}
+                                    />
+                                </div>
+                            </div>
+                            {/* 反思 — 一題，逼學生點出卡點 */}
+                            <ThinkRecord
+                                dataKey="w2-reflect-stuck"
+                                prompt="✍️ 反思：四段式框架（觀察 → 落差 → 展開假設 → 鎖定研究問題）你卡在哪一段？為什麼那段最難？"
+                                placeholder="例：我卡在『展開假設』那段。觀察跟落差還算順，但要我針對同一個矛盾想出 3-5 個可能解釋就卡住——因為平常想事情習慣只想一個答案。後來發現：硬逼自己列第 4、第 5 個假設時，反而冒出意想不到的角度。"
+                                scaffold={['我卡在第 ___ 段（觀察 / 落差 / 展開假設 / 鎖定研究問題）', '為什麼最難…', '我後來怎麼處理或還沒處理…']}
+                                rows={4}
+                            />
                         </div>
                     ),
                 },
@@ -1141,15 +1182,6 @@ const ProblemFocusContent = () => {
                                     ))}
                                 </div>
                             </div>
-
-                            {/* 反思 — 一題，逼學生點出卡點 */}
-                            <ThinkRecord
-                                dataKey="w2-reflect-stuck"
-                                prompt="✍️ 反思：四段式框架（觀察 → 落差 → 展開假設 → 鎖定研究問題）你卡在哪一段？為什麼那段最難？"
-                                placeholder="例：我卡在『展開假設』那段。觀察跟落差還算順，但要我針對同一個矛盾想出 3-5 個可能解釋就卡住——因為平常想事情習慣只想一個答案。後來發現：硬逼自己列第 4、第 5 個假設時，反而冒出意想不到的角度。"
-                                scaffold={['我卡在第 ___ 段（觀察 / 落差 / 展開假設 / 鎖定研究問題）', '為什麼最難…', '我後來怎麼處理或還沒處理…']}
-                                rows={4}
-                            />
 
                             {/* 一鍵複製繳交 */}
                             <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">

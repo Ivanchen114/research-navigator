@@ -16,7 +16,7 @@ import LessonMap from '../components/ui/LessonMap';
 import GroupSizeSelector from '../components/ui/GroupSizeSelector';
 import ContentTypeChip from '../components/ui/ContentTypeChip';
 import { W10Data } from '../data/lessonMaps';
-import { readRecords } from '../components/ui/ThinkRecord';
+import { readRecords, STORAGE_KEY } from '../components/ui/ThinkRecord';
 import {
     Users,
     Map,
@@ -61,7 +61,7 @@ const PREP_OPTIONS = [
 
 const PrepStatusCheck = ({ methodId }) => {
     const [status, setStatus] = useState(() => {
-        try { return localStorage.getItem('w10-prep-status') || null; } catch { return null; }
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')['w10-prep-status'] || null; } catch { return null; }
     });
     const template = TEMPLATES[methodId];
 
@@ -77,11 +77,19 @@ const PrepStatusCheck = ({ methodId }) => {
 
     const select = (s) => {
         setStatus(s);
-        try { localStorage.setItem('w10-prep-status', s); } catch {}
+        try {
+            const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            all['w10-prep-status'] = s;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+        } catch {}
     };
     const reset = () => {
         setStatus(null);
-        try { localStorage.removeItem('w10-prep-status'); } catch {}
+        try {
+            const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            delete all['w10-prep-status'];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+        } catch {}
     };
 
     /* 零層閘門：連 W9 都沒做 → 擋下 */
@@ -262,16 +270,20 @@ export const ToolRefinementPage = () => {
         else if (ml.includes('觀察')) setDetectedMethodId('observation');
         else if (ml.includes('文獻')) setDetectedMethodId('literature');
 
-        /* 文獻組：讀子類型（W9 計畫書勾選後同步寫入 localStorage） */
+        /* 文獻組：讀子類型（W9 計畫書勾選後同步寫入 STORAGE_KEY） */
         try {
-            const sub = localStorage.getItem('w10-lit-subtype') || '';
+            const sub = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')['w10-lit-subtype'] || '';
             if (sub) setLitSubtype(sub);
         } catch { /* ignore */ }
     }, []);
 
     const chooseLitSubtype = useCallback((id) => {
         setLitSubtype(id);
-        try { localStorage.setItem('w10-lit-subtype', id); } catch { /* ignore */ }
+        try {
+            const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            all['w10-lit-subtype'] = id;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+        } catch { /* ignore */ }
     }, []);
 
     /* ── 五步驟 ──────────────────────────────────────── */
@@ -285,62 +297,24 @@ export const ToolRefinementPage = () => {
                 <div className="space-y-8 prose-zh">
                     <StepBriefing
                         lines={[
-                            { label: '做', text: '開 GC 看 W9 老師回饋，把 ★★★ 必改項列出來，今天就修，分工確認' },
+                            { label: '節奏', text: '跟老師做（10 分鐘）' },
+                            { label: '做', text: '看 W9 老師回饋、確認今天分工，再打開第六章工具表單開始填。' },
                         ]}
                     />
                     {/* 入場擋板：W9 完成狀態自檢 */}
                     <PrepStatusCheck methodId={detectedMethodId} />
 
-                    {/* W9 老師回饋快速讀取（5 分鐘暖身） */}
-                    <div className="bg-white border-2 border-[var(--accent)] rounded-[var(--radius-unified)] p-5 max-w-[720px]">
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="text-[18px]">📬</span>
-                            <span className="font-bold text-[14px] text-[var(--ink)]">開始前：先看老師對 W9 計畫書第一~五章的回饋（5 分鐘）</span>
-                        </div>
-                        <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed mb-3">
-                            老師已在 <strong>Google Classroom</strong> 發回 W9 計畫書的批改。請先打開看過，把老師<strong className="text-[var(--ink)]">最主要</strong>的一兩句建議記下來——這些建議會影響你今天第六章工具設計的方向。
+                    {/* W9 老師回饋提示 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] px-4 py-3 flex items-start gap-3 max-w-[720px]">
+                        <span className="text-[18px] flex-shrink-0">📬</span>
+                        <p className="text-[12.5px] text-[var(--ink-mid)] leading-[1.8]">
+                            老師已在 <strong className="text-[var(--ink)]">Google Classroom</strong> 發回 W9 計畫書批改——先打開看一遍，知道哪些地方要改，再往下做。
                         </p>
-                        <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[6px] p-3">
-                            <p className="text-[12px] text-[var(--ink-mid)] leading-[1.85]">
-                                <strong className="text-[var(--ink)]">怎麼做：</strong>打開 GC 看老師批改 → <strong className="text-[var(--accent)]">直接在計畫書 docx 對應章節旁邊寫一句註解</strong>（或用 Word 註解功能）。
-                            </p>
-                            <p className="text-[11.5px] text-[var(--ink-light)] italic mt-2 leading-relaxed">
-                                💡 例：第四章變項太多要砍／第五章抽樣方式要改／第三章文獻對應不夠清楚⋯⋯不在這格寫，直接在 docx 邊註。
-                            </p>
-                        </div>
-                        <details className="mt-3 rounded-[var(--radius-unified)] border border-[#FCD34D] bg-[#FFFBEB] overflow-hidden">
-                            <summary className="cursor-pointer px-4 py-2.5 hover:bg-[#FEF3C7] transition-colors flex items-center gap-2">
-                                <span className="text-[12px] font-bold text-[#92400E]">⚠️ 老師還沒批 / 我還沒拿到回饋——點開看怎麼辦</span>
-                                <span className="ml-auto text-[10px] font-mono text-[#92400E]">▼</span>
-                            </summary>
-                            <div className="border-t border-[#FCD34D] p-4 bg-white">
-                                <p className="text-[12px] text-[#78350F] leading-relaxed mb-3">
-                                    沒回饋<strong>不能停課等</strong>——本節先用<strong>你 W9 自己寫完後最不確定的章節</strong>當「假想老師建議」，照下面 3 步走：
-                                </p>
-                                <ol className="list-decimal pl-5 space-y-1.5 text-[12px] text-[#78350F] leading-relaxed">
-                                    <li><strong>自評最弱章節</strong>：W9 五章裡你自己最沒把握的是哪一章？把那章的弱點寫進上方欄位（例：「第四章變項定義太空，自己也不滿意」）</li>
-                                    <li><strong>正常往下做 Step 2-5</strong>：今天的第六章工具設計不會被卡住</li>
-                                    <li><strong>回饋拿到後</strong>：到「Step 6 繳交確認」欄位旁有「W11 拿到回饋對照」的提示，那時再回頭修正本節做的決定</li>
-                                </ol>
-                                <p className="text-[11px] text-[#92400E] italic mt-3">
-                                    💡 老師那邊：批改完會在 Classroom 通知，你可以隨時刷新查看。
-                                </p>
-                            </div>
-                        </details>
                     </div>
 
-                    {/* Step 1 開場 */}
-                    <div>
-                        <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                            W9 你已完成計畫書第一~五章雛形（即使有些章是草稿也算）。本節 50 分鐘專心做一件事：<strong className="text-[var(--ink)]">把計畫書 1-5 章補完 + 第六章填具體題目</strong>。
-                        </p>
-                        <div className="flex items-center gap-2 mb-1">
-                            <ContentTypeChip type="做" />
-                            <p className="text-[13px] font-bold text-[var(--ink)]">確認 W9 進度、分工</p>
-                        </div>
-                        <div className="w7-notice w7-notice-gold">
-                            🎯 <strong>本節目標：計畫書 1-5 章定稿 + 第六章「填具體題目」</strong>（不是本組工具設計書——實體 W11 第一節做）。內容寫在 <strong>計畫書</strong> 上，網頁只記過程紀錄與 AI-RED。
-                        </div>
+                    {/* Step 1 開場目標 */}
+                    <div className="w7-notice w7-notice-gold">
+                        🎯 <strong>本節目標：計畫書 1-5 章定稿 + 第六章「填具體題目」</strong>（不是本組工具設計書——實體 W11 第一節做）。
                     </div>
 
                     {/* 🤝 分工 + 第六章填題目（可收合） */}
@@ -427,77 +401,88 @@ export const ToolRefinementPage = () => {
             ),
         },
 
-        /* ─── Step 2：方法工具書（跳轉到獨立頁面） ─── */
+        /* ─── Step 2：打開第六章工具表單 ─── */
         {
-            title: '方法工具書',
-            icon: '📚',
+            title: '第六章工具表單',
+            icon: '🛠️',
             content: (
-                <div className="space-y-8 prose-zh">
+                <div className="space-y-6 prose-zh">
                     <StepBriefing
                         lines={[
-                            { label: '學', text: '你那個方法的工具書 4 區塊：題型 / 原則 / 陷阱 / 範例 + 4 集影片' },
+                            { label: '節奏', text: '自己做（第一節主力）' },
+                            { label: '做', text: '打開第六章工具表單 → 填好題目／訪綱／流程 → 把重點寫進計畫書第六章' },
                         ]}
                     />
-                    <div className="flex items-center gap-2 mb-2">
-                        <ContentTypeChip type="學" />
-                        <p className="text-[13px] font-bold text-[var(--ink)]">方法工具書（跨週速查手冊）</p>
-                    </div>
-                    <p className="text-[14px] text-[var(--ink-mid)] leading-relaxed max-w-[720px]">
-                        工具書是<strong className="text-[var(--ink)]">跨週使用的速查手冊</strong>——獨立放在「研究工具庫」下，含 V→R→F 三大判準 + 4 集老師親拍影片 + 5 法 4 區塊（題型／原則／常見錯誤／完整範例）+ AI 啟動 prompt。看完回計畫書第六章寫題目，寫題目卡住可隨時回去查。
-                    </p>
 
-                    {/* 跳轉到工具書頁面 */}
-                    <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[760px]">
-                        <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
-                            <span className="text-[16px]">📚</span>
-                            <span className="font-bold text-[14px]">開啟方法工具書</span>
-                        </div>
-                        <div className="p-5 space-y-3">
-                            <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
-                                點下方連結到「研究工具庫」獨立頁面閱讀。<strong>建議新分頁開啟</strong>（不會打斷 W10 進度），方便邊讀邊回計畫書寫題目。
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                <a
-                                    href="/tools/methods"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-[var(--accent)] text-white px-4 py-2.5 rounded-[var(--radius-unified)] font-bold text-[13px] hover:opacity-90 transition-opacity no-underline"
-                                >
-                                    📚 開啟工具書（新分頁）
-                                </a>
-                                {(() => {
-                                    const activeKey = detectedMethodId || 'questionnaire';
-                                    return (
-                                        <a
-                                            href={`/tools/methods?method=${activeKey}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-2 bg-white text-[var(--accent)] border border-[var(--accent)] px-4 py-2.5 rounded-[var(--radius-unified)] font-bold text-[13px] hover:bg-[var(--paper-warm)] transition-colors no-underline"
-                                        >
-                                            🎯 直接到我的方法（{activeKey}）
-                                        </a>
-                                    );
-                                })()}
+                    {/* 兩份文件的關係說明 */}
+                    <div className="bg-[var(--paper-warm)] border border-[var(--border)] rounded-[var(--radius-unified)] p-4 max-w-[720px]">
+                        <p className="text-[13px] font-bold text-[var(--ink)] mb-2">📄 這節要開兩份文件</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[12px]">
+                            <div className="bg-white border-2 border-[var(--accent)] rounded p-3">
+                                <p className="font-bold text-[var(--accent)] mb-0.5">① 第六章工具表單（主力）</p>
+                                <p className="text-[var(--ink-mid)] leading-relaxed">你實際拿去問人／觀察／實驗用的那份——先把題目填進去。</p>
                             </div>
-                            <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
-                                💡 工具書跨週都能用：W11 修工具、W12 施測卡關、W14 分析時都可以回來查。
-                            </p>
+                            <div className="bg-white border border-[var(--border)] rounded p-3">
+                                <p className="font-bold text-[var(--ink)] mb-0.5">② 計畫書第六章（配合）</p>
+                                <p className="text-[var(--ink-mid)] leading-relaxed">工具填完後，把關鍵設計說明（為什麼這樣設計）補進計畫書文字。</p>
+                            </div>
                         </div>
                     </div>
 
-                    {/* 補充方法提示卡（W8 登記過才顯示） */}
+                    {/* 工具表單連結（依方法自動顯示） */}
+                    {!detectedMethodId ? (
+                        <div className="bg-[#FEF3C7] border-2 border-[#F59E0B] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12px] text-[#92400E] leading-relaxed">
+                            ⚠️ 未偵測到研究方法——請先回 <a href="/w9" className="text-[var(--accent)] font-bold underline">W9</a> 在「組內合議方法」點選，再回來這裡會自動顯示你的工具表單連結。
+                        </div>
+                    ) : (() => {
+                        const template = TEMPLATES[detectedMethodId];
+                        const methodLabel = METHOD_OPTIONS.find(m => m.id === detectedMethodId)?.label || detectedMethodId;
+                        const isLit = detectedMethodId === 'literature';
+                        return (
+                            <div className="border-2 border-[var(--accent)] rounded-[var(--radius-unified)] overflow-hidden max-w-[720px]">
+                                <div className="px-5 py-3 bg-[var(--accent)] text-white flex items-center gap-2">
+                                    <span className="text-[15px]">🛠️</span>
+                                    <span className="font-bold text-[13px]">你的第六章工具表單：{methodLabel}</span>
+                                </div>
+                                <div className="p-4 space-y-3">
+                                    {isLit ? (
+                                        <div className="space-y-2">
+                                            <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">文獻組依子類型選一份（計畫書第一章已勾選）：</p>
+                                            {[
+                                                { label: '② 歷史分析', url: 'https://docs.google.com/spreadsheets/d/1vvtTwR2_9F293I0GozYZc6zsGluTcfIY1NlHb2TpdgA/copy' },
+                                                { label: '③ 內容分析', url: 'https://docs.google.com/spreadsheets/d/1C_McYlh5zqyS216cAdSvorMzOZ4U8W56_bQFpYHlEdY/copy' },
+                                                { label: '④ 論述分析', url: 'https://docs.google.com/spreadsheets/d/1p4RCHe_uXwGs0NkwLoz_7XOrmAX35d3mhad7DmxBQjQ/copy' },
+                                                { label: '⑤ 敘事分析', url: 'https://docs.google.com/spreadsheets/d/1h5qymclzSox-t-gKvjL9iU8d48N4ORMxcPFX2hkQ70g/copy' },
+                                            ].map((item, i) => (
+                                                <a key={i} href={item.url} target="_blank" rel="noopener noreferrer"
+                                                    className="flex items-center gap-2 bg-white border border-[var(--border)] rounded px-3 py-2 text-[12px] font-bold text-[var(--accent)] hover:bg-[var(--paper-warm)] transition-colors no-underline">
+                                                    📄 {item.label} 工具表單 →
+                                                </a>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <a href={template.url} target="_blank" rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 bg-[var(--accent)] text-white px-4 py-2.5 rounded-[var(--radius-unified)] font-bold text-[13px] hover:opacity-90 transition-opacity no-underline">
+                                            📄 複製我的工具表單（{template.name}）→
+                                        </a>
+                                    )}
+                                    <p className="text-[11px] text-[var(--ink-light)] italic leading-relaxed">
+                                        💡 點連結會複製一份到你的 Google Drive，直接在上面填就好。
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })()}
+
+                    {/* 補充方法提示（有登記才顯示） */}
                     {w8Secondary && (
-                        <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-4 max-w-[720px] text-[12.5px] text-[#065F46] leading-relaxed">
-                            🧩 你在 W8 登記了補充方法：<strong>{w8Secondary}</strong>。
-                            <p className="mt-1.5">
-                                計畫書第六章建議分節寫：「6.1 主工具（{w9Method}）」、「6.2 補充工具（{w8Secondary}）」——兩個都填到，但<strong className="text-[#064E3B]">主工具寫完整、補充工具寫骨架就好</strong>。
-                            </p>
+                        <div className="bg-[#ECFDF5] border border-[#10B981] rounded-[var(--radius-unified)] p-3 max-w-[720px] text-[12px] text-[#065F46] leading-relaxed">
+                            🧩 補充方法（{w8Secondary}）的工具表單：主工具填完後課後再做，不擠進這節。
                         </div>
                     )}
 
-                    {/* 下一步 */}
                     <div className="w7-notice w7-notice-teal">
-                        ✅ 看完工具書 → 回計畫書第六章寫題目 → 進 <strong>Step 3 AI 工作坊</strong>（先用 AI 自查；老師諮詢在 Step 4）。
+                        ✅ 工具表單填到雛形 → 把關鍵設計說明補進計畫書第六章 → Step 3 AI 工作坊（可選）。
                     </div>
                 </div>
             ),
@@ -604,8 +589,10 @@ ___（貼題目／訪綱／流程／編碼表）
                             </div>
                         )}
 
-                        {/* 完整對話繳交（W10 多輪互動，必繳） */}
-                        <AIDialogSubmission week="10" taskName="工具設計對話" required={true} />
+                        {/* 完整對話繳交（使用 AI 模式才顯示；standalone 選了不用 AI，不強制繳） */}
+                        {w10AiMode && w10AiMode !== 'standalone' && (
+                            <AIDialogSubmission week="10" taskName="工具設計對話" required={false} />
+                        )}
                     </div>
 
                     {/* 下節預告 */}
@@ -691,20 +678,13 @@ ___（貼題目／訪綱／流程／編碼表）
                     {/* 第八章 + 第九章(三) 草稿備註（給學生看的） */}
                     <div>
                         <div className="bg-[#FFFBEB] border-l-4 border-[#D97706] rounded-r-[8px] p-4 mb-3 max-w-[760px]">
-                            <p className="text-[13px] font-bold text-[#92400E] mb-2">📌 給你的備註</p>
-                            <p className="text-[12.5px] text-[#78350F] leading-[1.85]">
-                                <strong>第八章 + 第九章(三) 草稿即可——不要花太多時間</strong>。理由：你還沒做完研究、不會分析、沒看過真實數據。等 W14 跑完數據再回頭補才寫得到位。
-                            </p>
-                        </div>
-
-                        <div className="bg-[#FFFBEB] border-l-4 border-[#D97706] rounded-r-[8px] p-4 mb-3 max-w-[760px]">
-                            <p className="text-[13px] font-bold text-[#92400E] mb-1">⚠️ 「草稿」是什麼意思？</p>
-                            <ul className="text-[12.5px] text-[#78350F] leading-[1.85] list-disc pl-5 space-y-0.5">
-                                <li><strong>第八章資料分析方式</strong>——寫一句話「預計用 ___ 分析」就好（如：「用 Excel 算次數分布和平均」）。<u>不需要</u>寫詳細統計步驟，你還沒看到資料長怎樣；分析工具 W14 老師會帶。</li>
-                                <li><strong>第九章 (三) 可能的限制與改進</strong>——寫 1-2 條你<u>現在就想得到</u>的（如：「樣本只有本校、無法推論」）。其他要等做完才知道，<u>不要硬猜</u>。</li>
-                            </ul>
-                            <p className="text-[11.5px] text-[#92400E] italic mt-2 pt-2 border-t border-[#D97706]/30">
-                                💡 草稿級別 ＝ 「我有寫，但等真的做了再修」。老師批改時會放過這兩段，不會苛責深度。
+                            <p className="text-[13px] font-bold text-[#92400E] mb-1.5">📌 第八章 + 第九章(三)：草稿即可，別花太多時間</p>
+                            <div className="text-[12px] text-[#78350F] leading-[1.85] space-y-1">
+                                <p><strong>第八章資料分析方式</strong>——寫一句「預計用 ___ 分析」即可（例：「用 Excel 算次數分布和平均」）。分析工具 W14 老師會帶，現在不需要寫詳細步驟。</p>
+                                <p><strong>第九章(三) 限制與改進</strong>——寫 1-2 條現在就想得到的（例：「樣本只有本校、無法推論」）。其他要等做完才知道，不要硬猜。</p>
+                            </div>
+                            <p className="text-[11px] text-[#92400E] italic mt-2 pt-2 border-t border-[#D97706]/30">
+                                💡 草稿 ＝「我有寫，等真的做了再修」。老師批改時不苛責這兩段的深度。
                             </p>
                         </div>
 
@@ -885,7 +865,7 @@ ___（貼題目／訪綱／流程／編碼表）
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                         type="button"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
                 </div>
             </div>
@@ -925,6 +905,15 @@ ___（貼題目／訪綱／流程／編碼表）
                     { wk: 'W11', name: 'Pilot Test\n倫理審查', status: '' },
                     { wk: 'W12-W15', name: '執行研究\n數據分析', status: '' },
                 ]} />
+
+            {/* 大紅標語：W10 不需填網頁 */}
+            <div className="bg-[var(--danger)] text-white rounded-[var(--radius-unified)] px-5 py-4 flex items-start gap-3 mb-2">
+                <span className="text-[22px] shrink-0">📋</span>
+                <div>
+                    <p className="text-[14px] font-bold mb-1">這週在計畫書 docx 寫——網頁不用填</p>
+                    <p className="text-[12px] text-white/70 leading-relaxed">主要工作都在計畫書 docx，網頁只是課程說明參考用。老師上課前會講重點。</p>
+                </div>
+            </div>
 
             <TaskCard
                 weekNumber="W10"

@@ -67,7 +67,7 @@ const STUDENT_A = {
     issues: [
         { id: 'a-swap', label: '換字抄襲——只換了字詞，句子結構完全一樣' },
         { id: 'a-nocite', label: '沒有引用——沒有標注（作者，年份）' },
-        { id: 'a-incomplete', label: '資訊不完整——重要發現沒有帶到' },
+        { id: 'a-incomplete', label: '缺少詮釋句——只轉述研究結果，沒有說明這個發現對我的研究題目有什麼意義' },
     ],
 };
 
@@ -127,13 +127,6 @@ const SENTENCE_TOOLKIT = [
     { cat: '連回題目', items: ['這與本研究欲探討的＿＿有密切關聯。', '因此，本研究想進一步了解＿＿。', '這也成為本研究關注＿＿的重要理由。'] },
 ];
 
-/* — 同儕會診 — */
-const PEER_REVIEW_ITEMS = [
-    { id: 'pr-rewrite', label: '改寫與整合', question: '這段文獻探討有沒有用自己的話整理三篇研究？是否避免了逐條翻寫或換字抄襲？' },
-    { id: 'pr-cite', label: '引用格式', question: '每次提到文獻時，是否都有正確標示（作者，年份）？' },
-    { id: 'pr-logic', label: '文獻完整性與邏輯', question: '三篇文獻是否都有帶到？句子之間是否有邏輯關係，而不是排排站？' },
-    { id: 'pr-link', label: '總結與連回題目', question: '最後一句是否有統整文獻，並連回自己的研究題目？' },
-];
 
 /* — 匯出欄位 — */
 const EXPORT_FIELDS = [
@@ -145,8 +138,6 @@ const EXPORT_FIELDS = [
     { key: 'w8-sandwich-evidence', label: '三明治：引用句', question: '第 2 層引用句——某某（年份）發現了什麼？' },
     { key: 'w8-sandwich-analysis', label: '三明治：分析句', question: '第 3 層分析句——這個證據說明了什麼？跟你的研究有什麼關係？' },
     { key: 'w8-lit-review', label: '文獻探討段落（演練3）', question: '用三篇文獻寫出至少 5 句的文獻探討，最後一句連回你的研究題目' },
-    { key: 'w8-peer-review', label: '同儕幫我審查的結果', question: '同儕幫你審查演練 3 後，給了什麼具體建議？你根據建議修改了什麼？' },
-    { key: 'w8-aired-record', label: 'AI-RED 敘事紀錄', question: '若用 AI 協助檢查三明治三層／連回題目／翻譯英文摘要，請記錄這次互動；未使用可留白。' },
 ];
 
 /* ══════════════════════════════════════
@@ -170,13 +161,10 @@ export const LiteratureReview = () => {
     /* 符號說明展開（演練 1 原文之後） */
     const [showSymbolHelp, setShowSymbolHelp] = useState(false);
 
-    /* 同儕會診勾選 */
-    const [peerChecks, setPeerChecks] = useState({ 'pr-rewrite': '', 'pr-cite': '', 'pr-logic': '', 'pr-link': '' });
 
     /* W7 文獻帶入 */
     const [w7Paper, setW7Paper] = useState('');
 
-    const W8_INTERACTIVE_KEY = 'research-navigator-w8-interactive';
 
     useEffect(() => {
         const records = readRecords();
@@ -188,22 +176,26 @@ export const LiteratureReview = () => {
             records['w8-sandwich-ref'] = w7Val;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
         }
-        // 載入互動狀態（勾選、素材包選擇）
+        // 載入互動狀態（勾選、素材包選擇）— 從 STORAGE_KEY 讀取，ResetWeekButton 才清得到
         try {
-            const saved = JSON.parse(localStorage.getItem(W8_INTERACTIVE_KEY) || '{}');
-            if (saved.checksA) setChecksA(saved.checksA);
-            if (saved.checksB) setChecksB(saved.checksB);
-            if (saved.selectedPack) setSelectedPack(saved.selectedPack);
-            if (saved.peerChecks) setPeerChecks(saved.peerChecks);
+            const raw = records['w8-interactive'];
+            if (raw) {
+                const saved = JSON.parse(raw);
+                if (saved.checksA) setChecksA(saved.checksA);
+                if (saved.checksB) setChecksB(saved.checksB);
+                if (saved.selectedPack) setSelectedPack(saved.selectedPack);
+            }
         } catch (e) { /* ignore */ }
     }, []);
 
-    // Task #7：持久化互動狀態
+    // 持久化互動狀態 → STORAGE_KEY（ResetWeekButton weekPrefix="w8-" 即可清除）
     useEffect(() => {
         try {
-            localStorage.setItem(W8_INTERACTIVE_KEY, JSON.stringify({ checksA, checksB, selectedPack, peerChecks }));
+            const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            all['w8-interactive'] = JSON.stringify({ checksA, checksB, selectedPack });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
         } catch (e) { /* ignore */ }
-    }, [checksA, checksB, selectedPack, peerChecks]);
+    }, [checksA, checksB, selectedPack]);
 
     const trackChoice = useCallback((question, selected, correct) => {
         setChoiceResults(prev => {
@@ -231,8 +223,8 @@ export const LiteratureReview = () => {
                         ]}
                     />
                     {/* ── 模擬文獻聲明 ── */}
-                    <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12.5px] text-[#7F1D1D] leading-relaxed">
-                        ⚠️ <strong>提醒</strong>：本頁部分文獻範例（如「王大明（2022）」「陳美玲（2021）」等）為<strong>課堂練習用的模擬素材</strong>，不可直接當成正式研究來源。正式計畫書與期末報告，<strong>只能使用自己查到、可追溯來源的文獻</strong>（W7 找到的 A 級文獻才是合格起點）。
+                    <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12px] text-[#7F1D1D] leading-relaxed">
+                        ⚠️ 本頁文獻範例（王大明、陳美玲等）是<strong>課堂練習用的模擬素材</strong>，正式報告只能用 W7 查到的真實文獻。
                     </div>
 
                     {/* ── 觀念 1 ── */}
@@ -617,9 +609,9 @@ export const LiteratureReview = () => {
                         ⚠️ <strong>寫作要求：</strong>至少 5 句、三篇文獻都要帶到、每提到一篇都要有（作者，年份）、不可以逐條抄寫素材、要用自己的話整合、<strong>最後一句要連回自己的研究題目。</strong>
                     </div>
 
-                    {/* 素材包區模擬文獻警示重複——GPT v1 #7 命中：學生常忽略頂部警示 */}
+                    {/* 素材包區模擬文獻警示 */}
                     <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-3 rounded-r-[6px] text-[12px] text-[#7F1D1D] leading-relaxed">
-                        ⚠️ <strong>再次提醒（重要）</strong>：下方四組素材包裡的文獻（王大明／陳美玲／林政達等）是為了讓你練「<strong>怎麼整合文獻</strong>」設計的<strong>模擬素材</strong>，不是真實研究來源。<strong className="text-[#991B1B]">正式報告與計畫書只能用你 W7 自己查到、可追溯的文獻</strong>——千萬不要把這些假名字搬到正式報告。
+                        ⚠️ 再次提醒：下方素材包是<strong>練習用的模擬文獻</strong>，不能搬到正式報告——正式報告只用 W7 查到的真實文獻。
                     </div>
 
                     {/* 素材包選擇 */}
@@ -698,89 +690,13 @@ export const LiteratureReview = () => {
                         scaffold={['關於…，已有不少研究進行探討。', '首先，…（年份）發現…', '綜合以上研究可見，…這也與本研究想探討的…']}
                         rows={10}
                     />
+
                 </div>
             ),
         },
 
         /* ──────────────────────────────────────
-         * STEP 4: 同儕會診
-         * ────────────────────────────────────── */
-        {
-            title: '同儕會診：互相複診',
-            icon: '🏥',
-            content: (
-                <div className="space-y-8 prose-zh">
-                    <StepBriefing
-                        lines={[
-                            { label: '做', text: '兩人交換段落，用 4 項審查（改寫/引用/邏輯/連回題目）給具體建議' },
-                        ]}
-                    />
-                    <div className="section-head">
-                        <div className="flex items-center gap-2 mb-2">
-                            <ContentTypeChip type="做" />
-                            <h2>同儕會診：互相複診</h2>
-                        </div>
-                        <div className="line"></div>
-                        <span className="mono">10 分鐘</span>
-                        <span className="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-[3px] bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A]">選做（做了演練三才做）</span>
-                    </div>
-                    <p className="section-desc">
-                        兩人一組，交換演練 3 的文獻探討段落。依照四個審查項目，給出具體修改建議。<strong>不要寫「很好」「很清楚」——那叫敷衍結案。</strong>
-                    </p>
-
-                    <div className="notice notice-accent text-[12px]">
-                        💡 請同儕在你的載具上勾選審查結果。好的審查意見是<strong>一句可以直接用來修改的建議</strong>，例如：「第三篇文獻的引用沒有加年份」、「最後一句沒有連回研究題目」。
-                    </div>
-
-                    <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden">
-                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] font-bold text-[13px]">
-                            🏥 同儕會診表　｜　請同儕在這裡幫你審查演練 3
-                        </div>
-                        <div className="divide-y divide-[var(--border)]">
-                            {PEER_REVIEW_ITEMS.map((item, i) => {
-                                const LEVELS = [
-                                    { key: 'pass', icon: '✓', label: '通過', color: 'var(--success)' },
-                                    { key: 'partial', icon: '△', label: '部分需修改', color: 'var(--gold)' },
-                                    { key: 'fail', icon: '✗', label: '需大幅修改', color: 'var(--danger)' },
-                                ];
-                                return (
-                                    <div key={item.id} className="p-5">
-                                        <div className="text-[12px] font-bold text-[var(--accent)] mb-1">審查項目 {i + 1}　｜　{item.label}</div>
-                                        <p className="text-[12px] text-[var(--ink-light)] italic mb-3">{item.question}</p>
-                                        <div className="flex flex-wrap gap-3">
-                                            {LEVELS.map(lv => {
-                                                const selected = peerChecks[item.id] === lv.key;
-                                                return (
-                                                    <button
-                                                        key={lv.key}
-                                                        onClick={() => setPeerChecks(prev => ({ ...prev, [item.id]: lv.key }))}
-                                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] font-medium border-2 transition-all ${selected ? 'text-white' : 'text-[var(--ink-mid)] border-[var(--border)] hover:border-[var(--ink-light)]'}`}
-                                                        style={selected ? { background: lv.color, borderColor: lv.color } : {}}
-                                                    >
-                                                        <span className="text-[11px]">{lv.icon}</span>
-                                                        {lv.label}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    <ThinkRecord
-                        dataKey="w8-peer-review"
-                        prompt="同儕幫你審查後，給了什麼具體建議？你根據建議修改了什麼？"
-                        scaffold={['同儕指出的問題是…', '我修改了…', '修改後的差異在於…']}
-                        rows={5}
-                    />
-                </div>
-            ),
-        },
-
-        /* ──────────────────────────────────────
-         * STEP 5: 回顧與繳交
+         * STEP 4: 回顧與繳交
          * ────────────────────────────────────── */
         {
             title: '回顧與繳交',
@@ -813,9 +729,6 @@ export const LiteratureReview = () => {
                             ))}
                         </div>
                     </div>
-
-                                        {/* AI-RED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <AIREDNarrative week="8" hint="W8 AI 邊界：可請 AI 檢查三明治三層完不完整／最後一句有沒有連回題目／翻譯英文摘要；不可讓 AI 寫整段文獻探討或「改寫」原文（容易變成換字抄襲）。" optional={true} />
 
                     {/* 一鍵複製 · Export 醒目化 */}
                     <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
@@ -894,7 +807,7 @@ export const LiteratureReview = () => {
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
                 </div>
             </div>
@@ -926,6 +839,15 @@ export const LiteratureReview = () => {
                 ]}
             />
             <CourseArc items={W8Data.courseArc} />
+
+            {/* 紙本週說明 */}
+            <div className="bg-[var(--danger)] text-white rounded-[var(--radius-unified)] px-5 py-4 flex items-start gap-3 mb-2">
+                <span className="text-[22px] shrink-0">✏️</span>
+                <div>
+                    <p className="text-[14px] font-bold mb-1">這週是紙本課——網頁不用填</p>
+                    <p className="text-[12px] text-white/70 leading-relaxed">今天的演練和作業都用紙本完成，繳交紙本即可。網頁這裡留著當參考資料用——想順手把內容填進來也沒問題。</p>
+                </div>
+            </div>
 
             <TaskCard
                 weekNumber="W8"

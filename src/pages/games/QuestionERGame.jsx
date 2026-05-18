@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { patientData } from '../../data/patientData';
 
-// 八個病（主診斷，單選）
+// 四類診斷（主診斷，單選）
 const DIAGNOSIS_OPTIONS = [
-    { id: 'A', icon: '🌫️', title: 'A｜抽象哲學病', subtitle: '概念太抽象，無法直接測量' },
-    { id: 'B', icon: '🔮', title: 'B｜算命占卜病', subtitle: '在猜未來，現在無法驗證' },
-    { id: 'C', icon: '📚', title: 'C｜百科全書病', subtitle: '範圍太大，像在搬運資料' },
-    { id: 'D', icon: '⚖️', title: 'D｜主觀偏見病', subtitle: '題目裡偷偷放了自己的答案' },
-    { id: 'E', icon: '⭕', title: 'E｜是非廢話病', subtitle: '只能回答有或沒有，研究會立刻結束' },
-    { id: 'F', icon: '👻', title: 'F｜觀落陰病', subtitle: '研究對象接觸不到' },
-    { id: 'G', icon: '🧪', title: 'G｜方法無效病', subtitle: '沒有可行方法蒐集資料或驗證' },
-    { id: 'H', icon: '🌀', title: 'H｜變因失控病', subtitle: '影響因素太多，無法控制' }
+    { id: '遠', icon: '🚀', title: '遠｜對象不在', subtitle: '研究對象找不到、未來還沒發生' },
+    { id: '難', icon: '🔒', title: '難｜方法不行', subtitle: '沒辦法用問卷、觀察、實驗驗證，或問法有主觀偏見' },
+    { id: '大', icon: '🔭', title: '大｜範圍太廣', subtitle: '裝太多東西，高中生四週做不完' },
+    { id: '空', icon: '🌫️', title: '空｜測不到', subtitle: '有個詞看不見、摸不到、只能回答有/沒有' },
 ];
 
 // 四個處方（多選）
@@ -49,27 +45,27 @@ const DEMO_STEPS = [
     {
         phase: 'question',
         content: '2030 年最熱門的工作會是什麼？',
-        note: '這是一道生病的研究題目。先不急著選答案，我們一起走一遍診斷流程。'
+        note: '這是一道有問題的研究題目。先不急著選答案，我們一起走一遍診斷流程。'
     },
     {
         phase: 'think1',
-        content: '🔍 第一步：先看「能不能研究」',
-        note: '這題在問「未來」——現在根本還沒發生，也沒有資料可以驗證。\n不管你用什麼方法，都碰不到2030年的資料。'
+        content: '🔍 第一步：先看「能不能接觸到對象」',
+        note: '這題在問「未來」——2030 年還沒到，根本找不到資料驗證。\n不管你用什麼方法，都碰不到 2030 年的資料。'
     },
     {
         phase: 'think2',
-        content: '💡 所以優先病灶是？',
-        note: '「2030年最熱門的工作」是在猜未來，現在無法驗證。\n→ 優先病灶：B｜算命占卜病\n\n你也可以說它「範圍太大（C）」，但那是共病。\n如果不先處理B，題目根本連資料都蒐集不到——所以先救B。'
+        content: '💡 所以優先搶救點是？',
+        note: '「2030年最熱門的工作」是在猜未來，現在無法驗證。\n→ 優先搶救點：遠｜對象不在\n\n你也可以說它「大（範圍太廣）」，但那是共病。\n如果不先解決「遠」，題目根本連資料都蒐集不到——所以先救遠。'
     },
     {
         phase: 'think3',
         content: '💊 下藥：把它救活',
-        note: '處方一：近（拉回現在，換成「目前」或「最近幾年」）\n\n治癒範例：\n「近五年台灣薪資成長最快的職業類別是哪些？」\n→ 有資料、找得到、高中生做得到 ✅'
+        note: '處方：近（拉回現在，換成「目前」或「最近幾年」）\n\n治癒範例：\n「近五年台灣薪資成長最快的職業類別是哪些？」\n→ 有資料、找得到、高中生做得到 ✅'
     },
     {
         phase: 'key',
         content: '🎯 這關最重要的一句話',
-        note: '你不是在找「也有道理的病」，\n而是在找「如果不先處理，整題就做不下去」的那個病。\n\n這就是優先搶救點。'
+        note: '你不是在找「也有道理的類別」，\n而是在找「如果不先處理，整題就做不下去」的那個問題。\n\n這就是優先搶救點。'
     }
 ];
 
@@ -278,13 +274,13 @@ export const QuestionERGame = () => {
                         </div>
                         <div className="space-y-2.5 text-sm">
                             <p className="text-teal-100 font-bold leading-snug">
-                                ① 一題可能多病，但先抓<span className="text-teal-300">優先搶救點</span>
+                                ① 一題可能多類，但先抓<span className="text-teal-300">最卡的那個</span>
                             </p>
                             <p className="text-teal-100 font-bold leading-snug">
-                                ② 先看能不能研究，再看有沒有落地，再看問法有沒有偏
+                                ② 先看對象找不找得到，再看方法行不行，再看測不測得到
                             </p>
                             <p className="text-teal-100 font-bold leading-snug">
-                                ③ 不要選看起來最厲害的題目，要選<span className="text-cyan-300">真的做得到的</span>
+                                ③ 不要選看起來最嚴重的類別，要選<span className="text-cyan-300">讓整題做不下去的那個</span>
                             </p>
                         </div>
                     </div>
@@ -299,14 +295,14 @@ export const QuestionERGame = () => {
                                 <button onClick={() => setExpandedStartHint(expandedStartHint === 1 ? null : 1)}
                                     className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
                                     <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第一關</span>
-                                    <span className="text-slate-300 flex-1">先看能不能研究：B算命、F觀落陰、G方法無效</span>
+                                    <span className="text-slate-300 flex-1">🚀 遠——對象找不到 / 未來還沒發生</span>
                                     <span className="text-slate-500 text-[10px]">{expandedStartHint === 1 ? '▲' : '▶'}</span>
                                 </button>
                                 {expandedStartHint === 1 && (
                                     <div className="mt-2 ml-2 pl-3 border-l-2 border-rose-500/40 space-y-1.5 animate-in fade-in duration-150">
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">B 算命占卜病：</span>題目在問未來還沒發生的事，現在根本找不到資料驗證。例：「2040年最熱門的職業是什麼？」</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">F 觀落陰病：</span>研究對象存在，但你碰不到——可能已過世、在外國、或根本不可能接觸。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">G 方法無效病：</span>不管你想怎麼做，都沒有任何合理方法可以蒐集資料或驗證這題。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">未來的事：</span>題目在問還沒發生的事，現在根本找不到資料驗證。例：「2040年最熱門的職業是什麼？」</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-rose-300 font-bold">對象不在：</span>研究對象存在，但你碰不到——可能已過世、在外國、或根本不可能接觸。例：訪談愛因斯坦。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-rose-300/60">⚡ 這關最優先——對象都找不到，後面完全白搭。先排這個。</p>
                                     </div>
                                 )}
                             </div>
@@ -316,15 +312,14 @@ export const QuestionERGame = () => {
                                 <button onClick={() => setExpandedStartHint(expandedStartHint === 2 ? null : 2)}
                                     className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
                                     <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第二關</span>
-                                    <span className="text-slate-300 flex-1">再看有沒有落地：C百科全書、A抽象哲學</span>
+                                    <span className="text-slate-300 flex-1">🔒 難——方法根本做不到</span>
                                     <span className="text-slate-500 text-[10px]">{expandedStartHint === 2 ? '▲' : '▶'}</span>
                                 </button>
                                 {expandedStartHint === 2 && (
                                     <div className="mt-2 ml-2 pl-3 border-l-2 border-amber-500/40 space-y-1.5 animate-in fade-in duration-150">
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">「落地」是什麼意思？</span>就是「能不能踩到地上、找到起點動手做」。一個沒落地的題目，你站在那裡不知道該從哪裡開始。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">C 百科全書病（先救）：</span>題目太大、裝太多東西，像在寫百科全書而不是做研究。例：「手機使用對學業成績的影響」——「手機使用」涵蓋太多種行為，範圍太廣。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">A 抽象哲學病（後處理）：</span>核心概念本身就抓不住、測不到。例：「幸福感是什麼？」——幸福感沒辦法直接觀察或量化。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-amber-300/60">⚡ 兩病同時出現時，先救 C——情境不先定，A 的量表根本無從設計。口訣：C 是「太多」，A 是「太空」；先縮範圍，再填內容。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">方法無效：</span>不管你用問卷、訪談、觀察、實驗哪種方法，都蒐集不到資料或驗證不了。例：「靈魂到底存不存在？」</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-amber-300 font-bold">問法有偏：</span>題目裡偷藏了你的立場，無法客觀驗證。例：「為什麼現在學生都不認真讀書？」——「都不認真」是你的偏見。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-amber-300/60">⚡ 方法無效比問法有偏更緊急——方法做不到直接死局；問法有偏換個問法就能救。</p>
                                     </div>
                                 )}
                             </div>
@@ -334,29 +329,14 @@ export const QuestionERGame = () => {
                                 <button onClick={() => setExpandedStartHint(expandedStartHint === 3 ? null : 3)}
                                     className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
                                     <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">第三關</span>
-                                    <span className="text-slate-300 flex-1">再看問法有沒有偏：E是非廢話、D主觀偏見</span>
+                                    <span className="text-slate-300 flex-1">🔭 大 + 🌫️ 空——範圍太廣 / 測不到</span>
                                     <span className="text-slate-500 text-[10px]">{expandedStartHint === 3 ? '▲' : '▶'}</span>
                                 </button>
                                 {expandedStartHint === 3 && (
                                     <div className="mt-2 ml-2 pl-3 border-l-2 border-cyan-500/40 space-y-1.5 animate-in fade-in duration-150">
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">「問法有沒有偏」是什麼意思？</span>內容沒問題，但你「問問題的方式」本身出了毛病——換個問法就能救活。</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">E 是非廢話病：</span>只能回答「有」或「沒有」，研究到此結束。例：「手機使用對學業有沒有影響？」——做完只能說「有」，然後呢？</p>
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">D 主觀偏見病：</span>題目裡偷藏了你的立場或假設。例：「為什麼現在學生都不認真讀書？」——「都不認真」是你的偏見，不是問題。</p>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* 最後才 */}
-                            <div>
-                                <button onClick={() => setExpandedStartHint(expandedStartHint === 4 ? null : 4)}
-                                    className="w-full flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
-                                    <span className="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap">最後才</span>
-                                    <span className="text-slate-300 flex-1">H 變因失控（高階重症，先把前三關排除）</span>
-                                    <span className="text-slate-500 text-[10px]">{expandedStartHint === 4 ? '▲' : '▶'}</span>
-                                </button>
-                                {expandedStartHint === 4 && (
-                                    <div className="mt-2 ml-2 pl-3 border-l-2 border-purple-500/40 animate-in fade-in duration-150">
-                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-purple-300 font-bold">H 變因失控病：</span>題目本身可以研究、也夠具體、問法也沒問題——但影響結果的因素太多，根本控制不了。這是排除前三關之後，才需要面對的高階問題。例：「手機使用對學業成績的影響」——如果你已經縮成「睡前使用 IG 時數 vs 週考成績」，這時才需要想：家庭背景、補習、睡眠這些變因要怎麼處理？</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">大（先救）：</span>題目裝太多東西，高中生四週做不完。例：「手機使用對學業成績的影響」——「手機使用」涵蓋太多行為，「學業成績」也太廣。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed"><span className="text-cyan-300 font-bold">空（後處理）：</span>有個詞看不見摸不到，沒辦法測量，或只能回答「有/沒有」。例：「幸福感」、「有沒有在用手機」。</p>
+                                        <p className="text-slate-400 font-normal leading-relaxed text-[10px] mt-1 text-cyan-300/60">⚡ 大和空同時出現時先救大——範圍沒定，空的那個詞從哪裡量起都不知道。</p>
                                     </div>
                                 )}
                             </div>
@@ -763,20 +743,16 @@ export const QuestionERGame = () => {
                         {showLightHint && (
                             <div className="bg-slate-800/70 border border-slate-600/50 border-t-0 rounded-b-sm p-5 animate-in fade-in slide-in-from-top-2 duration-200 text-left space-y-3">
                                 <div className="flex items-start gap-3">
-                                    <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第一關</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-rose-300 font-bold">先看能不能研究</span>：題目在問未來嗎（B）？研究對象碰不到嗎（F）？根本沒有方法可以蒐集資料嗎（G）？如果是，優先處理這裡。</p>
+                                    <span className="bg-rose-900/60 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第一關 🚀遠</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-rose-300 font-bold">先看對象找不找得到</span>：在問未來還沒發生的事？研究對象已不在或完全接觸不到？這是最先需要修的問題。</p>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第二關</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-amber-300 font-bold">再看有沒有落地</span>：題目的範圍太大、裝太多東西嗎（C）？還是核心概念本身抓不住、測不到嗎（A）？</p>
+                                    <span className="bg-amber-900/60 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第二關 🔒難</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-amber-300 font-bold">再看方法行不行</span>：用問卷、訪談、觀察、文獻根本蒐集不到資料？還是題目偷藏了主觀立場、問不出客觀答案？</p>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第三關</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">再看問法有沒有偏</span>：只能回答有或沒有嗎（E）？題目裡偷藏了立場嗎（D）？</p>
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <span className="bg-purple-900/60 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">最後才</span>
-                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-purple-300 font-bold">H 變因失控</span>：前三關都排除之後，如果影響因素還是多到控制不了，才考慮 H。</p>
+                                    <span className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[10px] font-black tracking-wider whitespace-nowrap mt-0.5">第三關 🔭大＋🌫️空</span>
+                                    <p className="text-sm text-slate-300 leading-relaxed"><span className="text-cyan-300 font-bold">再看範圍和測量</span>：裝太多東西、四週做不完（大）？還是核心概念看不見、摸不到、只能回答有沒有（空）？</p>
                                 </div>
                             </div>
                         )}

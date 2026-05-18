@@ -30,8 +30,9 @@ export default function ExportButton({
       const records = readRecords();
       const empties = fields.filter(f => {
         const val = records[f.key]?.trim();
-        // 結構骨架（含「：」和編號）但實質內容不足 → 視為空（>= 20 字才算有寫）
-        return !val || val.length < 20;
+        // 結構骨架（含「：」和編號）但實質內容不足 → 視為空（>= minLength 字才算有寫，預設 20）
+        const min = f.minLength ?? 20;
+        return !val || val.length < min;
       });
       setEmptyFields(empties);
     };

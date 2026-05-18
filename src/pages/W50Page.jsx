@@ -45,6 +45,8 @@ const EVIDENCE_CARDS = [
         title: '台中市高中職學生數學焦慮、數學自我效能與數學學業成就關係之研究',
         meta: '作者：鄭淑米｜指導教授：蔡蓉青｜2006｜碩士論文',
         desc: '本研究旨在瞭解高中職一年級學生數學焦慮與數學自我效能的現況，並探討其與數學學業成就之關係。研究採問卷調查法，回收有效問卷後進行統計分析。',
+        answerGrade: 'A',
+        answerHint: '關鍵線索：有完整作者姓名、指導教授、學校名稱、明確論文類型——這是碩士論文的標準格式，屬 A 級（主要證據）。查核路徑：到華藝線上圖書館或國圖碩博士論文系統搜「鄭淑米」或標題關鍵字「數學焦慮 高中」，確認可以找到原文摘要。',
     },
     {
         id: 'B',
@@ -53,24 +55,32 @@ const EVIDENCE_CARDS = [
         desc: 'This longitudinal study followed Taiwanese high school students for three years. Results indicated that excessive smartphone use predicted poorer sleep outcomes.',
         extra: 'DOI: 10.1177/0272989X241231721',
         glossary: '🔤 關鍵詞對照：longitudinal study＝長期追蹤研究、smartphone usage＝智慧型手機使用、sleep quality／outcomes＝睡眠品質、predicted poorer＝預測會變差。｜DOI 是論文的「身分證號碼」——到 doi.org 貼上這串能查到原文才是真的，查不到＝假 DOI。',
+        answerGrade: '?',
+        answerHint: '這張卡的關鍵不在「看格式」，而在「查 DOI」。格式正確、英文期刊、有 DOI——光看這些還不夠。步驟：到 doi.org，把上方的 DOI 號碼貼進去搜尋。查得到原文 → A 級；查不到 → AI 幻覺生成的假 DOI，等同 D 級。這張卡設計的目的就是讓你練習這個查核動作——光眼睛看判斷不了，要動手查。',
     },
     {
         id: 'C',
         title: '我的不正經人生觀',
         meta: '作者：黃益中｜出版社：寶瓶文化｜2019｜ISBN: 978-986-406-159-4',
         desc: '本書以教育現場的案例與社會觀察，討論青少年成長、學習動機、人際互動與價值選擇等議題。',
+        answerGrade: 'B',
+        answerHint: '關鍵線索：黃益中是真實教育工作者（公民老師），寶瓶文化是真實出版社，書籍存在。但這是通俗社會觀察書，不是同儕審查學術著作——不符合 A 級。根據等級定義，B 級包含「專家專書」，這本書符合 B 級（輔助參考）。可以引用，但只能輔助說明，不能當你研究結論的主要論據。',
     },
     {
         id: 'D',
         title: '研究證實：高中生滑手機讓成績下降 37%',
         meta: '來源：未具名教育新訊網｜作者：未署名｜2024',
         desc: '本網站整理多項「最新研究」指出，高中生每日滑手機超過 1 小時，學業成績平均下降 37%；建議家長嚴格管控。文章未標示原始研究來源，引用之「期刊」名稱在華藝、Google Scholar 皆查無資料。',
+        answerGrade: 'D',
+        answerHint: '三個紅旗同時出現：① 作者未署名、② 未標任何原始研究來源、③「37%」這種精確數字卻查不到是哪篇期刊說的。查核路徑：用「高中生 手機 成績 37%」去 Google Scholar 搜，找不到任何對應研究；所謂「期刊」名稱在華藝查無資料。D 級的特徵就是「數字看起來很精確，但來源查不到」。',
     },
     {
         id: 'E',
         title: '【Facebook 貼文】國家教育研究院',
         meta: '平台：Facebook｜2026 年 1 月 5 日',
         desc: '全國多所學校開始限制學生上課使用手機，休息時間也有 63% 禁用。老師們普遍支持，期望恢復純粹的學習環境。但面對 AI 與數位時代，也有教師持保留態度。',
+        answerGrade: 'C',
+        answerHint: '這張最容易跟 D 級搞混——但 C 和 D 的區別是：D 是假的或有意誤導，C 是「真實但不夠嚴謹」。國家教育研究院是真實機構，這則貼文的資訊不是捏造的——但社群媒體貼文不符合學術引用標準，沒有同儕審查、沒有完整研究方法。屬 C 級（找方向用），可以幫你了解議題現況，但不能寫進報告的引用文獻裡。',
     },
 ];
 
@@ -195,6 +205,36 @@ const EXPORT_FIELDS = [
     { key: 'w7-aired-record', label: 'AI-RED 敘事紀錄', question: '如果你今天用 AI 幫忙判斷某張證物（或華藝搜尋輔助），請記錄這次互動；若未使用 AI，可留白。' },
 ];
 
+/* ── APA 提示詞複製按鈕 ── */
+const APA_PROMPT = '請幫我確認這份書目是否符合 APA 第 7 版格式，直接給我：① 哪裡錯；② 修正後的正確版本。書目如下：[貼你的書目]';
+
+const ApaPromptTip = () => {
+    const [copied, setCopied] = useState(false);
+    const handleCopy = () => {
+        navigator.clipboard.writeText(APA_PROMPT).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+    return (
+        <div className="mt-4 notice notice-tip text-[12px]">
+            <span className="font-bold">💡 選做：不確定格式對不對？</span>
+            {' '}把書目貼給 AI，再貼這個 prompt：
+            <div className="flex items-start gap-2 mt-2">
+                <span className="font-mono text-[11.5px] flex-1 bg-white/60 rounded px-3 py-2 leading-relaxed select-all">
+                    {APA_PROMPT}
+                </span>
+                <button
+                    onClick={handleCopy}
+                    className="shrink-0 text-[11px] font-bold px-3 py-2 rounded bg-white/80 border border-current hover:bg-white transition-colors"
+                >
+                    {copied ? '✅ 已複製' : '📋 複製'}
+                </button>
+            </div>
+        </div>
+    );
+};
+
 /* ── 主組件 ── */
 
 export const W50Page = () => {
@@ -203,15 +243,42 @@ export const W50Page = () => {
 
     /* 研究題目帶入（W6 合題 > W4 我的題目 > W3 定案 fallback） */
     const [myTopic, setMyTopic] = useState('');
+    const [topicSource, setTopicSource] = useState(''); // 'w6-team' | 'w4' | 'w3'
+    const [editingTopic, setEditingTopic] = useState(false);
+
+    /* 研究方法帶入（W4 選定，可在此切換） */
+    const METHOD_HINTS = {
+        survey:      { icon: '📋', label: '問卷調查', hint: '問卷量表名詞（如「焦慮量表」「自我效能量表」）' },
+        interview:   { icon: '🎙️', label: '訪談研究', hint: '訪談主題詞（如「動機」「經驗描述」「心理歷程」）' },
+        experiment:  { icon: '🧪', label: '實驗研究', hint: '操控條件詞（如「介入方式」「控制組」「前後測」）' },
+        observation: { icon: '👁️', label: '觀察研究', hint: '行為觀察詞（如「分心行為」「互動頻率」「發生次數」）' },
+        literature:  { icon: '📚', label: '文獻分析', hint: '文獻類型詞（如「分析方法」「研究對象」「歷史脈絡」）' },
+    };
+    const [activeMethodId, setActiveMethodId] = useState('');
+
     useEffect(() => {
         const records = readRecords();
-        // v2 鏈：W6 合題題目 > W4 我的題目 > W3 定案；舊鍵 w4-final-topic fallback 容錯
-        const prev = (records['w6-team-topic'] || records['w4-my-topic'] || records['w3-final-topic'] || records['w4-final-topic'] || '').trim();
+        let src = '';
+        let prev = '';
+        if (records['w6-team-topic']?.trim()) {
+            prev = records['w6-team-topic'].trim();
+            src = 'w6-team';
+        } else if (records['w4-my-topic']?.trim()) {
+            prev = records['w4-my-topic'].trim();
+            src = 'w4';
+        } else {
+            prev = (records['w3-final-topic'] || records['w4-final-topic'] || '').trim();
+            src = prev ? 'w3' : '';
+        }
         setMyTopic(prev);
+        setTopicSource(src);
         if (prev && !records['w7-topic']) {
             records['w7-topic'] = prev;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
         }
+        /* 讀 W4 方法 */
+        const mid = localStorage.getItem('w4-method-pick') || '';
+        setActiveMethodId(mid && METHOD_HINTS[mid] ? mid : '');
     }, []);
 
     // 搜尋策略勾選（互動用，不存 localStorage）
@@ -224,19 +291,38 @@ export const W50Page = () => {
     // 我認領的證物（存 localStorage）
     const [claimedCards, setClaimedCards] = useState([]);
 
+    /* 老師解鎖：標題點三下，全班答案同時顯示 */
+    const [teacherUnlocked, setTeacherUnlocked] = useState(false);
+    const titleClickCount = React.useRef(0);
+    const titleClickTimer = React.useRef(null);
+    const handleTitleClick = useCallback(() => {
+        titleClickCount.current += 1;
+        clearTimeout(titleClickTimer.current);
+        titleClickTimer.current = setTimeout(() => { titleClickCount.current = 0; }, 800);
+        if (titleClickCount.current >= 3) {
+            setTeacherUnlocked(true);
+            titleClickCount.current = 0;
+        }
+    }, []);
+
     useEffect(() => {
         try {
-            const g = localStorage.getItem('w7-forensic-grades');
-            if (g) setForensicGrades(JSON.parse(g));
-            const c = localStorage.getItem('w7-claimed-cards');
-            if (c) setClaimedCards(JSON.parse(c));
+            const records = readRecords();
+            const gRaw = records['w7-forensic-grades'];
+            if (gRaw) setForensicGrades(JSON.parse(gRaw));
+            const cRaw = records['w7-claimed-cards'];
+            if (cRaw) setClaimedCards(JSON.parse(cRaw));
         } catch {}
     }, []);
 
     const handleSetForensicGrade = useCallback((cardId, level) => {
         setForensicGrades(prev => {
             const next = { ...prev, [cardId]: level };
-            try { localStorage.setItem('w7-forensic-grades', JSON.stringify(next)); } catch {}
+            try {
+                const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                all['w7-forensic-grades'] = JSON.stringify(next);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+            } catch {}
             return next;
         });
     }, []);
@@ -246,7 +332,11 @@ export const W50Page = () => {
             const next = prev.includes(cardId)
                 ? prev.filter(id => id !== cardId)
                 : [...prev, cardId];
-            try { localStorage.setItem('w7-claimed-cards', JSON.stringify(next)); } catch {}
+            try {
+                const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                all['w7-claimed-cards'] = JSON.stringify(next);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+            } catch {}
             return next;
         });
     }, []);
@@ -274,7 +364,6 @@ export const W50Page = () => {
                     <StepBriefing
                         lines={[
                             { label: '學', text: 'A-D 證據分級標準，以及 AI 幻覺是怎麼出現的' },
-                            { label: '做', text: '先確認帶來的研究題目正確' },
                         ]}
                     />
 
@@ -288,34 +377,6 @@ export const W50Page = () => {
                             <li><strong className="text-[var(--ink)]">同儕審查（peer-reviewed）</strong>　＝ 領域學者匿名把關後才刊出，<strong>不是</strong>同學互評。期刊封面或資料庫通常會標 peer-reviewed。</li>
                             <li><strong className="text-[var(--ink)]">文獻探討 ＝ 文獻回顧</strong>　同一件事的兩種說法：把別人做過的研究讀過、整理過。計畫書裡這一章正式名稱叫「文獻回顧」。（跟 W4 的「文獻分析<strong>法</strong>」不一樣——那是一種研究方法。）</li>
                         </ul>
-                    </div>
-
-                    {/* 定案題目帶入 */}
-                    <div>
-                        <div className="section-head"><h2>我帶來的研究題目</h2><div className="line"></div><span className="mono">STARTING POINT</span></div>
-                        <p className="section-desc">
-                            先確認你帶來 W7 的題目（W6 合題後共同題目 / W4 個人題目 / W3 定案題目）。下面的搜尋關鍵字都從這裡出發。
-                        </p>
-                        {myTopic && (
-                            <div className="bg-[var(--accent-light)] border border-[var(--accent)]/20 rounded-lg p-4 flex items-start gap-3 mb-3">
-                                <span className="text-[16px]">📎</span>
-                                <div>
-                                    <div className="text-[11px] font-mono text-[var(--accent)] uppercase tracking-wider mb-1">自動帶入：前面週次的題目</div>
-                                    <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{myTopic}</p>
-                                    <p className="text-[11px] text-[var(--ink-light)] mt-1">如果想修改，可以在下方編輯。</p>
-                                </div>
-                            </div>
-                        )}
-                        <div className="flex items-center gap-2 mb-1">
-                            <ContentTypeChip type="做" />
-                            <p className="text-[12px] font-bold text-[var(--ink-mid)]">確認帶入題目</p>
-                        </div>
-                        <ThinkRecord
-                            dataKey="w7-topic"
-                            prompt="我帶到 W7 找文獻的題目"
-                            placeholder="例如：本校高一生睡前手機使用內容類型與睡眠品質之差異研究"
-                            rows={2}
-                        />
                     </div>
 
                     {/* 為什麼找文獻 */}
@@ -338,10 +399,10 @@ export const W50Page = () => {
                                 { n: '03', icon: '🏛️', title: '支持論點', desc: '你的研究動機說「我發現這個現象」，文獻幫你說「其他研究也發現類似的事」，讓你站得住腳。' },
                             ].map(item => (
                                 <div key={item.n} className="bg-white border border-[var(--border)] rounded-xl p-5">
-                                    <div className="text-2xl mb-3">{item.icon}</div>
+                                    <div className="text-3xl mb-3">{item.icon}</div>
                                     <div className="text-[11px] font-mono text-[var(--accent)] font-bold mb-1">理由 {item.n}</div>
-                                    <div className="text-[14px] font-bold text-[var(--ink)] mb-2">{item.title}</div>
-                                    <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{item.desc}</div>
+                                    <div className="text-[20px] font-bold text-[var(--ink)] mb-2 leading-tight">{item.title}</div>
+                                    <div className="text-[13px] text-[var(--ink-mid)] leading-relaxed">{item.desc}</div>
                                 </div>
                             ))}
                         </div>
@@ -452,122 +513,208 @@ export const W50Page = () => {
                             { label: '注意', text: '你在這裡記錄的是你個人的搜尋技能與貢獻——組的完整文獻清單寫進共同文件，不在網頁上填' },
                         ]}
                     />
-                    <div className="section-head"><h2>資料庫查找練習</h2><div className="line"></div><span className="mono">先手動搜尋 · 25 分鐘</span></div>
-                    <p className="section-desc">
-                        先知道自己有多少斤兩。這個階段只能用華藝資料庫或國圖碩博系統，不能開 AI。靠你自己的搜尋策略找到第一篇真實證物。
-                    </p>
 
-                    <div className="notice notice-gold text-[12px] mb-6">
-                        🔍 <strong>這 25 分鐘先靠自己手動搜尋</strong>——目標是建立你自己的查找路徑：先想好關鍵字組合，再下手搜尋。
-                    </div>
-
-                    <div className="notice notice-accent text-[12px] mb-4">
-                        🔗 <strong>關鍵字哪裡來？</strong>你 W5 寫的「核心概念」（壓力／動機／睡眠品質⋯⋯）就是關鍵字的起點——把那幾個核心概念拆成名詞，就是你要搜的關鍵字。
-                    </div>
-
-                    {/* 合題組分工提示 */}
-                    <div className="bg-[var(--paper-warm)] border border-[var(--border-mid,var(--border))] rounded-[var(--radius-unified)] px-4 py-3 text-[12.5px] text-[var(--ink-mid)] leading-[1.85]">
-                        <span className="font-bold text-[var(--ink)]">🗂️ 合題組先分工，再各自去搜。</span>{' '}
-                        三個人用同一組關鍵字會撞在一起、找到重複的文獻。建議開搜前先口頭約定：誰負責「自變項」面向的文獻、誰負責「依變項」面向、誰負責「方法」相關——分好再各自搜，帶回來的才不會全部一樣。
-                    </div>
-
-                    {/* 搜尋關鍵字 */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="做" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">搜尋關鍵字</p>
-                    </div>
-                    <ThinkRecord
-                        dataKey="w7-search-keywords"
-                        prompt="你的搜尋關鍵字是什麼？（從題目中拆出 2-3 個核心名詞）"
-                        scaffold={['關鍵字 1：…', '關鍵字 2：…', '關鍵字 3（選填）：…']}
-                        rows={3}
-                    />
-
-                    {/* 搜尋策略勾選 */}
-                    <div className="bg-white border border-[var(--border)] rounded-xl overflow-hidden mt-4">
-                        <div className="p-4 px-5 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <ContentTypeChip type="做" />
-                                <span className="font-bold text-[13px] text-[var(--ink)]">我的搜尋策略</span>
-                            </div>
-                            <span className="text-[10px] font-mono font-bold text-[var(--danger)]">✋ 先靠自己手動</span>
-                        </div>
-                        <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <div className="text-[11px] font-mono text-[var(--ink-light)] mb-3 uppercase tracking-wider">搜尋位置</div>
-                                <div className="space-y-2.5">
-                                    {[['full', '全文搜尋'], ['title', '標題搜尋'], ['abstract', '摘要搜尋']].map(([key, label]) => (
-                                        <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={searchType[key]}
-                                                onChange={() => setSearchType(prev => ({ ...prev, [key]: !prev[key] }))}
-                                                className="w-4 h-4 rounded border-[var(--border)] text-[var(--accent)] focus:ring-0"
-                                            />
-                                            <span className="text-[13px] text-[var(--ink-mid)] group-hover:text-[var(--ink)] transition-colors">{label}</span>
-                                        </label>
-                                    ))}
+                    {/* ── 研究題目確認卡 ── */}
+                    {myTopic ? (
+                        <div className={`rounded-[var(--radius-unified)] border-2 overflow-hidden ${topicSource === 'w6-team' ? 'border-[var(--success)]' : 'border-[var(--accent)]'}`}>
+                            <div className={`px-5 py-3 flex items-center justify-between ${topicSource === 'w6-team' ? 'bg-[var(--success)]' : 'bg-[var(--accent)]'}`}>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-white text-[13px] font-bold">
+                                        {topicSource === 'w6-team' ? '📌 W6 小組合題（自動帶入）' : topicSource === 'w4' ? '📌 W4 個人定案題目（自動帶入）' : '📌 W3 題目（自動帶入）'}
+                                    </span>
                                 </div>
+                                <button
+                                    onClick={() => setEditingTopic(v => !v)}
+                                    className="text-white/90 text-[12px] flex items-center gap-1 hover:text-white transition-colors"
+                                >
+                                    ✏️ {editingTopic ? '收起' : '修改'}
+                                </button>
                             </div>
-                            <div>
-                                <div className="text-[11px] font-mono text-[var(--ink-light)] mb-3 uppercase tracking-wider">限制條件</div>
-                                <div className="space-y-2.5">
-                                    {[['taiwan', '臺灣研究'], ['years', '近 5 年'], ['thesis', '碩博士論文']].map(([key, label]) => (
-                                        <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={searchLimit[key]}
-                                                onChange={() => setSearchLimit(prev => ({ ...prev, [key]: !prev[key] }))}
-                                                className="w-4 h-4 rounded border-[var(--border)] text-[var(--accent)] focus:ring-0"
-                                            />
-                                            <span className="text-[13px] text-[var(--ink-mid)] group-hover:text-[var(--ink)] transition-colors">{label}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                            <div>
-                                <div className="text-[11px] font-mono text-[var(--ink-light)] mb-3 uppercase tracking-wider">使用的資料庫</div>
-                                <div className="space-y-2.5">
-                                    {[['airiti', '華藝線上圖書館'], ['ncl', '國圖碩博士論文系統']].map(([key, label]) => (
-                                        <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={searchDb[key]}
-                                                onChange={() => setSearchDb(prev => ({ ...prev, [key]: !prev[key] }))}
-                                                className="w-4 h-4 rounded border-[var(--border)] text-[var(--accent)] focus:ring-0"
-                                            />
-                                            <span className="text-[13px] text-[var(--ink-mid)] group-hover:text-[var(--ink)] transition-colors">{label}</span>
-                                        </label>
-                                    ))}
-                                </div>
+                            <div className="bg-white px-5 py-4">
+                                <p className="text-[20px] font-bold text-[var(--ink)] leading-snug">{myTopic}</p>
+                                {editingTopic && (
+                                    <div className="mt-3">
+                                        <ThinkRecord dataKey="w7-topic" placeholder="在這裡修改你的研究題目……" compact />
+                                    </div>
+                                )}
                             </div>
                         </div>
-                    </div>
-                    <p className="text-[11px] text-[var(--ink-light)] italic -mt-2">💡 勾選是幫你整理自己的策略，不會存檔——記得在下方文字格補上你實際用的條件。</p>
-
-                    {/* 找到的第一篇文獻 */}
-                    <div className="mt-6">
-                        <div className="section-head">
-                            <div className="flex items-center gap-2">
-                                <ContentTypeChip type="做" />
-                                <h2>我個人找到的第一篇文獻</h2>
+                    ) : (
+                        <div className="bg-[#FEF3C7] border-l-4 border-[#D97706] p-4 rounded-r-[8px] text-[13px] text-[#92400E] leading-relaxed">
+                            <p className="font-bold mb-1">⚠️ 還沒偵測到研究題目</p>
+                            <p>請先完成 W4 或 W6，或直接在下方填入：</p>
+                            <div className="mt-2">
+                                <ThinkRecord dataKey="w7-topic" placeholder="在這裡填入你的研究題目……" compact />
                             </div>
-                            <div className="line"></div><span className="mono">至少找 1 篇，帶回組裡</span>
                         </div>
-                        <p className="section-desc">
-                            選標題最接近你（組的）題目的那一篇。看完摘要後，記錄它跟研究有什麼關係——這篇是你帶回組裡的個人貢獻，組的完整清單統一整理進共同文件。
-                        </p>
+                    )}
 
-                        <ThinkRecord
-                            dataKey="w7-found-paper"
-                            prompt="記下你找到的文獻：標題、作者、年份、來源、跟你的題目有什麼關係？"
-                            scaffold={['標題：…', '作者：…', '年份：…', '來源（期刊/學校）：…', '跟我的題目相關的地方是：…']}
-                            rows={6}
-                        />
+                    {/* ── Phase 1：小組共識 ── */}
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[var(--accent)] overflow-hidden">
+                        <div className="bg-[var(--accent)] px-5 py-3 flex items-center gap-3">
+                            <span className="text-[11px] font-mono text-white/80 font-bold uppercase tracking-widest">PHASE 1 · 小組 · 約 5 分鐘</span>
+                        </div>
+                        <div className="bg-white p-6 space-y-5">
+                            <p className="text-[22px] font-bold text-[var(--ink)] leading-tight">先一起討論：關鍵字 ＆ 分工</p>
+                            <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                各自去搜之前，先花 5 分鐘一起做兩件事——這樣帶回來的文獻才不會全部重複。
+                            </p>
+
+                            {/* 關鍵字候選 */}
+                            <div className="bg-[var(--paper-warm)] rounded-[8px] p-4 space-y-2">
+                                <p className="text-[13px] font-bold text-[var(--ink)]">① 共同列出關鍵字候選</p>
+                                <p className="text-[12.5px] text-[var(--ink-mid)] leading-relaxed">
+                                    把題目拆成名詞：<strong>自變項名詞</strong> ＋ <strong>依變項名詞</strong> ＋ <strong>方法名詞（選填）</strong>。
+                                    先一起列出 4–6 個候選，再分配誰搜哪個。
+                                </p>
+                                <p className="text-[11.5px] text-[var(--accent)] font-bold">
+                                    🔗 W5 寫的「核心概念」就是起點——把那幾個詞直接拿來用就好。
+                                </p>
+                            </div>
+
+                            {/* 分工三欄 */}
+                            <div>
+                                <p className="text-[13px] font-bold text-[var(--ink)] mb-3">② 分工：誰搜哪個面向</p>
+                                <div className="grid grid-cols-3 gap-3">
+                                    {[
+                                        { role: '自變項面向', hint: '原因那側的詞', color: 'border-[var(--accent)]', bg: 'bg-[#F0F0FF]' },
+                                        { role: '依變項面向', hint: '結果那側的詞', color: 'border-[var(--success)]', bg: 'bg-[#F0FDF4]' },
+                                        {
+                                            role: '方法面向',
+                                            hint: activeMethodId && METHOD_HINTS[activeMethodId]
+                                                ? METHOD_HINTS[activeMethodId].hint
+                                                : '問卷量表 ／ 訪談主題 ／ 觀察行為詞',
+                                            color: 'border-[#D97706]', bg: 'bg-[#FFFBEB]',
+                                        },
+                                    ].map(item => (
+                                        <div key={item.role} className={`rounded-[8px] border-2 p-4 ${item.color} ${item.bg}`}>
+                                            <p className="text-[10px] font-mono font-bold uppercase tracking-wider opacity-50 mb-1">各自負責</p>
+                                            <p className="text-[15px] font-bold text-[var(--ink)] leading-tight">{item.role}</p>
+                                            <p className="text-[11px] text-[var(--ink-mid)] mt-1">{item.hint}</p>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* 方法切換按鈕 */}
+                                <div className="mt-3 flex flex-wrap gap-2 items-center">
+                                    <span className="text-[11px] text-[var(--ink-mid)]">你的方法：</span>
+                                    {Object.entries(METHOD_HINTS).map(([id, m]) => (
+                                        <button
+                                            key={id}
+                                            onClick={() => setActiveMethodId(id)}
+                                            className={`text-[11px] px-3 py-1 rounded-full border font-bold transition-colors ${
+                                                activeMethodId === id
+                                                    ? 'bg-[#D97706] border-[#D97706] text-white'
+                                                    : 'border-[#D97706] text-[#D97706] bg-white hover:bg-[#FFFBEB]'
+                                            }`}
+                                        >
+                                            {m.icon} {m.label}
+                                        </button>
+                                    ))}
+                                </div>
+                                {activeMethodId && METHOD_HINTS[activeMethodId] && (
+                                    <p className="text-[11px] text-[#92400E] mt-2 bg-[#FFFBEB] rounded-[6px] px-3 py-2">
+                                        ✅ W4 帶入：<strong>{METHOD_HINTS[activeMethodId].icon} {METHOD_HINTS[activeMethodId].label}</strong> → 方法面向搜：{METHOD_HINTS[activeMethodId].hint}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="notice notice-accent text-[12px]">
-                        💡 搜不到？試試換同義詞、把關鍵字從 3 個減成 2 個，或者把「標題搜尋」改成「全文搜尋」。
+                    {/* ── Phase 2：個人出擊 ── */}
+                    <div className="rounded-[var(--radius-unified)] border-2 border-[var(--border)] overflow-hidden">
+                        <div className="bg-[var(--ink)] px-5 py-3">
+                            <span className="text-[11px] font-mono text-white/70 font-bold uppercase tracking-widest">PHASE 2 · 個人 · 25 分鐘</span>
+                        </div>
+                        <div className="bg-white p-6 space-y-6">
+                            <div>
+                                <p className="text-[22px] font-bold text-[var(--ink)] leading-tight mb-1">靠自己找第一篇</p>
+                                <p className="text-[13px] text-[var(--ink-mid)] leading-relaxed">
+                                    只能用華藝或國圖碩博，不能開 AI。先知道自己有多少斤兩。
+                                </p>
+                            </div>
+
+                            {/* 搜尋關鍵字 */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <ContentTypeChip type="做" />
+                                    <p className="text-[13px] font-bold text-[var(--ink)]">我的搜尋關鍵字</p>
+                                </div>
+                                <ThinkRecord
+                                    dataKey="w7-search-keywords"
+                                    prompt="你用了哪幾個關鍵字？（從小組討論的候選裡選你負責的那組）"
+                                    scaffold={['關鍵字 1：…', '關鍵字 2：…', '關鍵字 3（選填）：…']}
+                                    rows={3}
+                                />
+                            </div>
+
+                            {/* 搜尋策略勾選 */}
+                            <div className="border border-[var(--border)] rounded-[var(--radius-unified)] overflow-hidden">
+                                <div className="px-5 py-3 bg-[var(--paper-warm)] border-b border-[var(--border)] flex items-center justify-between gap-3 flex-wrap">
+                                    <div className="flex items-center gap-2">
+                                        <ContentTypeChip type="做" />
+                                        <span className="font-bold text-[13px] text-[var(--ink)]">我的搜尋策略</span>
+                                    </div>
+                                    <span className="text-[10px] font-mono text-[var(--ink-light)]">勾選不存檔——下方文字格補上實際用的條件</span>
+                                </div>
+                                <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div>
+                                        <div className="text-[11px] font-mono text-[var(--ink-light)] mb-3 uppercase tracking-wider">搜尋位置</div>
+                                        <div className="space-y-2.5">
+                                            {[['full', '全文搜尋'], ['title', '標題搜尋'], ['abstract', '摘要搜尋']].map(([key, label]) => (
+                                                <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
+                                                    <input type="checkbox" checked={searchType[key]} onChange={() => setSearchType(prev => ({ ...prev, [key]: !prev[key] }))} className="w-4 h-4 rounded border-[var(--border)] text-[var(--accent)] focus:ring-0" />
+                                                    <span className="text-[13px] text-[var(--ink-mid)] group-hover:text-[var(--ink)] transition-colors">{label}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="text-[11px] font-mono text-[var(--ink-light)] mb-3 uppercase tracking-wider">限制條件</div>
+                                        <div className="space-y-2.5">
+                                            {[['taiwan', '臺灣研究'], ['years', '近 5 年'], ['thesis', '碩博士論文']].map(([key, label]) => (
+                                                <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
+                                                    <input type="checkbox" checked={searchLimit[key]} onChange={() => setSearchLimit(prev => ({ ...prev, [key]: !prev[key] }))} className="w-4 h-4 rounded border-[var(--border)] text-[var(--accent)] focus:ring-0" />
+                                                    <span className="text-[13px] text-[var(--ink-mid)] group-hover:text-[var(--ink)] transition-colors">{label}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="text-[11px] font-mono text-[var(--ink-light)] mb-3 uppercase tracking-wider">使用的資料庫</div>
+                                        <div className="space-y-2.5">
+                                            {[['airiti', '華藝線上圖書館'], ['ncl', '國圖碩博士論文系統']].map(([key, label]) => (
+                                                <label key={key} className="flex items-center gap-2.5 cursor-pointer group">
+                                                    <input type="checkbox" checked={searchDb[key]} onChange={() => setSearchDb(prev => ({ ...prev, [key]: !prev[key] }))} className="w-4 h-4 rounded border-[var(--border)] text-[var(--accent)] focus:ring-0" />
+                                                    <span className="text-[13px] text-[var(--ink-mid)] group-hover:text-[var(--ink)] transition-colors">{label}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 找到的第一篇文獻 */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <ContentTypeChip type="做" />
+                                    <p className="text-[13px] font-bold text-[var(--ink)]">我個人找到的第一篇文獻</p>
+                                    <span className="text-[10px] font-mono text-[var(--ink-light)] ml-auto">至少 1 篇 · 帶回組裡</span>
+                                </div>
+                                <p className="text-[12px] text-[var(--ink-mid)] mb-3 leading-relaxed">
+                                    選標題最接近組題目的那篇，看完摘要後記錄它跟研究的關係。這是你的個人貢獻，組的完整清單整理進共同文件。
+                                </p>
+                                <ThinkRecord
+                                    dataKey="w7-found-paper"
+                                    prompt="記下你找到的文獻：標題、作者、年份、來源、跟你的題目有什麼關係？"
+                                    scaffold={['標題：…', '作者：…', '年份：…', '來源（期刊/學校）：…', '跟我的題目相關的地方是：…']}
+                                    rows={6}
+                                />
+                                <p className="mt-3 text-[11.5px] text-[var(--ink-mid)] bg-[var(--paper-warm)] rounded-[6px] px-3 py-2 leading-relaxed">
+                                    💡 搜不到？試試換同義詞、把關鍵字從 3 個減成 2 個，或把「標題搜尋」改成「全文搜尋」。
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             ),
@@ -597,15 +744,15 @@ export const W50Page = () => {
                             <div className="line"></div><span className="mono">10 分鐘</span>
                         </div>
                         <p className="section-desc">
-                            學術界用 APA 格式記錄引用——目的是讓別人能順著你的標籤，找到原文。<strong>W7 這週不用背、也不用一次完美</strong>：你要先學會把作者、年份、標題、來源貼清楚就好；格式可以慢慢修，但這四件不能少。
+                            APA 格式的目的只有一個：讓別人順著你的標籤找到原文。四件不能少：<strong>作者、年份、標題、來源</strong>。
                         </p>
 
                         <div className="space-y-3 mb-6">
                             {APA_FORMATS.map(f => (
                                 <div key={f.type} className="p-4 bg-[var(--paper)] rounded-[var(--radius-unified)] border border-[var(--border)]">
                                     <div className="text-[11px] font-mono text-[var(--ink-light)] mb-2">{f.type}</div>
-                                    <div className="text-[13px] text-[var(--ink)] font-medium leading-relaxed mb-2">{f.template}</div>
-                                    <div className="text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                    <div className="text-[15px] text-[var(--ink)] font-bold leading-relaxed mb-3">{f.template}</div>
+                                    <div className="text-[14px] text-[var(--ink-mid)] leading-relaxed">
                                         範例：{f.example}
                                     </div>
                                 </div>
@@ -630,17 +777,8 @@ export const W50Page = () => {
                             rows={3}
                         />
 
-                        {/* 格式確認清單 */}
-                        <div className="mt-4 p-4 bg-[var(--paper-warm)] rounded-xl border border-[var(--border)]">
-                            <div className="text-[12px] font-bold text-[var(--ink)] mb-3">格式確認清單（自己檢查一遍）</div>
-                            <div className="content-grid" style={{ '--cols': 2 }}>
-                                {['作者全名格式正確', '年份有括號', '論文或文章名稱完整', '期刊或學校名稱正確', '類型判斷正確（論文 or 期刊）', '出版地/卷期頁碼填寫完整'].map((item, i) => (
-                                    <div key={i} className="content-item flex items-center gap-2 text-[12px] text-[var(--ink-mid)]">
-                                        <span className="text-[var(--ink-light)]">□</span> {item}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        {/* AI 格式驗證提示（選做） */}
+                        <ApaPromptTip />
                     </div>
                 </div>
             ),
@@ -656,23 +794,56 @@ export const W50Page = () => {
                 <div className="space-y-8 prose-zh">
                     <StepBriefing
                         lines={[
-                            { label: '做', text: '各自判斷 5 張證物的等級 + 寫下你的查核路徑；判完後跟組員互報、補漏' },
-                            { label: '注意', text: '每人在自己的裝置填自己的判斷——這是個人技能紀錄，不是組的共同紀錄' },
+                            { label: '做', text: '小組分配五張證物，各自認領 1–2 張，判定等級 + 寫查核路徑，判完互報' },
+                            { label: '注意', text: '用自己的裝置填自己負責那幾張——這是個人技能紀錄，不是組的共同紀錄' },
                         ]}
                     />
                     <div className="section-head">
                         <div className="flex items-center gap-2">
                             <ContentTypeChip type="做" />
-                            <h2>證物鑑識大賽：等級判定</h2>
+                            <h2 onClick={handleTitleClick} className="cursor-default select-none">證物鑑識大賽：等級判定</h2>
                         </div>
                         <div className="line"></div><span className="mono">個人判斷 + 組內互報 · 30 分鐘</span>
                     </div>
                     <p className="section-desc">
-                        五張證物（A–E）每人各自判斷等級和查核路徑，判完後組員互報、補對方漏掉的線索。<strong>每人在自己的裝置上填自己的判斷</strong>，不要共用同一台——因為這記的是你個人的鑑識技能，不是組的討論結果。不要只勾等級——<strong>告訴我你怎麼知道的</strong>。
+                        五張由小組自行分配，每人認領 1–2 張，各自判定等級和查核路徑，判完再互報給其他組員。<strong>不要共用裝置</strong>——你填的是你自己負責那幾張的判斷紀錄。
                     </p>
 
-                    <div className="notice notice-gold text-[12px] mb-6">
-                        💡 <strong>查核路徑很重要！</strong>你怎麼知道證物 D 是內容農場？你怎麼查出證物 B 是不是真的期刊？去 Google 搜標題？去查作者有沒有這個人？把你的偵查過程寫下來。
+                    <div className="notice notice-gold text-[12px] mb-4">
+                        📌 <strong>不要只勾等級——要寫查核路徑。</strong>你怎麼查的？去哪查？查到什麼？這才是鑑識能力。先自己判，填完再用 AI 驗，驗完在 Step 5 的 AI-RED 記「AI 跟我判得一不一樣」。
+                    </div>
+
+                    {/* 查核路徑範本 */}
+                    <div className="rounded-[var(--radius-unified)] border border-[var(--border)] overflow-hidden mb-6">
+                        <div className="bg-[var(--paper-warm)] px-4 py-2 flex items-center gap-2">
+                            <span className="text-[11px] font-mono font-bold text-[var(--ink-mid)] uppercase tracking-wider">查核路徑 · 怎麼寫</span>
+                            <span className="text-[10px] text-[var(--ink-light)]">— 參考這三種句型，選一個套用</span>
+                        </div>
+                        <div className="bg-white divide-y divide-[var(--border)]">
+                            {[
+                                {
+                                    tag: '搜標題',
+                                    eg: '我把標題「高中男女分校與其學校性別角色」複製到 Google Scholar 搜尋 → 找到這篇論文，點進去確認有摘要和指導教授 → 判 A 級。',
+                                },
+                                {
+                                    tag: '查 DOI',
+                                    eg: '我把 DOI 號碼貼到 doi.org → 跳出錯誤頁面，查無此文件 → 這個 DOI 是假的 → 判 D 級。',
+                                },
+                                {
+                                    tag: '查作者',
+                                    eg: '我 Google「Michael Chen sleep research Taiwan」→ 找不到這個人在任何大學或研究機構的頁面 → 作者可疑，加上 DOI 查不到 → 判 D 級。',
+                                },
+                                {
+                                    tag: '查來源網站',
+                                    eg: '我點進「未具名教育新訊網」→ 網站沒有關於我們、文章都沒有署名作者、找不到原始研究連結 → 內容農場特徵 → 判 D 級。',
+                                },
+                            ].map(({ tag, eg }) => (
+                                <div key={tag} className="px-4 py-3 flex gap-3">
+                                    <span className="shrink-0 text-[10px] font-mono font-bold bg-[var(--ink)] text-white px-2 py-0.5 rounded-[4px] h-fit mt-0.5">{tag}</span>
+                                    <p className="text-[12px] text-[var(--ink-mid)] leading-relaxed">{eg}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {/* 認領選卡 */}
@@ -757,6 +928,27 @@ export const W50Page = () => {
                                                 這張由組員負責——聽完互報後點上方按鈕記錄等級即可，不需要填查核路徑。
                                             </p>
                                         )}
+
+                                        {/* 參考判定說明——填完才能解鎖 */}
+                                        {card.answerHint && (
+                                            <div className="mt-3">
+                                                {teacherUnlocked ? (
+                                                    <div className="rounded-[6px] border border-[var(--border)] overflow-hidden">
+                                                        <div className="px-3 py-2 bg-[var(--paper-warm)] flex items-center gap-2">
+                                                            <span className="text-[11px] font-mono text-[var(--ink-light)]">📋 參考判定說明</span>
+                                                            {card.answerGrade !== '?' && (
+                                                                <span className={`font-bold px-1.5 py-0.5 rounded-[3px] text-white text-[10px] ${GRADE_COLORS[card.answerGrade]?.bg || 'bg-[var(--ink-mid)]'}`}>
+                                                                    {card.answerGrade} 級
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="px-4 py-3 bg-white text-[12px] text-[var(--ink-mid)] leading-relaxed">
+                                                            {card.answerHint}
+                                                        </div>
+                                                    </div>
+                                                ) : null}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );
@@ -777,6 +969,9 @@ export const W50Page = () => {
                             rows={4}
                         />
                     </div>
+
+                    {/* AI 協助鑑識？記錄下來 */}
+                    <AIREDNarrative week="7" hint="如果你用 AI 協助判斷文獻等級，記錄這次最關鍵的互動；找文獻本身仍要親自查證。" optional={true} />
                 </div>
             ),
         },
@@ -815,13 +1010,6 @@ export const W50Page = () => {
                             ))}
                         </div>
                     </div>
-
-                                        {/* AI-RED 敘事紀錄（循序漸進：五欄 → 一段話） */}
-                    <div className="flex items-center gap-2 mb-1">
-                        <ContentTypeChip type="交出" />
-                        <p className="text-[12px] font-bold text-[var(--ink-mid)]">AI-RED 敘事紀錄（選填）</p>
-                    </div>
-                    <AIREDNarrative week="7" hint="如果你在「證物鑑識」階段用 AI 協助判斷，請記錄這次互動；找文獻本身仍要親自查證。" optional={true} />
 
                     {/* 一鍵複製 · Export 醒目化 */}
                     <div className="bg-[#EFF6FF] border-2 border-[#1E40AF] rounded-[var(--radius-unified)] p-4">
@@ -883,7 +1071,7 @@ export const W50Page = () => {
                         onClick={() => setShowLessonMap(!showLessonMap)}
                         className="text-[11px] text-[var(--ink-light)] hover:text-[var(--accent)] transition-colors flex items-center gap-1 font-mono"
                     >
-                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? 'Hide Plan' : 'Instructor View'}</span>
+                        <Map size={12} /> <span className="hidden md:inline">{showLessonMap ? '收起流程' : '教師流程'}</span>
                     </button>
                 </div>
             </div>
